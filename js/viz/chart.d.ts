@@ -38,7 +38,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
-    Color,
+    ChartsColor,
 } from './core/base_widget';
 
 import {
@@ -2019,7 +2019,7 @@ export interface dxChartCommonPaneSettings {
      * @type string|object
      * @public
      */
-    backgroundColor?: string | Color;
+    backgroundColor?: string | ChartsColor;
     /**
      * @docid dxChartOptions.commonPaneSettings.border
      * @public
@@ -3161,7 +3161,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.cornerRadius
      * @default 0
@@ -3477,7 +3477,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @default undefined
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle
      * @default 'solid'
@@ -3514,7 +3514,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default undefined
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
      * @default 'solid'
@@ -3731,7 +3731,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.hoverMode
      * @default 'onlyPoint'
@@ -3775,7 +3775,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.size
        * @default undefined
@@ -3891,7 +3891,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.size
        * @default undefined
@@ -3936,7 +3936,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @default undefined
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle
      * @default 'solid'

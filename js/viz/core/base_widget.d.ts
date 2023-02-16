@@ -871,7 +871,7 @@ export interface BaseWidgetAnnotationConfig {
  * @type object
  * @namespace DevExpress.viz
  */
-export interface Color {
+export interface ChartsColor {
   /**
    * @docid
    * @default undefined

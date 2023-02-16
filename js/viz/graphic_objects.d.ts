@@ -8,7 +8,7 @@ import {
  * @static
  * @public
  */
-export function registerGradient(type: string, options: { rotationAngle: number; colors: Array<Colors> }): string;
+export function registerGradient(type: string, options: { rotationAngle: number; colors: Array<GradientColor> }): string;
 /**
  * @docid viz.registerPattern
  * @publicName registerPattern(options)
@@ -19,7 +19,7 @@ export function registerPattern(options: { width: number | string; height: numbe
 /**
  * @namespace DevExpress.viz
  */
-export interface Colors {
+export interface GradientColor {
    /**
    * @docid
    * @default undefined

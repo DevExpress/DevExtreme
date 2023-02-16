@@ -20,7 +20,7 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    Color,
+    ChartsColor,
 } from '../core/base_widget';
 
 import {
@@ -153,7 +153,7 @@ export interface BaseGaugeRangeContainer {
      * @type string|object
      * @public
      */
-    backgroundColor?: string | Color;
+    backgroundColor?: string | ChartsColor;
     /**
      * @docid BaseGaugeOptions.rangeContainer.offset
      * @default 0
@@ -183,7 +183,7 @@ export interface BaseGaugeRangeContainer {
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
        * @type string|object
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
        */
@@ -455,7 +455,7 @@ export interface CommonIndicator {
      * @type string|object
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid
      * @default 'right' &for(value_indicators)

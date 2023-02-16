@@ -42,7 +42,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
-    Color,
+    ChartsColor,
 } from './core/base_widget';
 
 import {
@@ -525,7 +525,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @type string|object
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
      * @default 'onlyPoint'
@@ -567,7 +567,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @type string|object
        * @default undefined
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -766,7 +766,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @type string|object
        * @default undefined
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */

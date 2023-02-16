@@ -42,7 +42,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
-    Color,
+    ChartsColor,
 } from './core/base_widget';
 
 import {
@@ -1488,7 +1488,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @type string|object
      * @public
      */
-    color?: string | Color;
+    color?: string | ChartsColor;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
      * @default 'solid'
@@ -1539,7 +1539,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @type string|object
        * @default undefined
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
        * @default 'solid'
@@ -1667,7 +1667,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @type string|object
        * @default undefined
        */
-      color?: string | Color;
+      color?: string | ChartsColor;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
        * @default 'solid'
