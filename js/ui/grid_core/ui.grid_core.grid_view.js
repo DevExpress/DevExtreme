@@ -575,9 +575,10 @@ const ResizingController = modules.ViewController.inherit({
     },
     _setScrollerSpacing: function() {
         const scrollable = this._rowsView.getScrollable();
-
         // T722415, T758955
-        if(!scrollable) {
+        const isNativeScrolling = this.option('scrolling.useNative') === true;
+
+        if(!scrollable || isNativeScrolling) {
             deferRender(() => {
                 deferUpdate(() => {
                     this._setScrollerSpacingCore();
