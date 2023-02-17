@@ -611,6 +611,9 @@ const resizingControllerMembers = {
 
         // @ts-expect-error
         const rootElementHeight = getHeight($rootElement);
+        const height = that.option('height') || $rootElement.get(0).style.height;
+        const isHeightSpecified = !!height && height !== 'auto';
+
         // @ts-expect-error
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
@@ -619,7 +622,7 @@ const resizingControllerMembers = {
         that.updateSize($rootElement);
 
         deferRender(function() {
-            const hasHeight = that._hasHeight || !!maxHeight;
+            const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
             rowsView.hasHeight(hasHeight);
 
             // IE11

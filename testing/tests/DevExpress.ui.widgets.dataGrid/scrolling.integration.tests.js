@@ -1455,6 +1455,52 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.strictEqual(tableFixed.find('tr').length, 3);
     });
 
+    QUnit.test('DataGrid scrollable should work properly when height option is changed to \'auto\' and to a specific value', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, name: 'test1' },
+                { id: 2, name: 'test2' }
+            ],
+            keyExpr: 'id',
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    $('<div>')
+                        .dxDataGrid({
+                            keyExpr: 'id',
+                            dataSource: [
+                                { id: 1 }
+                            ],
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // assert
+        assert.notOk(checkScrollWorks(dataGrid), 'scroll should not work if height is not specified');
+
+        // act
+        dataGrid.option('height', 150);
+        dataGrid.expandRow(2);
+        this.clock.tick();
+
+        // assert
+        assert.ok(checkScrollWorks(dataGrid), 'scroll should work as height is specified and content height is bigger than height');
+
+        // act
+        dataGrid.option('height', 'auto');
+        this.clock.tick();
+
+        // assert
+        assert.notOk(checkScrollWorks(dataGrid), 'scroll should not work if height is \'auto\'');
+    });
+
     // T1139557
     QUnit.test('DataGrid should be scrollable if max-height is set and master detail was expanded', function(assert) {
         $('#dataGrid').css('max-height', '150px');
