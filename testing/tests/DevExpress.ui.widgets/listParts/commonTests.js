@@ -1846,6 +1846,27 @@ QUnit.module('selectByClick option', ()=> {
 
         assert.strictEqual(onSelectionChangedSpy.callCount, 2);
     });
+
+    QUnit.test('onSelectionChanged event shouldn`t be called on item click if selectByClick=true, selectionMode=single', function(assert) {
+        const onSelectionChangedSpy = sinon.spy();
+        const $list = $('#list').dxList({
+            items: [1, 2],
+            showSelectionControls: true,
+            selectByClick: true,
+            selectionMode: 'single',
+            onSelectionChanged: onSelectionChangedSpy,
+        });
+
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+        $items.eq(0).trigger('dxclick');
+        assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+        $items.eq(1).trigger('dxclick');
+        assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+        assert.strictEqual(onSelectionChangedSpy.callCount, 2);
+    });
 });
 
 QUnit.module('events', moduleSetup, () => {
