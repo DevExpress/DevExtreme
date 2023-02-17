@@ -1838,7 +1838,7 @@ QUnit.module('selectByClick option', ()=> {
         });
 
         const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
-        const $item2 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $item2 = $list.find(`.${LIST_ITEM_CLASS}`).eq(1);
 
         $item1.trigger('dxclick');
         $item2.trigger('dxclick');
