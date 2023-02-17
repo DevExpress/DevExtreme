@@ -127,12 +127,13 @@ export const ListBase = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-
             hoverStateEnabled: true,
 
             pullRefreshEnabled: false,
 
             scrollingEnabled: true,
+
+            selectByClick: true,
 
             showScrollbar: 'onScroll',
 
@@ -250,6 +251,7 @@ export const ListBase = CollectionWidget.inherit({
         ]);
     },
 
+
     _visibilityChanged: function(visible) {
         if(visible) {
             this._updateLoadingState(true);
@@ -316,6 +318,10 @@ export const ListBase = CollectionWidget.inherit({
 
     _itemSelectHandler: function(e) {
         if(this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
+            return;
+        }
+
+        if(!this.option('selectByClick')) {
             return;
         }
 
@@ -942,6 +948,7 @@ export const ListBase = CollectionWidget.inherit({
             case '_swipeEnabled':
                 break;
             case '_listAttributes':
+            case 'selectByClick':
                 break;
             default:
                 this.callBase(args);
