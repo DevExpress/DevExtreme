@@ -1788,6 +1788,65 @@ QUnit.module('selection', moduleSetup, () => {
     });
 });
 
+QUnit.module('selectByClick option', ()=> {
+    QUnit.test('selectByClick option should be changed after initialization', function(assert) {
+        const list = $('#list').dxList({ items: [1, 2], selectByClick: false }).dxList('instance');
+        const isSelectByClick = list.option('selectByClick');
+
+        assert.strictEqual(isSelectByClick, true);
+    });
+
+    QUnit.test('selectByClick option should be changed after updation', function(assert) {
+        const list = $('#list').dxList({ items: [1, 2] }).dxList('instance');
+
+        list.option('selectByClick', false);
+
+        const isSelectByClick = list.option('selectByClick');
+
+        assert.strictEqual(isSelectByClick, false);
+    });
+
+    QUnit.test('onSelectionChanged event shouldn`t call on item click if selectByClick is false', function(assert) {
+        let actionCount = sinon.spy();
+        const $list = $('#list').dxList({
+            items: [1, 2],
+            showSelectionControls: true,
+            selectByClick: false,
+            selectionMode: 'multiple',
+            onSelectionChanged() {
+                actionCount++;
+            },
+        });
+
+        const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $item2 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+        $item1.trigger('dxclick');
+        $item2.trigger('dxclick');
+
+        assert.strictEqual(actionCount, 0);
+    });
+
+    QUnit.test('onSelectionChanged event should call on item click if selectByClick is true', function(assert) {
+        const actionCount = sinon.spy();
+        const $list = $('#list').dxList({
+            items: [1, 2],
+            showSelectionControls: true,
+            selectByClick: true,
+            selectionMode: 'multiple',
+            onSelectionChanged: actionCount,
+        });
+
+        const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $item2 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+        $item1.trigger('dxclick');
+        $item2.trigger('dxclick');
+
+        assert.strictEqual(actionCount, 2);
+    });
+});
+
 QUnit.module('events', moduleSetup, () => {
     QUnit.test('onItemClick should be fired when item is clicked in ungrouped list', function(assert) {
         let actionFired;
