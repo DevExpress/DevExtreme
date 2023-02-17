@@ -39,7 +39,6 @@ import {
     FIELD_ITEM_LABEL_TEXT_CLASS,
 } from 'ui/form/components/label';
 
-
 const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 
