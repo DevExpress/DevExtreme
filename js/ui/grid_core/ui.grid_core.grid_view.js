@@ -479,8 +479,8 @@ const resizingControllerMembers = {
         return Math.ceil(result);
     },
 
-    _$groupElement: function() {
-        return this.component.$element().children().eq(0);
+    _getGroupElement: function() {
+        return this.component.$element().children().get(0);
     },
 
     updateSize: function(rootElement) {
@@ -553,7 +553,7 @@ const resizingControllerMembers = {
     },
     _resetGroupElementHeight: function() {
         // @ts-expect-error
-        const groupElement = this._$groupElement().get(0);
+        const groupElement = this._getGroupElement();
         const scrollable = this._rowsView.getScrollable();
 
         if(groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
@@ -586,16 +586,12 @@ const resizingControllerMembers = {
         });
     },
     _setScrollerSpacing: function() {
-        if(this.option('scrolling.useNative') === true) {
-            // T722415, T758955
-            deferRender(() => {
-                deferUpdate(() => {
-                    this._setScrollerSpacingCore();
-                });
+        // T722415, T758955
+        deferRender(() => {
+            deferUpdate(() => {
+                this._setScrollerSpacingCore();
             });
-        } else {
-            this._setScrollerSpacingCore();
-        }
+        });
     },
     _updateDimensionsCore: function() {
         const that = this;
@@ -607,7 +603,7 @@ const resizingControllerMembers = {
 
         const $rootElement = that.component.$element();
         // @ts-expect-error
-        const groupElement = this._$groupElement().get(0);
+        const groupElement = this._getGroupElement();
 
         // @ts-expect-error
         const rootElementHeight = getHeight($rootElement);

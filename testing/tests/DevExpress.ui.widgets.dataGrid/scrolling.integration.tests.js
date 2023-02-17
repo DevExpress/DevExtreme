@@ -67,6 +67,13 @@ function checkScrollWorks(dataGrid, scrollBy = 10, isHorizontal = false) {
     return false;
 }
 
+function checkHeaderRowScrollPadding(dataGrid) {
+    const headerPadding = parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight'));
+    const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth();
+
+    return headerPadding === scrollbarWidth;
+}
+
 QUnit.module('Scrolling', baseModuleConfig, () => {
     [true, false].forEach(nativeScrolling => {
         QUnit.test(`Correct start scroll position when RTL with nativeScrolling: ${nativeScrolling}`, function(assert) {
@@ -1178,13 +1185,13 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+        assert.ok(checkHeaderRowScrollPadding(dataGrid), 'padding-right');
 
         // act
         dataGrid.expandRow(0);
 
         // assert
-        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+        assert.ok(checkHeaderRowScrollPadding(dataGrid), 'padding-right');
     });
 
     QUnit.test('New mode. Rows should be scrolled properly when rowRenderingMode is virtual', function(assert) {
@@ -1455,7 +1462,35 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.strictEqual(tableFixed.find('tr').length, 3);
     });
 
-    QUnit.test('DataGrid scrollable should work properly when height option is changed to \'auto\' and to a specific value', function(assert) {
+    QUnit.test('DataGrid scrollbar padding should be added after grid showed and updateDimensions called', function(assert) {
+        // arrange
+        $('#dataGrid').css('display', 'none');
+
+        const dataSource = [];
+
+        for(let i = 0; i < 25; i++) { dataSource.push({ value: i, value2: i }); }
+
+        const dataGrid = createDataGrid({
+            dataSource,
+            columns: ['value', 'value2'],
+            scrolling: {
+                useNative: true
+            }
+        });
+        this.clock.tick();
+
+        dataGrid.$element().addClass('fixed-height');
+
+        // act
+        $('#dataGrid').css('display', '');
+
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.ok(checkHeaderRowScrollPadding(dataGrid), 'padding-right');
+    });
+
+    QUnit.test('DataGrid scrollbar should appear and dissapear when height option is changed to \'auto\' and to a specific value', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             dataSource: [
