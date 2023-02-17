@@ -1809,12 +1809,10 @@ QUnit.module('selectByClick option', ()=> {
             selectionMode: 'multiple',
             onSelectionChanged: onSelectionChangedSpy,
         });
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
-        const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
-        const $item2 = $list.find(`.${LIST_ITEM_CLASS}`).eq(1);
-
-        $item1.trigger('dxclick');
-        $item2.trigger('dxclick');
+        $items.eq(0).trigger('dxclick');
+        $items.eq(1).trigger('dxclick');
 
         assert.strictEqual(onSelectionChangedSpy.callCount, 0);
     });
