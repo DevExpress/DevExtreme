@@ -471,8 +471,8 @@ const ResizingController = modules.ViewController.inherit({
         return Math.ceil(result);
     },
 
-    _$groupElement: function() {
-        return this.component.$element().children().eq(0);
+    _getGroupElement: function() {
+        return this.component.$element().children().get(0);
     },
 
     updateSize: function(rootElement) {
@@ -542,7 +542,7 @@ const ResizingController = modules.ViewController.inherit({
         return result.promise();
     },
     _resetGroupElementHeight: function() {
-        const groupElement = this._$groupElement().get(0);
+        const groupElement = this._getGroupElement();
         const scrollable = this._rowsView.getScrollable();
 
         if(groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
@@ -574,16 +574,12 @@ const ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function() {
-        if(this.option('scrolling.useNative') === true) {
-            // T722415, T758955
-            deferRender(() => {
-                deferUpdate(() => {
-                    this._setScrollerSpacingCore();
-                });
+        // T722415, T758955
+        deferRender(() => {
+            deferUpdate(() => {
+                this._setScrollerSpacingCore();
             });
-        } else {
-            this._setScrollerSpacingCore();
-        }
+        });
     },
     _updateDimensionsCore: function() {
         const that = this;
@@ -593,7 +589,7 @@ const ResizingController = modules.ViewController.inherit({
         const rowsView = that._rowsView;
 
         const $rootElement = that.component.$element();
-        const groupElement = this._$groupElement().get(0);
+        const groupElement = this._getGroupElement();
 
         const rootElementHeight = getHeight($rootElement);
         const height = that.option('height') || $rootElement.get(0).style.height;
