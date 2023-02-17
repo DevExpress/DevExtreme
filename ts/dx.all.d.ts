@@ -1387,6 +1387,9 @@ declare module DevExpress.common {
     | 'datetime';
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
+  /**
+   * [descr:Draggable]
+   */
   export type Draggable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
   export type DragHighlight = 'push' | 'indicate';
@@ -1642,6 +1645,9 @@ declare module DevExpress.common {
      */
     type: 'required';
   };
+  /**
+   * [descr:Scrollable]
+   */
   export type Scrollable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
@@ -1655,6 +1661,9 @@ declare module DevExpress.common {
   export type SingleOrMultiple = 'single' | 'multiple';
   export type SingleOrNone = 'single' | 'none';
   export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
+  /**
+   * [descr:Sortable]
+   */
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
@@ -1704,6 +1713,9 @@ declare module DevExpress.common {
     | 'dxDropDownButton';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
+  /**
+   * [descr:ValidationCallbackData]
+   */
   export type ValidationCallbackData = {
     value?: any;
     rule: any;
@@ -1713,6 +1725,9 @@ declare module DevExpress.common {
     formItem?: any;
   };
   export type ValidationMessageMode = 'always' | 'auto';
+  /**
+   * [descr:ValidationRule]
+   */
   export type ValidationRule =
     | AsyncRule
     | CompareRule
