@@ -3,7 +3,7 @@ import { patchFontOptions } from '../core/utils';
 import { noop } from '../../core/utils/common';
 
 const pieChartPlugin = {
-    name: 'center_template_pieChart',
+    name: 'center_template_pie_chart',
     init: noop,
     dispose: function() {
         this._centerTemplateGroup.linkOff().dispose();
@@ -73,7 +73,8 @@ const gaugePlugin = {
         _createCenterTemplateGroup() {
             this._centerTemplateGroup = this._renderer.g()
                 .attr({ class: 'dxg-hole-template' })
-                .linkOn(this._renderer.root, 'center-template').linkAppend();
+                .linkOn(this._renderer.root, 'center-template')
+                .linkAppend();
         },
     },
     customize: pieChartPlugin.customize,
