@@ -1,4 +1,4 @@
-import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
+import { getOuterWidth, getInnerWidth, getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 // @ts-expect-error
@@ -29,14 +29,6 @@ const isPercentWidth = function(width) {
 
 const isPixelWidth = function(width) {
     return isString(width) && width.slice(-2) === 'px';
-};
-
-const getContainerHeight = function($container) {
-    const clientHeight = $container.get(0).clientHeight;
-    const paddingTop = parseFloat($container.css('paddingTop'));
-    const paddingBottom = parseFloat($container.css('paddingBottom'));
-
-    return clientHeight - paddingTop - paddingBottom;
 };
 
 const calculateFreeWidth = function(that, widths) {
@@ -98,7 +90,7 @@ const resizingControllerMembers = {
             if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                 !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
                 deferUpdate(() => deferRender(() => deferUpdate(() => {
-                    that._setScrollerSpacing(that._hasHeight);
+                    that._setScrollerSpacing();
                     that._rowsView.resize();
                 })));
             } else {
@@ -488,22 +480,25 @@ const resizingControllerMembers = {
         return Math.ceil(result);
     },
 
+    _getGroupElement: function() {
+        return this.component.$element().children().get(0);
+    },
+
     updateSize: function(rootElement) {
         const that = this;
-        let $groupElement;
-        let width;
         const $rootElement = $(rootElement);
         const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
         if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
-            $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
+            const $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
+
             if($groupElement.length) {
                 $groupElement.detach();
             }
 
-            that._hasHeight = !!getContainerHeight($rootElement);
+            that._hasHeight = !!getHeight($rootElement);
 
-            width = getWidth($rootElement);
+            const width = getWidth($rootElement);
             $rootElement.addClass(importantMarginClass);
             that._hasWidth = getWidth($rootElement) === width;
             $rootElement.removeClass(importantMarginClass);
@@ -559,7 +554,7 @@ const resizingControllerMembers = {
     },
     _resetGroupElementHeight: function() {
         // @ts-expect-error
-        const groupElement = this.component.$element().children().get(0);
+        const groupElement = this._getGroupElement();
         const scrollable = this._rowsView.getScrollable();
 
         if(groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
@@ -580,9 +575,9 @@ const resizingControllerMembers = {
         }
         return true;
     },
-    _setScrollerSpacingCore: function(hasHeight) {
+    _setScrollerSpacingCore: function() {
         const that = this;
-        const vScrollbarWidth = hasHeight ? that._rowsView.getScrollbarWidth() : 0;
+        const vScrollbarWidth = that._rowsView.getScrollbarWidth();
         const hScrollbarWidth = that._rowsView.getScrollbarWidth(true);
 
         deferRender(function() {
@@ -591,52 +586,47 @@ const resizingControllerMembers = {
             that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
         });
     },
-    _setScrollerSpacing: function(hasHeight) {
-        if(this.option('scrolling.useNative') === true) {
-            // T722415, T758955
+    _setScrollerSpacing: function() {
+        const scrollable = this._rowsView.getScrollable();
+        // T722415, T758955
+        const isNativeScrolling = this.option('scrolling.useNative') === true;
+
+        if(!scrollable || isNativeScrolling) {
             deferRender(() => {
                 deferUpdate(() => {
-                    this._setScrollerSpacingCore(hasHeight);
+                    this._setScrollerSpacingCore();
                 });
             });
-        } else {
-            this._setScrollerSpacingCore(hasHeight);
-        }
+        } else { this._setScrollerSpacingCore(); }
     },
     _updateDimensionsCore: function() {
         const that = this;
+
         const dataController = that._dataController;
+        // @ts-expect-error
+        const editorFactory = that.getController('editorFactory');
         const rowsView = that._rowsView;
+
         const $rootElement = that.component.$element();
         // @ts-expect-error
-        const groupElement = $rootElement.children().get(0);
+        const groupElement = this._getGroupElement();
+
         // @ts-expect-error
-        const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
+        const rootElementHeight = getHeight($rootElement);
+        const height = that.option('height') || $rootElement.get(0).style.height;
+        const isHeightSpecified = !!height && height !== 'auto';
+
         // @ts-expect-error
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
-        // @ts-expect-error
-        const height = that.option('height') || $rootElement.get(0).style.height;
-        // @ts-expect-error
-        const editorFactory = that.getController('editorFactory');
-        const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
-        let $testDiv;
+        const isMaxHeightApplied = groupElement && groupElement.scrollHeight === groupElement.offsetHeight;
 
         that.updateSize($rootElement);
-        const hasHeight = that._hasHeight || maxHeightHappened;
-
-        // @ts-expect-error
-        if(height && (that._hasHeight ^ (height !== 'auto'))) {
-            $testDiv = $('<div>');
-            setHeight($testDiv, height);
-            $testDiv.appendTo($rootElement);
-            that._hasHeight = !!getHeight($testDiv);
-            // @ts-expect-error
-            $testDiv.remove();
-        }
 
         deferRender(function() {
-            rowsView.height(null, hasHeight);
+            const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
+            rowsView.hasHeight(hasHeight);
+
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
@@ -648,7 +638,7 @@ const resizingControllerMembers = {
             }
             deferUpdate(function() {
                 that._updateLastSizes($rootElement);
-                that._setScrollerSpacing(hasHeight);
+                that._setScrollerSpacing();
 
                 each(VIEW_NAMES, function(index, viewName) {
                     // @ts-expect-error

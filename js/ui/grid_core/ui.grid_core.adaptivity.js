@@ -169,7 +169,7 @@ const adaptiveColumnsControllerMembers = {
                 templateOptions.value = cellOptions.row.values[columnIndex];
                 if(isItemEdited || column.showEditorAlways) {
                     // @ts-expect-error
-                    editingController.renderFormEditTemplate(templateOptions, item, options, $container, !isItemEdited);
+                    editingController.renderFormEditorTemplate(templateOptions, item, options, $container, !isItemEdited);
                 } else {
                     templateOptions.column = column;
                     templateOptions.columnIndex = columnIndex;

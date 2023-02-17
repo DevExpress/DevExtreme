@@ -146,9 +146,9 @@ export interface RowsView extends State, ColumnsView {
 
   scrollTo: (this: this, location) => any;
 
-  height: (this: this, height, hasHeight) => any;
+  height: (this: this, height) => any;
 
-  hasHeight: (this: this) => any;
+  hasHeight: (this: this, hasHeight) => any;
 
   setLoading: (this: this, isLoading, messageText) => any;
 

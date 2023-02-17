@@ -403,6 +403,67 @@ test('Header container should have padding-right after expanding the master row 
   },
 }));
 
+test('Header container should have padding-right if grid has max-height and scrollbar is shown', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  async function getRightPadding(): Promise<number> {
+    const padding = await dataGrid.getHeaders().element.getStyleProperty('padding-right');
+    return parseFloat(padding);
+  }
+
+  // act
+  const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
+
+  await dataGrid.scrollBy({ y: 20 });
+
+  // assert
+  await t
+    .expect(await getRightPadding())
+    .eql(scrollBarWidth)
+
+    .expect(await dataGrid.getScrollTop())
+    .eql(20)
+
+    .expect(await takeScreenshot('grid-header-row-scrollbar-padding.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    $('#container').css('max-height', 200);
+  })();
+
+  return createWidget('dxDataGrid', {
+    width: 400,
+    showBorders: true,
+    scrolling: {
+      useNative: true,
+    },
+    dataSource: [
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+      {
+        id: 1, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+      {
+        id: 2, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+      {
+        id: 3, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+      {
+        id: 4, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+      {
+        id: 5, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+    ],
+    keyExpr: 'id',
+    columns: ['field1', 'field2', 'field3'],
+  });
+});
+
 test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
