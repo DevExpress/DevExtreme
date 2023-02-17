@@ -802,7 +802,7 @@ QUnit.module('Class check', ()=>{
             });
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
-            assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
         });
 
         test(`${editorType} should have a ${TOGGLE_CONTROLS_PADDING_CLASS} class after visibility change to true (labelLocation=top, label.alignment=left)`, function(assert) {
@@ -833,7 +833,7 @@ QUnit.module('Class check', ()=>{
 
             const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
 
-            assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
         });
 
         test(`${editorType} should not have a ${TOGGLE_CONTROLS_PADDING_CLASS} class after visibility change to false (labelLocation=top, label.alignment=left)`, function(assert) {
@@ -864,7 +864,7 @@ QUnit.module('Class check', ()=>{
 
             const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
 
-            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
         });
 
         test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.visible=false`, function(assert) {
@@ -889,7 +889,7 @@ QUnit.module('Class check', ()=>{
             });
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
-            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
         });
 
         ['left', 'right'].forEach(labelLocation => {
@@ -915,7 +915,7 @@ QUnit.module('Class check', ()=>{
                 });
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
-                assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
             });
         });
 
@@ -942,7 +942,7 @@ QUnit.module('Class check', ()=>{
                 });
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
-                assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
             });
         });
 
@@ -967,7 +967,7 @@ QUnit.module('Class check', ()=>{
             });
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
-            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
         });
     });
 });
