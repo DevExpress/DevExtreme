@@ -596,6 +596,9 @@ const ResizingController = modules.ViewController.inherit({
         const groupElement = this._$groupElement().get(0);
 
         const rootElementHeight = getHeight($rootElement);
+        const height = that.option('height') || $rootElement.get(0).style.height;
+        const isHeightSpecified = !!height && height !== 'auto';
+
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
         const isMaxHeightApplied = groupElement && groupElement.scrollHeight === groupElement.offsetHeight;
@@ -603,7 +606,7 @@ const ResizingController = modules.ViewController.inherit({
         that.updateSize($rootElement);
 
         deferRender(function() {
-            const hasHeight = that._hasHeight || !!maxHeight;
+            const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
             rowsView.hasHeight(hasHeight);
 
             // IE11
