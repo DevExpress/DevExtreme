@@ -833,7 +833,7 @@ QUnit.module('Class check', ()=>{
 
             const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
 
-            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
         });
 
         test(`${editorType} should not have a ${TOGGLE_CONTROLS_PADDING_CLASS} class after visibility change to false (labelLocation=top, label.alignment=left)`, function(assert) {
