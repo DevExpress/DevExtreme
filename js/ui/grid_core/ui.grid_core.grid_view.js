@@ -574,12 +574,16 @@ const ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function() {
+        const scrollable = this._rowsView.getScrollable();
+
         // T722415, T758955
-        deferRender(() => {
-            deferUpdate(() => {
-                this._setScrollerSpacingCore();
+        if(!scrollable) {
+            deferRender(() => {
+                deferUpdate(() => {
+                    this._setScrollerSpacingCore();
+                });
             });
-        });
+        } else { this._setScrollerSpacingCore(); }
     },
     _updateDimensionsCore: function() {
         const that = this;
