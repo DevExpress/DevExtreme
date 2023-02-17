@@ -1822,7 +1822,7 @@ QUnit.module('selectByClick option', ()=> {
         $item1.trigger('dxclick');
         $item2.trigger('dxclick');
 
-        assert.strictEqual(actionCount, 0);
+        assert.strictEqual(actionCount.callCount, 0);
     });
 
     QUnit.test('onSelectionChanged event should call on item click if selectByClick is true', function(assert) {
@@ -1841,7 +1841,7 @@ QUnit.module('selectByClick option', ()=> {
         $item1.trigger('dxclick');
         $item2.trigger('dxclick');
 
-        assert.strictEqual(actionCount, 2);
+        assert.strictEqual(actionCount.callCount, 2);
     });
 });
 
