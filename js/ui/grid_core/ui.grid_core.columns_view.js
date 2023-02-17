@@ -1194,6 +1194,7 @@ const columnsViewMembers = {
 
         return false;
     },
+
     dispose: function() {
         if(hasWindow()) {
             getWindow().clearTimeout(this._templateTimeout);
