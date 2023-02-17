@@ -181,6 +181,7 @@ export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'da
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
@@ -565,6 +566,7 @@ export type RequiredRule = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
@@ -637,6 +639,7 @@ export type SingleOrNone = 'single' | 'none';
 export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
@@ -734,6 +737,7 @@ export type ToolbarItemLocation = 'after' | 'before' | 'center';
 export type TooltipShowMode = 'always' | 'onHover';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
@@ -753,6 +757,7 @@ export type ValidationCallbackData = {
 export type ValidationMessageMode = 'always' | 'auto';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
