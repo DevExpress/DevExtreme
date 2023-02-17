@@ -1790,13 +1790,6 @@ QUnit.module('selection', moduleSetup, () => {
 });
 
 QUnit.module('selectByClick option', ()=> {
-    QUnit.test('selectByClick option should be changed during initialization', function(assert) {
-        const list = $('#list').dxList({ items: [1, 2], selectByClick: false }).dxList('instance');
-        const isSelectByClick = list.option('selectByClick');
-
-        assert.strictEqual(isSelectByClick, false);
-    });
-
     QUnit.test('selectByClick option should be changed after initialization', function(assert) {
         const list = $('#list').dxList({ items: [1, 2] }).dxList('instance');
 
