@@ -36,6 +36,7 @@ const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
 const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -1835,11 +1836,13 @@ QUnit.module('selectByClick option', ()=> {
             onSelectionChanged: onSelectionChangedSpy,
         });
 
-        const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
-        const $item2 = $list.find(`.${LIST_ITEM_CLASS}`).eq(1);
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
-        $item1.trigger('dxclick');
-        $item2.trigger('dxclick');
+        $items.eq(0).trigger('dxclick');
+        assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+        $items.eq(1).trigger('dxclick');
+        assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
 
         assert.strictEqual(onSelectionChangedSpy.callCount, 2);
     });
