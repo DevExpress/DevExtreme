@@ -1806,14 +1806,14 @@ QUnit.module('selectByClick option', ()=> {
         assert.strictEqual(isSelectByClick, false);
     });
 
-    QUnit.test('onSelectionChanged event shouldn`t call on item click if selectByClick is false', function(assert) {
-        const actionCount = sinon.spy();
+    QUnit.test('onSelectionChanged event shouldn`t be called on item click if selectByClick is false', function(assert) {
+        const onSelectionChangedSpy = sinon.spy();
         const $list = $('#list').dxList({
             items: [1, 2],
             showSelectionControls: true,
             selectByClick: false,
             selectionMode: 'multiple',
-            onSelectionChanged: actionCount,
+            onSelectionChanged: onSelectionChangedSpy,
         });
 
         const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
@@ -1822,17 +1822,17 @@ QUnit.module('selectByClick option', ()=> {
         $item1.trigger('dxclick');
         $item2.trigger('dxclick');
 
-        assert.strictEqual(actionCount.callCount, 0);
+        assert.strictEqual(onSelectionChangedSpy.callCount, 0);
     });
 
     QUnit.test('onSelectionChanged event should call on item click if selectByClick is true', function(assert) {
-        const actionCount = sinon.spy();
+        const onSelectionChangedSpy = sinon.spy();
         const $list = $('#list').dxList({
             items: [1, 2],
             showSelectionControls: true,
             selectByClick: true,
             selectionMode: 'multiple',
-            onSelectionChanged: actionCount,
+            onSelectionChanged: onSelectionChangedSpy,
         });
 
         const $item1 = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
@@ -1841,7 +1841,7 @@ QUnit.module('selectByClick option', ()=> {
         $item1.trigger('dxclick');
         $item2.trigger('dxclick');
 
-        assert.strictEqual(actionCount.callCount, 2);
+        assert.strictEqual(onSelectionChangedSpy.callCount, 2);
     });
 });
 
