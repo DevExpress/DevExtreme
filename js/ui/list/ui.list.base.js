@@ -251,7 +251,6 @@ export const ListBase = CollectionWidget.inherit({
         ]);
     },
 
-
     _visibilityChanged: function(visible) {
         if(visible) {
             this._updateLoadingState(true);
