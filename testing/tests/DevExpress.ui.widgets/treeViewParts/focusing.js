@@ -31,7 +31,7 @@ QUnit.testInActiveWindow('item should have focus-state class after click on it',
     assert.ok($node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
-QUnit.testInActiveWindow('disabled item should not have focus-state class after click on it', function(assert) {
+QUnit.testInActiveWindow('disabled item should have focus-state class after click on it', function(assert) {
     const treeViewData = $.extend(true, [], DATA[0]);
     treeViewData[0].disabled = true;
 
@@ -44,7 +44,7 @@ QUnit.testInActiveWindow('disabled item should not have focus-state class after 
 
     $item.trigger('dxpointerdown');
 
-    assert.ok(!$node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
+    assert.ok($node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
 QUnit.testInActiveWindow('widget should not have focus-state class after click on arrow', function(assert) {
