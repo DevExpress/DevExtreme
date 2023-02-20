@@ -122,7 +122,6 @@ QUnit.test('visible should be rendered correctly after value changed', function(
 QUnit.module('disabled builtin');
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const DISABLED_STATE_ATTR = 'aria-disabled';
 
 QUnit.test('disabled should be rendered correctly by default', function(assert) {
     const widget = new CollectionWidget($('<div>'), {
@@ -160,5 +159,5 @@ QUnit.test('aria-disabled attribute should be set if the item\'s disabled prop i
 
     const $item = widget.itemElements().eq(0);
 
-    assert.ok($item.attr(DISABLED_STATE_ATTR), 'element has aria-disabled attribute');
+    assert.ok($item.attr('aria-disabled'), 'element has aria-disabled attribute');
 });
