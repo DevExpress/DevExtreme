@@ -72,3 +72,30 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
     });
   });
 });
+
+[true, false].forEach((rtlEnabled) => {
+  ['normal', 'none'].forEach((showCheckBoxesMode) => {
+    test(`TreeView-selectAll,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      const screenshotName = `Treeview with custom expander icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
+
+      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'material.blue.light', shouldTestInCompact: true });
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => createWidget('dxTreeView', {
+      items: employees,
+      width: 300,
+      showCheckBoxesMode,
+      rtlEnabled,
+      expandButtonIcon: 'add',
+      collapseButtonIcon: 'minus',
+      itemTemplate(item) {
+        return `<div>${item.fullName} (${item.position})</div>`;
+      },
+    }));
+  });
+});
