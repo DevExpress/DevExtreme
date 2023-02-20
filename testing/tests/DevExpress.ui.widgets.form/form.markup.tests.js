@@ -776,7 +776,7 @@ QUnit.module('Form', () => {
     });
 });
 
-QUnit.module('Class check', ()=>{
+QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
     ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'].forEach(editorType => {
         const componentName = editorType.split('dx')[1].toLowerCase();
 
@@ -946,7 +946,7 @@ QUnit.module('Class check', ()=>{
             });
         });
 
-        test(`default editor should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.alignment=left, label.visible=true,  labelLocation=top`, function(assert) {
+        test('editor should not have class if it is not CheckBox, Switch or RadioGroup', function(assert) {
             const $form = $('#form').dxForm({
                 labelLocation: 'top',
                 items: [
