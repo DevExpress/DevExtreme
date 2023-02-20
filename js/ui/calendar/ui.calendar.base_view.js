@@ -11,6 +11,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
+import { start as hoverStartEventName } from '../../events/hover';
 
 const { abstract } = Widget;
 
@@ -20,9 +21,13 @@ const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
+const CALENDAR_RANGE_DATE_CLASS = 'dx-calendar-range-date';
+const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
+const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
 const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxCalendar');
+const CALENDAR_DXHOVER_EVENT_NAME = addNamespace(hoverStartEventName, 'dxCalendar');
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
@@ -39,6 +44,7 @@ const BaseView = Widget.inherit({
             cellTemplate: null,
             disabledDates: null,
             onCellClick: null,
+            onCellHover: null,
             rowCount: 3,
             colCount: 4,
             allowValueSelection: true,
@@ -59,6 +65,7 @@ const BaseView = Widget.inherit({
         this._renderBody();
         this._renderContouredDate();
         this._renderValue();
+        this._renderRange();
         this._renderEvents();
     },
 
@@ -198,10 +205,27 @@ const BaseView = Widget.inherit({
                 });
             }
         }));
+
+        if(this.option('selectionMode') === 'range') {
+            this._createCellHoverAction();
+            eventsEngine.off(this._$table, CALENDAR_DXHOVER_EVENT_NAME);
+            eventsEngine.on(this._$table, CALENDAR_DXHOVER_EVENT_NAME, `td:not(.${CALENDAR_WEEK_NUMBER_CELL_CLASS})`, ((e) => {
+                if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
+                    this._cellHoverAction({
+                        event: e,
+                        value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
+                    });
+                }
+            }));
+        }
     },
 
     _createCellClickAction: function() {
         this._cellClickAction = this._createActionByOption('onCellClick');
+    },
+
+    _createCellHoverAction: function() {
+        this._cellHoverAction = this._createActionByOption('onCellHover');
     },
 
     _createDisabledDatesHandler: function() {
@@ -253,37 +277,44 @@ const BaseView = Widget.inherit({
         return this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
     },
 
-    _changeValue: function(cellDate) {
-        if(cellDate) {
-            const value = this.option('value');
-            const newValue = value ? new Date(value) : new Date();
-
-            newValue.setDate(cellDate.getDate());
-            newValue.setMonth(cellDate.getMonth());
-            newValue.setFullYear(cellDate.getFullYear());
-            newValue.setDate(cellDate.getDate());
-
-            this.option('value', newValue);
-        } else {
-            this.option('value', null);
-        }
-    },
-
     _renderValue: function() {
         if(!this.option('allowValueSelection')) {
             return;
         }
 
-        if(this._selectedCells) {
-            this._selectedCells.forEach((cell) => (cell.removeClass(CALENDAR_SELECTED_DATE_CLASS)));
+        let value = this.option('value');
+        if(!Array.isArray(value)) {
+            value = [value];
         }
-        const multiselect = this.option('multiselect');
-        const selectedCells = multiselect ?
-            this.option('values').map((value) => this._getCellByDate(value)) :
-            [this._getCellByDate(this.option('value'))];
+
+        this._selectedCells?.forEach((cell) => (cell.removeClass(CALENDAR_SELECTED_DATE_CLASS)));
+
+        const selectedCells = value.map((value) => this._getCellByDate(value));
 
         this._selectedCells = selectedCells;
         selectedCells.forEach((cell) => (cell.addClass(CALENDAR_SELECTED_DATE_CLASS)));
+    },
+
+    _renderRange: function() {
+        const { allowValueSelection, selectionMode } = this.option();
+        if(!allowValueSelection || selectionMode !== 'range') {
+            return;
+        }
+
+        this._rangeCells?.forEach((cell) => (cell.removeClass(CALENDAR_RANGE_DATE_CLASS)));
+        this._rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
+        this._rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
+
+        const rangeCells = this.option('range').map((value) => this._getCellByDate(value));
+        const [rangeStartDateCell, rangeEndDateCell] = this.option('value').map((value) => this._getCellByDate(value));
+
+        this._rangeCells = rangeCells;
+        this._rangeStartDateCell = rangeStartDateCell;
+        this._rangeEndDateCell = rangeEndDateCell;
+
+        rangeCells.forEach((cell) => (cell.addClass(CALENDAR_RANGE_DATE_CLASS)));
+        rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
+        rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
     },
 
     getCellAriaLabel: function(date) {
@@ -306,15 +337,19 @@ const BaseView = Widget.inherit({
         const { name, value } = args;
         switch(name) {
             case 'value':
-            case 'values':
-            case 'multiselect':
                 this._renderValue();
+                break;
+            case 'range':
+                this._renderRange();
                 break;
             case 'contouredDate':
                 this._renderContouredDate(value);
                 break;
             case 'onCellClick':
                 this._createCellClickAction();
+                break;
+            case 'onCellHover':
+                this._createCellHoverAction();
                 break;
             case 'disabledDates':
             case 'cellTemplate':
