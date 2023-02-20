@@ -797,7 +797,6 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
                             },
                         ],
                     },
-
                 ],
             });
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
@@ -822,7 +821,6 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
                             },
                         ],
                     },
-
                 ],
             });
             const optionLabelVisible = 'items[0].items[0].items[0].label.visible';
@@ -853,7 +851,6 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
                             },
                         ],
                     },
-
                 ],
             });
             const optionLabelVisible = 'items[0].items[0].items[0].label.visible';
@@ -884,7 +881,6 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
                             },
                         ],
                     },
-
                 ],
             });
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
@@ -910,7 +906,6 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
                                 },
                             ],
                         },
-
                     ],
                 });
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
