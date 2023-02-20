@@ -675,6 +675,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria('selected', nodeData.selected, $node);
+        this.setAria('disabled', nodeData.disabled, $node);
         this._toggleSelectedClass($node, nodeData.selected);
         this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
@@ -1389,9 +1390,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        if(!$target.children().hasClass(DISABLED_STATE_CLASS)) {
-            this.callBase($target);
-        }
+        this.callBase($target);
     },
 
     _itemPointerDownHandler: function(e) {
@@ -1427,7 +1426,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             fx.stop(this, true);
         });
 
-        const $items = this._findNonDisabledNodes(this._nodeElements());
+        const $items = this._nodeElements();
 
         if(!$items || !$items.length) {
             return;
