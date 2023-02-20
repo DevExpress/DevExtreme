@@ -5,6 +5,7 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { equalByValue } from '../../core/utils/common';
 import { isDefined, isBoolean } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
+import { UiGridCoreFocusUtils } from './ui.grid_core.focus.utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = '.dx-row' + '.' + ROW_FOCUSED_CLASS;
@@ -662,24 +663,32 @@ export const focusModule = {
                     return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
                 },
                 _generateBooleanFilter: function(selector, value, sortInfo) {
-                    let result;
+                    const { desc } = sortInfo;
 
-                    if(value === false) {
-                        result = [selector, '=', sortInfo.desc ? true : null];
-                    } else if(value === true ? !sortInfo.desc : sortInfo.desc) {
-                        result = [selector, '<>', value];
+                    switch(true) {
+                        case value === false && desc:
+                            return [selector, '=', true];
+                        case value === false && !desc:
+                            return [selector, '=', null];
+                        case value === true && !desc:
+                        case !isBoolean(value) && desc:
+                            return [selector, '<>', value];
+                        default:
+                            return undefined;
                     }
-
-                    return result;
                 },
+                // TODO Vinogradov: Move this method implementation to the UiGridCoreFocusUtils
+                // and cover with unit tests.
                 _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     const that = this;
-                    const dataSource = that._dataSource;
+                    const dateSerializationFormat = that.option('dateSerializationFormat');
+                    const isRemoteFiltering = that._dataSource.remoteOperations().filtering;
+
                     let filter = that._generateFilterByKey(key, '<');
-                    let sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering, true);
+                    let sort = that._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
                     if(useGroup) {
-                        const group = that._columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().filtering);
+                        const group = that._columnsController.getGroupDataSourceParameters(!isRemoteFiltering);
                         if(group) {
                             sort = sort ? group.concat(sort) : group;
                         }
@@ -687,39 +696,40 @@ export const focusModule = {
 
                     if(sort) {
                         sort.slice().reverse().forEach(function(sortInfo) {
-                            const selector = sortInfo.selector;
-                            let getter;
+                            const { selector, desc, compare } = sortInfo;
+                            const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
+                                sortInfo,
+                                rowData,
+                                {
+                                    isRemoteFiltering,
+                                    dateSerializationFormat,
+                                    getSelector: (selector) => that._columnsController.columnOption(selector, 'selector'),
+                                }
+                            );
 
-                            if(typeof selector === 'function') {
-                                getter = selector;
-                            } else {
-                                getter = that._columnsController.columnOption(selector, 'selector');
-                            }
+                            filter = [[selector, '=', safeValue], 'and', filter];
 
-                            const value = getter ? getter(rowData) : rowData[selector];
-                            filter = [[selector, '=', value], 'and', filter];
-
-                            if(value === null || isBoolean(value)) {
-                                const booleanFilter = that._generateBooleanFilter(selector, value, sortInfo);
+                            if(rawValue === null || isBoolean(rawValue)) {
+                                const booleanFilter = that._generateBooleanFilter(selector, safeValue, desc);
 
                                 if(booleanFilter) {
                                     filter = [booleanFilter, 'or', filter];
                                 }
                             } else {
-                                const filterOperation = sortInfo.desc ? '>' : '<';
+                                const filterOperation = desc ? '>' : '<';
 
                                 let sortFilter;
-                                if(sortInfo.compare) {
+                                if(compare) {
                                     sortFilter = (data) => {
                                         if(filterOperation === '<') {
-                                            return sortInfo.compare(value, getter(data)) >= 1;
+                                            return compare(rawValue, getter(data)) >= 1;
                                         } else {
-                                            return sortInfo.compare(value, getter(data)) <= -1;
+                                            return compare(rawValue, getter(data)) <= -1;
                                         }
                                     };
                                 } else {
-                                    sortFilter = [selector, filterOperation, value];
-                                    if(!sortInfo.desc) {
+                                    sortFilter = [selector, filterOperation, safeValue];
+                                    if(!desc) {
                                         sortFilter = [sortFilter, 'or', [selector, '=', null]];
                                     }
                                 }
