@@ -98,7 +98,8 @@ $tree-view-icon-size: 24px;
   }
 }
 
-.dx-treeview-toggle-item-visibility {
+.dx-treeview-toggle-item-visibility,
+.dx-treeview-custom-icon-toggle-item-visibility {
   position: absolute;
   cursor: pointer;
 
@@ -132,7 +133,8 @@ $tree-view-icon-size: 24px;
     }
   }
 
-  .dx-treeview-toggle-item-visibility {
+  .dx-treeview-toggle-item-visibility,
+  .dx-treeview-custom-icon-toggle-item-visibility {
     left: auto;
     right: 0;
 
