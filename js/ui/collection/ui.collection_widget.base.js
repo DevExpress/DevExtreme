@@ -282,6 +282,10 @@ const CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, false);
     },
 
+    _findActiveTarget($el) {
+        return $el.find(this._activeStateUnit);
+    },
+
     _getActiveItem: function(last) {
         const $focusedElement = $(this.option('focusedElement'));
 
