@@ -6019,7 +6019,7 @@ QUnit.module('Vertical headers', {
 
         area.on('scroll', scrollHandler);
 
-        area.scrollTo(10);
+        area.scrollTo({ top: 10 });
 
         assert.strictEqual(scrollHandler.callCount, 1);
         assert.strictEqual(scrollHandler.lastCall.args[0].scrollOffset.top, 10);
@@ -6044,7 +6044,7 @@ QUnit.module('Vertical headers', {
         area.on('scroll', scrollHandler);
         area.off('scroll', scrollHandler);
 
-        area.scrollTo(10);
+        area.scrollTo({ top: 10 });
 
         assert.strictEqual(scrollHandler.callCount, 0);
     });

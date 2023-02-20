@@ -431,7 +431,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         renderDelayedTemplates: function(e) {
-            this._waitAsyncTemplates(e).done(() => {
+            this.waitAsyncTemplates(e).done(() => {
                 this._updateContentPosition(true);
             });
             this.callBase.apply(this, arguments);
@@ -487,7 +487,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             const contentTable = contentElement.children().first();
             if(changeType === 'append' || changeType === 'prepend') {
-                this._waitAsyncTemplates(change).done(() => {
+                this.waitAsyncTemplates(change).done(() => {
                     const $tBodies = this._getBodies(tableElement);
                     if($tBodies.length === 1) {
                         this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
@@ -681,11 +681,14 @@ const VirtualScrollingRowsViewExtender = (function() {
             const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
             const zeroTopPosition = e.scrollOffset.top === 0;
             const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;
+            const hasScrolled = isScrollTopChanged || e.forceUpdateScrollPosition;
+            const isValidScrollTarget = this._hasHeight || !legacyScrollingMode && zeroTopPosition;
 
-            if((isScrollTopChanged || e.forceUpdateScrollPosition) && (this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+            if(hasScrolled && isValidScrollTarget && this._rowHeight) {
                 this._scrollTop = e.scrollOffset.top;
+                const isVirtualRowRendering = isVirtualMode(this) || this.option('scrolling.rowRenderingMode') !== 'standard';
 
-                if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false) {
+                if(isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
                     this._updateContentItemSizes();
                     this._updateViewportSize(null, this._scrollTop);
                 }

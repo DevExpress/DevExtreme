@@ -27194,6 +27194,7 @@ declare module DevExpress.viz {
   export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * [descr:dxChartOptions.argumentAxis.aggregateByCategory]
+     * @deprecated [depNote:dxChartOptions.argumentAxis.aggregateByCategory]
      */
     aggregateByCategory?: boolean;
     /**
@@ -33814,6 +33815,7 @@ declare module DevExpress.viz {
     scale?: {
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregateByCategory]
+       * @deprecated [depNote:dxRangeSelectorOptions.scale.aggregateByCategory]
        */
       aggregateByCategory?: boolean;
       /**

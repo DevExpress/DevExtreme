@@ -93,7 +93,35 @@ QUnit.test('There is no error when \'dataSource\' is an empty array and scale is
     assert.strictEqual(this.axis.setBusinessRange.lastCall.args[0].isEmpty(), true);
 });
 
-QUnit.test('Should show warning if deprecated "behavior.callValueChanged" option is used', function(assert) {
+QUnit.test('RangeSelector should have default value of the aggregatebycategory = true', function(assert) {
+    this.$container.dxRangeSelector();
+    const axisOptions = this.axis.updateOptions.getCall(1).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, true);
+});
+
+QUnit.test('RangeSelector should be able to change the aggregatebycategory setting', function(assert) {
+    this.$container.dxRangeSelector({
+        scale: {
+            aggregateByCategory: false
+        }
+    });
+    const axisOptions = this.axis.updateOptions.getCall(1).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, false);
+});
+
+QUnit.test('RangeSelector should change the aggregatebycategory value when the value was updated', function(assert) {
+    const rangeSelector = this.$container.dxRangeSelector({}).dxRangeSelector('instance');
+
+    rangeSelector.option('scale', { aggregateByCategory: false });
+
+    const axisOptions = this.axis.updateOptions.getCall(3).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, false);
+});
+
+QUnit.test('Should show warning if deprecated "behavior.callValueChanged" property is used', function(assert) {
     sinon.spy(errors, 'log');
 
     try {
@@ -107,7 +135,28 @@ QUnit.test('Should show warning if deprecated "behavior.callValueChanged" option
             'dxRangeSelector',
             'behavior.callValueChanged',
             '23.1',
-            'Use the "behavior.valueChangeMode" option instead'
+            'Use the "behavior.valueChangeMode" property instead'
+        ]);
+    } finally {
+        errors.log.restore();
+    }
+});
+
+QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" property is used', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        this.$container.dxRangeSelector({
+            scale: {
+                aggregateByCategory: 'onMoving'
+            }
+        });
+        assert.deepEqual(errors.log.lastCall.args, [
+            'W0001',
+            'dxRangeSelector',
+            'scale.aggregateByCategory',
+            '23.1',
+            'Use the aggregation.enabled property'
         ]);
     } finally {
         errors.log.restore();

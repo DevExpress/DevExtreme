@@ -851,12 +851,24 @@ export const createTestFileSystem = () => {
 
 export const createHugeFileSystem = () => {
     const result = [];
-    for(let i = 0; i < 10; i++) {
-        result.push({
+    const getFiles = amount =>
+        [...new Array(amount).keys()].map(i => ({
             name: `File ${i}.txt`,
             isDirectory: false
-        });
-    }
+        }));
+    result.push(...getFiles(10));
+    result.push({
+        name: 'Folder 1',
+        isDirectory: true,
+        hasDubDirectories: false,
+        items: getFiles(100)
+    });
+    result.push({
+        name: 'Folder 2',
+        isDirectory: true,
+        hasDubDirectories: false,
+        items: getFiles(100)
+    });
     return result;
 };
 

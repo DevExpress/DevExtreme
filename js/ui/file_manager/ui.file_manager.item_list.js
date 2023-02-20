@@ -311,6 +311,7 @@ class FileManagerItemListBase extends Widget {
 
     }
 
+    refresh(options, operation) { }
 }
 
 export default FileManagerItemListBase;
