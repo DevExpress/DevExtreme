@@ -1805,7 +1805,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('disabled item should not be skipped when keyboard navigation is used', function(assert) {
         this.instance.option('items', [{ text: 'Item 1', disabled: true }, { text: 'Item 2' }]);
 
-        this.keyboard.press('right');
+        this.keyboard.press('tab');
 
         assert.ok(this.instance.itemElements().eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was not skipped');
     });

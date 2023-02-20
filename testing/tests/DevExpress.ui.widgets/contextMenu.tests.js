@@ -2223,7 +2223,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         assert.ok($items.eq(3).hasClass(DX_STATE_FOCUSED_CLASS), 'Item 13 is focused');
     });
 
-    QUnit.test('Disabled item should be skipped when keyboard navigation', function(assert) {
+    QUnit.test('Disabled item should not be skipped when keyboard navigation', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: 'Item 1', disabled: true },
@@ -2240,7 +2240,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
 
         kb.keyDown('down');
 
-        assert.ok($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was skipped');
+        assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was not skipped');
     });
 
     QUnit.test('Focus should follow the nested hovered item if item in the parent level is focused', function(assert) {
