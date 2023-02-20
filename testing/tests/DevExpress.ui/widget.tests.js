@@ -1380,19 +1380,18 @@ QUnit.module('keyboard navigation', {}, () => {
 
         const instance = $element.dxWidget('instance');
 
-        assert.strictEqual($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class');
-        assert.strictEqual($element.attr('tabindex'), '0', 'element has tabindex after focus');
+        assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class');
+
+        assert.equal($element.attr('tabindex'), null, 'element has not tabindex after focus');
 
         $element.trigger('focusin');
-        assert.strictEqual($element.hasClass(FOCUSED_STATE_CLASS), true, 'element has dx-state-focus class after focus in disabled state');
 
-        $element.trigger('focusout');
-        assert.strictEqual($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class after focus out');
+        assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class after focus in disabled state');
 
         instance.option('disabled', false);
 
         $element.trigger('focusin');
-        assert.strictEqual($element.hasClass(FOCUSED_STATE_CLASS), true, 'element has dx-state-focus class after focus');
+        assert.equal($element.hasClass(FOCUSED_STATE_CLASS), true, 'element has dx-state-focus class after focus');
     });
 
     QUnit.test('registerKeyHandler function add key handler to widget', function(assert) {

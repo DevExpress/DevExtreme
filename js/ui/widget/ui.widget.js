@@ -130,17 +130,14 @@ const Widget = DOMComponent.inherit({
     },
 
     _initMarkup() {
-        const { disabled, visible, focusStateEnabled } = this.option();
+        const { disabled, visible } = this.option();
 
         this.$element().addClass('dx-widget');
 
         this._toggleDisabledState(disabled);
         this._toggleVisibility(visible);
         this._renderHint();
-
-        if(focusStateEnabled) {
-            this._renderFocusTarget();
-        }
+        this._isFocusable() && this._renderFocusTarget();
 
         this.callBase();
     },
@@ -196,9 +193,7 @@ const Widget = DOMComponent.inherit({
     _renderFocusState() {
         this._attachKeyboardEvents();
 
-        const { focusStateEnabled } = this.option();
-
-        if(focusStateEnabled) {
+        if(this._isFocusable()) {
             this._renderFocusTarget();
             this._attachFocusEvents();
             this._renderAccessKey();
@@ -210,6 +205,12 @@ const Widget = DOMComponent.inherit({
         const { accessKey } = this.option();
 
         $el.attr('accesskey', accessKey);
+    },
+
+    _isFocusable() {
+        const { focusStateEnabled, disabled } = this.option();
+
+        return focusStateEnabled && !disabled;
     },
 
     _eventBindingTarget() {
@@ -260,7 +261,7 @@ const Widget = DOMComponent.inherit({
         if(!event.isDefaultPrevented()) {
             this._createActionByOption('onFocusIn', {
                 beforeExecute: () => this._updateFocusState(event, true),
-                excludeValidators: ['readOnly', 'disabled']
+                excludeValidators: ['readOnly']
             })({ event });
         }
     },
@@ -317,15 +318,7 @@ const Widget = DOMComponent.inherit({
         }
     },
 
-    _isDisabled() {
-        return this.option('disabled');
-    },
-
     _keyboardHandler(options, onlyChildProcessing) {
-        if(this._isDisabled()) {
-            return false;
-        }
-
         if(!onlyChildProcessing) {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys(originalEvent);

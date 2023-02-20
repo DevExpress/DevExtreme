@@ -129,6 +129,7 @@ Action.registerExecutor({
             $target.is('.dx-state-disabled, .dx-state-disabled *')
         )
     },
+
     'readOnly': {
         validate: createValidatorByTargetElement(($target) =>
             $target.is('.dx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')

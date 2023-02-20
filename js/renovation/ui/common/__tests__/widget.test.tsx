@@ -359,8 +359,8 @@ describe('Widget', () => {
           widget.focusInEffect();
 
           emit(EVENT.focus, e);
-          expect(widget.focused).toBe(true);
-          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+          expect(widget.focused).toBe(false);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
         });
 
         it('should not subscribe to focusin event is widget is not focusable', () => {
