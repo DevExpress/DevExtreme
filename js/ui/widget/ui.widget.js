@@ -230,9 +230,7 @@ const Widget = DOMComponent.inherit({
         const activeElement = this._eventBindingTarget();
 
         if(this._activeStateUnit) {
-            return activeElement
-                .find(this._activeStateUnit)
-                .not('.dx-state-disabled');
+            return activeElement.find(this._activeStateUnit);
         }
 
         return activeElement;
