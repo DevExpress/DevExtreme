@@ -780,54 +780,48 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
     ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'].forEach(editorType => {
         const componentName = editorType.split('dx')[1].toLowerCase();
 
-        test(`${editorType} should have class when labelLocation=top, label.alignment=default (default=left), label.visible=true (T1126956)`, function(assert) {
-            const $form = $('#form').dxForm({
-                labelLocation: 'top',
-                items: [
-                    {
+        ['left', undefined].forEach(alignment => {
+            test(`${editorType} should have class when labelLocation=top, label.alignment=${alignment}, label.visible=true (T1126956)`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation: 'top',
+                    items: [{
                         itemType: 'group',
-                        items: [
-                            {
-                                itemType: 'group',
-                                items: [{
-                                    dataField: editorType,
-                                    label: { visible: true },
-                                    editorType,
-                                }],
-                            },
-                        ],
-                    },
-                ],
-            });
-            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true, alignment },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
-            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
+            });
         });
 
         test(`${editorType} should have class after visibility change to true (labelLocation=top, label.alignment=left)`, function(assert) {
             const $formContainer = $('#form').dxForm({
                 labelLocation: 'top',
-                items: [
-                    {
+                items: [{
+                    itemType: 'group',
+                    items: [{
                         itemType: 'group',
-                        items: [
-                            {
-                                itemType: 'group',
-                                items: [{
-                                    dataField: editorType,
-                                    label: { visible: false },
-                                    editorType,
-                                }],
-                            },
-                        ],
-                    },
-                ],
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: false },
+                            editorType,
+                        }]
+                    }]
+                }]
             });
-            const optionLabelVisible = 'items[0].items[0].items[0].label.visible';
+            const labelVisibleOptionName = 'items[0].items[0].items[0].label.visible';
 
             $formContainer
                 .dxForm('instance')
-                .option(optionLabelVisible, true);
+                .option(labelVisibleOptionName, true);
 
             const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
 
@@ -837,27 +831,23 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
         test(`${editorType} should not have class after visibility change to false (labelLocation=top, label.alignment=left)`, function(assert) {
             const $formContainer = $('#form').dxForm({
                 labelLocation: 'top',
-                items: [
-                    {
+                items: [{
+                    itemType: 'group',
+                    items: [{
                         itemType: 'group',
-                        items: [
-                            {
-                                itemType: 'group',
-                                items: [{
-                                    dataField: editorType,
-                                    label: { visible: true },
-                                    editorType,
-                                }],
-                            },
-                        ],
-                    },
-                ],
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: true },
+                            editorType,
+                        }]
+                    }]
+                }]
             });
-            const optionLabelVisible = 'items[0].items[0].items[0].label.visible';
+            const labelVisibleOptionName = 'items[0].items[0].items[0].label.visible';
 
             $formContainer
                 .dxForm('instance')
-                .option(optionLabelVisible, false);
+                .option(labelVisibleOptionName, false);
 
             const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
 
@@ -867,21 +857,17 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
         test(`${editorType} should not have class when label.visible=false`, function(assert) {
             const $form = $('#form').dxForm({
                 labelLocation: 'top',
-                items: [
-                    {
+                items: [{
+                    itemType: 'group',
+                    items: [{
                         itemType: 'group',
-                        items: [
-                            {
-                                itemType: 'group',
-                                items: [{
-                                    dataField: editorType,
-                                    label: { visible: false },
-                                    editorType,
-                                }, ],
-                            },
-                        ],
-                    },
-                ],
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: false },
+                            editorType,
+                        }]
+                    }]
+                }]
             });
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
@@ -892,21 +878,17 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
             test(`${editorType} should not have class when the labelLocation=${labelLocation}`, function(assert) {
                 const $form = $('#form').dxForm({
                     labelLocation,
-                    items: [
-                        {
+                    items: [{
+                        itemType: 'group',
+                        items: [{
                             itemType: 'group',
-                            items: [
-                                {
-                                    itemType: 'group',
-                                    items: [{
-                                        dataField: editorType,
-                                        label: { visible: true },
-                                        editorType,
-                                    }, ],
-                                },
-                            ],
-                        },
-                    ],
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true },
+                                editorType,
+                            }]
+                        }]
+                    }]
                 });
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
@@ -918,52 +900,42 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
             test(`${editorType} should not have class when label.alignment=${alignment}`, function(assert) {
                 const $form = $('#form').dxForm({
                     labelLocation: 'top',
-                    items: [
-                        {
+                    items: [{
+                        itemType: 'group',
+                        items: [{
                             itemType: 'group',
-                            items: [
-                                {
-                                    itemType: 'group',
-                                    items: [{
-                                        dataField: editorType,
-                                        label: { visible: true, alignment },
-                                        editorType,
-                                    }, ],
-                                },
-                            ],
-                        },
-
-                    ],
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true, alignment },
+                                editorType,
+                            }]
+                        }]
+                    }]
                 });
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
                 assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
             });
         });
+    });
 
-        test('editor should not have class if it is not CheckBox, Switch or RadioGroup', function(assert) {
-            const $form = $('#form').dxForm({
-                labelLocation: 'top',
-                items: [
-                    {
-                        itemType: 'group',
-                        items: [
-                            {
-                                itemType: 'group',
-                                items: [{
-                                    dataField: 'default',
-                                    label: { visible: true, alignment: 'left' },
-                                }, ],
-                            },
-                        ],
-                    },
-
-                ],
-            });
-            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
-
-            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+    test('editor should not have class if it is not CheckBox, Switch or RadioGroup', function(assert) {
+        const $form = $('#form').dxForm({
+            labelLocation: 'top',
+            items: [{
+                itemType: 'group',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'default',
+                        label: { visible: true, alignment: 'left' },
+                    }]
+                }]
+            }]
         });
+        const $componentWrapper = $form.find(`.${FIELD_ITEM_CONTENT_CLASS}`);
+
+        assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
     });
 });
 

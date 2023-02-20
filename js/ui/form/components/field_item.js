@@ -111,9 +111,9 @@ export function renderFieldItem({
         const toggleControls = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
         const isToggleControls = toggleControls.includes(editorType);
         const labelAlignment = labelOptions.alignment;
-        const isNotAlignmentRightOrCenter = labelAlignment !== 'right' && labelAlignment !== 'center';
+        const isLabelAlignmentLeft = labelAlignment === 'left' || !labelAlignment;
 
-        if(isToggleControls && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
+        if(isToggleControls && labelLocation === 'top' && isLabelAlignmentLeft) {
             $fieldEditorContainer.addClass(TOGGLE_CONTROLS_PADDING_CLASS);
         }
     } else {
