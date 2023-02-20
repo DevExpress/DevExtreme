@@ -317,6 +317,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'animationEnabled':
             case 'virtualModeEnabled':
             case 'selectByClick':
+            case 'expandButtonIcon':
+            case 'collapseButtonIcon':
                 break;
             case 'selectionMode':
                 this._initDataAdapter();
