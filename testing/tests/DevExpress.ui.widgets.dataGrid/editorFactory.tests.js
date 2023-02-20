@@ -59,6 +59,31 @@ QUnit.module('Editor Factory', {
     }
 }, () => {
 
+    // T1145047
+    QUnit.test('SelectBox editor without valueChangeEvent', function(assert) {
+        // arrange
+        const $container = $('#container');
+
+        this.options.onEditorPreparing = function(options) {
+            if(options.editorName === 'dxSelectBox') {
+                // assert
+                assert.strictEqual(options.editorOptions.valueChangeEvent, undefined, 'selectbox created without the \'valueChangeEvent\' option');
+            }
+        };
+        this.editorFactoryController.init();
+
+        // act
+        this.editorFactoryController.createEditor($container, {
+            editorType: 'dxSelectBox',
+            parentType: 'dataRow',
+            editorOptions: {}
+        });
+        const editor = $container.dxSelectBox('instance');
+
+        // assert
+        assert.ok(editor, 'editor created');
+    });
+
     QUnit.test('Text editor', function(assert) {
         const $container = $('#container');
         let value = 'A';

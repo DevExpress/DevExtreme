@@ -290,7 +290,7 @@ const EditorFactoryMixin = (function() {
                 options.tabIndex = this.option('tabIndex');
             }
 
-            if(options.lookup) {
+            if(options.lookup || options.editorType === 'dxSelectBox') {
                 prepareSelectBox(options);
             } else {
                 switch(options.dataType) {
