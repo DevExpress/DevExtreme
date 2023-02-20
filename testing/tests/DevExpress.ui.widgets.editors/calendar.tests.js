@@ -17,6 +17,7 @@ import { normalizeKeyName } from 'events/utils/index';
 import localization from 'localization';
 
 import 'generic_light.css!';
+import devices from '../../../js/core/devices.js';
 
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
@@ -2119,6 +2120,11 @@ QUnit.module('Options', {
                 }
             ].forEach(({ values, scenario }) => {
                 QUnit.test(`Cells should not have ${CALENDAR_RANGE_DATE_CLASS} class on hover ${scenario}`, function(assert) {
+                    if(devices.real().deviceType !== 'desktop') {
+                        assert.ok(true, 'test does not actual for mobile devices');
+                        return;
+                    }
+
                     this.reinit({
                         values,
                         selectionMode: 'range'
@@ -2132,6 +2138,11 @@ QUnit.module('Options', {
             });
 
             QUnit.test(`Cells should have ${CALENDAR_RANGE_DATE_CLASS} class on hover when only startDate is defined`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'test does not actual for mobile devices');
+                    return;
+                }
+
                 this.reinit({
                     values: ['2023/01/13', null],
                     selectionMode: 'range'
