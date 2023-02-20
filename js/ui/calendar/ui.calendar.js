@@ -276,15 +276,15 @@ const Calendar = Editor.inherit({
 
     _dateOption: function(optionName, optionValue) {
         if(arguments.length === 1) {
-            return optionName === 'values' ?
-                (this.option('values') || []).map((value) => this._convertToDate(value)) :
-                this._convertToDate(this.option(optionName));
+            return optionName === 'values'
+                ? (this.option('values') || []).map((value) => this._convertToDate(value))
+                : this._convertToDate(this.option(optionName));
         }
 
         const serializationFormat = this._getSerializationFormat(optionName);
-        const serializedValue = optionName === 'values' ?
-            (optionValue || []).map((value) => dateSerialization.serializeDate(value, serializationFormat)) :
-            dateSerialization.serializeDate(optionValue, serializationFormat);
+        const serializedValue = optionName === 'values'
+            ? (optionValue || []).map((value) => dateSerialization.serializeDate(value, serializationFormat))
+            : dateSerialization.serializeDate(optionValue, serializationFormat);
 
         this.option(optionName, serializedValue);
     },
