@@ -75,7 +75,7 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
 
 [true, false].forEach((rtlEnabled) => {
   ['normal', 'none'].forEach((showCheckBoxesMode) => {
-    test(`TreeView-selectAll,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
+    test(`TreeView with custom expander icons,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const screenshotName = `Treeview with custom expander icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
