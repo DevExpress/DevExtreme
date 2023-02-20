@@ -73,10 +73,16 @@ class ariaAccessibilityTestHelper {
             role: 'checkbox',
             'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue
         };
+
+        if(options.disabled) {
+            expectedAttributes['aria-disabled'] = 'true';
+        }
+
         if(CheckBox.IS_RENOVATED_WIDGET) {
             expectedAttributes['aria-invalid'] = 'false';
             expectedAttributes['aria-readonly'] = 'false';
         }
+
         this.checkAttributes($checkBox, expectedAttributes, `checkbox[${index}]`);
     }
 
@@ -95,6 +101,10 @@ class ariaAccessibilityTestHelper {
 
         if(isDefined(node.internalFields.selected)) {
             nodeAttributes['aria-selected'] = node.internalFields.selected.toString();
+        }
+
+        if(node.internalFields.disabled) {
+            nodeAttributes['aria-disabled'] = node.internalFields.disabled.toString();
         }
 
         if(isDefined(focusedNodeIndex) && index === focusedNodeIndex) {
