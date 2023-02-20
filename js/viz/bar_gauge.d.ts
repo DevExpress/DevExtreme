@@ -176,6 +176,13 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     };
     /**
      * @docid
+     * @default undefined
+     * @type_function_return string|SVGElement|jQuery
+     * @public
+     */
+    centerTemplate?: template | ((component: dxBarGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    /**
+     * @docid
      * @public
      */
     label?: {
