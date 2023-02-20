@@ -30,6 +30,10 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
     .dx-treeview-item-with-checkbox .dx-checkbox {
       overflow: visible;
     }
+
+    .dx-treeview-node-container:has(.dx-treeview-item-with-custom-expander-icon) {
+      padding-right: -$generic-treeview-toggle-item-visibility-offset;
+    }
   }
 }
 
