@@ -675,8 +675,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria('selected', nodeData.selected, $node);
-        this.setAria('disabled', nodeData.disabled, $node);
         this._toggleSelectedClass($node, nodeData.selected);
+
+        nodeData.disabled && this.setAria('disabled', nodeData.disabled, $node);
+
         this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
