@@ -12,12 +12,12 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
+import devices from 'core/devices.js';
 import dateLocalization from 'localization/date';
 import { normalizeKeyName } from 'events/utils/index';
 import localization from 'localization';
 
 import 'generic_light.css!';
-import devices from '../../../js/core/devices.js';
 
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
