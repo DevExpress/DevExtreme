@@ -243,7 +243,7 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
             const [firstPage, ...restOfPages] = multiPageRowPages;
             pages.push([...currentPageRects, ...firstPage]);
             if(restOfPages.length > 0) {
-                restOfPages.push(...restOfPages);
+                pages.push(...restOfPages);
             }
         } else {
             if(currentPageRects.length > 0) {
