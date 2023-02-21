@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { scrollTo } from '../cellsSelection/init/widget.setup';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler: SmoothCellLines`
@@ -17,7 +16,7 @@ test('The group panel and date table stay in sync during scrolling on material t
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await scrollTo(0, 1100);
+  await t.scroll(0, 1100);
 
   await t
     .expect(await takeScreenshot('material-theme-scrolling-vertical', scheduler.workSpace))
