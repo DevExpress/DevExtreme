@@ -4,6 +4,7 @@ import { noop, equalByValue } from '../../core/utils/common';
 import { selectionModule } from '../grid_core/ui.grid_core.selection';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
+import { Deferred } from '../../core/utils/deferred';
 
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -48,8 +49,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                     if(isRecursiveSelection) {
                         d.done(function() {
-                            selectionController.updateSelectionState({
-                                selectedItemKeys: that.option('selectedRowKeys')
+                            selectionController._updateSelectedItems({
+                                selectedItemKeys: that.option('selectedRowKeys'),
+                                removedItemKeys: [],
+                                addedItemKeys: []
                             });
                         });
                     }
@@ -72,6 +75,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         let result;
                         if(cached) {
                             result = this._dataController.getCachedStoreData();
+                            result = result.concat(this._dataController.getRemoteSelectedItems());
                         }
 
                         result ||= plainItems.apply(this, arguments).map(item => item.data);
@@ -178,14 +182,16 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 selectedItemKeys: function(value, preserve, isDeselect, isSelectAll) {
                     const that = this;
                     const selectedRowKeys = that.option('selectedRowKeys');
-                    const isRecursiveSelection = this.isRecursiveSelection();
-                    const normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
+                    const isRecursiveSelection = that.isRecursiveSelection();
+                    const normalizedArgs = that._normalizeSelectionArgs({
                         keys: isDefined(value) ? value : []
                     }, preserve, !isDeselect);
 
-                    if(normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
+                    // selected items changed
+                    if(isRecursiveSelection && normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
                         that._isSelectionNormalizing = true;
-                        return this.callBase(normalizedArgs.selectedRowKeys, false, false, false)
+
+                        return that.callBase(normalizedArgs.selectedRowKeys, false, false, false)
                             .always(function() {
                                 that._isSelectionNormalizing = false;
                             })
@@ -195,41 +201,63 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                             });
                     }
 
-                    return this.callBase(value, preserve, isDeselect, isSelectAll);
+                    const deferred = new Deferred();
+
+                    that.callBase(value, preserve, isDeselect, isSelectAll)
+                        .done(function(selectedItems) {
+                            const resolveDeferred = () => deferred.resolve(selectedItems);
+
+                            that._dataController.loadRemoteSelectedItems(selectedItems).done(() => {
+                                const selectedItemKeys = selectedItems.map(item => that._dataController.keyOf(item));
+
+                                that._updateSelectedItems({
+                                    selectedItemKeys,
+                                    removedItemKeys: [],
+                                    addedItemKeys: []
+                                });
+
+                                return resolveDeferred();
+                            });
+                            return resolveDeferred();
+                        }).fail(deferred.reject);
+
+                    return deferred;
                 },
 
                 changeItemSelection: function(itemIndex, keyboardKeys) {
-                    const isRecursiveSelection = this.isRecursiveSelection();
+                    const that = this;
+                    const callBase = that.callBase;
+                    const isRecursiveSelection = that.isRecursiveSelection();
 
                     if(isRecursiveSelection && !keyboardKeys.shift) {
-                        const key = this._dataController.getKeyByRowIndex(itemIndex);
-                        return this.selectedItemKeys(key, true, this.isRowSelected(key)).done(() => {
-                            this.isRowSelected(key) && this.callBase(itemIndex, keyboardKeys, true);
+                        const key = that._dataController.getKeyByRowIndex(itemIndex);
+                        return that.selectedItemKeys(key, true, that.isRowSelected(key)).done(() => {
+                            that.isRowSelected(key) && callBase.apply(that, [itemIndex, keyboardKeys, true]);
                         });
                     }
 
-                    return this.callBase.apply(this, arguments);
+                    return callBase.apply(that, arguments);
                 },
 
                 _updateParentSelectionState: function(node, isSelected) {
                     const that = this;
-                    let state = isSelected;
                     const parentNode = node.parent;
 
+                    let state = isSelected;
                     if(parentNode) {
-                        if(parentNode.children.length > 1) {
-                            if(isSelected === false) {
-                                const hasSelectedState = parentNode.children.some(function(childNode, index, children) {
-                                    return that._selectionStateByKey[childNode.key];
-                                });
+                        if(isSelected === false) {
+                            const hasSelectedChild = parentNode.children.some(childNode => that._selectionStateByKey[childNode.key]);
 
-                                state = hasSelectedState ? undefined : false;
-                            } else if(isSelected === true) {
-                                const hasNonSelectedState = parentNode.children.some(function(childNode) {
-                                    return !that._selectionStateByKey[childNode.key];
-                                });
+                            if(hasSelectedChild) {
+                                state = undefined;
+                            }
+                        } else if(isSelected === true) {
+                            // children can be not loaded, if remote filtering is enabled and the selected item was not loaded yet
+                            const isChildrenNotLoaded = !this._dataController.isChildrenLoaded(parentNode);
+                            const hasNotSelectedChild = parentNode.children.some(childNode => !that._selectionStateByKey[childNode.key]);
 
-                                state = hasNonSelectedState ? undefined : true;
+                            if(isChildrenNotLoaded || hasNotSelectedChild) {
+                                state = undefined;
                             }
                         }
 
@@ -246,7 +274,12 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const children = node.children;
 
                     children && children.forEach(function(childNode) {
-                        that._selectionStateByKey[childNode.key] = isSelected;
+                        // children can be not loaded in case of enabled remoteFiltering and selected items are not loaded to the tree
+                        if(that._dataController.isChildrenLoaded(node)) {
+                            that._selectionStateByKey[childNode.key] = isSelected;
+                        } else {
+                            delete that._selectionStateByKey[childNode.key];
+                        }
 
                         if(childNode.children.length > 0) {
                             that._updateChildrenSelectionState(childNode, isSelected);

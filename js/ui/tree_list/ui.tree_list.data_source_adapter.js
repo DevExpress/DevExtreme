@@ -261,13 +261,17 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             options.expandVisibleNodes = expandVisibleNodes;
         },
 
+        isChildrenLoaded: function(node) {
+            return node.children.length && this._isChildrenLoaded[node.key];
+        },
+
         _getParentIdsToLoad: function(parentIds) {
             const parentIdsToLoad = [];
 
             for(let i = 0; i < parentIds.length; i++) {
                 const node = this.getNodeByKey(parentIds[i]);
 
-                if(!node || node.hasChildren && !node.children.length) {
+                if(!node || (node.hasChildren && !this.isChildrenLoaded(node))) {
                     parentIdsToLoad.push(parentIds[i]);
                 }
             }
@@ -335,10 +339,22 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             };
         },
 
+        _getCachedNodes: function(keys) {
+            const cachedNodes = [];
+
+            keys.forEach(key => {
+                const node = this.getNodeByKey(key) || this._remoteSelectedNodes[key];
+
+                if(node && node.data) {
+                    cachedNodes.push(node);
+                }
+            });
+
+            return cachedNodes;
+        },
+
         _loadParentsOrChildren: function(data, options, needChildren) {
             const that = this;
-            let filter;
-            let needLocalFiltering;
             const { keys, keyMap } = that._generateInfoToLoad(data, needChildren);
             const d = new Deferred();
             const isRemoteFiltering = options.remoteOperations.filtering;
@@ -356,7 +372,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return d.resolve(data);
             }
 
-            let cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node && node.data);
+            let cachedNodes = this._getCachedNodes(keys);
 
             if(cachedNodes.length === keys.length) {
                 if(needChildren) {
@@ -371,7 +387,8 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
 
             const keyExpr = needChildren ? that.option('parentIdExpr') : that.getKeyExpr();
-            filter = that._createIdFilter(keyExpr, keys);
+            let filter = that._createIdFilter(keyExpr, keys);
+            let needLocalFiltering;
             const filterLength = encodeURI(JSON.stringify(filter)).length;
 
             if(filterLength > maxFilterLengthInRequest) {
@@ -470,6 +487,64 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             if(hasItemsSetter && node.data) {
                 hasItemsSetter(node.data, value);
             }
+        },
+
+        // inserts to the tree selected items that have not been loaded when remoteFiltering is true
+        loadRemoteSelectedItems: function(selectedItems) {
+            const that = this;
+            const rootValue = that.option('rootValue');
+            const deferred = new Deferred();
+            const remoteOperations = that.option('remoteOperations');
+
+            if(remoteOperations?.filtering !== true) {
+                return deferred.resolve(selectedItems);
+            }
+
+            // remote filtering is set to 'false', to disable data caching
+            const loadOptions = { remoteOperations: { filtering: false } };
+
+            this._loadParents(selectedItems, loadOptions).done((data) => {
+                // sorted so that at the beginning are parents, and at the end are children
+                const sortedItems = [];
+                const parentIdsQueue = [rootValue];
+
+                while(parentIdsQueue.length) {
+                    const parentId = parentIdsQueue.pop();
+                    const children = data.filter(item => this._parentIdGetter(item) === parentId);
+
+                    sortedItems.push(...children);
+                    parentIdsQueue.push(...children.map(item => this._keyGetter(item)));
+                }
+
+                that._remoteSelectedItems = [];
+                that._remoteSelectedNodes = {};
+
+                sortedItems.forEach(item => {
+                    const parentId = this._parentIdGetter(item);
+                    const parentNode = that.getNodeByKey(parentId);
+
+                    if(!that._isChildrenLoaded[parentId]) {
+                        const node = that._convertItemToNode(item, rootValue, that._nodeByKey);
+
+                        node.hasChildren = true;
+                        node.level = parentNode.level + 1;
+                        node.visible = true;
+
+                        parentNode.children.push(node);
+
+                        that._remoteSelectedItems.push(item);
+                        that._remoteSelectedNodes[node.key] = node;
+                    }
+                });
+
+                deferred.resolve(sortedItems);
+            }).fail(deferred.reject);
+
+            return deferred.promise();
+        },
+
+        getRemoteSelectedItems: function() {
+            return this._remoteSelectedItems;
         },
 
         _applyInsert: function(change) {
@@ -628,12 +703,14 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const needLoadParents = filter && (!parentIds || !parentIds.length) && filterMode !== 'standard';
 
             if(!options.isCustomLoading) {
+                // Load filtered data's parents and/or children depending on filteredMode
                 if(needLoadParents) {
                     const d = options.data = new Deferred();
 
                     if(filterMode === 'matchOnly') {
                         visibleItems = data;
                     }
+
                     return that._loadParents(data, options).done(function(data) {
                         that._loadChildrenIfNeed(data, options).done((data) => {
                             options.data = data;
@@ -643,7 +720,13 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                         });
                     }).fail(d.reject);
                 } else {
+                    const selectedItems = options.remoteOperations?.filtering && that.component.getSelectedRowsData();
+
                     that._processTreeStructure(options);
+
+                    return that.loadRemoteSelectedItems(selectedItems).always(() => {
+                        callBase.call(that, options);
+                    });
                 }
             }
 
@@ -680,6 +763,10 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             this._nodeByKey = {};
             this._isChildrenLoaded = {};
             this._totalItemsCount = 0;
+
+            this._remoteSelectedItems = [];
+            this._remoteSelectedNodes = {};
+
             this.createAction('onNodesInitialized');
         },
 
