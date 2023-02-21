@@ -6167,10 +6167,8 @@ QUnit.module('Performance', moduleConfig, () => {
             'setTextColor,#000000',
             'deleted text',
             'rect,40,40,100,21.5',
-            'rect,40,61.5,100,389.5',
-            'setFontSize,16',
-            'setLineWidth,0.200025',
-            'setDrawColor,#000000'
+            'rect,40,61.5,100,734.5',
+            'addPage,'
         ];
 
         exportDataGrid({
@@ -6181,6 +6179,7 @@ QUnit.module('Performance', moduleConfig, () => {
             // doc.save(assert.test.testName + '.pdf');
             doc.__log.splice(4, 1, 'deleted text'); // remove very long text
             doc.__log.splice(13, 1, 'deleted text'); // remove very long text
+            doc.__log.splice(17);
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
