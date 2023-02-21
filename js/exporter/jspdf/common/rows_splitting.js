@@ -64,14 +64,14 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
             currentPageRects.push(args.topRect);
             rectsToSplit.push(args.bottomRect);
-        }, (pagesLength, pageRects) => {
+        }, (isFirstPage, pageRects) => {
             const currentPageRects = [];
             const nextPageRects = [];
             let maxCurrentPageHeight = 0;
             let maxNextPageHeight = 0;
             pageRects.forEach((rect) => {
                 const { w, sourceCellInfo } = rect;
-                const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
+                const additionalHeight = (!isFirstPage && options.repeatHeaders)
                     ? headerHeight
                     : headerHeight + options.topLeft.y;
                 const heightOfOneLine = getTextDimensions(doc, sourceCellInfo.text, sourceCellInfo.font).h;
@@ -108,7 +108,6 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             nextPageRects.forEach((rect) => rect.h = maxNextPageHeight);
             return [currentPageRects, nextPageRects];
         });
-
     if(options.repeatHeaders) {
         for(let i = 1; i < verticallyPages.length; i++) {
             verticallyPages[i].forEach(rect => rect.y += headerHeight);
@@ -155,7 +154,6 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             pageIndex += 1;
         }
     }
-
     return verticallyPages.map(rects => {
         return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
     });
@@ -183,14 +181,14 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
         if(onSplitMultiPageRow) {
             const isHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
             const possibleMultiPageRect = isHeader ? null : rectsToSplit[currentPageRects.length];
-            const pagesLength = currentPageRectsContainsOnlyHeader ? 0 : pages.length + 1;
-            if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(pagesLength, possibleMultiPageRect.h + marginValue))) {
+            let isFirstPage = currentPageRectsContainsOnlyHeader;
+            if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(isFirstPage ? 0 : 1, possibleMultiPageRect.h + marginValue))) {
                 const rectsToPatch = rectsToSplit.filter(({ y }) => (y === possibleMultiPageRect.y));
                 let nextPageRects = rectsToPatch;
                 let nextPageRectHeight = possibleMultiPageRect.h;
                 do {
-                    const [ newPageRects, pageRects ] = onSplitMultiPageRow(pagesLength, nextPageRects);
-                    if(currentPageRectsContainsOnlyHeader && multiPageRowPages.length === 0) {
+                    const [ newPageRects, pageRects ] = onSplitMultiPageRow(isFirstPage, nextPageRects);
+                    if(currentPageRectsContainsOnlyHeader && isFirstPage) {
                         newPageRects.forEach((rect) => {
                             rect.y = currentPageRects[0].y + currentPageRects[0].h;
                         });
@@ -198,7 +196,8 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
                     multiPageRowPages.push(newPageRects);
                     nextPageRectHeight = pageRects[0].h;
                     nextPageRects = pageRects;
-                } while(!isFitToPage(pagesLength, nextPageRectHeight + marginValue));
+                    isFirstPage = multiPageRowPages.length === 0;
+                } while(!isFitToPage(isFirstPage ? 0 : 1, nextPageRectHeight + marginValue));
                 rectsToPatch.forEach((rect, rectIndex) => {
                     rect.sourceCellInfo.text = nextPageRects[rectIndex].sourceCellInfo.text;
                     rect.h = nextPageRects[rectIndex].h;
@@ -240,18 +239,26 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
                 : rect[coordinate];
         });
         const firstPageContainsHeaderAndMultiPageRow = currentPageRectsContainsOnlyHeader && multiPageRowPages.length > 0;
-        if(currentPageRects.length > 0) {
-            if(firstPageContainsHeaderAndMultiPageRow) {
-                pages.push([...currentPageRects, ...multiPageRowPages[0]]);
-            } else {
-                pages.push(currentPageRects);
+        if(firstPageContainsHeaderAndMultiPageRow) {
+            const [firstPage, ...pages] = multiPageRowPages;
+            pages.push([...currentPageRects, ...firstPage]);
+            if(pages.length > 0) {
+                pages.push(...pages);
             }
         } else {
-            pages.push(rectsToSplit);
-            break;
-        }
-        if(!firstPageContainsHeaderAndMultiPageRow) {
-            pages.push(...multiPageRowPages);
+            if(currentPageRects.length > 0) {
+                pages.push(currentPageRects);
+                if(multiPageRowPages.length > 0) {
+                    pages.push(...multiPageRowPages);
+                }
+            } else {
+                if(multiPageRowPages.length > 0) {
+                    pages.push(...multiPageRowPages);
+                } else {
+                    pages.push(rectsToSplit);
+                    break;
+                }
+            }
         }
     }
 
