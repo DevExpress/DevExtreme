@@ -21,11 +21,9 @@ import messageLocalization from '../../localization/message';
 import dateLocalization from '../../localization/date';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { isCommandKeyPressed } from '../../events/utils/index';
-import {
-    CalendarSingleSelectionStrategy as SingleSelection,
-    CalendarMultiSelectionStrategy as MultiSelection,
-    CalendarRangeSelectionStrategy as RangeSelection
-} from './ui.calendar.selection.strategy';
+import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
+import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
+import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
 
 // STYLE calendar
 
@@ -60,10 +58,10 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
-const SELECTION_STRATEGY_CLASSES = {
-    SingleSelection,
-    MultiSelection,
-    RangeSelection
+const SELECTION_STRATEGIES = {
+    SingleSelection: CalendarSingleSelectionStrategy,
+    MultiSelection: CalendarMultiSelectionStrategy,
+    RangeSelection: CalendarRangeSelectionStrategy
 };
 
 function elementHasFocus(element) {
@@ -425,9 +423,9 @@ const Calendar = Editor.inherit({
 
     _initSelectionStrategy: function() {
         const strategyName = this._getSelectionStrategyName();
-        const strategy = SELECTION_STRATEGY_CLASSES[strategyName];
+        const strategy = SELECTION_STRATEGIES[strategyName];
 
-        if(!(this._selectionStrategy && this._selectionStrategy.NAME === strategyName)) {
+        if(!this._selectionStrategy || this._selectionStrategy.NAME !== strategyName) {
             this._selectionStrategy = new strategy(this);
         }
     },
@@ -468,7 +466,7 @@ const Calendar = Editor.inherit({
 
     _initCurrentDate: function() {
         const currentDate = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
-            || this._getNormalizedDate(this.option('currentDate'));
+            ?? this._getNormalizedDate(this.option('currentDate'));
 
         this.option('currentDate', currentDate);
     },
@@ -1192,8 +1190,8 @@ const Calendar = Editor.inherit({
 
     _updateViewsOption: function(optionName, newValue) {
         this._view.option(optionName, newValue);
-        this._beforeView && this._beforeView.option(optionName, newValue);
-        this._afterView && this._afterView.option(optionName, newValue);
+        this._beforeView?.option(optionName, newValue);
+        this._afterView?.option(optionName, newValue);
     },
 
     _updateAriaSelected: function(value, previousValue) {

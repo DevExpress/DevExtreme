@@ -287,12 +287,12 @@ const BaseView = Widget.inherit({
             value = [value];
         }
 
-        this._selectedCells?.forEach((cell) => (cell.removeClass(CALENDAR_SELECTED_DATE_CLASS)));
+        this._selectedCells?.forEach((cell) => { cell.removeClass(CALENDAR_SELECTED_DATE_CLASS); });
 
         const selectedCells = value.map((value) => this._getCellByDate(value));
 
         this._selectedCells = selectedCells;
-        selectedCells.forEach((cell) => (cell.addClass(CALENDAR_SELECTED_DATE_CLASS)));
+        selectedCells.forEach((cell) => { cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
     },
 
     _renderRange: function() {
@@ -301,7 +301,7 @@ const BaseView = Widget.inherit({
             return;
         }
 
-        this._rangeCells?.forEach((cell) => (cell.removeClass(CALENDAR_RANGE_DATE_CLASS)));
+        this._rangeCells?.forEach((cell) => { cell.removeClass(CALENDAR_RANGE_DATE_CLASS); });
         this._rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
         this._rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
 
@@ -312,7 +312,7 @@ const BaseView = Widget.inherit({
         this._rangeStartDateCell = rangeStartDateCell;
         this._rangeEndDateCell = rangeEndDateCell;
 
-        rangeCells.forEach((cell) => (cell.addClass(CALENDAR_RANGE_DATE_CLASS)));
+        rangeCells.forEach((cell) => { cell.addClass(CALENDAR_RANGE_DATE_CLASS); });
         rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
         rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
     },
