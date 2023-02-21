@@ -406,4 +406,80 @@ QUnit.module('Splitting - Multi page row value', moduleConfig, () => {
             done();
         });
     });
+    QUnit.test('horizontal split, 2 columns, 2 page multi row, 2 row is multi page row', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        const margin = initMargin(doc, { pageWidth: 500, pageHeight: 65 });
+
+        const dataGrid = createDataGrid({
+            width: 600,
+            wordWrapEnabled: true,
+            columns: [
+                { dataField: 'f1' },
+                { dataField: 'f2' }
+            ],
+            dataSource: [
+                { f1: 'first row value', f2: 'short text 1' },
+                { f1: generateValues(14 + 6), f2: 'short text 2' } // 14 per page
+            ]
+        });
+
+        const expectedLog = [
+            'setTextColor,#979797',
+            'setFontSize,10',
+            'text,F1,15,25.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,first row value,15,47.25,{baseline:middle}',
+            'setLineWidth,0.5',
+            'setDrawColor,#979797',
+            'rect,10,15,300,21.5',
+            'rect,10,36.5,300,21.5',
+            'addPage,',
+            'setTextColor,#979797',
+            'text,F2,5,25.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,short text 1,5,47.25,{baseline:middle}',
+            'rect,0,15,250,21.5',
+            'rect,0,36.5,250,21.5',
+            'addPage,',
+            'setTextColor,#979797',
+            'text,F1,15,10.75,{baseline:middle}',
+            'setTextColor,#000000',
+            `text,0value 1value 2value 3value 4value 5value 6value 7value 8value
+9value 10value 11value 12value 13value 14value 15value,15,32.25,{baseline:middle}`,
+            'rect,10,0,300,21.5',
+            'rect,10,21.5,300,33',
+            'addPage,',
+            'setTextColor,#979797',
+            'text,F2,5,10.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,short text 2,5,38,{baseline:middle}',
+            'rect,0,0,250,21.5',
+            'rect,0,21.5,250,33',
+            'addPage,',
+            'setTextColor,#979797',
+            'text,F1,15,10.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,16value 17value 18value 19value,15,32.25,{baseline:middle}',
+            'rect,10,0,300,21.5',
+            'rect,10,21.5,300,21.5',
+            'addPage,',
+            'setTextColor,#979797',
+            'text,F2,5,10.75,{baseline:middle}',
+            'rect,0,0,250,21.5',
+            'rect,0,21.5,250,21.5',
+            'setFontSize,16',
+            'setLineWidth,0.200025',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
+        ];
+        exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin,
+            topLeft: { x: 10, y: 15 },
+            columnWidths: [ 300, 250 ] // 300 + 250 > 500
+        }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
 });
