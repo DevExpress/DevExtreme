@@ -21,7 +21,10 @@ const environment = {
     },
 
     createGauge(options) {
-        return $('<div>').appendTo($('#qunit-fixture')).dxBarGauge(options).dxBarGauge('instance');
+        return $('<div>')
+            .appendTo($('#qunit-fixture'))
+            .dxBarGauge(options)
+            .dxBarGauge('instance');
     }
 };
 

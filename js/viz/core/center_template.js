@@ -10,10 +10,11 @@ const pieChartPlugin = {
     },
     extenders: {
         _createHtmlStructure() {
+            const patchedFontOptions = patchFontOptions(this._themeManager._font);
             this._centerTemplateGroup = this._renderer.g()
                 .attr({ class: 'dxc-hole-template' })
                 .linkOn(this._renderer.root, 'center-template')
-                .css(patchFontOptions(this._themeManager._font))
+                .css(patchedFontOptions)
                 .linkAppend();
         },
         _renderExtraElements() {
@@ -38,7 +39,9 @@ const pieChartPlugin = {
                 onRendered: () => {
                     const group = centerTemplateGroup;
                     const bBox = group.getBBox();
-                    group.move(center.x - (bBox.x + bBox.width / 2), center.y - (bBox.y + bBox.height / 2));
+                    const bBoxCenterX = bBox.x + bBox.width / 2;
+                    const bBoxCenterY = bBox.y + bBox.height / 2;
+                    group.move(center.x - bBoxCenterX, center.y - bBoxCenterY);
                     group.attr({ visibility: 'visible' });
                 }
             });
@@ -64,7 +67,8 @@ const gaugePlugin = {
             this._createCenterTemplateGroup();
         },
         _renderContent() {
-            this._centerTemplateGroup.css(patchFontOptions(this._themeManager._font));
+            const patchedFontOptions = patchFontOptions(this._themeManager._font);
+            this._centerTemplateGroup.css(patchedFontOptions);
             this._requestChange(['CENTER_TEMPLATE']);
         }
     },
