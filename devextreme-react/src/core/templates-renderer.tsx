@@ -11,6 +11,10 @@ class TemplatesRenderer extends React.PureComponent<{
 
   private mounted = false;
 
+  private shouldRepeatForceUpdate = false;
+
+  private isUpdateFuncLaunched = false;
+
   componentDidMount(): void {
     this.mounted = true;
   }
@@ -21,19 +25,30 @@ class TemplatesRenderer extends React.PureComponent<{
 
   public scheduleUpdate(useDeferUpdate: boolean, onRendered?: () => void): void {
     if (this.updateScheduled) {
+      this.shouldRepeatForceUpdate = this.isUpdateFuncLaunched;
       return;
     }
 
     this.updateScheduled = true;
 
     const updateFunc = useDeferUpdate ? deferUpdate : requestAnimationFrame;
+
     updateFunc(() => {
       if (this.mounted) {
+        this.isUpdateFuncLaunched = true;
+
         this.forceUpdate(() => {
           this.updateScheduled = false;
           onRendered?.();
+
+          if (this.shouldRepeatForceUpdate) {
+            this.shouldRepeatForceUpdate = false;
+            this.forceUpdate();
+          }
         });
       }
+
+      this.isUpdateFuncLaunched = false;
       this.updateScheduled = false;
     });
   }
