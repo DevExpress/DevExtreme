@@ -48,7 +48,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     }
 
     getDefaultCurrentDate() {
-        return this._getLowestDateInArray(this._getValues().filter((value) => value));
+        const dates = this.dateOption('values').filter(value => value);
+        return this._getLowestDateInArray(dates);
     }
 
     _getValues() {
