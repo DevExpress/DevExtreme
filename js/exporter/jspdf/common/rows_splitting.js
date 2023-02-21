@@ -181,7 +181,8 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
         });
         const currentPageRectsContainsOnlyHeader = pages.length === 0 && currentPageRects.length > 0 && currentPageRects[currentPageRects.length - 1].sourceCellInfo.gridCell.rowType === 'header';
         if(onSplitMultiPageRow) {
-            const possibleMultiPageRect = rectsToSplit[currentPageRects.length];
+            const isHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
+            const possibleMultiPageRect = isHeader ? null : rectsToSplit[currentPageRects.length];
             const pagesLength = currentPageRectsContainsOnlyHeader ? 0 : pages.length + 1;
             if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(pagesLength, possibleMultiPageRect.h + marginValue))) {
                 const rectsToPatch = rectsToSplit.filter(({ y }) => (y === possibleMultiPageRect.y));
