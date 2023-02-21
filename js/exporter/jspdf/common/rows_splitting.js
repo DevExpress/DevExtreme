@@ -240,10 +240,10 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
         });
         const firstPageContainsHeaderAndMultiPageRow = currentPageRectsContainsOnlyHeader && multiPageRowPages.length > 0;
         if(firstPageContainsHeaderAndMultiPageRow) {
-            const [firstPage, ...pages] = multiPageRowPages;
+            const [firstPage, ...restOfPages] = multiPageRowPages;
             pages.push([...currentPageRects, ...firstPage]);
-            if(pages.length > 0) {
-                pages.push(...pages);
+            if(restOfPages.length > 0) {
+                restOfPages.push(...restOfPages);
             }
         } else {
             if(currentPageRects.length > 0) {
