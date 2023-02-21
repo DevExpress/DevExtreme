@@ -228,6 +228,13 @@ const EditorFactoryMixin = (function() {
                     options.setValue.apply(this, params);
                 }
             }, options);
+        } else {
+            options.editorOptions = getResultConfig({
+                value: options.value,
+                onValueChanged: function(args) {
+                    options.setValue(args.value);
+                },
+            }, options);
         }
     }
 
@@ -290,16 +297,8 @@ const EditorFactoryMixin = (function() {
                 options.tabIndex = this.option('tabIndex');
             }
 
-            if(options.lookup) {
+            if(options.lookup || options.editorType === 'dxSelectBox' || options.editorType === 'dxLookup') {
                 prepareSelectBox(options);
-            } else if(options.editorType === 'dxSelectBox' || options.editorType === 'dxLookup') {
-                options.editorOptions = getResultConfig({
-                    value: options.value,
-                    onValueChanged: function(e) {
-                        const params = [e.value];
-                        options.setValue.apply(this, params);
-                    }
-                }, options);
             } else {
                 switch(options.dataType) {
                     case 'date':
