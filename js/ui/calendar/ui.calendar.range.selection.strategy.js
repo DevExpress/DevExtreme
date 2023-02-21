@@ -2,6 +2,7 @@ import dateUtils from '../../core/utils/date';
 import CalendarSelectionStrategy from './ui.calendar.selection.strategy';
 
 const DAY_INTERVAL = 86400000;
+const RANGE_OFFSET = DAY_INTERVAL * 120;
 
 class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     constructor(component) {
@@ -74,9 +75,16 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     }
 
     _getDaysInRange(startDate, endDate) {
-        return startDate && endDate
-            ? [...dateUtils.getDatesOfInterval(startDate, endDate, DAY_INTERVAL), endDate]
-            : [];
+        if(!startDate || !endDate) {
+            return [];
+        }
+
+        // TODO: rework this range redusing algorythm if we desided to puplic multiselect feature
+        const currentDate = this.calendar.option('currentDate').getTime();
+        const rangeStartDate = new Date(Math.max(currentDate - RANGE_OFFSET, startDate));
+        const rangeEndDate = new Date(Math.min(currentDate + RANGE_OFFSET, endDate));
+
+        return [...dateUtils.getDatesOfInterval(rangeStartDate, rangeEndDate, DAY_INTERVAL), rangeEndDate];
     }
 
     _cellHoverHandler(e) {

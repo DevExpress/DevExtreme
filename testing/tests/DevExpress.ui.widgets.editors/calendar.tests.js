@@ -1969,7 +1969,7 @@ QUnit.module('Options', {
                     assert.deepEqual(currentDate, new Date(value));
                 });
 
-                QUnit.test(`Should be equal to the lowest defined date in values afters witching from single to ${selectionMode} selectionMode`, function(assert) {
+                QUnit.test(`Should be equal to the lowest defined date in values after switching from single to ${selectionMode} selectionMode`, function(assert) {
                     this.reinit({
                         selectionMode: 'single',
                         values: ['02/01/2023', '01/15/2023', '02/05/2023', null],
@@ -2152,6 +2152,17 @@ QUnit.module('Options', {
                 $cell.trigger('mouseenter');
 
                 assert.ok($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+            });
+
+            QUnit.test('Selected range should be reduced when difference between startDate and endDate is bigger than four mounths', function(assert) {
+                this.reinit({
+                    values: ['1996/01/05', '2121/03/07'],
+                    selectionMode: 'range',
+                });
+
+                const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+
+                assert.ok(selectedRange.length < 240);
             });
         });
     });
