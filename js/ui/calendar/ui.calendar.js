@@ -273,8 +273,8 @@ const Calendar = Editor.inherit({
     },
 
     _dateOption: function(optionName, optionValue) {
-        const values = this.option('values') ?? [];
         if(arguments.length === 1) {
+            const values = this.option('values') ?? [];
             return optionName === 'values'
                 ? values.map((value) => this._convertToDate(value))
                 : this._convertToDate(this.option(optionName));
@@ -282,7 +282,7 @@ const Calendar = Editor.inherit({
 
         const serializationFormat = this._getSerializationFormat(optionName);
         const serializedValue = optionName === 'values'
-            ? values.map((value) => dateSerialization.serializeDate(value, serializationFormat))
+            ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat)) || []
             : dateSerialization.serializeDate(optionValue, serializationFormat);
 
         this.option(optionName, serializedValue);
@@ -1219,8 +1219,7 @@ const Calendar = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        const value = args.value;
-        const previousValue = args.previousValue;
+        const { value, previousValue } = args;
 
         switch(args.name) {
             case 'width':
