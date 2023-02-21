@@ -124,4 +124,4 @@ function applyRtl(doc, rectsByPages, options) {
     });
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap, toPdfUnit, applyRtl };
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextDimensions, getTextLines, getPageWidth, getPageHeight, applyWordWrap, toPdfUnit, applyRtl };

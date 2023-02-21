@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { getPageWidth, getPageHeight } from './pdf_utils';
+import { getPageWidth, getPageHeight, getTextLines, getTextDimensions, calculateTextHeight } from './pdf_utils';
 import { roundToThreeDecimals } from './draw_utils';
 
 function convertToCellsArray(rows) {
@@ -26,8 +26,18 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
     const headerRows = rowsInfo.filter(r => r.rowType === 'header');
     const headerHeight = headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0);
+    function createMultiCellRect(rect, text) {
+        return {
+            ...rect,
+            sourceCellInfo: {
+                ...rect.sourceCellInfo,
+                text
+            },
+            y: options.margin.top,
+        };
+    }
 
-    const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
+    const verticallyPages = splitRectsByPages(doc, convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
         (pagesLength, currentCoordinate) => {
             const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
                 ? headerHeight
@@ -54,6 +64,49 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
             currentPageRects.push(args.topRect);
             rectsToSplit.push(args.bottomRect);
+        }, (pagesLength, pageRects) => {
+            const currentPageRects = [];
+            const nextPageRects = [];
+            let maxCurrentPageHeight = 0;
+            let maxNextPageHeight = 0;
+            pageRects.forEach((rect) => {
+                const { w, sourceCellInfo } = rect;
+                const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
+                    ? headerHeight
+                    : headerHeight + options.topLeft.y;
+                const heightOfOneLine = getTextDimensions(doc, sourceCellInfo.text, sourceCellInfo.font).h;
+                const paddingHeight = sourceCellInfo.padding.top + sourceCellInfo.padding.bottom;
+                const fullPageHeight = (maxBottomRight.y - additionalHeight - paddingHeight - options.margin.top);
+                const possibleLinesCount = Math.floor(fullPageHeight / (heightOfOneLine * doc.getLineHeightFactor()));
+                const allLines = getTextLines(doc, sourceCellInfo.text,
+                    sourceCellInfo.font, {
+                        wordWrapEnabled: sourceCellInfo.wordWrapEnabled,
+                        targetRectWidth: w
+                    });
+                if(possibleLinesCount < allLines.length) {
+                    const currentPageText = allLines.slice(0, possibleLinesCount).join('\n');
+                    const currentPageHeight = calculateTextHeight(doc, currentPageText, sourceCellInfo.font, {
+                        wordWrapEnabled: sourceCellInfo.wordWrapEnabled,
+                        targetRectWidth: w
+                    });
+                    maxCurrentPageHeight = Math.max(maxCurrentPageHeight, currentPageHeight + paddingHeight);
+                    maxNextPageHeight = rect.h - currentPageHeight;
+                    currentPageRects.push(createMultiCellRect(rect, currentPageText));
+                    nextPageRects.push(createMultiCellRect(rect, allLines.slice(possibleLinesCount).join('\n')));
+                } else {
+                    const currentPageHeight = calculateTextHeight(doc, sourceCellInfo.text, sourceCellInfo.font, {
+                        wordWrapEnabled: sourceCellInfo.wordWrapEnabled,
+                        targetRectWidth: w
+                    });
+                    maxCurrentPageHeight = Math.max(maxCurrentPageHeight, currentPageHeight + paddingHeight);
+                    maxNextPageHeight = Math.max(maxNextPageHeight, currentPageHeight + paddingHeight);
+                    currentPageRects.push(createMultiCellRect(rect, sourceCellInfo.text));
+                    nextPageRects.push(createMultiCellRect(rect, ''));
+                }
+            });
+            currentPageRects.forEach((rect) => rect.h = maxCurrentPageHeight);
+            nextPageRects.forEach((rect) => rect.h = maxNextPageHeight);
+            return [currentPageRects, nextPageRects];
         });
 
     if(options.repeatHeaders) {
@@ -71,7 +124,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
     let pageIndex = 0;
     while(pageIndex < verticallyPages.length) {
-        const horizontallyPages = splitRectsByPages(verticallyPages[pageIndex], options.margin.left, 'x', 'w',
+        const horizontallyPages = splitRectsByPages(doc, verticallyPages[pageIndex], options.margin.left, 'x', 'w',
             (pagesLength, currentCoordinate) => roundToThreeDecimals(currentCoordinate) <= roundToThreeDecimals(maxBottomRight.x),
             (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
                 const args = {
@@ -108,16 +161,16 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     });
 }
 
-
-function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredicate, onSeparateCallback) {
+function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFitToPage, onSeparateCallback, onSplitMultiPageRow) {
     const pages = [];
     const rectsToSplit = [...rects];
 
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectCoordinate = 0;
+        const multiPageRowPages = [];
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectCoordinate = rect[coordinate] + rect[dimension];
-            if(checkPredicate(pages.length, currentRectCoordinate)) {
+            if(isFitToPage(pages.length, currentRectCoordinate)) {
                 if(currentPageMaxRectCoordinate <= currentRectCoordinate) {
                     currentPageMaxRectCoordinate = currentRectCoordinate;
                 }
@@ -126,7 +179,38 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
                 return false;
             }
         });
-
+        const currentPageRectsContainsOnlyHeader = pages.length === 0 && currentPageRects.length > 0 && currentPageRects[currentPageRects.length - 1].sourceCellInfo.gridCell.rowType === 'header';
+        if(onSplitMultiPageRow) {
+            const possibleMultiPageRect = rectsToSplit[currentPageRects.length];
+            const pagesLength = currentPageRectsContainsOnlyHeader ? 0 : pages.length + 1;
+            if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(pagesLength, possibleMultiPageRect.h + marginValue))) {
+                const rectsToPatch = rectsToSplit.filter(({ y }) => (y === possibleMultiPageRect.y));
+                let nextPageRects = rectsToPatch;
+                let nextPageRectHeight = possibleMultiPageRect.h;
+                do {
+                    const [ newPageRects, pageRects ] = onSplitMultiPageRow(pagesLength, nextPageRects);
+                    if(currentPageRectsContainsOnlyHeader && multiPageRowPages.length === 0) {
+                        newPageRects.forEach((rect) => {
+                            rect.y = currentPageRects[0].y + currentPageRects[0].h;
+                        });
+                    }
+                    multiPageRowPages.push(newPageRects);
+                    nextPageRectHeight = pageRects[0].h;
+                    nextPageRects = pageRects;
+                } while(!isFitToPage(pagesLength, nextPageRectHeight + marginValue));
+                rectsToPatch.forEach((rect, rectIndex) => {
+                    rect.sourceCellInfo.text = nextPageRects[rectIndex].sourceCellInfo.text;
+                    rect.h = nextPageRects[rectIndex].h;
+                });
+                const nextRectAfterPatchedRowIndex = rectsToSplit.indexOf(rectsToPatch[rectsToPatch.length - 1]) + 1;
+                if(nextRectAfterPatchedRowIndex < rectsToSplit.length) {
+                    const delta = rectsToSplit[nextRectAfterPatchedRowIndex].y - (rectsToPatch[0].y + rectsToPatch[0].h);
+                    for(let i = nextRectAfterPatchedRowIndex; i < rectsToSplit.length; i++) {
+                        rectsToSplit[i].y = rectsToSplit[i].y - delta;
+                    }
+                }
+            }
+        }
         const rectsToSeparate = rectsToSplit.filter(rect => {
             // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
             const currentRectLeft = rect[coordinate];
@@ -135,7 +219,6 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
                 return true;
             }
         });
-
         rectsToSeparate.forEach(rect => {
             onSeparateCallback(rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit);
             const index = rectsToSplit.indexOf(rect);
@@ -150,18 +233,24 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
                 rectsToSplit.splice(index, 1);
             }
         });
-
         rectsToSplit.forEach(rect => {
             rect[coordinate] = isDefined(currentPageMaxRectCoordinate)
                 ? (rect[coordinate] - currentPageMaxRectCoordinate + marginValue)
                 : rect[coordinate];
         });
-
+        const firstPageContainsHeaderAndMultiPageRow = currentPageRectsContainsOnlyHeader && multiPageRowPages.length > 0;
         if(currentPageRects.length > 0) {
-            pages.push(currentPageRects);
+            if(firstPageContainsHeaderAndMultiPageRow) {
+                pages.push([...currentPageRects, ...multiPageRowPages[0]]);
+            } else {
+                pages.push(currentPageRects);
+            }
         } else {
             pages.push(rectsToSplit);
             break;
+        }
+        if(!firstPageContainsHeaderAndMultiPageRow) {
+            pages.push(...multiPageRowPages);
         }
     }
 
