@@ -177,10 +177,11 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
                 return false;
             }
         });
-        const currentPageRectsContainsOnlyHeader = pages.length === 0 && currentPageRects.length > 0 && currentPageRects[currentPageRects.length - 1].sourceCellInfo.gridCell.rowType === 'header';
+        const lastCurrentPageRect = currentPageRects[currentPageRects.length - 1];
+        const currentPageRectsContainsOnlyHeader = pages.length === 0 && lastCurrentPageRect && lastCurrentPageRect.sourceCellInfo.gridCell.rowType === 'header';
         if(onSplitMultiPageRow) {
-            const isHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
-            const possibleMultiPageRect = isHeader ? null : rectsToSplit[currentPageRects.length];
+            const isPossibleMultiplePageRectHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
+            const possibleMultiPageRect = isPossibleMultiplePageRectHeader ? null : rectsToSplit[currentPageRects.length];
             let isFirstPage = currentPageRectsContainsOnlyHeader;
             if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(isFirstPage ? 0 : 1, possibleMultiPageRect.h + marginValue))) {
                 const rectsToPatch = rectsToSplit.filter(({ y }) => (y === possibleMultiPageRect.y));
@@ -190,7 +191,7 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
                     const [ newPageRects, pageRects ] = onSplitMultiPageRow(isFirstPage, nextPageRects);
                     if(currentPageRectsContainsOnlyHeader && isFirstPage) {
                         newPageRects.forEach((rect) => {
-                            rect.y = currentPageRects[0].y + currentPageRects[0].h;
+                            rect.y = lastCurrentPageRect.y + lastCurrentPageRect.h;
                         });
                     }
                     multiPageRowPages.push(newPageRects);

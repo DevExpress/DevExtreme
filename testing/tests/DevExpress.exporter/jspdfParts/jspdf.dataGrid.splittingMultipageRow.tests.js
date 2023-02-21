@@ -694,4 +694,30 @@ QUnit.module('Splitting - Multi page row value', moduleConfig, () => {
             done();
         });
     });
+    QUnit.test('band 2 columns, 1 row 1 column 2 page multi row, 1 row 2 column 3 page multi row, 2 row short text', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        const margin = initMargin(doc, { pageWidth: 500, pageHeight: 85 });
+
+        const dataGrid = createDataGrid({
+            width: 600,
+            wordWrapEnabled: true,
+            columns: [
+                { caption: 'Band1', columns: [ 'f1', 'f2', ] } ],
+            dataSource: [
+                { f1: generateValues(10), f2: generateValues(14 + 6) }, // 14 per page
+                { f1: 'last value 1', f2: 'last value 2' }, // 14 per page
+            ]
+        });
+
+        const expectedLog = [ ];
+        exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin,
+            topLeft: { x: 10, y: 15 },
+            // columnWidths: [ 300, 300 ]
+        }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
 });
