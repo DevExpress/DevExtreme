@@ -70,6 +70,9 @@ $generic-button-icon-size: $generic-base-icon-size;
   border-radius: $button-border-radius;
   border-width: $generic-button-border-weight;
   border-style: solid;
+  text-transform: $generic-button-text-transform;
+  font-weight: $generic-button-text-font-weight;
+  letter-spacing: $generic-button-text-letter-spacing;
 
   @at-root #{selector-append(".dx-state-disabled", &)},
   .dx-state-disabled & {

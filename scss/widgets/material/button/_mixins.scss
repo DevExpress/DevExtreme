@@ -102,6 +102,9 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     $button-focused-bg, $button-active-bg, $button-icon-color
   ) {
   border-radius: $button-border-radius;
+  text-transform: $material-button-text-transform;
+  font-weight: $material-button-text-font-weight;
+  letter-spacing: $material-button-text-letter-spacing;
 
   @include dx-button-styling-variant(
       $button-bg,
