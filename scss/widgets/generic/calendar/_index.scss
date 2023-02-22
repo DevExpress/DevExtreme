@@ -79,13 +79,10 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 
   .dx-calendar-caption-button {
     font-size: $generic-calendar-navigator-fontsize;
+    font-weight: bold;
+    text-transform: uppercase;
     right: $generic-nav-button-width;
     left: $generic-nav-button-width;
-
-    .dx-button-text {
-      font-weight: bold;
-      text-transform: uppercase;
-    }
 
     &.dx-button {
       &.dx-state-active {
