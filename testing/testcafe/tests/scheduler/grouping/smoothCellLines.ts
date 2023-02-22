@@ -16,7 +16,7 @@ test('The group panel and date table stay in sync during scrolling on material t
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.scroll(scheduler.element.find('.dx-scrollable-container').nth(1), 0, 1100);
+  await t.scroll(scheduler.workspaceScrollable, 0, 1100);
 
   await t
     .expect(await takeScreenshot('material-theme-scrolling-vertical', scheduler.workSpace))
