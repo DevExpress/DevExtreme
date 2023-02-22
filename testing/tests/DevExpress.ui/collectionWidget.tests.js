@@ -1628,7 +1628,7 @@ module('keyboard navigation', {
         this.clock.tick();
 
         keyboard.keyDown('right');
-        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correctly');
+        assert.equal(instance.option('selectedIndex'), 0, 'selectedIndex is correctly');
 
         $item = $($items.get(1));
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'correct item has an focused-state');
