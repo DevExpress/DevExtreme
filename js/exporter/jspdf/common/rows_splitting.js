@@ -1,6 +1,7 @@
 import { isDefined } from '../../../core/utils/type';
 import { getPageWidth, getPageHeight, getTextLines, getTextDimensions, calculateTextHeight } from './pdf_utils';
 import { roundToThreeDecimals } from './draw_utils';
+import { getMultiPageRowPages } from './get_multipage_row_pages';
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],
@@ -38,8 +39,8 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     }
 
     const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
-        (pagesLength, currentCoordinate) => {
-            const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
+        (isFirstPage, currentCoordinate) => {
+            const additionalHeight = (!isFirstPage && options.repeatHeaders)
                 ? headerHeight
                 : 0;
             return roundToThreeDecimals(currentCoordinate + additionalHeight) <= roundToThreeDecimals(maxBottomRight.y);
@@ -163,13 +164,13 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPage, onSeparateCallback, onSplitMultiPageRow) {
     const pages = [];
     const rectsToSplit = [...rects];
+    const isFitToPageForMultiPageRow = (isFirstPage, rectHeight) => (isFitToPage(isFirstPage, rectHeight + marginValue));
 
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectCoordinate = 0;
-        const multiPageRowPages = [];
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectCoordinate = rect[coordinate] + rect[dimension];
-            if(isFitToPage(pages.length, currentRectCoordinate)) {
+            if(isFitToPage(pages.length === 0, currentRectCoordinate)) {
                 if(currentPageMaxRectCoordinate <= currentRectCoordinate) {
                     currentPageMaxRectCoordinate = currentRectCoordinate;
                 }
@@ -178,42 +179,7 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPag
                 return false;
             }
         });
-        const lastCurrentPageRect = currentPageRects[currentPageRects.length - 1];
-        const currentPageRectsContainsOnlyHeader = pages.length === 0 && lastCurrentPageRect && lastCurrentPageRect.sourceCellInfo.gridCell.rowType === 'header';
-        if(onSplitMultiPageRow) {
-            const possibleMultiPageRectIsHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
-            const possibleMultiPageRect = possibleMultiPageRectIsHeader ? null : rectsToSplit[currentPageRects.length];
-            let isFirstPage = currentPageRectsContainsOnlyHeader;
-            if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(isFirstPage ? 0 : 1, possibleMultiPageRect.h + marginValue))) {
-                const rectsToPatch = rectsToSplit.filter(({ y }) => (y === possibleMultiPageRect.y));
-                const firstPageHeaderHeightAdjustment = lastCurrentPageRect.y + lastCurrentPageRect.h;
-                let nextPageRects = rectsToPatch;
-                let nextPageRectHeight = possibleMultiPageRect.h;
-                do {
-                    const [ newPageRects, pageRects ] = onSplitMultiPageRow(isFirstPage, nextPageRects);
-                    if(currentPageRectsContainsOnlyHeader && isFirstPage) {
-                        newPageRects.forEach((rect) => {
-                            rect.y = firstPageHeaderHeightAdjustment;
-                        });
-                    }
-                    multiPageRowPages.push(newPageRects);
-                    nextPageRectHeight = pageRects[0].h;
-                    nextPageRects = pageRects;
-                    isFirstPage = multiPageRowPages.length === 0;
-                } while(!isFitToPage(isFirstPage ? 0 : 1, nextPageRectHeight + marginValue));
-                rectsToPatch.forEach((rect, rectIndex) => {
-                    rect.sourceCellInfo.text = nextPageRects[rectIndex].sourceCellInfo.text;
-                    rect.h = nextPageRects[rectIndex].h;
-                });
-                const nextRectAfterPatchedRowIndex = rectsToSplit.indexOf(rectsToPatch[rectsToPatch.length - 1]) + 1;
-                if(nextRectAfterPatchedRowIndex < rectsToSplit.length) {
-                    const delta = rectsToSplit[nextRectAfterPatchedRowIndex].y - (rectsToPatch[0].y + rectsToPatch[0].h);
-                    for(let i = nextRectAfterPatchedRowIndex; i < rectsToSplit.length; i++) {
-                        rectsToSplit[i].y = rectsToSplit[i].y - delta;
-                    }
-                }
-            }
-        }
+        const { currentPageRectsContainsOnlyHeader, multiPageRowPages } = getMultiPageRowPages(currentPageRects, rectsToSplit, pages.length === 0, onSplitMultiPageRow, isFitToPageForMultiPageRow);
         const rectsToSeparate = rectsToSplit.filter(rect => {
             // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
             const currentRectLeft = rect[coordinate];
@@ -269,3 +235,4 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPag
 }
 
 export { splitByPages };
+
