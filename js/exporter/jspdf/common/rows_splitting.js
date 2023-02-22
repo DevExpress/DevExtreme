@@ -37,7 +37,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
         };
     }
 
-    const verticallyPages = splitRectsByPages(doc, convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
+    const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
         (pagesLength, currentCoordinate) => {
             const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
                 ? headerHeight
@@ -64,7 +64,8 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
             currentPageRects.push(args.topRect);
             rectsToSplit.push(args.bottomRect);
-        }, (isFirstPage, pageRects) => {
+        },
+        (isFirstPage, pageRects) => {
             const currentPageRects = [];
             const nextPageRects = [];
             let maxCurrentPageHeight = 0;
@@ -123,7 +124,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
     let pageIndex = 0;
     while(pageIndex < verticallyPages.length) {
-        const horizontallyPages = splitRectsByPages(doc, verticallyPages[pageIndex], options.margin.left, 'x', 'w',
+        const horizontallyPages = splitRectsByPages(verticallyPages[pageIndex], options.margin.left, 'x', 'w',
             (pagesLength, currentCoordinate) => roundToThreeDecimals(currentCoordinate) <= roundToThreeDecimals(maxBottomRight.x),
             (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
                 const args = {
@@ -159,7 +160,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     });
 }
 
-function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFitToPage, onSeparateCallback, onSplitMultiPageRow) {
+function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPage, onSeparateCallback, onSplitMultiPageRow) {
     const pages = [];
     const rectsToSplit = [...rects];
 
@@ -180,18 +181,19 @@ function splitRectsByPages(doc, rects, marginValue, coordinate, dimension, isFit
         const lastCurrentPageRect = currentPageRects[currentPageRects.length - 1];
         const currentPageRectsContainsOnlyHeader = pages.length === 0 && lastCurrentPageRect && lastCurrentPageRect.sourceCellInfo.gridCell.rowType === 'header';
         if(onSplitMultiPageRow) {
-            const isPossibleMultiplePageRectHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
-            const possibleMultiPageRect = isPossibleMultiplePageRectHeader ? null : rectsToSplit[currentPageRects.length];
+            const possibleMultiPageRectIsHeader = rectsToSplit[currentPageRects.length] && rectsToSplit[currentPageRects.length].sourceCellInfo.gridCell.rowType === 'header';
+            const possibleMultiPageRect = possibleMultiPageRectIsHeader ? null : rectsToSplit[currentPageRects.length];
             let isFirstPage = currentPageRectsContainsOnlyHeader;
             if(possibleMultiPageRect && (currentPageRectsContainsOnlyHeader || !isFitToPage(isFirstPage ? 0 : 1, possibleMultiPageRect.h + marginValue))) {
                 const rectsToPatch = rectsToSplit.filter(({ y }) => (y === possibleMultiPageRect.y));
+                const firstPageHeaderHeightAdjustment = lastCurrentPageRect.y + lastCurrentPageRect.h;
                 let nextPageRects = rectsToPatch;
                 let nextPageRectHeight = possibleMultiPageRect.h;
                 do {
                     const [ newPageRects, pageRects ] = onSplitMultiPageRow(isFirstPage, nextPageRects);
                     if(currentPageRectsContainsOnlyHeader && isFirstPage) {
                         newPageRects.forEach((rect) => {
-                            rect.y = lastCurrentPageRect.y + lastCurrentPageRect.h;
+                            rect.y = firstPageHeaderHeightAdjustment;
                         });
                     }
                     multiPageRowPages.push(newPageRects);
