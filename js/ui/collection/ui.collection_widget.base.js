@@ -412,7 +412,10 @@ const CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, true);
         this.onFocusedItemChanged(this.getFocusedItemId());
 
-        if(this.option('selectOnFocus')) {
+        const { selectOnFocus } = this.option();
+        const isDisabled = $target.attr('aria-disabled') === 'true';
+
+        if(selectOnFocus && !isDisabled) {
             this._selectFocusedItem($target);
         }
     },
