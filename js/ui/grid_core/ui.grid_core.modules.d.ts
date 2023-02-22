@@ -54,7 +54,7 @@ export type Controllers = {
   columnChooser: import('./ui.grid_core.column_chooser').ColumnChooserController;
   editorFactory: import('./ui.grid_core.editor_factory').EditorFactory;
   editing: import('./ui.grid_core.editing').EditingController;
-  keyboardNavigation: import('./ui.grid_core.keyboard_navigation').KeyboardNavigationController;
+  keyboardNavigation: import('./keyboard_navigation/types').KeyboardNavigationController;
   focus: import('./ui.grid_core.focus').FocusController;
   columnsResizer: any;
   validating: any;
