@@ -15,6 +15,9 @@
 
 .dx-button-text {
   line-height: $generic-button-text-line-height;
+  text-transform: $generic-button-text-transform;
+  font-weight: $generic-button-text-font-weight;
+  letter-spacing: $generic-button-text-letter-spacing;
 }
 
 .dx-button {
