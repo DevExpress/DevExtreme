@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -31,15 +32,92 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
+
 <body>
-    <div id="button"></div>
+    <div id="widget"></div>
+
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+        const disabled = true
+
+        const tabPanelItems = [{
+            ID: 1,
+            title: 'SuprMart',
+            text: '702',
+        }, {
+            ID: 2,
+            disabled,
+            title: "El'Depot",
+            text: '2455',
+        }, {
+            ID: 3,
+            title: 'K&S Music',
+            text: '1000',
+        }, {
+            ID: 4,
+            title: 'Tom Club',
+            text: '999',
+        }
+        // , {
+        //     ID: 5,
+        //     title: 'SuprMart',
+        //     text: '702',
+        // }, {
+        //     ID: 1,
+        //     title: 'SuprMart',
+        //     text: '702',
+        // }, {
+        //     ID: 2,
+        //     disabled,
+        //     title: "El'Depot",
+        //     text: '2455',
+        // }, {
+        //     ID: 3,
+        //     title: 'K&S Music',
+        //     text: '1000',
+        // }, {
+        //     ID: 4,
+        //     title: 'Tom Club',
+        //     text: '999',
+        // }, {
+        //     ID: 5,
+        //     title: 'SuprMart',
+        //     text: '702',
+        // }, {
+        //     ID: 1,
+        //     title: 'SuprMart',
+        //     text: '702',
+        // }, {
+        //     ID: 2,
+        //     disabled,
+        //     title: "El'Depot",
+        //     text: '2455',
+        // }, {
+        //     ID: 3,
+        //     title: 'K&S Music',
+        //     text: '1000',
+        // }, {
+        //     ID: 4,
+        //     title: 'Tom Club',
+        //     text: '999',
+        // }, {
+        //     ID: 5,
+        //     title: 'SuprMart',
+        //     text: '702',
+        // }
+    ];
+
+        $(function () {
+            $('#widget').dxTabPanel({
+                height: 300,
+                items: tabPanelItems,
+                showNavButtons: true,
+            }).dxTabPanel('instance');
+
+            // $('#widget').dxTabs({
+            //     items: tabPanelItems,
+            // });
         });
     </script>
 </body>
+
 </html>

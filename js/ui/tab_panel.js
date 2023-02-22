@@ -22,6 +22,8 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+
 const TabPanel = MultiView.inherit({
 
     _getDefaultOptions: function() {
@@ -252,6 +254,8 @@ const TabPanel = MultiView.inherit({
         if(e.target === this._tabs._focusTarget().get(0)) {
             this._toggleFocusClass(isFocused, this._focusTarget());
         }
+
+        this._updateWrapperFocusedClass(isFocused);
     },
 
     _focusOutHandler: function(e) {
@@ -287,6 +291,10 @@ const TabPanel = MultiView.inherit({
     repaint: function() {
         this.callBase();
         this._tabs.repaint();
+    },
+
+    _updateWrapperFocusedClass(value) {
+        this._$wrapper.toggleClass(FOCUSED_STATE_CLASS, value);
     },
 
     _optionChanged: function(args) {
@@ -336,7 +344,9 @@ const TabPanel = MultiView.inherit({
             case 'focusedElement': {
                 const id = value ? $(value).index() : value;
                 const newItem = value ? this._tabs._itemElements().eq(id) : value;
+                const isDisabled = value.attr('aria-disabled') === 'true';
                 this._setTabsOption('focusedElement', getPublicElement(newItem));
+                this._updateWrapperFocusedClass(!isDisabled);
                 this.callBase(args);
                 break;
             }

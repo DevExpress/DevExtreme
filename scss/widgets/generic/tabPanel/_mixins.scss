@@ -1,0 +1,67 @@
+@use "../tabs/sizes" as *;
+@use "../tabs/colors" as *;
+
+// adduse
+
+$generic-tabpanel-inset-shadow-left: inset $generic-tabs-border-width 0;
+$generic-tabpanel-inset-shadow-top: inset 0 $generic-tabs-border-width;
+$generic-tabpanel-inset-shadow-right: inset (-$generic-tabs-border-width) 0;
+$generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
+
+
+@mixin tabpanel-shadow-mixin($accent-color, $target-class) {
+  & > .dx-tabpanel-tabs {
+    .dx-tabs {
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
+    }
+
+    .dx-tab {
+      box-shadow: $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-bottom $accent-color;
+
+      &.#{$target-class} {
+        box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
+      }
+
+      &.#{$target-class},
+      &.dx-tab-active {
+        .dx-tab-content {
+          color: $tabs-tab-selected-color;
+        }
+      }
+    }
+
+    .dx-tabs-expanded {
+      .dx-tab:not(.#{$target-class}) {
+        &:first-of-type {
+          box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+
+          @at-root #{selector-append(".dx-rtl", &)},
+          .dx-rtl & {
+            box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+          }
+        }
+      }
+    }
+
+    .dx-tabs-stretched {
+      .dx-tab:not(.#{$target-class}) {
+        &:last-of-type {
+          box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+
+          @at-root #{selector-append(".dx-rtl", &)},
+          .dx-rtl & {
+            box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+          }
+        }
+      }
+    }
+
+    .dx-tabs-nav-button-left {
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+    }
+
+    .dx-tabs-nav-button-right {
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
+    }
+  }
+}
