@@ -95,16 +95,19 @@ function transpile(src, dist, pipes = []) {
     return task;
 }
 
-function babelCjs() {
-    return cache(babel(transpileConfig.cjs), { name: 'babel-cjs' });
+function babelCjs(dev = false) {
+    // return babel(transpileConfig.debug);
+    return dev
+        ? babel(transpileConfig.debug)
+        : cache(babel(transpileConfig.cjs), { name: 'babel-cjs' });
 }
 
 function babelEsm() {
     return babel(transpileConfig.esm);
 }
 
-const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, [
-    babelCjs()
+const transpileDefault = (dev) => transpile(src, ctx.TRANSPILED_PATH, [
+    babelCjs(dev)
 ]);
 
 const touch = () => through2.obj(function(file, enc, cb) {
@@ -115,19 +118,20 @@ const touch = () => through2.obj(function(file, enc, cb) {
     cb(null, file);
 });
 
-const transpileRenovation = (watch) => transpile(src, ctx.TRANSPILED_RENOVATION_PATH, [
+const transpileRenovation = (watch, dev) => transpile(src, ctx.TRANSPILED_RENOVATION_PATH, [
     replaceWidgets(true),
-    babelCjs(),
+    babelCjs(dev),
     touch()
 ], watch);
 
-const transpileProd = (dist, isEsm, watch) => transpile(src, dist, [
+const transpileProd = (dist, isEsm, watch, dev = false) => transpile(src, dist, [
     removeDebug(),
     replaceWidgets(false),
-    isEsm ? babelEsm() : babelCjs(),
+    isEsm ? babelEsm() : babelCjs(dev),
 ], watch);
 
-const transpileRenovationProd = (watch) => transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch);
+const transpileRenovationProd = (watch, dev) =>
+    transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch, dev);
 
 const transpileEsm = (dist) => gulp.series.apply(gulp, [
     transpileProd(path.join(dist, './cjs'), false),
@@ -172,6 +176,14 @@ gulp.task('transpile', gulp.series(
     transpileDefault(),
     transpileRenovation(),
     transpileRenovationProd(),
+    ifEsmPackage('transpile-esm'),
+));
+
+gulp.task('transpile-dev', gulp.series(
+    'bundler-config',
+    transpileDefault(true),
+    transpileRenovation(false, true),
+    transpileRenovationProd(false, true),
     ifEsmPackage('transpile-esm'),
 ));
 
@@ -220,16 +232,16 @@ gulp.task('transpile-watch', gulp.series(
                     .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
             }));
         watchTask
-            .pipe(babel(transpileConfig.cjs))
+            .pipe(babel(transpileConfig.debug))
             .pipe(gulp.dest(ctx.TRANSPILED_PATH));
         watchTask
             .pipe(replaceWidgets(true))
-            .pipe(babel(transpileConfig.cjs))
+            .pipe(babel(transpileConfig.debug))
             .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
         watchTask
             .pipe(removeDebug())
             .pipe(replaceWidgets(true))
-            .pipe(babel(transpileConfig.cjs))
+            .pipe(babel(transpileConfig.debug))
             .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
         return watchTask;
     }
@@ -237,7 +249,8 @@ gulp.task('transpile-watch', gulp.series(
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>
     gulp
-        .src(['testing/**/*.js', "!testing/renovation-npm/**/*.js"])
+        .src(['testing/**/*.js', '!testing/renovation-npm/**/*.js'])
+        // .pipe(babel(testsConfig))
         .pipe(babel(testsConfig))
         .pipe(gulp.dest('testing'))
 ));

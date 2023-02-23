@@ -73,7 +73,6 @@
     "babel-plugin-inferno": "6.5.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
     "babel-plugin-transform-object-assign": "6.22.0",
-    "babel-preset-env": "1.7.0",
     "bootstrap": "5.2.3",
     "cldr-core": "41.0.0",
     "cldr-numbers-full": "41.0.0",
@@ -248,7 +247,6 @@
   },
   "browserslist": [
     "last 2 versions",
-    "ios > 9",
     "> 1%"
   ],
   "jest": {
