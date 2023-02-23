@@ -79,7 +79,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
             return [];
         }
 
-        // TODO: rework this range redusing algorythm if we desided to puplic multiselect feature
+        // TODO: Rework this range reducing algorithm to support different multi views
+        // and optimise single views.
         const currentDate = this.calendar.option('currentDate').getTime();
         const rangeStartDate = new Date(Math.max(currentDate - RANGE_OFFSET, startDate));
         const rangeEndDate = new Date(Math.min(currentDate + RANGE_OFFSET, endDate));

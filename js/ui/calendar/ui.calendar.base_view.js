@@ -25,6 +25,7 @@ const CALENDAR_RANGE_DATE_CLASS = 'dx-calendar-range-date';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
+const NOT_WEEK_CELL_SELECTOR = `td:not(.${CALENDAR_WEEK_NUMBER_CELL_CLASS})`;
 
 const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxCalendar');
 const CALENDAR_DXHOVERSTART_EVENT_NAME = addNamespace(hoverStartEventName, 'dxCalendar');
@@ -194,11 +195,10 @@ const BaseView = Widget.inherit({
     },
 
     _renderEvents: function() {
-        const excludeWeekCellsSelector = `td:not(.${CALENDAR_WEEK_NUMBER_CELL_CLASS})`;
         this._createCellClickAction();
 
         eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, excludeWeekCellsSelector, ((e) => {
+        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
             if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                 this._cellClickAction({
                     event: e,
@@ -210,7 +210,7 @@ const BaseView = Widget.inherit({
         if(this.option('selectionMode') === 'range') {
             this._createCellHoverAction();
             eventsEngine.off(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME);
-            eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, excludeWeekCellsSelector, ((e) => {
+            eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
                 if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                     this._cellHoverAction({
                         event: e,
@@ -278,6 +278,10 @@ const BaseView = Widget.inherit({
         return this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
     },
 
+    _toggleClass($cell, className, isSelected) {
+        $cell?.toggleClass(className, isSelected);
+    },
+
     _renderValue: function() {
         if(!this.option('allowValueSelection')) {
             return;
@@ -288,9 +292,9 @@ const BaseView = Widget.inherit({
             value = [value];
         }
 
-        this._$selectedCells?.forEach((cell) => { cell.removeClass(CALENDAR_SELECTED_DATE_CLASS); });
+        this._$selectedCells?.forEach(($cell) => { this._toggleClass($cell, CALENDAR_SELECTED_DATE_CLASS, false); });
         this._$selectedCells = value.map((value) => this._getCellByDate(value));
-        this._$selectedCells.forEach((cell) => { cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
+        this._$selectedCells.forEach(($cell) => { this._toggleClass($cell, CALENDAR_SELECTED_DATE_CLASS, true); });
     },
 
     _renderRange: function() {
@@ -299,17 +303,17 @@ const BaseView = Widget.inherit({
             return;
         }
 
-        this._$rangeCells?.forEach((cell) => { cell.removeClass(CALENDAR_RANGE_DATE_CLASS); });
-        this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
-        this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
+        this._$rangeCells?.forEach(($cell) => { this._toggleClass($cell, CALENDAR_RANGE_DATE_CLASS, false); });
+        this._toggleClass(this._$rangeStartDateCell, CALENDAR_RANGE_START_DATE_CLASS, false);
+        this._toggleClass(this._$rangeEndDateCell, CALENDAR_RANGE_END_DATE_CLASS, false);
 
         this._$rangeCells = range.map((value) => this._getCellByDate(value));
         this._$rangeStartDateCell = this._getCellByDate(value[0]);
         this._$rangeEndDateCell = this._getCellByDate(value[1]);
 
-        this._$rangeCells.forEach((cell) => { cell.addClass(CALENDAR_RANGE_DATE_CLASS); });
-        this._$rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
-        this._$rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
+        this._$rangeCells?.forEach(($cell) => { this._toggleClass($cell, CALENDAR_RANGE_DATE_CLASS, true); });
+        this._toggleClass(this._$rangeStartDateCell, CALENDAR_RANGE_START_DATE_CLASS, true);
+        this._toggleClass(this._$rangeEndDateCell, CALENDAR_RANGE_END_DATE_CLASS, true);
     },
 
     getCellAriaLabel: function(date) {
