@@ -677,7 +677,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.setAria('selected', nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
 
-        nodeData.disabled && this.setAria('disabled', nodeData.disabled, $node);
+        if(nodeData.disabled) {
+            this.setAria('disabled', nodeData.disabled, $node);
+        }
 
         this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
@@ -1385,14 +1387,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const $activeItem = this._getActiveItem();
         this.option('focusedElement', getPublicElement($activeItem.closest('.' + NODE_CLASS)));
-    },
-
-    _setFocusedItem: function($target) {
-        if(!$target || !$target.length) {
-            return;
-        }
-
-        this.callBase($target);
     },
 
     _itemPointerDownHandler: function(e) {
