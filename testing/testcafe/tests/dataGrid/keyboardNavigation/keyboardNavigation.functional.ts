@@ -1,14 +1,14 @@
 import { Selector, ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
-import CommandCell from '../../model/dataGrid/commandCell';
-import { ClassNames } from '../../model/dataGrid/classNames';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import DataGrid from '../../../model/dataGrid';
+import CommandCell from '../../../model/dataGrid/commandCell';
+import { ClassNames } from '../../../model/dataGrid/classNames';
 
 const CLASS = ClassNames;
 
-fixture.disablePageReloads`Keyboard Navigation`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Keyboard Navigation - common`
+  .page(url(__dirname, '../../container.html'));
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
