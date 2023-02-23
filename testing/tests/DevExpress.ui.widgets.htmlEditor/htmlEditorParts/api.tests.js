@@ -7,6 +7,8 @@ import { isObject } from 'core/utils/type';
 const { test, module: testModule } = QUnit;
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const DX_BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -263,6 +265,31 @@ testModule('API', moduleConfig, () => {
         this.instance.undo();
 
         assert.strictEqual(this.instance.option('value'), '<p>aTest 1</p><p>Test 2</p><p>Test 3</p>', 'value is actual');
+    });
+
+    test('undo button should have disabled state after call "clearHistory"', function(assert) {
+        this.options.toolbar = { items: ['undo'] };
+        this.createEditor();
+        this.instance.insertText(0, 'a');
+        this.clock.tick(1000);
+        const $undoButton = $('#htmlEditor').find(`.${DX_BUTTON_CLASS}`);
+
+        this.instance.clearHistory();
+
+        assert.strictEqual($undoButton.hasClass(DISABLED_STATE_CLASS), true, 'undo button disabled');
+    });
+
+    test('redo button should have disabled state after call "undo"->"clearHistory"', function(assert) {
+        this.options.toolbar = { items: ['redo'] };
+        this.createEditor();
+        this.instance.insertText(0, 'a');
+        this.clock.tick(1000);
+        const $redoButton = $('#htmlEditor').find(`.${DX_BUTTON_CLASS}`);
+
+        this.instance.undo();
+        this.instance.clearHistory();
+
+        assert.strictEqual($redoButton.hasClass(DISABLED_STATE_CLASS), true, 'redo button disabled');
     });
 
     test('registerModule', function(assert) {

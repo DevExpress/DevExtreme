@@ -698,6 +698,7 @@ const HtmlEditor = Editor.inherit({
 
     clearHistory: function() {
         this._applyQuillHistoryMethod('clear');
+        this._applyToolbarMethod('updateHistoryWidgets');
     },
 
     undo: function() {
