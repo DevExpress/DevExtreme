@@ -199,6 +199,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @default undefined
+     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */

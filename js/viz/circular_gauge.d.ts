@@ -87,6 +87,7 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     /**
      * @docid
      * @default undefined
+     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
