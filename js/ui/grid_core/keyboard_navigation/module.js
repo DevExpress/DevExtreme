@@ -1,20 +1,22 @@
-import { getOuterHeight, getHeight, getWidth, getOuterWidth } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import domAdapter from '../../core/dom_adapter';
-import eventsEngine from '../../events/core/events_engine';
-import core from './ui.grid_core.modules';
-import gridCoreUtils from './ui.grid_core.utils';
-import { isDefined, isEmptyObject } from '../../core/utils/type';
-import { focused } from '../widget/selectors';
-import { addNamespace, createEvent, isCommandKeyPressed } from '../../events/utils/index';
-import pointerEvents from '../../events/pointer';
-import { name as clickEventName } from '../../events/click';
-import { noop } from '../../core/utils/common';
-import * as accessibility from '../shared/accessibility';
-import browser from '../../core/utils/browser';
-import { keyboard } from '../../events/short';
-import devices from '../../core/devices';
+import { getOuterHeight, getHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import domAdapter from '../../../core/dom_adapter';
+import eventsEngine from '../../../events/core/events_engine';
+import core from '../ui.grid_core.modules';
+import gridCoreUtils from '../ui.grid_core.utils';
+import { isDefined, isEmptyObject } from '../../../core/utils/type';
+import { focused } from '../../widget/selectors';
+import { addNamespace, createEvent, isCommandKeyPressed } from '../../../events/utils/index';
+import pointerEvents from '../../../events/pointer';
+import { name as clickEventName } from '../../../events/click';
+import { noop } from '../../../core/utils/common';
+import * as accessibility from '../../shared/accessibility';
+import browser from '../../../core/utils/browser';
+import { keyboard } from '../../../events/short';
+import devices from '../../../core/devices';
+import { GridCoreKeyboardNavigationDom } from './dom';
 
+// TODO: Move these constants to const.js
 const ROWS_VIEW_CLASS = 'rowsview';
 const EDIT_FORM_CLASS = 'edit-form';
 const GROUP_FOOTER_CLASS = 'group-footer';
@@ -1456,6 +1458,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 return !isMasterDetailRow && column && (!isDefined(column.groupIndex) || isShowWhenGrouped && isDataCell) || parseInt($cell.attr('colspan')) > 1;
             };
 
+            const isDragCell = GridCoreKeyboardNavigationDom.isDragCell($cell);
+            if(isDragCell) {
+                return false;
+            }
+
             if(this._isMasterDetailCell($cell)) {
                 return true;
             }
@@ -2031,7 +2038,8 @@ export const keyboardNavigationModule = {
                         }
                     };
 
-                    const $cell = cellElements.filter(`[aria-colindex='${columnIndex + 1}']`);
+                    const $cell = GridCoreKeyboardNavigationDom.getCellToFocus(cellElements, columnIndex);
+
                     if($cell.length) {
                         updateCellTabIndex($cell);
                     } else {
