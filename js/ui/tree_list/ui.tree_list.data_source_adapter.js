@@ -339,20 +339,6 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             };
         },
 
-        _getCachedNodes: function(keys) {
-            const cachedNodes = [];
-
-            keys.forEach(key => {
-                const node = this.getNodeByKey(key) || this._remoteSelectedNodes[key];
-
-                if(node && node.data) {
-                    cachedNodes.push(node);
-                }
-            });
-
-            return cachedNodes;
-        },
-
         _loadParentsOrChildren: function(data, options, needChildren) {
             const that = this;
             const { keys, keyMap } = that._generateInfoToLoad(data, needChildren);
@@ -372,7 +358,6 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return d.resolve(data);
             }
 
-            // let cachedNodes = this._getCachedNodes(keys);
             let cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node && node.data);
 
             if(cachedNodes.length === keys.length) {
