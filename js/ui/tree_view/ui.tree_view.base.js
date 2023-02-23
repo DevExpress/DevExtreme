@@ -1102,7 +1102,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             $toggleItem.show();
             return;
         }
-        $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`).hide();
         $toggleItem.removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
         $node.addClass(IS_LEAF);
     },
