@@ -4904,6 +4904,9 @@
             "Name": "ChunkUploading",
             "DocUrl": "",
             "Widget": "FileUploader",
+            "MvcAdditionalFiles": [
+              "/Models/FileUploader/ChunkMetadata.cs"
+            ],
             "BackendFiles": [
               "FileUploaderController.cs"
             ]
