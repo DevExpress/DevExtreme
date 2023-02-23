@@ -38,7 +38,6 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
-    ChartsColor,
 } from './core/base_widget';
 
 import {
@@ -74,6 +73,7 @@ import {
     VisualRangeUpdateMode,
     WordWrap,
     ZoomPanAction,
+    ChartsColor,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {
@@ -2016,7 +2016,6 @@ export interface dxChartCommonPaneSettings {
     /**
      * @docid dxChartOptions.commonPaneSettings.backgroundColor
      * @default 'none'
-     * @type string|object
      * @public
      */
     backgroundColor?: string | ChartsColor;
@@ -3157,7 +3156,6 @@ export interface dxChartSeriesTypesCommonSeries {
     closeValueField?: string;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.color
-     * @type string|object
      * @default undefined
      * @public
      */
@@ -3473,7 +3471,6 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
     border?: dxChartSeriesTypesCommonSeriesHoverStyleBorder;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.color
-     * @type string|object
      * @default undefined
      * @public
      */
@@ -3510,7 +3507,6 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
 export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.color
-     * @type string|object
      * @default undefined
      * @public
      */
@@ -3727,7 +3723,6 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.color
      * @default undefined
-     * @type string|object
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
@@ -3771,7 +3766,6 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
       };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.color
-       * @type string|object
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
@@ -3887,7 +3881,6 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
       };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.color
-       * @type string|object
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
@@ -3932,7 +3925,6 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
     border?: dxChartSeriesTypesCommonSeriesSelectionStyleBorder;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.color
-     * @type string|object
      * @default undefined
      * @public
      */

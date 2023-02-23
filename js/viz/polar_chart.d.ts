@@ -42,7 +42,6 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
-    ChartsColor,
 } from './core/base_widget';
 
 import {
@@ -68,6 +67,7 @@ import {
     ValueErrorBarType,
     VisualRange,
     ZoomPanAction,
+    ChartsColor,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {
@@ -1485,7 +1485,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.color
      * @default undefined
-     * @type string|object
      * @public
      */
     color?: string | ChartsColor;
@@ -1536,7 +1535,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       };
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
-       * @type string|object
        * @default undefined
        */
       color?: string | ChartsColor;
@@ -1664,7 +1662,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       };
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
-       * @type string|object
        * @default undefined
        */
       color?: string | ChartsColor;

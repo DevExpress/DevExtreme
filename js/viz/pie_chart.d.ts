@@ -42,7 +42,6 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
-    ChartsColor,
 } from './core/base_widget';
 
 import {
@@ -54,6 +53,7 @@ import {
     ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
+    ChartsColor,
 } from '../common/charts';
 
 export {
@@ -522,7 +522,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.color
      * @default undefined
-     * @type string|object
      * @public
      */
     color?: string | ChartsColor;
@@ -564,7 +563,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
-       * @type string|object
        * @default undefined
        */
       color?: string | ChartsColor;
@@ -763,7 +761,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
-       * @type string|object
        * @default undefined
        */
       color?: string | ChartsColor;

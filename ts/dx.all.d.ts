@@ -1626,6 +1626,24 @@ declare module DevExpress.common {
     >
   >;
   /**
+   * [descr:viz.registerGradient(type, options)]
+   */
+  export function registerGradient(
+    type: string,
+    options: {
+      rotationAngle?: number;
+      colors: Array<DevExpress.viz.GradientColor>;
+    }
+  ): string;
+  /**
+   * [descr:viz.registerPattern(options)]
+   */
+  export function registerPattern(options: {
+    width: number | string;
+    height: number | string;
+    template: DevExpress.core.template;
+  }): string;
+  /**
    * [descr:RequiredRule]
    */
   export type RequiredRule = {
@@ -1963,6 +1981,19 @@ declare module DevExpress.common.charts {
     visible?: boolean;
   }
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
+  /**
+   * [descr:ChartsColor]
+   */
+  export type ChartsColor = {
+    /**
+     * [descr:ChartsColor.base]
+     */
+    base?: string;
+    /**
+     * [descr:ChartsColor.fillId]
+     */
+    fillId?: string;
+  };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
@@ -25477,7 +25508,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.rangeContainer.backgroundColor]
      */
-    backgroundColor?: string | ChartsColor;
+    backgroundColor?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.offset]
      */
@@ -25497,7 +25528,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseGaugeOptions.rangeContainer.ranges.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:BaseGaugeOptions.rangeContainer.ranges.endValue]
        */
@@ -26587,20 +26618,6 @@ declare module DevExpress.viz {
     size?: number | string;
   }
   /**
-   * [descr:ChartsColor]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ChartsColor {
-    /**
-     * [descr:ChartsColor.base]
-     */
-    base?: string;
-    /**
-     * [descr:ChartsColor.fillId]
-     */
-    fillId?: string;
-  }
-  /**
    * [descr:ChartSeries]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -26672,7 +26689,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:CommonIndicator.horizontalOrientation]
      */
@@ -27864,7 +27881,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonPaneSettings.backgroundColor]
      */
-    backgroundColor?: string | ChartsColor;
+    backgroundColor?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartOptions.commonPaneSettings.border]
      */
@@ -28859,7 +28876,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.cornerRadius]
      */
@@ -29071,7 +29088,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
      */
@@ -29096,7 +29113,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
      */
@@ -29250,7 +29267,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
      */
@@ -29279,7 +29296,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
        */
@@ -29365,7 +29382,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
        */
@@ -29395,7 +29412,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
      */
@@ -31723,7 +31740,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode]
      */
@@ -31756,7 +31773,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching]
        */
@@ -31914,7 +31931,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching]
        */
@@ -32882,7 +32899,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.color]
      */
-    color?: string | ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
      */
@@ -32919,7 +32936,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
@@ -33010,7 +33027,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */
@@ -36004,10 +36021,7 @@ declare module DevExpress.viz {
    * [descr:viz.getTheme(theme)]
    */
   export function getTheme(theme: string): any;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface GradientColor {
+  export type GradientColor = {
     /**
      * [descr:GradientColor.offset]
      */
@@ -36016,7 +36030,7 @@ declare module DevExpress.viz {
      * [descr:GradientColor.color]
      */
     color: string;
-  }
+  };
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36201,24 +36215,9 @@ declare module DevExpress.viz {
    */
   export function refreshTheme(): void;
   /**
-   * [descr:viz.registerGradient(type, options)]
-   */
-  export function registerGradient(
-    type: string,
-    options: { rotationAngle: number; colors: Array<GradientColor> }
-  ): string;
-  /**
    * [descr:viz.registerPalette(paletteName, palette)]
    */
   export function registerPalette(paletteName: string, palette: any): void;
-  /**
-   * [descr:viz.registerPattern(options)]
-   */
-  export function registerPattern(options: {
-    width: number | string;
-    height: number | string;
-    template: DevExpress.core.template;
-  }): string;
   /**
    * [descr:viz.registerTheme(customTheme, baseTheme)]
    */

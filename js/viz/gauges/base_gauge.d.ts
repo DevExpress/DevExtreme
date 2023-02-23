@@ -20,7 +20,6 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    ChartsColor,
 } from '../core/base_widget';
 
 import {
@@ -33,6 +32,7 @@ import {
     Palette,
     PaletteExtensionMode,
     LabelOverlap,
+    ChartsColor,
 } from '../../common/charts';
 
 export interface TooltipInfo {
@@ -150,7 +150,6 @@ export interface BaseGaugeRangeContainer {
     /**
      * @docid BaseGaugeOptions.rangeContainer.backgroundColor
      * @default '#808080'
-     * @type string|object
      * @public
      */
     backgroundColor?: string | ChartsColor;
@@ -181,7 +180,6 @@ export interface BaseGaugeRangeContainer {
     ranges?: Array<{
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
-       * @type string|object
        */
       color?: string | ChartsColor;
       /**
@@ -452,7 +450,6 @@ export interface CommonIndicator {
     beginAdaptingAtRadius?: number;
     /**
      * @docid
-     * @type string|object
      * @public
      */
     color?: string | ChartsColor;
