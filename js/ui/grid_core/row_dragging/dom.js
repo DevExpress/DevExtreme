@@ -4,7 +4,7 @@ import { ATTRIBUTES, CLASSES } from './const';
 
 const createHandleTemplateFunc = (addWidgetPrefix) => (container, options) => {
     const $container = $(container);
-    $container.attr(ATTRIBUTES.commandCell, '');
+    $container.attr(ATTRIBUTES.dragCell, '');
     if(options.rowType === 'data') {
         $container.addClass(CLASSES.cellFocusDisabled);
         return $('<span>').addClass(addWidgetPrefix(CLASSES.handleIcon));

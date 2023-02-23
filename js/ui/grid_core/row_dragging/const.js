@@ -1,5 +1,5 @@
 export const ATTRIBUTES = {
-    commandCell: 'dx-command-cell',
+    dragCell: 'dx-drag-cell',
 };
 
 export const CLASSES = {
