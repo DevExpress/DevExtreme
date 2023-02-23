@@ -254,19 +254,15 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>', 'redo operation');
     });
 
-    test('clearHistory', function(assert) {
+    test('value should not changed when "undo" called after call "clearHistory"', function(assert) {
         this.createEditor();
         this.instance.insertText(0, 'a');
-        this.clock.tick(1000);
-        this.instance.insertText(0, 'b');
-        this.clock.tick(1000);
-        this.instance.insertText(0, 'c');
         this.clock.tick(1000);
 
         this.instance.clearHistory();
         this.instance.undo();
 
-        assert.strictEqual(this.instance.option('value'), '<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>', 'history is empty');
+        assert.strictEqual(this.instance.option('value'), '<p>aTest 1</p><p>Test 2</p><p>Test 3</p>', 'value is actual');
     });
 
     test('registerModule', function(assert) {
