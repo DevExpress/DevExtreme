@@ -720,13 +720,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                         });
                     }).fail(d.reject);
                 } else {
-                    const selectedItems = options.remoteOperations?.filtering && that.component.getSelectedRowsData();
-
                     that._processTreeStructure(options);
-
-                    return that.loadRemoteSelectedItems(selectedItems).always(() => {
-                        callBase.call(that, options);
-                    });
                 }
             }
 

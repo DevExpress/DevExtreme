@@ -5,6 +5,7 @@ import { selectionModule } from '../grid_core/ui.grid_core.selection';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 import { Deferred } from '../../core/utils/deferred';
+import dataSourceAdapter from './ui.tree_list.data_source_adapter';
 
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -16,6 +17,28 @@ const originalHandleDataChanged = selectionModule.extenders.controllers.data._ha
 const nodeExists = function(array, currentKey) {
     return !!array.filter(function(key) { return key === currentKey; }).length;
 };
+
+
+const SelectionDataSourceAdapterExtender = (function() {
+    return {
+        _handleDataLoadedCore: function(options) {
+            const isCustomLoading = options.isCustomLoading;
+            const selectionController = this.component.getController('selection');
+
+            if(!isCustomLoading && selectionController?.isRecursiveSelection()) {
+                const selectedItems = selectionController.getSelectedRowsData();
+
+                this.callBase(options);
+
+                this.loadRemoteSelectedItems(selectedItems);
+            } else {
+                this.callBase(options);
+            }
+        }
+    };
+})();
+
+dataSourceAdapter.extend(SelectionDataSourceAdapterExtender);
 
 treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
     defaultOptions: function() {
@@ -75,7 +98,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         let result;
                         if(cached) {
                             result = this._dataController.getCachedStoreData();
-                            result = result.concat(this._dataController.getRemoteSelectedItems());
+
+                            if(result) { result = result.concat(this._dataController.getRemoteSelectedItems()); }
                         }
 
                         result ||= plainItems.apply(this, arguments).map(item => item.data);
@@ -187,41 +211,42 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         keys: isDefined(value) ? value : []
                     }, preserve, !isDeselect);
 
-                    // selected items changed
-                    if(isRecursiveSelection && normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
-                        that._isSelectionNormalizing = true;
+                    if(isRecursiveSelection) {
+                        // selected items changed
+                        if(normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
+                            that._isSelectionNormalizing = true;
 
-                        return that.callBase(normalizedArgs.selectedRowKeys, false, false, false)
-                            .always(function() {
-                                that._isSelectionNormalizing = false;
-                            })
-                            .done(function(items) {
-                                normalizedArgs.selectedRowsData = items;
-                                that._fireSelectionChanged(normalizedArgs);
-                            });
+                            return that.callBase(normalizedArgs.selectedRowKeys, false, false, false)
+                                .always(function() {
+                                    that._isSelectionNormalizing = false;
+                                })
+                                .done(function(items) {
+                                    normalizedArgs.selectedRowsData = items;
+                                    that._fireSelectionChanged(normalizedArgs);
+                                });
+                        }
+
+                        const deferred = new Deferred();
+
+                        that.callBase(value, preserve, isDeselect, isSelectAll)
+                            .done(function(selectedItems) {
+                                that._dataController.loadRemoteSelectedItems(selectedItems).always(() => {
+                                    const selectedItemKeys = selectedItems.map(item => that._dataController.keyOf(item));
+
+                                    that._updateSelectedItems({
+                                        selectedItemKeys,
+                                        removedItemKeys: [],
+                                        addedItemKeys: []
+                                    });
+
+                                    deferred.resolve(selectedItems);
+                                });
+                            }).fail(deferred.reject);
+
+                        return deferred;
                     }
 
-                    const deferred = new Deferred();
-
-                    that.callBase(value, preserve, isDeselect, isSelectAll)
-                        .done(function(selectedItems) {
-                            const resolveDeferred = () => deferred.resolve(selectedItems);
-
-                            that._dataController.loadRemoteSelectedItems(selectedItems).done(() => {
-                                const selectedItemKeys = selectedItems.map(item => that._dataController.keyOf(item));
-
-                                that._updateSelectedItems({
-                                    selectedItemKeys,
-                                    removedItemKeys: [],
-                                    addedItemKeys: []
-                                });
-
-                                return resolveDeferred();
-                            });
-                            return resolveDeferred();
-                        }).fail(deferred.reject);
-
-                    return deferred;
+                    return that.callBase(value, preserve, isDeselect, isSelectAll);
                 },
 
                 changeItemSelection: function(itemIndex, keyboardKeys) {
