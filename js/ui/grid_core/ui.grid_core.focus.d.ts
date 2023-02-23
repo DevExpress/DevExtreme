@@ -2,7 +2,7 @@ import { ViewController } from './ui.grid_core.modules';
 
 interface State {
   _dataController: import('./ui.grid_core.data_controller').DataController;
-  _keyboardController: import('./ui.grid_core.keyboard_navigation').KeyboardNavigationController;
+  _keyboardController: import('./keyboard_navigation/types').KeyboardNavigationController;
 }
 
 interface FocusController extends ViewController, State {
