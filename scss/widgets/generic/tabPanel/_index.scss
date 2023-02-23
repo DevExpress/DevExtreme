@@ -6,7 +6,7 @@
 @use "../tabs/sizes" as *;
 @use "../tabs/colors" as *;
 @use "../../base/tabPanel";
-@use "./mixins" as *;
+@use "mixins" as *;
 
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
