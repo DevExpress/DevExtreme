@@ -18,9 +18,19 @@ const nodeExists = function(array, currentKey) {
     return !!array.filter(function(key) { return key === currentKey; }).length;
 };
 
-
 const SelectionDataSourceAdapterExtender = (function() {
     return {
+        init: function() {
+            this.callBase.apply(this, arguments);
+
+            this._remoteSelectedItems = [];
+            this._remoteSelectedNodes = {};
+        },
+
+        getNodeByKey: function(key) {
+            return this.callBase.apply(this, arguments) || this._remoteSelectedNodes[key];
+        },
+
         _handleDataLoadedCore: function(options) {
             const isCustomLoading = options.isCustomLoading;
             const selectionController = this.component.getController('selection');
@@ -34,7 +44,65 @@ const SelectionDataSourceAdapterExtender = (function() {
             } else {
                 this.callBase(options);
             }
-        }
+        },
+
+        // inserts to the tree selected items that have not been loaded when remoteFiltering is true
+        loadRemoteSelectedItems: function(selectedItems) {
+            const that = this;
+            const rootValue = that.option('rootValue');
+            const deferred = new Deferred();
+            const remoteOperations = that.option('remoteOperations');
+
+            if(remoteOperations?.filtering !== true) {
+                return deferred.resolve(selectedItems);
+            }
+
+            // remote filtering is set to 'false', to disable data caching
+            const loadOptions = { remoteOperations: { filtering: false } };
+
+            this._loadParents(selectedItems, loadOptions).done((data) => {
+                // sorted so that at the beginning are parents, and at the end are children
+                const sortedItems = [];
+                const parentIdsQueue = [rootValue];
+
+                while(parentIdsQueue.length) {
+                    const parentId = parentIdsQueue.pop();
+                    const children = data.filter(item => this._parentIdGetter(item) === parentId);
+
+                    sortedItems.push(...children);
+                    parentIdsQueue.push(...children.map(item => this._keyGetter(item)));
+                }
+
+                that._remoteSelectedItems = [];
+                that._remoteSelectedNodes = {};
+
+                sortedItems.forEach(item => {
+                    const parentId = this._parentIdGetter(item);
+                    const parentNode = that.getNodeByKey(parentId);
+
+                    if(!that._isChildrenLoaded[parentId]) {
+                        const node = that._convertItemToNode(item, rootValue, that._nodeByKey);
+
+                        node.hasChildren = true;
+                        node.level = parentNode.level + 1;
+                        node.visible = true;
+
+                        parentNode.children.push(node);
+
+                        that._remoteSelectedItems.push(item);
+                        that._remoteSelectedNodes[node.key] = node;
+                    }
+                });
+
+                deferred.resolve(sortedItems);
+            }).fail(deferred.reject);
+
+            return deferred.promise();
+        },
+
+        getRemoteSelectedItems: function() {
+            return this._remoteSelectedItems;
+        },
     };
 })();
 
@@ -81,7 +149,15 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     }
 
                     return d;
-                }
+                },
+
+                getRemoteSelectedItems: function() {
+                    return this._dataSource.getRemoteSelectedItems();
+                },
+
+                loadRemoteSelectedItems: function(selectedItems) {
+                    return this._dataSource.loadRemoteSelectedItems(selectedItems);
+                },
             },
 
             selection: {

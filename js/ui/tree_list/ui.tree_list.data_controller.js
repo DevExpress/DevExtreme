@@ -169,14 +169,6 @@ export const DataController = dataControllerModule.controllers.data.inherit((fun
             return this._dataSource.getChildNodeKeys(parentKey);
         },
 
-        getRemoteSelectedItems: function() {
-            return this._dataSource.getRemoteSelectedItems();
-        },
-
-        loadRemoteSelectedItems: function(selectedItems) {
-            return this._dataSource.loadRemoteSelectedItems(selectedItems);
-        },
-
         isChildrenLoaded: function(node) {
             return this._dataSource.isChildrenLoaded(node);
         },

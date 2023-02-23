@@ -372,7 +372,8 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return d.resolve(data);
             }
 
-            let cachedNodes = this._getCachedNodes(keys);
+            // let cachedNodes = this._getCachedNodes(keys);
+            let cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node && node.data);
 
             if(cachedNodes.length === keys.length) {
                 if(needChildren) {
@@ -487,64 +488,6 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             if(hasItemsSetter && node.data) {
                 hasItemsSetter(node.data, value);
             }
-        },
-
-        // inserts to the tree selected items that have not been loaded when remoteFiltering is true
-        loadRemoteSelectedItems: function(selectedItems) {
-            const that = this;
-            const rootValue = that.option('rootValue');
-            const deferred = new Deferred();
-            const remoteOperations = that.option('remoteOperations');
-
-            if(remoteOperations?.filtering !== true) {
-                return deferred.resolve(selectedItems);
-            }
-
-            // remote filtering is set to 'false', to disable data caching
-            const loadOptions = { remoteOperations: { filtering: false } };
-
-            this._loadParents(selectedItems, loadOptions).done((data) => {
-                // sorted so that at the beginning are parents, and at the end are children
-                const sortedItems = [];
-                const parentIdsQueue = [rootValue];
-
-                while(parentIdsQueue.length) {
-                    const parentId = parentIdsQueue.pop();
-                    const children = data.filter(item => this._parentIdGetter(item) === parentId);
-
-                    sortedItems.push(...children);
-                    parentIdsQueue.push(...children.map(item => this._keyGetter(item)));
-                }
-
-                that._remoteSelectedItems = [];
-                that._remoteSelectedNodes = {};
-
-                sortedItems.forEach(item => {
-                    const parentId = this._parentIdGetter(item);
-                    const parentNode = that.getNodeByKey(parentId);
-
-                    if(!that._isChildrenLoaded[parentId]) {
-                        const node = that._convertItemToNode(item, rootValue, that._nodeByKey);
-
-                        node.hasChildren = true;
-                        node.level = parentNode.level + 1;
-                        node.visible = true;
-
-                        parentNode.children.push(node);
-
-                        that._remoteSelectedItems.push(item);
-                        that._remoteSelectedNodes[node.key] = node;
-                    }
-                });
-
-                deferred.resolve(sortedItems);
-            }).fail(deferred.reject);
-
-            return deferred.promise();
-        },
-
-        getRemoteSelectedItems: function() {
-            return this._remoteSelectedItems;
         },
 
         _applyInsert: function(change) {
@@ -757,9 +700,6 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             this._nodeByKey = {};
             this._isChildrenLoaded = {};
             this._totalItemsCount = 0;
-
-            this._remoteSelectedItems = [];
-            this._remoteSelectedNodes = {};
 
             this.createAction('onNodesInitialized');
         },
