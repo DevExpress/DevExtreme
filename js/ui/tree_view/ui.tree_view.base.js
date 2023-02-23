@@ -40,6 +40,8 @@ const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-custom-icon-toggle-item-visibility`;
+const CUSTOM_EXPAND_ICON_CLASS = `${CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS}-expand-button-icon`;
+const CUSTOM_COLLAPSE_ICON_CLASS = `${CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS}-collapse-button-icon`;
 
 const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
 const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
@@ -884,10 +886,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         $iconCollapsed.appendTo($node).addClass('dx-custom-expander-icon');
 
         $icon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
-        $icon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS + '-expand-button-icon');
+        $icon.addClass(CUSTOM_EXPAND_ICON_CLASS);
 
         $iconCollapsed.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
-        $iconCollapsed.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS + '-collapse-button-icon');
+        $iconCollapsed.addClass(CUSTOM_COLLAPSE_ICON_CLASS);
 
         if(node.internalFields.expanded) {
             $icon.hide();
@@ -941,8 +943,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _toggleCustomExpanderBtnIcons: function(node, isOpen) {
-        const expandBtnIcon = node.children(`.${CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS}-expand-button-icon`);
-        const collapseBtnIcon = node.children(`.${CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS}-collapse-button-icon`);
+        const expandBtnIcon = node.children(`.${CUSTOM_EXPAND_ICON_CLASS}`);
+        const collapseBtnIcon = node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`);
 
         if(isOpen) {
             collapseBtnIcon.show();
@@ -1103,13 +1105,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             LoadIndicator.getInstance($loadIndicator)?.option('visible', false);
         }
 
-        const $toggleItem = $node.children(`.${CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS}-collapse-button-icon,.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
+        const $toggleItem = $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS},.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         if(hasNewItems) {
             $toggleItem.show();
             return;
         }
-        $node.children(`.${CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS}-collapse-button-icon`).hide();
+        $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`).hide();
         $toggleItem.removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
         $node.addClass(IS_LEAF);
     },

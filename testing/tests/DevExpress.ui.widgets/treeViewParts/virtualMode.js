@@ -199,6 +199,31 @@ QUnit.test('Remove toggle icon after expand childless item', function(assert) {
     assert.equal($icons.length, 2);
 });
 
+QUnit.test('Custom expander icon should hide after expand childless item', function(assert) {
+    const treeView = new TreeView(this.$element, {
+        dataSource: $.extend(true, [], data2),
+        dataStructure: 'plain',
+        expandButtonIcon: 'add',
+        collapseButtonIcon: 'minus',
+        virtualModeEnabled: true
+    });
+
+    const expandButtonClass = '.dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon';
+
+    const $expandIcons = this.$element.find(expandButtonClass);
+    assert.ok($expandIcons.eq(0).is(':visible'));
+    assert.ok($expandIcons.eq(1).is(':visible'));
+    assert.ok($expandIcons.eq(2).is(':visible'));
+
+    treeView.expandItem(16);
+
+    const $iconsAfterExpandChildlessNode = this.$element.find(expandButtonClass);
+
+    assert.ok($iconsAfterExpandChildlessNode.eq(0).is(':visible'));
+    assert.ok($iconsAfterExpandChildlessNode.eq(1).is(':visible'));
+    assert.notOk($iconsAfterExpandChildlessNode.eq(2).is(':visible'));
+});
+
 QUnit.test('Remove loadindicator after expand childless item', function(assert) {
     new TreeView(this.$element, {
         dataSource: makeSlowDataSource($.extend(true, [], data2)),
