@@ -1458,8 +1458,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 return !isMasterDetailRow && column && (!isDefined(column.groupIndex) || isShowWhenGrouped && isDataCell) || parseInt($cell.attr('colspan')) > 1;
             };
 
-            const isCommandCell = GridCoreKeyboardNavigationDom.isCommandCell($cell);
-            if(isCommandCell) {
+            const isDragCell = GridCoreKeyboardNavigationDom.isDragCell($cell);
+            if(isDragCell) {
                 return false;
             }
 
