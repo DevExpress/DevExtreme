@@ -11,6 +11,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
+import { start as hoverStartEventName } from '../../events/hover';
 
 const { abstract } = Widget;
 
@@ -20,9 +21,14 @@ const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
+const CALENDAR_RANGE_DATE_CLASS = 'dx-calendar-range-date';
+const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
+const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
+const NOT_WEEK_CELL_SELECTOR = `td:not(.${CALENDAR_WEEK_NUMBER_CELL_CLASS})`;
 
 const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxCalendar');
+const CALENDAR_DXHOVERSTART_EVENT_NAME = addNamespace(hoverStartEventName, 'dxCalendar');
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
@@ -39,6 +45,7 @@ const BaseView = Widget.inherit({
             cellTemplate: null,
             disabledDates: null,
             onCellClick: null,
+            onCellHover: null,
             rowCount: 3,
             colCount: 4,
             allowValueSelection: true,
@@ -59,6 +66,7 @@ const BaseView = Widget.inherit({
         this._renderBody();
         this._renderContouredDate();
         this._renderValue();
+        this._renderRange();
         this._renderEvents();
     },
 
@@ -190,7 +198,7 @@ const BaseView = Widget.inherit({
         this._createCellClickAction();
 
         eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `td:not(.${CALENDAR_WEEK_NUMBER_CELL_CLASS})`, ((e) => {
+        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
             if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                 this._cellClickAction({
                     event: e,
@@ -198,10 +206,27 @@ const BaseView = Widget.inherit({
                 });
             }
         }));
+
+        if(this.option('selectionMode') === 'range') {
+            this._createCellHoverAction();
+            eventsEngine.off(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME);
+            eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
+                if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
+                    this._cellHoverAction({
+                        event: e,
+                        value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
+                    });
+                }
+            }));
+        }
     },
 
     _createCellClickAction: function() {
         this._cellClickAction = this._createActionByOption('onCellClick');
+    },
+
+    _createCellHoverAction: function() {
+        this._cellHoverAction = this._createActionByOption('onCellHover');
     },
 
     _createDisabledDatesHandler: function() {
@@ -253,36 +278,38 @@ const BaseView = Widget.inherit({
         return this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
     },
 
-    _changeValue: function(cellDate) {
-        if(cellDate) {
-            const value = this.option('value');
-            const newValue = value ? new Date(value) : new Date();
-
-            newValue.setDate(cellDate.getDate());
-            newValue.setMonth(cellDate.getMonth());
-            newValue.setFullYear(cellDate.getFullYear());
-            newValue.setDate(cellDate.getDate());
-
-            this.option('value', newValue);
-        } else {
-            this.option('value', null);
-        }
-    },
-
     _renderValue: function() {
         if(!this.option('allowValueSelection')) {
             return;
         }
 
-        const value = this.option('value');
-        const selectedCell = this._getCellByDate(value);
-
-        if(this._selectedCell) {
-            this._selectedCell.removeClass(CALENDAR_SELECTED_DATE_CLASS);
+        let value = this.option('value');
+        if(!Array.isArray(value)) {
+            value = [value];
         }
 
-        selectedCell.addClass(CALENDAR_SELECTED_DATE_CLASS);
-        this._selectedCell = selectedCell;
+        this._$selectedCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_SELECTED_DATE_CLASS); });
+        this._$selectedCells = value.map((value) => this._getCellByDate(value));
+        this._$selectedCells.forEach(($cell) => { $cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
+    },
+
+    _renderRange: function() {
+        const { allowValueSelection, selectionMode, value, range } = this.option();
+        if(!allowValueSelection || selectionMode !== 'range') {
+            return;
+        }
+
+        this._$rangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_RANGE_DATE_CLASS); });
+        this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
+        this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
+
+        this._$rangeCells = range.map((value) => this._getCellByDate(value));
+        this._$rangeStartDateCell = this._getCellByDate(value[0]);
+        this._$rangeEndDateCell = this._getCellByDate(value[1]);
+
+        this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_RANGE_DATE_CLASS); });
+        this._$rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
+        this._$rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
     },
 
     getCellAriaLabel: function(date) {
@@ -307,11 +334,17 @@ const BaseView = Widget.inherit({
             case 'value':
                 this._renderValue();
                 break;
+            case 'range':
+                this._renderRange();
+                break;
             case 'contouredDate':
                 this._renderContouredDate(value);
                 break;
             case 'onCellClick':
                 this._createCellClickAction();
+                break;
+            case 'onCellHover':
+                this._createCellHoverAction();
                 break;
             case 'disabledDates':
             case 'cellTemplate':
