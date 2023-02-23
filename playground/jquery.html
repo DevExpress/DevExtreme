@@ -31,92 +31,193 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://unpkg.com/devextreme-aspnet-data@2.8.6/js/dx.aspnet.data.js" charset="utf-8"></script>
+
+    <style>
+        #gridContainer {
+            height: 620px;
+        }
+
+        .dx-datagrid-rowsview .dx-master-detail-row:not(.dx-datagrid-edit-form)>.dx-datagrid-group-space,
+        .dx-datagrid-rowsview .dx-master-detail-row:not(.dx-datagrid-edit-form) .dx-master-detail-cell {
+            background-color: transparent;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .address-form label {
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="widget"></div>
+    <div class="dx-viewport">
+        <div class="demo-container">
+            <div id="gridContainer"></div>
+        </div>
+    </div>
 
     <script>
-        const disabled = true
+        const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
-        const tabPanelItems = [{
-            ID: 1,
-            title: 'SuprMart',
-            text: '702',
-        }, {
-            ID: 2,
-            disabled,
-            title: "El'Depot",
-            text: '2455',
-        }, {
-            ID: 3,
-            title: 'K&S Music',
-            text: '1000',
-        }, {
-            ID: 4,
-            title: 'Tom Club',
-            text: '999',
-        }
-        // , {
-        //     ID: 5,
-        //     title: 'SuprMart',
-        //     text: '702',
-        // }, {
-        //     ID: 1,
-        //     title: 'SuprMart',
-        //     text: '702',
-        // }, {
-        //     ID: 2,
-        //     disabled,
-        //     title: "El'Depot",
-        //     text: '2455',
-        // }, {
-        //     ID: 3,
-        //     title: 'K&S Music',
-        //     text: '1000',
-        // }, {
-        //     ID: 4,
-        //     title: 'Tom Club',
-        //     text: '999',
-        // }, {
-        //     ID: 5,
-        //     title: 'SuprMart',
-        //     text: '702',
-        // }, {
-        //     ID: 1,
-        //     title: 'SuprMart',
-        //     text: '702',
-        // }, {
-        //     ID: 2,
-        //     disabled,
-        //     title: "El'Depot",
-        //     text: '2455',
-        // }, {
-        //     ID: 3,
-        //     title: 'K&S Music',
-        //     text: '1000',
-        // }, {
-        //     ID: 4,
-        //     title: 'Tom Club',
-        //     text: '999',
-        // }, {
-        //     ID: 5,
-        //     title: 'SuprMart',
-        //     text: '702',
-        // }
-    ];
-
-        $(function () {
-            $('#widget').dxTabPanel({
-                height: 300,
-                items: tabPanelItems,
-                showNavButtons: true,
-            }).dxTabPanel('instance');
-
-            // $('#widget').dxTabs({
-            //     items: tabPanelItems,
-            // });
+        $(() => {
+            $('#gridContainer').dxDataGrid({
+                showBorders: true,
+                dataSource: DevExpress.default.data.AspNet.createStore({
+                    key: 'SupplierID',
+                    loadUrl: `${url}/GetSuppliers`,
+                }),
+                paging: {
+                    pageSize: 15,
+                },
+                remoteOperations: true,
+                columns: [
+                    'ContactName',
+                    'ContactTitle',
+                    'CompanyName',
+                    'City',
+                    'Country',
+                ],
+                masterDetail: {
+                    enabled: true,
+                    template: masterDetailTemplate,
+                },
+            });
         });
+
+        function masterDetailTemplate(_, masterDetailOptions) {
+            return $('<div>').dxTabPanel({
+                items: [{
+                    title: 'Orders',
+                    template: createOrdersTabTemplate(masterDetailOptions.data),
+                }, {
+                    disabled: true,
+                    title: 'Address',
+                    template: createAddressTabTemplate(masterDetailOptions.data),
+                }, {
+                    title: 'Address 2',
+                    template: createAddressTabTemplate(masterDetailOptions.data),
+                }],
+            });
+        }
+
+        function createOrdersTabTemplate(masterDetailData) {
+            return function () {
+                let orderHistoryDataGrid;
+                function onProductChanged(productID) {
+                    orderHistoryDataGrid.option('dataSource', createOrderHistoryStore(productID));
+                }
+                function onDataGridInitialized(e) {
+                    orderHistoryDataGrid = e.component;
+                }
+                return $('<div>').addClass('form-container').dxForm({
+                    labelLocation: 'top',
+                    items: [{
+                        label: { text: 'Product' },
+                        template: createProductSelectBoxTemplate(masterDetailData, onProductChanged),
+                    }, {
+                        label: { text: 'Order History' },
+                        template: createOrderHistoryTemplate(onDataGridInitialized),
+                    }],
+                });
+            };
+        }
+
+        function createProductSelectBoxTemplate(masterDetailData, onProductChanged) {
+            return function () {
+                return $('<div>').dxSelectBox({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'ProductID',
+                        loadParams: { SupplierID: masterDetailData.SupplierID },
+                        loadUrl: `${url}/GetProductsBySupplier`,
+                    }),
+                    valueExpr: 'ProductID',
+                    displayExpr: 'ProductName',
+                    deferRendering: false,
+                    onContentReady(e) {
+                        const firstItem = e.component.option('items[0]');
+                        if (firstItem) {
+                            e.component.option('value', firstItem.ProductID);
+                        }
+                    },
+                    onValueChanged(e) {
+                        onProductChanged(e.value);
+                    },
+                });
+            };
+        }
+
+        function createOrderHistoryTemplate(onDataGridInitialized) {
+            return function () {
+                return $('<div>').dxDataGrid({
+                    onInitialized: onDataGridInitialized,
+                    paging: {
+                        pageSize: 5,
+                    },
+                    showBorders: true,
+                    columns: [
+                        'OrderID',
+                        {
+                            dataField: 'OrderDate',
+                            dataType: 'date',
+                        },
+                        'ShipCountry',
+                        'ShipCity',
+                        {
+                            dataField: 'UnitPrice',
+                            format: 'currency',
+                        },
+                        'Quantity',
+                        {
+                            dataField: 'Discount',
+                            format: 'percent',
+                        },
+                    ],
+                    summary: {
+                        totalItems: [{
+                            column: 'UnitPrice',
+                            summaryType: 'sum',
+                            valueFormat: {
+                                format: 'currency',
+                                precision: 2,
+                            },
+                        }, {
+                            column: 'Quantity',
+                            summaryType: 'count',
+                        }],
+                    },
+                });
+            };
+        }
+
+        function createAddressTabTemplate(data) {
+            return function () {
+                return $('<div>').addClass('address-form form-container').dxForm({
+                    formData: data,
+                    colCount: 2,
+                    customizeItem(item) {
+                        item.template = formItemTemplate;
+                    },
+                    items: ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'],
+                });
+            };
+        }
+
+        function formItemTemplate(item) {
+            return $('<span>').text(item.editorOptions.value);
+        }
+
+        function createOrderHistoryStore(productID) {
+            return DevExpress.data.AspNet.createStore({
+                key: 'OrderID',
+                loadParams: { ProductID: productID },
+                loadUrl: `${url}/GetOrdersByProduct`,
+            });
+        }
+
     </script>
 </body>
 
