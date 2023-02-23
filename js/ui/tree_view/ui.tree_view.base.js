@@ -879,37 +879,31 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderToggleItemVisibilityCustomIcon: function($node, node) {
-        const $icon = getImageContainer(this.option('expandButtonIcon') ?? this.option('collapseButtonIcon'));
-        const $iconCollapsed = getImageContainer(this.option('collapseButtonIcon') ?? this.option('expandButtonIcon'));
+        const $expandIcon = getImageContainer(this.option('expandButtonIcon') ?? this.option('collapseButtonIcon'));
+        const $collapseIcon = getImageContainer(this.option('collapseButtonIcon') ?? this.option('expandButtonIcon'));
 
-        $icon.appendTo($node).addClass('dx-custom-expander-icon');
-        $iconCollapsed.appendTo($node).addClass('dx-custom-expander-icon');
+        $expandIcon.appendTo($node).addClass('dx-custom-expander-icon');
+        $collapseIcon.appendTo($node).addClass('dx-custom-expander-icon');
 
-        $icon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
-        $icon.addClass(CUSTOM_EXPAND_ICON_CLASS);
+        $expandIcon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
+        $expandIcon.addClass(CUSTOM_EXPAND_ICON_CLASS);
 
-        $iconCollapsed.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
-        $iconCollapsed.addClass(CUSTOM_COLLAPSE_ICON_CLASS);
+        $collapseIcon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
+        $collapseIcon.addClass(CUSTOM_COLLAPSE_ICON_CLASS);
 
-        if(node.internalFields.expanded) {
-            $icon.hide();
-            $iconCollapsed.show();
-        } else {
-            $icon.show();
-            $iconCollapsed.hide();
-        }
+        this._toggleCustomExpanderBtnIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
 
         if(node.internalFields.expanded) {
             $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
         }
 
         if(node.internalFields.disabled) {
-            $icon.addClass(DISABLED_STATE_CLASS);
-            $iconCollapsed.addClass(DISABLED_STATE_CLASS);
+            $expandIcon.addClass(DISABLED_STATE_CLASS);
+            $collapseIcon.addClass(DISABLED_STATE_CLASS);
         }
 
-        this._renderToggleItemVisibilityIconClick($iconCollapsed, node);
-        this._renderToggleItemVisibilityIconClick($icon, node);
+        this._renderToggleItemVisibilityIconClick($collapseIcon, node);
+        this._renderToggleItemVisibilityIconClick($expandIcon, node);
     },
 
     _renderToggleItemVisibilityIcon: function($node, node) {
@@ -942,16 +936,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _toggleCustomExpanderBtnIcons: function(node, isOpen) {
-        const expandBtnIcon = node.children(`.${CUSTOM_EXPAND_ICON_CLASS}`);
-        const collapseBtnIcon = node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`);
-
+    _toggleCustomExpanderBtnIcons: function($expandBtnIcon, $collapseBtnIcon, isOpen) {
         if(isOpen) {
-            collapseBtnIcon.show();
-            expandBtnIcon.hide();
+            $collapseBtnIcon.show();
+            $expandBtnIcon.hide();
         } else {
-            collapseBtnIcon.hide();
-            expandBtnIcon.show();
+            $collapseBtnIcon.hide();
+            $expandBtnIcon.show();
         }
     },
 
@@ -972,7 +963,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
         if(this._showCustomExpanderIcons() && $nodeContainer.not(':empty').length) {
-            this._toggleCustomExpanderBtnIcons($node, state);
+            this._toggleCustomExpanderBtnIcons($node.children(`.${CUSTOM_EXPAND_ICON_CLASS}`), $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`), state);
         }
 
         $icon.toggleClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS, state);
