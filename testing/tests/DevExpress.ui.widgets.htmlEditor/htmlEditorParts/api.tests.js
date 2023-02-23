@@ -8,7 +8,7 @@ const { test, module: testModule } = QUnit;
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const DX_BUTTON_CLASS = 'dx-button';
+const BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -256,7 +256,7 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>', 'redo operation');
     });
 
-    test('value should not changed when "undo" called after call "clearHistory"', function(assert) {
+    test('value should not change on undo after "clearHistory" call', function(assert) {
         this.createEditor();
         this.instance.insertText(0, 'a');
         this.clock.tick(1000);
@@ -267,12 +267,24 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<p>aTest 1</p><p>Test 2</p><p>Test 3</p>', 'value is actual');
     });
 
+    test('value should not change on redo after "clearHistory" call', function(assert) {
+        this.createEditor();
+        this.instance.insertText(0, 'a');
+        this.clock.tick(1000);
+        this.instance.undo();
+
+        this.instance.clearHistory();
+        this.instance.redo();
+
+        assert.strictEqual(this.instance.option('value'), '<p>Test 1</p><p>Test 2</p><p>Test 3</p>', 'value is actual');
+    });
+
     test('undo button should have disabled state after call "clearHistory"', function(assert) {
         this.options.toolbar = { items: ['undo'] };
         this.createEditor();
         this.instance.insertText(0, 'a');
         this.clock.tick(1000);
-        const $undoButton = $('#htmlEditor').find(`.${DX_BUTTON_CLASS}`);
+        const $undoButton = $('#htmlEditor').find(`.${BUTTON_CLASS}`);
 
         this.instance.clearHistory();
 
@@ -284,7 +296,7 @@ testModule('API', moduleConfig, () => {
         this.createEditor();
         this.instance.insertText(0, 'a');
         this.clock.tick(1000);
-        const $redoButton = $('#htmlEditor').find(`.${DX_BUTTON_CLASS}`);
+        const $redoButton = $('#htmlEditor').find(`.${BUTTON_CLASS}`);
 
         this.instance.undo();
         this.instance.clearHistory();
