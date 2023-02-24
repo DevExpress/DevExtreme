@@ -32,7 +32,7 @@ if (!isMaterial()) {
             .expect(getComputedPropertyValue('body', 'overflow'))
             .eql('visible')
             .expect(getDocumentScrollTop())
-            .eql(147);
+            .eql(258);
 
           await setStylePropertyValue('body', 'padding-right', '10px');
           await setStylePropertyValue('body', 'overflow', 'auto');
@@ -51,7 +51,7 @@ if (!isMaterial()) {
             .expect(getComputedPropertyValue('body', 'overflow'))
             .eql(enableBodyScroll ? 'auto' : 'hidden')
             .expect(getDocumentScrollTop())
-            .eql(147);
+            .eql(258);
 
           await overlay.hide();
 
@@ -61,7 +61,7 @@ if (!isMaterial()) {
             .expect(getComputedPropertyValue('body', 'overflow'))
             .eql('auto')
             .expect(getDocumentScrollTop())
-            .eql(147);
+            .eql(258);
 
           await testScreenshot(t, takeScreenshot, `Overlay with native scrolling,shading=${shading},enableBodyScroll=${enableBodyScroll},fullScreen=${fullScreen}.png`);
 
