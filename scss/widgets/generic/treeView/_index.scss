@@ -85,8 +85,10 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
 
 .dx-treeview-item-with-checkbox {
   &.dx-treeview-item-with-custom-expander-icon {
+    padding-left: $generic-treeview-custom-expander-icon-offset;
+
     .dx-checkbox {
-      padding-left: $generic-treeview-item-side-padding;
+      padding-left: 10px;
     }
 
     .dx-treeview-item {
@@ -112,6 +114,10 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
 }
 
 .dx-treeview-item-without-checkbox {
+  &.dx-treeview-item-with-custom-expander-icon {
+    padding-left: $generic-treeview-custom-expander-icon-offset;
+  }
+
   &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
     padding-left: $generic-treeview-item-side-padding * 2;
   }

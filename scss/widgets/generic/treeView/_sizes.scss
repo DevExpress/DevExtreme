@@ -24,12 +24,13 @@ $generic-treeview-loadincicator-offset-left: -1px !default;
 
 $generic-treeview-item-side-padding: 6px !default;
 
+$generic-treeview-custom-expander-icon-offset: null !default;
 
 @if $size == "default" {
   $generic-treeview-container-with-border-offset: 7px !default;
 
   $generic-treeview-node-offset: 15px !default;
-
+  $generic-treeview-custom-expander-icon-offset: 20px;
   $generic-treeview-toggle-item-width: 21px !default;
 
   $generic-treeview-item-with-checkbox-offset: 36px !default;
@@ -38,7 +39,7 @@ $generic-treeview-item-side-padding: 6px !default;
   $generic-select-all-item-padding: 9px 0 11px $generic-select-all-item-offset !default;
   $generic-select-all-item-left-padding: 26px !default;
 
-  $generic-treeview-item-padding: 5px $generic-treeview-item-side-padding !default;
+  $generic-treeview-item-padding: 5px 6px !default;
   $generic-treeview-min-item-height: 32px !default;
 
   $generic-treeview-checkbox-offset: 19px !default;
@@ -57,7 +58,7 @@ $generic-treeview-item-side-padding: 6px !default;
   $generic-treeview-container-with-border-offset: 6px !default;
 
   $generic-treeview-node-offset: 10px !default;
-
+  $generic-treeview-custom-expander-icon-offset: 16px;
   $generic-treeview-toggle-item-width: 16px !default;
 
   $generic-treeview-item-with-checkbox-offset: 31px !default;
@@ -66,7 +67,7 @@ $generic-treeview-item-side-padding: 6px !default;
   $generic-select-all-item-padding: 6px 0 8px $generic-select-all-item-offset !default;
   $generic-select-all-item-left-padding: 20px !default;
 
-  $generic-treeview-item-padding: 4px $generic-treeview-item-side-padding !default;
+  $generic-treeview-item-padding: 4px 6px !default;
   $generic-treeview-min-item-height: 28px !default;
 
   $generic-treeview-checkbox-offset: 14px !default;
