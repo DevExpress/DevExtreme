@@ -36,6 +36,7 @@ const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
 const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -1787,6 +1788,155 @@ QUnit.module('selection', moduleSetup, () => {
         assert.ok($item.hasClass('dx-list-item-selected'), 'item should not lose selection');
     });
 });
+
+QUnit.module('selectByClick', {
+    beforeEach: function() {
+        this.onSelectionChangedSpy = sinon.spy();
+        this.items = [1, 2];
+        this.createList = (selectionMode, selectByClick) => {
+            return $('#list').dxList({
+                items: this.items,
+                showSelectionControls: true,
+                selectByClick,
+                selectionMode,
+                onSelectionChanged: this.onSelectionChangedSpy,
+            });
+        };
+    }
+}, () => {
+    QUnit.module('on single mode', () => {
+        QUnit.test('selection should be changed on item click if selectByClick=true', function(assert) {
+            const $list = this.createList('single', true);
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 2, 'OnSelectionChanged should be called on every click');
+        });
+
+        QUnit.test('selection shouldn`t be changed on item click if selectByClick=false', function(assert) {
+            const $list = this.createList('single', false);
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'OnSelectionChanged should not be called');
+        });
+
+        QUnit.test('selection should be changed on item click after selectByClick is set to true', function(assert) {
+            const $list = this.createList('single', false);
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $list.dxList('instance').option('selectByClick', true);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 2, 'OnSelectionChanged should be called on every click');
+        });
+
+        QUnit.test('selection shouldn`t be changed on item click after selectByClick is set to false', function(assert) {
+            const $list = this.createList('single');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $list.dxList('instance').option('selectByClick', false);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'OnSelectionChanged should not be called');
+        });
+    });
+
+    QUnit.module('on multiple mode', ()=> {
+        QUnit.test('selection should be changed on item click if selectByClick=true', function(assert) {
+            const $list = this.createList('multiple', true);
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 2, 'OnSelectionChanged should be called on every click');
+        });
+
+        QUnit.test('selection shouldn`t be changed on item click if selectByClick=false', function(assert) {
+            const $list = this.createList('multiple', false);
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'OnSelectionChanged should not be called');
+        });
+
+        QUnit.test('selection should be changed on item click after selectByClick is set to true', function(assert) {
+            const $list = this.createList('multiple');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $list.dxList('instance').option('selectByClick', true);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'item has selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 2, 'OnSelectionChanged should be called on every click');
+        });
+
+        QUnit.test('selection shouldn`t be changed on item click after selectByClick is set to false', function(assert) {
+            const $list = this.createList('multiple');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+
+            $list.dxList('instance').option('selectByClick', false);
+
+            $items.eq(0).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            $items.eq(1).trigger('dxclick');
+            assert.strictEqual($items.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+            assert.strictEqual($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item doesn`t have selected class');
+
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'OnSelectionChanged should not be called');
+        });
+    });
+});
+
 
 QUnit.module('events', moduleSetup, () => {
     QUnit.test('onItemClick should be fired when item is clicked in ungrouped list', function(assert) {

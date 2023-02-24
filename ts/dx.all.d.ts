@@ -16852,6 +16852,10 @@ declare module DevExpress.ui {
      */
     selectAllMode?: DevExpress.common.SelectAllMode;
     /**
+     * [descr:dxListOptions.selectByClick]
+     */
+    selectByClick?: boolean;
+    /**
      * [descr:dxListOptions.selectionMode]
      */
     selectionMode?: DevExpress.common.SingleMultipleAllOrNone;
