@@ -24170,11 +24170,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.collapseButtonIcon]
      */
-    collapseButtonIcon?: string;
+    collapseButtonIcon?: string | null;
     /**
      * [descr:dxTreeViewOptions.expandButtonIcon]
      */
-    expandButtonIcon?: string;
+    expandButtonIcon?: string | null;
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
