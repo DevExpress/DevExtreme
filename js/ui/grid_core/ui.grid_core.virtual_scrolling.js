@@ -431,7 +431,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         renderDelayedTemplates: function(e) {
-            this._waitAsyncTemplates(e).done(() => {
+            this.waitAsyncTemplates(e).done(() => {
                 this._updateContentPosition(true);
             });
             this.callBase.apply(this, arguments);
@@ -487,7 +487,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             const contentTable = contentElement.children().first();
             if(changeType === 'append' || changeType === 'prepend') {
-                this._waitAsyncTemplates(change).done(() => {
+                this.waitAsyncTemplates(change).done(() => {
                     const $tBodies = this._getBodies(tableElement);
                     if($tBodies.length === 1) {
                         this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
