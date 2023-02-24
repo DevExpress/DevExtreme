@@ -117,6 +117,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     hideOnParentScroll?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    preventScrollEvents?: boolean;
+    /**
+     * @docid
      * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
      * @public
      */

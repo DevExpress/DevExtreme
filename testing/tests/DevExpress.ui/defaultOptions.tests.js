@@ -32,6 +32,7 @@ const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
 const Widget = require('ui/widget/ui.widget');
+const Overlay = require('ui/overlay/ui.overlay');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
 const RadioGroup = require('ui/radio_group');
@@ -576,6 +577,22 @@ testComponentDefaults(Popup,
     }
 );
 
+testComponentDefaults(Popup,
+    {},
+    {
+        preventScrollEvents: false,
+        enableBodyScroll: true,
+    }
+);
+
+testComponentDefaults(Overlay,
+    {},
+    {
+        preventScrollEvents: true,
+        enableBodyScroll: true,
+    }
+);
+
 testComponentDefaults(Widget,
     {},
     {
@@ -596,6 +613,8 @@ testComponentDefaults(Widget,
 testComponentDefaults(Popover,
     {},
     {
+        preventScrollEvents: false,
+        enableBodyScroll: true,
         position: {
             at: 'bottom center',
             collision: 'fit flip',

@@ -18048,6 +18048,14 @@ declare module DevExpress.ui {
      */
     hideOnParentScroll?: boolean;
     /**
+     * [descr:dxOverlayOptions.preventScroll]
+     */
+    preventScrollEvents?: boolean;
+    /**
+     * [descr:dxOverlayOptions.enableBodyScroll]
+     */
+    enableBodyScroll?: boolean;
+    /**
      * [descr:dxOverlayOptions.height]
      */
     height?: number | string | (() => number | string);
@@ -18967,6 +18975,10 @@ declare module DevExpress.ui {
      */
     hideOnParentScroll?: boolean;
     /**
+     * [descr:dxPopoverOptions.preventScroll]
+     */
+    preventScrollEvents?: boolean;
+    /**
      * [descr:dxPopoverOptions.position]
      */
     position?: DevExpress.common.Position | PositionConfig;
@@ -19125,6 +19137,10 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.position]
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
+    /**
+     * [descr:dxPopupOptions.preventScroll]
+     */
+    preventScrollEvents?: boolean;
     /**
      * [descr:dxPopupOptions.resizeEnabled]
      */

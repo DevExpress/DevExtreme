@@ -85,6 +85,18 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     hideOnParentScroll?: boolean;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    preventScrollEvents?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    enableBodyScroll?: boolean;
+    /**
+     * @docid
      * @default '80vh'
      * @public
      */

@@ -3366,6 +3366,50 @@ testModule('focus policy', {
     });
 });
 
+testModule('preventScrollEvents', () => {
+    [true, false].forEach((shading) => {
+        test(`dxmousewheel event should not be prevented on overlay shader if shading is ${shading}`, function(assert) {
+            assert.expect(1);
+
+            const overlay = $('#overlay').dxOverlay({
+                shading,
+                visible: true,
+                preventScrollEvents: false,
+            }).dxOverlay('instance');
+
+            const $wrapper = $(overlay.content()).parent();
+
+            $($wrapper.parent()).on('dxmousewheel', (e) => {
+                assert.strictEqual(e.isDefaultPrevented(), false, 'event is not prevented');
+            });
+
+            pointerMock($wrapper).start().wheel(10);
+
+            $($wrapper.parent()).off('dxmousewheel');
+        });
+
+        test(`dxmousewheel event should not be prevented on overlay content if shading is ${shading}`, function(assert) {
+            assert.expect(1);
+
+            const overlay = $('#overlay').dxOverlay({
+                shading,
+                visible: true,
+                preventScrollEvents: false,
+            }).dxOverlay('instance');
+
+            const $content = $(overlay.content());
+            const $wrapper = $(overlay.content()).parent();
+
+            $($wrapper).on('dxmousewheel', (e) => {
+                assert.strictEqual(e.isDefaultPrevented(), false, 'event is not prevented');
+            });
+
+            pointerMock($content).start().wheel(10);
+
+            $($wrapper).off('dxmousewheel');
+        });
+    });
+});
 
 testModule('scrollable interaction', {
     beforeEach: function() {

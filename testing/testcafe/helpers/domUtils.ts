@@ -86,3 +86,17 @@ export const appendElementTo = ClientFunction((
 
   containerElement?.appendChild(element);
 }, { dependencies: { createElement } });
+
+export const getComputedPropertyValue = ClientFunction((selector, property) => {
+  const element = document.querySelector(selector);
+
+  return window.getComputedStyle(element).getPropertyValue(property);
+});
+
+export const getDocumentScrollTop = ClientFunction(() => document.documentElement.scrollTop);
+
+export const setStylePropertyValue = ClientFunction((selector, property, value) => {
+  const element = document.querySelector(selector);
+
+  element.style[property] = value;
+});

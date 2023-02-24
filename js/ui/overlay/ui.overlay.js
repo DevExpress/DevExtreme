@@ -31,6 +31,7 @@ import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
+import { enableBodyScroll, disableBodyScroll } from './utils';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -155,6 +156,10 @@ const Overlay = Widget.inherit({
             // NOTE: private options
             hideTopOverlayHandler: () => { this.hide(); },
             hideOnParentScroll: false,
+
+            preventScrollEvents: true,
+            enableBodyScroll: true,
+
             onPositioned: null,
             propagateOutsideClick: false,
             ignoreChildEvents: true,
@@ -467,6 +472,10 @@ const Overlay = Widget.inherit({
             this._showingDeferred.reject();
         } else {
             const show = () => {
+                if(!this.option('enableBodyScroll')) {
+                    disableBodyScroll();
+                }
+
                 this._stopAnimation();
                 this._toggleVisibility(true);
                 this._$content.css('visibility', 'hidden');
@@ -567,6 +576,7 @@ const Overlay = Widget.inherit({
         } else {
             this._actions.onHiding(hidingArgs);
 
+            enableBodyScroll(this._$wrapper);
             this._toggleSafariScrolling();
 
             const cancelHide = () => {
@@ -867,7 +877,9 @@ const Overlay = Widget.inherit({
             }
         });
 
-        this._renderScrollTerminator();
+        if(this.option('preventScrollEvents')) {
+            this._renderScrollTerminator();
+        }
 
         whenContentRendered.done(() => {
             if(this.option('visible')) {
