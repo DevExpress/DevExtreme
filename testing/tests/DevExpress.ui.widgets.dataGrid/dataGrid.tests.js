@@ -1343,11 +1343,13 @@ QUnit.module('Async render', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
     });
 
-    QUnit.test('Column auto width should be calculated after cell is rendered', function(assert) {
+    QUnit.test('Column auto width should be calculated after cell is rendered in react', function(assert) {
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1 }],
             columnAutoWidth: true,
             width: 500,
+            templatesRenderAsynchronously: true,
+            renderAsync: false,
             columns: ['column1', {
                 dataField: 'id',
                 renderAsync: true,
@@ -1423,6 +1425,35 @@ QUnit.module('Async render', baseModuleConfig, () => {
         assert.equal(cellTemplateArgs.length, 1, 'cell template is called');
         assert.equal(cellTemplateArgs[0].rowType, 'data', 'cell template rowType');
         assert.equal(cellTemplateArgs[0].column.dataField, 'template', 'cell template column');
+    });
+
+    // T1126234
+    QUnit.test('component should resize on first render without async if renderAsync = true', function(assert) {
+        // act
+        const grid = createDataGrid({
+            dataSource: [{ id: 1 }],
+            filterRow: {
+                visible: true
+            },
+            renderAsync: true,
+            columns: ['id'],
+            selection: {
+                mode: 'multiple',
+            }
+        });
+
+        const resizingController = grid.getController('resizing');
+        const refreshSizes = sinon.spy(resizingController, '_refreshSizes');
+        const originalHandler = resizingController._refreshSizesHandler;
+        resizingController._refreshSizesHandler = function() {
+            originalHandler.apply(this, arguments);
+
+            // assert
+            assert.deepEqual(refreshSizes.callCount, 1, 'resize is called immediately'); 1;
+        };
+
+        // act
+        this.clock.tick();
     });
 });
 
@@ -4545,6 +4576,7 @@ QUnit.module('templates', baseModuleConfig, () => {
                 columns: ['text'],
                 dataRowTemplate: 'rowTemplate',
                 templatesRenderAsynchronously: true,
+                renderAsync: false,
                 integrationOptions: {
                     templates: {
                         rowTemplate: {

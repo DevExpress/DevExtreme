@@ -397,7 +397,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
             const options = templateParameters.options;
             const doc = domAdapter.getDocument();
-            const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
+            const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
 
             if(!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
                 if(change) {
@@ -886,19 +886,19 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $scrollContainer;
     },
 
-    _needWaitAsyncTemplates: function() {
+    needWaitAsyncTemplates: function() {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    _waitAsyncTemplates: function(change, forceWaiting) {
-        const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate)) && change?.templateDeferreds ? change?.templateDeferreds : [];
+    waitAsyncTemplates: function(change, forceWaiting) {
+        const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
+        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate || change.isMasterDetail)) && change?.templateDeferreds ? change?.templateDeferreds : [];
 
         return when.apply(this, templateDeferreds);
     },
 
     _updateContent: function($newTableElement, change) {
-        return this._waitAsyncTemplates(change).done(() => {
+        return this.waitAsyncTemplates(change).done(() => {
             this.setTableElement($newTableElement);
             this._wrapTableInScrollContainer($newTableElement);
         });

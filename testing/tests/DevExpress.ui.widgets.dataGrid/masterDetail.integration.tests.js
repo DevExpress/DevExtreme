@@ -1154,7 +1154,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             masterDetail: {
                 enabled: true,
                 template,
-            }
+            },
+            templatesRenderAsynchronously: true,
+            renderAsync: false,
         }).dxDataGrid('instance');
 
         const originalRenderTemplate = dataGrid.getView('rowsView').renderTemplate;

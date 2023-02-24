@@ -319,6 +319,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 },
             ],
             templatesRenderAsynchronously: true,
+            renderAsync: false,
             integrationOptions: {
                 templates: {
                     buttonTemplate: {
