@@ -645,35 +645,32 @@ QUnit.module('items in disabled state', {
                 },
             ]
         });
-
-        this.tabPanelInstance = this.$tabPanel.dxTabPanel('instance');
-        this.tabWidgetInstance = this.$tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
     },
     afterEach() {
         fx.off = false;
     },
 }, () => {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
-        this.$tabPanel.find(toSelector(TABS_CLASS)).focusin();
-
-        const keyboard = keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
+        const keyboard = keyboardMock(tabs);
         const disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
 
+        tabs.focusin();
         keyboard.keyDown('right');
 
         assert.strictEqual($(disabledItem).hasClass('dx-state-focused'), true, 'disabled item is focused');
     });
 
     QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
-        this.$tabPanel.find(toSelector(TABS_CLASS)).focusin();
-
         const multiViewWrapper = this.$tabPanel.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
-        const keyboard = keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
+        const tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
 
+        const keyboard = keyboardMock(tabs);
+
+        tabs.focusin();
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class is setted');
 
         keyboard.keyDown('right');
-
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class is not setted');
     });
 });
