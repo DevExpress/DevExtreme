@@ -25,17 +25,17 @@ module.exports = {
 
     debug: Object.assign({}, {
         plugins: [
-            // '@babel/plugin-proposal-nullish-coalescing-operator',
-            // '@babel/plugin-proposal-optional-chaining',
-            // ['babel-plugin-inferno', { 'imports': true }],
-            // 'transform-object-assign',
-            // ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
+            '@babel/plugin-proposal-nullish-coalescing-operator',
+            '@babel/plugin-proposal-optional-chaining',
+            ['babel-plugin-inferno', { 'imports': true }],
+            'transform-object-assign',
+            ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
 
             ['add-module-exports', { addDefaultProperty: true }],
             ['@babel/plugin-transform-modules-commonjs', { strict: true }],
 
-            // ['@babel/plugin-transform-classes', { loose: true }],
-            // '@babel/plugin-transform-property-mutators'
+            ['@babel/plugin-transform-classes', { loose: true }],
+            '@babel/plugin-transform-property-mutators'
         ],
         ignore: ['**/*.json'],
     }),
