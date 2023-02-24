@@ -3367,6 +3367,27 @@ testModule('focus policy', {
 });
 
 testModule('preventScrollEvents', () => {
+    test('wrapper scroll subscription after change preventScrollEvents option', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+        }).dxOverlay('instance');
+
+        const $wrapper = $(overlay.content()).parent();
+
+
+        const getWrapperEventListeners = () => $._data($wrapper.get(0)).events || {};
+
+        assert.strictEqual('dxdrag' in getWrapperEventListeners(), true, 'scroll subscribed');
+
+        overlay.option('preventScrollEvents', false);
+
+        assert.strictEqual('dxdrag' in getWrapperEventListeners(), false, 'scroll unsubscribed');
+
+        overlay.option('preventScrollEvents', true);
+
+        assert.strictEqual('dxdrag' in getWrapperEventListeners(), true, 'scroll subscribed');
+    });
+
     [true, false].forEach((shading) => {
         test(`dxmousewheel event should not be prevented on overlay shader if shading is ${shading}`, function(assert) {
             assert.expect(1);

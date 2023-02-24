@@ -800,6 +800,15 @@ testComponentDefaults(TagBox,
     { showDropDownButton: false }
 );
 
+testComponentDefaults(Popup,
+    {},
+    {
+        preventScrollEvents: false,
+        enableBodyScroll: true,
+    }
+);
+
+
 testComponentDefaults(Toast,
     [{ platform: 'android' }],
     {

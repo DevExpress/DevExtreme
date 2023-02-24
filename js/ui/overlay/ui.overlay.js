@@ -401,6 +401,10 @@ const Overlay = Widget.inherit({
         return this._getOptionValue('animation', this);
     },
 
+    _toggleBodyScroll: function(enabled) {
+        enabled ? enableBodyScroll() : disableBodyScroll();
+    },
+
     _animateShowing: function() {
         const animation = this._getAnimationConfig() ?? {};
         const showAnimation = this._normalizeAnimation(animation.show, 'to');
@@ -472,9 +476,7 @@ const Overlay = Widget.inherit({
             this._showingDeferred.reject();
         } else {
             const show = () => {
-                if(!this.option('enableBodyScroll')) {
-                    disableBodyScroll();
-                }
+                this._toggleBodyScroll(this.option('enableBodyScroll'));
 
                 this._stopAnimation();
                 this._toggleVisibility(true);
@@ -576,7 +578,7 @@ const Overlay = Widget.inherit({
         } else {
             this._actions.onHiding(hidingArgs);
 
-            enableBodyScroll(this._$wrapper);
+            this._toggleBodyScroll(true);
             this._toggleSafariScrolling();
 
             const cancelHide = () => {
@@ -877,9 +879,7 @@ const Overlay = Widget.inherit({
             }
         });
 
-        if(this.option('preventScrollEvents')) {
-            this._renderScrollTerminator();
-        }
+        this._toggleWrapperScrollEventsSubscription(this.option('preventScrollEvents'));
 
         whenContentRendered.done(() => {
             if(this.option('visible')) {
@@ -913,37 +913,39 @@ const Overlay = Widget.inherit({
         );
     },
 
-    _renderScrollTerminator: function() {
-        const $scrollTerminator = this._$wrapper;
-        const terminatorEventName = addNamespace(dragEventMove, this.NAME);
+    _toggleWrapperScrollEventsSubscription: function(enabled) {
+        const eventName = addNamespace(dragEventMove, this.NAME);
 
-        eventsEngine.off($scrollTerminator, terminatorEventName);
-        eventsEngine.on($scrollTerminator, terminatorEventName, {
-            validate: function() {
-                return true;
-            },
-            getDirection: function() {
-                return 'both';
-            },
-            _toggleGestureCover: function(toggle) {
-                if(!toggle) {
-                    this._toggleGestureCoverImpl(toggle);
+        eventsEngine.off(this._$wrapper, eventName);
+
+        if(enabled) {
+            eventsEngine.on(this._$wrapper, eventName, {
+                validate: function() {
+                    return true;
+                },
+                getDirection: function() {
+                    return 'both';
+                },
+                _toggleGestureCover: function(toggle) {
+                    if(!toggle) {
+                        this._toggleGestureCoverImpl(toggle);
+                    }
+                },
+                _clearSelection: noop,
+                isNative: true
+            }, e => {
+                const originalEvent = e.originalEvent.originalEvent;
+                const { type } = originalEvent || {};
+                const isWheel = type === 'wheel';
+                const isMouseMove = type === 'mousemove';
+                const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
+                e._cancelPreventDefault = true;
+
+                if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
+                    e.preventDefault();
                 }
-            },
-            _clearSelection: noop,
-            isNative: true
-        }, e => {
-            const originalEvent = e.originalEvent.originalEvent;
-            const { type } = originalEvent || {};
-            const isWheel = type === 'wheel';
-            const isMouseMove = type === 'mousemove';
-            const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
-            e._cancelPreventDefault = true;
-
-            if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
-                e.preventDefault();
-            }
-        });
+            });
+        }
     },
 
     _moveFromContainer: function() {
@@ -1139,14 +1141,14 @@ const Overlay = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        const value = args.value;
+        const { value, name } = args;
 
-        if(this._getActionsList().includes(args.name)) {
+        if(this._getActionsList().includes(name)) {
             this._initActions();
             return;
         }
 
-        switch(args.name) {
+        switch(name) {
             case 'animation':
                 break;
             case 'shading':
@@ -1198,7 +1200,7 @@ const Overlay = Widget.inherit({
                 break;
             case 'hideTopOverlayHandler':
                 this._toggleHideTopOverlayCallback(false);
-                this._initHideTopOverlayHandler(args.value);
+                this._initHideTopOverlayHandler(value);
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
             case 'hideOnParentScroll':
@@ -1219,7 +1221,13 @@ const Overlay = Widget.inherit({
                 this._renderWrapperAttributes();
                 break;
             case 'restorePosition':
-                this._positionController.restorePosition = args.value;
+                this._positionController.restorePosition = value;
+                break;
+            case 'preventScrollEvents':
+                this._toggleWrapperScrollEventsSubscription(value);
+                break;
+            case 'enableBodyScroll':
+                this._toggleBodyScroll(value);
                 break;
             default:
                 this.callBase(args);
