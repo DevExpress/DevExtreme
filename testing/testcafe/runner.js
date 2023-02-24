@@ -9,6 +9,41 @@ const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
+const express = require('express');
+
+const app = express();
+const port = 3000;
+const reports = [];
+
+app.use(express.json({ type: 'application/csp-report' }));
+
+app.post('/report', (req, res, next) => {
+    const { 'csp-report': cspReport } = req.body;
+
+    if(cspReport != null) {
+        const {
+            'source-file': sourceFile,
+            'original-policy': originalPolicy,
+            'violated-directive': violatedDirective,
+            'blocked-uri': blockedUri,
+            'line-number': lineNumber
+        } = cspReport;
+
+        reports.push({ originalPolicy, violatedDirective, blockedUri, lineNumber, sourceFile });
+
+        if(blockedUri != null && !blockedUri.includes('testcafe') && !blockedUri.includes('hammerhead')) {
+            if(sourceFile == null) {
+                reports.push({ originalPolicy, violatedDirective, blockedUri, lineNumber });
+            } else if(!sourceFile.includes('testcafe') && !sourceFile.includes('hammerhead')) {
+                reports.push({ originalPolicy, violatedDirective, blockedUri, lineNumber, sourceFile });
+            }
+        }
+    }
+
+    res.status(200);
+    res.end();
+});
+
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
     // eslint-disable-next-line no-undef
     window.DevExpress.ui.themes.ready(resolve);
@@ -113,10 +148,23 @@ createTestCafe({
             runOptions.disableScreenshots = true;
         }
 
+        app.listen(port);
+
         return runner.run(runOptions);
     })
     .then(failedCount => {
         testCafe.close();
+
+        const dedup = reports.filter((obj, index) => {
+            return index === reports.findIndex(o => (
+                obj.violatedDirective === o.violatedDirective &&
+                obj.blockedUri === o.blockedUri &&
+                obj.lineNumber === o.lineNumber
+            ));
+        });
+
+        console.log(dedup);
+
         process.exit(failedCount);
     });
 

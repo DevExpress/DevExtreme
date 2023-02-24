@@ -237,7 +237,7 @@
     "validate-ts": "gulp validate-ts",
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js --exclude js/renovation/",
-    "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
+    "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run --rm -it testcafe-testing",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
     "test-jest": "jest --coverage --maxWorkers=8",
