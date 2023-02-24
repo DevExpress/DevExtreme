@@ -32,7 +32,7 @@ QUnit.testStart(() => {
 
 const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
-// const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
+const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 const TABS_ITEM_CLASS = 'dx-tab';
 const SELECTED_TAB_CLASS = 'dx-tab-selected';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
@@ -656,7 +656,7 @@ QUnit.module('items in disabled state', {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
         this.tabPanelInstance.focus();
 
-        const keyboard = new keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
+        const keyboard = keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
         const disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
 
         keyboard.keyDown('right');
@@ -664,19 +664,18 @@ QUnit.module('items in disabled state', {
         assert.strictEqual($(disabledItem).hasClass('dx-state-focused'), true, 'disabled item is focused');
     });
 
-    // eslint-disable-next-line qunit/no-commented-tests
-    // QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
-    //     this.tabPanelInstance.focus();
+    QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
+        this.tabPanelInstance.focus();
 
-    //     const multiViewWrapper = this.$tabPanel.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
-    //     const keyboard = new keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
+        const multiViewWrapper = this.$tabPanel.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const keyboard = keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
 
-    //     assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class is setted');
+        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class is setted');
 
-    //     keyboard.keyDown('right');
+        keyboard.keyDown('right');
 
-    //     assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class is not setted');
-    // });
+        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class is not setted');
+    });
 });
 
 QUnit.module('aria accessibility', () => {
