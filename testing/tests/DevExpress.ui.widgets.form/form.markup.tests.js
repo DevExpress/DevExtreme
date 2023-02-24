@@ -16,11 +16,14 @@ import { FIELD_ITEM_CLASS,
 
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
+    TOGGLE_CONTROLS_PADDING_CLASS
 } from 'ui/form/components/field_item';
 
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
+import 'ui/radio_group';
+import 'ui/switch';
 
 import 'generic_light.css!';
 
@@ -770,6 +773,169 @@ QUnit.module('Form', () => {
         });
 
         assert.equal(templateStub.getCall(0).args[0].name, undefined, 'name argument');
+    });
+});
+
+QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
+    ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'].forEach(editorType => {
+        const componentName = editorType.split('dx')[1].toLowerCase();
+
+        ['left', undefined].forEach(alignment => {
+            test(`${editorType} should have class when labelLocation=top, label.alignment=${alignment}, label.visible=true (T1126956)`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation: 'top',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true, alignment },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
+            });
+        });
+
+        test(`${editorType} should have class after visibility change to true (labelLocation=top, label.alignment=left)`, function(assert) {
+            const $formContainer = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: false },
+                            editorType,
+                        }]
+                    }]
+                }]
+            });
+            const labelVisibleOptionName = 'items[0].items[0].items[0].label.visible';
+
+            $formContainer
+                .dxForm('instance')
+                .option(labelVisibleOptionName, true);
+
+            const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
+        });
+
+        test(`${editorType} should not have class after visibility change to false (labelLocation=top, label.alignment=left)`, function(assert) {
+            const $formContainer = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: true },
+                            editorType,
+                        }]
+                    }]
+                }]
+            });
+            const labelVisibleOptionName = 'items[0].items[0].items[0].label.visible';
+
+            $formContainer
+                .dxForm('instance')
+                .option(labelVisibleOptionName, false);
+
+            const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+        });
+
+        test(`${editorType} should not have class when label.visible=false`, function(assert) {
+            const $form = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: false },
+                            editorType,
+                        }]
+                    }]
+                }]
+            });
+            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+        });
+
+        ['left', 'right'].forEach(labelLocation => {
+            test(`${editorType} should not have class when the labelLocation=${labelLocation}`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation,
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+            });
+        });
+
+        ['center', 'right'].forEach(alignment => {
+            test(`${editorType} should not have class when label.alignment=${alignment}`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation: 'top',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true, alignment },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+            });
+        });
+    });
+
+    test('editor should not have class if it is not CheckBox, Switch or RadioGroup', function(assert) {
+        const $form = $('#form').dxForm({
+            labelLocation: 'top',
+            items: [{
+                itemType: 'group',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'default',
+                        label: { visible: true, alignment: 'left' },
+                    }]
+                }]
+            }]
+        });
+        const $componentWrapper = $form.find(`.${FIELD_ITEM_CONTENT_CLASS}`);
+
+        assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
     });
 });
 
