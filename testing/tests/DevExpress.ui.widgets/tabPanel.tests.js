@@ -654,7 +654,7 @@ QUnit.module('items in disabled state', {
     },
 }, () => {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
-        this.tabPanelInstance.focus();
+        this.$tabPanel.find(toSelector(TABS_CLASS)).focusin();
 
         const keyboard = keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
         const disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
@@ -665,7 +665,7 @@ QUnit.module('items in disabled state', {
     });
 
     QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
-        this.tabPanelInstance.focus();
+        this.$tabPanel.find(toSelector(TABS_CLASS)).focusin();
 
         const multiViewWrapper = this.$tabPanel.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
         const keyboard = keyboardMock(this.$tabPanel.find(toSelector(TABS_CLASS)));
