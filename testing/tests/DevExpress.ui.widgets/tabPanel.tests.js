@@ -630,8 +630,6 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('items in disabled state', {
     beforeEach() {
-        fx.off = true;
-
         this.$tabPanel = $('#tabPanel').dxTabPanel({
             items: [
                 {
@@ -640,14 +638,11 @@ QUnit.module('items in disabled state', {
                 },
                 {
                     disabled: true,
-                    title: 'El\'Depot',
+                    title: 'ElDepot',
                     text: '2455',
                 },
             ]
         });
-    },
-    afterEach() {
-        fx.off = false;
     },
 }, () => {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
@@ -655,8 +650,7 @@ QUnit.module('items in disabled state', {
         const tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
         const keyboard = keyboardMock(tabs);
 
-        tabs.focusin();
-        keyboard.keyDown('right');
+        keyboard.press('right');
 
         assert.strictEqual($(disabledItem).hasClass('dx-state-focused'), true, 'disabled item is focused');
     });
@@ -666,10 +660,10 @@ QUnit.module('items in disabled state', {
         const tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
         const keyboard = keyboardMock(tabs);
 
-        tabs.focusin();
+        keyboard.press('tab');
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class is setted');
 
-        keyboard.keyDown('right');
+        keyboard.press('right');
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class is not setted');
     });
 });
