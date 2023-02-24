@@ -1349,6 +1349,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
             columnAutoWidth: true,
             width: 500,
             templatesRenderAsynchronously: true,
+            renderAsync: false,
             columns: ['column1', {
                 dataField: 'id',
                 renderAsync: true,
@@ -4575,6 +4576,7 @@ QUnit.module('templates', baseModuleConfig, () => {
                 columns: ['text'],
                 dataRowTemplate: 'rowTemplate',
                 templatesRenderAsynchronously: true,
+                renderAsync: false,
                 integrationOptions: {
                     templates: {
                         rowTemplate: {
