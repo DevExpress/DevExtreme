@@ -633,10 +633,10 @@ QUnit.module('keyboard navigation', {
         const tabs = this.$element.find(toSelector(TABS_CLASS));
         const keyboard = keyboardMock(tabs);
 
-        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class is setted');
+        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class set');
 
         keyboard.press('right');
-        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class is not setted');
+        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class not set');
     });
 
     if(devices.current().deviceType === 'desktop') {
