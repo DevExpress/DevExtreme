@@ -1,4 +1,8 @@
 import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
@@ -9,6 +13,10 @@ import {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
+
+import {
+    template,
+} from '../core/templates/template';
 
 import {
     BaseGauge,
@@ -76,6 +84,14 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
        */
       startAngle?: number;
     };
+    /**
+     * @docid
+     * @default undefined
+     * @type template
+     * @type_function_return string|SVGElement|jQuery
+     * @public
+     */
+    centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
      * @type object
