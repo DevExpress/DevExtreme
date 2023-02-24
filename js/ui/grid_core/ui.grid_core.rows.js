@@ -1028,7 +1028,7 @@ export const rowsModule = {
                     }
                 },
 
-                height: function(height, hasHeight) {
+                height: function(height) {
                     const that = this;
                     const $element = this.element();
 
@@ -1036,15 +1036,16 @@ export const rowsModule = {
                         return $element ? getOuterHeight($element, true) : 0;
                     }
 
-                    that._hasHeight = hasHeight === undefined ? height !== 'auto' : hasHeight;
-
                     if(isDefined(height) && $element) {
+                        that.hasHeight(height !== 'auto');
                         setHeight($element, height);
                     }
                 },
 
-                hasHeight: function() {
-                    return !!this._hasHeight;
+                hasHeight: function(hasHeight) {
+                    if(arguments.length === 0) { return !!this._hasHeight; }
+
+                    this._hasHeight = hasHeight;
                 },
 
                 setLoading: function(isLoading, messageText) {

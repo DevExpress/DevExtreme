@@ -1,5 +1,5 @@
 import core from './ui.tree_list.core';
-import { keyboardNavigationModule } from '../grid_core/ui.grid_core.keyboard_navigation';
+import { keyboardNavigationModule } from '../grid_core/keyboard_navigation/module';
 import { extend } from '../../core/utils/extend';
 
 core.registerModule('keyboardNavigation', extend(true, {}, keyboardNavigationModule, {

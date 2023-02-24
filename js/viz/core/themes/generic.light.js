@@ -743,6 +743,7 @@ export default [{
             },
             argumentAxis: {
                 endOnTick: false,
+                aggregateByCategory: true,
                 workWeek: [1, 2, 3, 4, 5]
             },
             valueAxis: {
@@ -1101,6 +1102,7 @@ export default [{
                 color: BLACK,
                 opacity: 0.1,
                 showCustomBoundaryTicks: true,
+                aggregateByCategory: true,
                 label: {
                     overlappingBehavior: 'hide',
                     alignment: CENTER,

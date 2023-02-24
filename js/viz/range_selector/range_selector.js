@@ -563,7 +563,8 @@ const dxRangeSelector = baseWidgetModule.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'behavior.callValueChanged': { since: '23.1', message: 'Use the "behavior.valueChangeMode" option instead' }
+            'behavior.callValueChanged': { since: '23.1', message: 'Use the "behavior.valueChangeMode" property instead' },
+            'scale.aggregateByCategory': { since: '23.1', message: 'Use the aggregation.enabled property' }
         });
     },
 

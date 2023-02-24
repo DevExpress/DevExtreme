@@ -268,6 +268,7 @@ const Slider = TrackBar.inherit({
         this._createComponent(this._$wrapper, Swipeable, {
             elastic: false,
             immediate: true,
+            immediateTimeout: 0,
             onStart: this._swipeStartHandler.bind(this),
             onUpdated: this._swipeUpdateHandler.bind(this),
             onEnd: this._swipeEndHandler.bind(this),

@@ -113,10 +113,12 @@ const SwipeEmitter = GestureEmitter.inherit({
         }
 
         this._fireEvent(SWIPE_EVENT, e, {
-            offset: offset
+            offset: offset,
         });
 
-        e.preventDefault();
+        if(e.cancelable !== false) {
+            e.preventDefault();
+        }
     },
 
     _end: function(e) {

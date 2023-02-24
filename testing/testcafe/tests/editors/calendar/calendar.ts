@@ -66,3 +66,18 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
     return cellIndex === -1 ? bold : italic;
   },
 }));
+
+['multi', 'range'].forEach((selectionMode) => {
+  test(`Calendar with ${selectionMode} selectionMode rendered correct`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Calendar with ${selectionMode} selectionMode.png`, { element: '#container', shouldTestInCompact: true });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxCalendar', {
+    values: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
+    selectionMode,
+  }));
+});
