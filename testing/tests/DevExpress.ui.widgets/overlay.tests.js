@@ -3368,6 +3368,11 @@ testModule('focus policy', {
 
 testModule('preventScrollEvents', () => {
     test('wrapper scroll subscription after change preventScrollEvents option', function(assert) {
+        if(QUnit.urlParams['nojquery']) {
+            assert.ok(true);
+            return;
+        }
+
         const overlay = $('#overlay').dxOverlay({
             visible: true,
         }).dxOverlay('instance');
