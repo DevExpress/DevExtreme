@@ -26,49 +26,52 @@ export const getElementMaxHeightByWindow = ($element, startLocation) => {
     return actualOffset * WINDOW_HEIGHT_PERCENT;
 };
 
-
-let previousBodyOverflowSetting;
-let previousBodyPaddingRight;
-
-const setOverflowHidden = () => {
+export const createBodyOverflowManager = () => {
     const window = getWindow();
+    const documentElement = domAdapter.getDocument().documentElement;
     const $body = $(domAdapter.getBody());
 
-    if(!isDefined(previousBodyPaddingRight)) {
-        const scrollBarWidth = window.innerWidth - domAdapter.getDocument().documentElement.clientWidth;
+    const prevSettings = {
+        overflow: null,
+        paddingRight: null,
+    };
 
-        if(scrollBarWidth > 0) {
-            const computedBodyPaddingRight = parseInt(window.getComputedStyle($body.get(0)).getPropertyValue('padding-right'), 10);
-            previousBodyPaddingRight = $body.css('paddingRight');
-            $body.css('paddingRight', `${computedBodyPaddingRight + scrollBarWidth}px`);
+    const setBodyPaddingRight = () => {
+        const scrollBarWidth = window.innerWidth - documentElement.clientWidth;
+        if(prevSettings.paddingRight || scrollBarWidth <= 0) {
+            return;
         }
-    }
-
-    if(!isDefined(previousBodyOverflowSetting)) {
-        previousBodyOverflowSetting = $body.css('overflow');
+        const paddingRight = window.getComputedStyle($body.get(0)).getPropertyValue('padding-right');
+        const computedBodyPaddingRight = parseInt(paddingRight, 10);
+        prevSettings.paddingRight = $body.css('paddingRight');
+        $body.css('paddingRight', `${computedBodyPaddingRight + scrollBarWidth}px`);
+    };
+    const restoreBodyPaddingRight = () => {
+        if(!isDefined(prevSettings.paddingRight)) {
+            return;
+        }
+        $body.css('paddingRight', prevSettings.paddingRight);
+        prevSettings.paddingRight = null;
+    };
+    const setBodyOverflow = () => {
+        if(prevSettings.overflow) {
+            return;
+        }
+        prevSettings.overflow = $body.css('overflow');
         $body.css('overflow', 'hidden');
-    }
-};
-
-const restoreOverflowSetting = () => {
-    const $body = $(domAdapter.getBody());
-    if(isDefined(previousBodyPaddingRight)) {
-        $body.css('paddingRight', previousBodyPaddingRight);
-
-        previousBodyPaddingRight = undefined;
-    }
-
-    if(isDefined(previousBodyOverflowSetting)) {
-        $body.css('overflow', previousBodyOverflowSetting);
-
-        previousBodyOverflowSetting = undefined;
-    }
-};
-
-export const disableBodyScroll = () => {
-    setOverflowHidden();
-};
-
-export const enableBodyScroll = () => {
-    restoreOverflowSetting();
+    };
+    const restoreBodyOverflow = () => {
+        $body.css('overflow', prevSettings.overflow);
+        prevSettings.overflow = null;
+    };
+    return {
+        setOverflow() {
+            setBodyPaddingRight();
+            setBodyOverflow();
+        },
+        restoreOverflow() {
+            restoreBodyPaddingRight();
+            restoreBodyOverflow();
+        },
+    };
 };

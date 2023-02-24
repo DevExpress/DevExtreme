@@ -31,7 +31,7 @@ import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
-import { enableBodyScroll, disableBodyScroll } from './utils';
+import { createBodyOverflowManager } from './utils';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -402,7 +402,9 @@ const Overlay = Widget.inherit({
     },
 
     _toggleBodyScroll: function(enabled) {
-        enabled ? enableBodyScroll() : disableBodyScroll();
+        const { setOverflow, restoreOverflow } = this._bodyOverflowManager ??= createBodyOverflowManager();
+
+        enabled ? restoreOverflow() : setOverflow();
     },
 
     _animateShowing: function() {
