@@ -18,4 +18,4 @@ export interface Callback<TArgs extends any[] = any[], TContext = any> {
   fired(): boolean;
 }
 
-export default function Callbacks<TArgs extends any[]>(): Callback<TArgs>;
+export default function createCallback<TArgs extends any[]>(): Callback<TArgs>;
