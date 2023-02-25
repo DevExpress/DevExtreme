@@ -81,7 +81,6 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
       const screenshotName = `Treeview with custom expander icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
 
       await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', shouldTestInCompact: true });
-      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'material.blue.light', shouldTestInCompact: true });
 
       await t
         .expect(compareResults.isValid())

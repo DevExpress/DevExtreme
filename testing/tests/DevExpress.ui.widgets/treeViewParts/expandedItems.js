@@ -194,13 +194,13 @@ module('Expanded items', {
             expandButtonIcon: 'add',
             collapseButtonIcon: 'add',
         });
-        const treeViewInstance = $treeView.dxTreeView('instance');
+        const treeView = $treeView.dxTreeView('instance');
         const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
         const $icon = $firstItem.parent().find('> .' + internals.CUSTOM_EXPAND_ICON_CLASS);
 
         $icon.trigger('dxclick');
 
-        assert.ok(treeViewInstance.option('items')[0].expanded, 'item was expanded');
+        assert.ok(treeView.option('items')[0].expanded, 'item was expanded');
     });
 
     test('disabled item should not expand on click', function(assert) {
@@ -327,16 +327,17 @@ module('Expanded items', {
 
     test('itemExpanded should be fired when expanding item', function(assert) {
         const data = $.extend(true, [], DATA[5]);
-
         const $treeView = initTree({
             items: data
         });
         const treeView = $treeView.dxTreeView('instance');
         const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
-
-        treeView.on('itemExpanded', () => assert.ok(true, 'itemExpanded was fired'));
+        const itemExpandedEventSpy = sinon.spy();
+        treeView.on('itemExpanded', itemExpandedEventSpy);
 
         $toggleExpandIcon.trigger('dxclick');
+
+        assert.ok(itemExpandedEventSpy.called);
     });
 
     test('itemExpanded should be fired when expanding item with custom expander icon', function(assert) {

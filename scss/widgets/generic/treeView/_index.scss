@@ -159,7 +159,7 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
   }
 }
 
-.dx-custom-expander-icon {
+.dx-treeview-custom-expander-icon {
   @include dx-icon-sizing($generic-base-icon-size);
 
   top: 7px;

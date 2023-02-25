@@ -23,7 +23,7 @@ $material-treeview-node-offset: $material-treeview-toggle-item-width;
 $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5;
 
 
-.dx-custom-expander-icon {
+.dx-treeview-custom-expander-icon {
   @include dx-icon-sizing($material-base-icon-size);
 
   top: $material-custom-icon-top;
