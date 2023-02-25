@@ -252,7 +252,7 @@ module('Expanded items', {
     });
 
 
-    test('expand and collapse icons should change visibility onClick', function(assert) {
+    test('expand and collapse icons should change visibility on click multiple times', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = false;
         const $treeView = initTree({
@@ -264,6 +264,16 @@ module('Expanded items', {
 
         const $expandIcon = $firstItem.parent().find('> .' + internals.CUSTOM_EXPAND_ICON_CLASS);
         const $collapseIcon = $firstItem.parent().find('> .' + internals.CUSTOM_COLLAPSE_ICON_CLASS);
+
+        assert.notOk($collapseIcon.is(':visible'));
+        assert.ok($expandIcon.is(':visible'));
+
+        $expandIcon.trigger('dxclick');
+
+        assert.ok($collapseIcon.is(':visible'));
+        assert.notOk($expandIcon.is(':visible'));
+
+        $expandIcon.trigger('dxclick');
 
         assert.notOk($collapseIcon.is(':visible'));
         assert.ok($expandIcon.is(':visible'));

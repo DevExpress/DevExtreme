@@ -907,10 +907,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $collapseIcon = getImageContainer(collapseButtonIcon ?? expandButtonIcon);
 
         $expandIcon.appendTo($node)
-            .addClass([CUSTOM_EXPANDER_ICON_CLASS, CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS, CUSTOM_EXPAND_ICON_CLASS]);
+            .addClass(CUSTOM_EXPANDER_ICON_CLASS);
+
+        $expandIcon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
+        $expandIcon.addClass(CUSTOM_EXPAND_ICON_CLASS);
 
         $collapseIcon.appendTo($node)
-            .addClass([CUSTOM_EXPANDER_ICON_CLASS, CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS, CUSTOM_COLLAPSE_ICON_CLASS]);
+            .addClass(CUSTOM_EXPANDER_ICON_CLASS);
+
+        $collapseIcon.addClass(CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
+        $collapseIcon.addClass(CUSTOM_COLLAPSE_ICON_CLASS);
 
         this._toggleCustomExpanderBtnIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
 
