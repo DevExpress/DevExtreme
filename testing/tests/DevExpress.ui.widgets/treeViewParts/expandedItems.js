@@ -195,8 +195,7 @@ module('Expanded items', {
             collapseButtonIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-        const $icon = $firstItem.parent().find('> .' + internals.CUSTOM_EXPAND_ICON_CLASS);
+        const $icon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
 
         $icon.trigger('dxclick');
 
@@ -227,8 +226,7 @@ module('Expanded items', {
             collapseButtonIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-        const $icon = $firstItem.parent().find('> .' + internals.CUSTOM_ICON_TOGGLE_ITEM_VISIBILITY_CLASS);
+        const $icon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
 
         $icon.trigger('dxclick');
 
@@ -251,22 +249,17 @@ module('Expanded items', {
         assert.ok(treeView.option('items')[0].expanded, 'disabled item was not expanded');
     });
 
-
-    test('expand and collapse icons should change visibility on click multiple times', function(assert) {
+    test('expand and collapse custom icons should change visibility on click multiple times', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = false;
-        const $treeView = initTree({
+        initTree({
             items: data,
             expandButtonIcon: 'add',
             collapseButtonIcon: 'add',
         });
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
-        const $expandIcon = $firstItem.parent().find('> .' + internals.CUSTOM_EXPAND_ICON_CLASS);
-        const $collapseIcon = $firstItem.parent().find('> .' + internals.CUSTOM_COLLAPSE_ICON_CLASS);
-
-        assert.notOk($collapseIcon.is(':visible'));
-        assert.ok($expandIcon.is(':visible'));
+        const $expandIcon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
+        const $collapseIcon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`);
 
         $expandIcon.trigger('dxclick');
 
@@ -284,7 +277,6 @@ module('Expanded items', {
         assert.notOk($expandIcon.is(':visible'));
     });
 
-
     test('expanded disabled item with custom icon should not collapse on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
@@ -295,12 +287,27 @@ module('Expanded items', {
             collapseButtonIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-        const $icon = $firstItem.parent().find('> .' + internals.CUSTOM_COLLAPSE_ICON_CLASS);
+        const $icon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(0);
 
         $icon.trigger('dxclick');
 
         assert.ok(treeView.option('items')[0].expanded, 'disabled item was not collapsed');
+    });
+
+    test('expanded item with custom icon should collapse on click', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+        data[0].expanded = true;
+        const $treeView = initTree({
+            items: data,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $icon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(0);
+
+        $icon.trigger('dxclick');
+
+        assert.notOk(treeView.option('items')[0].expanded, 'item was collapsed');
     });
 
     test('expanded item shouldn\'t collapse after setting .disable for it', function(assert) {
@@ -359,9 +366,13 @@ module('Expanded items', {
             collapseButtonIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $toggleExpandIcon = $($treeView.find('.' + internals.CUSTOM_EXPAND_ICON_CLASS).eq(0));
-        treeView.on('itemExpanded', () => assert.ok(true, 'itemExpanded was fired'));
+        const $toggleExpandIcon = $($treeView.find(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`).eq(0));
+        const itemExpandedEventSpy = sinon.spy();
+        treeView.on('itemExpanded', itemExpandedEventSpy);
+
         $toggleExpandIcon.trigger('dxclick');
+
+        assert.ok(itemExpandedEventSpy.called);
     });
 
     test('itemCollapsed should be fired when collapsing item by click', function(assert) {
