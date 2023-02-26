@@ -248,10 +248,6 @@ const TabPanel = MultiView.inherit({
         this._focusTarget().attr('tabIndex', -1);
     },
 
-    _isDisabled($el) {
-        return $el && $($el).attr('aria-disabled') === 'true';
-    },
-
     _toggleWrapperFocusedClass(isFocused) {
         this._toggleFocusClass(isFocused, this._$wrapper);
     },
