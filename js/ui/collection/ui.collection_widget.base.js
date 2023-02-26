@@ -404,6 +404,10 @@ const CollectionWidget = Widget.inherit({
         }
     },
 
+    _isDisabled($el) {
+        return $el && $($el).attr('aria-disabled') === 'true';
+    },
+
     _setFocusedItem: function($target) {
         if(!$target || !$target.length) {
             return;
