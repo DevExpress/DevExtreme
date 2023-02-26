@@ -9,6 +9,7 @@ import 'ui/tabs';
 import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 import { getScrollLeftMax } from 'renovation/ui/scroll_view/utils/get_scroll_left_max';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -38,6 +39,7 @@ const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
@@ -655,6 +657,31 @@ QUnit.module('Horizontal scrolling', () => {
 
         assert.ok(itemOffset <= rightBoundary, `item offset ${itemOffset} is lower than right boundary ${rightBoundary}`);
         assert.ok(itemOffset > contentLeft, `item offset ${itemOffset} is greater than left boundary ${contentLeft}`);
+    });
+
+    QUnit.test('tabs should scroll to the disabled item when it have focus', function(assert) {
+        const items = [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', disabled: true }];
+        const $element = $('#scrollableTabs').dxTabs({
+            items: items,
+            scrollingEnabled: true,
+            visible: true,
+            width: 200,
+            showNavButtons: false,
+            focusStateEnabled: true,
+        });
+        const $item = $element.find('.' + DISABLED_STATE_CLASS).eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('right');
+        keyboard.press('right');
+        keyboard.press('right');
+
+        const contentLeft = Math.round($element.offset().left);
+        const contentRight = Math.round(contentLeft + $element.outerWidth());
+        const itemLeft = Math.round($item.offset().left);
+        const itemRight = Math.round(itemLeft + $item.outerWidth());
+
+        assert.strictEqual(itemRight - contentRight, 0, 'focused item in disabled state in view');
     });
 });
 
