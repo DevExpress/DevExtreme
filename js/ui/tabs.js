@@ -425,6 +425,14 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _updateScrolling($target) {
+        const isDisabled = $($target).attr('aria-disabled') === 'true';
+
+        if(isDisabled) {
+            this._scrollToItem($target);
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -445,6 +453,10 @@ const Tabs = CollectionWidget.inherit({
                 break;
             case 'badgeExpr':
                 this._invalidate();
+                break;
+            case 'focusedElement':
+                this.callBase(args);
+                this._updateScrolling(args.value);
                 break;
             default:
                 this.callBase(args);
