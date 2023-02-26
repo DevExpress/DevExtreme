@@ -16,6 +16,17 @@ $generic-tabpanel-inset-shadow-right: inset (-$generic-tabs-border-width) 0;
 $generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
 
 
+@mixin tabpanel-navigation-shadow-mixin($accent-color) {
+  .dx-tabs-nav-button-left {
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+  }
+
+  .dx-tabs-nav-button-right {
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
+  }
+}
+
+
 @mixin tabpanel-tab-shadow-mixin($accent-color, $target-class) {
   .dx-tabs {
     box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
@@ -73,18 +84,15 @@ $generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
     }
 
     @include tabpanel-tab-shadow-mixin($accent-color, $target-class);
-
-    .dx-tabs-nav-button-left {
-      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
-    }
-
-    .dx-tabs-nav-button-right {
-      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
-    }
+    @include tabpanel-navigation-shadow-mixin($accent-color);
   }
 
-  &.dx-focus-on-disabled > .dx-tabpanel-tabs {
-    @include tabpanel-tab-shadow-mixin($tabs-border-color, $target-class);
+  &.dx-focus-on-disabled {
+    & > .dx-tabpanel-tabs {
+      @include tabpanel-tab-shadow-mixin($tabs-border-color, $target-class);
+    }
+
+    @include tabpanel-navigation-shadow-mixin($tabs-border-color);
   }
 }
 
