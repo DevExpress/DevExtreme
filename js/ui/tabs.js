@@ -426,9 +426,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateScrolling($target) {
-        const isDisabled = $($target).attr('aria-disabled') === 'true';
-
-        if(isDisabled) {
+        if(this._isDisabled($target)) {
             this._scrollToItem($target);
         }
     },
