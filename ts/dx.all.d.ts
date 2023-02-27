@@ -24168,13 +24168,13 @@ declare module DevExpress.ui {
      */
     showCheckBoxesMode?: DevExpress.ui.dxTreeView.TreeViewCheckBoxMode;
     /**
-     * [descr:dxTreeViewOptions.collapseButtonIcon]
+     * [descr:dxTreeViewOptions.collapseIcon]
      */
-    collapseButtonIcon?: string | null;
+    collapseIcon?: string | null;
     /**
-     * [descr:dxTreeViewOptions.expandButtonIcon]
+     * [descr:dxTreeViewOptions.expandIcon]
      */
-    expandButtonIcon?: string | null;
+    expandIcon?: string | null;
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */

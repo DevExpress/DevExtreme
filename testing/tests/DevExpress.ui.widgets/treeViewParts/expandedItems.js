@@ -191,8 +191,8 @@ module('Expanded items', {
         const data = $.extend(true, [], DATA[5]);
         const $treeView = initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
         const $icon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
@@ -222,8 +222,8 @@ module('Expanded items', {
         data[0].disabled = true;
         const $treeView = initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
         const $icon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
@@ -254,8 +254,8 @@ module('Expanded items', {
         data[0].expanded = false;
         initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
 
         const $expandIcon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
@@ -283,8 +283,8 @@ module('Expanded items', {
         data[0].disabled = true;
         const $treeView = initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
         const $icon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(0);
@@ -299,8 +299,8 @@ module('Expanded items', {
         data[0].expanded = true;
         const $treeView = initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
         const $icon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(0);
@@ -363,8 +363,8 @@ module('Expanded items', {
 
         const $treeView = initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
         const $toggleExpandIcon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`).eq(0);

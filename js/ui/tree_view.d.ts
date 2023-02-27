@@ -319,13 +319,13 @@ export interface dxTreeViewOptions<TKey = any>
      * @default null
      * @public
      */
-    collapseButtonIcon?: string | null;
+    collapseIcon?: string | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    expandButtonIcon?: string | null;
+    expandIcon?: string | null;
     /**
      * @docid
      * @default false

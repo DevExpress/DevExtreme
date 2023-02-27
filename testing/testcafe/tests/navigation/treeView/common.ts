@@ -91,8 +91,8 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
       width: 300,
       showCheckBoxesMode,
       rtlEnabled,
-      expandButtonIcon: 'add',
-      collapseButtonIcon: 'minus',
+      expandIcon: 'add',
+      collapseIcon: 'minus',
       itemTemplate(item) {
         return `<div>${item.fullName} (${item.position})</div>`;
       },

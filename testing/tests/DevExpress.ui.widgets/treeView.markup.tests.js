@@ -133,28 +133,28 @@ QUnit.module('markup', {
         return $element.length && !$element.hasClass('dx-state-invisible');
     }
 }, () => {
-    QUnit.test('expandButtonIcon should be able to change at runtime', function(assert) {
+    QUnit.test('expand icon should be able to change at runtime', function(assert) {
         const $treeView = initTree({
             items: this.treeItems,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        treeView.option('expandButtonIcon', 'activefolder');
+        treeView.option('expandIcon', 'activefolder');
 
         assert.ok($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).hasClass('dx-icon-activefolder'));
     });
 
-    QUnit.test('collapseButtonIcon should be able to change at runtime', function(assert) {
+    QUnit.test('collapse icon should be able to change at runtime', function(assert) {
         const $treeView = initTree({
             items: this.treeItems,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        treeView.option('collapseButtonIcon', 'minus');
+        treeView.option('collapseIcon', 'minus');
 
         assert.ok($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).hasClass('dx-icon-minus'));
     });
@@ -166,13 +166,13 @@ QUnit.module('markup', {
 
         const $treeView = initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        treeView.option('expandButtonIcon', null);
-        treeView.option('collapseButtonIcon', null);
+        treeView.option('expandIcon', null);
+        treeView.option('collapseIcon', null);
 
         assert.equal($(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).length, 2);
     });
@@ -180,8 +180,8 @@ QUnit.module('markup', {
     QUnit.test('icons should not be rendered if plain items are used', function(assert) {
         initTree({
             items: this.plainItems,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
 
         assert.equal($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).length, 0);
@@ -191,8 +191,8 @@ QUnit.module('markup', {
     QUnit.test('expand icon should be shown if node is collasped', function(assert) {
         initTree({
             items: this.treeItems,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const $expandIcon = $(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).eq(0);
 
@@ -204,8 +204,8 @@ QUnit.module('markup', {
         data[0].expanded = true;
         initTree({
             items: data,
-            expandButtonIcon: 'add',
-            collapseButtonIcon: 'add',
+            expandIcon: 'add',
+            collapseIcon: 'add',
         });
         const $collapseIcon = $(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).eq(0);
 
@@ -215,7 +215,7 @@ QUnit.module('markup', {
     QUnit.test('expand custom item should be set with collapse icon value if omited', function(assert) {
         initTree({
             items: this.treeItems,
-            collapseButtonIcon: 'minus',
+            collapseIcon: 'minus',
         });
         const $expandIcon = $(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).eq(0);
 
@@ -225,7 +225,7 @@ QUnit.module('markup', {
     QUnit.test('collapse custom item should be set with expand icon value if omited', function(assert) {
         initTree({
             items: this.treeItems,
-            expandButtonIcon: 'add',
+            expandIcon: 'add',
         });
         const $collapseIcon = $(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).eq(0);
 

@@ -159,8 +159,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             selectNodesRecursive: true,
             expandNodesRecursive: true,
             showCheckBoxesMode: 'none',
-            expandButtonIcon: null,
-            collapseButtonIcon: null,
+            expandIcon: null,
+            collapseIcon: null,
             selectAllText: messageLocalization.format('dxList-selectAll'),
             onItemSelectionChanged: null,
             onItemExpanded: null,
@@ -330,8 +330,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._dataAdapter.setOption('recursiveSelection', args.value);
                 this.repaint();
                 break;
-            case 'expandButtonIcon':
-            case 'collapseButtonIcon':
+            case 'expandIcon':
+            case 'collapseIcon':
                 this.repaint();
                 break;
             default:
@@ -665,7 +665,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _hasCustomExpanderIcons: function() {
-        return this.option('expandButtonIcon') || this.option('collapseButtonIcon');
+        return this.option('expandIcon') || this.option('collapseIcon');
     },
 
     _selectAllEnabled: function() {
@@ -911,10 +911,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderCustomExpanderIcons: function($node, node) {
-        const { expandButtonIcon, collapseButtonIcon } = this.option();
+        const { expandIcon, collapseIcon } = this.option();
 
-        const $expandIcon = getImageContainer(expandButtonIcon ?? collapseButtonIcon);
-        const $collapseIcon = getImageContainer(collapseButtonIcon ?? expandButtonIcon);
+        const $expandIcon = getImageContainer(expandIcon ?? collapseIcon);
+        const $collapseIcon = getImageContainer(collapseIcon ?? expandIcon);
 
         this._renderExpanderIcon($expandIcon, CUSTOM_EXPAND_ICON_CLASS, $node, node);
         this._renderExpanderIcon($collapseIcon, CUSTOM_COLLAPSE_ICON_CLASS, $node, node);

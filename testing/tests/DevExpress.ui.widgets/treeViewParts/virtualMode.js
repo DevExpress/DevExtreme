@@ -203,8 +203,8 @@ QUnit.test('No custom expander icons should be visible after expand childless it
     const treeView = new TreeView(this.$element, {
         dataSource: $.extend(true, [], data2),
         dataStructure: 'plain',
-        expandButtonIcon: 'add',
-        collapseButtonIcon: 'minus',
+        expandIcon: 'add',
+        collapseIcon: 'minus',
         virtualModeEnabled: true
     });
 
