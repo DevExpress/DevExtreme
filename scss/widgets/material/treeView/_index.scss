@@ -41,7 +41,8 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
   @include dx-treeview-make-rtl($material-treeview-container-with-border-offset, $material-treeview-node-offset, $material-treeview-item-with-checkbox-offset, $material-treeview-checkbox-offset, $material-select-all-text-offset, $material-select-all-item-left-padding, $material-treeview-border-padding);
 
   .dx-treeview-toggle-item-visibility,
-  .dx-treeview-custom-icon-toggle-item-visibility {
+  .dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon,
+  .dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon {
     right: 0;
   }
 
