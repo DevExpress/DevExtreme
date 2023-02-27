@@ -1,7 +1,10 @@
 import { isDefined } from '../../../core/utils/type';
-import { getPageWidth, getPageHeight, getTextLines, getTextDimensions, calculateTextHeight } from './pdf_utils';
+import { getPageWidth, getPageHeight } from './pdf_utils';
+
 import { roundToThreeDecimals } from './draw_utils';
-import { getMultiPageRowPages } from './get_multipage_row_pages';
+
+import { getMultiPageRowPages, checkPageContainsOnlyHeader } from './get_multipage_row_pages';
+import { createOnSplitMultiPageRow } from './create_on_slpin_multipage_row';
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],
@@ -27,16 +30,6 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
     const headerRows = rowsInfo.filter(r => r.rowType === 'header');
     const headerHeight = headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0);
-    function createMultiCellRect(rect, text) {
-        return {
-            ...rect,
-            sourceCellInfo: {
-                ...rect.sourceCellInfo,
-                text
-            },
-            y: options.margin.top,
-        };
-    }
 
     const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
         (isFirstPage, currentCoordinate) => {
@@ -66,50 +59,8 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             currentPageRects.push(args.topRect);
             rectsToSplit.push(args.bottomRect);
         },
-        (isFirstPage, pageRects) => {
-            const currentPageRects = [];
-            const nextPageRects = [];
-            let maxCurrentPageHeight = 0;
-            let maxNextPageHeight = 0;
-            pageRects.forEach((rect) => {
-                const { w, sourceCellInfo } = rect;
-                const additionalHeight = (!isFirstPage && options.repeatHeaders)
-                    ? headerHeight
-                    : headerHeight + options.topLeft.y;
-                const heightOfOneLine = getTextDimensions(doc, sourceCellInfo.text, sourceCellInfo.font).h;
-                const paddingHeight = sourceCellInfo.padding.top + sourceCellInfo.padding.bottom;
-                const fullPageHeight = (maxBottomRight.y - additionalHeight - paddingHeight - options.margin.top);
-                const possibleLinesCount = Math.floor(fullPageHeight / (heightOfOneLine * doc.getLineHeightFactor()));
-                const allLines = getTextLines(doc, sourceCellInfo.text,
-                    sourceCellInfo.font, {
-                        wordWrapEnabled: sourceCellInfo.wordWrapEnabled,
-                        targetRectWidth: w
-                    });
-                if(possibleLinesCount < allLines.length) {
-                    const currentPageText = allLines.slice(0, possibleLinesCount).join('\n');
-                    const currentPageHeight = calculateTextHeight(doc, currentPageText, sourceCellInfo.font, {
-                        wordWrapEnabled: sourceCellInfo.wordWrapEnabled,
-                        targetRectWidth: w
-                    });
-                    maxCurrentPageHeight = Math.max(maxCurrentPageHeight, currentPageHeight + paddingHeight);
-                    maxNextPageHeight = rect.h - currentPageHeight;
-                    currentPageRects.push(createMultiCellRect(rect, currentPageText));
-                    nextPageRects.push(createMultiCellRect(rect, allLines.slice(possibleLinesCount).join('\n')));
-                } else {
-                    const currentPageHeight = calculateTextHeight(doc, sourceCellInfo.text, sourceCellInfo.font, {
-                        wordWrapEnabled: sourceCellInfo.wordWrapEnabled,
-                        targetRectWidth: w
-                    });
-                    maxCurrentPageHeight = Math.max(maxCurrentPageHeight, currentPageHeight + paddingHeight);
-                    maxNextPageHeight = Math.max(maxNextPageHeight, currentPageHeight + paddingHeight);
-                    currentPageRects.push(createMultiCellRect(rect, sourceCellInfo.text));
-                    nextPageRects.push(createMultiCellRect(rect, ''));
-                }
-            });
-            currentPageRects.forEach((rect) => rect.h = maxCurrentPageHeight);
-            nextPageRects.forEach((rect) => rect.h = maxNextPageHeight);
-            return [currentPageRects, nextPageRects];
-        });
+        createOnSplitMultiPageRow(doc, options, headerHeight, maxBottomRight)
+    );
     if(options.repeatHeaders) {
         for(let i = 1; i < verticallyPages.length; i++) {
             verticallyPages[i].forEach(rect => rect.y += headerHeight);
@@ -179,7 +130,16 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPag
                 return false;
             }
         });
-        const { currentPageRectsContainsOnlyHeader, multiPageRowPages } = getMultiPageRowPages(currentPageRects, rectsToSplit, pages.length === 0, onSplitMultiPageRow, isFitToPageForMultiPageRow);
+
+        const isCurrentPageContainsOnlyHeader = checkPageContainsOnlyHeader(currentPageRects, pages.length === 0);
+        const multiPageRowPages = getMultiPageRowPages(
+            currentPageRects,
+            rectsToSplit,
+            isCurrentPageContainsOnlyHeader,
+            onSplitMultiPageRow,
+            isFitToPageForMultiPageRow,
+        );
+
         const rectsToSeparate = rectsToSplit.filter(rect => {
             // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
             const currentRectLeft = rect[coordinate];
@@ -207,7 +167,8 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPag
                 ? (rect[coordinate] - currentPageMaxRectCoordinate + marginValue)
                 : rect[coordinate];
         });
-        const firstPageContainsHeaderAndMultiPageRow = currentPageRectsContainsOnlyHeader && multiPageRowPages.length > 0;
+
+        const firstPageContainsHeaderAndMultiPageRow = isCurrentPageContainsOnlyHeader && multiPageRowPages.length > 0;
         if(firstPageContainsHeaderAndMultiPageRow) {
             const [firstPage, ...restOfPages] = multiPageRowPages;
             pages.push([...currentPageRects, ...firstPage]);
