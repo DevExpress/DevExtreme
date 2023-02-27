@@ -301,9 +301,6 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                     const expandedRowKeys = options.collapseVisibleNodes ? [] : this.option('expandedRowKeys');
                     parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
 
-                    // когда включен fullBracn mode и у нас есть фильтр, на событии changeRowExpand
-                    // нам нужны parrentIdsToLoad у которых просто есть дети. isChildrenLoaded может быть false
-
                     const parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
                     if(parentIdsToLoad.length) {
