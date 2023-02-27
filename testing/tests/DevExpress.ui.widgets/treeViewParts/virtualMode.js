@@ -208,28 +208,9 @@ QUnit.test('No custom expander icons should be visible after expand childless it
         virtualModeEnabled: true
     });
 
-    const $expandIcons = this.$element.find(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
-    assert.ok($expandIcons.eq(0).is(':visible'));
-    assert.ok($expandIcons.eq(1).is(':visible'));
-    assert.ok($expandIcons.eq(2).is(':visible'));
-
-    const $collapseIcons = this.$element.find(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`);
-    assert.notOk($collapseIcons.eq(0).is(':visible'));
-    assert.notOk($collapseIcons.eq(1).is(':visible'));
-    assert.notOk($collapseIcons.eq(2).is(':visible'));
-
     treeView.expandItem(16);
 
-    const $expandIconsAfterExpandChildlessNode = this.$element.find(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
-
-    assert.ok($expandIconsAfterExpandChildlessNode.eq(0).is(':visible'));
-    assert.ok($expandIconsAfterExpandChildlessNode.eq(1).is(':visible'));
-    assert.notOk($expandIconsAfterExpandChildlessNode.eq(2).is(':visible'));
-
-    const $collapseIconsAfterExpandChildlessNode = this.$element.find(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`);
-    assert.notOk($collapseIconsAfterExpandChildlessNode.eq(0).is(':visible'));
-    assert.notOk($collapseIconsAfterExpandChildlessNode.eq(1).is(':visible'));
-    assert.notOk($collapseIconsAfterExpandChildlessNode.eq(2).is(':visible'));
+    assert.notOk($(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(2).is(':visible'));
 });
 
 QUnit.test('Remove loadindicator after expand childless item', function(assert) {

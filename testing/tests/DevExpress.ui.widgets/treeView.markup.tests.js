@@ -19,6 +19,12 @@ const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+
+const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon';
+const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon';
+const CUSTOM_EXPAND_ICON_CLASS_SELECTOR = `.${CUSTOM_EXPAND_ICON_CLASS}`;
+const CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR = `.${CUSTOM_COLLAPSE_ICON_CLASS}`;
+
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
 
 const initTree = (options) => $('#treeView').dxTreeView(options);
@@ -122,8 +128,110 @@ QUnit.module('markup', {
             },
             { key: 2, text: 'Item 2' }
         ];
+    },
+    isVisible($element) {
+        return $element.length && !$element.hasClass('dx-state-invisible');
     }
 }, () => {
+    QUnit.test('expandButtonIcon should be able to change at runtime', function(assert) {
+        const $treeView = initTree({
+            items: this.treeItems,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+
+        treeView.option('expandButtonIcon', 'activefolder');
+
+        assert.ok($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).hasClass('dx-icon-activefolder'));
+    });
+
+    QUnit.test('collapseButtonIcon should be able to change at runtime', function(assert) {
+        const $treeView = initTree({
+            items: this.treeItems,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+
+        treeView.option('collapseButtonIcon', 'minus');
+
+        assert.ok($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).hasClass('dx-icon-minus'));
+    });
+
+    QUnit.test('when both custom expander icons are set to null default icons should be used', function(assert) {
+        const data = this.treeItems;
+        data[0].expanded = true;
+        data[0].items[1].expanded = true;
+
+        const $treeView = initTree({
+            items: data,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+
+        treeView.option('expandButtonIcon', null);
+        treeView.option('collapseButtonIcon', null);
+
+        assert.equal($(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).length, 2);
+    });
+
+    QUnit.test('icons should not be rendered if plain items are used', function(assert) {
+        initTree({
+            items: this.plainItems,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+
+        assert.equal($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).length, 0);
+        assert.equal($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).length, 0);
+    });
+
+    QUnit.test('expand icon should be shown if node is collasped', function(assert) {
+        initTree({
+            items: this.treeItems,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+        const $expandIcon = $(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok(this.isVisible($expandIcon));
+    });
+
+    QUnit.test('collapse icon should be shown if node is expanded', function(assert) {
+        const data = this.treeItems;
+        data[0].expanded = true;
+        initTree({
+            items: data,
+            expandButtonIcon: 'add',
+            collapseButtonIcon: 'add',
+        });
+        const $collapseIcon = $(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok(this.isVisible($collapseIcon));
+    });
+
+    QUnit.test('expand custom item should be set with collapse icon value if omited', function(assert) {
+        initTree({
+            items: this.treeItems,
+            collapseButtonIcon: 'minus',
+        });
+        const $expandIcon = $(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok($expandIcon.hasClass('dx-icon-minus'));
+    });
+
+    QUnit.test('collapse custom item should be set with expand icon value if omited', function(assert) {
+        initTree({
+            items: this.treeItems,
+            expandButtonIcon: 'add',
+        });
+        const $collapseIcon = $(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok($collapseIcon.hasClass('dx-icon-add'));
+    });
+
     QUnit.test('TreeView should render correctly without items', function(assert) {
         const $treeView = initTree({
             items: undefined
