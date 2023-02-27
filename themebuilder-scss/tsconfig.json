@@ -7,7 +7,6 @@
         "noImplicitAny": true,
         "allowJs": true,
         "resolveJsonModule": true,
-        "strictNullChecks": true,
         "moduleResolution": "node",
         "outDir": "dist",
         "baseUrl": ".",
