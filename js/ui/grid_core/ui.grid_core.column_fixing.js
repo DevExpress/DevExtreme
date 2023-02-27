@@ -638,15 +638,13 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     },
 
     _getScrollDelay: function() {
-        let scrollDelay = browser.mozilla ? 60 : 0;
         const hasResizeTimeout = this.getController('resizing')?.hasResizeTimeout();
-        const updateTimeout = this.option('scrolling.updateTimeout');
 
         if(hasResizeTimeout) {
-            scrollDelay = updateTimeout;
+            return this.option('scrolling.updateTimeout');
         }
 
-        return scrollDelay;
+        return browser.mozilla ? 60 : 0;
     },
 
     _findContentElement: function() {
@@ -688,7 +686,11 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                         scrollTop = scrollable.scrollTop();
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 
-                        if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + this.getScrollbarWidth())) {
+                        const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
+                        const scrollableHeight = scrollable.scrollHeight() + this.getScrollbarWidth();
+                        const isPreventDefault = scrollable.scrollTop() > 0 && scrollableTop < scrollableHeight;
+
+                        if(isPreventDefault) {
                             return false;
                         }
                     }
