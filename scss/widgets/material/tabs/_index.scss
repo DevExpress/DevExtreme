@@ -81,7 +81,8 @@ $material-tabs-background: darken($base-bg, 4%);
     margin: 0 auto;
   }
 
-  &.dx-tab-selected {
+  &.dx-tab-selected,
+  &.dx-state-focused.dx-state-disabled {
     color: $tabs-tab-selected-color;
 
     .dx-icon {
@@ -113,7 +114,8 @@ $material-tabs-background: darken($base-bg, 4%);
     opacity: 1;
   }
 
-  .dx-tab-content {
+  .dx-tab-content,
+  &.dx-state-focused::before {
     opacity: 0.3;
   }
 }
