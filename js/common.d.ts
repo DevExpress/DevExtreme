@@ -734,6 +734,7 @@ export type ToolbarItemLocation = 'after' | 'before' | 'center';
 export type TooltipShowMode = 'always' | 'onHover';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
@@ -753,6 +754,7 @@ export type ValidationCallbackData = {
 export type ValidationMessageMode = 'always' | 'auto';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */

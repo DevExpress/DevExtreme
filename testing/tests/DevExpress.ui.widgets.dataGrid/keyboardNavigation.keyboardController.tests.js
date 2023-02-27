@@ -13,7 +13,7 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-import { keyboardNavigationModule } from 'ui/grid_core/ui.grid_core.keyboard_navigation';
+import { keyboardNavigationModule } from 'ui/grid_core/keyboard_navigation/module';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';

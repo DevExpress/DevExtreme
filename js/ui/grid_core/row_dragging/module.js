@@ -1,15 +1,11 @@
-import { setWidth, getWidth } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import Sortable from '../sortable';
-import gridCoreUtils from './ui.grid_core.utils';
-import { deferUpdate } from '../../core/utils/common';
-
-const COMMAND_HANDLE_CLASS = 'dx-command-drag';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-const HANDLE_ICON_CLASS = 'drag-icon';
-const ROWS_VIEW = 'rowsview';
-const SORTABLE_WITHOUT_HANDLE_CLASS = 'dx-sortable-without-handle';
+import { setWidth, getWidth } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import { extend } from '../../../core/utils/extend';
+import Sortable from '../../sortable';
+import gridCoreUtils from './../ui.grid_core.utils';
+import { deferUpdate } from '../../../core/utils/common';
+import { GridCoreRowDraggingDom } from './dom';
+import { CLASSES } from './const';
 
 const RowDraggingExtender = {
     init: function() {
@@ -34,7 +30,7 @@ const RowDraggingExtender = {
             command: 'drag',
             visibleIndex: -2,
             alignment: 'center',
-            cssClass: COMMAND_HANDLE_CLASS,
+            cssClass: CLASSES.commandDrag,
             width: 'auto',
             cellTemplate: this._getHandleTemplate(),
             visible: isHandleColumnVisible
@@ -86,7 +82,7 @@ const RowDraggingExtender = {
                     this._synchronizeScrollLeftPosition(gridInstance);
                 },
                 dragTemplate: this._getDraggableRowTemplate(),
-                handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
+                handle: rowDragging.showDragIcons && `.${CLASSES.commandDrag}`,
                 dropFeedbackMode: 'indicate'
             }, rowDragging, {
                 onDragStart: (e) => {
@@ -127,7 +123,7 @@ const RowDraggingExtender = {
             }));
 
             $content.toggleClass('dx-scrollable-container', isFixedTableRendering);
-            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, allowReordering && !rowDragging.showDragIcons);
+            $content.toggleClass(CLASSES.sortableWithoutHandle, allowReordering && !rowDragging.showDragIcons);
         }
 
         return $content;
@@ -208,21 +204,19 @@ const RowDraggingExtender = {
             const gridOptions = this._getDraggableGridOptions(row);
 
             this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
-            $dataGridContainer.find('.dx-gridbase-container').children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();
+            $dataGridContainer
+                .find('.dx-gridbase-container')
+                .children(`:not(.${this.addWidgetPrefix(CLASSES.rowsView)})`)
+                .hide();
 
             return $dataGridContainer;
         };
     },
 
     _getHandleTemplate: function() {
-        return (container, options) => {
-            if(options.rowType === 'data') {
-                $(container).addClass(CELL_FOCUS_DISABLED_CLASS);
-                return $('<span>').addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
-            } else {
-                gridCoreUtils.setEmptyText($(container));
-            }
-        };
+        return GridCoreRowDraggingDom.createHandleTemplateFunc(
+            (string) => this.addWidgetPrefix(string),
+        );
     },
 
     optionChanged: function(args) {

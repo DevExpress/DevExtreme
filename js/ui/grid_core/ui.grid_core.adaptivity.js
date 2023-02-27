@@ -129,6 +129,7 @@ const adaptiveColumnsControllerMembers = {
             const templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
 
             rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isElementInDom($container)).done(() => {
+                // @ts-expect-error
                 rowsView._cellPrepared($container, cellOptions);
             });
         } else {
@@ -150,6 +151,7 @@ const adaptiveColumnsControllerMembers = {
                 }
             }
 
+            // @ts-expect-error
             rowsView._cellPrepared($container, cellOptions);
         }
     },
@@ -1032,6 +1034,7 @@ export const adaptivityModule = {
                 },
 
                 _beforeCloseEditCellInBatchMode: function(rowIndices) {
+                    // @ts-expect-error
                     const expandedKey = this._dataController._adaptiveExpandedKey;
 
                     if(expandedKey) {
@@ -1089,6 +1092,7 @@ export const adaptivityModule = {
                 },
 
                 _toggleBestFitMode: function(isBestFit) {
+                    // @ts-expect-error
                     isBestFit && this._adaptiveColumnsController._showHiddenColumns();
                     this.callBase(isBestFit);
                 },

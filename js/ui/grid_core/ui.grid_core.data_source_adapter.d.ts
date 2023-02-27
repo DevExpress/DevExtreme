@@ -1,6 +1,8 @@
 import DataSource from '../../data/data_source';
 import { LoadOptions as BaseLoadOptions } from '../../data';
 import { Controller, InternalGridOptions } from './ui.grid_core.modules';
+import { Callback } from '../../core/utils/callbacks';
+import { HandleDataChangedArguments } from './ui.grid_core.data_controller';
 
 type RemoteOperations = Exclude<InternalGridOptions['remoteOperations'], 'auto' | boolean | undefined>;
 
@@ -49,13 +51,15 @@ interface State {
   _remoteOperations: RemoteOperations;
   _scheduleLoadCallbacks: any;
   _totalCountCorrection: any;
-  always: any;
-  changed: any;
-  changing: any;
-  customizeStoreLoadOptions: any;
-  loadError: any;
-  loadingChanged: any;
-  pushed: any;
+
+  always: Callback;
+  changed: Callback<[HandleDataChangedArguments]>;
+  changing: Callback;
+  customizeStoreLoadOptions: Callback;
+  loadError: Callback;
+  loadingChanged: Callback;
+  pushed: Callback;
+
   _dataChangedHandler: DataSourceAdapter['_handleDataChanged'];
   _customizeStoreLoadOptionsHandler: DataSourceAdapter['_handleCustomizeStoreLoadOptions'];
   _dataLoadedHandler: DataSourceAdapter['_handleDataLoaded'];

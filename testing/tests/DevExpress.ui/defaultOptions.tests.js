@@ -375,6 +375,13 @@ testComponentDefaults(List,
 );
 
 testComponentDefaults(List,
+    {},
+    {
+        selectByClick: true,
+    }
+);
+
+testComponentDefaults(List,
     { platform: 'generic', deviceType: 'desktop' },
     {
         showScrollbar: 'onHover',

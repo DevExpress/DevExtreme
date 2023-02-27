@@ -245,6 +245,12 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
+.dx-scheduler-timeline {
+  .dx-scheduler-date-table-cell {
+    height: $material-scheduler-timeline-date-table-cell-height;
+  }
+}
+
 .dx-scheduler-work-space-day {
   &.dx-scheduler-work-space-count {
     .dx-scheduler-header-panel {

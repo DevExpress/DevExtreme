@@ -1,4 +1,4 @@
-import { Controllers, ViewController, Views } from './ui.grid_core.modules';
+import { Controllers, ViewController, Views } from '../ui.grid_core.modules';
 
 interface State {
   _updateFocusTimeout: any;

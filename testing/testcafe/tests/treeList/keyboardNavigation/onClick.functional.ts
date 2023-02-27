@@ -1,9 +1,10 @@
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import TreeList from '../../model/treeList';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import TreeList from '../../../model/treeList';
 
-fixture`Keyboard Navigation`
-  .page(url(__dirname, '../container.html'));
+fixture
+  .disablePageReloads`Keyboard Navigation - focus on click`
+  .page(url(__dirname, '../../container.html'));
 
 // T861048
 test('The row should be selected on click if less than half of a row is visible', async (t) => {
