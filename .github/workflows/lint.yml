@@ -17,11 +17,6 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
-
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
@@ -47,11 +42,6 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v3
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -89,11 +79,6 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
-
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
@@ -119,11 +104,6 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
-
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
@@ -143,11 +123,6 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v3
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -189,11 +164,6 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v3
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
 
     - name: Check package-lock
       run: |
