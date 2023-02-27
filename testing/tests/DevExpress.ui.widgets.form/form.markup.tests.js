@@ -876,7 +876,6 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
 
         test(`${editorType} should not have class when items have template`, function(assert) {
             const $form = $('#form').dxForm({
-                formData: { test: true },
                 items: [{
                     editorType,
                     label: { visible: true, alignment: 'left' },
