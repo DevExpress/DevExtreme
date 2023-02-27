@@ -875,7 +875,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             if(!currentState && !this._nodeHasRenderedChildren($node)) {
-                this._createLoadIndicator($node, currentState);
+                this._createLoadIndicator($node);
             }
         }
 

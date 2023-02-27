@@ -344,6 +344,7 @@ module('Expanded items', {
 
     test('itemExpanded should be fired when expanding item', function(assert) {
         const data = $.extend(true, [], DATA[5]);
+
         const $treeView = initTree({
             items: data
         });
@@ -366,7 +367,7 @@ module('Expanded items', {
             collapseButtonIcon: 'add',
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $toggleExpandIcon = $($treeView.find(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`).eq(0));
+        const $toggleExpandIcon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`).eq(0);
         const itemExpandedEventSpy = sinon.spy();
         treeView.on('itemExpanded', itemExpandedEventSpy);
 
