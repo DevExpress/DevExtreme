@@ -361,13 +361,12 @@
           ],
           "TypeImports": [
             {
-              "Name": "default",
-              "Alias": "Store",
-              "Path": "data/abstract_store"
+              "Name": "Store",
+              "Path": "data"
             },
             {
               "Name": "StoreOptions",
-              "Path": "data/abstract_store"
+              "Path": "data"
             },
             {
               "Name": "default",
