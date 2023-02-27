@@ -1,9 +1,19 @@
-import { ColumnBase } from '../data_grid';
+import { ColumnBase, ColumnLookup as ColumnLookupBase } from '../data_grid';
 import { Controller } from './ui.grid_core.modules';
 
-export interface Column extends ColumnBase {
-  serializeValue?: any;
+export interface ColumnLookup extends ColumnLookupBase {
+  items: unknown[];
 }
+
+export interface Column extends ColumnBase {
+  lookup?: ColumnLookup;
+  serializeValue?: unknown;
+  displayField?: unknown;
+}
+
+type MakeFieldRequired<Type, Field extends keyof Type> = Type & Required<Pick<Type, Field>>;
+
+export type LookupColumn = MakeFieldRequired<Column, 'lookup'>;
 
 interface State {
   _skipProcessingColumnsChange: boolean | undefined;
