@@ -150,6 +150,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.roughEqual(scrollable.scrollTop(), maxScrollTop, 1.01, 'scroll position at the end');
     });
 
+    // TODO replace setTimeout -> clock tick
     QUnit.test('It should be possible to scroll to the last row when there is fixed column and wordWrapEnabled is set to true', function(assert) {
         // arrange
         const data = generateNestedData(20, 1);
