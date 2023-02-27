@@ -402,6 +402,10 @@ const Overlay = Widget.inherit({
     },
 
     _toggleBodyScroll: function(enabled) {
+        if(!hasWindow() || this.option('enableBodyScroll')) {
+            return;
+        }
+
         const { setOverflow, restoreOverflow } = this._bodyOverflowManager ??= createBodyOverflowManager();
 
         enabled ? restoreOverflow() : setOverflow();
@@ -478,7 +482,7 @@ const Overlay = Widget.inherit({
             this._showingDeferred.reject();
         } else {
             const show = () => {
-                this._toggleBodyScroll(this.option('enableBodyScroll'));
+                this._toggleBodyScroll(false);
 
                 this._stopAnimation();
                 this._toggleVisibility(true);
@@ -580,8 +584,8 @@ const Overlay = Widget.inherit({
         } else {
             this._actions.onHiding(hidingArgs);
 
-            this._toggleBodyScroll(true);
             this._toggleSafariScrolling();
+            this._toggleBodyScroll(true);
 
             const cancelHide = () => {
                 this._isHidingActionCanceled = true;
@@ -1003,6 +1007,10 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSafariScrolling: function() {
+        if(!this.option('enableBodyScroll')) {
+            return;
+        }
+
         const visible = this.option('visible');
         const $body = $(domAdapter.getBody());
         const isIosSafari = devices.real().platform === 'ios' && browser.safari;
@@ -1133,6 +1141,7 @@ const Overlay = Widget.inherit({
         this.callBase();
 
         this._toggleSafariScrolling();
+        this._toggleBodyScroll(true);
         this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();

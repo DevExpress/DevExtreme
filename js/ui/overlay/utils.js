@@ -3,6 +3,7 @@ import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 import { isNumeric, isDefined } from '../../core/utils/type';
 import domAdapter from '../../core/dom_adapter';
+import devices from '../../core/devices';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
@@ -31,9 +32,47 @@ export const createBodyOverflowManager = () => {
     const documentElement = domAdapter.getDocument().documentElement;
     const $body = $(domAdapter.getBody());
 
+    const isIosDevice = devices.real().platform === 'ios';
+
     const prevSettings = {
         overflow: null,
         paddingRight: null,
+        position: null,
+        top: null,
+        left: null,
+    };
+
+    const setBodyPositionFixed = () => {
+        if(isDefined(prevSettings.position)) {
+            return;
+        }
+
+        const body = $body.get(0);
+        const { scrollY, scrollX } = window;
+        prevSettings.position = body.style.position;
+        prevSettings.top = body.style.top;
+        prevSettings.left = body.style.left;
+
+        body.css({ position: 'fixed', top: `${-scrollY}px`, left: `${-scrollX}px` });
+    };
+
+    const restoreBodyPositionFixed = () => {
+        if(!isDefined(prevSettings.position)) {
+            return;
+        }
+
+        const body = $body.get(0);
+
+        const scrollY = -parseInt(body.style.top, 10);
+        const scrollX = -parseInt(body.style.left, 10);
+
+        const { position, top, left } = prevSettings;
+
+        body.css({ position, top, left });
+
+        window.scrollTo(scrollX, scrollY);
+
+        prevSettings.position = null;
     };
 
     const setBodyPaddingRight = () => {
@@ -66,12 +105,20 @@ export const createBodyOverflowManager = () => {
     };
     return {
         setOverflow() {
-            setBodyPaddingRight();
-            setBodyOverflow();
+            if(isIosDevice) {
+                setBodyPositionFixed();
+            } else {
+                setBodyPaddingRight();
+                setBodyOverflow();
+            }
         },
         restoreOverflow() {
-            restoreBodyPaddingRight();
-            restoreBodyOverflow();
+            if(isIosDevice) {
+                restoreBodyPositionFixed();
+            } else {
+                restoreBodyPaddingRight();
+                restoreBodyOverflow();
+            }
         },
     };
 };

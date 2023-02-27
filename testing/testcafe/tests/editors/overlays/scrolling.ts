@@ -23,43 +23,48 @@ if (!isMaterial()) {
 
           const body = Selector('body');
 
+          const checkBodyStyles = async ({ paddingRight, overflow }) => {
+            await t
+              .expect(getComputedPropertyValue('body', 'padding-right'))
+              .eql(paddingRight)
+              .expect(getComputedPropertyValue('body', 'overflow'))
+              .eql(overflow)
+              .expect(getComputedPropertyValue('body', 'position'))
+              .eql('static')
+              .expect(getComputedPropertyValue('body', 'top'))
+              .eql('auto')
+              .expect(getComputedPropertyValue('body', 'left'))
+              .eql('auto');
+          };
+
           await t
             .scroll(body, 300, 0);
 
+          await checkBodyStyles({ paddingRight: '0px', overflow: 'visible' });
           await t
-            .expect(getComputedPropertyValue('body', 'padding-right'))
-            .eql('0px')
-            .expect(getComputedPropertyValue('body', 'overflow'))
-            .eql('visible')
             .expect(getDocumentScrollTop())
             .eql(258);
 
           await setStylePropertyValue('body', 'padding-right', '10px');
           await setStylePropertyValue('body', 'overflow', 'auto');
 
+          await checkBodyStyles({ paddingRight: '10px', overflow: 'auto' });
           await t
-            .expect(getComputedPropertyValue('body', 'padding-right'))
-            .eql('10px')
-            .expect(getComputedPropertyValue('body', 'overflow'))
-            .eql('auto');
+            .expect(getDocumentScrollTop())
+            .eql(258);
 
           await overlay.show();
 
+          await checkBodyStyles({ paddingRight: enableBodyScroll ? '10px' : '25px', overflow: enableBodyScroll ? 'auto' : 'hidden' });
           await t
-            .expect(getComputedPropertyValue('body', 'padding-right'))
-            .eql(enableBodyScroll ? '10px' : '25px')
-            .expect(getComputedPropertyValue('body', 'overflow'))
-            .eql(enableBodyScroll ? 'auto' : 'hidden')
             .expect(getDocumentScrollTop())
             .eql(258);
 
           await overlay.hide();
 
+          await checkBodyStyles({ paddingRight: '10px', overflow: 'auto' });
           await t
-            .expect(getComputedPropertyValue('body', 'padding-right'))
-            .eql('10px')
-            .expect(getComputedPropertyValue('body', 'overflow'))
-            .eql('auto')
+
             .expect(getDocumentScrollTop())
             .eql(258);
 

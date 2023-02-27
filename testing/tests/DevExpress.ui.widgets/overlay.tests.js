@@ -3913,6 +3913,60 @@ testModule('renderGeometry', {
     });
 });
 
+QUnit.module('enableBodyScroll on Ios devices', {
+    beforeEach: function() {
+        fx.off = true;
+        this.originalDevice = {
+            platform: devices.real().platform,
+            deviceType: devices.real().deviceType
+        };
+        this.instance = $('#overlay').dxOverlay({ enableBodyScroll: false }).dxOverlay('instance');
+        devices.real({ platform: 'ios', deviceType: 'phone' });
+        this.$body = $('body');
+        this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+    },
+    afterEach: function() {
+        this.instance.dispose();
+        devices.real(this.originalDevice);
+        window.scrollTo(0, 0);
+        this.$additionalElement.remove();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('body should not have PREVENT_SAFARI_SCROLLING_CLASS if container is window and shading is enabled on overlay init, enableBodyScroll: false', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.dispose();
+        $('#overlay').dxOverlay({ visible: true, enableBodyScroll: false });
+
+        assert.strictEqual(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), false);
+    });
+
+    QUnit.test('body should have position fixed after showing if enableBodyScroll: false', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.dispose();
+        window.scrollTo(200, 200);
+        const overlay = $('#overlay').dxOverlay({ visible: true, enableBodyScroll: false }).dxOverlay('instance');
+
+        assert.strictEqual(this.$body.get(0).style.position, 'fixed');
+        assert.strictEqual(this.$body.get(0).style.top, '-200px');
+        assert.strictEqual(this.$body.get(0).style.left, '0px');
+
+        overlay.hide();
+
+        assert.strictEqual(this.$body.get(0).style.position, '');
+        assert.strictEqual(this.$body.get(0).style.top, '0px');
+        assert.strictEqual(this.$body.get(0).style.left, '');
+    });
+});
+
 QUnit.module('prevent safari scrolling on ios devices', {
     beforeEach: function() {
         fx.off = true;
