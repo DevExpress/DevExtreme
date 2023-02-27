@@ -3,8 +3,8 @@ import { getPageWidth, getPageHeight } from './pdf_utils';
 
 import { roundToThreeDecimals } from './draw_utils';
 
-import { getMultiPageRowPages, checkPageContainsOnlyHeader } from './get_multipage_row_pages';
-import { createOnSplitMultiPageRow } from './create_on_slpin_multipage_row';
+import { getMultiPageRowPages, checkPageContainsOnlyHeader } from './rows_spliting_utils/get_multipage_row_pages';
+import { createOnSplitMultiPageRow } from './rows_spliting_utils/create_on_split_multipage_row';
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],
@@ -172,24 +172,18 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPag
         if(firstPageContainsHeaderAndMultiPageRow) {
             const [firstPage, ...restOfPages] = multiPageRowPages;
             pages.push([...currentPageRects, ...firstPage]);
-            if(restOfPages.length > 0) {
-                pages.push(...restOfPages);
-            }
+            pages.push(...restOfPages);
+        } else if(currentPageRects.length > 0) {
+            pages.push(currentPageRects);
+            pages.push(...multiPageRowPages);
+        } else if(multiPageRowPages.length > 0) {
+            pages.push(...multiPageRowPages);
+            pages.push(rectsToSplit);
         } else {
-            if(currentPageRects.length > 0) {
-                pages.push(currentPageRects);
-                if(multiPageRowPages.length > 0) {
-                    pages.push(...multiPageRowPages);
-                }
-            } else {
-                if(multiPageRowPages.length > 0) {
-                    pages.push(...multiPageRowPages);
-                } else {
-                    pages.push(rectsToSplit);
-                    break;
-                }
-            }
+            pages.push(rectsToSplit);
+            break;
         }
+
     }
 
     return pages;
