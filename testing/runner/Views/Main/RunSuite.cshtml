@@ -46,6 +46,7 @@
         window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
 
         QUnit.config.autostart = false;
+        QUnit.config.failOnZeroTests = false;
     </script>
     <script src="@Url.ContentWithCacheBuster("~/testing/helpers/qunitExtensions.js")"></script>
 
