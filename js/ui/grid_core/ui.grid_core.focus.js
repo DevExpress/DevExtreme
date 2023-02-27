@@ -57,6 +57,7 @@ const FocusController = core.ViewController.inherit((function() {
                 const rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
                 if(rowIndex >= 0) {
                     const $rowElement = $(this.getView('rowsView').getRowElement(rowIndex));
+                    // @ts-expect-error
                     this.getController('keyboardNavigation')._fireFocusedRowChanged($rowElement, focusedRowIndex);
                 }
             }
@@ -89,6 +90,7 @@ const FocusController = core.ViewController.inherit((function() {
                     let rowIndex = index - dataController.getRowIndexOffset(true);
 
                     if(!operationTypes || operationTypes.paging && !operationTypes.filtering) {
+                        // @ts-expect-error
                         const lastItemIndex = dataController._getLastItemIndex();
                         rowIndex = Math.min(rowIndex, lastItemIndex);
                     }
@@ -114,6 +116,7 @@ const FocusController = core.ViewController.inherit((function() {
         },
         _isLocalRowIndex(index) {
             const dataController = this.getController('data');
+            // @ts-expect-error
             const isVirtualScrolling = this.getController('keyboardNavigation')._isVirtualScrolling();
 
             if(isVirtualScrolling) {
@@ -168,6 +171,7 @@ const FocusController = core.ViewController.inherit((function() {
                 focusedRowKey: null
             });
 
+            // @ts-expect-error
             keyboardController._fireFocusedRowChanged(undefined, -1);
         },
 
@@ -251,6 +255,7 @@ const FocusController = core.ViewController.inherit((function() {
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
             const that = this;
             const dataController = this.getController('data');
+            // @ts-expect-error
             const rowsScrollController = dataController._rowsScrollController;
             const rowIndex = gridCoreUtils.getIndexByKey(key, dataController.items(true));
             const scrollable = that.getView('rowsView').getScrollable();
@@ -317,6 +322,7 @@ const FocusController = core.ViewController.inherit((function() {
             if(isDefined(focusedRowKey)) {
                 const visibleRowIndex = dataController.getRowIndexByKey(focusedRowKey);
                 if(visibleRowIndex >= 0) {
+                    // @ts-expect-error
                     if(keyboardController._isVirtualScrolling()) {
                         currentFocusedRowIndex = visibleRowIndex + dataController.getRowIndexOffset();
                     }
@@ -332,6 +338,7 @@ const FocusController = core.ViewController.inherit((function() {
                     });
                 }
             } else if(currentFocusedRowIndex >= 0) {
+                // @ts-expect-error
                 this.getController('focus')._focusRowByIndex(currentFocusedRowIndex);
             }
         },
@@ -402,6 +409,7 @@ const FocusController = core.ViewController.inherit((function() {
                 const tabIndex = this.option('tabindex') || 0;
                 const rowsView = this.getView('rowsView');
 
+                // @ts-expect-error
                 $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
             }
@@ -511,6 +519,7 @@ export const focusModule = {
                     if(!focusedRowEnabled || !keyboardController?.isRowFocusType() || editingController.isEditing()) {
                         this.callBase($element, isHideBorder);
                     } else if(focusedRowEnabled) {
+                        // @ts-expect-error
                         const isRowElement = keyboardController._getElementType($element) === 'row';
 
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
@@ -525,6 +534,7 @@ export const focusModule = {
                 getSortDataSourceParameters: function(_, sortByKey) {
                     let result = this.callBase.apply(this, arguments);
                     const dataController = this.getController('data');
+                    // @ts-expect-error
                     const dataSource = dataController._dataSource;
                     const store = dataController.store();
                     let key = store && store.key();
@@ -591,13 +601,16 @@ export const focusModule = {
                     const focusController = this.getController('focus');
                     const { reload, fullReload } = operationTypes;
                     const keyboardController = this.getController('keyboardNavigation');
+                    // @ts-expect-error
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
 
                     if(reload && !fullReload && isDefined(focusedRowKey)) {
+                        // @ts-expect-error
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
+                                // @ts-expect-error
                                 focusController._focusRowByIndex(undefined, operationTypes);
                             }
                         });
@@ -608,6 +621,7 @@ export const focusModule = {
                             const focusedRowIndex = this.option('focusedRowIndex');
                             const needFocusRowByIndex = focusedRowIndex >= 0 && (focusedRowIndex === rowIndexByKey || !isValidRowIndexByKey);
                             if(needFocusRowByIndex) {
+                                // @ts-expect-error
                                 focusController._focusRowByIndex(undefined, operationTypes);
                             }
                         } else {
@@ -616,6 +630,7 @@ export const focusModule = {
                             }
                         }
                     } else if(operationTypes.fullReload) {
+                        // @ts-expect-error
                         focusController._focusRowByKeyOrIndex();
                     }
                 },
@@ -795,6 +810,7 @@ export const focusModule = {
                         const visibleRows = dataController.getVisibleRows();
 
                         if(rowIndex === -1 && !visibleRows.length) {
+                            // @ts-expect-error
                             this.getController('focus')._resetFocusedRow();
                         }
                     });
