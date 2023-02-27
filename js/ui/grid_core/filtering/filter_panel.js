@@ -1,17 +1,17 @@
-import $ from '../../core/renderer';
-import { isDefined } from '../../core/utils/type';
-import modules from './ui.grid_core.modules';
-import gridUtils from './ui.grid_core.utils';
-import eventsEngine from '../../events/core/events_engine';
-import messageLocalization from '../../localization/message';
-import CheckBox from '../check_box';
+import $ from '../../../core/renderer';
+import { isDefined } from '../../../core/utils/type';
+import modules from '../ui.grid_core.modules';
+import gridUtils from '../ui.grid_core.utils';
+import eventsEngine from '../../../events/core/events_engine';
+import messageLocalization from '../../../localization/message';
+import CheckBox from '../../check_box';
 import {
     getCurrentLookupValueText, getCustomOperation, getCurrentValueText,
     getField, getCaptionByOperation, getGroupValue, isCondition, isGroup,
-} from '../filter_builder/utils';
-import { when, Deferred } from '../../core/utils/deferred';
-import { captionize } from '../../core/utils/inflector';
-import { registerKeyboardAction } from './ui.grid_core.accessibility';
+} from '../../filter_builder/utils';
+import { when, Deferred } from '../../../core/utils/deferred';
+import { captionize } from '../../../core/utils/inflector';
+import { registerKeyboardAction } from '../ui.grid_core.accessibility';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
 const FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text';

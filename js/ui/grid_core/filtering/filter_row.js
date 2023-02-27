@@ -1,18 +1,18 @@
-import { getOuterWidth } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { normalizeKeyName } from '../../events/utils/index';
-import { each, map } from '../../core/utils/iterator';
-import modules from './ui.grid_core.modules';
-import gridCoreUtils from './ui.grid_core.utils';
-import messageLocalization from '../../localization/message';
-import Editor from '../editor/editor';
-import Overlay from '../overlay/ui.overlay';
-import Menu from '../menu';
-import { selectView } from '../shared/accessibility';
-import { equalByValue } from '../../core/utils/common';
+import { getOuterWidth } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import eventsEngine from '../../../events/core/events_engine';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { normalizeKeyName } from '../../../events/utils/index';
+import { each, map } from '../../../core/utils/iterator';
+import modules from '../ui.grid_core.modules';
+import gridCoreUtils from '../ui.grid_core.utils';
+import messageLocalization from '../../../localization/message';
+import Editor from '../../editor/editor';
+import Overlay from '../../overlay/ui.overlay';
+import Menu from '../../menu';
+import { selectView } from '../../shared/accessibility';
+import { equalByValue } from '../../../core/utils/common';
 
 const OPERATION_ICONS = {
     '=': 'filter-operation-equals',

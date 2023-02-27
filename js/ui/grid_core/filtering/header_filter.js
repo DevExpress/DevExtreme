@@ -1,21 +1,21 @@
-import eventsEngine from '../../events/core/events_engine';
-import modules from './ui.grid_core.modules';
-import filterUtils from '../shared/filtering';
-import gridCoreUtils from './ui.grid_core.utils';
-import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from './ui.grid_core.header_filter_core';
-import messageLocalization from '../../localization/message';
-import { name as clickEventName } from '../../events/click';
-import { compileGetter } from '../../core/utils/data';
-import { each } from '../../core/utils/iterator';
-import { isDefined, isObject, isFunction } from '../../core/utils/type';
-import { getDefaultAlignment } from '../../core/utils/position';
-import { extend } from '../../core/utils/extend';
-import { normalizeDataSourceOptions } from '../../data/data_source/utils';
-import dateLocalization from '../../localization/date';
-import { Deferred } from '../../core/utils/deferred';
-import { restoreFocus, saveFocusedElementInfo } from '../shared/accessibility';
-import dataQuery from '../../data/query';
-import storeHelper from '../../data/store_helper';
+import eventsEngine from '../../../events/core/events_engine';
+import modules from '../ui.grid_core.modules';
+import filterUtils from '../../shared/filtering';
+import gridCoreUtils from '../ui.grid_core.utils';
+import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from './header_filter_core';
+import messageLocalization from '../../../localization/message';
+import { name as clickEventName } from '../../../events/click';
+import { compileGetter } from '../../../core/utils/data';
+import { each } from '../../../core/utils/iterator';
+import { isDefined, isObject, isFunction } from '../../../core/utils/type';
+import { getDefaultAlignment } from '../../../core/utils/position';
+import { extend } from '../../../core/utils/extend';
+import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
+import dateLocalization from '../../../localization/date';
+import { Deferred } from '../../../core/utils/deferred';
+import { restoreFocus, saveFocusedElementInfo } from '../../shared/accessibility';
+import dataQuery from '../../../data/query';
+import storeHelper from '../../../data/store_helper';
 
 const DATE_INTERVAL_FORMATS = {
     'month': function(value) {

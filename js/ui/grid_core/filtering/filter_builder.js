@@ -1,11 +1,11 @@
-import $ from '../../core/renderer';
-import modules from './ui.grid_core.modules';
-import { extend } from '../../core/utils/extend';
-import FilterBuilder from './../filter_builder';
-import messageLocalization from '../../localization/message';
-import ScrollView from './../scroll_view';
-import Popup from './../popup/ui.popup';
-import { restoreFocus } from '../shared/accessibility';
+import $ from '../../../core/renderer';
+import modules from '../ui.grid_core.modules';
+import { extend } from '../../../core/utils/extend';
+import FilterBuilder from '../../filter_builder';
+import messageLocalization from '../../../localization/message';
+import ScrollView from '../../scroll_view';
+import Popup from '../../popup/ui.popup';
+import { restoreFocus } from '../../shared/accessibility';
 
 const FilterBuilderView = modules.View.inherit({
     _renderCore: function() {

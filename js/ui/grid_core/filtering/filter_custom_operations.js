@@ -1,10 +1,10 @@
-import $ from '../../core/renderer';
-import messageLocalization from '../../localization/message';
-import { extend } from '../../core/utils/extend';
-import { DataSource } from '../../data/data_source/data_source';
-import { Deferred } from '../../core/utils/deferred';
-import { isGroup, isCondition, getFilterExpression, renderValueText } from '../filter_builder/utils';
-import errors from '../widget/ui.errors';
+import $ from '../../../core/renderer';
+import messageLocalization from '../../../localization/message';
+import { extend } from '../../../core/utils/extend';
+import { DataSource } from '../../../data/data_source/data_source';
+import { Deferred } from '../../../core/utils/deferred';
+import { isGroup, isCondition, getFilterExpression, renderValueText } from '../../filter_builder/utils';
+import errors from '../../widget/ui.errors';
 
 function baseOperation(grid) {
     const calculateFilterExpression = function(filterValue, field, fields) {

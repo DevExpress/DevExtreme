@@ -1,15 +1,15 @@
-import $ from '../../core/renderer';
-import modules from './ui.grid_core.modules';
-import gridCoreUtils from './ui.grid_core.utils';
-import { isDefined, isFunction } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
-import { extend } from '../../core/utils/extend';
-import Popup from '../popup/ui.popup';
-import TreeView from '../tree_view';
-import List from '../list_light';
-import '../list/modules/search';
-import '../list/modules/selection';
-import messageLocalization from '../../localization/message';
+import $ from '../../../core/renderer';
+import modules from '../ui.grid_core.modules';
+import gridCoreUtils from '../ui.grid_core.utils';
+import { isDefined, isFunction } from '../../../core/utils/type';
+import { each } from '../../../core/utils/iterator';
+import { extend } from '../../../core/utils/extend';
+import Popup from '../../popup/ui.popup';
+import TreeView from '../../tree_view';
+import List from '../../list_light';
+import '../../list/modules/search';
+import '../../list/modules/selection';
+import messageLocalization from '../../../localization/message';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
