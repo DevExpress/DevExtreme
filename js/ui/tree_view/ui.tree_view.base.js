@@ -39,8 +39,8 @@ const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
-const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
-const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
+const CUSTOM_COLLAPSE_ICON_CLASS = `${WIDGET_CLASS}-custom-collapse-icon`;
+const CUSTOM_EXPAND_ICON_CLASS = `${WIDGET_CLASS}-custom-expand-icon`;
 
 const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
 const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
@@ -923,7 +923,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
         }
 
-        this._toggleCustomExpanderBtnIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
+        this._toggleCustomExpanderIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
@@ -935,7 +935,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _toggleCustomExpanderBtnIcons: function($expandBtnIcon, $collapseBtnIcon, isOpen) {
+    _toggleCustomExpanderIcons: function($expandBtnIcon, $collapseBtnIcon, isOpen) {
         if(isOpen) {
             $collapseBtnIcon.show();
             $expandBtnIcon.hide();
@@ -959,7 +959,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._hasCustomExpanderIcons()) {
             if(this._nodeHasRenderedChildren($node)) {
-                this._toggleCustomExpanderBtnIcons($node.children(`.${CUSTOM_EXPAND_ICON_CLASS}`), $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`), state);
+                this._toggleCustomExpanderIcons($node.children(`.${CUSTOM_EXPAND_ICON_CLASS}`), $node.children(`.${CUSTOM_COLLAPSE_ICON_CLASS}`), state);
             }
         } else {
             const $icon = $node.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
