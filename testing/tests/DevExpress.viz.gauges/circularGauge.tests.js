@@ -583,6 +583,34 @@ const TestPointerElement = TestElement.inherit({
         assert.strictEqual(secondCenterTemplate.callCount, 1, 'new template function is called');
     });
 
+    QUnit.test('Should rerender center template on value update', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate: centerTemplate, value: 10 });
+
+        const centerTemplateGroup = this.renderer.g.getCall(10).returnValue;
+        centerTemplateGroup.clear.reset();
+        centerTemplate.reset();
+
+        gauge.option('value', 13);
+
+        assert.ok(centerTemplateGroup.clear.called, 'group was cleared');
+        assert.strictEqual(centerTemplate.callCount, 1, 'new template function is called');
+    });
+
+    QUnit.test('Should rerender center template on subvalues update', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate: centerTemplate, subvalues: [3, 4] });
+
+        const centerTemplateGroup = this.renderer.g.getCall(10).returnValue;
+        centerTemplateGroup.clear.reset();
+        centerTemplate.reset();
+
+        gauge.option('subvalues', [5]);
+
+        assert.ok(centerTemplateGroup.clear.called, 'group was cleared');
+        assert.strictEqual(centerTemplate.callCount, 1, 'new template function is called');
+    });
+
     QUnit.module('Disposing', environment);
 
     QUnit.test('Disposing', function(assert) {
