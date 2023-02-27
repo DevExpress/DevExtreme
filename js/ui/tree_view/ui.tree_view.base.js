@@ -712,7 +712,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(this._hasCustomExpanderIcons()) {
-            this._renderToggleItemVisibilityCustomIcon($node, node);
+            this._renderCustomExpanderIcons($node, node);
         } else {
             const $icon = $('<div>')
                 .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
@@ -899,31 +899,31 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         $icon.hide();
     },
 
-    _renderToggleItemVisibilityCustomIcon: function($node, node) {
+    _renderExpanderIcon: function($icon, iconClass, $node, node) {
+        $icon.appendTo($node);
+        $icon.addClass(iconClass);
+
+        if(node.internalFields.disabled) {
+            $icon.addClass(DISABLED_STATE_CLASS);
+        }
+
+        this._renderToggleItemVisibilityIconClick($icon, node);
+    },
+
+    _renderCustomExpanderIcons: function($node, node) {
         const { expandButtonIcon, collapseButtonIcon } = this.option();
 
         const $expandIcon = getImageContainer(expandButtonIcon ?? collapseButtonIcon);
         const $collapseIcon = getImageContainer(collapseButtonIcon ?? expandButtonIcon);
 
-        $expandIcon.appendTo($node);
-        $expandIcon.addClass(CUSTOM_EXPAND_ICON_CLASS);
-
-        $collapseIcon.appendTo($node);
-        $collapseIcon.addClass(CUSTOM_COLLAPSE_ICON_CLASS);
-
-        this._toggleCustomExpanderBtnIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
+        this._renderExpanderIcon($expandIcon, CUSTOM_EXPAND_ICON_CLASS, $node, node);
+        this._renderExpanderIcon($collapseIcon, CUSTOM_COLLAPSE_ICON_CLASS, $node, node);
 
         if(node.internalFields.expanded) {
             $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
         }
 
-        if(node.internalFields.disabled) {
-            $expandIcon.addClass(DISABLED_STATE_CLASS);
-            $collapseIcon.addClass(DISABLED_STATE_CLASS);
-        }
-
-        this._renderToggleItemVisibilityIconClick($collapseIcon, node);
-        this._renderToggleItemVisibilityIconClick($expandIcon, node);
+        this._toggleCustomExpanderBtnIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
