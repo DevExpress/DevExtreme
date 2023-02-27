@@ -13,7 +13,7 @@ import {
     HeaderFilterView as HeaderFilterViewBase,
     updateHeaderFilterItemSelectionState,
     headerFilterMixin
-} from '../grid_core/ui.grid_core.header_filter_core';
+} from '../grid_core/filtering/header_filter_core';
 import columnStateMixin from '../grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '../grid_core/ui.grid_core.sorting_mixin';
 import { foreachTree, createPath } from './ui.pivot_grid.utils';
