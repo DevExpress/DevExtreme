@@ -70,7 +70,10 @@ const gaugePlugin = {
             const patchedFontOptions = patchFontOptions(this._themeManager._font);
             this._centerTemplateGroup.css(patchedFontOptions);
             this._requestChange(['CENTER_TEMPLATE']);
-        }
+        },
+        _updateExtraElements() {
+            this._requestChange(['CENTER_TEMPLATE']);
+        },
     },
     members: {
         _renderCenterTemplate: pieChartPlugin.members._renderCenterTemplate,

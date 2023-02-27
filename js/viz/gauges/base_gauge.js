@@ -11,6 +11,7 @@ import { plugin as exportPlugin } from '../core/export';
 import { plugin as titlePlugin } from '../core/title';
 import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
+import { noop } from '../../core/utils/common';
 
 const _format = formatHelper.format;
 export const BaseGauge = BaseWidget.inherit({
@@ -157,6 +158,8 @@ export const BaseGauge = BaseWidget.inherit({
     _change_MOSTLY_TOTAL: function() {
         this._applyMostlyTotalChange();
     },
+
+    _updateExtraElements: noop,
 
     _setupDomain: function() {
         const that = this;

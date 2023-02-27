@@ -342,31 +342,31 @@ export const dxGauge = BaseGauge.inherit({
     },
 
     _changeValue: function(value) {
-        const that = this;
-        that._setupValue(value);
-        that._beginValueChanging();
-        that._updateValueIndicator();
-        if(that.__value !== that.option(OPTION_VALUE)) {
-            that.option(OPTION_VALUE, that.__value);
+        this._setupValue(value);
+        this._beginValueChanging();
+        this._updateValueIndicator();
+        this._updateExtraElements();
+        if(this.__value !== this.option(OPTION_VALUE)) {
+            this.option(OPTION_VALUE, this.__value);
         }
-        that._endValueChanging();
+        this._endValueChanging();
     },
 
     _changeSubvalues: function(subvalues) {
-        const that = this;
-        if(that.__subvalues !== null) {
-            that._setupSubvalues(subvalues);
-            that._beginValueChanging();
-            that._updateSubvalueIndicators();
-            that._endValueChanging();
+        if(this.__subvalues !== null) {
+            this._setupSubvalues(subvalues);
+            this._beginValueChanging();
+            this._updateSubvalueIndicators();
+            this._updateExtraElements();
+            this._endValueChanging();
         } else {
-            that.__subvalues = parseArrayOfNumbers(subvalues);
-            that._setContentSize();
-            that._renderContent();
+            this.__subvalues = parseArrayOfNumbers(subvalues);
+            this._setContentSize();
+            this._renderContent();
         }
 
-        if(!_compareArrays(that.__subvalues, that.option(OPTION_SUBVALUES))) {
-            that.option(OPTION_SUBVALUES, that.__subvalues);
+        if(!_compareArrays(this.__subvalues, this.option(OPTION_SUBVALUES))) {
+            this.option(OPTION_SUBVALUES, this.__subvalues);
         }
     },
 
