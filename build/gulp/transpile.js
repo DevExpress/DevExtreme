@@ -232,16 +232,19 @@ gulp.task('transpile-watch', gulp.series(
                     .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
             }));
         watchTask
-            .pipe(babel(transpileConfig.debug))
+            // .pipe(babel(transpileConfig.debug))
+            .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_PATH));
         watchTask
             .pipe(replaceWidgets(true))
-            .pipe(babel(transpileConfig.debug))
+            // .pipe(babel(transpileConfig.debug))
+            .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
         watchTask
             .pipe(removeDebug())
             .pipe(replaceWidgets(true))
-            .pipe(babel(transpileConfig.debug))
+            // .pipe(babel(transpileConfig.debug))
+            .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
         return watchTask;
     }
