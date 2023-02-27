@@ -5,6 +5,7 @@ import DataSource from '../../../data/data_source';
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import variableWrapper from '../../../core/utils/variable_wrapper';
 import { isFunction, isString } from '../../../core/utils/type';
+import gridCoreUtils from '../ui.grid_core.utils';
 
 function normalizeGroupingLoadOptions(group) {
     if(!Array.isArray(group)) {
@@ -26,7 +27,6 @@ function normalizeGroupingLoadOptions(group) {
 /**
  *
  * @param {import('../ui.grid_core.columns_controller').ColumnLookup} lookup
- * @returns
  */
 export function normalizeLookupDataSource(lookup) {
     let lookupDataSourceOptions;
@@ -63,13 +63,13 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
     const hasGroupPaging = dataSource.remoteOperations().groupPaging;
     const hasLookupOptimization = column.displayField && isString(column.displayField);
 
-    let cachedUniqueRelevantItems;
-
     const sliceItems = (items, loadOptions) => {
         const start = loadOptions.skip ?? 0;
         const end = loadOptions.take ? start + loadOptions.take : items.length;
         return items.slice(start, end);
     };
+
+    let cachedUniqueRelevantItems;
 
     const loadUniqueRelevantItems = (loadOptions) => {
         const group = normalizeGroupingLoadOptions(
@@ -105,7 +105,7 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
                     return;
                 }
 
-                const filter = this.combineFilters(
+                const filter = gridCoreUtils.combineFilters(
                     items.flatMap((data) => data.key).map((key => [
                         column.lookup.valueExpr, key,
                     ])),
@@ -115,13 +115,13 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
                 const newDataSource = new DataSource({
                     ...lookupDataSourceOptions,
                     ...loadOptions,
-                    filter: this.combineFilters([filter, loadOptions.filter], 'and'),
+                    filter: gridCoreUtils.combineFilters([filter, loadOptions.filter], 'and'),
                     paginate: false, // pagination is included to filter
                 });
 
                 newDataSource
                     .load()
-                    // @ts-expect-error
+                    // @ts-ignore
                     .done(d.resolve)
                     .fail(d.fail);
             }).fail(d.fail);
