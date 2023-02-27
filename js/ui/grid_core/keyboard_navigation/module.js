@@ -109,7 +109,7 @@ function shouldPreventScroll(that) {
 }
 
 /**
- * @type {Partial<import('./ui.grid_core.keyboard_navigation').KeyboardNavigationController>}
+ * @type {Partial<import('./types').KeyboardNavigationController>}
  */
 const keyboardNavigationMembers = {
     // #region Initialization
@@ -1964,7 +1964,7 @@ const KeyboardNavigationController = core.ViewController.inherit(keyboardNavigat
 */
 
 /**
- * @type {import('./ui.grid_core.modules').Module}
+ * @type {import('../ui.grid_core.modules').Module}
  */
 export const keyboardNavigationModule = {
     defaultOptions: function() {
