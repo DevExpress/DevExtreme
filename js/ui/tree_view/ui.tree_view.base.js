@@ -39,8 +39,8 @@ const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
-const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon';
-const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon';
+const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
+const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
 
 const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
 const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;

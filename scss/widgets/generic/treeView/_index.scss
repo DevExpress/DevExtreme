@@ -26,8 +26,8 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
     @include dx-treeview-make-rtl($generic-treeview-container-with-border-offset, $generic-treeview-node-offset, $generic-treeview-item-with-checkbox-offset, $generic-treeview-checkbox-offset, $generic-select-all-text-offset, $generic-select-all-item-left-padding, $generic-treeview-border-padding);
 
     .dx-treeview-toggle-item-visibility,
-    .dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon,
-    .dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon {
+    .dx-treeview-custom-expand-icon,
+    .dx-treeview-custom-collapse-icon {
       right: $generic-treeview-toggle-item-visibility-offset;
     }
 
@@ -160,8 +160,8 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
   }
 }
 
-.dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon,
-.dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon {
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
   @include dx-icon-sizing($generic-base-icon-size);
 
   top: 7px;

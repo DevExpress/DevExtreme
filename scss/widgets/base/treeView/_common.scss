@@ -99,8 +99,8 @@ $tree-view-icon-size: 24px;
 }
 
 .dx-treeview-toggle-item-visibility,
-.dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon,
-.dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon {
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
   position: absolute;
   cursor: pointer;
 
@@ -135,8 +135,8 @@ $tree-view-icon-size: 24px;
   }
 
   .dx-treeview-toggle-item-visibility,
-  .dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon,
-  .dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon {
+  .dx-treeview-custom-expand-icon,
+  .dx-treeview-custom-collapse-icon {
     left: auto;
     right: 0;
 

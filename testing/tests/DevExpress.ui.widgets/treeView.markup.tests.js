@@ -20,8 +20,8 @@ const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 
-const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-icon-toggle-item-visibility-collapse-button-icon';
-const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-icon-toggle-item-visibility-expand-button-icon';
+const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
+const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
 const CUSTOM_EXPAND_ICON_CLASS_SELECTOR = `.${CUSTOM_EXPAND_ICON_CLASS}`;
 const CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR = `.${CUSTOM_COLLAPSE_ICON_CLASS}`;
 
