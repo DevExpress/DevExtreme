@@ -112,13 +112,14 @@ export function renderFieldItem({
         const isToggleControls = toggleControls.includes(editorType);
         const labelAlignment = labelOptions.alignment;
         const isLabelAlignmentLeft = labelAlignment === 'left' || !labelAlignment;
-        const hasTemplate = Boolean(template);
+        const hasNotTemplate = !template;
         const isLabelOnTop = labelLocation === 'top';
 
-        if(isToggleControls
+        if(hasNotTemplate
+            && isToggleControls
             && isLabelOnTop
             && isLabelAlignmentLeft
-            && !hasTemplate) {
+        ) {
             $fieldEditorContainer.addClass(TOGGLE_CONTROLS_PADDING_CLASS);
         }
     } else {
