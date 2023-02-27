@@ -17,7 +17,7 @@ const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-const src = ['./js/**/*.d.ts', './js/ui/grid_core/*.js', '!./js/renovation/**/*'];
+const src = ['./js/**/*.d.ts', './js/ui/grid_core/**/*.js', '!./js/renovation/**/*'];
 
 const TS_TESTS_PATH = './testing/typescript';
 
@@ -27,7 +27,7 @@ function compileTS(settings) {
         types: ['jquery'],
         noEmitOnError: true,
         allowJs: true,
-        lib: [ "es6", "es7", "es2017.object", "dom" ],
+        lib: [ 'es6', 'es7', 'es2017.object', 'dom' ],
         strict: true,
         noImplicitAny: false,
         ...settings
@@ -166,28 +166,28 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
 
 gulp.task('test-ts', gulp.series(
     (callback) => {
-        spawn('npm',  ['i', '--no-audit', '--no-fund'], { shell: true, cwd: TS_TESTS_PATH })
-        .on('error', callback)
-        .on('close', code => code ? callback(new Error(code)) : callback());
+        spawn('npm', ['i', '--no-audit', '--no-fund'], { shell: true, cwd: TS_TESTS_PATH })
+            .on('error', callback)
+            .on('close', code => code ? callback(new Error(code)) : callback());
     },
     () => {
         return gulp
-        .src([
-            `${TS_TESTS_PATH}/**/*.ts`,
-            `!${TS_TESTS_PATH}/node_modules/**/*`,
-        ])
-        .pipe(compileTS({
-            'esModuleInterop': true,
-            'moduleResolution': 'node',
-            'noEmit': true,
-            'skipLibCheck': true,
-            'typeRoots': [],
-            'target': 'es2015',
-            'baseUrl': `${TS_TESTS_PATH}`,
-            'paths': {
-                '*': ['node_modules/*']
-            },
-        }));
+            .src([
+                `${TS_TESTS_PATH}/**/*.ts`,
+                `!${TS_TESTS_PATH}/node_modules/**/*`,
+            ])
+            .pipe(compileTS({
+                'esModuleInterop': true,
+                'moduleResolution': 'node',
+                'noEmit': true,
+                'skipLibCheck': true,
+                'typeRoots': [],
+                'target': 'es2015',
+                'baseUrl': `${TS_TESTS_PATH}`,
+                'paths': {
+                    '*': ['node_modules/*']
+                },
+            }));
     }
 ));
 
