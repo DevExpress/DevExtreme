@@ -174,21 +174,17 @@ const ResizingController = modules.ViewController.inherit({
         this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);
         this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
-        this._toggleContentMinHeight(isBestFit); // T1047239
-
         if(this._needStretch()) {
             $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
         }
     },
 
-    _toggleContentMinHeight: function(isBestFit) {
-        if(this.option('wordWrapEnabled')) {
-            const scrollable = this._rowsView.getScrollable();
-            const $contentElement = this._rowsView._findContentElement();
+    _toggleContentMinHeight: function(value) {
+        const scrollable = this._rowsView.getScrollable();
+        const $contentElement = this._rowsView._findContentElement();
 
-            if(scrollable?.option('useNative') === false) {
-                $contentElement.css({ minHeight: isBestFit ? gridCoreUtils.getContentHeightLimit(browser) : '' });
-            }
+        if(scrollable?.option('useNative') === false) {
+            $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : '' });
         }
     },
 
@@ -196,6 +192,7 @@ const ResizingController = modules.ViewController.inherit({
         const columnsController = this._columnsController;
         const visibleColumns = columnsController.getVisibleColumns();
         const columnAutoWidth = this.option('columnAutoWidth');
+        const wordWrapEnabled = this.option('wordWrapEnabled');
         let needBestFit = this._needBestFit();
         let hasMinWidth = false;
         let resetBestFitMode;
@@ -241,6 +238,8 @@ const ResizingController = modules.ViewController.inherit({
             this._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
+
+        this._toggleContentMinHeight(wordWrapEnabled); // T1047239
 
         const $element = this.component.$element();
         if($element && $element[0] && this._maxWidth) {
@@ -294,6 +293,10 @@ const ResizingController = modules.ViewController.inherit({
             deferRender(() => {
                 if(needBestFit || isColumnWidthsCorrected) {
                     this._setVisibleWidths(visibleColumns, resultWidths);
+                }
+
+                if(wordWrapEnabled) {
+                    this._toggleContentMinHeight(false);
                 }
             });
         });
