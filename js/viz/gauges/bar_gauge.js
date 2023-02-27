@@ -14,6 +14,7 @@ import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAnd
 import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
 import dxCircularGauge from './circular_gauge';
 import { plugin as pluginLegend } from '../components/legend';
+import { plugins as centerTemplatePlugins } from '../core/center_template';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
@@ -243,6 +244,10 @@ export const dxBarGauge = BaseGauge.inherit({
                 startAngle: that._context.endAngle, endAngle: that._context.startAngle, fill: that._context.backgroundColor
             }).append(that._barsGroup);
         }
+    },
+
+    _getCenter: function() {
+        return { x: this._context.x, y: this._context.y };
     },
 
     _updateBars: function() {
@@ -772,6 +777,7 @@ function getStartCoordsArc(x, y, innerR, outerR, startAngleCos, startAngleSin) {
 registerComponent('dxBarGauge', dxBarGauge);
 
 dxBarGauge.addPlugin(pluginLegend);
+dxBarGauge.addPlugin(centerTemplatePlugins.gauge);
 
 ///#DEBUG
 const __BarWrapper = BarWrapper;

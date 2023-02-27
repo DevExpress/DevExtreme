@@ -265,6 +265,7 @@ export const rowsModule = {
                             }
                         }
 
+                        // @ts-expect-error
                         if(that.option('columnAutoWidth') || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }

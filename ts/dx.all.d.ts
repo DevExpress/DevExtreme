@@ -16852,6 +16852,10 @@ declare module DevExpress.ui {
      */
     selectAllMode?: DevExpress.common.SelectAllMode;
     /**
+     * [descr:dxListOptions.selectByClick]
+     */
+    selectByClick?: boolean;
+    /**
      * [descr:dxListOptions.selectionMode]
      */
     selectionMode?: DevExpress.common.SingleMultipleAllOrNone;
@@ -26938,6 +26942,15 @@ declare module DevExpress.viz {
       startAngle?: number;
     };
     /**
+     * [descr:dxBarGaugeOptions.centerTemplate]
+     */
+    centerTemplate?:
+      | DevExpress.core.template
+      | ((
+          component: dxBarGauge,
+          element: SVGGElement
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+    /**
      * [descr:dxBarGaugeOptions.label]
      */
     label?: {
@@ -30792,6 +30805,15 @@ declare module DevExpress.viz {
        */
       startAngle?: number;
     };
+    /**
+     * [descr:dxCircularGaugeOptions.centerTemplate]
+     */
+    centerTemplate?:
+      | DevExpress.core.template
+      | ((
+          component: dxCircularGauge,
+          element: SVGGElement
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer]
      */

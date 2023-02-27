@@ -180,8 +180,8 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
     color: $calendar-cell-hover-color;
   }
 
-  &.dx-calendar-other-view:not(.dx-calendar-selected-date),
-  &.dx-calendar-empty-cell:not(.dx-calendar-selected-date) {
+  &.dx-calendar-other-view:not(.dx-calendar-selected-date, .dx-calendar-range-date),
+  &.dx-calendar-empty-cell:not(.dx-calendar-selected-date, .dx-calendar-range-date) {
     color: $calendar-cell-other-color;
 
     &.dx-state-hover,
@@ -220,6 +220,19 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 
       &.dx-calendar-contoured-date {
         box-shadow: inset 0 0 0 1px $calendar-cell-contoured-border-color, inset 0 0 0 1000px $calendar-cell-selected-bg;
+      }
+    }
+  }
+
+  &.dx-calendar-range-date:not(.dx-calendar-selected-date) {
+    &,
+    &.dx-calendar-today {
+      color: $base-inverted-text-color;
+      box-shadow: inset 0 0 0 1000px lighten($calendar-cell-selected-bg, 30%);
+      font-weight: normal;
+
+      &.dx-calendar-contoured-date {
+        box-shadow: inset 0 0 0 1px $calendar-cell-contoured-border-color, inset 0 0 0 1000px lighten($calendar-cell-selected-bg, 30%);
       }
     }
   }
