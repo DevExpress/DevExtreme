@@ -38,9 +38,15 @@ const SelectionDataSourceAdapterExtender = (function() {
             if(!isCustomLoading && selectionController?.isRecursiveSelection()) {
                 const selectedItems = selectionController.getSelectedRowsData();
 
-                this.callBase(options);
+                const deferred = this.callBase(options);
 
-                this.loadRemoteSelectedItems(selectedItems);
+                if(deferred) {
+                    return deferred.always(() => {
+                        this.loadRemoteSelectedItems(selectedItems);
+                    });
+                } else {
+                    this.loadRemoteSelectedItems(selectedItems);
+                }
             } else {
                 this.callBase(options);
             }
@@ -376,10 +382,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                     children && children.forEach(function(childNode) {
                         // children can be not loaded in case of enabled remoteFiltering and selected items are not loaded to the tree
-                        if(that._dataController.isChildrenLoaded(node)) {
-                            that._selectionStateByKey[childNode.key] = isSelected;
-                        } else {
+                        if(!that._dataController.isChildrenLoaded(node)) {
                             delete that._selectionStateByKey[childNode.key];
+                        } else {
+                            that._selectionStateByKey[childNode.key] = isSelected;
                         }
 
                         if(childNode.children.length > 0) {

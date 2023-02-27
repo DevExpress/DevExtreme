@@ -262,7 +262,13 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         isChildrenLoaded: function(node) {
-            return node.children.length && this._isChildrenLoaded[node.key];
+            const remoteFiltering = this.option('remoteOperations')?.filtering;
+
+            if(remoteFiltering) {
+                return node.children.length && this._isChildrenLoaded[node.key];
+            }
+
+            return node.children.length;
         },
 
         _getParentIdsToLoad: function(parentIds) {
@@ -294,6 +300,10 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 if(isFullBranchFilterMode(this) && options.cachedStoreData || !options.storeLoadOptions.filter) {
                     const expandedRowKeys = options.collapseVisibleNodes ? [] : this.option('expandedRowKeys');
                     parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
+
+                    // когда включен fullBracn mode и у нас есть фильтр, на событии changeRowExpand
+                    // нам нужны parrentIdsToLoad у которых просто есть дети. isChildrenLoaded может быть false
+
                     const parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
                     if(parentIdsToLoad.length) {
