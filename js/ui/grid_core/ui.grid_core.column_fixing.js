@@ -660,7 +660,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             if(!$content.length && scrollable) {
                 $content = $('<div>').addClass(contentClass);
 
-                eventsEngine.on($content, 'scroll', function(e) {
+                eventsEngine.on($content, 'scroll', (e) => {
                     const target = e.target;
                     const scrollDelay = this._getScrollDelay();
 
