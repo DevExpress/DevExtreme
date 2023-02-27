@@ -26,7 +26,7 @@ function normalizeGroupingLoadOptions(group) {
 
 /**
  *
- * @param {import('../ui.grid_core.columns_controller').ColumnLookup} lookup
+ * @param {import('../columns_controller/module').ColumnLookup} lookup
  */
 export function normalizeLookupDataSource(lookup) {
     let lookupDataSourceOptions;
@@ -44,10 +44,9 @@ export function normalizeLookupDataSource(lookup) {
 
 /**
  *
- * @param {import('../ui.grid_core.columns_controller').LookupColumn} column
+ * @param {import('../columns_controller/module').LookupColumn} column
  * @param {import('../ui.grid_core.data_source_adapter').DataSourceAdapter} dataSource
  * @param {*} filter
- * @returns
  */
 export function getWrappedLookupDataSource(column, dataSource, filter) {
     if(!dataSource) {

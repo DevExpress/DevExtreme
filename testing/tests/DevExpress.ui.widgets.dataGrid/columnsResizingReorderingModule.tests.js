@@ -55,7 +55,7 @@ import dragEvents from 'events/drag';
 import columnsResizingReordering from 'ui/data_grid/ui.data_grid.columns_resizing_reordering';
 import { ColumnChooserView } from 'ui/data_grid/ui.data_grid.column_chooser';
 import { ColumnHeadersView } from 'ui/data_grid/ui.data_grid.column_headers';
-import { columnsControllerModule } from 'ui/grid_core/ui.grid_core.columns_controller';
+import { columnsControllerModule } from 'ui/grid_core/columns_controller/module';
 const ColumnsController = columnsControllerModule.controllers.columns;
 import { RowsView } from 'ui/data_grid/ui.data_grid.rows';
 import { GroupingHeaderPanelExtender } from 'ui/data_grid/ui.data_grid.grouping';

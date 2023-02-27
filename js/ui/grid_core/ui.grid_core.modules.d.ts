@@ -54,7 +54,7 @@ export interface OptionChangedArgs<T extends string = string> {
 
 export type ControllersPrivate = {
   data: import('./ui.grid_core.data_controller').DataController;
-  columns: import('./ui.grid_core.columns_controller').ColumnsController;
+  columns: import('./columns_controller/module').ColumnsController;
   resizing: import('./ui.grid_core.grid_view').ResizingController;
   adaptiveColumns: import('./ui.grid_core.adaptivity').AdaptiveColumnsController;
   columnChooser: import('./ui.grid_core.column_chooser').ColumnChooserController;

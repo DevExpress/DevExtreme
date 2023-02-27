@@ -1,29 +1,29 @@
 // @ts-check
-import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
-import variableWrapper from '../../core/utils/variable_wrapper';
-import { compileGetter, compileSetter } from '../../core/utils/data';
-import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
-import { each, map } from '../../core/utils/iterator';
-import { getDefaultAlignment } from '../../core/utils/position';
-import { extend } from '../../core/utils/extend';
-import { normalizeIndexes } from '../../core/utils/array';
-import config from '../../core/config';
-import { orderEach, deepExtendArraySafe } from '../../core/utils/object';
-import errors from '../widget/ui.errors';
-import modules from './ui.grid_core.modules';
-import gridCoreUtils from './ui.grid_core.utils';
-import { captionize } from '../../core/utils/inflector';
-import dateSerialization from '../../core/utils/date_serialization';
-import numberLocalization from '../../localization/number';
-import dateLocalization from '../../localization/date';
-import messageLocalization from '../../localization/message';
-import { when, Deferred } from '../../core/utils/deferred';
-import Store from '../../data/abstract_store';
-import { DataSource } from '../../data/data_source/data_source';
-import { normalizeDataSourceOptions } from '../../data/data_source/utils';
-import { equalByValue } from '../../core/utils/common';
-import filterUtils from '../shared/filtering';
+import $ from '../../../core/renderer';
+import Callbacks from '../../../core/utils/callbacks';
+import variableWrapper from '../../../core/utils/variable_wrapper';
+import { compileGetter, compileSetter } from '../../../core/utils/data';
+import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../../core/utils/type';
+import { each, map } from '../../../core/utils/iterator';
+import { getDefaultAlignment } from '../../../core/utils/position';
+import { extend } from '../../../core/utils/extend';
+import { normalizeIndexes } from '../../../core/utils/array';
+import config from '../../../core/config';
+import { orderEach, deepExtendArraySafe } from '../../../core/utils/object';
+import errors from '../../widget/ui.errors';
+import modules from '../ui.grid_core.modules';
+import gridCoreUtils from '../ui.grid_core.utils';
+import { captionize } from '../../../core/utils/inflector';
+import dateSerialization from '../../../core/utils/date_serialization';
+import numberLocalization from '../../../localization/number';
+import dateLocalization from '../../../localization/date';
+import messageLocalization from '../../../localization/message';
+import { when, Deferred } from '../../../core/utils/deferred';
+import Store from '../../../data/abstract_store';
+import { DataSource } from '../../../data/data_source/data_source';
+import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
+import { equalByValue } from '../../../core/utils/common';
+import filterUtils from '../../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
 const USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
@@ -37,7 +37,7 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 let globalColumnId = 1;
 
 /**
- * @type {import('./ui.grid_core.modules').Module}
+ * @type {import('../ui.grid_core.modules').Module}
  */
 export const columnsControllerModule = {
     defaultOptions: function() {
@@ -365,7 +365,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @this {import('./ui.grid_core.columns_controller').Column}
+             * @this {import('./module').Column}
              */
             const customizeTextForBooleanDataType = function(e) {
                 if(e.value === true) {
@@ -409,7 +409,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @param {import('./ui.grid_core.columns_controller').ColumnsController} that
+             * @param {import('./module').ColumnsController} that
              */
             const updateColumnIndexes = function(that) {
                 each(that._columns, function(index, column) {
@@ -798,7 +798,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @type {import('./ui.grid_core.columns_controller').Column['setCellValue']}
+             * @type {import('./module').Column['setCellValue']}
              */
             const defaultSetCellValue = function(data, value) {
                 if(!this.dataField) {
@@ -869,7 +869,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @this {import('./ui.grid_core.columns_controller').ColumnsController}
+             * @this {import('./module').ColumnsController}
              */
             const processExpandColumns = function(columns, expandColumns, type, columnIndex) {
                 let customColumnIndex;
@@ -1023,7 +1023,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @type {Partial<import('./ui.grid_core.columns_controller').ColumnsController>}
+             * @type {Partial<import('./module').ColumnsController>}
              */
             const members = {
                 _getExpandColumnOptions: function() {

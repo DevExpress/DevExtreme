@@ -1,5 +1,5 @@
-import { ColumnBase, ColumnLookup as ColumnLookupBase } from '../data_grid';
-import { Controller } from './ui.grid_core.modules';
+import { ColumnBase, ColumnLookup as ColumnLookupBase } from '../../data_grid';
+import { Controller } from '../ui.grid_core.modules';
 
 export interface ColumnLookup extends ColumnLookupBase {
   items: unknown[];
