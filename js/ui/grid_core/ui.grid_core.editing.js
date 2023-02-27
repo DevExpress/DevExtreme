@@ -452,6 +452,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         getFirstEditableCellInRow: function(rowIndex) {
             const rowsView = this.getView('rowsView');
+            // @ts-expect-error
             return rowsView && rowsView._getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
         },
 
@@ -1301,6 +1302,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const rowsView = this.getView('rowsView');
             const editColumnIndex = this._getVisibleEditColumnIndex();
 
+            // @ts-expect-error
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
 
             if($editCell) {
@@ -1980,6 +1982,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
 
                 if(columnIndex >= 0) {
+                    // @ts-expect-error
                     const $focusedItem = this._rowsView._getCellElement(row.rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItem, () => {
                         setTimeout(() => {
@@ -2606,6 +2609,7 @@ export const editingModule = {
                     this.callBase.apply(this, arguments);
 
                     return this.waitAsyncTemplates(change, true).done(() => {
+                        // @ts-expect-error
                         this._editingController._focusEditorIfNeed();
                     });
                 }
