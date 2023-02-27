@@ -714,20 +714,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this._hasCustomExpanderIcons()) {
             this._renderCustomExpanderIcons($node, node);
         } else {
-            const $icon = $('<div>')
-                .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
-                .appendTo($node);
-
-            if(node.internalFields.expanded) {
-                $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
-                $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
-            }
-
-            if(node.internalFields.disabled) {
-                $icon.addClass(DISABLED_STATE_CLASS);
-            }
-
-            this._renderToggleItemVisibilityIconClick($icon, node);
+            this._renderDefaultExpanderIcons($node, node);
         }
 
         if(this.option('deferRendering') && !node.internalFields.expanded) {
@@ -910,6 +897,23 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._renderToggleItemVisibilityIconClick($icon, node);
     },
 
+    _renderDefaultExpanderIcons: function($node, node) {
+        const $icon = $('<div>')
+            .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
+            .appendTo($node);
+
+        if(node.internalFields.expanded) {
+            $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
+            $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
+        }
+
+        if(node.internalFields.disabled) {
+            $icon.addClass(DISABLED_STATE_CLASS);
+        }
+
+        this._renderToggleItemVisibilityIconClick($icon, node);
+    },
+
     _renderCustomExpanderIcons: function($node, node) {
         const { expandIcon, collapseIcon } = this.option();
 
@@ -919,11 +923,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._renderExpanderIcon($expandIcon, CUSTOM_EXPAND_ICON_CLASS, $node, node);
         this._renderExpanderIcon($collapseIcon, CUSTOM_COLLAPSE_ICON_CLASS, $node, node);
 
-        if(node.internalFields.expanded) {
+        const isNodeExpanded = node.internalFields.expanded;
+
+        if(isNodeExpanded) {
             $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
         }
 
-        this._toggleCustomExpanderIcons($expandIcon, $collapseIcon, node.internalFields.expanded);
+        this._toggleCustomExpanderIcons($expandIcon, $collapseIcon, isNodeExpanded);
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {

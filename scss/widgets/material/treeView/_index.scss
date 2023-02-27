@@ -93,6 +93,10 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-item-with-checkbox {
+  &.dx-treeview-item-with-custom-expander-icon > .dx-checkbox {
+    top: $material-treeview-with-custom-icon-checkbox-vertical-offset;
+  }
+
   .dx-treeview-item {
     color: $base-text-color;
     padding-left: $material-treeview-item-with-checkbox-offset;
