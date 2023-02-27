@@ -1603,31 +1603,38 @@ export const virtualScrollingModule = {
                         }
                     });
                 },
+
+                hasResizeTimeout: function() {
+                    return !!this._resizeTimeout;
+                },
+
                 resize: function() {
-                    const that = this;
-                    const callBase = that.callBase;
+                    const callBase = this.callBase;
                     let result;
 
-                    if(isVirtualMode(that) || gridCoreUtils.isVirtualRowRendering(that)) {
-                        clearTimeout(that._resizeTimeout);
-                        const diff = new Date() - that._lastTime;
-                        const updateTimeout = that.option('scrolling.updateTimeout');
-                        if(that._lastTime && diff < updateTimeout) {
+                    if(isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
+                        clearTimeout(this._resizeTimeout);
+                        this._resizeTimeout = null;
+
+                        const diff = new Date() - this._lastTime;
+                        const updateTimeout = this.option('scrolling.updateTimeout');
+
+                        if(this._lastTime && diff < updateTimeout) {
                             result = new Deferred();
-                            that._resizeTimeout = setTimeout(function() {
-                                callBase.apply(that).done(result.resolve).fail(result.reject);
-                                that._lastTime = new Date();
+                            this._resizeTimeout = setTimeout(() => {
+                                this._resizeTimeout = null;
+                                callBase.apply(this).done(result.resolve).fail(result.reject);
+                                this._lastTime = new Date();
                             }, updateTimeout);
-                            that._lastTime = new Date();
+                            this._lastTime = new Date();
                         } else {
-                            result = callBase.apply(that);
-                            if(that._dataController.isLoaded()) {
-                                that._lastTime = new Date();
+                            result = callBase.apply(this);
+                            if(this._dataController.isLoaded()) {
+                                this._lastTime = new Date();
                             }
                         }
-
                     } else {
-                        result = callBase.apply(that);
+                        result = callBase.apply(this);
                     }
                     return result;
                 },
