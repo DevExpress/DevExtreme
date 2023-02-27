@@ -167,7 +167,7 @@ module('selection common', () => {
         } catch(e) {
             assert.notOk(true, 'Error has been raised');
         } finally {
-            assert.step('Test completed');
+            assert.ok(true);
         }
     });
 
