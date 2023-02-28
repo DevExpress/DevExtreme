@@ -1,9 +1,8 @@
-import { writeFileSync as writeFile } from 'fs';
+import { writeFileSync as writeFile, existsSync, mkdirSync } from 'fs';
 
 import {
   dirname as getDirName,
   join as joinPaths,
-  normalize as normalizePath,
   relative as getRelativePath,
   sep as pathSeparator,
 } from 'path';
@@ -19,9 +18,9 @@ import {
 
 import { convertTypes } from './converter';
 import generateIndex, { IReExport } from './index-generator';
+import generateCommonReexports from './common-reexports-generator';
 
 import generateComponent, {
-  generateReExport,
   IComponent,
   IIndependentEvents,
   INestedComponent,
@@ -239,6 +238,7 @@ function generate({
   components: { baseComponent, extensionComponent, configComponent },
   out,
   widgetsPackage,
+  generateReexports,
 }: {
   metaData: IModel,
   components: {
@@ -248,10 +248,10 @@ function generate({
   },
   out: {
     componentsDir: string,
-    oldComponentsDir: string,
     indexFileName: string
   },
-  widgetsPackage: string
+  widgetsPackage: string,
+  generateReexports?: boolean
 }): void {
   const modulePaths: IReExport[] = [];
   rawData.widgets.forEach((data) => {
@@ -271,18 +271,23 @@ function generate({
       name: widgetFile.component.name,
       path: `./${removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, '/')}`,
     });
-
-    writeFile(
-      joinPaths(out.oldComponentsDir, widgetFile.fileName),
-      generateReExport(
-        normalizePath(`./${removeExtension(getRelativePath(out.oldComponentsDir, widgetFilePath))}`)
-          .replace(pathSeparator, '/'),
-        removeExtension(widgetFile.fileName),
-      ),
-    );
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: 'utf8' });
+
+  if (generateReexports && rawData.commonReexports) {
+    const commonPath = joinPaths(out.componentsDir, 'common');
+    if (!existsSync(commonPath)) {
+      mkdirSync(commonPath);
+    }
+    Object.keys(rawData.commonReexports).forEach((key) => {
+      writeFile(
+        joinPaths(commonPath, `${key.replace('common/', '')}.ts`),
+        generateCommonReexports(key, rawData.commonReexports[key]),
+        { encoding: 'utf8' },
+      );
+    });
+  }
 }
 
 export default generate;

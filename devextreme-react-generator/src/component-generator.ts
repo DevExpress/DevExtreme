@@ -102,16 +102,6 @@ function getIndent(indent: number) {
   return Array(indent * 2 + 1).join(' ');
 }
 
-const renderReExport: (model: { path: string, fileName: string }) => string = createTempate(
-  '/** @deprecated Use \'devextreme-react/<#= it.fileName #>\' file instead */\n'
-+ 'export * from "<#= it.path #>";\n'
-+ 'export { default } from "<#= it.path #>";\n',
-);
-
-function generateReExport(path: string, fileName: string): string {
-  return renderReExport({ path, fileName });
-}
-
 const renderObjectEntry: (model: {
   key: string;
   value: string;
@@ -619,5 +609,4 @@ export {
   IOption,
   ISubscribableOption,
   IPropTyping,
-  generateReExport,
 };
