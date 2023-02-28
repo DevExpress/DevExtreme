@@ -16,6 +16,7 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $('body').append(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 
@@ -37,6 +38,7 @@ import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import dataUtils from 'core/element_data';
 import translator from 'animation/translator';
 import { getOuterHeight } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 const device = devices.real();
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();

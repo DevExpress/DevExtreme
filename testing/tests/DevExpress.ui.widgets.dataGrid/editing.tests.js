@@ -8,6 +8,7 @@ import commonUtils from 'core/utils/common';
 import { Deferred } from 'core/utils/deferred';
 import { getHeight, getWidth, setWidth, getOffset } from 'core/utils/size';
 import typeUtils from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
 import { triggerResizeEvent } from 'events/visibility_change';
@@ -46,6 +47,7 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $('body').append(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 
