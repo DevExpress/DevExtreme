@@ -16,7 +16,6 @@ const
   CLEAN = 'clean',
 
   OUTPUTDIR_CLEAN = 'output-dir.clean',
-  OLD_OUTPUTDIR_CREATE = 'output-dir.create',
   GEN_RUN = 'generator.run',
 
   COPY_STRATEGY = 'copy.strategy',
@@ -39,10 +38,6 @@ gulp.task(NPM_CLEAN, (c) =>
 
 gulp.task(CLEAN, gulp.parallel(OUTPUTDIR_CLEAN, NPM_CLEAN));
 
-gulp.task(OLD_OUTPUTDIR_CREATE, (done) =>
-  mkdir(config.oldComponentsDir, {}, done)
-);
-
 gulp.task(GEN_RUN, (done) => {
   generateSync(
     JSON.parse(fs.readFileSync(config.metadataPath).toString()),
@@ -50,18 +45,17 @@ gulp.task(GEN_RUN, (done) => {
     config.configComponent,
     {
       componentsDir: config.generatedComponentsDir,
-      oldComponentsDir: config.oldComponentsDir,
       indexFileName: config.indexFileName
     },
     config.widgetsPackage,
-    VUE_VERSION
+    VUE_VERSION, 
+    true
   );
 
   done();
 });
 
 gulp.task(GENERATE, gulp.series(
-  OLD_OUTPUTDIR_CREATE,
   GEN_RUN
 ));
 
