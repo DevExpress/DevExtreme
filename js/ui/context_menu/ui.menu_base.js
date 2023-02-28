@@ -528,7 +528,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     _updateSelectedItemOnClick(actionArgs) {
         const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
-        if(!this._isItemSelectionAllowed(args.itemData)) {
+        if(!this._isItemSelectAllowed(args.itemData)) {
             return;
         }
 
@@ -548,9 +548,9 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     }
 
-    _isItemSelectionAllowed(item) {
-        const isSelectionByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
-        return !this._isContainerEmpty() && isSelectionByClickEnabled && this._isItemSelectable(item) && !this._itemsGetter(item);
+    _isItemSelectAllowed(item) {
+        const isSelectByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
+        return !this._isContainerEmpty() && isSelectByClickEnabled && this._isItemSelectable(item) && !this._itemsGetter(item);
     }
 
     _isContainerEmpty() {
