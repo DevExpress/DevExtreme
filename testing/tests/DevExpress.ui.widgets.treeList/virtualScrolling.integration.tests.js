@@ -48,12 +48,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('It should be possible to scroll to the last row when columnAutoWidth: true (T1121483)', function(assert) {
+    QUnit.test('It should be possible to scroll to the last row when wordWrapEnabled: true (T1121483)', function(assert) {
         // arrange
         const data = generateNestedData(20, 1);
 
         data[9].field2 = 'TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test  Test Test Test Test Test Test Test Test ';
-
 
         const treeList = $('#treeList').dxTreeList({
             dataSource: data,
@@ -106,5 +105,106 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[visibleRows.length - 1].key, 20, 'last visible row at the bottom second time');
         assert.ok(treeListWrapper.rowsView.isRowVisible(11), 'last row visible');
 
+    });
+
+    // T1147345
+    QUnit.test('It should be possible to scroll to the last row when wordWrapEnabled is set to true and rowDragging is enabled', function(assert) {
+        // arrange
+        const data = generateNestedData(20, 1);
+
+        data[9].field2 = 'TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test  Test Test Test Test Test Test Test Test ';
+
+        const treeList = $('#treeList').dxTreeList({
+            dataSource: data,
+            height: 500,
+            autoExpandAll: true,
+            wordWrapEnabled: true,
+            rowDragging: {
+                allowReordering: true
+            },
+            columns: [{
+                dataField: 'field1',
+                width: 120,
+            }, {
+                dataField: 'field2',
+                width: 300
+            }],
+            scrolling: {
+                useNative: false
+            },
+        }).dxTreeList('instance');
+
+        this.clock.tick(300);
+
+        const scrollable = treeList.getScrollable();
+        const $scrollableContent = $(scrollable.content());
+        const $scrollableContainer = $(scrollable.container());
+
+        // act
+        scrollable.scrollTo({ y: 10000 });
+        $scrollableContainer.trigger('scroll');
+        this.clock.tick(1000);
+
+        // assert
+        const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
+        assert.roughEqual(scrollable.scrollTop(), maxScrollTop, 1.01, 'scroll position at the end');
+    });
+
+    // TODO replace setTimeout -> clock tick
+    QUnit.test('It should be possible to scroll to the last row when there is fixed column and wordWrapEnabled is set to true', function(assert) {
+        // arrange
+        const data = generateNestedData(20, 1);
+        const done = assert.async();
+
+        data.forEach((item, index) => {
+            item.field1 = `Field1 ${index} `.repeat(2);
+        });
+        data[0].field2 = 'TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST TestTEST Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test  Test Test Test Test Test Test Test Test ';
+
+        const treeList = $('#treeList').dxTreeList({
+            dataSource: data,
+            height: 500,
+            autoExpandAll: true,
+            wordWrapEnabled: true,
+            editing: {
+                mode: 'row',
+                allowDeleting: true,
+                allowUpdating: true,
+                useIcons: true
+            },
+            columns: [{
+                dataField: 'field1',
+                width: 60,
+            }, {
+                dataField: 'field2',
+                width: 120
+            }, {
+                type: 'buttons',
+                fixed: true,
+                buttons: ['edit', 'delete']
+            }],
+            scrolling: {
+                useNative: false
+            },
+        }).dxTreeList('instance');
+
+        this.clock.tick(300);
+        this.clock.restore();
+
+        const scrollable = treeList.getScrollable();
+        const $scrollableContent = $(scrollable.content());
+        const $scrollableContainer = $(scrollable.container());
+
+        // act
+        scrollable.scrollTo({ y: 350 });
+        scrollable.scrollTo({ y: 400 });
+        scrollable.scrollTo({ y: 10000 });
+
+        setTimeout(() => {
+            // assert
+            const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
+            assert.roughEqual(scrollable.scrollTop(), maxScrollTop, 1.01, 'scroll position at the end');
+            done();
+        }, 300);
     });
 });
