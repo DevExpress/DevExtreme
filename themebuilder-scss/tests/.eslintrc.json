@@ -7,5 +7,19 @@
     },
     "parserOptions": {
         "project": "themebuilder-scss/tests/tsconfig.json"
-    }
+    },
+    "overrides": [
+        {
+            "files": [
+                "*.ts",
+                "*.tsx"
+            ],
+            "rules": {
+                "@typescript-eslint/ban-ts-comment": "off",
+                "@typescript-eslint/prefer-ts-expect-error": "off",
+                "@typescript-eslint/no-non-null-assertion": "off",
+                "@typescript-eslint/no-unsafe-return": "off"
+            }
+        }
+    ]
 }
