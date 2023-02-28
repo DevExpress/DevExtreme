@@ -285,7 +285,6 @@ module('Integration: Appointment filtering', {
             });
 
             test('Tasks should be filtered by end day hour before render', function(assert) {
-                this.clock.restore();
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
                     { text: 'Two', startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
