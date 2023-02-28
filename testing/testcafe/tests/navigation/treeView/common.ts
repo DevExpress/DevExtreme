@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -79,6 +80,8 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const screenshotName = `Treeview with custom expander icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
+
+      await t.hover(Selector('.dx-treeview-item'));
 
       await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', shouldTestInCompact: true });
 
