@@ -53,7 +53,7 @@ export const createBodyOverflowManager = () => {
         prevSettings.top = body.style.top;
         prevSettings.left = body.style.left;
 
-        body.css({ position: 'fixed', top: `${-scrollY}px`, left: `${-scrollX}px` });
+        $body.css({ position: 'fixed', top: `${-scrollY}px`, left: `${-scrollX}px` });
     };
 
     const restoreBodyPositionFixed = () => {
@@ -68,7 +68,7 @@ export const createBodyOverflowManager = () => {
 
         const { position, top, left } = prevSettings;
 
-        body.css({ position, top, left });
+        $body.css({ position, top, left });
 
         window.scrollTo(scrollX, scrollY);
 
