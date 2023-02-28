@@ -1,8 +1,13 @@
 interface MetaItem {
+  // @ts-ignore
   Key?: string;
+  // @ts-ignore
   Name?: string;
+  // @ts-ignore
   Value?: string;
+  // @ts-ignore
   Type?: string;
+  // @ts-ignore
   TypeValues?: string;
   [key: string]: string;
 }
@@ -67,7 +72,7 @@ interface PackageResult {
   compiledMetadata: { [key: string]: string };
   widgets: string[];
   unusedWidgets: string[];
-  swatchSelector: string;
+  swatchSelector: string | null;
   version?: string;
 }
 

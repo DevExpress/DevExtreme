@@ -78,7 +78,7 @@ export default class Compiler {
 
   getMatchingUserItemsAsString(theme: string): string {
     const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
-    const themeKeys: string[] = meta.map((item) => item.Key);
+    const themeKeys: (string | undefined)[] = meta.map((item) => item.Key);
 
     return this.userItems
       .filter((item) => themeKeys.includes(item.key))
@@ -87,7 +87,7 @@ export default class Compiler {
   }
 
   // eslint-disable-next-line spellcheck/spell-checker
-  canonicalize = (url: string): URL => (url.includes('tb_') ? new URL(`db:${url}`) : null);
+  canonicalize = (url: string): URL | null => (url.includes('tb_') ? new URL(`db:${url}`) : null);
 
   load = (url: URL): sass.ImporterResult => {
     const { pathname: path } = url;
@@ -121,7 +121,7 @@ export default class Compiler {
         }
 
         const variableKey = key.text;
-        const variableValue = parse(value.get(1));
+        const variableValue = parse(value.get(1)!);
 
         this.changedVariables[variableKey] = variableValue;
       });

@@ -67,7 +67,9 @@ export default class MetadataGenerator {
   static getMainColorsFileTheme(fileName: string): string {
     const match = /widgets[/\\](material|generic)[/\\]_colors.scss/.exec(fileName);
 
-    if (match === null) return null;
+    if (match === null) { // @ts-ignore
+      return null;
+    }
 
     return match[1];
   }

@@ -14,7 +14,7 @@ export default class CompileManager {
   compiler = new Compiler();
 
   async compile(config: ConfigSettings): Promise<PackageResult> {
-    const bundleOptions = resolveBundle(config.themeName, config.colorScheme);
+    const bundleOptions = resolveBundle(config.themeName!, config.colorScheme!);
     const {
       items, widgets, isBootstrap, bootstrapVersion, data,
     } = config;
@@ -27,20 +27,20 @@ export default class CompileManager {
 
     try {
       if (isBootstrap) {
-        const bootstrapExtractor = new BootstrapExtractor(data, bootstrapVersion);
+        const bootstrapExtractor = new BootstrapExtractor(data!, bootstrapVersion!);
         modifiedVariables = await bootstrapExtractor.extract();
       }
 
       const compileData = await this.compiler.compile(
         bundleOptions.file,
-        modifiedVariables,
+        modifiedVariables!,
         bundleOptions.options,
       );
       let css = compileData.result.css.toString();
-      let swatchSelector: string = null;
+      let swatchSelector: string | null = null;
 
       if (config.makeSwatch) {
-        const swatchSass = createSassForSwatch(config.outColorScheme, css);
+        const swatchSass = createSassForSwatch(config.outColorScheme!, css);
         const swatchResult = await this.compiler.compileString(
           swatchSass.sass,
           [],
@@ -50,7 +50,7 @@ export default class CompileManager {
         css = fixSwatchCss(
           swatchResult.result.css,
           swatchSass.selector,
-          config.colorScheme,
+          config.colorScheme!,
         );
         swatchSelector = swatchSass.selector;
       }

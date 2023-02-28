@@ -166,7 +166,7 @@
     "react-dom": "16.14.0",
     "react-test-renderer": "16.14.0",
     "recast": "0.22.0",
-    "sass-embedded": "1.54.4",
+    "sass-embedded": "1.58.3",
     "shelljs": "0.8.5",
     "sinon": "1.10.3",
     "staged-git-files": "1.3.0",
@@ -258,5 +258,8 @@
   "pre-commit": [
     "lint-staged",
     "pre-commit"
+  ],
+  "workspaces": [
+    "themebuilder-scss"
   ]
 }

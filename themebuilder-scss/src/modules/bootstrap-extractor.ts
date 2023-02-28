@@ -42,6 +42,7 @@ export default class BootstrapExtractor {
 
     const path = require.resolve(`bootstrap${this.version}/dist/css/bootstrap.css`);
     const content = await fs.readFile(path, 'utf8');
+    // @ts-ignore
     const rootVariables = new RegExp(':root {.+?}', 's').exec(content)[0];
 
     const ruleRegex = /(--.+): (.+);/gm;
@@ -70,7 +71,7 @@ export default class BootstrapExtractor {
     return new Promise((resolve, reject) => {
       less.render(
         input,
-        (error, result) => (error ? reject(error.message) : resolve(result.css)),
+        (error, result) => (error ? reject(error.message) : resolve(result!.css)),
       );
     });
   }
@@ -129,7 +130,7 @@ ${this.getCollectorServiceCode()}`;
     const css = await this.compiler(await this.sourceProcessor());
     const serviceCodeRegex = /dx-varibles-collector\s{([\s\S]*)}/;
     const ruleRegex = /([\w-]*):\s(.*);/g;
-    const serviceCode = serviceCodeRegex.exec(css)[1];
+    const serviceCode = serviceCodeRegex.exec(css)![1];
     const rootVariables = await this.getRootVariablesSass();
     const result: ConfigMetaItem[] = [];
 
@@ -141,7 +142,7 @@ ${this.getCollectorServiceCode()}`;
       if (valueMatch !== 'dx-empty') {
         if (valueMatch.startsWith('var')) {
           const cssVariableName = valueMatch.replace('var(', '').replace(')', '');
-          valueMatch = rootVariables.find((item) => item.key === cssVariableName).value;
+          valueMatch = rootVariables.find((item) => item.key === cssVariableName)!.value;
         }
 
         const value = BootstrapExtractor.convertRemToPx(valueMatch);

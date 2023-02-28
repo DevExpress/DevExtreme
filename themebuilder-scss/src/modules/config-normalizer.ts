@@ -98,7 +98,7 @@ const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
       log(`The base theme with name ${config.baseTheme} does not exist.`);
     }
   } else if (config.themeId) {
-    foundTheme = themes.find((t) => t.themeId === parseInt(config.themeId.toString(), 10));
+    foundTheme = themes.find((t) => t.themeId === parseInt(config.themeId!.toString(), 10));
     if (!foundTheme) {
       log(`The theme with ID ${config.themeId} does not exist.`);
     }
@@ -132,8 +132,8 @@ const parseConfig = (config: ConfigSettings): void => {
   const { command } = config;
   const metadataFilePath = config.inputFile ?? '';
   const themeInfo = getThemeAndColorScheme(config);
-  const bootstrapConfig = getBootstrapConfig(metadataFilePath, config.bootstrapVersion);
-  const output = getOutParameters(command, themeInfo.themeName, config);
+  const bootstrapConfig = getBootstrapConfig(metadataFilePath, config.bootstrapVersion!);
+  const output = getOutParameters(command!, themeInfo.themeName!, config);
 
   delete config.baseTheme;
   delete config.outputColorScheme;

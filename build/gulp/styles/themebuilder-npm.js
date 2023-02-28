@@ -7,7 +7,7 @@ const packagePath = context.RESULT_NPM_PATH + '/devextreme-themebuilder';
 
 gulp.task('themebuilder-npm', gulp.series(
     (callback) => {
-        exec('cd themebuilder-scss && npm i && npm run build', (e, out, err) => {
+        exec('npm run build -w themebuilder-scss', (e, out, err) => {
             console.log(out, err);
             callback(e);
         });

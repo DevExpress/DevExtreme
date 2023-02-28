@@ -26,6 +26,7 @@ export default class DependencyCollector {
         .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
 
       if (styleComment) {
+        // @ts-ignore
         return stylesRegex.exec(styleComment.value)[1].toLowerCase();
       }
     }
