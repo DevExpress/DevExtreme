@@ -115,7 +115,8 @@ export function renderFieldItem({
         const hasNotTemplate = !template;
         const isLabelOnTop = labelLocation === 'top';
 
-        if(hasNotTemplate
+        if(
+            hasNotTemplate
             && isToggleControls
             && isLabelOnTop
             && isLabelAlignmentLeft
