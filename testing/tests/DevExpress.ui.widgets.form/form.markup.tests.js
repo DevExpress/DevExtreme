@@ -874,6 +874,22 @@ QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
             assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
         });
 
+        test(`${editorType} should not have class when items have template`, function(assert) {
+            const $form = $('#form').dxForm({
+                items: [{
+                    editorType,
+                    label: { visible: true, alignment: 'left' },
+                    dataField: 'field',
+                    template: function() {
+                        return $('<div/>');
+                    }
+                }]
+            });
+            const $componentWrapper = $form.find(`.${FIELD_ITEM_CONTENT_CLASS}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+        });
+
         ['left', 'right'].forEach(labelLocation => {
             test(`${editorType} should not have class when the labelLocation=${labelLocation}`, function(assert) {
                 const $form = $('#form').dxForm({
