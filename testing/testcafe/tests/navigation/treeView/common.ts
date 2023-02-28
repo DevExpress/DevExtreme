@@ -79,9 +79,10 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
     test(`TreeView with custom expander icons,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const screenshotName = `Treeview with custom expander icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
+      const screenshotName = `Treeview with custom icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
 
       await t.hover(Selector('.dx-treeview-item'));
+      await t.wait(500);
 
       await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', shouldTestInCompact: true });
 
