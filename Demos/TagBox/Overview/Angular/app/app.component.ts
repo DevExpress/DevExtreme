@@ -35,7 +35,10 @@ export class AppComponent {
 
   onCustomItemCreating(args) {
     const newValue = args.text;
-    this.editableProducts.unshift(newValue);
+    const isItemInDataSource = this.editableProducts.some((item) => item === newValue);
+    if (!isItemInDataSource) {
+      this.editableProducts.unshift(newValue);
+    }
     args.customItem = newValue;
   }
 }

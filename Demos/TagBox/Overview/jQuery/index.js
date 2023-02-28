@@ -31,8 +31,11 @@ $(() => {
       const newValue = args.text;
       const { component } = args;
       const currentItems = component.option('items');
-      currentItems.unshift(newValue);
-      component.option('items', currentItems);
+      const isItemInDataSource = currentItems.some((item) => item === newValue);
+      if (!isItemInDataSource) {
+        currentItems.unshift(newValue);
+        component.option('items', currentItems);
+      }
       args.customItem = newValue;
     },
   });
