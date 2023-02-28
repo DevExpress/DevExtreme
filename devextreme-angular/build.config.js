@@ -52,7 +52,13 @@ module.exports = {
                 'drop-down-button',
                 'file-manager' ],
             outputFileName: 'tests/src/server/component-names.ts'
-        }
+        },
+        commonReexportsGenerator: {
+            importFrom: 'devextreme-angular-generator/dist/common-reexports-generator',
+            metadataPath: './metadata/NGMetaData.json',
+            outputPath: './src/'
+        },
+
     },
     components: {
         srcFilesPattern: '**/*.ts',

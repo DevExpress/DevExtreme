@@ -61,6 +61,14 @@ gulp.task('generate.facades', gulp.series('generate.moduleFacades', function(don
     done();
 }));
 
+gulp.task('generate.common-reexports', function(done) {
+    var CommonReexportsGenerator = require(buildConfig.tools.commonReexportsGenerator.importFrom).default,
+        commonReexportsGenerator = new CommonReexportsGenerator();
+
+    commonReexportsGenerator.generate(buildConfig.tools.commonReexportsGenerator);
+    done();
+});
+
 gulp.task('build.license-headers', function() {
     var config = buildConfig.components,
         pkg = require('./package.json'),
@@ -123,6 +131,7 @@ gulp.task('build.remove-unusable-variable', function() {
 });
 
 gulp.task('build.components', gulp.series('generate.facades', 
+        'generate.common-reexports',
         'build.copy-sources',
         'build.license-headers',
         'build.ngc',

@@ -1,3 +1,4 @@
 metadata/generated
 src/ui/
+src/common/
 src/index.ts

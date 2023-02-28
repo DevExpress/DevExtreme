@@ -18,12 +18,16 @@ doT.templateSettings = {
   selfcontained: false
 };
 
+export function createTemplateFromString(templateString: string) {
+    return doT.template(templateString);
+}
+
 export default class DoTGenerator {
     private _encoding = 'utf8';
     createTemplate(templateFilePath: string) {
         logger('Create doT template from ' + templateFilePath);
         let templateString = fs.readFileSync(templateFilePath, this._encoding);
-        return doT.template(templateString);
+        return createTemplateFromString(templateString);
     }
     generate(config) {
         this.generateTemplate(config.templateFilePath || path.join(__dirname, './templates/component.tst'),
