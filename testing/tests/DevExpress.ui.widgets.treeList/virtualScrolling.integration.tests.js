@@ -1,3 +1,4 @@
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import 'ui/tree_list';
 import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
@@ -13,6 +14,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 
