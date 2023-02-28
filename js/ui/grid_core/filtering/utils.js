@@ -1,6 +1,5 @@
 // @ts-check
 
-import { Deferred } from '../../../core/utils/deferred';
 import DataSource from '../../../data/data_source';
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import variableWrapper from '../../../core/utils/variable_wrapper';
@@ -72,11 +71,10 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
     let previousTake;
     let previousSkip;
 
-    const loadUniqueRelevantItems = (loadOptions) => {
+    const loadUniqueRelevantItems = async(loadOptions) => {
         const group = normalizeGroupingLoadOptions(
             hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
         );
-        const d = Deferred();
 
         const canUseCache = cachedUniqueRelevantItems && (
             !hasGroupPaging ||
@@ -84,67 +82,53 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
         );
 
         if(canUseCache) {
-            d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
+            return sliceItems(cachedUniqueRelevantItems, loadOptions);
         } else {
             previousSkip = loadOptions.skip;
             previousTake = loadOptions.take;
-            dataSource.load({
+            const items = await dataSource.load({
                 filter,
                 group,
                 take: hasGroupPaging ? loadOptions.take : undefined,
                 skip: hasGroupPaging ? loadOptions.skip : undefined,
-            }).done((items) => {
-                cachedUniqueRelevantItems = items;
-                d.resolve(hasGroupPaging ? items : sliceItems(items, loadOptions));
-            }).fail(d.fail);
+            });
+            cachedUniqueRelevantItems = items;
+            return hasGroupPaging ? items : sliceItems(items, loadOptions);
         }
-
-        return d;
     };
 
     const lookupDataSource = {
         ...lookupDataSourceOptions,
         __dataGridSourceFilter: filter,
-        load: (loadOptions) => {
-            const d = Deferred();
-            loadUniqueRelevantItems(loadOptions).done((items) => {
-                if(items.length === 0) {
-                    d.resolve([]);
-                    return;
-                }
+        load: async(loadOptions) => {
+            const items = await loadUniqueRelevantItems(loadOptions);
+            if(items.length === 0) {
+                return [];
+            }
 
-                const filter = gridCoreUtils.combineFilters(
-                    items.flatMap((data) => data.key).map((key => [
-                        column.lookup.valueExpr, key,
-                    ])),
-                    'or'
-                );
+            const filter = gridCoreUtils.combineFilters(
+                items.flatMap((data) => data.key).map((key => [
+                    column.lookup.valueExpr, key,
+                ])),
+                'or'
+            );
 
-                const newDataSource = new DataSource({
-                    ...lookupDataSourceOptions,
-                    ...loadOptions,
-                    filter: gridCoreUtils.combineFilters([filter, loadOptions.filter], 'and'),
-                    paginate: false, // pagination is included to filter
-                });
-
-                newDataSource
-                    .load()
-                    // @ts-ignore
-                    .done(d.resolve)
-                    .fail(d.fail);
-            }).fail(d.fail);
-            return d;
-        },
-        key: column.lookup.valueExpr,
-        byKey(key) {
-            const d = Deferred();
-            this.load({
-                filter: [column.lookup.valueExpr, '=', key],
-            }).done(arr => {
-                d.resolve(arr[0]);
+            const newDataSource = new DataSource({
+                ...lookupDataSourceOptions,
+                ...loadOptions,
+                filter: gridCoreUtils.combineFilters([filter, loadOptions.filter], 'and'),
+                paginate: false, // pagination is included to filter
             });
 
-            return d.promise();
+            return newDataSource.load();
+        },
+        key: column.lookup.valueExpr,
+        async byKey(key) {
+            const arr = await this.load({
+                filter: [column.lookup.valueExpr, '=', key],
+            });
+
+            return arr[0];
         },
     };
 
