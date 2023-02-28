@@ -16,6 +16,7 @@ import { Deferred } from '../../../core/utils/deferred';
 import { restoreFocus, saveFocusedElementInfo } from '../../shared/accessibility';
 import dataQuery from '../../../data/query';
 import storeHelper from '../../../data/store_helper';
+import { getWrappedLookupDataSource, normalizeLookupDataSource } from './utils';
 
 const DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -214,9 +215,9 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                     const filter = this._dataController.getCombinedFilter();
                     this._currentColumn = null;
 
-                    options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                    options.dataSource = getWrappedLookupDataSource(column, dataSource, filter);
                 } else {
-                    options.dataSource = gridCoreUtils.normalizeLookupDataSource(column.lookup);
+                    options.dataSource = normalizeLookupDataSource(column.lookup);
                 }
             } else {
                 const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;

@@ -365,7 +365,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @this {import('./module').Column}
+             * @this {import('./types').Column}
              */
             const customizeTextForBooleanDataType = function(e) {
                 if(e.value === true) {
@@ -798,7 +798,7 @@ export const columnsControllerModule = {
             };
 
             /**
-             * @type {import('./module').Column['setCellValue']}
+             * @type {import('./types').Column['setCellValue']}
              */
             const defaultSetCellValue = function(data, value) {
                 if(!this.dataField) {

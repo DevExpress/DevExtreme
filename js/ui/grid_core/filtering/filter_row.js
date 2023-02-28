@@ -13,6 +13,7 @@ import Overlay from '../../overlay/ui.overlay';
 import Menu from '../../menu';
 import { selectView } from '../../shared/accessibility';
 import { equalByValue } from '../../../core/utils/common';
+import { getWrappedLookupDataSource } from './utils';
 
 const OPERATION_ICONS = {
     '=': 'filter-operation-equals',
@@ -488,7 +489,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 const filter = this.getController('data').getCombinedFilter();
                 filterRowController.setCurrentColumnForFiltering(null);
 
-                const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
+                const lookupDataSource = getWrappedLookupDataSource(options, dataSource, filter);
                 const lookupOptions = {
                     ...options,
                     lookup: {
@@ -709,7 +710,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                         !equalByValue(editorDataSource.__dataGridSourceFilter, filter);
 
                     if(shouldUpdateFilter) {
-                        const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                        const lookupDataSource = getWrappedLookupDataSource(column, dataSource, filter);
                         editor.option('dataSource', lookupDataSource);
                     }
 
