@@ -159,7 +159,7 @@ QUnit.module('markup', {
         assert.ok($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).hasClass('dx-icon-minus'));
     });
 
-    QUnit.test('when both custom expander icons are set to null default icons should be used', function(assert) {
+    QUnit.test('default icons should be rendered if both custom expander icons are not specified', function(assert) {
         const data = this.treeItems;
         data[0].expanded = true;
         data[0].items[1].expanded = true;
@@ -188,7 +188,7 @@ QUnit.module('markup', {
         assert.equal($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).length, 0);
     });
 
-    QUnit.test('expand icon should be shown if node is collasped', function(assert) {
+    QUnit.test('expand icon should be shown if node is collapsed', function(assert) {
         initTree({
             items: this.treeItems,
             expandIcon: 'add',
@@ -212,7 +212,7 @@ QUnit.module('markup', {
         assert.ok(this.isVisible($collapseIcon));
     });
 
-    QUnit.test('expand custom item should be set with collapse icon value if omited', function(assert) {
+    QUnit.test('collapseIcon value should be used for an expand icon if an expandIcon is not specified', function(assert) {
         initTree({
             items: this.treeItems,
             collapseIcon: 'minus',
@@ -222,7 +222,7 @@ QUnit.module('markup', {
         assert.ok($expandIcon.hasClass('dx-icon-minus'));
     });
 
-    QUnit.test('collapse custom item should be set with expand icon value if omited', function(assert) {
+    QUnit.test('expandIcon value should be used for a collapse icon if collapseIcon is not specified', function(assert) {
         initTree({
             items: this.treeItems,
             expandIcon: 'add',
