@@ -462,47 +462,47 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.allowSearch
    * @default false
    */
   allowSearch?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.emptyPanelText
    * @default "Drag a column here to hide it"
    */
   emptyPanelText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.enabled
    * @default false
    */
   enabled?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.height
    * @default 260
    */
   height?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.mode
    * @default "dragAndDrop"
    */
   mode?: ColumnChooserMode;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.searchTimeout
    * @default 500
    */
   searchTimeout?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.title
    * @default "Column Chooser"
    */
   title?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.width
    * @default 250
    */
   width?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnChooser.sortOrder
    * @default undefined
    */
   sortOrder?: SortOrder;
@@ -515,7 +515,6 @@ export type ColumnChooser = {
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -527,104 +526,100 @@ export type ColumnCustomizeTextArg = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnFixing = {
   /**
-   * @docid
+   * @docid GridBaseOptions.columnFixing.enabled
    * @default false
    */
   enabled?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnFixing.texts
    * @type object
    */
   texts?: ColumnFixingTexts;
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnFixingTexts = {
   /**
-   * @docid
+   * @docid GridBaseOptions.columnFixing.texts.fix
    * @default "Fix"
    */
   fix?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnFixing.texts.leftPosition
    * @default "To the left"
    */
   leftPosition?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnFixing.texts.rightPosition
    * @default "To the right"
    */
   rightPosition?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.columnFixing.texts.unfix
    * @default "Unfix"
    */
   unfix?: string;
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnHeaderFilter = {
   /**
-   * @docid
+   * @docid GridBaseColumn.headerFilter.allowSearch
    * @default false
    */
   allowSearch?: boolean;
   /**
-   * @docid
+   * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field component:object
    * @default undefined
    * @type Array<any>|Store|DataSourceOptions|Function|null
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void);
   /**
-   * @docid
+   * @docid GridBaseColumn.headerFilter.groupInterval
    * @default undefined
    */
   groupInterval?: HeaderFilterGroupInterval | number;
   /**
-   * @docid
+   * @docid GridBaseColumn.headerFilter.height
    * @default undefined
    */
   height?: number;
   /**
-   * @docid
+   * @docid GridBaseColumn.headerFilter.searchMode
    * @default 'contains'
    */
   searchMode?: SearchMode;
   /**
-   * @docid
+   * @docid GridBaseColumn.headerFilter.width
    * @default undefined
    */
   width?: number;
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnLookup = {
   /**
-   * @docid
+   * @docid GridBaseColumn.lookup.allowClearing
    * @default false
    */
   allowClearing?: boolean;
   /**
-   * @docid
+   * @docid GridBaseColumn.lookup.dataSource
    * @type_function_param1_field data:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
@@ -632,18 +627,18 @@ export type ColumnLookup = {
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>) | null;
   /**
-   * @docid
+   * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
    * @type_function_param1 data:object
    */
   displayExpr?: string | ((data: any) => string);
   /**
-   * @docid
+   * @docid GridBaseColumn.lookup.valueExpr
    * @default undefined
    */
   valueExpr?: string;
   /**
-   * @docid
+   * @docid GridBaseColumn.lookup.calculateCellValue
    * @type_function_param1 rowData:object
    * @public
    */
@@ -919,23 +914,22 @@ export interface FilterPanelCustomizeTextArg<TComponent> {
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type FilterPanelTexts = {
   /**
-   * @docid
+   * @docid GridBaseOptions.filterPanel.texts.clearFilter
    * @default "Clear"
    */
   clearFilter?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterPanel.texts.createFilter
    * @default "Create Filter"
    */
   createFilter?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterPanel.texts.filterEnabledHint
    * @default "Enable the filter"
    */
   filterEnabledHint?: string;
@@ -972,116 +966,114 @@ export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowDa
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type FilterRow = {
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.applyFilter
    * @default "auto"
    */
   applyFilter?: ApplyFilterMode;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.applyFilterText
    * @default "Apply filter"
    */
   applyFilterText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.betweenEndText
    * @default "End"
    */
   betweenEndText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.betweenStartText
    * @default "Start"
    */
   betweenStartText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions
    * @type object
    */
   operationDescriptions?: FilterRowOperationDescriptions;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.resetOperationText
    * @default "Reset"
    */
   resetOperationText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.showAllText
    * @default "(All)"
    */
   showAllText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.showOperationChooser
    * @default true
    */
   showOperationChooser?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.visible
    * @default false
    */
   visible?: boolean;
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type FilterRowOperationDescriptions = {
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.between
    * @default "Between"
    */
   between?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.contains
    * @default "Contains"
    */
   contains?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.endsWith
    * @default "Ends with"
    */
   endsWith?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.equal
    * @default "Equals"
    */
   equal?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.greaterThan
    * @default "Greater than"
    */
   greaterThan?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual
    * @default "Greater than or equal to"
    */
   greaterThanOrEqual?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.lessThan
    * @default "Less than"
    */
   lessThan?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual
    * @default "Less than or equal to"
    */
   lessThanOrEqual?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.notContains
    * @default "Does not contain"
    */
   notContains?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.notEqual
    * @default "Does not equal"
    */
   notEqual?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.filterRow.operationDescriptions.startsWith
    * @default "Starts with"
    */
   startsWith?: string;
@@ -1094,39 +1086,38 @@ export type FilterRowOperationDescriptions = {
 export type FilterType = 'exclude' | 'include';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilter = {
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.allowSearch
    * @default false
    */
   allowSearch?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.height
    * @default 315 &for(Material)
    * @default 325
    */
   height?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.searchTimeout
    * @default 500
    */
   searchTimeout?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.texts
    * @type object
    */
   texts?: HeaderFilterTexts;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.visible
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.width
    * @default 252
    */
   width?: number;
@@ -1139,23 +1130,22 @@ export type HeaderFilter = {
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterTexts = {
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.texts.cancel
    * @default "Cancel"
    */
   cancel?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.texts.emptyValue
    * @default "(Blanks)"
    */
   emptyValue?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.headerFilter.texts.ok
    * @default "Ok"
    */
   ok?: string;
@@ -2167,28 +2157,27 @@ export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
 export type GroupExpandMode = 'buttonClick' | 'rowClick';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type KeyboardNavigation = {
   /**
-   * @docid
+   * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
    * @default false
    */
   editOnKeyPress?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.keyboardNavigation.enabled
    * @default true
    */
   enabled?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.keyboardNavigation.enterKeyAction
    * @default "startEdit"
    */
   enterKeyAction?: EnterKeyAction;
   /**
-   * @docid
+   * @docid GridBaseOptions.keyboardNavigation.enterKeyDirection
    * @default "none"
    */
   enterKeyDirection?: EnterKeyDirection;
@@ -2202,53 +2191,52 @@ export type KeyDownInfo = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type LoadPanel = {
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.enabled
    * @default "auto"
    */
   enabled?: boolean | Mode;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.height
    * @default 90
    */
   height?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.indicatorSrc
    * @default ""
    */
   indicatorSrc?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.shading
    * @default false
    */
   shading?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.shadingColor
    * @default ''
    */
   shadingColor?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.showIndicator
    * @default true
    */
   showIndicator?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.showPane
    * @default true
    */
   showPane?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.text
    * @default "Loading..."
    */
   text?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.loadPanel.width
    * @default 200
    */
   width?: number;
@@ -2269,48 +2257,47 @@ export interface NewRowInfo<TRowData = any> {
 export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type Pager = {
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.allowedPageSizes
    * @default "auto"
    */
   allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.displayMode
    * @default "adaptive"
    */
   displayMode?: PagerDisplayMode;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.infoText
    * @default "Page {0} of {1} ({2} items)"
    */
   infoText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.showInfo
    * @default false
    */
   showInfo?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.showNavigationButtons
    * @default false
    */
   showNavigationButtons?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.showPageSizeSelector
    * @default false
    */
   showPageSizeSelector?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.visible
    * @default "auto"
    */
   visible?: boolean | Mode;
   /**
-   * @docid
+   * @docid GridBaseOptions.pager.label
    * @default "Page Navigation"
    */
   label?: string;
@@ -2540,7 +2527,6 @@ export interface RowDraggingEventInfo<TRowData = any> {
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2689,44 +2675,43 @@ export interface ScrollingBase {
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type SearchPanel = {
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.highlightCaseSensitive
    * @default false
    */
   highlightCaseSensitive?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.highlightSearchText
    * @default true
    */
   highlightSearchText?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.placeholder
    * @default "Search..."
    */
   placeholder?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.searchVisibleColumnsOnly
    * @default false
    */
   searchVisibleColumnsOnly?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.text
    * @default ""
    * @fires GridBaseOptions.onOptionChanged
    */
   text?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.visible
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.searchPanel.width
    * @default 160
    */
   width?: number;
@@ -2773,33 +2758,32 @@ export interface SelectionChangedInfo<TRowData = any, TKey = any> {
 export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLongTap';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type Sorting = {
   /**
-   * @docid
+   * @docid GridBaseOptions.sorting.ascendingText
    * @default "Sort Ascending"
    */
   ascendingText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.sorting.clearText
    * @default "Clear Sorting"
    */
   clearText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.sorting.descendingText
    * @default "Sort Descending"
    */
   descendingText?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.sorting.mode
    * @default "single"
    */
   mode?: SingleMultipleOrNone;
   /**
-   * @docid
+   * @docid GridBaseOptions.sorting.showSortIndexes
    * @default true
    */
   showSortIndexes?: boolean;
@@ -2818,40 +2802,39 @@ export type StartEditAction = 'click' | 'dblClick';
 export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type StateStoring = {
   /**
-   * @docid
+   * @docid GridBaseOptions.stateStoring.customLoad
    * @type Function
    * @type_function_return Promise<Object>
    */
   customLoad?: (() => PromiseLike<any>);
   /**
-   * @docid
+   * @docid GridBaseOptions.stateStoring.customSave
    * @type_function_param1 gridState:object
    * @type_function_return void
    */
   customSave?: ((gridState: any) => any);
   /**
-   * @docid
+   * @docid GridBaseOptions.stateStoring.enabled
    * @default false
    */
   enabled?: boolean;
   /**
-   * @docid
+   * @docid GridBaseOptions.stateStoring.savingTimeout
    * @default 2000
    */
   savingTimeout?: number;
   /**
-   * @docid
+   * @docid GridBaseOptions.stateStoring.storageKey
    * @default null
    */
   storageKey?: string;
   /**
-   * @docid
+   * @docid GridBaseOptions.stateStoring.type
    * @default "localStorage"
    */
   type?: StateStoreType;
