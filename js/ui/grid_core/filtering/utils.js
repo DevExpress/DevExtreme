@@ -69,6 +69,8 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
     };
 
     let cachedUniqueRelevantItems;
+    let previousTake;
+    let previousSkip;
 
     const loadUniqueRelevantItems = (loadOptions) => {
         const group = normalizeGroupingLoadOptions(
@@ -76,9 +78,16 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
         );
         const d = Deferred();
 
-        if(!hasGroupPaging && cachedUniqueRelevantItems) {
+        const canUseCache = cachedUniqueRelevantItems && (
+            !hasGroupPaging ||
+            (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
+        );
+
+        if(canUseCache) {
             d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
         } else {
+            previousSkip = loadOptions.skip;
+            previousTake = loadOptions.take;
             dataSource.load({
                 filter,
                 group,
