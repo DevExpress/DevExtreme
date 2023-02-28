@@ -15,10 +15,9 @@ const wrapper = function() {
     return $('body').find('.' + TOOLTIP_WRAPPER_CLASS);
 };
 
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
-
 QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass('dx-viewport'));
+
     const markup =
         '<div id="qunit-fixture">\
         <div class="dx-viewport">\
