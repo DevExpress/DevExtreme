@@ -149,7 +149,7 @@ const Gallery = CollectionWidget.inherit({
             selectOnFocus: true,
             selectionMode: 'single',
             selectionRequired: true,
-            selectionByClick: false
+            selectByClick: false
         });
     },
 

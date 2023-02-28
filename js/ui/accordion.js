@@ -58,7 +58,7 @@ const Accordion = CollectionWidget.inherit({
             deferRendering: true,
 
 
-            selectionByClick: true,
+            selectByClick: true,
             activeStateEnabled: true,
             _itemAttributes: { role: 'tab' },
             _animationEasing: 'ease'

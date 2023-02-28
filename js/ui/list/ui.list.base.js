@@ -320,10 +320,6 @@ export const ListBase = CollectionWidget.inherit({
             return;
         }
 
-        if(!this.option('selectByClick')) {
-            return;
-        }
-
         return this.callBase(e);
     },
 
