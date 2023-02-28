@@ -14,6 +14,7 @@ jest.mock('fs', () => ({
 
 describe('Widgets handler tests', () => {
   test('getIndexWidgetItems', () => {
+    // @ts-ignore
     const widgetsHandler = new WidgetsHandler([], '', null);
     const indexContent = 'common content\n'
             + '@use "./commonUse";\n'
@@ -93,6 +94,7 @@ describe('Widgets handler tests', () => {
   });
 
   test('check that list of widgets will be an empty array if constructor receive null', () => {
+    // @ts-ignore
     const widgetsHandler = new WidgetsHandler(null, '/', {});
 
     expect(widgetsHandler.widgets).toEqual([]);

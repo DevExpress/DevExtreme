@@ -4,6 +4,7 @@ import {
 } from '../../../build/gulp/styles/theme-options';
 import themes from '../../src/modules/themes';
 
+// @ts-ignore
 const generateThemeName = (theme: string, size: string, color: string, mode: string = null): string => `${theme}.${color}${mode ? `-${mode}` : ''}${size === 'default' ? '' : '-compact'}`;
 
 describe('Themes', () => {

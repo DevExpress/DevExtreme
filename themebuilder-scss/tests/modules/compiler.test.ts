@@ -21,6 +21,7 @@ describe('compile', () => {
   test('Compile with empty modifications (check that items can be undefined)', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
+    // @ts-ignore
     return compiler.compile(file, null, {
       loadPaths: [...includePaths],
     }).then((data) => {

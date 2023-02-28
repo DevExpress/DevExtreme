@@ -80,6 +80,7 @@ describe('Builder integration tests', () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
+      // @ts-ignore
       items: allChangedVariables,
     };
 
@@ -99,6 +100,7 @@ describe('Builder integration tests', () => {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
       baseTheme: 'material.blue.light',
+      // @ts-ignore
       items: allChangedVariables,
     };
 

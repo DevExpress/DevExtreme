@@ -147,6 +147,7 @@ describe('DependencyCollector', () => {
           widget: 'm',
           dependencies: {
             file4: {
+              // @ts-ignore
               widget: null,
               dependencies: {
                 file5: {
@@ -172,6 +173,7 @@ describe('DependencyCollector', () => {
           },
         },
         file3: {
+          // @ts-ignore
           widget: null,
           dependencies: {},
         },
