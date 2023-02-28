@@ -1704,9 +1704,6 @@ declare module DevExpress.common {
     | 'dxDropDownButton';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
-  /**
-   * [descr:ValidationCallbackData]
-   */
   export type ValidationCallbackData = {
     value?: any;
     rule: any;
@@ -2460,18 +2457,12 @@ declare module DevExpress.common.grids {
     sortOrder?: SortOrder;
   };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
-  /**
-   * [descr:ColumnCustomizeTextArg]
-   */
   export type ColumnCustomizeTextArg = {
     value?: any;
     valueText?: string;
     target?: string;
     groupInterval?: string | number;
   };
-  /**
-   * [descr:ColumnFixing]
-   */
   export type ColumnFixing = {
     /**
      * [descr:GridBaseOptions.columnFixing.enabled]
@@ -2482,9 +2473,6 @@ declare module DevExpress.common.grids {
      */
     texts?: ColumnFixingTexts;
   };
-  /**
-   * [descr:ColumnFixingTexts]
-   */
   export type ColumnFixingTexts = {
     /**
      * [descr:GridBaseOptions.columnFixing.texts.fix]
@@ -2503,9 +2491,6 @@ declare module DevExpress.common.grids {
      */
     unfix?: string;
   };
-  /**
-   * [descr:ColumnHeaderFilter]
-   */
   export type ColumnHeaderFilter = {
     /**
      * [descr:GridBaseColumn.headerFilter.allowSearch]
@@ -2537,9 +2522,6 @@ declare module DevExpress.common.grids {
      */
     width?: number;
   };
-  /**
-   * [descr:ColumnLookup]
-   */
   export type ColumnLookup = {
     /**
      * [descr:GridBaseColumn.lookup.allowClearing]
@@ -2783,9 +2765,6 @@ declare module DevExpress.common.grids {
     readonly filterValue: any;
     readonly text: string;
   }
-  /**
-   * [descr:FilterPanelTexts]
-   */
   export type FilterPanelTexts = {
     /**
      * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
@@ -2800,9 +2779,6 @@ declare module DevExpress.common.grids {
      */
     filterEnabledHint?: string;
   };
-  /**
-   * [descr:FilterRow]
-   */
   export type FilterRow = {
     /**
      * [descr:GridBaseOptions.filterRow.applyFilter]
@@ -2841,9 +2817,6 @@ declare module DevExpress.common.grids {
      */
     visible?: boolean;
   };
-  /**
-   * [descr:FilterRowOperationDescriptions]
-   */
   export type FilterRowOperationDescriptions = {
     /**
      * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
@@ -3550,9 +3523,6 @@ declare module DevExpress.common.grids {
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
-  /**
-   * [descr:HeaderFilter]
-   */
   export type HeaderFilter = {
     /**
      * [descr:GridBaseOptions.headerFilter.allowSearch]
@@ -3587,9 +3557,6 @@ declare module DevExpress.common.grids {
     | 'quarter'
     | 'second'
     | 'year';
-  /**
-   * [descr:HeaderFilterTexts]
-   */
   export type HeaderFilterTexts = {
     /**
      * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -3604,9 +3571,6 @@ declare module DevExpress.common.grids {
      */
     ok?: string;
   };
-  /**
-   * [descr:KeyboardNavigation]
-   */
   export type KeyboardNavigation = {
     /**
      * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
@@ -3631,9 +3595,6 @@ declare module DevExpress.common.grids {
   export type KeyDownInfo = {
     handled: boolean;
   };
-  /**
-   * [descr:LoadPanel]
-   */
   export type LoadPanel = {
     /**
      * [descr:GridBaseOptions.loadPanel.enabled]
@@ -3686,9 +3647,6 @@ declare module DevExpress.common.grids {
     | 'pageTop'
     | 'viewportBottom'
     | 'viewportTop';
-  /**
-   * [descr:Pager]
-   */
   export type Pager = {
     /**
      * [descr:GridBaseOptions.pager.allowedPageSizes]
@@ -3902,9 +3860,6 @@ declare module DevExpress.common.grids {
     readonly fromData?: any;
     readonly toData?: any;
   }
-  /**
-   * [descr:RowDraggingTemplateData]
-   */
   export type RowDraggingTemplateData<TRowData = any> = {
     readonly itemData: TRowData;
     readonly itemElement: DevExpress.core.DxElement;
@@ -4020,9 +3975,6 @@ declare module DevExpress.common.grids {
      */
     renderAsync?: boolean;
   }
-  /**
-   * [descr:SearchPanel]
-   */
   export type SearchPanel = {
     /**
      * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
@@ -4092,9 +4044,6 @@ declare module DevExpress.common.grids {
     | 'none'
     | 'onClick'
     | 'onLongTap';
-  /**
-   * [descr:Sorting]
-   */
   export type Sorting = {
     /**
      * [descr:GridBaseOptions.sorting.ascendingText]
@@ -4119,9 +4068,6 @@ declare module DevExpress.common.grids {
   };
   export type StartEditAction = 'click' | 'dblClick';
   export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
-  /**
-   * [descr:StateStoring]
-   */
   export type StateStoring = {
     /**
      * [descr:GridBaseOptions.stateStoring.customLoad]
