@@ -3962,7 +3962,7 @@ QUnit.module('enableBodyScroll on Ios devices', {
         overlay.hide();
 
         assert.strictEqual(this.$body.get(0).style.position, '');
-        assert.strictEqual(this.$body.get(0).style.top, '0px');
+        assert.strictEqual(this.$body.get(0).style.top, '');
         assert.strictEqual(this.$body.get(0).style.left, '');
     });
 });
