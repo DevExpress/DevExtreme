@@ -11,6 +11,7 @@ module.exports = {
   metadataPath: './metadata/integration-data.json',
   generatedComponentsDir: './src',
   coreComponentsDir: './src/core',
+  oldComponentsDir: './src/ui',
   indexFileName: './src/index.ts',
   baseComponent: './core/component',
   extensionComponent: './core/extension-component',
