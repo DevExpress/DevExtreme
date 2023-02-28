@@ -674,7 +674,6 @@ QUnit.module('Horizontal scrolling', () => {
 
         keyboard.press('right');
         keyboard.press('right');
-        keyboard.press('right');
 
         const contentLeft = Math.round($element.offset().left);
         const contentRight = Math.round(contentLeft + $element.outerWidth());
