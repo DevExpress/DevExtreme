@@ -5,7 +5,7 @@ import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo, getComputedPropertyValue, getDocumentScrollTop, setStylePropertyValue,
+  appendElementTo, getComputedPropertyValue, getDocumentScrollTop, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 import Popup from '../../../model/overlay/index';
 
@@ -45,8 +45,7 @@ if (!isMaterial()) {
             .expect(getDocumentScrollTop())
             .eql(258);
 
-          await setStylePropertyValue('body', 'padding-right', '10px');
-          await setStylePropertyValue('body', 'overflow', 'auto');
+          await insertStylesheetRulesToPage('body { padding-right: 10px; overflow: auto;}');
 
           await checkBodyStyles({ paddingRight: '10px', overflow: 'auto' });
           await t
@@ -60,6 +59,8 @@ if (!isMaterial()) {
             .expect(getDocumentScrollTop())
             .eql(258);
 
+          await testScreenshot(t, takeScreenshot, `Overlay with native scrolling,shading=${shading},enableBodyScroll=${enableBodyScroll},fullScreen=${fullScreen}.png`);
+
           await overlay.hide();
 
           await checkBodyStyles({ paddingRight: '10px', overflow: 'auto' });
@@ -67,8 +68,6 @@ if (!isMaterial()) {
 
             .expect(getDocumentScrollTop())
             .eql(258);
-
-          await testScreenshot(t, takeScreenshot, `Overlay with native scrolling,shading=${shading},enableBodyScroll=${enableBodyScroll},fullScreen=${fullScreen}.png`);
 
           await t
             .expect(compareResults.isValid())
