@@ -21,7 +21,7 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "css-loader": "^2.1.1",
     "del": "^3.0.0",
-    "devextreme-vue-generator": "^1.3.0",
+    "devextreme-vue-generator": "^2.0.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^5.0.1",
     "jest": "^26.0.0",
