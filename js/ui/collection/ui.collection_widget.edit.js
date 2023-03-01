@@ -49,12 +49,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             */
             selectionRequired: false,
 
-            /**
-            * @name CollectionWidgetOptions.selectByClick
-            * @type boolean
-            * @default true
-            * @hidden
-            */
             selectByClick: true,
 
             selectedItems: [],
