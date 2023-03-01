@@ -1630,6 +1630,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @docid
    * @type object
    * @public
+   * @inherits ColumnChooser
    */
   columnChooser?: ColumnChooser;
   /**
