@@ -414,37 +414,41 @@ export default class DataGrid extends Widget {
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
-    return ClientFunction(() => {
-      const gridInstance = getInstance() as any;
-      const $row = $(gridInstance.getRowElement(rowIndex));
-      let $dragElement = $row.children('.dx-command-drag');
+    return ClientFunction(
+      () => {
+        const gridInstance = getInstance() as any;
+        const $row = $(gridInstance.getRowElement(rowIndex));
+        let $dragElement = $row.children('.dx-command-drag');
 
-      $dragElement = $dragElement.length ? $dragElement : $row;
+        $dragElement = $dragElement.length ? $dragElement : $row;
 
-      moveElement($dragElement, x, y, isStart);
-    },
-    {
-      dependencies: {
-        getInstance, rowIndex, x, y, isStart, moveElement,
+        moveElement($dragElement, x, y, isStart);
       },
-    })();
+      {
+        dependencies: {
+          getInstance, rowIndex, x, y, isStart, moveElement,
+        },
+      },
+    )();
   }
 
   moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
-    return ClientFunction(() => {
-      const gridInstance = getInstance() as any;
-      const columnHeadersView = gridInstance.getView('columnHeadersView');
-      const $header = $(columnHeadersView.getHeaderElement(columnIndex));
+    return ClientFunction(
+      () => {
+        const gridInstance = getInstance() as any;
+        const columnHeadersView = gridInstance.getView('columnHeadersView');
+        const $header = $(columnHeadersView.getHeaderElement(columnIndex));
 
-      moveElement($header, x, y, isStart);
-    },
-    {
-      dependencies: {
-        getInstance, columnIndex, x, y, isStart, moveElement,
+        moveElement($header, x, y, isStart);
       },
-    })();
+      {
+        dependencies: {
+          getInstance, columnIndex, x, y, isStart, moveElement,
+        },
+      },
+    )();
   }
 
   isVirtualRowIntersectViewport(): Promise<boolean> {

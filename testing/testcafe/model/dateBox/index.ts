@@ -30,12 +30,14 @@ export default class DateBox extends Widget {
 
   static getRollerScrollTop(viewName: string): Promise<number> {
     const rollerClass: string = DateBox.getDateViewRollerClass(viewName);
-    return ClientFunction(() => $(`${rollerClass} .dx-scrollable-container`).scrollTop(),
+    return ClientFunction(
+      () => $(`${rollerClass} .dx-scrollable-container`).scrollTop(),
       {
         dependencies: {
           rollerClass,
         },
-      })();
+      },
+    )();
   }
 
   // eslint-disable-next-line class-methods-use-this
