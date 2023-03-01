@@ -22,6 +22,7 @@ export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
 export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
+export const TOGGLE_CONTROLS_PADDING_CLASS = 'dx-toggle-controls-paddings';
 
 import { renderLabel } from './label';
 
@@ -77,6 +78,8 @@ export function renderFieldItem({
 
     const $label = needRenderLabel ? renderLabel(labelOptions) : null;
     if($label) {
+        const { editorType } = item;
+
         $rootElement.append($label);
         if(labelLocation === 'top' || labelLocation === 'left') {
             $rootElement.append($fieldEditorContainer);
@@ -91,10 +94,26 @@ export function renderFieldItem({
             $rootElement.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
         }
 
-        if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
+        if(editorType === 'dxCheckBox' || editorType === 'dxSwitch') {
             eventsEngine.on($label, clickEventName, function() {
                 eventsEngine.trigger($fieldEditorContainer.children(), clickEventName);
             });
+        }
+
+        const toggleControls = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
+        const isToggleControls = toggleControls.includes(editorType);
+        const labelAlignment = labelOptions.alignment;
+        const isLabelAlignmentLeft = labelAlignment === 'left' || !labelAlignment;
+        const hasNotTemplate = !template;
+        const isLabelOnTop = labelLocation === 'top';
+
+        if(
+            hasNotTemplate
+            && isToggleControls
+            && isLabelOnTop
+            && isLabelAlignmentLeft
+        ) {
+            $fieldEditorContainer.addClass(TOGGLE_CONTROLS_PADDING_CLASS);
         }
     } else {
         $rootElement.append($fieldEditorContainer);
