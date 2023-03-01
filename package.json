@@ -101,7 +101,7 @@
     "eslint-plugin-qunit": "4.3.0",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-rulesdir": "0.2.2",
-    "eslint-plugin-spellcheck": "0.0.19",
+    "eslint-plugin-spellcheck": "0.0.20",
     "eslint-plugin-testcafe": "0.2.1",
     "exceljs": "4.3.0",
     "file-saver": "2.0.5",
