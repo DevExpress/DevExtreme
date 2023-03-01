@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { value as viewPort } from 'core/utils/view_port';
 import fx from 'animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
@@ -16,8 +15,6 @@ const wrapper = function() {
 };
 
 QUnit.testStart(function() {
-    viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
     const markup =
         '<div id="qunit-fixture">\
         <div class="dx-viewport">\
