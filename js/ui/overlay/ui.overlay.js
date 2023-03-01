@@ -251,6 +251,7 @@ const Overlay = Widget.inherit({
         };
 
         this.warnPositionAsFunction();
+        this._createBodyOverflowManager();
     },
 
     warnPositionAsFunction() {
@@ -401,14 +402,24 @@ const Overlay = Widget.inherit({
         return this._getOptionValue('animation', this);
     },
 
+    _createBodyOverflowManager: function() {
+        if(hasWindow() && !this.option('enableBodyScroll')) {
+            this._bodyOverflowManager = createBodyOverflowManager();
+        }
+    },
+
     _toggleBodyScroll: function(enabled) {
-        if(!hasWindow() || this.option('enableBodyScroll')) {
+        if(!this._bodyOverflowManager) {
             return;
         }
 
-        const { setOverflow, restoreOverflow } = this._bodyOverflowManager ??= createBodyOverflowManager();
+        const { setOverflow, restoreOverflow } = this._bodyOverflowManager;
 
-        enabled ? restoreOverflow() : setOverflow();
+        if(enabled) {
+            restoreOverflow();
+        } else {
+            setOverflow();
+        }
     },
 
     _animateShowing: function() {
