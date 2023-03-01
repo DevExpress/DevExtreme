@@ -8,6 +8,10 @@ const types = {
 const type = function(object) {
     const typeOfObject = Object.prototype.toString.call(object);
 
+    if(object === null) {
+        return 'null';
+    }
+
     return typeof object === 'object' ?
         types[typeOfObject] || 'object' : typeof object;
 };
@@ -41,7 +45,7 @@ const isNumeric = function(object) {
 };
 
 const isObject = function(object) {
-    return object !== null && type(object) === 'object';
+    return type(object) === 'object';
 };
 
 const isEmptyObject = function(object) {
