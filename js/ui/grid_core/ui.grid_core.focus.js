@@ -599,14 +599,14 @@ export const focusModule = {
                 processUpdateFocusedRow: function(e) {
                     const operationTypes = e.operationTypes || {};
                     const focusController = this.getController('focus');
-                    const { reload, fullReload } = operationTypes;
+                    const { reload, fullReload, paging } = operationTypes;
                     const keyboardController = this.getController('keyboardNavigation');
                     // @ts-expect-error
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
 
-                    if(reload && !fullReload && isDefined(focusedRowKey)) {
+                    if((reload && !paging) && !fullReload && isDefined(focusedRowKey)) {
                         // @ts-expect-error
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
