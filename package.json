@@ -227,6 +227,7 @@
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
     "build:community-localization": "gulp generate-community-locales",
+    "build-ts": "tsc --project ./js/tsconfig.json",
     "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",

@@ -9,6 +9,6 @@ export const SortableConst = {
         widget: 'dx-widget',
     },
     attrs: {
-        treeViewItem: 'tree-view-item'
+        treeViewItem: 'tree-view-item',
     },
 };

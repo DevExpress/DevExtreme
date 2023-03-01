@@ -1,0 +1,51 @@
+{
+
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./",
+    "allowJs": true,
+    "checkJs": false,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "noEmitOnError": false,
+    "resolveJsonModule": false,
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    // -- ts config
+    "alwaysStrict": true,
+    "module": "es6",
+    "target": "es6",
+    "moduleResolution": "node",
+    // TODO: set to true
+    "noImplicitAny": false,
+    // TODO: set to true after typescript update
+    //"noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useDefineForClassFields": true,
+    // TODO: set to true after typescript update
+    //"useUnknownInCatchVariables": true,
+  },
+  "include": [
+    "ui/pivot_grid/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.js",
+    "**/*.d.ts",
+  ]
+}

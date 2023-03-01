@@ -9,75 +9,61 @@ import { each, map } from '../../core/utils/iterator';
 import localizationMessage from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
 import Widget from '../widget/ui.widget';
-import {
-    HeaderFilterView as HeaderFilterViewBase,
-    updateHeaderFilterItemSelectionState,
-    headerFilterMixin
-} from '../grid_core/ui.grid_core.header_filter_core';
+import { HeaderFilterView as HeaderFilterViewBase, updateHeaderFilterItemSelectionState, headerFilterMixin, } from '../grid_core/ui.grid_core.header_filter_core';
 import columnStateMixin from '../grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '../grid_core/ui.grid_core.sorting_mixin';
 import { foreachTree, createPath } from './ui.pivot_grid.utils';
 import Sortable from './ui.sortable';
 import { Deferred } from '../../core/utils/deferred';
 import { sortableItemRender } from './sortable/index';
-
 const DIV = '<div>';
-
 const HeaderFilterView = HeaderFilterViewBase.inherit({
-    _getSearchExpr: function(options) {
+    _getSearchExpr(options) {
         options.useDefaultSearchExpr = true;
         return this.callBase(options);
-    }
+    },
 });
-
-const processItems = function(groupItems, field) {
+const processItems = function (groupItems, field) {
     const filterValues = [];
     const isTree = !!field.groupName;
-    const isExcludeFilterType = (field.filterType === 'exclude');
-
-    if(field.filterValues) {
-        each(field.filterValues, function(_, filterValue) {
+    const isExcludeFilterType = field.filterType === 'exclude';
+    if (field.filterValues) {
+        each(field.filterValues, (_, filterValue) => {
             filterValues.push(Array.isArray(filterValue) ? filterValue.join('/') : filterValue && filterValue.valueOf());
         });
     }
-
-    foreachTree(groupItems, function(items) {
+    foreachTree(groupItems, (items) => {
         const item = items[0];
         const path = createPath(items);
-        const preparedFilterValueByText = isTree ? map(items, function(item) { return item.text; }).reverse().join('/') : item.text;
-
-        item.value = isTree ? path.slice(0) : (item.key || item.value);
+        const preparedFilterValueByText = isTree ? map(items, (item) => item.text).reverse().join('/') : item.text;
+        item.value = isTree ? path.slice(0) : item.key || item.value;
         const preparedFilterValue = isTree ? path.join('/') : item.value && item.value.valueOf();
-
-        if(item.children) {
+        if (item.children) {
             item.items = item.children;
             item.children = null;
         }
-
-        updateHeaderFilterItemSelectionState(
-            item,
-            item.key && filterValues.includes(preparedFilterValueByText) || filterValues.includes(preparedFilterValue),
-            isExcludeFilterType
-        );
+        updateHeaderFilterItemSelectionState(item, item.key
+            && filterValues.includes(preparedFilterValueByText)
+            || filterValues.includes(preparedFilterValue), isExcludeFilterType);
     });
 };
-
 function getMainGroupField(dataSource, sourceField) {
     let field = sourceField;
-    if(isDefined(sourceField.groupIndex)) {
+    if (isDefined(sourceField.groupIndex)) {
         field = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex];
     }
-
     return field;
 }
-
 function getStringState(state) {
     state = state || {};
     return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
-
-const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).inherit(headerFilterMixin).inherit({
-    _getDefaultOptions: function() {
+const FieldChooserBase = Widget
+    .inherit(columnStateMixin)
+    .inherit(sortingMixin)
+    .inherit(headerFilterMixin)
+    .inherit({
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             allowFieldDragging: true,
             applyChangesMode: 'instantly',
@@ -89,42 +75,40 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 texts: {
                     emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),
                     ok: localizationMessage.format('dxDataGrid-headerFilterOK'),
-                    cancel: localizationMessage.format('dxDataGrid-headerFilterCancel')
-                }
-            }
+                    cancel: localizationMessage.format('dxDataGrid-headerFilterCancel'),
+                },
+            },
         });
     },
-
-    _init: function() {
+    _init() {
         this.callBase();
         this._headerFilterView = new HeaderFilterView(this);
         this._refreshDataSource();
         this.subscribeToEvents();
     },
-
-    _refreshDataSource: function() {
+    _refreshDataSource() {
         const dataSource = this.option('dataSource');
-
-        if(dataSource && dataSource.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
+        if (dataSource
+            && dataSource.fields && dataSource.load /* instanceof DX.ui.dxPivotGrid.DataSource */) {
             this._dataSource = dataSource;
         }
     },
-
-    _optionChanged: function(args) {
-        switch(args.name) {
+    _optionChanged(args) {
+        switch (args.name) {
             case 'dataSource':
                 this._refreshDataSource();
                 break;
             case 'applyChangesMode':
                 break;
             case 'state':
-                if(this._skipStateChange || !this._dataSource) {
+                if (this._skipStateChange || !this._dataSource) {
                     break;
                 }
-
-                if(this.option('applyChangesMode') === 'instantly' && getStringState(this._dataSource.state()) !== getStringState(args.value)) {
+                if (this.option('applyChangesMode') === 'instantly'
+                    && getStringState(this._dataSource.state()) !== getStringState(args.value)) {
                     this._dataSource.state(args.value);
-                } else {
+                }
+                else {
                     this._clean(true);
                     this._renderComponent();
                 }
@@ -137,8 +121,7 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 this.callBase(args);
         }
     },
-
-    renderField: function(field, showColumnLines) {
+    renderField(field, showColumnLines) {
         const that = this;
         const $fieldContent = $(DIV).addClass('dx-area-field-content')
             .text(field.caption || field.dataField);
@@ -148,21 +131,19 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
             .data('field', field)
             .append($fieldContent);
         const mainGroupField = getMainGroupField(that._dataSource, field);
-
-        if(field.area !== 'data') {
-            if(field.allowSorting) {
+        if (field.area !== 'data') {
+            if (field.allowSorting) {
                 that._applyColumnState({
                     name: 'sort',
                     rootElement: $fieldElement,
                     column: {
                         alignment: that.option('rtlEnabled') ? 'right' : 'left',
                         sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
-                        allowSorting: field.allowSorting
+                        allowSorting: field.allowSorting,
                     },
-                    showColumnLines: showColumnLines
+                    showColumnLines,
                 });
             }
-
             that._applyColumnState({
                 name: 'headerFilter',
                 rootElement: $fieldElement,
@@ -170,222 +151,197 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                     alignment: that.option('rtlEnabled') ? 'right' : 'left',
                     filterValues: mainGroupField.filterValues,
                     allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
-                    allowSorting: field.allowSorting
+                    allowSorting: field.allowSorting,
                 },
-                showColumnLines: showColumnLines
+                showColumnLines,
             });
         }
-
-        if(field.groupName) {
+        if (field.groupName) {
             $fieldElement.attr('item-group', field.groupName);
         }
-
         return $fieldElement;
     },
-
-    _clean: function() {
+    _clean() {
     },
-
-    _render: function() {
+    _render() {
         this.callBase();
         this._headerFilterView.render(this.$element());
     },
-
-    renderSortable: function() {
+    renderSortable() {
         const that = this;
-
         that._createComponent(that.$element(), Sortable, extend({
             allowDragging: that.option('allowFieldDragging'),
             itemSelector: '.dx-area-field',
             itemContainerSelector: '.dx-area-field-container',
             groupSelector: '.dx-area-fields',
-            groupFilter: function() {
+            groupFilter() {
                 const dataSource = that._dataSource;
                 const $sortable = $(this).closest('.dx-sortable-old');
                 const pivotGrid = $sortable.data('dxPivotGrid');
                 const pivotGridFieldChooser = $sortable.data('dxPivotGridFieldChooser');
-
-                if(pivotGrid) {
+                if (pivotGrid) {
                     return pivotGrid.getDataSource() === dataSource;
                 }
-                if(pivotGridFieldChooser) {
+                if (pivotGridFieldChooser) {
                     return pivotGridFieldChooser.option('dataSource') === dataSource;
                 }
                 return false;
             },
             itemRender: sortableItemRender,
-            onDragging: function(e) {
+            onDragging(e) {
                 const field = e.sourceElement.data('field');
-                const targetGroup = e.targetGroup;
+                const { targetGroup } = e;
                 e.cancel = false;
-
-                if(field.isMeasure === true) {
-                    if(targetGroup === 'column' || targetGroup === 'row' || targetGroup === 'filter') {
+                if (field.isMeasure === true) {
+                    if (targetGroup === 'column' || targetGroup === 'row' || targetGroup === 'filter') {
                         e.cancel = true;
                     }
-                } else if(field.isMeasure === false && targetGroup === 'data') {
+                }
+                else if (field.isMeasure === false && targetGroup === 'data') {
                     e.cancel = true;
                 }
             },
             useIndicator: true,
-            onChanged: function(e) {
+            onChanged(e) {
                 const field = e.sourceElement.data('field');
-
                 e.removeSourceElement = !!e.sourceGroup;
-
                 that._adjustSortableOnChangedArgs(e);
-
-                if(field) {
-                    const targetIndex = e.targetIndex;
+                if (field) {
+                    const { targetIndex } = e;
                     let mainGroupField;
                     let invisibleFieldsIndexOffset = 0;
-
                     that._processDemandState((dataSource) => {
                         const fields = dataSource.getAreaFields(field.area, true);
                         mainGroupField = getMainGroupField(dataSource, field);
-
-                        const visibleFields = fields.filter(f => f.visible !== false);
+                        const visibleFields = fields.filter((f) => f.visible !== false);
                         const fieldBeforeTarget = visibleFields[targetIndex - 1];
-
-                        if(fieldBeforeTarget) {
-                            invisibleFieldsIndexOffset = fields.filter(f => f.visible === false && f.areaIndex <= fieldBeforeTarget.areaIndex).length;
+                        if (fieldBeforeTarget) {
+                            invisibleFieldsIndexOffset = fields
+                                .filter((f) => f.visible === false
+                                && f.areaIndex <= fieldBeforeTarget.areaIndex)
+                                .length;
                         }
                     });
-
                     that._applyChanges([mainGroupField], {
                         area: e.targetGroup,
-                        areaIndex: targetIndex + invisibleFieldsIndexOffset
+                        areaIndex: targetIndex + invisibleFieldsIndexOffset,
                     });
                 }
-            }
+            },
         }, that._getSortableOptions()));
     },
-
-    _processDemandState: function(func) {
+    _processDemandState(func) {
         const that = this;
         const isInstantlyMode = that.option('applyChangesMode') === 'instantly';
         const dataSource = that._dataSource;
-
-        if(isInstantlyMode) {
+        if (isInstantlyMode) {
             func(dataSource, isInstantlyMode);
-        } else {
+        }
+        else {
             const currentState = dataSource.state();
             const pivotGridState = that.option('state');
-
-            if(pivotGridState) {
+            if (pivotGridState) {
                 dataSource.state(pivotGridState, true);
             }
-
             func(dataSource, isInstantlyMode);
-
             dataSource.state(currentState, true);
         }
     },
-
     _applyChanges(fields, props) {
         const that = this;
-
-        that._processDemandState(function(dataSource, isInstantlyMode) {
+        that._processDemandState((dataSource, isInstantlyMode) => {
             fields.forEach(({ index }) => {
                 dataSource.field(index, props);
             });
-
-            if(isInstantlyMode) {
+            if (isInstantlyMode) {
                 dataSource.load();
-            } else {
+            }
+            else {
                 that._changedHandler();
             }
         });
     },
-
-    _adjustSortableOnChangedArgs: function(e) {
+    _adjustSortableOnChangedArgs(e) {
         e.removeSourceElement = false;
         e.removeTargetElement = true;
         e.removeSourceClass = false;
     },
-
-    _getSortableOptions: function() {
+    _getSortableOptions() {
         return {
-            direction: 'auto'
+            direction: 'auto',
         };
     },
-
-    subscribeToEvents: function(element) {
+    subscribeToEvents(element) {
         const that = this;
-        const func = function(e) {
+        const func = function (e) {
             const field = $(e.currentTarget).data('field');
             const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
             const isHeaderFilter = $(e.target).hasClass('dx-header-filter');
             const dataSource = that._dataSource;
             const type = mainGroupField.groupName ? 'tree' : 'list';
             const paginate = dataSource.paginate() && type === 'list';
-
-            if(isHeaderFilter) {
+            if (isHeaderFilter) {
                 that._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
-                    type: type,
+                    type,
                     encodeHtml: that.option('encodeHtml'),
                     dataSource: {
                         useDefaultSearch: !paginate,
                         // paginate: false,
-                        load: function(options) {
-                            const userData = options.userData;
-                            if(userData.store) {
+                        load(options) {
+                            const { userData } = options;
+                            if (userData.store) {
                                 return userData.store.load(options);
-                            } else {
-                                const d = new Deferred();
-                                dataSource.getFieldValues(mainGroupField.index, that.option('headerFilter.showRelevantValues'), paginate ? options : undefined).done(function(data) {
-                                    const emptyValue = that.option('headerFilter.texts.emptyValue');
-
-                                    data.forEach((element) => {
-                                        if(!element.text) {
-                                            element.text = emptyValue;
-                                        }
-                                    });
-
-                                    if(paginate) {
-                                        d.resolve(data);
-                                    } else {
-                                        userData.store = new ArrayStore(data);
-                                        userData.store.load(options).done(d.resolve).fail(d.reject);
-                                    }
-                                }).fail(d.reject);
-                                return d;
                             }
+                            // @ts-expect-error
+                            const d = new Deferred();
+                            dataSource.getFieldValues(mainGroupField.index, that.option('headerFilter.showRelevantValues'), paginate
+                                ? options
+                                : undefined).done((data) => {
+                                const emptyValue = that.option('headerFilter.texts.emptyValue');
+                                data.forEach((element) => {
+                                    if (!element.text) {
+                                        element.text = emptyValue;
+                                    }
+                                });
+                                if (paginate) {
+                                    d.resolve(data);
+                                }
+                                else {
+                                    userData.store = new ArrayStore(data);
+                                    userData.store.load(options).done(d.resolve).fail(d.reject);
+                                }
+                            }).fail(d.reject);
+                            return d;
                         },
-                        postProcess: function(data) {
+                        postProcess(data) {
                             processItems(data, mainGroupField);
                             return data;
-                        }
+                        },
                     },
-
-                    apply: function() {
+                    apply() {
                         that._applyChanges([mainGroupField], {
                             filterValues: this.filterValues,
-                            filterType: this.filterType
+                            filterType: this.filterType,
                         });
-                    }
+                    },
                 }));
-            } else if(field.allowSorting && field.area !== 'data') {
+            }
+            else if (field.allowSorting && field.area !== 'data') {
                 that._applyChanges([field], {
-                    sortOrder: field.sortOrder === 'desc' ? 'asc' : 'desc'
+                    sortOrder: field.sortOrder === 'desc' ? 'asc' : 'desc',
                 });
             }
         };
-
-        if(element) {
+        if (element) {
             eventsEngine.on(element, clickEventName, '.dx-area-field.dx-area-box', func);
             return;
         }
         eventsEngine.on(that.$element(), clickEventName, '.dx-area-field.dx-area-box', func);
     },
-
     _initTemplates: noop,
-
-    addWidgetPrefix: function(className) {
-        return 'dx-pivotgrid-' + className;
-    }
+    addWidgetPrefix(className) {
+        return `dx-pivotgrid-${className}`;
+    },
 });
-
 registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase);
-
 export default FieldChooserBase;
