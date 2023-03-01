@@ -1,5 +1,6 @@
 // @ts-check
 
+import { Deferred } from '../../../core/utils/deferred';
 import DataSource from '../../../data/data_source';
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import variableWrapper from '../../../core/utils/variable_wrapper';
@@ -71,10 +72,11 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
     let previousTake;
     let previousSkip;
 
-    const loadUniqueRelevantItems = async(loadOptions) => {
+    const loadUniqueRelevantItems = (loadOptions) => {
         const group = normalizeGroupingLoadOptions(
             hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
         );
+        const d = Deferred();
 
         const canUseCache = cachedUniqueRelevantItems && (
             !hasGroupPaging ||
@@ -82,53 +84,67 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
         );
 
         if(canUseCache) {
-            return sliceItems(cachedUniqueRelevantItems, loadOptions);
+            d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
         } else {
             previousSkip = loadOptions.skip;
             previousTake = loadOptions.take;
-            const items = await dataSource.load({
+            dataSource.load({
                 filter,
                 group,
                 take: hasGroupPaging ? loadOptions.take : undefined,
                 skip: hasGroupPaging ? loadOptions.skip : undefined,
-            });
-            cachedUniqueRelevantItems = items;
-            return hasGroupPaging ? items : sliceItems(items, loadOptions);
+            }).done((items) => {
+                cachedUniqueRelevantItems = items;
+                d.resolve(hasGroupPaging ? items : sliceItems(items, loadOptions));
+            }).fail(d.fail);
         }
+
+        return d;
     };
 
     const lookupDataSource = {
         ...lookupDataSourceOptions,
         __dataGridSourceFilter: filter,
-        load: async(loadOptions) => {
-            const items = await loadUniqueRelevantItems(loadOptions);
-            if(items.length === 0) {
-                return [];
-            }
+        load: (loadOptions) => {
+            const d = Deferred();
+            loadUniqueRelevantItems(loadOptions).done((items) => {
+                if(items.length === 0) {
+                    d.resolve([]);
+                    return;
+                }
 
-            const filter = gridCoreUtils.combineFilters(
-                items.flatMap((data) => data.key).map((key => [
-                    column.lookup.valueExpr, key,
-                ])),
-                'or'
-            );
+                const filter = gridCoreUtils.combineFilters(
+                    items.flatMap((data) => data.key).map((key => [
+                        column.lookup.valueExpr, key,
+                    ])),
+                    'or'
+                );
 
-            const newDataSource = new DataSource({
-                ...lookupDataSourceOptions,
-                ...loadOptions,
-                filter: gridCoreUtils.combineFilters([filter, loadOptions.filter], 'and'),
-                paginate: false, // pagination is included to filter
-            });
+                const newDataSource = new DataSource({
+                    ...lookupDataSourceOptions,
+                    ...loadOptions,
+                    filter: gridCoreUtils.combineFilters([filter, loadOptions.filter], 'and'),
+                    paginate: false, // pagination is included to filter
+                });
 
-            return newDataSource.load();
+                newDataSource
+                    .load()
+                    // @ts-ignore
+                    .done(d.resolve)
+                    .fail(d.fail);
+            }).fail(d.fail);
+            return d;
         },
         key: column.lookup.valueExpr,
-        async byKey(key) {
-            const arr = await this.load({
+        byKey(key) {
+            const d = Deferred();
+            this.load({
                 filter: [column.lookup.valueExpr, '=', key],
+            }).done(arr => {
+                d.resolve(arr[0]);
             });
 
-            return arr[0];
+            return d.promise();
         },
     };
 
