@@ -2,6 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
+import { Column } from 'devextreme/ui/data_grid';
 import {
   Service, Employee, State, City,
 } from './app.service';
@@ -43,9 +44,9 @@ export class AppComponent {
     }
   }
 
-  setStateValue(rowData: any, value: any): void {
-    rowData.CityID = null;
-    (<any> this).defaultSetCellValue(rowData, value);
+  setStateValue(this: Column, newData: Employee, value: number, currentRowData: Employee) {
+    newData.CityID = null;
+    this.defaultSetCellValue(newData, value, currentRowData);
   }
 }
 
