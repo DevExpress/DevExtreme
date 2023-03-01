@@ -375,7 +375,7 @@ const SelectBox = DropDownList.inherit({
         if(this.option('showSelectionControls')) {
             extend(result, {
                 showSelectionControls: true,
-                selectionByClick: true
+                selectByClick: true
             });
         }
 

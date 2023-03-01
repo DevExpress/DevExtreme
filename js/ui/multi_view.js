@@ -73,7 +73,7 @@ const MultiView = CollectionWidget.inherit({
             selectOnFocus: true,
             selectionMode: 'single',
             selectionRequired: true,
-            selectionByClick: false
+            selectByClick: false
         });
     },
 
