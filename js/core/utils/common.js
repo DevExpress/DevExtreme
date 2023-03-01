@@ -277,6 +277,10 @@ const arraysEqualByValue = function(array1, array2, depth) {
 };
 
 const objectsEqualByValue = function(object1, object2, depth, strict) {
+    if(object1 === null || object2 === null) {
+        return false;
+    }
+
     for(const propertyName in object1) {
         if(
             Object.prototype.hasOwnProperty.call(object1, propertyName) &&

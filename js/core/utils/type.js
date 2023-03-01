@@ -41,7 +41,7 @@ const isNumeric = function(object) {
 };
 
 const isObject = function(object) {
-    return type(object) === 'object';
+    return object !== null && type(object) === 'object';
 };
 
 const isEmptyObject = function(object) {
