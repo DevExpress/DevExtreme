@@ -43,6 +43,7 @@ const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
 const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
@@ -271,6 +272,8 @@ const Popup = Overlay.inherit({
         this._$popupContent = this._$content
             .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
             .children().eq(0);
+
+        this._toggleContentScrollClass();
     },
 
     _render: function() {
@@ -606,6 +609,10 @@ const Popup = Overlay.inherit({
             this._$wrapper.css('zIndex', zIndex);
             this._$content.css('zIndex', zIndex);
         }
+    },
+
+    _toggleContentScrollClass() {
+        this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, !this.option('preventScrollEvents'));
     },
 
     _getPositionControllerConfig() {
@@ -977,6 +984,11 @@ const Popup = Overlay.inherit({
                 break;
             case 'showCloseButton':
                 this._renderTitle();
+                break;
+            case 'preventScrollEvents':
+                this.callBase(args);
+
+                this._toggleContentScrollClass();
                 break;
             default:
                 this.callBase(args);

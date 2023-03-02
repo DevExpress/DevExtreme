@@ -2198,6 +2198,20 @@ QUnit.module('rendering', {
 
         assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbar('instance').option('compactMode'), 'bottom toolbar has the compact option');
     });
+
+    QUnit.test('dx-popup-content-scrollable class should be attached when preventScrollEvents is used', function(assert) {
+        this.instance.show();
+
+        const $popupContent = this.instance.$content();
+
+        assert.strictEqual($popupContent.hasClass('dx-popup-content-scrollable'), true, 'scrollable class is attached');
+
+        this.instance.option('preventScrollEvents', true);
+        assert.strictEqual($popupContent.hasClass('dx-popup-content-scrollable'), false, 'scrollable class is detached');
+
+        this.instance.option('preventScrollEvents', false);
+        assert.strictEqual($popupContent.hasClass('dx-popup-content-scrollable'), true, 'scrollable class is attached');
+    });
 });
 
 QUnit.module('templates', () => {
