@@ -21,11 +21,16 @@ const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'light',
-    'light.compact',
-    'dark',
-    'contrast',
-    'material.blue.light',
-    'material.blue.light.compact',
+    // 'light.compact',
+    // 'dark',
+    // 'contrast',
+    // 'material.blue.light',
+    // 'material.blue.light.compact',
+    // 'carmine',
+    // 'darkmoon',
+    // 'darkviolet',
+    // 'greenmist',
+    // 'softblue',
 ];
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
