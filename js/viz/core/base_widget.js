@@ -16,7 +16,7 @@ import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
 import { when } from '../../core/utils/deferred';
-import { getGraphicObjects } from '../graphic_objects';
+import { getGraphicObjects } from '../../common/charts';
 import {
     createEventTrigger,
     createResizeHandler,

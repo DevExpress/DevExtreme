@@ -306,6 +306,7 @@ export type ChartsColor = {
 /**
  * @docid viz.registerGradient
  * @publicName registerGradient(type, options)
+ * @namespace DevExpress.common.charts
  * @static
  * @public
  */
@@ -313,12 +314,13 @@ export function registerGradient(type: string, options: { rotationAngle?: number
 /**
  * @docid viz.registerPattern
  * @publicName registerPattern(options)
+ * @namespace DevExpress.common.charts
  * @static
  * @public
  */
 export function registerPattern(options: { width: number | string; height: number | string; template: template }): string;
 /**
- * @namespace DevExpress.viz
+ * @namespace DevExpress.common.charts
  * @public
  */
 export type GradientColor = {

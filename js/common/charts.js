@@ -1,4 +1,4 @@
-import { getNextDefsSvgId } from './core/utils';
+import { getNextDefsSvgId } from '../viz/core/utils';
 
 const graphicObjects = {};
 

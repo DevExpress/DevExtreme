@@ -1,4 +1,4 @@
-import { registerPattern, registerGradient, getGraphicObjects } from 'viz/graphic_objects';
+import { registerPattern, registerGradient, getGraphicObjects } from 'common/charts';
 import utils from 'viz/core/utils';
 
 

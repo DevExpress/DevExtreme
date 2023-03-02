@@ -1,6 +1,7 @@
 /* eslint-disable import/no-commonjs */
 const DevExpress = require('./core');
 require('./data');
+require('../common.charts');
 
 /// BUNDLER_PARTS
 /* Viz core (dx.module-viz-core.js) */
@@ -16,8 +17,6 @@ viz.getPalette = require('../../../viz/palette').getPalette;
 viz.generateColors = require('../../../viz/palette').generateColors;
 viz.registerPalette = require('../../../viz/palette').registerPalette;
 viz.refreshTheme = require('../../../viz/themes').refreshTheme;
-viz.registerGradient = require('../../../viz/graphic_objects').registerGradient;
-viz.registerPattern = require('../../../viz/graphic_objects').registerPattern;
 
 /* Charts (dx.module-viz-charts.js) */
 viz.dxChart = require('../../../viz/chart');

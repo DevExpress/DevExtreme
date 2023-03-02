@@ -1626,24 +1626,6 @@ declare module DevExpress.common {
     >
   >;
   /**
-   * [descr:viz.registerGradient(type, options)]
-   */
-  export function registerGradient(
-    type: string,
-    options: {
-      rotationAngle?: number;
-      colors: Array<DevExpress.viz.GradientColor>;
-    }
-  ): string;
-  /**
-   * [descr:viz.registerPattern(options)]
-   */
-  export function registerPattern(options: {
-    width: number | string;
-    height: number | string;
-    template: DevExpress.core.template;
-  }): string;
-  /**
    * [descr:RequiredRule]
    */
   export type RequiredRule = {
@@ -1998,6 +1980,16 @@ declare module DevExpress.common.charts {
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
+  export type GradientColor = {
+    /**
+     * [descr:GradientColor.offset]
+     */
+    offset: number | string;
+    /**
+     * [descr:GradientColor.color]
+     */
+    color: string;
+  };
   export type HatchDirection = 'left' | 'none' | 'right';
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
@@ -2034,6 +2026,21 @@ declare module DevExpress.common.charts {
     | 'triangle'
     | 'triangleDown'
     | 'triangleUp';
+  /**
+   * [descr:viz.registerGradient(type, options)]
+   */
+  export function registerGradient(
+    type: string,
+    options: { rotationAngle?: number; colors: Array<GradientColor> }
+  ): string;
+  /**
+   * [descr:viz.registerPattern(options)]
+   */
+  export function registerPattern(options: {
+    width: number | string;
+    height: number | string;
+    template: DevExpress.core.template;
+  }): string;
   export type RelativePosition = 'inside' | 'outside';
   /**
    * [descr:ScaleBreak]
@@ -36021,16 +36028,6 @@ declare module DevExpress.viz {
    * [descr:viz.getTheme(theme)]
    */
   export function getTheme(theme: string): any;
-  export type GradientColor = {
-    /**
-     * [descr:GradientColor.offset]
-     */
-    offset: number | string;
-    /**
-     * [descr:GradientColor.color]
-     */
-    color: string;
-  };
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

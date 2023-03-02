@@ -18,7 +18,7 @@ import {
     insertMockFactory, restoreMockFactory, seriesMockData
 } from '../../helpers/chartMocks.js';
 import TemplateManagerModule from 'core/template_manager';
-import graphicObjects from 'viz/graphic_objects';
+import graphicObjects from 'common/charts';
 import eventsEngine from 'events/core/events_engine';
 import devices from 'core/devices';
 
