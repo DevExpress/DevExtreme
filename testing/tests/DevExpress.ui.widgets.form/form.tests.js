@@ -2520,6 +2520,25 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
     assert.equal(form.$element().find('.custom-class').length, 0, 'custom css class is not found');
 });
 
+QUnit.test('No errors should occur on form reset twice when dxNumberBox is set as item with visible=false (T1146107)', function(assert) {
+    const form = $('#form').dxForm({
+        items: [{
+            itemType: 'group',
+            items: [{
+                editorType: 'dxNumberBox',
+                dataField: 'TestField',
+            }]
+        }],
+    }).dxForm('instance');
+
+    form.itemOption('TestField', 'visible', false);
+
+    form.resetValues();
+    form.resetValues();
+
+    assert.ok(true, 'There are no exceptions');
+});
+
 [false, true].forEach(useItemOption => {
     const optionWay = useItemOption ? 'itemOption' : 'option';
     QUnit.test(`Changing an editor/button options without re-render Form when use the ${optionWay} method (T311892, T681241)`, function(assert) {
