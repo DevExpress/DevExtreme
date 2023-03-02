@@ -662,25 +662,23 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('tabs should scroll to the disabled item when it have focus', function(assert) {
         const items = [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', disabled: true }];
         const $element = $('#scrollableTabs').dxTabs({
-            items: items,
-            scrollingEnabled: true,
-            visible: true,
+            items,
             width: 200,
             showNavButtons: false,
             focusStateEnabled: true,
         });
-        const $item = $element.find('.' + DISABLED_STATE_CLASS).eq(0);
+        const $item = $element.find(`.${DISABLED_STATE_CLASS}`).eq(0);
         const keyboard = keyboardMock($element);
 
         keyboard.press('right');
         keyboard.press('right');
 
-        const contentLeft = Math.round($element.offset().left);
-        const contentRight = Math.round(contentLeft + $element.outerWidth());
-        const itemLeft = Math.round($item.offset().left);
-        const itemRight = Math.round(itemLeft + $item.outerWidth());
+        const contentLeft = $element.offset().left;
+        const contentRight = contentLeft + $element.outerWidth();
+        const itemLeft = $item.offset().left;
+        const itemRight = itemLeft + $item.outerWidth();
 
-        assert.strictEqual(itemRight - contentRight, 0, 'focused item in disabled state in view');
+        assert.roughEqual(itemRight, contentRight, 1, 'focused disabled item is in view');
     });
 });
 
