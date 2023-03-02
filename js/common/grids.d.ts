@@ -515,7 +515,6 @@ export type ColumnChooser = {
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -527,7 +526,6 @@ export type ColumnCustomizeTextArg = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -545,7 +543,6 @@ export type ColumnFixing = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -573,7 +570,6 @@ export type ColumnFixingTexts = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -613,7 +609,6 @@ export type ColumnHeaderFilter = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -919,7 +914,6 @@ export interface FilterPanelCustomizeTextArg<TComponent> {
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -972,7 +966,6 @@ export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowDa
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1025,7 +1018,6 @@ export type FilterRow = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1094,7 +1086,6 @@ export type FilterRowOperationDescriptions = {
 export type FilterType = 'exclude' | 'include';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1139,7 +1130,6 @@ export type HeaderFilter = {
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1640,6 +1630,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @docid
    * @type object
    * @public
+   * @inherits ColumnChooser
    */
   columnChooser?: ColumnChooser;
   /**
@@ -2167,7 +2158,6 @@ export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
 export type GroupExpandMode = 'buttonClick' | 'rowClick';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2202,7 +2192,6 @@ export type KeyDownInfo = {
 };
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2269,7 +2258,6 @@ export interface NewRowInfo<TRowData = any> {
 export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2540,7 +2528,6 @@ export interface RowDraggingEventInfo<TRowData = any> {
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2689,7 +2676,6 @@ export interface ScrollingBase {
 }
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2773,7 +2759,6 @@ export interface SelectionChangedInfo<TRowData = any, TKey = any> {
 export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLongTap';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2818,7 +2803,6 @@ export type StartEditAction = 'click' | 'dblClick';
 export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common.grids
  */

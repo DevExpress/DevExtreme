@@ -2726,7 +2726,9 @@ QUnit.module('editing', moduleSetup, () => {
 
         try {
             keyboard.change();
-        } catch(e) {
+        }
+        // eslint-disable-next-line no-empty
+        catch(e) {
         }
 
         assert.equal($input.val(), '1', 'input value is correct');

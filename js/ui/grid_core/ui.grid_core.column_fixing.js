@@ -637,31 +637,40 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
     },
 
+    _getScrollDelay: function() {
+        const hasResizeTimeout = this.getController('resizing')?.hasResizeTimeout();
+
+        if(hasResizeTimeout) {
+            return this.option('scrolling.updateTimeout');
+        }
+
+        return browser.mozilla ? 60 : 0;
+    },
+
     _findContentElement: function() {
-        const that = this;
         let $content;
         let scrollTop;
-        const contentClass = that.addWidgetPrefix(CONTENT_CLASS);
-        const element = that.element();
-        const scrollDelay = browser.mozilla ? 60 : 0;
+        const contentClass = this.addWidgetPrefix(CONTENT_CLASS);
+        const element = this.element();
 
-        if(element && that._isFixedTableRendering) {
+        if(element && this._isFixedTableRendering) {
             $content = element.children('.' + contentClass);
 
-            const scrollable = that.getScrollable();
+            const scrollable = this.getScrollable();
             if(!$content.length && scrollable) {
                 $content = $('<div>').addClass(contentClass);
 
-                eventsEngine.on($content, 'scroll', function(e) {
+                eventsEngine.on($content, 'scroll', (e) => {
                     const target = e.target;
+                    const scrollDelay = this._getScrollDelay();
 
-                    clearTimeout(that._fixedScrollTimeout);
-                    that._fixedScrollTimeout = setTimeout(function() {
+                    clearTimeout(this._fixedScrollTimeout);
+                    this._fixedScrollTimeout = setTimeout(() => {
                         scrollTop = $(target).scrollTop();
                         scrollable.scrollTo({ y: scrollTop });
                     }, scrollDelay);
                 });
-                eventsEngine.on($content, wheelEventName, function(e) {
+                eventsEngine.on($content, wheelEventName, (e) => {
                     const $nearestScrollable = $(e.target).closest('.dx-scrollable');
                     let shouldScroll = false;
 
@@ -678,7 +687,11 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                         scrollTop = scrollable.scrollTop();
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 
-                        if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
+                        const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
+                        const scrollableHeight = scrollable.scrollHeight() + this.getScrollbarWidth();
+                        const isPreventDefault = scrollable.scrollTop() > 0 && scrollableTop < scrollableHeight;
+
+                        if(isPreventDefault) {
                             return false;
                         }
                     }
@@ -690,7 +703,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             return $content;
         }
 
-        return that.callBase();
+        return this.callBase();
     },
 
     _updateScrollable: function() {

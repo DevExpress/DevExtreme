@@ -39,7 +39,7 @@ test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
     height: '90%',
     visible: true,
     contentTemplate: ClientFunction(() => {
-      const scheduler = $("<div id='scheduler' />");
+      const scheduler = $('<div id="scheduler" />');
 
       (scheduler as any).dxScheduler({
         width: '100%',

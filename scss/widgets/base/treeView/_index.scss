@@ -5,6 +5,14 @@
   right: 0;
 }
 
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+}
+
 @mixin dx-treeview-make-rtl($container-with-border-offset, $node-offset, $item-with-checkbox-offset, $checkbox-offset, $select-all-text-offset, $select-all-item-left-padding, $border-padding) {
   &.dx-treeview-border-visible {
     .dx-treeview-select-all-item {
