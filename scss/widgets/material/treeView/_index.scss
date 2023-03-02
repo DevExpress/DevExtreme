@@ -22,14 +22,6 @@ $material-select-all-item-left-padding: 26px;
 $material-treeview-node-offset: $material-treeview-toggle-item-width;
 $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5;
 
-
-.dx-treeview-custom-expand-icon,
-.dx-treeview-custom-collapse-icon {
-  @include dx-icon-sizing($material-base-icon-size);
-
-  top: $material-custom-icon-top;
-}
-
 .dx-treeview-node-loadindicator {
   top: $material-treeview-loadincicator-offset-top;
   left: $material-treeview-loadincicator-offset-left;
@@ -40,9 +32,7 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 .dx-rtl {
   @include dx-treeview-make-rtl($material-treeview-container-with-border-offset, $material-treeview-node-offset, $material-treeview-item-with-checkbox-offset, $material-treeview-checkbox-offset, $material-select-all-text-offset, $material-select-all-item-left-padding, $material-treeview-border-padding);
 
-  .dx-treeview-toggle-item-visibility,
-  .dx-treeview-custom-expand-icon,
-  .dx-treeview-custom-collapse-icon {
+  .dx-treeview-toggle-item-visibility {
     right: 0;
   }
 
@@ -93,10 +83,6 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-item-with-checkbox {
-  &.dx-treeview-item-with-custom-expander-icon > .dx-checkbox {
-    top: $material-treeview-with-custom-icon-checkbox-vertical-offset;
-  }
-
   .dx-treeview-item {
     color: $base-text-color;
     padding-left: $material-treeview-item-with-checkbox-offset;
@@ -109,10 +95,6 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
 }
 
 .dx-treeview-item-without-checkbox {
-  &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
-    padding-left: $material-treeview-item-side-padding;
-  }
-
   &.dx-state-selected {
     > .dx-treeview-item {
       color: $treeview-item-selected-color;

@@ -22,9 +22,7 @@ window.internals = {
     ITEM_WITH_CHECKBOX_CLASS: 'dx-treeview-item-with-checkbox',
     IS_LEAF: 'dx-treeview-node-is-leaf',
     TOGGLE_ITEM_VISIBILITY_CLASS: 'dx-treeview-toggle-item-visibility',
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
-    CUSTOM_COLLAPSE_ICON_CLASS: 'dx-treeview-custom-collapse-icon',
-    CUSTOM_EXPAND_ICON_CLASS: 'dx-treeview-custom-expand-icon'
+    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened'
 };
 
 window.DATA = (function() {
