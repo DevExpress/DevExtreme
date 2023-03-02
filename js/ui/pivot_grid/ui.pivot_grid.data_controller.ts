@@ -31,7 +31,6 @@ const proxyMethod = function (instance, methodName, defaultResult?) {
 };
 
 export const DataController = Class.inherit((function () {
-  // @ts-expect-error
   function getHeaderItemText(item, description, options) {
     let { text } = item;
 
@@ -1217,7 +1216,6 @@ export const DataController = Class.inherit((function () {
 
         foreachRowInfo(
           newRowsInfo,
-          // @ts-expect-error
           (rowInfo, visibleIndex, rowIndex, columnIndex, realColumnIndex) => {
             const colspan = rowInfo.colspan || 1;
 

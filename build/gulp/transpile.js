@@ -14,6 +14,7 @@ const replace = require('gulp-replace');
 const watch = require('gulp-watch');
 const cache = require('gulp-cache');
 const through2 = require('through2');
+const ts = require('gulp-typescript');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
@@ -80,6 +81,18 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
+function compileTS(settings) {
+    return ts.createProject('tsconfig.json', {
+        // typescript: require('typescript-min'),
+        // types: ['jquery'],
+        noEmitOnError: true,
+        allowJs: true,
+        lib: [ 'es6', 'es7', 'es2017.object', 'dom' ],
+        strict: true,
+        noImplicitAny: false,
+        ...settings
+    })(ts.reporter.fullReporter());
+}
 
 function transpile(src, dist, pipes = []) {
     const task = () => {
@@ -92,7 +105,15 @@ function transpile(src, dist, pipes = []) {
         return result.pipe(gulp.dest(dist));
     };
     task.displayName = 'transpile:' + dist;
-    return task;
+
+    return gulp.parallel([
+        task,
+        () => gulp.src([
+            'js/**/*.ts',
+            '!js/renovation/**/*',
+            '!js/**/*.d.ts',
+        ]).pipe(compileTS()).js.pipe(gulp.dest(dist))
+    ]);
 }
 
 function babelCjs() {
@@ -237,7 +258,7 @@ gulp.task('transpile-watch', gulp.series(
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>
     gulp
-        .src(['testing/**/*.js', "!testing/renovation-npm/**/*.js"])
+        .src(['testing/**/*.js', '!testing/renovation-npm/**/*.js'])
         .pipe(babel(testsConfig))
         .pipe(gulp.dest('testing'))
 ));

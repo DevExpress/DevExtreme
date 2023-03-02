@@ -445,7 +445,6 @@ const FieldChooser = BaseFieldChooser.inherit({
       searchEnabled: that.option('allowSearch'),
       searchTimeout: that.option('searchTimeout'),
       useNativeScrolling: false,
-      // @ts-expect-error
       itemTemplate(itemData, itemIndex, itemElement) {
         const $item = ($('<div>') as any)
           .toggleClass('dx-area-field', !itemData.items)
