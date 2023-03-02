@@ -48,7 +48,8 @@ const config: Partial<ScrollableProps>[] = [];
   fixture.disablePageReloads.skip('Render strategies');
 
   config.forEach((props) => {
-    test(`Should render ${page}, ${JSON.stringify(props)}`,
+    test(
+      `Should render ${page}, ${JSON.stringify(props)}`,
       async (t, { platform, screenshotComparerOptions }) => {
         const component = new Component[platform](COMPONENT_SELECTOR, props, widgetName);
         const { direction, useNative, rtlEnabled } = props;
@@ -61,13 +62,15 @@ const config: Partial<ScrollableProps>[] = [];
             screenshotComparerOptions,
           ))
           .ok();
-      })
+      },
+    )
       .before(async (_, { platform }) => updateComponentOptions(platform, {
         ...defaultProps,
         ...props,
       }));
 
-    test(`${page}.scrollTo({ top: 50, left: 50 }), ${JSON.stringify(props)}`,
+    test(
+      `${page}.scrollTo({ top: 50, left: 50 }), ${JSON.stringify(props)}`,
       async (t, { platform, screenshotComparerOptions }) => {
         const component = new Component[platform](COMPONENT_SELECTOR, props, widgetName);
         const { direction, useNative, rtlEnabled } = props;
@@ -82,7 +85,8 @@ const config: Partial<ScrollableProps>[] = [];
             screenshotComparerOptions,
           ))
           .ok();
-      })
+      },
+    )
       .before(async (_, { platform }) => updateComponentOptions(platform, {
         ...defaultProps,
         ...props,

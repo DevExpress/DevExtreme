@@ -83,17 +83,29 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
 
     const indexDifference = showAllDayPanel ? 1 : 0;
     await checkSelectionWhenFocusedInViewport(
-      t, scheduler, 8 - indexDifference, 6 - indexDifference, 1,
+      t,
+      scheduler,
+      8 - indexDifference,
+      6 - indexDifference,
+      1,
     );
 
     await scrollTo(0, 1100);
     await checkSelectionWhenFocusedIsNotInViewport(
-      t, scheduler, 4 + indexDifference, 2 + indexDifference, 1,
+      t,
+      scheduler,
+      4 + indexDifference,
+      2 + indexDifference,
+      1,
     );
 
     await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(
-      t, scheduler, 8 - indexDifference, 6 - indexDifference, 1,
+      t,
+      scheduler,
+      8 - indexDifference,
+      6 - indexDifference,
+      1,
     );
   }).before(async () => createScheduler({
     showAllDayPanel,

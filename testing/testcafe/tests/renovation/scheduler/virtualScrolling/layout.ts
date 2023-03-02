@@ -165,7 +165,8 @@ test('Virtual scrolling layout in scheduler views', async (t, { platform, screen
 //   });
 // });
 
-test('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used',
+test(
+  'Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used',
   async (t, { platform, screenshotComparerOptions }) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
@@ -181,7 +182,8 @@ test('Header cells should be aligned with date-table cells in timeline-month whe
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (_, { platform }) => {
+  },
+).before(async (_, { platform }) => {
   await createScheduler(platform, {
     currentDate: new Date(2020, 10, 1),
     currentView: 'timelineMonth',

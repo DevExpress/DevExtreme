@@ -2,7 +2,6 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
-// eslint-disable-next-line import/extensions
 import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
 
 const buildTimeout = 150000;

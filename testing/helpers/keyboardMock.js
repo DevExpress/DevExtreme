@@ -57,8 +57,9 @@ let focused;
                 try {
                     start = input.selectionStart;
                     end = input.selectionEnd;
-                } catch(e) {
                 }
+                // eslint-disable-next-line no-empty
+                catch(e) {}
             }
             return { start: start, end: end };
         },
@@ -93,7 +94,9 @@ let focused;
                 } else {
                     input.setSelectionRange(start, end);
                 }
-            } catch(e) { }
+            }
+            // eslint-disable-next-line no-empty
+            catch(e) { }
         }
     };
 
