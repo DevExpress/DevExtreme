@@ -3379,8 +3379,10 @@ test('edit => scroll => command, should not result in grid scrolling back to edi
       grid.getCellElement(1, 1).trigger('dxclick');
       setTimeout(() => {
         grid.getScrollable().scrollTo({ x: 10000 });
-        setTimeout(() => { $('.dx-link-delete').first().trigger('focusin'); },
-          100);
+        setTimeout(
+          () => { $('.dx-link-delete').first().trigger('focusin'); },
+          100,
+        );
       }, 100);
     }, 500);
   })();

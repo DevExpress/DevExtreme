@@ -52,9 +52,11 @@ async function editingPopupTestFunction(t: TestController, screenshotName: strin
     .ok(compareResults.errorMessages());
 }
 
-async function dragAndDropTestFunction(t: TestController,
+async function dragAndDropTestFunction(
+  t: TestController,
   screenshotName: string,
-  { rowIdx, cellIdx }: ITestDragNDropOptions): Promise<void> {
+  { rowIdx, cellIdx }: ITestDragNDropOptions,
+): Promise<void> {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const screenshotZone = scheduler.workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -72,19 +74,23 @@ async function dragAndDropTestFunction(t: TestController,
     .ok(compareResults.errorMessages());
 }
 
-async function resizeTestFunction(t: TestController,
+async function resizeTestFunction(
+  t: TestController,
   screenshotName: string,
-  resizeOptions: ITestResizeOptions): Promise<void> {
+  resizeOptions: ITestResizeOptions,
+): Promise<void> {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const screenshotZone = scheduler.workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointmentToEdit = scheduler.getAppointment(TEST_APPOINTMENT_TEXT);
 
-  await t.drag(appointmentToEdit.resizableHandle[resizeOptions.direction],
+  await t.drag(
+    appointmentToEdit.resizableHandle[resizeOptions.direction],
     0,
     resizeOptions.value,
-    TEST_CURSOR_OPTIONS);
+    TEST_CURSOR_OPTIONS,
+  );
 
   const appointmentDialog = new AppointmentDialog();
   await t.click(appointmentDialog.series);

@@ -45,7 +45,8 @@ const resources = [{
 
 [undefined, resources].forEach((resourcesValue) => {
   ['day', 'week', 'workWeek', 'month'].forEach((view) => {
-    test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`,
+    test(
+      `Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`,
       async (t, { screenshotComparerOptions }) => {
         const scheduler = new Scheduler('#container');
         const appointment = scheduler.getAppointment('1 appointment', 0);
@@ -62,19 +63,23 @@ const resources = [{
           .ok();
 
         await t
-          .expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
+          .expect(await takeScreenshot(
+            `generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
             scheduler.workSpace,
-            screenshotComparerOptions))
+            screenshotComparerOptions,
+          ))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async (_, { platform }) => createScheduler(platform, view, resourcesValue));
+      },
+    ).before(async (_, { platform }) => createScheduler(platform, view, resourcesValue));
   });
 });
 
 [undefined, resources].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`,
+    test(
+      `Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`,
       async (t, { screenshotComparerOptions }) => {
         const scheduler = new Scheduler('#container');
         const appointment = scheduler.getAppointment('1 appointment', 0);
@@ -91,12 +96,15 @@ const resources = [{
           .ok();
 
         await t
-          .expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
+          .expect(await takeScreenshot(
+            `generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
             scheduler.workSpace,
-            screenshotComparerOptions))
+            screenshotComparerOptions,
+          ))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async (_, { platform }) => createScheduler(platform, view, resourcesValue));
+      },
+    ).before(async (_, { platform }) => createScheduler(platform, view, resourcesValue));
   });
 });

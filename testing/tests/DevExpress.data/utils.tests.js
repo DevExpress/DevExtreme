@@ -283,14 +283,14 @@ QUnit.module('createObjectWithChanges', () => {
     });
     QUnit.test('handles nested class instances', function(t) {
         class Data {
-            prop1
+            prop1;
         }
         class Prop1 {
-            prop2
+            prop2;
         }
 
         class Prop2 {
-            name
+            name;
         }
 
         const target = {

@@ -3,7 +3,7 @@ const gulp = require('gulp');
 const through = require('through2');
 const remoteSrc = require('gulp-remote-src');
 const rename = require('gulp-rename');
-const lint = require('gulp-eslint');
+const lint = require('gulp-eslint-new');
 
 gulp.task('create-timezones-data', () => {
     const momentTimezonesRawUrl = 'https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/';
@@ -20,10 +20,7 @@ gulp.task('create-timezones-data', () => {
             callBack(null, file);
         }))
         .pipe(rename('timezones_data.js'))
-        .pipe(lint({
-            fix: true,
-            configFile: './.eslintrc.js'
-        }))
+        .pipe(lint({fix: true}))
         .pipe(lint.format())
         .pipe(gulp.dest('js/ui/scheduler/timezones'));
 });
