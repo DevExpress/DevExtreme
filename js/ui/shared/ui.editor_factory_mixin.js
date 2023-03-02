@@ -228,13 +228,6 @@ const EditorFactoryMixin = (function() {
                     options.setValue.apply(this, params);
                 }
             }, options);
-        } else {
-            options.editorOptions = getResultConfig({
-                value: options.value,
-                onValueChanged: function(args) {
-                    options.setValue(args.value);
-                },
-            }, options);
         }
     }
 
@@ -297,23 +290,32 @@ const EditorFactoryMixin = (function() {
                 options.tabIndex = this.option('tabIndex');
             }
 
-            if(options.lookup || options.editorType === 'dxSelectBox' || options.editorType === 'dxLookup') {
-                prepareSelectBox(options);
+            if(options.editorType && !['dxDateBox', 'dxCheckBox', 'dxNumberBox', 'dxTextBox'].includes(options.editorType) && !isDefined(options.lookup)) {
+                options.editorOptions = getResultConfig({
+                    value: options.value,
+                    onValueChanged: function(args) {
+                        options.setValue(args.value);
+                    },
+                }, options);
             } else {
-                switch(options.dataType) {
-                    case 'date':
-                    case 'datetime':
-                        prepareDateBox(options);
-                        break;
-                    case 'boolean':
-                        prepareBooleanEditor(options);
-                        break;
-                    case 'number':
-                        prepareNumberBox(options);
-                        break;
-                    default:
-                        prepareTextBox(options);
-                        break;
+                if(options.lookup) {
+                    prepareSelectBox(options);
+                } else {
+                    switch(options.dataType) {
+                        case 'date':
+                        case 'datetime':
+                            prepareDateBox(options);
+                            break;
+                        case 'boolean':
+                            prepareBooleanEditor(options);
+                            break;
+                        case 'number':
+                            prepareNumberBox(options);
+                            break;
+                        default:
+                            prepareTextBox(options);
+                            break;
+                    }
                 }
             }
 
