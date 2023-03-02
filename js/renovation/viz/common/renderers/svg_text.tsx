@@ -103,7 +103,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   get textItems(): TextItem[] | undefined {
-    let items: TextItem[] | undefined = undefined;
+    let items: TextItem[] | undefined;
     let parsedHtml = '';
     const { text } = this.props;
 

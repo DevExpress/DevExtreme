@@ -32,7 +32,7 @@ export const viewFunction = ({
       strokeWidth={strokeWidth}
       strokeOpacity={strokeOpacity}
       opacity={opacity}
-    // eslint-disable-next-line react/jsx-props-no-spreading
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...getGraphicExtraProps(parsedProps, x, y)}
     />
   );

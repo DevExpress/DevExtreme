@@ -83,8 +83,8 @@ jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => filesContent[path] || ''),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,
   // eslint-disable-next-line spellcheck/spell-checker
-  realpathSync: () => { }, // https://github.com/facebook/jest/issues/10012
-  readFile: () => { }, // The "original" argument must be of type function. Received undefined
+  realpathSync: (): void => { }, // https://github.com/facebook/jest/issues/10012
+  readFile: (): void => { }, // The "original" argument must be of type function. Received undefined
 }));
 
 jest.mock('filing-cabinet', () => ({
@@ -203,7 +203,7 @@ describe('DependencyCollector', () => {
     const dependencyCollector = new DependencyCollector();
     dependencyCollector.collect();
 
-    expect(fs.readFileSync).toBeCalledTimes(10);
+    expect(fs.readFileSync).toHaveBeenCalledTimes(10);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
       toolbar: ['menu', 'icon'],
       button: ['icon'],

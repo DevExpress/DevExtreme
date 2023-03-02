@@ -40,7 +40,8 @@ fixture.disablePageReloads.skip('Renovated scrollable - render strategies');
 
 config.forEach((props) => {
   // it repeats test scenario from common file. Used for demonstration purposes
-  test(`Should render scrollable, ${JSON.stringify(props)}`,
+  test(
+    `Should render scrollable, ${JSON.stringify(props)}`,
     async (t, { screenshotComparerOptions }) => {
       const scrollable = new Scrollable(SCROLLABLE_SELECTOR, props);
       const { direction, useNative, rtlEnabled } = props;
@@ -53,7 +54,8 @@ config.forEach((props) => {
           screenshotComparerOptions,
         ))
         .ok();
-    })
+    },
+  )
     .before(async (_, { platform }) => updateComponentOptions(platform, {
       ...defaultProps,
       ...props,
@@ -63,7 +65,8 @@ config.forEach((props) => {
 fixture.disablePageReloads.skip('Renovated scrollable - visibility integration');
 
 config.forEach((props) => {
-  test(`Scroll should save position on visibility change, ${JSON.stringify(props)}`,
+  test(
+    `Scroll should save position on visibility change, ${JSON.stringify(props)}`,
     async (t, { platform, screenshotComparerOptions }) => {
       const scrollable = new ScrollableFactory[platform](SCROLLABLE_SELECTOR, props);
       const { direction, useNative, rtlEnabled } = props;
@@ -103,7 +106,8 @@ config.forEach((props) => {
           screenshotComparerOptions,
         ))
         .ok();
-    })
+    },
+  )
     .before(async (_, { platform }) => updateComponentOptions(platform, {
       ...defaultProps,
       ...props,

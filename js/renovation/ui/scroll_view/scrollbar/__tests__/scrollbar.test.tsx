@@ -134,7 +134,7 @@ describe('Scrollbar', () => {
 
                     expect(viewModel.hidden).toEqual(!isScrollbarVisible);
 
-                    let expectedThumbVisibility: boolean | undefined = undefined;
+                    let expectedThumbVisibility: boolean | undefined;
 
                     if (!isScrollbarVisible) {
                       expectedThumbVisibility = false;

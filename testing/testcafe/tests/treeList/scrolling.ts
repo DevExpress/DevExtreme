@@ -5,14 +5,16 @@ import createWidget from '../../helpers/createWidget';
 import TreeList from '../../model/treeList';
 
 const scrollWindowTo = async (position: object) => {
-  await ClientFunction(() => {
-    (window as any).scroll(position);
-  },
-  {
-    dependencies: {
-      position,
+  await ClientFunction(
+    () => {
+      (window as any).scroll(position);
     },
-  })();
+    {
+      dependencies: {
+        position,
+      },
+    },
+  )();
 };
 
 fixture`Virtual Scrolling`

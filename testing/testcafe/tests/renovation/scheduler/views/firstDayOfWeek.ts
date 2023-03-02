@@ -12,7 +12,8 @@ const test = multiPlatformTest({
 
 fixture.disablePageReloads.skip('Renovated scheduler - firstDayOfWeek');
 
-test('WorkWeek should generate correct start view date',
+test(
+  'WorkWeek should generate correct start view date',
   async (t, { screenshotComparerOptions }) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -23,7 +24,8 @@ test('WorkWeek should generate correct start view date',
       screenshotComparerOptions,
     ))
       .ok();
-  }).before(
+  },
+).before(
   async (t, { platform }) => {
     await t.resizeWindow(1200, 800);
     await createWidget(platform, 'dxScheduler', {

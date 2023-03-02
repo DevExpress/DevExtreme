@@ -38,7 +38,9 @@ export default abstract class Widget {
     this.element = typeof id === 'string' ? Selector(id) : id;
 
     this.getInstance = getComponentInstance(
-      this.getTestingPlatform(), this.element, this.getName(),
+      this.getTestingPlatform(),
+      this.element,
+      this.getName(),
     );
   }
 
