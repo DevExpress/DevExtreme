@@ -2,8 +2,8 @@ import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
 import devices from 'core/devices';
-import { createBlobFile } from '../../../helpers/fileHelper.js';
 import fx from 'animation/fx';
+import 'ui/html_editor';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -52,6 +52,11 @@ const fakeFileText = {
     type: 'text/plain',
     lastModifiedDate: Date.now()
 };
+
+const createFakeFile = (name, size, type) => new File(new Array(size).fill('a'), name, {
+    type: type || 'image/png',
+    lastModified: (new Date).getTime()
+});
 
 const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
 
@@ -244,7 +249,7 @@ module('Image uploading integration', {
 
             this.instance.option({ imageUpload: { tabs: ['image'] } });
 
-            const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
+            const file = createFakeFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
             const quillUploadSpy = sinon.spy(this.instance.getQuillInstance().getModule('uploader'), 'upload');
 
@@ -252,7 +257,7 @@ module('Image uploading integration', {
                 const $form = this.getFormElement([1, 2]);
                 const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
-                fileUploader.option('value', [fakeFileBlob]);
+                fileUploader.option('value', [file]);
                 this.clock.tick(TIME_TO_WAIT);
 
                 this.clickDialogOkButton();
@@ -369,7 +374,7 @@ module('Image uploading integration', {
             this.createWidget();
 
             this.clock.tick(TIME_TO_WAIT);
-            const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
+            const file = createFakeFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
             const quillUploadSpy = sinon.spy(this.quillInstance.getModule('uploader'), 'upload');
             const $form = this.getFormElement([1, 2]);
@@ -379,14 +384,14 @@ module('Image uploading integration', {
 
             base64EditorInstance.option('value', true);
 
-            fileUploader.option('value', [fakeFileBlob]);
+            fileUploader.option('value', [file]);
             this.clock.tick(TIME_TO_WAIT);
 
             this.clickDialogOkButton();
 
             assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
             assert.strictEqual(quillUploadSpy.getCall(0).args[0].index, 1, 'first upload arg index is correct');
-            assert.deepEqual(quillUploadSpy.getCall(0).args[1], [fakeFileBlob], 'file upload arg is correct');
+            assert.deepEqual(quillUploadSpy.getCall(0).args[1], [file], 'file upload arg is correct');
         });
 
         test('check file uploading in base64 format if fileUploadMode is not defined', function(assert) {
@@ -401,13 +406,13 @@ module('Image uploading integration', {
 
             this.clock.tick(TIME_TO_WAIT);
 
-            const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
+            const file = createFakeFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
             const quillUploadSpy = sinon.spy(this.instance.getQuillInstance().getModule('uploader'), 'upload');
             const $form = this.getFormElement([1, 2]);
             const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
-            fileUploader.option('value', [fakeFileBlob]);
+            fileUploader.option('value', [file]);
 
             this.clickDialogOkButton();
 
