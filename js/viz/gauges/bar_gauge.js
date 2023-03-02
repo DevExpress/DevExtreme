@@ -291,27 +291,36 @@ export const dxBarGauge = BaseGauge.inherit({
             const startAngle = bar._bar.attr('startAngle');
             const endAngle = bar._bar.attr('endAngle');
             const coordStart = getStartCoordsArc.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
-            const xStart = Number(coordStart.x);
-            const yStart = Number(coordStart.y);
+            const { cos, sin } = _getCosAndSin(bar._angle);
+            const xStart = _round((coordStart.x - (sin * connectorWidth / 2) - cos) * 10000) / 10000;
+            const yStart = _round((coordStart.y - (cos * connectorWidth / 2) + sin) * 10000) / 10000;
             const box = bar._text.getBBox();
-            const shiftConnector = connectorWidth / 2;
             const lastCoords = bar._text._lastCoords;
+            const xDeviationForOddConnectorWidth = -sin / 2;
+            const yDeviationForOddConnectorWidth = -cos / 2;
+            const points = [
+                xStart,
+                yStart,
+                box.x,
+                box.y + box.height / 2 + lastCoords.y];
 
             if(bar._angle > 90) {
-                bar._line.attr({ points: [
-                    xStart + shiftConnector,
-                    yStart + shiftConnector,
-                    box.x + box.width + lastCoords.x,
-                    box.y + box.height / 2 + lastCoords.y
-                ] });
-            } else if(bar._angle <= 90) {
-                bar._line.attr({ points: [
-                    xStart - shiftConnector,
-                    yStart + shiftConnector,
-                    box.x + lastCoords.x,
-                    box.y + box.height / 2 + lastCoords.y
-                ] });
+                points[2] += box.width + lastCoords.x;
+            } else {
+                points[2] += lastCoords.x;
             }
+
+            if(connectorWidth % 2) {
+                if(bar._angle > 180) {
+                    points[0] -= xDeviationForOddConnectorWidth;
+                    points[1] -= yDeviationForOddConnectorWidth;
+                } else if(bar._angle <= 90 && bar._angle > 0) {
+                    points[0] += xDeviationForOddConnectorWidth;
+                    points[1] += yDeviationForOddConnectorWidth;
+                }
+            }
+
+            bar._line.attr({ points });
             bar._line.rotate(0);
         });
     },
