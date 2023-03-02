@@ -21,32 +21,38 @@ export const createScheduler = async (options = {}): Promise<void> => {
 };
 
 export const selectCells = async (
-  table: Selector, firstCell: Selector, secondCell: Selector,
-): Promise<void> => ClientFunction(() => {
-  const $table = $(table());
+  table: Selector,
+  firstCell: Selector,
+  secondCell: Selector,
+): Promise<void> => ClientFunction(
+  () => {
+    const $table = $(table());
 
-  $($table).trigger(
-    $.Event('dxpointerdown', { target: $(firstCell()).get(0), which: 1, pointerType: 'mouse' }),
-  );
-  $($table).trigger($.Event('dxpointermove', { target: $(secondCell()).get(0), which: 1 }));
-},
-{
-  dependencies: {
-    firstCell, secondCell, table,
+    $($table).trigger(
+      $.Event('dxpointerdown', { target: $(firstCell()).get(0), which: 1, pointerType: 'mouse' }),
+    );
+    $($table).trigger($.Event('dxpointermove', { target: $(secondCell()).get(0), which: 1 }));
   },
-})();
+  {
+    dependencies: {
+      firstCell, secondCell, table,
+    },
+  },
+)();
 
 export const moveMouse = async (table: Selector, cell: Selector):
-Promise<void> => ClientFunction(() => {
-  const $table = $(table());
+Promise<void> => ClientFunction(
+  () => {
+    const $table = $(table());
 
-  $($table).trigger($.Event('dxpointermove', { target: $(cell()).get(0), which: 1 }));
-},
-{
-  dependencies: {
-    cell, table,
+    $($table).trigger($.Event('dxpointermove', { target: $(cell()).get(0), which: 1 }));
   },
-})();
+  {
+    dependencies: {
+      cell, table,
+    },
+  },
+)();
 
 export const scrollTo = ClientFunction((x, y) => {
   const instance = ($('#container') as any).dxScheduler('instance');
@@ -56,8 +62,12 @@ export const scrollTo = ClientFunction((x, y) => {
 });
 
 export const checkSelectionWhenFocusedInViewport = async (
-  t: TestController, scheduler: Scheduler, selectedCellsCount: number,
-  bottomMostCellRowIndex: number, lastCellColumnIndex: number, lastCellRowIndex = 0,
+  t: TestController,
+  scheduler: Scheduler,
+  selectedCellsCount: number,
+  bottomMostCellRowIndex: number,
+  lastCellColumnIndex: number,
+  lastCellRowIndex = 0,
 ): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells().count)
@@ -77,8 +87,12 @@ export const checkSelectionWhenFocusedInViewport = async (
 };
 
 export const checkSelectionWhenFocusedIsNotInViewport = async (
-  t: TestController, scheduler: Scheduler, selectedCellsCount: number, bottomMostCellRowIndex = 0,
-  lastCellColumnIndex = 0, lastCellRowIndex = 0,
+  t: TestController,
+  scheduler: Scheduler,
+  selectedCellsCount: number,
+  bottomMostCellRowIndex = 0,
+  lastCellColumnIndex = 0,
+  lastCellRowIndex = 0,
 ): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells().count)
@@ -102,7 +116,8 @@ export const checkSelectionWhenFocusedIsNotInViewport = async (
 };
 
 export const checkAllDayCellsWhenInViewport = async (
-  t: TestController, scheduler: Scheduler,
+  t: TestController,
+  scheduler: Scheduler,
 ): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells(true).count)
@@ -115,7 +130,8 @@ export const checkAllDayCellsWhenInViewport = async (
     .ok();
 };
 export const checkAllDayCellsWhenNotInViewport = async (
-  t: TestController, scheduler: Scheduler,
+  t: TestController,
+  scheduler: Scheduler,
 ): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells(true).count)

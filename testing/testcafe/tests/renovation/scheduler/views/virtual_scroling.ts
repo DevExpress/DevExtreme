@@ -142,7 +142,8 @@ const resources = [{
   'timelineWeek',
   'timelineMonth',
 ].forEach((view) => {
-  test(`virtual scrolling should work in "${view}" view`,
+  test(
+    `virtual scrolling should work in "${view}" view`,
     async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -154,7 +155,8 @@ const resources = [{
           screenshotComparerOptions,
         ))
         .ok();
-    }).before(
+    },
+  ).before(
     async (t, { platform }) => {
       await t.resizeWindow(1200, 800);
       await createWidget(platform, 'dxScheduler', {

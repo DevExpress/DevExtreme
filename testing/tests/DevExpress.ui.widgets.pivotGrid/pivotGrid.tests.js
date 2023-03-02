@@ -3285,6 +3285,7 @@ QUnit.module('dxPivotGrid', {
     });
 
     QUnit.test('Custom localize grandTotal and total text', function(assert) {
+        /* eslint-disable i18n/no-russian-character */
         createPivotGrid({
             texts: {
                 grandTotal: 'Гранд тотал',
@@ -3292,6 +3293,7 @@ QUnit.module('dxPivotGrid', {
             },
             dataSource: this.dataSource
         });
+        /* eslint-enable i18n/no-russian-character */
 
         function getText(elements, index) {
             return $(elements[index]).text();

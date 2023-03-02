@@ -60,7 +60,8 @@ fixture.disablePageReloads.skip('Renovated scheduler - Appointment templates');
   'week',
   'month',
 ].forEach((currentView) => {
-  test(`it should be rendered correctly if view=${currentView}`,
+  test(
+    `it should be rendered correctly if view=${currentView}`,
     async (t, { screenshotComparerOptions }) => {
       const { element } = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -72,7 +73,8 @@ fixture.disablePageReloads.skip('Renovated scheduler - Appointment templates');
           screenshotComparerOptions,
         ))
         .ok();
-    }).before(
+    },
+  ).before(
     async (t, { platform }) => {
       await t.resizeWindow(1200, 800);
       await createWidget(platform, 'dxScheduler', {

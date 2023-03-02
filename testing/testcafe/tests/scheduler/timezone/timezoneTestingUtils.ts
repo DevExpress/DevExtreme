@@ -38,10 +38,12 @@ const getAppointmentTime = (desiredDate: Date, timezone: string): Date => {
 
 const getScreenshotName = (testModuleName: string, screenshotName: string): string => `${testModuleName}__${screenshotName}.png`;
 
-const screenshotTestFunc = async (t: TestController,
+const screenshotTestFunc = async (
+  t: TestController,
   testModuleName: string,
   screenshotName: string,
-  schedulerSelector = DEFAULT_SCHEDULER_SELECTOR): Promise<void> => {
+  schedulerSelector = DEFAULT_SCHEDULER_SELECTOR,
+): Promise<void> => {
   const scheduler = new Scheduler(schedulerSelector);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

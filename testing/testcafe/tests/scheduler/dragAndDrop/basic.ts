@@ -132,7 +132,8 @@ test('Drag-n-drop the appointment to the left column to the cell that has the sa
   await t
     .dragToElement(
       draggableAppointment.element,
-      scheduler.getDateTableCell(2, 2), { speed: 0.5 },
+      scheduler.getDateTableCell(2, 2),
+      { speed: 0.5 },
     );
 
   await takeScreenshot('drag-n-drop-appointment-to-left-column.png', screenshotZone);

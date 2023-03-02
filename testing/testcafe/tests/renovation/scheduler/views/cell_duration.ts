@@ -12,7 +12,8 @@ const test = multiPlatformTest({
 
 fixture.disablePageReloads.skip('Renovated scheduler - Cell Duration modification');
 
-test('cellDuration modification should work correctly',
+test(
+  'cellDuration modification should work correctly',
   async (t, { screenshotComparerOptions, platform }) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -25,7 +26,8 @@ test('cellDuration modification should work correctly',
       screenshotComparerOptions,
     ))
       .ok();
-  }).before(
+  },
+).before(
   async (t, { platform }) => {
     await t.resizeWindow(1200, 800);
     await createWidget(platform, 'dxScheduler', {

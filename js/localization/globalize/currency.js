@@ -2,7 +2,7 @@ import openXmlCurrencyFormat from '../open_xml_currency_format';
 import './core';
 import './number';
 import '../currency';
-// eslint-disable-next-line no-restricted-imports
+// eslint-disable-next-line no-restricted-imports, import/no-unresolved
 import 'globalize/currency';
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';

@@ -3911,10 +3911,12 @@ define(function(require) {
             });
 
             store.load({
+                /* eslint-disable i18n/no-russian-character */
                 columns: [
                     { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column' }
                 ],
                 values: [{ dataField: '[Measures].[Опер_Колво]' }]
+                /* eslint-enable i18n/no-russian-character */
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);
@@ -3939,11 +3941,13 @@ define(function(require) {
                 cube: 'CubeMobile'
             });
             store.load({
+                /* eslint-disable i18n/no-russian-character */
                 columns: [
                     { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column', expanded: true },
                     { dataField: '[Дата].[Год]' }
                 ],
                 values: [{ dataField: '[Measures].[Опер_Колво]' }]
+                /* eslint-enable i18n/no-russian-character */
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);

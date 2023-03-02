@@ -1222,7 +1222,7 @@ QUnit.module('options changed callbacks', {
         assert.equal($title.find('.dx-button').length, 0, 'close button is removed');
     });
 
-    QUnit.test('сlose button options', function(assert) {
+    QUnit.test('close button options', function(assert) {
         $('#popup').dxPopup({ visible: true, showCloseButton: true });
         const $closeButton = $(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, viewport());
         const { stylingMode, icon, onClick } = $closeButton.dxButton('instance').option();

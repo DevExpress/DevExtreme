@@ -5,7 +5,7 @@ const path = require('path');
 const rename = require('gulp-rename');
 const del = require('del');
 const template = require('gulp-template');
-const lint = require('gulp-eslint');
+const lint = require('gulp-eslint-new');
 const fs = require('fs');
 
 const headerPipes = require('./header-pipes.js');
@@ -170,10 +170,7 @@ gulp.task('localization-generated-sources', gulp.parallel([
                 exportName: source.exportName,
                 json: serializeObject(source.data)
             }))
-            .pipe(lint({
-                fix: true,
-                configFile: '.eslintrc.js'
-            }))
+            .pipe(lint({fix: true}))
             .pipe(lint.format())
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));

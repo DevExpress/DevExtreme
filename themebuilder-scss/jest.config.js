@@ -2,7 +2,7 @@ module.exports = {
     'globals': {
         'ts-jest': {
             // eslint-disable-next-line spellcheck/spell-checker
-            tsconfig: 'tests/tsconfig.json',
+            tsconfig: './tsconfig.tests.json',
         }
     },
     moduleFileExtensions: [

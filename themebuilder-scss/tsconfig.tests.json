@@ -2,12 +2,12 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "types": [
-      "node"
-    ]
+      "node",
+      "jest",
+    ],
   },
   "include": [
-    "src/modules/*",
-    "src/data/**/*",
-    "src/types/*"
-  ]
+    "tests/**/*.ts",
+    "src/types/*",
+  ],
 }
