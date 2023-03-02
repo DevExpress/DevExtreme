@@ -292,35 +292,36 @@ export const dxBarGauge = BaseGauge.inherit({
             const endAngle = bar._bar.attr('endAngle');
             const coordStart = getStartCoordsArc.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
             const { cos, sin } = _getCosAndSin(bar._angle);
-            const xStart = _round((coordStart.x - (sin * connectorWidth / 2) - cos) * 10000) / 10000;
-            const yStart = _round((coordStart.y - (cos * connectorWidth / 2) + sin) * 10000) / 10000;
+            const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
+            const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
             const box = bar._text.getBBox();
             const lastCoords = bar._text._lastCoords;
             const xDeviationForOddConnectorWidth = -sin / 2;
             const yDeviationForOddConnectorWidth = -cos / 2;
-            const points = [
+            const originalPoints = [
                 xStart,
                 yStart,
                 box.x,
                 box.y + box.height / 2 + lastCoords.y];
 
             if(bar._angle > 90) {
-                points[2] += box.width + lastCoords.x;
+                originalPoints[2] += box.width + lastCoords.x;
             } else {
-                points[2] += lastCoords.x;
+                originalPoints[2] += lastCoords.x;
             }
 
             if(connectorWidth % 2) {
                 if(bar._angle > 180) {
-                    points[0] -= xDeviationForOddConnectorWidth;
-                    points[1] -= yDeviationForOddConnectorWidth;
+                    originalPoints[0] -= xDeviationForOddConnectorWidth;
+                    originalPoints[1] -= yDeviationForOddConnectorWidth;
                 } else if(bar._angle <= 90 && bar._angle > 0) {
-                    points[0] += xDeviationForOddConnectorWidth;
-                    points[1] += yDeviationForOddConnectorWidth;
+                    originalPoints[0] += xDeviationForOddConnectorWidth;
+                    originalPoints[1] += yDeviationForOddConnectorWidth;
                 }
             }
 
-            bar._line.attr({ points });
+            const points = originalPoints.map(coordinate => _round(coordinate * 10000) / 10000);
+            bar._line.attr({ points: points });
             bar._line.rotate(0);
         });
     },
