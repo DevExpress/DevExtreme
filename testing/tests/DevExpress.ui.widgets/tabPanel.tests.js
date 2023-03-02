@@ -655,13 +655,13 @@ QUnit.module('Disabled items', {
     }
 }, () => {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
-        const disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const $disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
         const keyboard = keyboardMock(this.$tabs);
 
         keyboard.press('right');
 
-        assert.strictEqual($(disabledItem).hasClass('dx-state-focused'), true, 'disabled item is focused');
-        assert.strictEqual($(disabledItem).attr('aria-disabled'), 'true', 'disabled item aria-disabled is correct');
+        assert.strictEqual($disabledItem.hasClass('dx-state-focused'), true, 'disabled item is focused');
+        assert.strictEqual($disabledItem.attr('aria-disabled'), 'true', 'disabled item aria-disabled is correct');
     });
 
     QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
