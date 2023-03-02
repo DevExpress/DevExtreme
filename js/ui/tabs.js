@@ -425,7 +425,7 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _updateScrolling($target) {
+    _scrollToFocusedDisabledItem($target) {
         if(this._isDisabled($target)) {
             this._scrollToItem($target);
         }
@@ -454,7 +454,7 @@ const Tabs = CollectionWidget.inherit({
                 break;
             case 'focusedElement':
                 this.callBase(args);
-                this._updateScrolling(args.value);
+                this._scrollToFocusedDisabledItem(args.value);
                 break;
             default:
                 this.callBase(args);
