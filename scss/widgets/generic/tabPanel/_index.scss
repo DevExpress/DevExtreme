@@ -59,7 +59,7 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right,
 }
 
 
-@mixin tabpanel-tabs-shadow-mixin($accent-color, $target-class) {
+@mixin tabpanel-tabs-shadow-mixin($accent-color) {
   .dx-tabs {
     box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
   }
@@ -68,9 +68,8 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right,
     box-shadow: $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-bottom $accent-color;
   }
 
-  // TODO. Пересмотреть этот момент
   .dx-tabs-expanded {
-    .dx-tab:not(.#{$target-class}, .dx-tab-selected) {
+    .dx-tab:not(.dx-state-focused, .dx-tab-selected) {
       &:first-of-type {
         @include tabpanel-tab-shadow-mixin(
           get-tab-not-selected-not-focused-first-expanded-shadow($accent-color),
@@ -81,7 +80,7 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right,
   }
 
   .dx-tabs-stretched {
-    .dx-tab:not(.#{$target-class}, .dx-tab-selected) {
+    .dx-tab:not(.dx-state-focused, .dx-tab-selected) {
       &:last-of-type {
         @include tabpanel-tab-shadow-mixin(
           get-tab-not-selected-not-focused-first-stretched-shadow($accent-color),
@@ -114,13 +113,13 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right,
       }
     }
 
-    @include tabpanel-tabs-shadow-mixin($accent-color, $target-class);
+    @include tabpanel-tabs-shadow-mixin($accent-color);
     @include tabpanel-navigation-shadow-mixin($accent-color);
   }
 
   &.dx-focus-on-disabled {
     & > .dx-tabpanel-tabs {
-      @include tabpanel-tabs-shadow-mixin($tabs-border-color, $target-class);
+      @include tabpanel-tabs-shadow-mixin($tabs-border-color);
     }
 
     @include tabpanel-navigation-shadow-mixin($tabs-border-color);
