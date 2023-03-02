@@ -292,7 +292,7 @@ test('Grouped List with nested List should able to reorder items (T845082)', asy
   });
 });
 
-test('Disabled item should not have focus (T815151)', async (t) => {
+test('Disabled item should be focused on tab press to match accessibility criteria', async (t) => {
   const list = new List('#container');
   const { searchInput } = list;
   const firstItem = list.getItem();

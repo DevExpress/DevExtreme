@@ -161,3 +161,14 @@ QUnit.test('aria-disabled attribute should be set if the item\'s disabled prop i
 
     assert.ok($item.attr('aria-disabled'), 'element has aria-disabled attribute');
 });
+
+QUnit.test('aria-disabled attribute should be set if the item\'s disabled property was set to true at runtime', function(assert) {
+    const widget = new CollectionWidget($('<div>'), {
+        items: [{}]
+    });
+    widget.option('items[0].disabled', true);
+
+    const $item = widget.itemElements().eq(0);
+
+    assert.ok($item.attr('aria-disabled'), 'element has aria-disabled attribute');
+});

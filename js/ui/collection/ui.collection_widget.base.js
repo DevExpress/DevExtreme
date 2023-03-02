@@ -282,8 +282,8 @@ const CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, false);
     },
 
-    _findActiveTarget($el) {
-        return $el.find(this._activeStateUnit);
+    _findActiveTarget($element) {
+        return $element.find(this._activeStateUnit);
     },
 
     _getActiveItem: function(last) {
@@ -417,9 +417,9 @@ const CollectionWidget = Widget.inherit({
         this.onFocusedItemChanged(this.getFocusedItemId());
 
         const { selectOnFocus } = this.option();
-        const isDisabled = this._isDisabled($target);
+        const isTargetDisabled = this._isDisabled($target);
 
-        if(selectOnFocus && !isDisabled) {
+        if(selectOnFocus && !isTargetDisabled) {
             this._selectFocusedItem($target);
         }
     },
