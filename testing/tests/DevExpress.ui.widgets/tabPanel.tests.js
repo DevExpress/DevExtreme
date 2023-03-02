@@ -674,7 +674,6 @@ QUnit.module('Disabled items', {
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class not set');
     });
 
-
     QUnit.test(`element has ${FOCUS_ON_DISABLED_CLASS} class when disabled item has focus`, function(assert) {
         const keyboard = keyboardMock(this.$tabs);
 
@@ -682,6 +681,16 @@ QUnit.module('Disabled items', {
 
         keyboard.press('right');
         assert.strictEqual($(this.$element).hasClass(FOCUS_ON_DISABLED_CLASS), true, 'class set');
+    });
+
+    QUnit.test(`element does not have ${FOCUS_ON_DISABLED_CLASS} class when widget lost focus`, function(assert) {
+        const keyboard = keyboardMock(this.$tabs);
+
+        keyboard.press('right');
+        assert.strictEqual($(this.$element).hasClass(FOCUS_ON_DISABLED_CLASS), true, 'class set');
+
+        this.$element.focusout();
+        assert.strictEqual($(this.$element).hasClass(FOCUS_ON_DISABLED_CLASS), false, 'class not set');
     });
 });
 
