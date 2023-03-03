@@ -291,7 +291,7 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
             });
 
             if(isInstantlyMode) {
-                dataSource.load();
+                dataSource.localSort();
             } else {
                 that._changedHandler();
             }

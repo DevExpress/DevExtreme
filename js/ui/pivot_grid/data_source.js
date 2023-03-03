@@ -1077,6 +1077,15 @@ export default Class.inherit((function() {
             return !dataFields.length || !data.values.length;
         },
 
+        localSort: function() {
+            const that = this;
+            that._sort(
+                that._descriptions,
+                that._data,
+                areExpressionsUsed(that._descriptions.values));
+            that._eventsStrategy.fireEvent('changed');
+        },
+
         _update: function(deferred) {
             const that = this;
             const descriptions = that._descriptions;
