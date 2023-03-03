@@ -27,8 +27,8 @@ const createSeries = function(options, renderSettings) {
             selectionStyle: {}
         },
         valueErrorBar: {},
-        hoverStyle: { hatching: 'h-hatching' },
-        selectionStyle: { hatching: 's-hatching' },
+        hoverStyle: { hatching: 'h-hatching', lightening: true },
+        selectionStyle: { hatching: 's-hatching', lightening: true },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
     }, options);
@@ -304,6 +304,7 @@ QUnit.module('Bubble. Point styles', {
                 color: 'h-color',
                 size: 'h-size',
                 opacity: 'h-opacity',
+                lightening: true,
                 border: {
                     visible: true,
                     color: 'h-b-color',
@@ -314,6 +315,7 @@ QUnit.module('Bubble. Point styles', {
                 color: 's-color',
                 size: 's-size',
                 opacity: 's-opacity',
+                lightening: true,
                 border: {
                     visible: true,
                     color: 's-b-color',
@@ -331,13 +333,15 @@ QUnit.test('Style in point', function(assert) {
     series.createPoints();
 
     assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+        labelColor: 'n-color',
         hover: {
             fill: 'h-color',
             stroke: 'h-b-color',
             opacity: 'h-opacity',
             'stroke-width': 'h-b-width',
             dashStyle: 'solid',
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            filter: true,
         },
         normal: {
             opacity: 'n-opacity',
@@ -350,7 +354,8 @@ QUnit.test('Style in point', function(assert) {
             opacity: 's-opacity',
             'stroke-width': 's-b-width',
             dashStyle: 'solid',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: true
         }
     });
 });
@@ -365,7 +370,7 @@ QUnit.test('Style in point group', function(assert) {
     series.draw(false);
 
     assert.deepEqual(series._markersGroup._stored_settings, {
-        'class': 'dxc-markers',
+        class: 'dxc-markers',
         fill: 'n-color',
         stroke: 'n-b-color',
         'stroke-width': 'n-b-width',
@@ -382,7 +387,9 @@ QUnit.test('All options defined', function(assert) {
     series.createPoints();
 
     assert.deepEqual((series._getPointOptions().styles), {
+        labelColor: 'n-color',
         hover: {
+            filter: true,
             fill: 'h-color',
             stroke: 'h-b-color',
             opacity: 'h-opacity',
@@ -391,6 +398,7 @@ QUnit.test('All options defined', function(assert) {
             hatching: 'h-hatching'
         },
         normal: {
+            filter: undefined,
             fill: 'n-color',
             opacity: 'n-opacity',
             stroke: 'n-b-color',
@@ -399,12 +407,166 @@ QUnit.test('All options defined', function(assert) {
             hatching: undefined
         },
         selection: {
+            filter: true,
             fill: 's-color',
             stroke: 's-b-color',
             opacity: 's-opacity',
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
             hatching: 's-hatching'
+        }
+    });
+});
+
+QUnit.test('custom styles are defined', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        color: { base: 'seriesColor', fillId: 'id_color_0' },
+        border: {
+            visible: true,
+        },
+        hoverStyle: {
+            color: { fillId: 'id_color_1' },
+            lightening: true,
+            hatching: { direction: 'left' },
+            border: {
+                visible: true,
+            }
+        },
+        selectionStyle: {
+            color: { fillId: 'id_color_2' },
+            lightening: true,
+            hatching: { direction: 'left' },
+            border: {
+                visible: true,
+            }
+        }
+    });
+    series.updateData(this.data);
+    series.createPoints();
+
+    assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+        labelColor: 'seriesColor',
+        hover: {
+            fill: 'id_color_1',
+            stroke: 'seriesColor',
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true,
+        },
+        normal: {
+            opacity: undefined,
+            r: undefined,
+            'stroke-width': undefined
+        },
+        selection: {
+            fill: 'id_color_2',
+            stroke: 'seriesColor',
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true
+        }
+    });
+});
+
+QUnit.module('Bubble Series. LegendStyles', environment);
+
+QUnit.test('should contain default styles', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'mainSeriesColor'
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        hover: {
+            fill: 'mainSeriesColor',
+            hatching: 'h-hatching',
+            filter: true,
+            opacity: undefined
+        },
+        normal: {
+            fill: 'mainSeriesColor',
+            hatching: undefined,
+            filter: undefined,
+            opacity: undefined
+        },
+        selection: {
+            fill: 'mainSeriesColor',
+            hatching: 's-hatching',
+            filter: true,
+            opacity: undefined
+        }
+    });
+});
+
+QUnit.test('should contain colors, that used as string', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        color: 'n-color',
+        hoverStyle: {
+            color: 'h-color'
+        },
+        selectionStyle: {
+            color: 's-color'
+        }
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        hover: {
+            fill: 'h-color',
+            hatching: 'h-hatching',
+            filter: true,
+            opacity: undefined
+        },
+        normal: {
+            fill: 'n-color',
+            hatching: undefined,
+            filter: undefined,
+            opacity: undefined
+        },
+        selection: {
+            fill: 's-color',
+            hatching: 's-hatching',
+            filter: true,
+            opacity: undefined
+        }
+    });
+});
+
+QUnit.test('should contain custom styles', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'mainSeriesColor',
+        color: {
+            base: 'n-color',
+            fillId: 'id_color'
+        },
+        hoverStyle: {
+            hatching: { direction: 'left' }
+        },
+        selectionStyle: {
+            hatching: { direction: 'left' }
+        }
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        hover: {
+            fill: 'id_color',
+            hatching: { direction: 'none' },
+            filter: true,
+            opacity: undefined
+        },
+        normal: {
+            fill: 'id_color',
+            hatching: undefined,
+            filter: undefined,
+            opacity: undefined
+        },
+        selection: {
+            fill: 'id_color',
+            hatching: { direction: 'none' },
+            filter: true,
+            opacity: undefined
         }
     });
 });
@@ -463,6 +625,7 @@ QUnit.test('customize point color. all', function(assert) {
                     color: 'h-color',
                     size: 'h-size',
                     opacity: 'h-opacity',
+                    lightening: true,
                     border: {
                         visible: true,
                         color: 'h-b-color',
@@ -474,6 +637,7 @@ QUnit.test('customize point color. all', function(assert) {
                     color: 's-color',
                     size: 's-size',
                     opacity: 's-opacity',
+                    lightening: true,
                     border: {
                         visible: true,
                         color: 's-b-color',
@@ -491,7 +655,9 @@ QUnit.test('customize point color. all', function(assert) {
     assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
         usePointCustomOptions: true,
         useLabelCustomOptions: undefined,
+        labelColor: 'n-color',
         hover: {
+            filter: true,
             fill: 'h-color',
             stroke: 'h-b-color',
             'stroke-width': 'h-b-width',
@@ -500,6 +666,7 @@ QUnit.test('customize point color. all', function(assert) {
             hatching: 'h-hatching'
         },
         normal: {
+            filter: undefined,
             fill: 'n-color',
             opacity: 'n-opacity',
             stroke: 'n-b-color',
@@ -508,6 +675,7 @@ QUnit.test('customize point color. all', function(assert) {
             hatching: undefined
         },
         selection: {
+            filter: true,
             fill: 's-color',
             opacity: 's-opacity',
             stroke: 's-b-color',

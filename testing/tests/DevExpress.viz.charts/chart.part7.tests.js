@@ -6,6 +6,7 @@ import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
 import seriesModule from 'viz/series/base_series';
 import dataValidatorModule from 'viz/components/data_validator';
 import { MockSeries, categories, seriesMockData, MockTranslator } from '../../helpers/chartMocks.js';
+import graphicObjects from 'common/charts';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
@@ -2085,5 +2086,80 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.strictEqual(this.labels[1].draw.callCount, 0);
         assert.strictEqual(this.labels[2].draw.callCount, 0);
         assert.strictEqual(this.labels[3].draw.callCount, 0);
+    });
+
+    QUnit.module('Graphic objects render', $.extend({}, commons.environment, {
+        beforeEach: function() {
+            commons.environment.beforeEach.call(this);
+            this.clock = sinon.useFakeTimers();
+
+            this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects', function() {
+                return {
+                    'id_1': { type: 'linear', colors: 'colors_1', rotationAngle: 30 },
+                    'id_2': { type: 'radial', colors: 'colors_2' },
+                    'id_3': { type: 'pattern', template: () => {}, width: 20, height: 10 },
+                    'id_4': { type: 'incorrect_type' }
+                };
+            });
+        },
+        afterEach: function() {
+            this.clock.restore();
+            commons.environment.afterEach.call(this);
+            this.fakeGraphicObjects.restore();
+        },
+    }));
+
+    QUnit.test('Should create graphic objects on widget creating', function(assert) {
+        const stubSeries = new MockSeries({});
+        seriesMockData.series.push(stubSeries);
+
+        const chart = this.createChart({
+            series: {}
+        });
+
+        assert.strictEqual(chart._graphicObjects['id_1']._stored_settings.color, 'colors_1');
+        assert.strictEqual(chart._graphicObjects['id_1']._stored_settings.id, 'id_1');
+        assert.strictEqual(chart._graphicObjects['id_1']._stored_settings.rotationAngle, 30);
+
+        assert.strictEqual(chart._graphicObjects['id_2']._stored_settings.color, 'colors_2');
+        assert.strictEqual(chart._graphicObjects['id_2']._stored_settings.id, 'id_2');
+
+        assert.strictEqual(chart._graphicObjects['id_3']._stored_settings.width, 20);
+        assert.strictEqual(chart._graphicObjects['id_3']._stored_settings.height, 10);
+        assert.strictEqual(chart._graphicObjects['id_3']._stored_settings.id, 'id_3');
+        assert.ok(chart._graphicObjects['id_3']._stored_settings.template);
+
+        assert.strictEqual(chart._renderer.linearGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.radialGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.customPattern.callCount, 1);
+    });
+
+    QUnit.test('Should not create more objects after redraw', function(assert) {
+        const stubSeries = new MockSeries({});
+        seriesMockData.series.push(stubSeries);
+
+        const chart = this.createChart({
+            series: {}
+        });
+        chart.render({
+            force: true
+        });
+
+        assert.strictEqual(chart._renderer.linearGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.radialGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.customPattern.callCount, 1);
+    });
+
+    QUnit.test('Should dispose graphic objects on container remove', function(assert) {
+        const stubSeries = new MockSeries({});
+        seriesMockData.series.push(stubSeries);
+
+        const chart = this.createChart({
+            series: {}
+        });
+
+        this.$container.remove();
+
+        assert.strictEqual(chart._graphicObjects, null);
     });
 })();

@@ -185,14 +185,23 @@ Series.prototype = {
     _createStyles: function(options) {
         const that = this;
         const mainSeriesColor = options.mainSeriesColor;
+        const colorId = this._getColorId(options);
+        const hoverStyle = options.hoverStyle || {};
+        const selectionStyle = options.selectionStyle || {};
+
+        if(colorId) {
+            that._turnOffHatching(hoverStyle, selectionStyle);
+        }
+
         that._styles = {
+            labelColor: mainSeriesColor,
             normal: that._parseStyle(options, mainSeriesColor, mainSeriesColor),
-            hover: that._parseStyle(options.hoverStyle || {}, mainSeriesColor, mainSeriesColor),
-            selection: that._parseStyle(options.selectionStyle || {}, mainSeriesColor, mainSeriesColor),
+            hover: that._parseStyle(hoverStyle, colorId || mainSeriesColor, mainSeriesColor),
+            selection: that._parseStyle(selectionStyle, colorId || mainSeriesColor, mainSeriesColor),
             legendStyles: {
-                normal: that._createLegendState(options, mainSeriesColor),
-                hover: that._createLegendState(options.hoverStyle || {}, mainSeriesColor),
-                selection: that._createLegendState(options.selectionStyle || {}, mainSeriesColor)
+                normal: that._createLegendState(options, colorId || mainSeriesColor),
+                hover: that._createLegendState(hoverStyle, colorId || mainSeriesColor),
+                selection: that._createLegendState(selectionStyle, colorId || mainSeriesColor)
             }
         };
     },
@@ -827,6 +836,15 @@ Series.prototype = {
         });
     },
 
+    _turnOffHatching(hoverStyle, selectionStyle) {
+        if(hoverStyle.hatching) {
+            hoverStyle.hatching.direction = 'none';
+        }
+        if(selectionStyle.hatching) {
+            selectionStyle.hatching.direction = 'none';
+        }
+    },
+
     _parsePointOptions: function(pointOptions, labelOptions, data, point) {
         const that = this;
         const options = that._options;
@@ -839,7 +857,7 @@ Series.prototype = {
             visibilityChanged: options.visibilityChanged
         });
 
-        parsedOptions.label = getLabelOptions(labelOptions, styles.normal.fill);
+        parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
 
         if(that.areErrorBarsVisible()) {
             parsedOptions.errorBars = options.valueErrorBar;
@@ -1263,6 +1281,8 @@ Series.prototype = {
     getNeighborPoint: _noop,
 
     areErrorBarsVisible: _noop,
+
+    _getColorId: _noop,
 
     getMarginOptions: function() {
         return this._patchMarginOptions({

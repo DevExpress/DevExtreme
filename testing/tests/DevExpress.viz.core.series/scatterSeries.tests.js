@@ -1017,6 +1017,124 @@ const seriesType = 'scatter';
         series.createPoints();
 
         assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            labelColor: 'n-color',
+            hover: {
+                fill: 'h-color',
+                r: 1,
+                stroke: 'h-b-color',
+                'stroke-width': 'h-b-width'
+            },
+            normal: {
+                r: 2.5,
+                'stroke-width': 'n-b-width',
+                opacity: undefined
+            },
+            selection: {
+                fill: 's-color',
+                r: 2,
+                stroke: 's-b-color',
+                'stroke-width': 's-b-width'
+            }
+        });
+    });
+
+    QUnit.test('custom styles in series should not apply', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            color: { fillId: 'id_color', base: 'n-color' },
+            hoverStyle: {
+                color: { fillId: 'id_color', base: 'h-color' },
+            },
+            selectionStyle: {
+                color: { fillId: 'id_color', base: 's-color' },
+            },
+            point: {
+                size: 5,
+                border: {
+                    visible: true,
+                    color: 'n-b-color',
+                    width: 'n-b-width'
+                },
+                hoverStyle: {
+                    size: 2,
+                    border: {
+                        visible: true,
+                        color: 'h-b-color',
+                        width: 'h-b-width'
+                    }
+                },
+                selectionStyle: {
+                    size: 4,
+                    border: {
+                        visible: true,
+                        color: 's-b-color',
+                        width: 's-b-width'
+                    }
+                }
+            }
+        });
+
+        series.updateData(this.data);
+        series.createPoints();
+
+        assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            hover: {
+                fill: 'containerColor',
+                r: 1,
+                stroke: 'h-b-color',
+                'stroke-width': 'h-b-width'
+            },
+            normal: {
+                r: 2.5,
+                'stroke-width': 'n-b-width',
+                opacity: undefined
+            },
+            selection: {
+                fill: 'containerColor',
+                r: 2,
+                stroke: 's-b-color',
+                'stroke-width': 's-b-width'
+            }
+        });
+    });
+
+    QUnit.test('custom styles in points should not apply', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            point: {
+                color: { fillId: 'id_color', base: 'n-color' },
+                size: 5,
+                border: {
+                    visible: true,
+                    color: 'n-b-color',
+                    width: 'n-b-width'
+                },
+                hoverStyle: {
+                    color: { fillId: 'id_color', base: 'h-color' },
+                    size: 2,
+                    border: {
+                        visible: true,
+                        color: 'h-b-color',
+                        width: 'h-b-width'
+                    }
+                },
+                selectionStyle: {
+                    color: { fillId: 'id_color', base: 's-color' },
+                    size: 4,
+                    border: {
+                        visible: true,
+                        color: 's-b-color',
+                        width: 's-b-width'
+                    }
+                }
+            }
+        });
+
+        series.updateData(this.data);
+        series.createPoints();
+
+        assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
@@ -1187,7 +1305,7 @@ const seriesType = 'scatter';
             'clip-path': null,
             stroke: 'n-b-color',
             'stroke-width': 'n-b-width',
-            visibility: 'visible'
+            visibility: 'visible',
         });
     });
 
@@ -1228,24 +1346,25 @@ const seriesType = 'scatter';
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'visible'
+                visibility: 'visible',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1286,24 +1405,25 @@ const seriesType = 'scatter';
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 0
+                'stroke-width': 0,
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 0,
-                visibility: 'visible'
+                visibility: 'visible',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 0
+                'stroke-width': 0,
             }
         });
     });
@@ -1339,24 +1459,25 @@ const seriesType = 'scatter';
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'n-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'visible'
+                visibility: 'visible',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1393,24 +1514,25 @@ const seriesType = 'scatter';
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'seriesColor',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'seriesColor',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'seriesColor',
                 r: 2.5,
                 stroke: 'seriesColor',
                 'stroke-width': 'n-b-width',
-                visibility: 'visible'
+                visibility: 'visible',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'seriesColor',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1498,24 +1620,25 @@ const seriesType = 'scatter';
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
 
@@ -1600,24 +1723,25 @@ const seriesType = 'scatter';
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1657,24 +1781,25 @@ const seriesType = 'scatter';
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
+            labelColor: 'n-color',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'n-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1752,21 +1877,21 @@ const seriesType = 'scatter';
             fill: 'normalColor',
             stroke: 'black',
             'stroke-width': 2,
-            visibility: 'hidden'
+            visibility: 'hidden',
         }, 'parsed normal style');
 
         assert.deepEqual(pointOptions.styles.selection, {
             r: 10,
             stroke: 'selectionBorderColor',
             'stroke-width': 10,
-            fill: 'selectionColor'
+            fill: 'selectionColor',
         }, 'parseSelectionStyle');
 
         assert.deepEqual(pointOptions.styles.hover, {
             r: 8,
             stroke: 'hoverBorderColor',
             'stroke-width': 8,
-            fill: 'hoverColor'
+            fill: 'hoverColor',
         }, 'parseHoverStyle');
 
         assert.deepEqual(pointOptions.image, {

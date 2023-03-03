@@ -73,6 +73,7 @@ import {
     VisualRangeUpdateMode,
     WordWrap,
     ZoomPanAction,
+    ChartsColor,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {
@@ -2018,7 +2019,7 @@ export interface dxChartCommonPaneSettings {
      * @default 'none'
      * @public
      */
-    backgroundColor?: string;
+    backgroundColor?: string | ChartsColor;
     /**
      * @docid dxChartOptions.commonPaneSettings.border
      * @public
@@ -3160,7 +3161,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.cornerRadius
      * @default 0
@@ -3475,7 +3476,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle
      * @default 'solid'
@@ -3497,6 +3498,12 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @public
      */
     width?: number;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.lightening
+     * @default true
+     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
+     */
+    lightening?: boolean;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
@@ -3505,7 +3512,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
      * @default 'solid'
@@ -3721,7 +3728,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.hoverMode
      * @default 'onlyPoint'
@@ -3764,7 +3771,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.size
        * @default undefined
@@ -3879,7 +3886,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.size
        * @default undefined
@@ -3923,7 +3930,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle
      * @default 'solid'
@@ -3945,6 +3952,12 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @public
      */
     width?: number;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.lightening
+     * @default true
+     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
+     */
+    lightening?: boolean;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {

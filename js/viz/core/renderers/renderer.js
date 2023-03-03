@@ -6,7 +6,7 @@ import callOnce from '../../../core/utils/call_once';
 import eventsEngine from '../../../events/core/events_engine';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
-import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams } from '../utils';
+import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams, getNextDefsSvgId } from '../utils';
 import { isDefined } from '../../../core/utils/type';
 
 const window = getWindow();
@@ -15,6 +15,8 @@ const { max, round, } = Math;
 
 const SHARPING_CORRECTION = 0.5;
 const ARC_COORD_PREC = 5;
+
+const LIGHTENING_HASH = '@filter::lightening';
 
 const pxAddingExceptions = {
     'column-count': true,
@@ -92,11 +94,6 @@ function restoreRoot(root, container) {
     }
 }
 
-let getNextDefsSvgId = (function() {
-    let numDefsSvgElements = 1;
-    return function() { return 'DevExpress_' + numDefsSvgElements++; };
-})();
-
 function isObjectArgument(value) {
     return value && (typeof value !== 'string');
 }
@@ -133,12 +130,22 @@ const preserveAspectRatioMap = {
 export function processHatchingAttrs(element, attrs) {
     if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== 'none') {
         attrs = extend({}, attrs);
-        attrs.fill = element._hatching = element.renderer.lockHatching(attrs.fill, attrs.hatching, element._hatching);
-        delete attrs.hatching;
+        attrs.fill = element._hatching = element.renderer.lockDefsElements({
+            color: attrs.fill,
+            hatching: attrs.hatching
+        }, element._hatching, 'pattern');
+        delete attrs.filter;
     } else if(element._hatching) {
-        element.renderer.releaseHatching(element._hatching);
+        element.renderer.releaseDefsElements(element._hatching);
         element._hatching = null;
+    } else if(attrs.filter) {
+        attrs = extend({}, attrs);
+        attrs.filter = element._filter = element.renderer.lockDefsElements({}, element._filter, 'filter');
+    } else if(element._filter) {
+        element.renderer.releaseDefsElements(element._filter);
+        element._filter = null;
     }
+    delete attrs.hatching;
     return attrs;
 }
 
@@ -1318,10 +1325,6 @@ function arcAnimate(params, options, complete) {
 }
 
 ///#DEBUG
-export const DEBUG_set_getNextDefsSvgId = function(newFunction) {
-    getNextDefsSvgId = newFunction;
-};
-
 export const DEBUG_removeBackupContainer = function() {
     if(getBackup().backupCounter) {
         getBackup().backupCounter = 0;
@@ -1946,17 +1949,34 @@ Renderer.prototype = {
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
-    linearGradient: function(stops) {
-        const id = getNextDefsSvgId();
-        const that = this;
-        const gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
+    linearGradient: function(stops, id = getNextDefsSvgId(), rotationAngle) {
+        const gradient = this._createElement('linearGradient', {
+            id,
+            gradientTransform: `rotate(${rotationAngle || 0})`
+        }).append(this._defs);
         gradient.id = id;
 
-        stops.forEach((stop) => {
-            that._createElement('stop', { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
-        });
+        this._createGradientStops(stops, gradient);
 
         return gradient;
+    },
+
+    radialGradient: function(stops, id) {
+        const gradient = this._createElement('radialGradient', { id }).append(this._defs);
+
+        this._createGradientStops(stops, gradient);
+
+        return gradient;
+    },
+
+    _createGradientStops: function(stops, group) {
+        stops.forEach((stop) => {
+            this._createElement('stop', {
+                offset: stop.offset,
+                'stop-color': stop['stop-color'] ?? stop.color,
+                'stop-opacity': stop.opacity
+            }).append(group);
+        });
     },
 
     // appended automatically
@@ -1985,6 +2005,27 @@ Renderer.prototype = {
         ///#ENDDEBUG
 
         return pattern;
+    },
+
+    customPattern: function(id, template, width, height) {
+        const option = {
+            id,
+            width,
+            height,
+            patternContentUnits: 'userSpaceOnUse',
+            patternUnits: this._getPatternUnits(width, height)
+        };
+        const pattern = this._createElement('pattern', option).append(this._defs);
+
+        template.render({ container: pattern.element });
+
+        return pattern;
+    },
+
+    _getPatternUnits: function(width, height) {
+        if(Number(width) && Number(height)) {
+            return 'userSpaceOnUse';
+        }
     },
 
     _getPointsWithYOffset: function(points, offset) {
@@ -2109,8 +2150,22 @@ Renderer.prototype = {
         return filter;
     },
 
-    initHatching: function() {
-        const storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() };
+    lightenFilter: function(id) {
+        const coef = 1.3;
+        const filter = this._createElement('filter', { id }).append(this._defs);
+
+        this._createElement('feColorMatrix', {
+            type: 'matrix',
+            values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
+        }).append(filter);
+
+        filter.id = id;
+
+        return filter;
+    },
+
+    initDefsElements: function() {
+        const storage = this._defsElementsStorage = this._defsElementsStorage || { byHash: {}, baseId: getNextDefsSvgId() };
         const byHash = storage.byHash;
         let name;
 
@@ -2122,19 +2177,28 @@ Renderer.prototype = {
         storage.nextId = 0;
     },
 
-    lockHatching: function(color, hatching, ref) {
-        const storage = this._hatchingStorage;
-        const hash = getHatchingHash(color, hatching);
+    drawPattern: function({ color, hatching }, storageId, nextId) {
+        return this.pattern(color, hatching, `${storageId}-hatching-${nextId++}`);
+    },
+
+    drawFilter: function(_, storageId, nextId) {
+        return this.lightenFilter(`${storageId}-lightening-${nextId++}`);
+    },
+
+    lockDefsElements: function(attrs, ref, type) {
+        const storage = this._defsElementsStorage;
         let storageItem;
+        const hash = type === 'pattern' ? getHatchingHash(attrs) : LIGHTENING_HASH;
+        const method = type === 'pattern' ? this.drawPattern : this.drawFilter;
         let pattern;
 
         if(storage.refToHash[ref] !== hash) {
             if(ref) {
-                this.releaseHatching(ref);
+                this.releaseDefsElements(ref);
             }
             storageItem = storage.byHash[hash];
             if(!storageItem) {
-                pattern = this.pattern(color, hatching, storage.baseId + '-hatching-' + storage.nextId++);
+                pattern = method.call(this, attrs, storage.baseId, storage.nextId++);
                 storageItem = storage.byHash[hash] = { pattern: pattern, count: 0 };
                 storage.refToHash[pattern.id] = hash;
             }
@@ -2144,8 +2208,8 @@ Renderer.prototype = {
         return ref;
     },
 
-    releaseHatching: function(ref) {
-        const storage = this._hatchingStorage;
+    releaseDefsElements: function(ref) {
+        const storage = this._defsElementsStorage;
         const hash = storage.refToHash[ref];
         const storageItem = storage.byHash[hash];
 
@@ -2154,10 +2218,10 @@ Renderer.prototype = {
             delete storage.byHash[hash];
             delete storage.refToHash[ref];
         }
-    }
+    },
 };
 
-function getHatchingHash(color, hatching) {
+function getHatchingHash({ color, hatching }) {
     return '@' + color + '::' + hatching.step + ':' + hatching.width + ':' + hatching.opacity + ':' + hatching.direction;
 }
 

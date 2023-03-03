@@ -67,6 +67,7 @@ import {
     ValueErrorBarType,
     VisualRange,
     ZoomPanAction,
+    ChartsColor,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {
@@ -1486,7 +1487,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
      * @default 'solid'
@@ -1536,7 +1537,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
        * @default undefined
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
        * @default 'solid'
@@ -1569,6 +1570,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          */
         width?: number;
       };
+      /**
+       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening
+       * @default true
+       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       */
+      lightening?: boolean;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width
        * @default 3
@@ -1657,7 +1664,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
        * @default undefined
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
        * @default 'solid'
@@ -1690,6 +1697,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          */
         width?: number;
       };
+      /**
+       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening
+       * @default true
+       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       */
+      lightening?: boolean;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width
        * @default 3

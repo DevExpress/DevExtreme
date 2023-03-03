@@ -250,7 +250,7 @@ const dxFunnel = baseWidget.inherit({
             });
         }
 
-        that._renderer.initHatching();
+        that._renderer.initDefsElements();
         that._change(['TILING', 'DRAWN']);
     },
 
