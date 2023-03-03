@@ -31,7 +31,7 @@ import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
-import { createBodyOverflowManager } from './utils';
+
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -158,7 +158,6 @@ const Overlay = Widget.inherit({
             hideOnParentScroll: false,
 
             preventScrollEvents: true,
-            enableBodyScroll: true,
 
             onPositioned: null,
             propagateOutsideClick: false,
@@ -251,7 +250,6 @@ const Overlay = Widget.inherit({
         };
 
         this.warnPositionAsFunction();
-        this._createBodyOverflowManager();
     },
 
     warnPositionAsFunction() {
@@ -402,25 +400,7 @@ const Overlay = Widget.inherit({
         return this._getOptionValue('animation', this);
     },
 
-    _createBodyOverflowManager: function() {
-        if(hasWindow() && !this.option('enableBodyScroll')) {
-            this._bodyOverflowManager = createBodyOverflowManager();
-        }
-    },
-
-    _toggleBodyScroll: function(enabled) {
-        if(!this._bodyOverflowManager) {
-            return;
-        }
-
-        const { setOverflow, restoreOverflow } = this._bodyOverflowManager;
-
-        if(enabled) {
-            restoreOverflow();
-        } else {
-            setOverflow();
-        }
-    },
+    _toggleBodyScroll: noop,
 
     _animateShowing: function() {
         const animation = this._getAnimationConfig() ?? {};
@@ -1018,10 +998,6 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSafariScrolling: function() {
-        if(!this.option('enableBodyScroll')) {
-            return;
-        }
-
         const visible = this.option('visible');
         const $body = $(domAdapter.getBody());
         const isIosSafari = devices.real().platform === 'ios' && browser.safari;
@@ -1152,7 +1128,6 @@ const Overlay = Widget.inherit({
         this.callBase();
 
         this._toggleSafariScrolling();
-        this._toggleBodyScroll(true);
         this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
@@ -1247,9 +1222,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'preventScrollEvents':
                 this._toggleWrapperScrollEventsSubscription(value);
-                break;
-            case 'enableBodyScroll':
-                this._toggleBodyScroll(value);
                 break;
             default:
                 this.callBase(args);

@@ -101,37 +101,35 @@ if (!isMaterial()) {
             fullScreen,
             contentTemplate: ($content) => {
               const overlayContent = '\
-            <div class="caption">Description</div>\
-            <div class="text" style="width: 450px">In the heart of LA\'s business district, the Downtown Inn has a welcoming staff and award winning restaurants that remain open 24 hours a day. Use our conference room facilities to conduct meetings and have a drink at our beautiful rooftop bar.</div> \
-            <br>\
-            <div class="hotel-features content">\
-            <div class="feature">\
-              <div class="caption">Features</div>\
-              <div class="features">\
-                <div>Concierge</div>\
-                <div>Restaurant</div>\
-                <div>Valet Parking</div>\
-                <div>Fitness Center</div>\
-                <div>Sauna</div>\
-                <div>Airport Shuttle</div>\
-              </div>\
-            </div>\
-            <br>\
-            <div class="room">\
-              <div class="caption">Rooms</div>\
-              <div class="features">\
-                <div>Climate control</div>\
-                <div>Air conditioning</div>\
-                <div>Coffee/tea maker</div>\
-                <div>Iron/ironing</div>\
-              </div>\
-            </div>\
-            <br>\
-            </div>\
-            <div class="text" style="width: 450px">In the heart of LA\'s business district, the Downtown Inn has a welcoming staff and award winning restaurants that remain open 24 hours a day. Use our conference room facilities to conduct meetings and have a drink at our beautiful rooftop bar.</div> \
-            ';
-
-              $content.css('overflow', 'auto');
+                <div class="caption">Description</div>\
+                <div class="text" style="width: 450px">In the heart of LA\'s business district, the Downtown Inn has a welcoming staff and award winning restaurants that remain open 24 hours a day. Use our conference room facilities to conduct meetings and have a drink at our beautiful rooftop bar.</div> \
+                <br>\
+                <div class="hotel-features content">\
+                <div class="feature">\
+                  <div class="caption">Features</div>\
+                  <div class="features">\
+                    <div>Concierge</div>\
+                    <div>Restaurant</div>\
+                    <div>Valet Parking</div>\
+                    <div>Fitness Center</div>\
+                    <div>Sauna</div>\
+                    <div>Airport Shuttle</div>\
+                  </div>\
+                </div>\
+                <br>\
+                <div class="room">\
+                  <div class="caption">Rooms</div>\
+                  <div class="features">\
+                    <div>Climate control</div>\
+                    <div>Air conditioning</div>\
+                    <div>Coffee/tea maker</div>\
+                    <div>Iron/ironing</div>\
+                  </div>\
+                </div>\
+                <br>\
+                </div>\
+                <div class="text" style="width: 450px">In the heart of LA\'s business district, the Downtown Inn has a welcoming staff and award winning restaurants that remain open 24 hours a day. Use our conference room facilities to conduct meetings and have a drink at our beautiful rooftop bar.</div> \
+                ';
 
               $content.html(overlayContent);
             },

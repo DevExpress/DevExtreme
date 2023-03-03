@@ -16980,10 +16980,6 @@ declare module DevExpress.ui {
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
     /**
-     * [descr:dxLoadPanelOptions.preventScroll]
-     */
-    preventScrollEvents?: boolean;
-    /**
      * [descr:dxLoadPanelOptions.shadingColor]
      */
     shadingColor?: string;
@@ -19129,10 +19125,6 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.position]
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
-    /**
-     * [descr:dxPopupOptions.preventScroll]
-     */
-    preventScrollEvents?: boolean;
     /**
      * [descr:dxPopupOptions.enableBodyScroll]
      */
@@ -22577,7 +22569,12 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {}
+  export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
+    /**
+     * [descr:dxTooltipOptions.enableBodyScroll]
+     */
+    enableBodyScroll?: boolean;
+  }
   /**
    * [descr:dxTrackBar]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -24339,11 +24336,6 @@ declare module DevExpress.ui {
     boundary?: String | DevExpress.core.UserDefinedElement;
 
     offset?: object;
-
-    /**
-     * [descr:dxValidationMessageOptions.preventScroll]
-     */
-    preventScrollEvents?: boolean;
   }
   /**
    * [descr:dxValidationSummary]

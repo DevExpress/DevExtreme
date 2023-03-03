@@ -35,6 +35,7 @@ const Widget = require('ui/widget/ui.widget');
 const Overlay = require('ui/overlay/ui.overlay');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
+const Tooltip = require('ui/tooltip');
 const RadioGroup = require('ui/radio_group');
 const Resizable = require('ui/resizable');
 const Scheduler = require('ui/scheduler/ui.scheduler');
@@ -590,7 +591,6 @@ testComponentDefaults(Overlay,
     {},
     {
         preventScrollEvents: true,
-        enableBodyScroll: true,
     }
 );
 
@@ -634,6 +634,14 @@ testComponentDefaults(Popover,
                 to: 0
             }
         }
+    }
+);
+
+testComponentDefaults(Tooltip,
+    {},
+    {
+        preventScrollEvents: true,
+        enableBodyScroll: true,
     }
 );
 
