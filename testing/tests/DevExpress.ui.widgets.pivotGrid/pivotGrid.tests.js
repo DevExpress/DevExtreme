@@ -41,7 +41,7 @@ import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import eventsEngine from 'events/core/events_engine';
-import { getScrollbarWidth } from 'ui/pivot_grid/utils/get_scrollbar_width.js';
+import { getScrollbarWidth } from 'ui/pivot_grid/utils/calculate_scrollbar_width';
 import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;

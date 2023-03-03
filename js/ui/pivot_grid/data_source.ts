@@ -928,7 +928,7 @@ export default Class.inherit((function () {
       (this as any)._loadingCount += increment;
       const newLoading = this.isLoading();
 
-      // @ts-expect-error
+      //- @ts-expect-error
       if (oldLoading ^ newLoading) {
         (this as any)._eventsStrategy.fireEvent('loadingChanged', [newLoading]);
       }

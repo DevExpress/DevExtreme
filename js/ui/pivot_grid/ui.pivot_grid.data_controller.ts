@@ -31,6 +31,7 @@ const proxyMethod = function (instance, methodName, defaultResult?) {
 };
 
 export const DataController = Class.inherit((function () {
+  //- @ts-expect-error
   function getHeaderItemText(item, description, options) {
     let { text } = item;
 
@@ -683,7 +684,7 @@ export const DataController = Class.inherit((function () {
               if (that._dataSource.paginate()) {
                 that._dataSource.load();
               } else {
-                // @ts-expect-error
+                //- @ts-expect-error
                 virtualScrollControllerChanged.apply(this, arguments);
               }
             });
@@ -710,7 +711,7 @@ export const DataController = Class.inherit((function () {
               if (that._dataSource.paginate()) {
                 that._dataSource.load();
               } else {
-                // @ts-expect-error
+                //- @ts-expect-error
                 virtualScrollControllerChanged.apply(this, arguments);
               }
             });
@@ -1124,7 +1125,7 @@ export const DataController = Class.inherit((function () {
       };
 
       const notifyProgress = function (progress) {
-        // @ts-expect-error
+        //- @ts-expect-error
         this.progress = progress;
         that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
       };
@@ -1216,6 +1217,7 @@ export const DataController = Class.inherit((function () {
 
         foreachRowInfo(
           newRowsInfo,
+          //- @ts-expect-error
           (rowInfo, visibleIndex, rowIndex, columnIndex, realColumnIndex) => {
             const colspan = rowInfo.colspan || 1;
 

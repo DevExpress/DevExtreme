@@ -82,15 +82,15 @@ const createModuleConfig = (name, dir, filePath) => {
 };
 
 function compileTS(settings) {
-    return ts.createProject('tsconfig.json', {
+    return ts.createProject('js/tsconfig.json', {
         // typescript: require('typescript-min'),
         // types: ['jquery'],
-        noEmitOnError: true,
-        allowJs: true,
-        lib: [ 'es6', 'es7', 'es2017.object', 'dom' ],
-        strict: true,
-        noImplicitAny: false,
-        ...settings
+        // noEmitOnError: true,
+        // allowJs: true,
+        // lib: [ 'es6', 'es7', 'es2017.object', 'dom' ],
+        // strict: true,
+        // noImplicitAny: false,
+        // ...settings
     })(ts.reporter.fullReporter());
 }
 

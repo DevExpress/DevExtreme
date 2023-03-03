@@ -1,17 +1,17 @@
 import {
     DxPromise,
-} from '../../core/utils/deferred';
+} from '../../../core/utils/deferred';
 
 import {
     Store,
     StoreOptions,
-} from '../../data/index';
+} from '../../../data/index';
 
-import DataSource from '../../data/data_source';
+import DataSource from '../../../data/data_source';
 
 import {
     Format,
-  } from '../../localization';
+  } from '../../../localization';
 
 import XmlaStore, {
     XmlaStoreOptions,
@@ -19,12 +19,12 @@ import XmlaStore, {
 
 import {
     SortOrder,
-} from '../../common';
+} from '../../../common';
 
 import {
     FilterType,
     SummaryType,
-} from '../../common/grids';
+} from '../../../common/grids';
 
 export {
     FilterType,

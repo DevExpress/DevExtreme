@@ -144,17 +144,17 @@ function getPathFieldName(dimension) {
 }
 
 const SummaryCell = function (columnPath, rowPath, data, descriptions, fieldIndex, fieldsCache?) {
-  // @ts-expect-error
+  //- @ts-expect-error
   this._columnPath = columnPath;
-  // @ts-expect-error
+  //- @ts-expect-error
   this._rowPath = rowPath;
-  // @ts-expect-error
+  //- @ts-expect-error
   this._fieldIndex = fieldIndex;
-  // @ts-expect-error
+  //- @ts-expect-error
   this._fieldsCache = fieldsCache || createCache();
-  // @ts-expect-error
+  //- @ts-expect-error
   this._data = data;
-  // @ts-expect-error
+  //- @ts-expect-error
   this._descriptions = descriptions;
 
   const cell = data.values
@@ -164,7 +164,7 @@ const SummaryCell = function (columnPath, rowPath, data, descriptions, fieldInde
   if (cell) {
     cell.originalCell = cell.originalCell || cell.slice();
     cell.postProcessedFlags = cell.postProcessedFlags || [];
-    // @ts-expect-error
+    //- @ts-expect-error
     this._cell = cell;
   }
 };
