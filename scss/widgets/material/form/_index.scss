@@ -81,6 +81,10 @@
       transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
     }
   }
+
+  .dx-toggle-controls-paddings {
+    padding-left: $material-filled-texteditor-input-horizontal-padding;
+  }
 }
 
 .dx-field-item-content-wrapper.dx-invalid {
