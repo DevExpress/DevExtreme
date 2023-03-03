@@ -282,7 +282,7 @@ export interface DataController extends State, Controller {
 
   _updatePageIndexes: (this: this, ...args: any) => any;
 
-  processUpdateFocusedRow: (this: this, ...args: any) => any;
+  _updateFocusedRow: (this: this, ...args: any) => any;
 
   isPagingByRendering: (this: this, ...args: any) => any;
 
