@@ -606,7 +606,9 @@ const Popup = Overlay.inherit({
     },
 
     _toggleContentScrollClass() {
-        this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, !this.option('preventScrollEvents'));
+        const isNativeScrollingEnabled = !this.option('preventScrollEvents');
+
+        this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
     },
 
     _getPositionControllerConfig() {
@@ -915,7 +917,7 @@ const Popup = Overlay.inherit({
     },
 
     _optionChanged: function(args) {
-        const { value, name } = args.value;
+        const { value, name } = args;
 
         switch(name) {
             case 'disabled':

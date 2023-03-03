@@ -1,14 +1,14 @@
 /* eslint-disable no-multi-str */
-import { ClientFunction, Selector } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { ClientFunction } from 'testcafe';
+import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo, getComputedPropertyValue, getDocumentScrollTop, insertStylesheetRulesToPage,
-  removeAttribute,
 } from '../../../helpers/domUtils';
-import Popup from '../../../model/overlay/index';
+import Popup from '../../../model/popup';
+
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
 fixture`Popup scrolling`
   .page(url(__dirname, '../../container.html'));
@@ -17,12 +17,8 @@ if (!isMaterial()) {
   [false, true].forEach((shading) => {
     [false, true].forEach((enableBodyScroll) => {
       [false, true].forEach((fullScreen) => {
-        test(`Overlay native scrolling, shading: ${shading}, enableBodyScroll: ${enableBodyScroll}, fullScreen: ${fullScreen}`, async (t) => {
-          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-          const overlay = new Popup('#overlay');
-
-          const body = Selector('body');
+        test(`Popup native scrolling, shading: ${shading}, enableBodyScroll: ${enableBodyScroll}, fullScreen: ${fullScreen}`, async (t) => {
+          const popup = new Popup('#popup');
 
           const checkBodyStyles = async ({ paddingRight, overflow }) => {
             await t
@@ -38,40 +34,45 @@ if (!isMaterial()) {
               .eql('auto');
           };
 
-          await t
-            .scroll(body, 300, 0);
+          const checkPopupStyles = async ({ overflow, overScrollBehavior }) => {
+            await t
+              .expect(getComputedPropertyValue(`.${POPUP_CONTENT_CLASS}`, 'overflow'))
+              .eql(overflow)
+              .expect(getComputedPropertyValue(`.${POPUP_CONTENT_CLASS}`, 'overscroll-behavior'))
+              .eql(overScrollBehavior);
+          };
 
           await checkBodyStyles({ paddingRight: '0px', overflow: 'visible' });
+
+          await insertStylesheetRulesToPage('body { padding-right: 10px; overflow: auto; }');
+
+          await ClientFunction(() => {
+            window.scrollTo(0, 300);
+          })();
+
           await t
             .expect(getDocumentScrollTop())
-            .eql(258);
-
-          await insertStylesheetRulesToPage('body { padding-right: 10px; overflow: auto;}');
+            .eql(300);
 
           await checkBodyStyles({ paddingRight: '10px', overflow: 'auto' });
           await t
             .expect(getDocumentScrollTop())
-            .eql(258);
+            .eql(300);
 
-          await overlay.show();
+          await popup.show();
 
+          await checkPopupStyles({ overflow: 'auto', overScrollBehavior: 'contain' });
           await checkBodyStyles({ paddingRight: enableBodyScroll ? '10px' : '25px', overflow: enableBodyScroll ? 'auto' : 'hidden' });
           await t
             .expect(getDocumentScrollTop())
-            .eql(258);
+            .eql(300);
 
-          await testScreenshot(t, takeScreenshot, `Overlay native scrolling,shading=${shading},enableBodyScroll=${enableBodyScroll},fullScreen=${fullScreen}.png`);
-
-          await overlay.hide();
+          await popup.hide();
 
           await checkBodyStyles({ paddingRight: '10px', overflow: 'auto' });
           await t
             .expect(getDocumentScrollTop())
-            .eql(258);
-
-          await t
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
+            .eql(300);
         }).before(async () => {
           await appendElementTo('#container', 'div', 'scrollable-container', { height: '2000px', overflowY: 'auto' });
           await appendElementTo('#scrollable-container', 'div', 'scrollable-content', { height: '3000px' });
@@ -91,16 +92,16 @@ if (!isMaterial()) {
           })();
 
           await appendElementTo('#inner-container', 'div', 'inner-content', { width: '2000px', height: '2000px' });
-          await appendElementTo('#scrollable-container', 'div', 'overlay', {});
+          await appendElementTo('#scrollable-container', 'div', 'popup', {});
 
-          await createWidget('dxOverlay', {
+          await createWidget('dxPopup', {
             width: 400,
             height: 400,
             shading,
             enableBodyScroll,
             fullScreen,
             contentTemplate: ($content) => {
-              const overlayContent = '\
+              const popupContent = '\
                 <div class="caption">Description</div>\
                 <div class="text" style="width: 450px">In the heart of LA\'s business district, the Downtown Inn has a welcoming staff and award winning restaurants that remain open 24 hours a day. Use our conference room facilities to conduct meetings and have a drink at our beautiful rooftop bar.</div> \
                 <br>\
@@ -131,11 +132,9 @@ if (!isMaterial()) {
                 <div class="text" style="width: 450px">In the heart of LA\'s business district, the Downtown Inn has a welcoming staff and award winning restaurants that remain open 24 hours a day. Use our conference room facilities to conduct meetings and have a drink at our beautiful rooftop bar.</div> \
                 ';
 
-              $content.html(overlayContent);
+              $content.html(popupContent);
             },
-          }, '#overlay');
-        }).after(async () => {
-          await removeAttribute('body', 'style');
+          }, '#popup');
         });
       });
     });

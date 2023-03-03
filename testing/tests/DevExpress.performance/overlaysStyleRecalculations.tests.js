@@ -77,4 +77,33 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
 
         assert.measureStyleRecalculation(measureFunction, shading ? 18 : 17);
     });
+
+    [true, false].forEach(enableBodyScroll => {
+        QUnit.performanceTest(`dxPopup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be rendered with minimum count of relayouts`, function(assert) {
+
+            const $additionalElement = $('<div>').height(2000).appendTo($('body'));
+
+            try {
+                const popup = $('#element').dxPopup({
+                    shading,
+                    enableBodyScroll,
+                    animation: null,
+                    useResizeObserver: false
+                }).dxPopup('instance');
+
+                const measureFunctionOnShown = function() {
+                    popup.show();
+                };
+
+                const measureFunctionOnHide = function() {
+                    popup.hide();
+                };
+
+                assert.measureStyleRecalculation(measureFunctionOnShown, 5);
+                assert.measureStyleRecalculation(measureFunctionOnHide, 5);
+            } finally {
+                $additionalElement.remove();
+            }
+        });
+    });
 });

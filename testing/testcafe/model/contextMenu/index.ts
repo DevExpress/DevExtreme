@@ -1,12 +1,12 @@
 import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
-import Overlay from './overlay';
-import OverlayWrapper from './overlay/wrapper';
+import Overlay from '../overlay';
 import { WidgetName } from '../../helpers/createWidget';
 
 const CLASS = {
   contextMenu: 'dx-context-menu',
   item: 'dx-menu-item',
+  overlay: 'dx-overlay',
 };
 
 export default class ContextMenu extends Widget {
@@ -14,14 +14,11 @@ export default class ContextMenu extends Widget {
 
   overlay: Overlay;
 
-  overlayWrapper: OverlayWrapper;
-
   constructor(id: string | Selector) {
     super(id);
 
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
-    this.overlay = new Overlay();
-    this.overlayWrapper = new OverlayWrapper();
+    this.overlay = new Overlay(`.${CLASS.overlay}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -36,7 +33,7 @@ export default class ContextMenu extends Widget {
     return this.items.count;
   }
 
-  apiShow(): Promise<void> {
+  show(): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(

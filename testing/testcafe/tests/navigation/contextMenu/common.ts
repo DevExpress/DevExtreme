@@ -17,7 +17,7 @@ test('ContextMenu items render', async (t) => {
   const contextMenu = new ContextMenu('#contextMenu');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await contextMenu.apiShow();
+  await contextMenu.show();
 
   await t.click(contextMenu.items.nth(0));
 
@@ -33,7 +33,7 @@ test('ContextMenu items render', async (t) => {
     shouldTestInCompact: true,
     compactCallBack: async () => {
       await contextMenu.repaint();
-      await contextMenu.apiShow();
+      await contextMenu.show();
       await t.click(contextMenu.items.nth(0));
     },
   });

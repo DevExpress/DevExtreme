@@ -5,13 +5,8 @@ import Widget from '../internal/widget';
 const CLASS = {
   content: 'dx-overlay-content',
   wrapper: 'dx-overlay-wrapper',
-  closeButton: 'dx-closebutton',
 };
 export default class Overlay extends Widget {
-  public static className = '.dx-popup-wrapper';
-
-  public static footerToolbarClassName = '.dx-popup-bottom';
-
   content: Selector;
 
   wrapper: Selector;
@@ -50,6 +45,23 @@ export default class Overlay extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).hide(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  getOverlayOffset(): Promise<any> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        const {
+          offsetX, offsetY, pageX, pageY,
+        // eslint-disable-next-line no-underscore-dangle
+        } = (getInstance() as any)._positionController._position.of;
+
+        return {
+          offsetX, offsetY, pageX, pageY,
+        };
+      },
       { dependencies: { getInstance } },
     )();
   }
