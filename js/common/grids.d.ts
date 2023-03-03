@@ -128,6 +128,7 @@ export interface ColumnBase<TRowData = any> {
   allowHeaderFiltering?: boolean;
   /**
    * @docid GridBaseColumn.allowHiding
+   * @default false &for(command column)
    * @default true
    * @public
    */
