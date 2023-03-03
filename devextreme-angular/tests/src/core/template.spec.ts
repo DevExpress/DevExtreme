@@ -137,6 +137,19 @@ export class TestContainerComponent {
     }
 }
 
+@Component({
+    selector: 'dx-imitation',
+    template: `
+        <div *dxTemplate="let d of 'ImportedTemlate'">
+            <div>123213</div>
+        </div>
+    `
+})
+export class ImitateImportComponent {
+    constructor() {
+    }
+}
+
 
 describe('DevExtreme Angular widget\'s template', () => {
 
@@ -167,6 +180,38 @@ describe('DevExtreme Angular widget\'s template', () => {
         expect(templatesHash['templateName']).not.toBeUndefined();
         expect(typeof templatesHash['templateName'].render).toBe('function');
 
+    });
+
+    it('should be able to load template imported from another component', () => {
+        TestBed.configureTestingModule(
+            {
+                declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestComponent, ImitateImportComponent],
+                imports: [DxTemplateModule, BrowserTransferStateModule]
+            });
+        TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+                template: `
+                    <dx-test-widget testTemplate="ImportedTemlate">
+                        <dx-imitation></dx-imitation>
+                    </dx-test-widget>
+                `
+            }
+        });
+        let fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
+
+        let testComponent = fixture.componentInstance,
+        innerComponent = testComponent.widget,
+        templatesHash = innerComponent.instance.option('integrationOptions.templates'),
+        template = innerComponent.testTemplate,
+        container = document.createElement('div');
+
+        expect(template).not.toBeUndefined;
+
+        templatesHash[template].render({ container: container });
+        fixture.detectChanges();
+
+        expect(container.children[0].classList.contains('dx-template-wrapper')).toBe(true);
     });
 
 

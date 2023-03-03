@@ -12,7 +12,8 @@ import {
     OnInit,
     DoCheck,
     AfterContentChecked,
-    AfterViewInit
+    AfterViewInit,
+    AfterViewChecked
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -44,7 +45,7 @@ export const getServerStateKey = () => {
 @Component({
     template: ''
 })
-export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit,
+export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
     private _initialOptions: any = {};
     protected _optionsToUpdate: any = {};
@@ -219,7 +220,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
 
     ngAfterContentChecked() {
-        this._updateTemplates();
         this.applyOptions();
         this.resetOptions();
         this.unlockWidgetUpdate();
@@ -229,6 +229,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
         this._updateTemplates();
         this.instance.endUpdate();
         this.recreatedNestedComponents = [];
+    }
+
+    ngAfterViewChecked(): void {
+        this._updateTemplates();
     }
 
     applyOptions() {
