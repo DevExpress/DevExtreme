@@ -1246,6 +1246,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.categories
      * @public
+     * @fires BaseWidgetOptions.onOptionChanged
      */
     categories?: Array<number | string | Date>;
     /**
@@ -2271,6 +2272,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.categories
      * @public
+     * @fires BaseWidgetOptions.onOptionChanged
      */
     categories?: Array<number | string | Date>;
     /**
