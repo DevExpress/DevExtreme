@@ -510,15 +510,19 @@ const columnsViewMembers = {
             } else {
                 that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
             }
-            if(change) {
-                change.templateDeferreds = change.templateDeferreds || [];
-                change.templateDeferreds.push(templateDeferred);
-            }
+
+            this._templateDeferreds.push(templateDeferred);
         } else {
             templateDeferred.reject();
         }
 
-        return templateDeferred.promise();
+        return templateDeferred.promise().always(() => {
+            const index = this._templateDeferreds.indexOf(templateDeferred);
+
+            if(index >= 0) {
+                this._templateDeferreds.splice(index, 1);
+            }
+        });
     },
 
     _getBodies: function(tableElement) {
@@ -844,6 +848,7 @@ const columnsViewMembers = {
         that._columnsController = that.getController('columns');
         that._dataController = that.getController('data');
         that._delayedTemplates = [];
+        this._templateDeferreds = [];
         that._templatesCache = {};
         that.createAction('onCellClick');
         that.createAction('onRowClick');
@@ -918,15 +923,15 @@ const columnsViewMembers = {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    waitAsyncTemplates: function(change, forceWaiting) {
+    waitAsyncTemplates: function(forceWaiting) {
         const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate || change.isMasterDetail)) && change?.templateDeferreds ? change?.templateDeferreds : [];
+        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && this._templateDeferreds || [];
 
         return when.apply(this, templateDeferreds);
     },
 
-    _updateContent: function($newTableElement, change) {
-        return this.waitAsyncTemplates(change).done(() => {
+    _updateContent: function($newTableElement) {
+        return this.waitAsyncTemplates().done(() => {
             this.setTableElement($newTableElement);
             this._wrapTableInScrollContainer($newTableElement);
         });

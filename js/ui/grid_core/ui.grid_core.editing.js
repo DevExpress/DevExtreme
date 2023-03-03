@@ -995,8 +995,10 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             d.done(() => {
-                this._showAddedRow(rowIndex);
-                this._afterInsertRow(change.key);
+                this._rowsView?.waitAsyncTemplates(true).done(() => {
+                    this._showAddedRow(rowIndex);
+                    this._afterInsertRow(change.key);
+                });
             });
 
             return d.promise();
@@ -2605,10 +2607,10 @@ export const editingModule = {
                     this.callBase.apply(this, arguments);
                     clearTimeout(this._pointerDownTimeout);
                 },
-                _renderCore: function(change) {
+                _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    return this.waitAsyncTemplates(change, true).done(() => {
+                    return this.waitAsyncTemplates(true).done(() => {
                         // @ts-expect-error
                         this._editingController._focusEditorIfNeed();
                     });
