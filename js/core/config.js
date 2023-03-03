@@ -15,10 +15,10 @@ const config = {
     wrapActionsBeforeExecute: true,
     useLegacyStoreResult: false,
     /**
-    * @name GlobalConfig.useJQuery
-    * @type boolean
-    * @hidden
-    */
+     * @name GlobalConfig.useJQuery
+     * @type boolean
+     * @hidden
+     */
     useJQuery: undefined,
     editorStylingMode: undefined,
     useLegacyVisibleIndex: false,
@@ -32,28 +32,40 @@ const config = {
             my: 'right bottom',
             offset: {
                 x: -16,
-                y: -16
-            }
+                y: -16,
+            },
         },
         maxSpeedDialActionCount: 5,
         shading: false,
-        direction: 'auto'
+        direction: 'auto',
     },
 
     optionsParser: (optionsString) => {
         if(optionsString.trim().charAt(0) !== '{') {
             optionsString = '{' + optionsString + '}';
         }
+
         try {
-            // eslint-disable-next-line no-new-func
-            return (new Function('return ' + optionsString))();
+            return JSON.parse(optionsString);
         } catch(ex) {
-            throw errors.Error('E3018', ex, optionsString);
+            try {
+                return JSON.parse(normalizeToJSONString(optionsString));
+            } catch(exNormalize) {
+                throw errors.Error('E3018', ex, optionsString);
+            }
         }
-    }
+    },
 };
 
-const deprecatedFields = [ 'decimalSeparator', 'thousandsSeparator' ];
+const normalizeToJSONString = (optionsString) => {
+    return optionsString
+        .replace(/([{,])[\s\n]*'([^']+)'[\s\n]*:/g, '$1"$2":') // replace quotes for single quoted keys
+        .replace(/([{,])[\s\n]*([^:\s]+)[\s\n]*:/g, '$1"$2":') // add quotes for unquoted keys
+        .replace(/'/g, '"') // replace all ' to "
+        .replace(/,\s*([\]}])/g, '$1'); // remove trailing commas
+};
+
+const deprecatedFields = ['decimalSeparator', 'thousandsSeparator'];
 
 const configMethod = (...args) => {
     if(!args.length) {
