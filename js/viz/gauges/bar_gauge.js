@@ -15,6 +15,7 @@ import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gau
 import dxCircularGauge from './circular_gauge';
 import { plugin as pluginLegend } from '../components/legend';
 import { plugins as centerTemplatePlugins } from '../core/center_template';
+import { roundFloatPart } from '../../core/utils/math';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
@@ -300,26 +301,27 @@ export const dxBarGauge = BaseGauge.inherit({
                 xStart,
                 yStart,
                 box.x + lastCoords.x,
-                box.y + box.height / 2 + lastCoords.y];
+                box.y + box.height / 2 + lastCoords.y
+            ];
 
             if(bar._angle > 90) {
                 originalPoints[2] += box.width;
             }
 
             if(connectorWidth % 2) {
-                const xDeviationForOddConnectorWidth = -sin / 2;
-                const yDeviationForOddConnectorWidth = -cos / 2;
+                const xDeviation = -sin / 2;
+                const yDeviation = -cos / 2;
 
                 if(bar._angle > 180) {
-                    originalPoints[0] -= xDeviationForOddConnectorWidth;
-                    originalPoints[1] -= yDeviationForOddConnectorWidth;
+                    originalPoints[0] -= xDeviation;
+                    originalPoints[1] -= yDeviation;
                 } else if(bar._angle > 0 && bar._angle <= 90) {
-                    originalPoints[0] += xDeviationForOddConnectorWidth;
-                    originalPoints[1] += yDeviationForOddConnectorWidth;
+                    originalPoints[0] += xDeviation;
+                    originalPoints[1] += yDeviation;
                 }
             }
 
-            const points = originalPoints.map(coordinate => _round(coordinate * 10000) / 10000);
+            const points = originalPoints.map(coordinate => roundFloatPart(coordinate, 4));
             bar._line.attr({ points });
             bar._line.rotate(0);
         });

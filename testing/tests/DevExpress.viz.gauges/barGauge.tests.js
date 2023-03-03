@@ -575,7 +575,7 @@ QUnit.test('Some values are not changed', function(assert) {
     }, this);
 });
 
-QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift,  width of the connector is odd', function(assert) {
+QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [10, 11, 12],
@@ -622,7 +622,7 @@ QUnit.test('label location if the angle < 90, resolveLabelOverlapping - shift', 
     }, this);
 });
 
-QUnit.test('if the labels go beyond the canvas and  resolveLabelOverlapping - shift', function(assert) {
+QUnit.test('if the labels go beyond the canvas and resolveLabelOverlapping - shift', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [10, 10, 10, 10, 10, 10],
@@ -676,7 +676,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift, w
     }, this);
 });
 
-QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift,', function(assert) {
+QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [49, 50, 51],
@@ -698,7 +698,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift,',
     }, this);
 });
 
-QUnit.test('label location if the angle > 90,  resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
+QUnit.test('label location if the angle > 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [80, 79, 78],
@@ -723,7 +723,7 @@ QUnit.test('label location if the angle > 90,  resolveLabelOverlapping - shift, 
     }, this);
 });
 
-QUnit.test('label location if the angle is > 90?  resolveLabelOverlapping - shift', function(assert) {
+QUnit.test('label location if the angle is > 90, resolveLabelOverlapping - shift', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [80, 79, 78],
