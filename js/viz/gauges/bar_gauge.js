@@ -296,32 +296,31 @@ export const dxBarGauge = BaseGauge.inherit({
             const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
             const box = bar._text.getBBox();
             const lastCoords = bar._text._lastCoords;
-            const xDeviationForOddConnectorWidth = -sin / 2;
-            const yDeviationForOddConnectorWidth = -cos / 2;
             const originalPoints = [
                 xStart,
                 yStart,
-                box.x,
+                box.x + lastCoords.x,
                 box.y + box.height / 2 + lastCoords.y];
 
             if(bar._angle > 90) {
-                originalPoints[2] += box.width + lastCoords.x;
-            } else {
-                originalPoints[2] += lastCoords.x;
+                originalPoints[2] += box.width;
             }
 
             if(connectorWidth % 2) {
+                const xDeviationForOddConnectorWidth = -sin / 2;
+                const yDeviationForOddConnectorWidth = -cos / 2;
+
                 if(bar._angle > 180) {
                     originalPoints[0] -= xDeviationForOddConnectorWidth;
                     originalPoints[1] -= yDeviationForOddConnectorWidth;
-                } else if(bar._angle <= 90 && bar._angle > 0) {
+                } else if(bar._angle > 0 && bar._angle <= 90) {
                     originalPoints[0] += xDeviationForOddConnectorWidth;
                     originalPoints[1] += yDeviationForOddConnectorWidth;
                 }
             }
 
             const points = originalPoints.map(coordinate => _round(coordinate * 10000) / 10000);
-            bar._line.attr({ points: points });
+            bar._line.attr({ points });
             bar._line.rotate(0);
         });
     },
