@@ -575,7 +575,32 @@ QUnit.test('Some values are not changed', function(assert) {
     }, this);
 });
 
-QUnit.test('label location if the angle is < 90 and resolveLabelOverlapping - shift', function(assert) {
+QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
+    const done = assert.async();
+    this.$container.dxBarGauge({
+        values: [10, 11, 12],
+        resolveLabelOverlapping: 'shift',
+        label: {
+            connectorWidth: 5
+        }
+    });
+    const group = this.getBarsGroup();
+
+    group.animationComplete = $.proxy(function() {
+        assert.deepEqual(group.children[2]._stored_settings.points, [64.617, 220.0915, 21, 7], 'line 1 coords');
+        assert.roughEqual(group.children[3]._stored_settings.x, 34, 1, 'text 1 is coord x');
+        assert.roughEqual(group.children[3]._stored_settings.y, 222, 1, 'text 1 is coord y');
+        assert.deepEqual(group.children[6]._stored_settings.points, [96.3555, 204.4274, 12, 17], 'line 2 coords');
+        assert.roughEqual(group.children[7]._stored_settings.x, 31, 1, 'text 2 is coord x');
+        assert.roughEqual(group.children[7]._stored_settings.y, 215, 1, 'text 2 is coord y');
+        assert.deepEqual(group.children[10]._stored_settings.points, [129.1944, 191.8763, 4, 27], 'line 3 coords');
+        assert.roughEqual(group.children[11]._stored_settings.x, 29, 1, 'text 3 is coord x');
+        assert.roughEqual(group.children[11]._stored_settings.y, 207, 1, 'text 3 is coord y');
+        done();
+    }, this);
+});
+
+QUnit.test('label location if the angle < 90, resolveLabelOverlapping - shift', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [10, 11, 12],
@@ -584,19 +609,18 @@ QUnit.test('label location if the angle is < 90 and resolveLabelOverlapping - sh
     const group = this.getBarsGroup();
 
     group.animationComplete = $.proxy(function() {
-        assert.deepEqual(group.children[2]._stored_settings.points, [64.04786, 219.49845, 21, 7], 'line 1 coords');
+        assert.deepEqual(group.children[2]._stored_settings.points, [64.3079, 219.1405, 21, 7], 'line 1 coords');
         assert.roughEqual(group.children[3]._stored_settings.x, 34, 1, 'text 1 is coord x');
         assert.roughEqual(group.children[3]._stored_settings.y, 222, 1, 'text 1 is coord y');
-        assert.deepEqual(group.children[6]._stored_settings.points, [95.86324, 203.76216, 12, 17], 'line 2 coords');
+        assert.deepEqual(group.children[6]._stored_settings.points, [96.0917, 203.4628, 12, 17], 'line 2 coords');
         assert.roughEqual(group.children[7]._stored_settings.x, 31, 1, 'text 2 is coord x');
         assert.roughEqual(group.children[7]._stored_settings.y, 215, 1, 'text 2 is coord y');
-        assert.deepEqual(group.children[10]._stored_settings.points, [128.78216, 191.1426, 4, 27], 'line 3 coords');
+        assert.deepEqual(group.children[10]._stored_settings.points, [128.9762, 190.9004, 4, 27], 'line 3 coords');
         assert.roughEqual(group.children[11]._stored_settings.x, 29, 1, 'text 3 is coord x');
         assert.roughEqual(group.children[11]._stored_settings.y, 207, 1, 'text 3 is coord y');
         done();
     }, this);
 });
-
 
 QUnit.test('if the labels go beyond the canvas and resolveLabelOverlapping - shift', function(assert) {
     const done = assert.async();
@@ -627,30 +651,79 @@ QUnit.test('if the labels go beyond the canvas and resolveLabelOverlapping - shi
     }, this);
 });
 
-QUnit.test('label location if the angle is 90 and resolveLabelOverlapping - shift', function(assert) {
+QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [49, 50, 51],
-
-        resolveLabelOverlapping: 'shift'
+        resolveLabelOverlapping: 'shift',
+        label: {
+            connectorWidth: 5
+        }
     });
     const group = this.getBarsGroup();
 
     group.animationComplete = $.proxy(function() {
-        assert.deepEqual(group.children[2]._stored_settings.points, [194.21667, 31.15986, 21, 7], 'line 1 coords');
+        assert.deepEqual(group.children[2]._stored_settings.points, [190.7666, 31.2765, 21, 7], 'line 1 coords');
         assert.roughEqual(group.children[3]._stored_settings.x, 192, 1, 'text 1 is coord x');
         assert.roughEqual(group.children[3]._stored_settings.y, -1, 1, 'text 1 is coord y');
-        assert.deepEqual(group.children[6]._stored_settings.points, [199, 66, 1, 7], 'line 2 coords');
+        assert.deepEqual(group.children[6]._stored_settings.points, [197, 66, 1, 7], 'line 2 coords');
         assert.roughEqual(group.children[7]._stored_settings.x, 200, 1, 'text 2 is coord x');
         assert.roughEqual(group.children[7]._stored_settings.y, -2, 1, 'text 2 is coord y');
-        assert.deepEqual(group.children[10]._stored_settings.points, [ 202.48588, 101.08215, -8, 17], 'line 3 coords');
+        assert.deepEqual(group.children[10]._stored_settings.points, [200.4421, 100.9397, -8, 17], 'line 3 coords');
         assert.roughEqual(group.children[11]._stored_settings.x, 207, 1, 'text 3 is coord x');
         assert.roughEqual(group.children[11]._stored_settings.y, -1, 1, 'text 3 is coord y');
         done();
     }, this);
 });
 
-QUnit.test('label location if the angle is > 90 and resolveLabelOverlapping - shift', function(assert) {
+QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift', function(assert) {
+    const done = assert.async();
+    this.$container.dxBarGauge({
+        values: [49, 50, 51],
+        resolveLabelOverlapping: 'shift'
+    });
+    const group = this.getBarsGroup();
+
+    group.animationComplete = $.proxy(function() {
+        assert.deepEqual(group.children[2]._stored_settings.points, [192.2649, 31.2059, 21, 7], 'line 1 coords');
+        assert.roughEqual(group.children[3]._stored_settings.x, 192, 1, 'text 1 is coord x');
+        assert.roughEqual(group.children[3]._stored_settings.y, -1, 1, 'text 1 is coord y');
+        assert.deepEqual(group.children[6]._stored_settings.points, [199, 66, 1, 7], 'line 2 coords');
+        assert.roughEqual(group.children[7]._stored_settings.x, 200, 1, 'text 2 is coord x');
+        assert.roughEqual(group.children[7]._stored_settings.y, -2, 1, 'text 2 is coord y');
+        assert.deepEqual(group.children[10]._stored_settings.points, [202.4399, 101.0339, -8, 17], 'line 3 coords');
+        assert.roughEqual(group.children[11]._stored_settings.x, 207, 1, 'text 3 is coord x');
+        assert.roughEqual(group.children[11]._stored_settings.y, -1, 1, 'text 3 is coord y');
+        done();
+    }, this);
+});
+
+QUnit.test('label location if the angle > 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
+    const done = assert.async();
+    this.$container.dxBarGauge({
+        values: [80, 79, 78],
+        resolveLabelOverlapping: 'shift',
+        label: {
+            connectorWidth: 5
+        }
+    });
+    const group = this.getBarsGroup();
+
+    group.animationComplete = $.proxy(function() {
+        assert.deepEqual(group.children[2]._stored_settings.points, [340.7701, 148.6668, 1, 7], 'line 1 coords');
+        assert.roughEqual(group.children[3]._stored_settings.x, 371, 1, 'text 1 is coord x');
+        assert.roughEqual(group.children[3]._stored_settings.y, 136, 1, 'text 1 is coord y');
+        assert.deepEqual(group.children[6]._stored_settings.points, [305.1477, 149.1613, -8, 17], 'line 2 coords');
+        assert.roughEqual(group.children[7]._stored_settings.x, 370, 1, 'text 2 is coord x');
+        assert.roughEqual(group.children[7]._stored_settings.y, 128, 1, 'text 2 is coord y');
+        assert.deepEqual(group.children[10]._stored_settings.points, [269.9605, 152.9399, -16, 27], 'line 3 coords');
+        assert.roughEqual(group.children[11]._stored_settings.x, 368, 1, 'text 3 is coord x');
+        assert.roughEqual(group.children[11]._stored_settings.y, 121, 1, 'text 3 is coord y');
+        done();
+    }, this);
+});
+
+QUnit.test('label location if the angle is > 90, resolveLabelOverlapping - shift', function(assert) {
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [80, 79, 78],
@@ -659,13 +732,13 @@ QUnit.test('label location if the angle is > 90 and resolveLabelOverlapping - sh
     const group = this.getBarsGroup();
 
     group.animationComplete = $.proxy(function() {
-        assert.deepEqual(group.children[2]._stored_settings.points, [341.22712, 152.47344, 1, 7], 'line 1 coords');
+        assert.deepEqual(group.children[2]._stored_settings.points, [341.083, 150.6422, 1, 7], 'line 1 coords');
         assert.roughEqual(group.children[3]._stored_settings.x, 371, 1, 'text 1 is coord x');
         assert.roughEqual(group.children[3]._stored_settings.y, 136, 1, 'text 1 is coord y');
-        assert.deepEqual(group.children[6]._stored_settings.points, [305.73529, 152.89618, -8, 17], 'line 2 coords');
+        assert.deepEqual(group.children[6]._stored_settings.points, [305.5533, 151.1197, -8, 17], 'line 2 coords');
         assert.roughEqual(group.children[7]._stored_settings.x, 370, 1, 'text 2 is coord x');
         assert.roughEqual(group.children[7]._stored_settings.y, 128, 1, 'text 2 is coord y');
-        assert.deepEqual(group.children[10]._stored_settings.points, [ 270.67515, 156.59695, -16, 27], 'line 3 coords');
+        assert.deepEqual(group.children[10]._stored_settings.points, [270.4579, 154.8771, -16, 27], 'line 3 coords');
         assert.roughEqual(group.children[11]._stored_settings.x.toFixed(3), 368, 1, 'text 3 is coord x');
         assert.roughEqual(group.children[11]._stored_settings.y.toFixed(3), 121, 1, 'text 3 is coord y');
         done();

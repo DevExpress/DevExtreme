@@ -15,6 +15,7 @@ import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gau
 import dxCircularGauge from './circular_gauge';
 import { plugin as pluginLegend } from '../components/legend';
 import { plugins as centerTemplatePlugins } from '../core/center_template';
+import { roundFloatPart } from '../../core/utils/math';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
@@ -291,27 +292,37 @@ export const dxBarGauge = BaseGauge.inherit({
             const startAngle = bar._bar.attr('startAngle');
             const endAngle = bar._bar.attr('endAngle');
             const coordStart = getStartCoordsArc.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
-            const xStart = Number(coordStart.x);
-            const yStart = Number(coordStart.y);
+            const { cos, sin } = _getCosAndSin(bar._angle);
+            const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
+            const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
             const box = bar._text.getBBox();
-            const shiftConnector = connectorWidth / 2;
             const lastCoords = bar._text._lastCoords;
+            const originalPoints = [
+                xStart,
+                yStart,
+                box.x + lastCoords.x,
+                box.y + box.height / 2 + lastCoords.y
+            ];
 
             if(bar._angle > 90) {
-                bar._line.attr({ points: [
-                    xStart + shiftConnector,
-                    yStart + shiftConnector,
-                    box.x + box.width + lastCoords.x,
-                    box.y + box.height / 2 + lastCoords.y
-                ] });
-            } else if(bar._angle <= 90) {
-                bar._line.attr({ points: [
-                    xStart - shiftConnector,
-                    yStart + shiftConnector,
-                    box.x + lastCoords.x,
-                    box.y + box.height / 2 + lastCoords.y
-                ] });
+                originalPoints[2] += box.width;
             }
+
+            if(connectorWidth % 2) {
+                const xDeviation = -sin / 2;
+                const yDeviation = -cos / 2;
+
+                if(bar._angle > 180) {
+                    originalPoints[0] -= xDeviation;
+                    originalPoints[1] -= yDeviation;
+                } else if(bar._angle > 0 && bar._angle <= 90) {
+                    originalPoints[0] += xDeviation;
+                    originalPoints[1] += yDeviation;
+                }
+            }
+
+            const points = originalPoints.map(coordinate => roundFloatPart(coordinate, 4));
+            bar._line.attr({ points });
             bar._line.rotate(0);
         });
     },
