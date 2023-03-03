@@ -119,6 +119,12 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     position?: PositionAlignment | PositionConfig | Function;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    preventScrollEvents?: boolean;
+    /**
+     * @docid
      * @default 'transparent'
      * @default '' &for(Android|iOS)
      * @public

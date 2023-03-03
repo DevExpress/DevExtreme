@@ -55,7 +55,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default false
      * @public
      */
-     copyRootClassesToWrapper?: boolean;
+    copyRootClassesToWrapper?: boolean;
     /**
      * @docid
      * @default true
@@ -83,18 +83,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     hideOnParentScroll?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    preventScrollEvents?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    enableBodyScroll?: boolean;
     /**
      * @docid
      * @default '80vh'

@@ -197,6 +197,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     preventScrollEvents?: boolean;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    enableBodyScroll?: boolean;
+    /**
+     * @docid
      * @default false
      * @public
      */

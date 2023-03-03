@@ -17,6 +17,13 @@ export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidatio
     boundary?: String | UserDefinedElement;
 
     offset?: object;
+
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    preventScrollEvents?: boolean;
 }
 /** @namespace DevExpress.ui */
 export default class dxValidationMessage extends dxOverlay<dxValidationMessageOptions> { }

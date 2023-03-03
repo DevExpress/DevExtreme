@@ -16980,6 +16980,10 @@ declare module DevExpress.ui {
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
     /**
+     * [descr:dxLoadPanelOptions.preventScroll]
+     */
+    preventScrollEvents?: boolean;
+    /**
      * [descr:dxLoadPanelOptions.shadingColor]
      */
     shadingColor?: string;
@@ -18048,14 +18052,6 @@ declare module DevExpress.ui {
      */
     hideOnParentScroll?: boolean;
     /**
-     * [descr:dxOverlayOptions.preventScroll]
-     */
-    preventScrollEvents?: boolean;
-    /**
-     * [descr:dxOverlayOptions.enableBodyScroll]
-     */
-    enableBodyScroll?: boolean;
-    /**
      * [descr:dxOverlayOptions.height]
      */
     height?: number | string | (() => number | string);
@@ -18975,10 +18971,6 @@ declare module DevExpress.ui {
      */
     hideOnParentScroll?: boolean;
     /**
-     * [descr:dxPopoverOptions.preventScroll]
-     */
-    preventScrollEvents?: boolean;
-    /**
      * [descr:dxPopoverOptions.position]
      */
     position?: DevExpress.common.Position | PositionConfig;
@@ -19141,6 +19133,10 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.preventScroll]
      */
     preventScrollEvents?: boolean;
+    /**
+     * [descr:dxPopupOptions.enableBodyScroll]
+     */
+    enableBodyScroll?: boolean;
     /**
      * [descr:dxPopupOptions.resizeEnabled]
      */
@@ -24343,6 +24339,11 @@ declare module DevExpress.ui {
     boundary?: String | DevExpress.core.UserDefinedElement;
 
     offset?: object;
+
+    /**
+     * [descr:dxValidationMessageOptions.preventScroll]
+     */
+    preventScrollEvents?: boolean;
   }
   /**
    * [descr:dxValidationSummary]

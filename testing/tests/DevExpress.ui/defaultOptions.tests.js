@@ -191,6 +191,7 @@ testComponentDefaults(ValidationMessage,
         animation: null,
         visible: true,
         propagateOutsideClick: true,
+        preventScrollEvents: false,
         _checkParentVisibility: false,
         rtlEnabled: false,
         contentTemplate: ValidationMessage._renderInnerHtml,
@@ -958,6 +959,7 @@ testComponentDefaults(LoadPanel,
     {
         focusStateEnabled: false,
         propagateOutsideClick: true,
+        preventScrollEvents: false,
     }
 );
 
