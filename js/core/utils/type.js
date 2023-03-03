@@ -2,15 +2,15 @@ const types = {
     '[object Array]': 'array',
     '[object Date]': 'date',
     '[object Object]': 'object',
-    '[object String]': 'string',
-    '[object Null]': 'null' };
+    '[object String]': 'string'
+};
 
 const type = function(object) {
-    const typeOfObject = Object.prototype.toString.call(object);
-
     if(object === null) {
         return 'null';
     }
+
+    const typeOfObject = Object.prototype.toString.call(object);
 
     return typeof object === 'object' ?
         types[typeOfObject] || 'object' : typeof object;
@@ -59,7 +59,7 @@ const isEmptyObject = function(object) {
 };
 
 const isPlainObject = function(object) {
-    if(!object || Object.prototype.toString.call(object) !== '[object Object]') {
+    if(!object || type(object) !== 'object') {
         return false;
     }
     const proto = Object.getPrototypeOf(object);
