@@ -32,7 +32,7 @@ import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
 import { PopupPositionController } from './popup_position_controller';
-import { getBodyOverflowManager } from './popup_overflow_manager';
+import { createBodyOverflowManager } from './popup_overflow_manager';
 
 const window = getWindow();
 
@@ -252,6 +252,7 @@ const Popup = Overlay.inherit({
 
         this.callBase();
 
+        this._createBodyOverflowManager();
         this._updateResizeCallbackSkipCondition();
 
         this.$element().addClass(POPUP_CLASS);
@@ -268,6 +269,12 @@ const Popup = Overlay.inherit({
 
         this._toggleFullScreenClass(isFullscreen);
         this.callBase();
+    },
+
+    _createBodyOverflowManager: function() {
+        if(hasWindow()) {
+            this._bodyOverflowManager = createBodyOverflowManager();
+        }
     },
 
     _toggleFullScreenClass: function(value) {
@@ -892,11 +899,11 @@ const Popup = Overlay.inherit({
     },
 
     _toggleBodyScroll: function(enabled) {
-        if(!hasWindow()) {
+        if(!this._bodyOverflowManager) {
             return;
         }
 
-        const { setOverflow, restoreOverflow } = getBodyOverflowManager();
+        const { setOverflow, restoreOverflow } = this._bodyOverflowManager;
 
         if(enabled) {
             restoreOverflow();

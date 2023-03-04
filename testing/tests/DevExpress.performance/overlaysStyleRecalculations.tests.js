@@ -79,7 +79,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
     });
 
     [true, false].forEach(enableBodyScroll => {
-        QUnit.performanceTest(`dxPopup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be rendered with minimum count of relayouts`, function(assert) {
+        QUnit.performanceTest(`showing dxPopup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be shown with minimum count of relayouts`, function(assert) {
 
             const $additionalElement = $('<div>').height(2000).appendTo($('body'));
 
@@ -92,16 +92,34 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
                     useResizeObserver: false
                 }).dxPopup('instance');
 
-                const measureFunctionOnShown = function() {
+                const measureFunction = function() {
                     popup.show();
                 };
 
-                const measureFunctionOnHide = function() {
+                assert.measureStyleRecalculation(measureFunction, shading ? 17 : 16);
+            } finally {
+                $additionalElement.remove();
+            }
+        });
+
+        QUnit.performanceTest(`showing dxPopup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be hidden with minimum count of relayouts`, function(assert) {
+
+            const $additionalElement = $('<div>').height(2000).appendTo($('body'));
+
+            try {
+                const popup = $('#element').dxPopup({
+                    shading,
+                    enableBodyScroll,
+                    visible: true,
+                    animation: null,
+                    useResizeObserver: false
+                }).dxPopup('instance');
+
+                const measureFunction = function() {
                     popup.hide();
                 };
 
-                assert.measureStyleRecalculation(measureFunctionOnShown, 9);
-                assert.measureStyleRecalculation(measureFunctionOnHide, shading ? 17 : 16);
+                assert.measureStyleRecalculation(measureFunction, shading ? 17 : 16);
             } finally {
                 $additionalElement.remove();
             }
