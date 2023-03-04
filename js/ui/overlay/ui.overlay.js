@@ -473,7 +473,7 @@ const Overlay = Widget.inherit({
             this._showingDeferred.reject();
         } else {
             const show = () => {
-                this._toggleBodyScroll(false);
+                this._toggleBodyScroll(this.option('enableBodyScroll'));
 
                 this._stopAnimation();
                 this._toggleVisibility(true);

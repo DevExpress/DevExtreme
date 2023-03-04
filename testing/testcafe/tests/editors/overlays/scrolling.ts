@@ -4,7 +4,11 @@ import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo, getComputedPropertyValue, getDocumentScrollTop, insertStylesheetRulesToPage,
+  appendElementTo,
+  getComputedPropertyValue,
+  getDocumentScrollTop,
+  insertStylesheetRulesToPage,
+  removeAttribute,
 } from '../../../helpers/domUtils';
 import Popup from '../../../model/popup';
 
@@ -135,6 +139,8 @@ if (!isMaterial()) {
               $content.html(popupContent);
             },
           }, '#popup');
+        }).after(async () => {
+          await removeAttribute('body', 'style');
         });
       });
     });

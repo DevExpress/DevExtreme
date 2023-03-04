@@ -87,6 +87,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
                 const popup = $('#element').dxPopup({
                     shading,
                     enableBodyScroll,
+                    visible: false,
                     animation: null,
                     useResizeObserver: false
                 }).dxPopup('instance');
@@ -99,8 +100,8 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
                     popup.hide();
                 };
 
-                assert.measureStyleRecalculation(measureFunctionOnShown, 5);
-                assert.measureStyleRecalculation(measureFunctionOnHide, 5);
+                assert.measureStyleRecalculation(measureFunctionOnShown, 9);
+                assert.measureStyleRecalculation(measureFunctionOnHide, shading ? 17 : 16);
             } finally {
                 $additionalElement.remove();
             }

@@ -3,7 +3,13 @@ import { isDefined } from '../../core/utils/type';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 
-export const createBodyOverflowManager = () => {
+let overflowManager;
+
+export const getBodyOverflowManager = () => {
+    if(overflowManager) {
+        return overflowManager;
+    }
+
     const window = getWindow();
     const documentElement = domAdapter.getDocument().documentElement;
     const body = domAdapter.getBody();
@@ -104,7 +110,7 @@ export const createBodyOverflowManager = () => {
         });
     };
 
-    return {
+    overflowManager = {
         setOverflow: isIosDevice
             ? setBodyPositionFixed
             : () => {
@@ -118,4 +124,6 @@ export const createBodyOverflowManager = () => {
                 restoreBodyOverflow();
             },
     };
+
+    return overflowManager;
 };

@@ -1410,7 +1410,7 @@ QUnit.module('options changed callbacks', {
                 platform: devices.real().platform,
                 deviceType: devices.real().deviceType
             };
-            this.instance = $('#popup').dxPopup({ enableBodyScroll: false }).dxPopup('instance');
+            this.instance = $('#popup').dxPopup().dxPopup('instance');
             devices.real({ platform: 'ios', deviceType: 'phone' });
             this.$body = $('body');
             this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
@@ -1464,7 +1464,11 @@ QUnit.module('options changed callbacks', {
 
             this.instance.dispose();
             window.scrollTo(200, 200);
-            const popup = $('#popup').dxPopup({ visible: true }).dxPopup('instance');
+
+            const popup = $('#popup').dxPopup({
+                visible: true,
+                shading: false
+            }).dxPopup('instance');
 
             assert.strictEqual(this.$body.get(0).style.position, '');
             assert.strictEqual(this.$body.get(0).style.top, '');
