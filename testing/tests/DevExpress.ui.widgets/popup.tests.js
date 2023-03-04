@@ -24,6 +24,7 @@ import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
+import positionUtils from 'animation/position';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -36,6 +37,8 @@ const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 themes.setDefaultTimeout(0);
+
+const scrollbarWidth = positionUtils.calculateScrollbarWidth();
 
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
@@ -1401,6 +1404,110 @@ QUnit.module('options changed callbacks', {
         } finally {
             resizeEventSpy.restore();
         }
+    });
+
+    QUnit.module('enableBodyScroll on desktop', {
+        beforeEach: function() {
+            fx.off = true;
+            devices.current('desktop');
+            this.instance = $('#popup').dxPopup().dxPopup('instance');
+
+            this.getBodyStyle = (property) => {
+                return this.$body.get(0).style[property];
+            };
+
+            this.$body = $('body');
+            this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+        },
+        afterEach: function() {
+            this.instance.dispose();
+            window.scrollTo(0, 0);
+            this.$additionalElement.remove();
+            fx.off = false;
+        }
+    }, () => {
+        QUnit.test('body should not have overflow styles after showing with enableBodyScroll is true', function(assert) {
+            this.instance.dispose();
+            window.scrollTo(200, 200);
+
+            $('#popup').dxPopup({
+                visible: true,
+                enableBodyScroll: true
+            });
+
+            const { overflow, paddingRight } = this.$body.get(0).style;
+
+            assert.strictEqual(overflow, '');
+            assert.strictEqual(paddingRight, '');
+        });
+
+        QUnit.test('body should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
+            this.instance.dispose();
+            window.scrollTo(200, 200);
+
+            const popup = $('#popup').dxPopup({
+                visible: true,
+                enableBodyScroll: false
+            }).dxPopup('instance');
+
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth}px`);
+
+            popup.hide();
+
+            assert.strictEqual(this.getBodyStyle('overflow'), '');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), '');
+        });
+
+        QUnit.test('body with inline style should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
+            this.instance.dispose();
+            window.scrollTo(200, 200);
+
+            try {
+                const bodyPaddingValue = 10;
+                $('body').get(0).style.paddingRight = `${bodyPaddingValue}px`;
+
+                const popup = $('#popup').dxPopup({
+                    visible: true,
+                    enableBodyScroll: false
+                }).dxPopup('instance');
+
+                assert.strictEqual(this.getBodyStyle('overflow'), 'hidden');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth + bodyPaddingValue}px`);
+
+                popup.hide();
+
+                assert.strictEqual(this.getBodyStyle('overflow'), '');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${bodyPaddingValue}px`);
+            } finally {
+                $('body').get(0).style.removeProperty('padding-right');
+            }
+        });
+
+        QUnit.test('body with css styles should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
+            this.instance.dispose();
+            window.scrollTo(200, 200);
+
+            try {
+                const bodyPaddingValue = 10;
+                $('body').get(0).style.paddingRight = `${bodyPaddingValue}px`;
+
+                const popup = $('#popup').dxPopup({
+                    visible: true,
+                    enableBodyScroll: false
+                }).dxPopup('instance');
+
+                assert.strictEqual(this.getBodyStyle('overflow'), 'hidden');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth + bodyPaddingValue}px`);
+
+                popup.hide();
+
+                assert.strictEqual(this.getBodyStyle('overflow'), '');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${bodyPaddingValue}px`);
+            } finally {
+                $('body').get(0).style.removeProperty('padding-right');
+            }
+        });
     });
 
     QUnit.module('enableBodyScroll on Ios devices', {

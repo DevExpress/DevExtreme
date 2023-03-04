@@ -21,7 +21,7 @@ export const createBodyOverflowManager = () => {
     };
 
     const setBodyPositionFixed = () => {
-        if(isDefined(prevSettings.position)) {
+        if(isDefined(prevSettings.position) || body.style.position === 'fixed') {
             return;
         }
 
@@ -57,17 +57,47 @@ export const createBodyOverflowManager = () => {
         prevSettings.position = null;
     };
 
+    const setBodyOverflow = () => {
+        setBodyPaddingRight();
+
+        if(prevSettings.overflow || body.style.overflow === 'hidden') {
+            return;
+        }
+
+        prevSettings.overflow = body.style.overflow;
+        prevSettings.overflowX = body.style.overflowX;
+        prevSettings.overflowY = body.style.overflowY;
+
+        body.style.setProperty('overflow', 'hidden');
+    };
+
+    const restoreBodyOverflow = () => {
+        restoreBodyPaddingRight();
+
+        ['overflow', 'overflowX', 'overflowY'].forEach((property) => {
+            const propertyInKebabCase = property.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
+            if(prevSettings[property]) {
+                body.style.setProperty(propertyInKebabCase, prevSettings[property]);
+            } else {
+                body.style.removeProperty(propertyInKebabCase);
+            }
+            prevSettings[property] = null;
+        });
+    };
+
     const setBodyPaddingRight = () => {
         const scrollBarWidth = window.innerWidth - documentElement.clientWidth;
         if(prevSettings.paddingRight || scrollBarWidth <= 0) {
             return;
         }
+
         const paddingRight = window.getComputedStyle(body).getPropertyValue('padding-right');
         const computedBodyPaddingRight = parseInt(paddingRight, 10);
         prevSettings.paddingRight = computedBodyPaddingRight;
 
         body.style.setProperty('padding-right', `${computedBodyPaddingRight + scrollBarWidth}px`);
     };
+
     const restoreBodyPaddingRight = () => {
         if(!isDefined(prevSettings.paddingRight)) {
             return;
@@ -81,41 +111,13 @@ export const createBodyOverflowManager = () => {
 
         prevSettings.paddingRight = null;
     };
-    const setBodyOverflow = () => {
-        if(prevSettings.overflow) {
-            return;
-        }
-
-        prevSettings.overflow = body.style.overflow;
-        prevSettings.overflowX = body.style.overflowX;
-        prevSettings.overflowY = body.style.overflowY;
-
-        body.style.setProperty('overflow', 'hidden');
-    };
-    const restoreBodyOverflow = () => {
-        ['overflow', 'overflowX', 'overflowY'].forEach((property) => {
-            const propertyInKebabCase = property.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
-            if(prevSettings[property]) {
-                body.style.setProperty(propertyInKebabCase, prevSettings[property]);
-            } else {
-                body.style.removeProperty(propertyInKebabCase);
-            }
-            prevSettings[property] = null;
-        });
-    };
 
     return {
         setOverflow: isIosDevice
             ? setBodyPositionFixed
-            : () => {
-                setBodyPaddingRight();
-                setBodyOverflow();
-            },
+            : setBodyOverflow,
         restoreOverflow: isIosDevice
             ? restoreBodyPositionFixed
-            : () => {
-                restoreBodyPaddingRight();
-                restoreBodyOverflow();
-            },
+            : restoreBodyOverflow,
     };
 };
