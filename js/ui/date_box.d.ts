@@ -86,7 +86,10 @@ export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type DisabledDate = ComponentDisabledDate<dxDateBox>;
 
 /** @public */

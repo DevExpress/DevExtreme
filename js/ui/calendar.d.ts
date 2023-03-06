@@ -61,7 +61,10 @@ export type CellTemplateData = {
     readonly text?: string;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
 /**

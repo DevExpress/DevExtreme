@@ -4167,6 +4167,9 @@ declare module DevExpress.core {
     : {
         [P in keyof T]?: DeepPartial<T[P]>;
       };
+  /**
+   * [descr:DefaultOptionsRule]
+   */
   export type DefaultOptionsRule<T> = {
     device?: Device | Device[] | ((device: Device) => boolean);
     options: DeepPartial<T>;
@@ -4444,6 +4447,9 @@ declare module DevExpress.data {
     >;
   }
   module CustomStore {
+    /**
+     * [descr:GroupItem]
+     */
     export type GroupItem<TItem = any> = {
       key: any | string | number;
       items: Array<TItem> | Array<GroupItem<TItem>> | null;
@@ -4465,6 +4471,9 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
+    /**
+     * [descr:ResolvedData]
+     */
     export type ResolvedData<TItem = any> =
       | Object
       | ItemsArray<TItem>
@@ -5938,6 +5947,9 @@ declare module DevExpress.data.utils {
     | ArrayStore<TItem, TKey>
     | LocalStore<TItem, TKey>
     | ODataStore<TItem, TKey>;
+  /**
+   * [descr:StoreOptions]
+   */
   export type StoreOptions<TItem = any, TKey = any> =
     | DevExpress.data.CustomStore.Options<TItem, TKey>
     | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
@@ -5951,9 +5963,15 @@ declare module DevExpress.data.utils.odata {
   export var keyConverters: any;
 }
 declare module DevExpress.events {
+  /**
+   * [descr:Cancelable]
+   */
   export interface Cancelable {
     cancel?: boolean;
   }
+  /**
+   * [descr:ChangedOptionInfo]
+   */
   export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;
@@ -5974,6 +5992,9 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type event = DxEvent;
+  /**
+   * [descr:EventInfo]
+   */
   export interface EventInfo<TComponent> {
     readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
@@ -6042,6 +6063,9 @@ declare module DevExpress.events {
   interface EventType extends JQueryEventObject {
     cancel?: boolean;
   }
+  /**
+   * [descr:InitializedEventInfo]
+   */
   export interface InitializedEventInfo<TComponent> {
     readonly component?: TComponent;
     readonly element?: DevExpress.core.DxElement;
@@ -6054,6 +6078,9 @@ declare module DevExpress.events {
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
+  /**
+   * [descr:NativeEventInfo]
+   */
   export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
@@ -8189,6 +8216,9 @@ declare module DevExpress.ui {
       readonly view: string;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCalendar>;
+    /**
+     * [descr:DisabledDate]
+     */
     export type DisabledDate = ComponentDisabledDate<dxCalendar>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCalendar>;
     export type InitializedEvent =
@@ -9336,6 +9366,9 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row<TRowData, TKey>>;
       };
+    /**
+     * [descr:GroupData]
+     */
     export type GroupData<TRowData> = {
       key: any;
       items: Array<TRowData> | Array<GroupData<TRowData>> | null;
@@ -10291,6 +10324,9 @@ declare module DevExpress.ui {
     >;
     export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
     export type DateType = 'date' | 'datetime' | 'time';
+    /**
+     * [descr:DisabledDate]
+     */
     export type DisabledDate =
       DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateBox>;
@@ -19759,6 +19795,9 @@ declare module DevExpress.ui {
           readonly appointmentElement: DevExpress.core.DxElement;
         };
     export type AppointmentTemplateData = TargetedAppointmentInfo;
+    /**
+     * [descr:AppointmentTooltipShowingAppointmentInfo]
+     */
     export type AppointmentTooltipShowingAppointmentInfo = {
       readonly appointmentData: Appointment;
       readonly currentAppointmentData: Appointment;

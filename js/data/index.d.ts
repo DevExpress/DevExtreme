@@ -174,6 +174,7 @@ export type Store<TItem = any, TKey = any> =
     ODataStore<TItem, TKey>;
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.data.utils
  */

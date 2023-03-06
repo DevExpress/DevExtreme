@@ -113,7 +113,10 @@ export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & 
   readonly popup: dxPopup;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type AppointmentTooltipShowingAppointmentInfo = {
   readonly appointmentData: Appointment;
   readonly currentAppointmentData: Appointment;
