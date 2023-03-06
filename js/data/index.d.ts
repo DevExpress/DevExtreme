@@ -174,8 +174,10 @@ export type Store<TItem = any, TKey = any> =
     ODataStore<TItem, TKey>;
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.data.utils
+ * @type object
  */
 export type StoreOptions<TItem = any, TKey = any> =
     CustomStoreOptions<TItem, TKey> |

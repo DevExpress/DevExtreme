@@ -91,6 +91,14 @@ QUnit.test('Render', function(assert) {
     assert.deepEqual(this.renderer.g.firstCall.returnValue.linkAppend.lastCall.args, [], 'root is appended to container');
 });
 
+QUnit.test('Custom color', function(assert) {
+    const target = this.target;
+    target.render({ currentValue: 10, color: { fillId: 'id_color' } }).resize();
+
+    assert.ok(target._rootElement, '_rootElement');
+    assert.deepEqual(target._rootElement._stored_settings, { 'class': 'root-class', fill: 'id_color' }, '_rootElement settings');
+});
+
 QUnit.test('Render then clean', function(assert) {
     const target = this.target;
     target.render({ currentValue: 10 }).clean();

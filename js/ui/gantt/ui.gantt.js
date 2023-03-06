@@ -533,7 +533,7 @@ class Gantt extends Widget {
         }, {});
 
         promise?.then(() => {
-            this._ganttView._ganttViewCore.applyTasksExpandedState(state);
+            this._ganttView.applyTasksExpandedState(state);
             this._sizeHelper.adjustHeight();
             delete this._lockRowExpandEvent;
         });

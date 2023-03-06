@@ -6,7 +6,7 @@ const _round = Math.round;
 import { formatValue, getSampleText } from './base_gauge';
 const _formatValue = formatValue;
 const _getSampleText = getSampleText;
-import { patchFontOptions as _patchFontOptions } from '../core/utils';
+import { patchFontOptions as _patchFontOptions, extractColor } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import Class from '../../core/class';
 
@@ -95,7 +95,7 @@ export const BaseIndicator = BaseElement.inherit({
         that.enabled = that._isEnabled();
         if(that.enabled) {
             that._setupAnimation();
-            that._rootElement.attr({ fill: that._options.color }).linkAppend();
+            that._rootElement.attr({ fill: extractColor(that._options.color) }).linkAppend();
             that._tracker.attach(that._trackerElement, that, that._trackerInfo);
         }
         return that;
