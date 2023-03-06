@@ -324,11 +324,20 @@ const MultiView = CollectionWidget.inherit({
 
         const selectedIndex = this.option('selectedIndex');
         const loop = this.option('loop');
-        const lastIndex = this._itemsCount() - 1;
+
+        const itemsCount = this._itemsCount();
+        const itemElements = this.itemElements();
+
+        const isLastDisabled = this._isDisabled(itemElements[itemElements.length - 1]);
+        const lastIndex = itemsCount - (isLastDisabled ? 2 : 1);
+
+        const isFirstDisabled = this._isDisabled(itemElements[0]);
+        const firstIndex = isFirstDisabled ? 1 : 0;
+
         const rtl = this.option('rtlEnabled');
 
-        e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > 0 : selectedIndex < lastIndex));
-        e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastIndex : selectedIndex > 0));
+        e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstIndex : selectedIndex < lastIndex));
+        e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastIndex : selectedIndex > firstIndex));
 
         this._swipeDirection = null;
     },
@@ -351,10 +360,17 @@ const MultiView = CollectionWidget.inherit({
 
     _swipeEndHandler: function(e) {
         const targetOffset = e.targetOffset * this._getRTLSignCorrection();
+
         if(targetOffset) {
-            this.option('selectedIndex', this._normalizeIndex(this.option('selectedIndex') - targetOffset));
-            // TODO: change focusedElement on focusedItem
+            const itemElements = this.itemElements();
+            const nextItemIndex = this._normalizeIndex(this.option('selectedIndex') - targetOffset);
+            const isNextDisabled = this._isDisabled(itemElements[nextItemIndex]);
+            const selectedIndex = isNextDisabled ? this._normalizeIndex(nextItemIndex - targetOffset) : nextItemIndex;
+
+            this.option('selectedIndex', selectedIndex);
+
             const $selectedElement = this.itemElements().filter('.dx-item-selected');
+
             this.option('focusStateEnabled') && this.option('focusedElement', getPublicElement($selectedElement));
         } else {
             this._animateItemContainer(0, noop);
