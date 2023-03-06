@@ -6,6 +6,8 @@ import { isDefined } from '../../core/utils/type';
 import { GanttHelper } from './ui.gantt.helper';
 import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
+import { compileGetter } from '../../core/utils/data';
+import { GanttTreeListNodesState } from './ui.gantt.treelist.nodes_state';
 
 const GANTT_TASKS = 'tasks';
 const GANTT_COLLAPSABLE_ROW = 'dx-gantt-collapsable-row';
@@ -194,18 +196,58 @@ export class GanttTreeList {
         }
     }
     saveExpandedKeys() {
-        const hasData = this._treeList?.getVisibleRows().length > 0;
-        const keys = this.getOption('expandedRowKeys');
-        if(hasData && keys) {
-            this._savedExpandedKeys = keys;
+        const treeList = this._treeList;
+        const visibleRowCount = treeList?.getVisibleRows().length;
+        if(visibleRowCount > 0) {
+            const nodes = this.getAllNodes();
+            const keys = this.getOption('expandedRowKeys');
+            const hasExpandedRows = keys && nodes.length !== visibleRowCount;
+            if(hasExpandedRows) {
+                const state = this.getNodesState();
+                state.applyNodes(nodes, this.getOption('rootValue'));
+                state.saveExpandedState(keys);
+            }
         }
     }
     _onNodesInitialized(e) {
-        const expandedKeys = this._savedExpandedKeys?.filter(k => !!this._treeList.getNodeByKey(k));
+        const state = this.getNodesState();
+        const savedKeys = state.getExpandedKeys();
+        const nodes = this.getAllNodes();
+        state.applyNodes(nodes, this.getOption('rootValue'));
+        const expandedKeys = state.getExpandedKeys();
         if(expandedKeys) {
-            this.setOption('expandedRowKeys', this._savedExpandedKeys);
+            this.setOption('expandedRowKeys', expandedKeys);
         }
-        delete this._savedExpandedKeys;
+
+        if(this.isExpandedStateChanged(savedKeys, expandedKeys)) {
+            const expandedState = nodes.reduce((previous, node) => {
+                previous[node.key] = expandedKeys ? expandedKeys.includes(node.key) : true;
+                return previous;
+            }, {});
+            this._gantt._ganttView.applyTasksExpandedState(expandedState);
+        }
+        state.clear();
+    }
+    getNodesState() {
+        if(!this._nodeState) {
+            this._nodeState = new GanttTreeListNodesState();
+        }
+        return this._nodeState;
+    }
+    getAllNodes() {
+        const treeList = this._treeList;
+        const store = treeList?.getDataSource().store();
+        const keyGetter = compileGetter(store?.key());
+        return store ? store._array.map(item => treeList.getNodeByKey(keyGetter(item))) : [];
+    }
+    isExpandedStateChanged(keys1, keys2) {
+        if(keys1 === null && keys2 === null) {
+            return false;
+        }
+        if(keys1?.length !== keys2?.length) {
+            return true;
+        }
+        return keys1.some((key, index) => key !== keys2[index]);
     }
 
     getOffsetHeight() {
@@ -258,7 +300,7 @@ export class GanttTreeList {
     }
 
     getOption(optionName) {
-        return this._treeList.option(optionName);
+        return this._treeList?.option(optionName);
     }
     onTaskInserted(insertedId, parentId) {
         if(isDefined(parentId)) {
