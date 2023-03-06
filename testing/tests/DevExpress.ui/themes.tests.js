@@ -34,6 +34,12 @@ function loadCss(frame, cssFileName) {
         return rulesFromSheet(ourSheet).length > 0;
     };
 }
+
+// TODO: remove wrapper after fix blinking tests
+const timeoutCbWrapper = (callback) => {
+    setTimeout(callback, 100)
+};
+
 const defaultTimeout = 2000;
 themes.setDefaultTimeout(defaultTimeout);
 
@@ -196,6 +202,8 @@ QUnit.module('dx-theme changing', (hooks) => {
         linksContainer.append('<link rel=\'dx-theme\' href=\'style2.css\' data-theme=\'' + materialThemeName + '\' />');
         linksContainer.append('<link rel=\'dx-theme\' href=\'style1.css\' data-theme=\'' + genericThemeName + '\' />');
 
+        themes.init({ context: window.document, theme: materialThemeName });
+
         themes.initialized(() => {
             assert.ok(themes.isMaterial(), 'isMaterial is true after material theme init');
             assert.notOk(themes.isGeneric(), 'isGeneric is false after material theme init');
@@ -215,8 +223,6 @@ QUnit.module('dx-theme changing', (hooks) => {
             linksContainer.remove();
             done();
         });
-
-        themes.init({ context: window.document, theme: materialThemeName });
     });
 
     test('Themes functions return right value if theme file loaded after ready event (T666366)', function(assert) {
@@ -271,7 +277,7 @@ QUnit.module('dx-theme links', (hooks) => {
         // assert
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 0, 'No stylesheets should be added');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('should throw if non-existing platform requested', function(assert) {
@@ -294,7 +300,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'myCss');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('theme by platform and color scheme', function(assert) {
@@ -309,7 +315,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'style2.css');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('change theme by string', function(assert) {
@@ -325,7 +331,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'style1.css');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('change theme by configuration object', function(assert) {
@@ -341,7 +347,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'style2.css');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('method themes.ready calls a callback function after themes loading', function(assert) {
@@ -353,11 +359,11 @@ QUnit.module('dx-theme links', (hooks) => {
 
         themes.init({ theme: 'myPlatform.theme1', context: frameDoc() });
 
-        themes.ready(function() {
+        themes.ready(timeoutCbWrapper(() => {
             assert.equal(themes.current(), 'sampleTheme.sampleColorScheme');
 
             done();
-        });
+        }));
 
         themes.current('sampleTheme.sampleColorScheme');
     });
@@ -372,7 +378,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.init({ theme: 'myPlatform', context: frameDoc() });
         // assert
         assert.equal(getFrameStyleLinks().attr('href'), 'style1.css');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('default theme defined by active attribute if not specified', function(assert) {
@@ -385,7 +391,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.init({ theme: 'myPlatform', context: frameDoc() });
         // assert
         assert.equal(getFrameStyleLinks().attr('href'), 'style2.css');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('dx-theme should change compact theme to normal if compact has data-active=\'true\' (T449216)', function(assert) {
@@ -398,7 +404,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.init({ theme: 'myPlatform.theme1', context: frameDoc() });
         // assert
         assert.equal(themes.current(), 'myPlatform.theme1');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('dx-theme should select active theme if theme name is incomplete (T449216)', function(assert) {
@@ -412,7 +418,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.current({ theme: 'myPlatform' });
         // assert
         assert.equal(themes.current(), 'myPlatform.theme1.compact');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('read current theme name', function(assert) {
@@ -426,7 +432,7 @@ QUnit.module('dx-theme links', (hooks) => {
         assert.equal(themes.current(), 'theme1');
         themes.current('theme2');
         assert.equal(themes.current(), 'theme2.dark');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
     test('loadCallback option for init', function(assert) {
@@ -560,7 +566,7 @@ QUnit.module('dx-theme links', (hooks) => {
 
         assert.equal($element.hasClass('dx-theme-oldtheme'), false, 'old theme class deleted');
         assert.equal($element.hasClass('dx-theme-oldtheme-typography'), false, 'old typography class deleted');
-        themes.initialized(done);
+        themes.initialized(timeoutCbWrapper(done));
     });
 
 
