@@ -25,6 +25,7 @@ import errors from 'ui/widget/ui.errors';
 import { getCells, generateItems, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -8636,6 +8637,61 @@ QUnit.module('Editing with real dataController', {
             // assert
             assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
         });
+
+        [true, false].forEach((renderAsync) => {
+            // T1147563
+            QUnit.test(`${editMode} edit mode - The editor should be rendered in a ${renderAsync === false ? 'detached' : 'attached'} table when editCellTemplate is specified  and renderAsync = ${renderAsync} (React)`, function(assert) {
+                assert.expect(3);
+
+                // arrange
+                const $testElement = $('#container');
+
+                this._getTemplate = function(name) {
+                    if(name === '#testTemplate') {
+                        return {
+                            render: function(options) {
+                                const container = $(options.container).get(0);
+
+                                // assert
+                                if(renderAsync === false) {
+                                    assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
+                                } else {
+                                    assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
+                                }
+                                setTimeout(() => {
+                                    $(options.container).append($('<div/>').addClass('myEditor'));
+                                    options.deferred && options.deferred.resolve();
+                                }, 50);
+                            }
+                        };
+                    }
+                };
+                this.options.renderAsync = renderAsync;
+                this.options.templatesRenderAsynchronously = true;
+                $.extend(this.options.editing, {
+                    allowUpdating: true,
+                    mode: editMode.toLowerCase()
+                });
+                this.options.columns = [{
+                    dataField: 'name',
+                    editCellTemplate: '#testTemplate'
+                }];
+
+                this.rowsView.render($testElement);
+                this.columnsController.init();
+
+                // act
+                this.editCell(0, 0);
+
+                // assert
+                assert.strictEqual($(this.getCellElement(0, 0)).find('.myEditor').length, 0, 'editor isn\'t rendred');
+
+                this.clock.tick(50);
+
+                // assert
+                assert.strictEqual($(this.getCellElement(0, 0)).find('.myEditor').length, 1, 'editor is rendred');
+            });
+        });
     });
 
     ['Row', 'Batch', 'Cell'].forEach((editMode) => {
@@ -8668,6 +8724,66 @@ QUnit.module('Editing with real dataController', {
             this.clock.tick();
 
             assert.ok(isEditorCell, 'cell is rendered for an editor');
+        });
+
+        [true, false].forEach((renderAsync) => {
+            // T1148595
+            QUnit.testInActiveWindow(`${editMode} mode - the first cell should be focused after inserting new row when renderAsync = ${renderAsync} and templatesRenderAsynchronously = true (react)`, function(assert) {
+                // arrange
+                const that = this;
+                const rowsView = this.rowsView;
+                const $testElement = $('.dx-datagrid');
+
+                this.options.renderAsync = renderAsync;
+                this.options.templatesRenderAsynchronously = true;
+                this.options.dataSource = this.array.slice(0, 1);
+                this.options.columns = [{ dataField: 'name', cellTemplate: '#testTemplate' }];
+                $.extend(that.options.editing, {
+                    allowAdding: true,
+                    mode: editMode.toLowerCase(),
+                    newRowPosition: 'last',
+                });
+                rowsView.component._getTemplate = function() {
+                    return {
+                        render: function(options) {
+                            setTimeout(() => {
+                                options.deferred && options.deferred.resolve();
+                            }, 50);
+                        }
+                    };
+                };
+
+                this.editingController.init();
+                this.dataController.init();
+                this.columnsController.init();
+                this.clock.tick(100);
+
+                rowsView.render($testElement);
+                this.clock.tick(300);
+
+                // assert
+                assert.strictEqual(this.getVisibleRows().length, 1, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick(300);
+
+                // assert
+                assert.strictEqual(this.getVisibleRows().length, 2, 'row count');
+                assert.ok($(this.getCellElement(1, 0)).hasClass('dx-focused'), 'first cell is focused');
+                assert.strictEqual(getInputElements($(this.getCellElement(1, 0))).length, 1, 'first cell has editor');
+
+                if(editMode !== 'Row') {
+                    // act
+                    this.addRow();
+                    this.clock.tick(300);
+
+                    // assert
+                    assert.strictEqual(this.getVisibleRows().length, 3, 'row count');
+                    assert.ok($(this.getCellElement(2, 0)).hasClass('dx-focused'), 'first cell is focused');
+                    assert.strictEqual(getInputElements($(this.getCellElement(2, 0))).length, 1, 'first cell has editor');
+                }
+            });
         });
     });
 
