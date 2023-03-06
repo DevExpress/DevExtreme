@@ -24,7 +24,7 @@ import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
-import positionUtils from 'animation/position';
+import domAdapter from 'core/dom_adapter';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -1426,7 +1426,7 @@ QUnit.module('options changed callbacks', {
 
             this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
 
-            this.scrollbarWidth = positionUtils.calculateScrollbarWidth();
+            this.scrollbarWidth = window.innerWidth - domAdapter.getDocument().documentElement.clientWidth;
         },
         afterEach: function() {
             this.instance.dispose();
@@ -1458,6 +1458,7 @@ QUnit.module('options changed callbacks', {
             window.scrollTo(200, 200);
 
             assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
             const popup = this.createPopup({
                 visible: true,
                 enableBodyScroll: false
@@ -1518,6 +1519,7 @@ QUnit.module('options changed callbacks', {
             this.instance = $('#popup').dxPopup().dxPopup('instance');
             devices.real({ platform: 'ios', deviceType: 'phone' });
             this.$body = $('body');
+            this.$body.get(0).style.overflow = 'auto';
             this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
         },
         afterEach: function() {

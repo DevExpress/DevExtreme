@@ -186,8 +186,6 @@ const calculateScrollbarWidth = function() {
     $scrollDiv.remove();
 
     scrollbarWidth = result;
-
-    return result;
 };
 
 const defaultPositionResult = {
