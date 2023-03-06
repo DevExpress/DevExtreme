@@ -39,7 +39,7 @@ const SELECTED_ITEM_CLASS = 'dx-item-selected';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 const ICON_CLASS = 'dx-icon';
-const FOCUS_ON_DISABLED_CLASS = 'dx-focus-on-disabled';
+const FOCUS_ON_DISABLED_CLASS = 'dx-disabled-tab-focused';
 
 const toSelector = cssClass => {
     return '.' + cssClass;

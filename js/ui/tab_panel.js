@@ -22,7 +22,7 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-const FOCUS_ON_DISABLED_CLASS = 'dx-focus-on-disabled';
+const FOCUS_ON_DISABLED_CLASS = 'dx-disabled-tab-focused';
 
 const TabPanel = MultiView.inherit({
 
