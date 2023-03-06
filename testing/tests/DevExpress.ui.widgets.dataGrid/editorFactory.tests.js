@@ -29,8 +29,17 @@ QUnit.testStart(function() {
 
 
 import 'ui/data_grid';
+import 'ui/autocomplete';
+import 'ui/calendar';
+import 'ui/color_box';
+import 'ui/drop_down_box';
+import 'ui/html_editor';
 import 'ui/lookup';
+import 'ui/radio_group';
+import 'ui/range_slider';
+import 'ui/slider';
 import 'ui/switch';
+import 'ui/tag_box';
 import TextArea from 'ui/text_area';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -59,54 +68,37 @@ QUnit.module('Editor Factory', {
     }
 }, () => {
 
-    // T1145047
-    QUnit.test('dxSelectBox editor without valueChangeEvent', function(assert) {
-        // arrange
-        const $container = $('#container');
+    ['dxAutocomplete', 'dxCalendar', 'dxCheckBox', 'dxColorBox', 'dxDateBox', 'dxDropDownBox', 'dxHtmlEditor', 'dxLookup', 'dxNumberBox', 'dxRadioGroup', 'dxRangeSlider', 'dxSelectBox', 'dxSlider', 'dxSwitch', 'dxTagBox', 'dxTextArea', 'dxTextBox'].forEach((editorType) => {
+        QUnit.test(`Prepare editor based on editorType: ${editorType}`, function(assert) {
+            // arrange
+            const $container = $('#container');
+            const editorOptions = {
+                editorType,
+                dataType: 'string'
+            };
 
-        this.options.onEditorPreparing = function(options) {
-            if(options.editorName === 'dxSelectBox') {
-                // assert
-                assert.strictEqual(options.editorOptions.valueChangeEvent, undefined, 'dxselectbox initialized without the \'valueChangeEvent\' option');
+            if(editorType === 'dxDateBox') {
+                editorOptions.dataType = 'date';
+            } else if(editorType === 'dxRangeSlider') {
+                editorOptions.value = [];
             }
-        };
-        this.editorFactoryController.init();
 
-        // act
-        this.editorFactoryController.createEditor($container, {
-            editorType: 'dxSelectBox',
-            parentType: 'dataRow',
-            editorOptions: {}
-        });
-        const editor = $container.dxSelectBox('instance');
-
-        // assert
-        assert.ok(editor, 'editor created');
-    });
-
-    // T1145047
-    QUnit.test('dxLookup editor without valueChangeEvent', function(assert) {
-        // arrange
-        const $container = $('#container');
-
-        this.options.onEditorPreparing = function(options) {
-            if(options.editorName === 'dxLookup') {
+            this.options.onEditorPreparing = function(options) {
                 // assert
-                assert.strictEqual(options.editorOptions.valueChangeEvent, undefined, 'dxlookup initialized without the \'valueChangeEvent\' option');
-            }
-        };
-        this.editorFactoryController.init();
+                assert.strictEqual(options.editorName, editorType, `editorName is set correctly: ${editorType}`);
+                if(['dxSelectBox', 'dxLookup'].includes(editorType)) { // T1145047
+                    assert.strictEqual(options.editorOptions.valueChangeEvent, undefined, `Prepare ${editorType} without the 'valueChangeEvent' option`);
+                }
+            };
+            this.editorFactoryController.init();
 
-        // act
-        this.editorFactoryController.createEditor($container, {
-            editorType: 'dxLookup',
-            parentType: 'dataRow',
-            editorOptions: {}
+            // act
+            this.editorFactoryController.createEditor($container, editorOptions);
+            const editor = $container[editorType]('instance');
+
+            // assert
+            assert.ok(editor, 'editor created');
         });
-        const editor = $container.dxLookup('instance');
-
-        // assert
-        assert.ok(editor, 'editor created');
     });
 
     QUnit.test('Text editor', function(assert) {
