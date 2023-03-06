@@ -1463,7 +1463,7 @@ QUnit.module('options changed callbacks', {
                 enableBodyScroll: false
             });
 
-            assert.strictEqual(this.getBodyStyleAttr(), `padding-right: ${this.scrollbarWidth}px; overflow: hidden;`, 'body style attribute');
+            assert.strictEqual(this.getBodyStyleAttr(), this.scrollbarWidth ? `padding-right: ${this.scrollbarWidth}px; overflow: hidden;` : 'overflow: hidden;', 'body style attribute');
             assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
             assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
 
@@ -1537,7 +1537,7 @@ QUnit.module('options changed callbacks', {
 
         QUnit.test('body should have position fixed after showing if enableBodyScroll: false', function(assert) {
             this.instance.dispose();
-            window.scrollTo(200, 200);
+            window.scrollTo(0, 200);
             const popup = $('#popup').dxPopup({ visible: true, enableBodyScroll: false }).dxPopup('instance');
 
             assert.strictEqual(this.$body.get(0).style.position, 'fixed');
@@ -1553,7 +1553,7 @@ QUnit.module('options changed callbacks', {
 
         QUnit.test('body should change the fixed position after change of enableBodyScroll option in runtime', function(assert) {
             this.instance.dispose();
-            window.scrollTo(200, 200);
+            window.scrollTo(0, 200);
 
             const popup = $('#popup').dxPopup({
                 visible: true,
