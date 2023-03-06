@@ -323,7 +323,7 @@ export function getFiltersByPath(fields, path) {
 
 export const storeDrillDownMixin = {
   createDrillDownDataSource(descriptions, params) {
-    const items = (this as any).getDrillDownItems(descriptions, params);
+    const items = this.getDrillDownItems(descriptions, params);
     let arrayStore;
 
     function createCustomStoreMethod(methodName) {
@@ -348,7 +348,7 @@ export const storeDrillDownMixin = {
     const dataSource = new DataSource({
       load: createCustomStoreMethod('load'),
       totalCount: createCustomStoreMethod('totalCount'),
-      key: (this as any).key(),
+      key: this.key(),
     });
 
     return dataSource;

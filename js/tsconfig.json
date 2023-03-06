@@ -16,8 +16,8 @@
     "isolatedModules": true,
     // -- ts config
     "alwaysStrict": true,
-    "module": "es6",
-    "target": "es6",
+    "module": "commonJs",
+    "target": "es5",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": false,
