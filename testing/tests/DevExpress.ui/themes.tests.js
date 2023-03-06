@@ -37,7 +37,7 @@ function loadCss(frame, cssFileName) {
 
 // TODO: remove wrapper after fix blinking tests
 const timeoutCbWrapper = (callback) => {
-    setTimeout(callback, 100)
+    setTimeout(callback, 200)
 };
 
 const defaultTimeout = 2000;
