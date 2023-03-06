@@ -3471,7 +3471,8 @@
             "Name": "Overview",
             "DocUrl": "",
             "Widget": "Gauges",
-            "DemoType": "Viz"
+            "DemoType": "Viz",
+            "Badge": "Updated"
           }
         ]
       },

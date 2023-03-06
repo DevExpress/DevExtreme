@@ -1,4 +1,5 @@
 window.onload = function () {
+  const color = '#f05b41';
   const speedValue = ko.observable(40);
   const gaugeValue = ko.computed(() => (speedValue() / 2));
 
@@ -15,11 +16,34 @@ window.onload = function () {
         tickInterval: 20,
         minorTickInterval: 10,
       },
+      centerTemplate(gauge, container) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+
+        circle.setAttribute('cx', 100);
+        circle.setAttribute('cy', 100);
+        circle.setAttribute('r', 55);
+        circle.setAttribute('stroke-width', 2);
+        circle.setAttribute('stroke', color);
+        circle.setAttribute('fill', 'transparent');
+
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('alignment-baseline', 'middle');
+        text.setAttribute('x', 100);
+        text.setAttribute('y', 100);
+        text.setAttribute('font-size', 50);
+        text.setAttribute('font-weight', 'lighter');
+        text.setAttribute('fill', color);
+        text.textContent = gauge.value();
+
+        container.appendChild(circle);
+        container.appendChild(text);
+      },
       valueIndicator: {
-        type: 'twoColorNeedle',
-        color: 'none',
-        secondFraction: 0.24,
-        secondColor: '#f05b41',
+        indentFromCenter: 55,
+        color,
+        spindleSize: 0,
+        spindleGapSize: 0,
       },
       value: speedValue,
       size: {
@@ -37,7 +61,7 @@ window.onload = function () {
         tickInterval: 10,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       value: gaugeValue,
       size: {
@@ -56,7 +80,7 @@ window.onload = function () {
         endAngle: 0,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       value: gaugeValue,
       size: {
@@ -75,7 +99,7 @@ window.onload = function () {
         endAngle: -180,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       value: gaugeValue,
       size: {
@@ -94,7 +118,7 @@ window.onload = function () {
         endAngle: -90,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       value: gaugeValue,
       size: {
@@ -116,7 +140,7 @@ window.onload = function () {
         },
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
         size: 8,
         offset: 7,
       },

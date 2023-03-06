@@ -1,6 +1,7 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
+  const color = '#f05b41';
   $scope.speedValue = 40;
   $scope.gaugeValue = 20;
   $scope.linearGaugeValue = 42.8;
@@ -26,10 +27,33 @@ DemoApp.controller('DemoController', ($scope) => {
         minorTickInterval: 10,
       },
       valueIndicator: {
-        type: 'twoColorNeedle',
-        color: 'none',
-        secondFraction: 0.24,
-        secondColor: '#f05b41',
+        indentFromCenter: 55,
+        color,
+        spindleSize: 0,
+        spindleGapSize: 0,
+      },
+      centerTemplate(gauge, container) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+
+        circle.setAttribute('cx', 100);
+        circle.setAttribute('cy', 100);
+        circle.setAttribute('r', 55);
+        circle.setAttribute('stroke-width', 2);
+        circle.setAttribute('stroke', color);
+        circle.setAttribute('fill', 'transparent');
+
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('alignment-baseline', 'middle');
+        text.setAttribute('x', 100);
+        text.setAttribute('y', 100);
+        text.setAttribute('font-size', 50);
+        text.setAttribute('font-weight', 'lighter');
+        text.setAttribute('fill', color);
+        text.textContent = gauge.value();
+
+        container.appendChild(circle);
+        container.appendChild(text);
       },
       bindingOptions: {
         value: 'speedValue',
@@ -49,7 +73,7 @@ DemoApp.controller('DemoController', ($scope) => {
         tickInterval: 50,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       bindingOptions: {
         value: 'gaugeValue',
@@ -70,7 +94,7 @@ DemoApp.controller('DemoController', ($scope) => {
         endAngle: 0,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       bindingOptions: {
         value: 'gaugeValue',
@@ -91,7 +115,7 @@ DemoApp.controller('DemoController', ($scope) => {
         endAngle: -180,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       bindingOptions: {
         value: 'gaugeValue',
@@ -112,7 +136,7 @@ DemoApp.controller('DemoController', ($scope) => {
         endAngle: -90,
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
       },
       bindingOptions: {
         value: 'gaugeValue',
@@ -136,7 +160,7 @@ DemoApp.controller('DemoController', ($scope) => {
         },
       },
       valueIndicator: {
-        color: '#f05b41',
+        color,
         size: 8,
         offset: 7,
       },

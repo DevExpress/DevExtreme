@@ -16,6 +16,8 @@ if (!/localhost/.test(document.location.host)) {
 
 export class AppComponent {
   speedValue = 40;
+
+  color = '#f05b41';
 }
 
 @NgModule({

@@ -30,23 +30,6 @@
   right: -40px;
 }
 
-.speed-value {
-  position: absolute;
-  border: 2px solid #f05b41;
-  border-radius: 50%;
-  width: 110px;
-  height: 110px;
-  left: 28%;
-  top: 36%;
-  line-height: 100px;
-}
-
-.speed-value > span {
-  font-size: 50px;
-  font-weight: lighter;
-  color: #f05b41;
-}
-
 #fuel-gauge {
   position: absolute;
   left: 34%;

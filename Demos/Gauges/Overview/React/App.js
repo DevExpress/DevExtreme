@@ -21,6 +21,15 @@ import Indicator from './Indicator.js';
 
 const color = '#f05b41';
 
+function CenterTemplate(gauge) {
+  return (
+    <svg>
+      <circle cx="100" cy="100" r="55" strokeWidth="2" stroke={color} fill="transparent"></circle>
+      <text textAnchor="middle" alignmentBaseline="middle" y="100" x="100" fontSize="50" fontWeight="lighter" fill={color}>{gauge.value()}</text>
+    </svg>
+  );
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -57,7 +66,7 @@ class App extends React.Component {
           </div>
           &nbsp;
           <div className="center-section">
-            <CircularGauge value={speedValue}>
+            <CircularGauge value={speedValue} centerRender={CenterTemplate}>
               <CircularSize width={260} />
               <CircularScale
                 startValue={20}
@@ -67,16 +76,12 @@ class App extends React.Component {
               />
               <Geometry startAngle={225} endAngle={315} />
               <CircularValueIndicator
-                type="twoColorNeedle"
-                secondFraction={0.24}
-                color="none"
-                secondColor={color}
+                indentFromCenter={55}
+                color={color}
+                spindleSize={0}
+                spindleGapSize={0}
               />
             </CircularGauge>
-
-            <div className="speed-value">
-              <span>{speedValue}</span>
-            </div>
 
             <LinearGauge value={50 - speedValue * 0.24} id="fuel-gauge">
               <LinearSize width={90} height={20} />

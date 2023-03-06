@@ -3,27 +3,31 @@
     <div class="left-section">
       <dx-circular-gauge [value]="speedValue / 2">
         <dxo-size [width]="90" [height]="90"></dxo-size>
-        <dxo-value-indicator color="#f05b41"> </dxo-value-indicator>
+        <dxo-value-indicator [color]="color"> </dxo-value-indicator>
         <dxo-geometry [startAngle]="180" [endAngle]="90"> </dxo-geometry>
         <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="50">
         </dxo-scale>
       </dx-circular-gauge>
       <dx-circular-gauge [value]="speedValue / 2">
         <dxo-size [width]="90" [height]="90"></dxo-size>
-        <dxo-value-indicator color="#f05b41"></dxo-value-indicator>
+        <dxo-value-indicator [color]="color"></dxo-value-indicator>
         <dxo-geometry [startAngle]="-90" [endAngle]="-180"> </dxo-geometry>
         <dxo-scale [startValue]="100" [endValue]="0" [tickInterval]="50">
         </dxo-scale>
       </dx-circular-gauge>
     </div>
     <div class="center-section">
-      <dx-circular-gauge id="speed-gauge" [value]="speedValue">
+      <dx-circular-gauge
+        id="speed-gauge"
+        [value]="speedValue"
+        centerTemplate="centerTemplate"
+      >
         <dxo-size [width]="260"></dxo-size>
         <dxo-value-indicator
-          type="twoColorNeedle"
-          color="none"
-          [secondFraction]="0.24"
-          secondColor="#f05b41"
+          [indentFromCenter]="55"
+          [color]="color"
+          [spindleSize]="0"
+          [spindleGapSize]="0"
         >
         </dxo-value-indicator>
         <dxo-geometry [startAngle]="225" [endAngle]="315"> </dxo-geometry>
@@ -34,10 +38,28 @@
           [minorTickInterval]="10"
         >
         </dxo-scale>
+        <svg *dxTemplate="let gauge of 'centerTemplate'">
+          <circle
+            cx="100"
+            cy="100"
+            r="55"
+            [attr.stroke]="color"
+            stroke-width="2"
+            fill="transparent"
+          ></circle>
+          <text
+            text-anchor="middle"
+            y="100"
+            x="100"
+            font-size="50"
+            font-weight="lighter"
+            alignment-baseline="middle"
+            [attr.fill]="color"
+          >
+            {{ gauge.value() }}
+          </text>
+        </svg>
       </dx-circular-gauge>
-      <div class="speed-value">
-        <span>{{ speedValue }}</span>
-      </div>
       <dx-linear-gauge id="fuel-gauge" [value]="50 - speedValue * 0.24">
         <dxo-size [width]="90" [height]="20"></dxo-size>
         <dxo-scale
@@ -49,21 +71,21 @@
           <dxo-minor-tick [visible]="true"></dxo-minor-tick>
           <dxo-label [visible]="false"></dxo-label>
         </dxo-scale>
-        <dxo-value-indicator color="#f05b41" [size]="8" [offset]="7">
+        <dxo-value-indicator [color]="color" [size]="8" [offset]="7">
         </dxo-value-indicator>
       </dx-linear-gauge>
     </div>
     <div class="right-section">
       <dx-circular-gauge [value]="speedValue / 2">
         <dxo-size [width]="90" [height]="90"></dxo-size>
-        <dxo-value-indicator color="#f05b41"> </dxo-value-indicator>
+        <dxo-value-indicator [color]="color"> </dxo-value-indicator>
         <dxo-geometry [startAngle]="90" [endAngle]="0"> </dxo-geometry>
         <dxo-scale [startValue]="100" [endValue]="0" [tickInterval]="50">
         </dxo-scale>
       </dx-circular-gauge>
       <dx-circular-gauge [value]="speedValue / 2">
         <dxo-size [width]="90" [height]="90"></dxo-size>
-        <dxo-value-indicator color="#f05b41"></dxo-value-indicator>
+        <dxo-value-indicator [color]="color"></dxo-value-indicator>
         <dxo-geometry [startAngle]="0" [endAngle]="-90"> </dxo-geometry>
         <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="50">
         </dxo-scale>
