@@ -425,12 +425,6 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _scrollToFocusedDisabledItem($target) {
-        if(this._isDisabled($target)) {
-            this._scrollToItem($target);
-        }
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -454,7 +448,7 @@ const Tabs = CollectionWidget.inherit({
                 break;
             case 'focusedElement':
                 this.callBase(args);
-                this._scrollToFocusedDisabledItem(args.value);
+                this._scrollToItem(args.value);
                 break;
             default:
                 this.callBase(args);
