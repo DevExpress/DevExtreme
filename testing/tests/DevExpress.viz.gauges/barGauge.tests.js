@@ -616,7 +616,7 @@ QUnit.test('The connector should move without turning', function(assert) {
 
     group.animationComplete = $.proxy(function() {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
-        assert.deepEqual(line1.rotate.lastCall.args, [-108, 200, 174], 'line 1 is shifted without rotation');
+        assert.deepEqual(line1.rotate.lastCall.args, [-108, 200, 174], 'line 1 is shifted Shifted by rotation, because the first bar');
         assert.roughEqual(text1._stored_settings.x, 34, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, 222, 1, 'text 1 is coord y');
         assert.deepEqual(line2._stored_settings.points, [97.5949, 208.3249, 16, 12], 'line 2 coords');
