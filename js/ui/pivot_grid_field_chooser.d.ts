@@ -7,7 +7,7 @@ import {
 
 import PivotGridDataSource, {
     Field,
-} from './pivot_grid/public_types/data_source';
+} from './pivot_grid/data_source';
 
 import Widget, {
     WidgetOptions,

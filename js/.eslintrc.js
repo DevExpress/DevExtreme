@@ -111,9 +111,9 @@ module.exports = {
         {
             files: [
                 'ui/pivot_grid/*.ts',
+                'ui/pivot_grid/**/module_*.ts',
+                'ui/pivot_grid/**/module.ts',
                 'ui/pivot_grid/sortable/*.ts',
-                'ui/pivot_grid/xmla_store/*.ts',
-                'ui/pivot_gird/**/module.ts',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {

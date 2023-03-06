@@ -1,10 +1,10 @@
 import '../../../testing/content/orders.js';
 
 import $ from 'jquery';
-import RemoteStore from 'ui/pivot_grid/remote_store';
-import { sort } from 'ui/pivot_grid/data_source.utils';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
-import { forEachGroup } from 'ui/pivot_grid/remote_store.utils';
+import RemoteStore from 'ui/pivot_grid/remote_store/module';
+import { sort } from 'ui/pivot_grid/data_source/module_utils';
+import pivotGridUtils from 'ui/pivot_grid/module_utils';
+import { forEachGroup } from 'ui/pivot_grid/remote_store/module_utils';
 import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
 

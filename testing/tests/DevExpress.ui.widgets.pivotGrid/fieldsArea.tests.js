@@ -13,8 +13,8 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import { FieldsArea } from 'ui/pivot_grid/ui.pivot_grid.fields_area';
-import { AreaItem } from 'ui/pivot_grid/ui.pivot_grid.area_item';
+import { FieldsArea } from 'ui/pivot_grid/fields_area/module';
+import { AreaItem } from 'ui/pivot_grid/area_item/module';
 
 QUnit.module('Creation', () => {
 

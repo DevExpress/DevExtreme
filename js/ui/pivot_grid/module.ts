@@ -13,20 +13,20 @@ import localizationMessage from '../../localization/message';
 import Widget from '../widget/ui.widget';
 import { addNamespace } from '../../events/utils/index';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
-import { setFieldProperty, findField, mergeArraysByMaxValue } from './ui.pivot_grid.utils';
-import { DataController } from './ui.pivot_grid.data_controller';
-import { DataArea } from './ui.pivot_grid.data_area';
-import { VerticalHeadersArea, HorizontalHeadersArea } from './ui.pivot_grid.headers_area';
+import { setFieldProperty, findField, mergeArraysByMaxValue } from './module_utils';
+import { DataController } from './data_controller/module';
+import { DataArea } from './data_area/module';
+import { VerticalHeadersArea, HorizontalHeadersArea } from './headers_area/module';
 import {
   setHeight, getHeight, getWidth, getOuterHeight,
 } from '../../core/utils/size';
 
-import { FieldsArea } from './ui.pivot_grid.fields_area';
+import { FieldsArea } from './fields_area/module';
 
-import PivotGridFieldChooser from './ui.pivot_grid.field_chooser';
-import PivotGridFieldChooserBase from './ui.pivot_grid.field_chooser_base';
-import { ExportController } from './ui.pivot_grid.export';
-import chartIntegrationMixin from './ui.pivot_grid.chart_integration';
+import PivotGridFieldChooser from './field_chooser/module';
+import PivotGridFieldChooserBase from './field_chooser/module_base';
+import { ExportController } from './export/module';
+import chartIntegrationMixin from './chart_integration/module';
 import Popup from '../popup/ui.popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';

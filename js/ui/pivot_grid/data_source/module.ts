@@ -1,22 +1,22 @@
-import { normalizeDataSourceOptions } from '../../data/data_source/utils';
-import Store from '../../data/abstract_store';
+import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
+import Store from '../../../data/abstract_store';
 // @ts-expect-error
-import { executeAsync } from '../../core/utils/common';
+import { executeAsync } from '../../../core/utils/common';
 import {
   isFunction, isNumeric, isDefined, isString, isPlainObject,
-} from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { normalizeIndexes } from '../../core/utils/array';
-import { each } from '../../core/utils/iterator';
-import { when, Deferred } from '../../core/utils/deferred';
-import Class from '../../core/class';
-import { EventsStrategy } from '../../core/events_strategy';
-import { titleize } from '../../core/utils/inflector';
-import { LocalStore } from './local_store';
-import RemoteStore from './remote_store';
-import { sort } from './data_source.utils';
-import { XmlaStore } from './xmla_store/xmla_store';
-import { applyDisplaySummaryMode, createMockSummaryCell, applyRunningTotal } from './ui.pivot_grid.summary_display_modes';
+} from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { normalizeIndexes } from '../../../core/utils/array';
+import { each } from '../../../core/utils/iterator';
+import { when, Deferred } from '../../../core/utils/deferred';
+import Class from '../../../core/class';
+import { EventsStrategy } from '../../../core/events_strategy';
+import { titleize } from '../../../core/utils/inflector';
+import { LocalStore } from '../local_store/module';
+import RemoteStore from '../remote_store/module';
+import { sort } from './module_utils';
+import { XmlaStore } from '../xmla_store/module';
+import { applyDisplaySummaryMode, createMockSummaryCell, applyRunningTotal } from '../summary_display_modes/module';
 import {
   foreachTree,
   foreachTreeAsync,
@@ -25,7 +25,7 @@ import {
   createPath,
   setFieldProperty,
   getFieldsDataType,
-} from './ui.pivot_grid.utils';
+} from '../module_utils';
 
 const DESCRIPTION_NAME_BY_AREA = {
   row: 'rows',
@@ -242,7 +242,7 @@ export default Class.inherit((function () {
             dataSourceCells[rowIndex] = [];
           }
           // eslint-disable-next-line eqeqeq
-          for (newColumnIndex = 0; newColumnIndex < newRowCells.length; newColumnIndex == 1) {
+          for (newColumnIndex = 0; newColumnIndex < newRowCells.length; newColumnIndex += 1) {
             newCell = newRowCells[newColumnIndex];
             columnIndex = newColumnItemIndexesToCurrent[newColumnIndex];
             if (!isDefined(columnIndex)) {
@@ -573,7 +573,7 @@ export default Class.inherit((function () {
   return {
     ctor(options) {
       options = options || {};
-      (this as any)._eventsStrategy = new EventsStrategy(this);
+      this._eventsStrategy = new EventsStrategy(this);
 
       const that: any = this;
       const store = createStore(options, (progress) => {
@@ -642,7 +642,7 @@ export default Class.inherit((function () {
     },
 
     getData() {
-      return (this as any)._data;
+      return this._data;
     },
 
     getAreaFields(area, collectGroups) {
@@ -650,10 +650,10 @@ export default Class.inherit((function () {
       let descriptions;
 
       if (collectGroups || area === 'data') {
-        areaFields = getAreaFields((this as any)._fields, area);
+        areaFields = getAreaFields(this._fields, area);
         sortFieldsByAreaIndex(areaFields);
       } else {
-        descriptions = (this as any)._descriptions || {};
+        descriptions = this._descriptions || {};
         areaFields = descriptions[DESCRIPTION_NAME_BY_AREA[area]] || [];
       }
 
@@ -700,15 +700,15 @@ export default Class.inherit((function () {
 
     getFieldValues(index, applyFilters, options) {
       const that: any = this;
-      const field = (this as any)._fields && (this as any)._fields[index];
+      const field = this._fields && this._fields[index];
       const store = this.store();
       const loadFields: any = [];
       const loadOptions: any = {
         columns: loadFields,
         rows: [],
-        values: (this as any).getAreaFields('data'),
+        values: this.getAreaFields('data'),
         filters: applyFilters
-          ? (this as any)._fields.filter((f) => f !== field
+          ? this._fields.filter((f) => f !== field
             && f.area
             && f.filterValues
             && f.filterValues.length)
@@ -756,12 +756,14 @@ export default Class.inherit((function () {
     },
 
     filter() {
-      const store = (this as any)._store;
+      const store = this._store;
 
       return store.filter.apply(store, arguments);
     },
 
-    load(options) {
+    // eslint-disable-next-line object-shorthand
+    load: function (options) {
+      console.log('load', when);
       const that: any = this;
       // @ts-expect-error
       const d = new Deferred();
@@ -796,8 +798,8 @@ export default Class.inherit((function () {
     },
 
     createDrillDownDataSource(params) {
-      return (this as any)._store.createDrillDownDataSource(
-        (this as any)._descriptions,
+      return this._store.createDrillDownDataSource(
+        this._descriptions,
         params,
       );
     },
@@ -805,6 +807,7 @@ export default Class.inherit((function () {
     _createDescriptions(currentField) {
       const that: any = this;
       const fields = that.fields();
+      console.log('create desc');
       const descriptions: any = {
         rows: [],
         columns: [],
@@ -878,7 +881,7 @@ export default Class.inherit((function () {
       that._descriptions = that._createDescriptions();
     },
     isLoading() {
-      return (this as any)._loadingCount > 0;
+      return this._loadingCount > 0;
     },
 
     state(state, skipLoading) {
@@ -925,20 +928,20 @@ export default Class.inherit((function () {
     _changeLoadingCount(increment) {
       const oldLoading = this.isLoading();
 
-      (this as any)._loadingCount += increment;
+      this._loadingCount += increment;
       const newLoading = this.isLoading();
 
-      //- @ts-expect-error
+      // - @ts-expect-error
       if (oldLoading ^ newLoading) {
-        (this as any)._eventsStrategy.fireEvent('loadingChanged', [newLoading]);
+        this._eventsStrategy.fireEvent('loadingChanged', [newLoading]);
       }
     },
 
     _hasPagingValues(options, area, oppositeIndex) {
       const takeField = `${area}Take`;
       const skipField = `${area}Skip`;
-      const { values } = (this as any)._data;
-      let items = (this as any)._data[`${area}s`];
+      const { values } = this._data;
+      let items = this._data[`${area}s`];
       const oppositeArea = area === 'row' ? 'column' : 'row';
       const indices: any = [];
 
@@ -978,7 +981,7 @@ export default Class.inherit((function () {
     _processPagingCacheByArea(options, pageSize, area) {
       const takeField = `${area}Take`;
       const skipField = `${area}Skip`;
-      let items = (this as any)._data[`${area}s`];
+      let items = this._data[`${area}s`];
       const oppositeArea = area === 'row' ? 'column' : 'row';
       let item;
 
@@ -1017,7 +1020,7 @@ export default Class.inherit((function () {
     },
 
     _processPagingCache(storeLoadOptions) {
-      const pageSize = (this as any)._pageSize;
+      const pageSize = this._pageSize;
 
       if (pageSize < 0) return;
 
@@ -1029,8 +1032,8 @@ export default Class.inherit((function () {
 
     _loadCore(options, deferred) {
       const that: any = this;
-      const store = (this as any)._store;
-      const descriptions = (this as any)._descriptions;
+      const store = this._store;
+      const descriptions = this._descriptions;
       const reload = options.reload || (this.paginate() && that._isFieldsModified);
       const paginate = this.paginate();
       const headerName = DESCRIPTION_NAME_BY_AREA[options.area];
@@ -1040,12 +1043,12 @@ export default Class.inherit((function () {
       if (store) {
         extend(options, descriptions);
         options.columnExpandedPaths = options.columnExpandedPaths
-          || getExpandedPaths((this as any)._data, options, 'columns', that._lastLoadOptions);
+          || getExpandedPaths(this._data, options, 'columns', that._lastLoadOptions);
         options.rowExpandedPaths = options.rowExpandedPaths
-          || getExpandedPaths((this as any)._data, options, 'rows', that._lastLoadOptions);
+          || getExpandedPaths(this._data, options, 'rows', that._lastLoadOptions);
 
         if (paginate) {
-          options.pageSize = (this as any)._pageSize;
+          options.pageSize = this._pageSize;
         }
 
         if (headerName) {
@@ -1107,21 +1110,21 @@ export default Class.inherit((function () {
     },
 
     _sort(descriptions, data, getAscOrder) {
-      const store = (this as any)._store;
+      const store = this._store;
 
-      if (store && !(this as any)._paginate) {
+      if (store && !this._paginate) {
         sort(descriptions, data, getAscOrder);
       }
     },
 
     paginate() {
-      return (this as any)._paginate
-        && (this as any)._store
-        && (this as any)._store.supportPaging();
+      return this._paginate
+        && this._store
+        && this._store.supportPaging();
     },
 
     isEmpty() {
-      const dataFields = (this as any).getAreaFields('data').filter((f) => f.visible !== false);
+      const dataFields = this.getAreaFields('data').filter((f) => f.visible !== false);
       const data = this.getData();
       return !dataFields.length || !data.values.length;
     },
@@ -1166,7 +1169,7 @@ export default Class.inherit((function () {
     },
 
     store() {
-      return (this as any)._store;
+      return this._store;
     },
 
     collapseHeaderItem(area, path) {
@@ -1197,19 +1200,19 @@ export default Class.inherit((function () {
 
     collapseAll(id) {
       let dataChanged = false;
-      const field = (this as any).field(id) || {};
-      let areaOffsets = [(this as any).getAreaFields(field.area).indexOf(field)];
+      const field = this.field(id) || {};
+      let areaOffsets = [this.getAreaFields(field.area).indexOf(field)];
 
       field.expanded = false;
       if (field && field.levels) {
         areaOffsets = [];
         field.levels.forEach((f) => {
-          areaOffsets.push((this as any).getAreaFields(field.area).indexOf(f));
+          areaOffsets.push(this.getAreaFields(field.area).indexOf(f));
           f.expanded = false;
         });
       }
 
-      foreachTree((this as any)._data[`${field.area}s`], (items) => {
+      foreachTree(this._data[`${field.area}s`], (items) => {
         const item = items[0];
         const path = createPath(items);
 
@@ -1220,11 +1223,11 @@ export default Class.inherit((function () {
         }
       }, true);
 
-      dataChanged && (this as any)._update();
+      dataChanged && this._update();
     },
 
     expandAll(id) {
-      const field = (this as any).field(id);
+      const field = this.field(id);
       if (field && field.area) {
         field.expanded = true;
         if (field && field.levels) {
@@ -1232,7 +1235,7 @@ export default Class.inherit((function () {
             f.expanded = true;
           });
         }
-        (this as any).load();
+        this.load();
       }
     },
 
@@ -1374,12 +1377,12 @@ export default Class.inherit((function () {
     },
 
     on(eventName, eventHandler) {
-      (this as any)._eventsStrategy.on(eventName, eventHandler);
+      this._eventsStrategy.on(eventName, eventHandler);
       return this;
     },
 
     off(eventName, eventHandler) {
-      (this as any)._eventsStrategy.off(eventName, eventHandler);
+      this._eventsStrategy.off(eventName, eventHandler);
       return this;
     },
 
@@ -1387,14 +1390,14 @@ export default Class.inherit((function () {
       const that: any = this;
       const delayedLoadTask = that._delayedLoadTask;
 
-      (this as any)._eventsStrategy.dispose();
+      this._eventsStrategy.dispose();
       if (delayedLoadTask) {
         delayedLoadTask.abort();
       }
-      (this as any)._isDisposed = true;
+      this._isDisposed = true;
     },
     isDisposed() {
-      return !!(this as any)._isDisposed;
+      return !!this._isDisposed;
     },
   };
 })());

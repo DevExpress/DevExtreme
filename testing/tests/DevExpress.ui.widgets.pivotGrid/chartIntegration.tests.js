@@ -1,13 +1,13 @@
 import '../../helpers/noIntl.js';
 import $ from 'jquery';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import PivotGridDataSource from 'ui/pivot_grid/data_source/module';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 /* global orders */
 import '../../../testing/content/orders.js';
 
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
-import 'ui/pivot_grid/ui.pivot_grid';
+import 'ui/pivot_grid/field_chooser/module';
+import 'ui/pivot_grid/module';
 
 import 'generic_light.css!';
 import 'viz/chart';
@@ -189,6 +189,8 @@ QUnit.module('Chart Binding', {
         const pivotGrid = createPivotGrid(this.pivotGridOptions);
         const chart = createChart();
         const chartReady = sinon.stub();
+
+        console.log('test');
 
         pivotGrid.bindChart(chart);
         pivotGrid.bindChart(chart);

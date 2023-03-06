@@ -5,7 +5,7 @@ const HORIZONTAL_WIDTH_LARGE = 1500;
 const HORIZONTAL_WIDTH_SMALL = 900;
 
 import 'generic_light.css!';
-import 'ui/pivot_grid/ui.sortable';
+import 'ui/pivot_grid/ui.sortable/module';
 import 'ui/scroll_view/ui.scrollable';
 import { getWidth, getHeight } from 'core/utils/size';
 

@@ -1,13 +1,13 @@
-import { setWidth } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import Class from '../../core/class';
-import { getPublicElement } from '../../core/element';
-import { extend } from '../../core/utils/extend';
-import { getBoundingRect } from '../../core/utils/position';
-import { isDefined } from '../../core/utils/type';
-import { setStyle } from '../../core/utils/style';
-import domAdapter from '../../core/dom_adapter';
-import { getMemoizeScrollTo } from '../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
+import { setWidth } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import Class from '../../../core/class';
+import { getPublicElement } from '../../../core/element';
+import { extend } from '../../../core/utils/extend';
+import { getBoundingRect } from '../../../core/utils/position';
+import { isDefined } from '../../../core/utils/type';
+import { setStyle } from '../../../core/utils/style';
+import domAdapter from '../../../core/dom_adapter';
+import { getMemoizeScrollTo } from '../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 

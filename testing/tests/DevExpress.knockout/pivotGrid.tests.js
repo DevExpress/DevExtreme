@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const ko = require('knockout');
 
-require('ui/pivot_grid/ui.pivot_grid');
+require('ui/pivot_grid/module');
 require('integration/knockout');
 
 QUnit.testStart(function() {

@@ -1,13 +1,13 @@
-import $ from '../../core/renderer';
-import { noop } from '../../core/utils/common';
-import { each } from '../../core/utils/iterator';
-import { AreaItem } from './ui.pivot_grid.area_item';
-import { capitalizeFirstLetter } from './ui.pivot_grid.utils';
-import { setHeight, setWidth } from '../../core/utils/style';
-import Popup from '../popup/ui.popup';
-import Button from '../button';
+import $ from '../../../core/renderer';
+import { noop } from '../../../core/utils/common';
+import { each } from '../../../core/utils/iterator';
+import { AreaItem } from '../area_item/module';
+import { capitalizeFirstLetter } from '../module_utils';
+import { setHeight, setWidth } from '../../../core/utils/style';
+import Popup from '../../popup/ui.popup';
+import Button from '../../button';
 
-import './ui.pivot_grid.field_chooser_base';
+import '../field_chooser/module_base';
 
 const DIV = '<div>';
 

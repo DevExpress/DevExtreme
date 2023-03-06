@@ -1,18 +1,18 @@
-import Callbacks from '../../core/utils/callbacks';
-import { when, Deferred } from '../../core/utils/deferred';
-import { extend } from '../../core/utils/extend';
-import { map, each } from '../../core/utils/iterator';
-import Class from '../../core/class';
-import { format } from '../../core/utils/string';
-import { deferUpdate } from '../../core/utils/common';
-import { isDefined, isString } from '../../core/utils/type';
-import { VirtualScrollController } from '../grid_core/ui.grid_core.virtual_scrolling_core';
-import { foreachColumnInfo, createColumnsInfo } from '../grid_core/ui.grid_core.virtual_columns_core';
-import { StateStoringController } from '../grid_core/ui.grid_core.state_storing_core';
-import PivotGridDataSource from './data_source';
+import Callbacks from '../../../core/utils/callbacks';
+import { when, Deferred } from '../../../core/utils/deferred';
+import { extend } from '../../../core/utils/extend';
+import { map, each } from '../../../core/utils/iterator';
+import Class from '../../../core/class';
+import { format } from '../../../core/utils/string';
+import { deferUpdate } from '../../../core/utils/common';
+import { isDefined, isString } from '../../../core/utils/type';
+import { VirtualScrollController } from '../../grid_core/ui.grid_core.virtual_scrolling_core';
+import { foreachColumnInfo, createColumnsInfo } from '../../grid_core/ui.grid_core.virtual_columns_core';
+import { StateStoringController } from '../../grid_core/ui.grid_core.state_storing_core';
+import PivotGridDataSource from '../data_source/module';
 import {
   findField, foreachTree, foreachTreeAsync, createPath, formatValue,
-} from './ui.pivot_grid.utils';
+} from '../module_utils';
 
 const math = Math;
 const GRAND_TOTAL_TYPE = 'GT';
@@ -31,7 +31,7 @@ const proxyMethod = function (instance, methodName, defaultResult?) {
 };
 
 export const DataController = Class.inherit((function () {
-  //- @ts-expect-error
+  // - @ts-expect-error
   function getHeaderItemText(item, description, options) {
     let { text } = item;
 
@@ -684,7 +684,7 @@ export const DataController = Class.inherit((function () {
               if (that._dataSource.paginate()) {
                 that._dataSource.load();
               } else {
-                //- @ts-expect-error
+                // - @ts-expect-error
                 virtualScrollControllerChanged.apply(this, arguments);
               }
             });
@@ -711,7 +711,7 @@ export const DataController = Class.inherit((function () {
               if (that._dataSource.paginate()) {
                 that._dataSource.load();
               } else {
-                //- @ts-expect-error
+                // - @ts-expect-error
                 virtualScrollControllerChanged.apply(this, arguments);
               }
             });
@@ -756,7 +756,7 @@ export const DataController = Class.inherit((function () {
     },
 
     _calculatePagingForRowExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
-      const rows = (this as any)._rowsInfo;
+      const rows = this._rowsInfo;
       const rowCount = Math.min(options.rowSkip + options.rowTake, rows.length);
       const { rowExpandedPaths } = options;
       let levels: any = [];
@@ -800,7 +800,7 @@ export const DataController = Class.inherit((function () {
       const skipByPath = {};
       const takeByPath = {};
 
-      foreachColumnInfo((this as any)._columnsInfo, (columnInfo, columnIndex) => {
+      foreachColumnInfo(this._columnsInfo, (columnInfo, columnIndex) => {
         if (columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
           const colspan = columnInfo.colspan || 1;
           const path = columnInfo.path.slice(0, -1).toString();
@@ -902,9 +902,9 @@ export const DataController = Class.inherit((function () {
 
     _handleCustomizeStoreLoadOptions(storeLoadOptions, reload) {
       const options = storeLoadOptions[0];
-      const rowsScrollController = (this as any)._rowsScrollController;
+      const rowsScrollController = this._rowsScrollController;
 
-      if ((this as any)._dataSource.paginate() && rowsScrollController) {
+      if (this._dataSource.paginate() && rowsScrollController) {
         const rowPageSize = rowsScrollController.pageSize();
 
         if (options.headerName === 'rows') {
@@ -920,9 +920,9 @@ export const DataController = Class.inherit((function () {
         }
       }
 
-      const columnsScrollController = (this as any)._columnsScrollController;
+      const columnsScrollController = this._columnsScrollController;
 
-      if ((this as any)._dataSource.paginate() && columnsScrollController) {
+      if (this._dataSource.paginate() && columnsScrollController) {
         const columnPageSize = columnsScrollController.pageSize();
         storeLoadOptions.forEach((options) => {
           if (options.headerName === 'columns') {
@@ -942,7 +942,7 @@ export const DataController = Class.inherit((function () {
 
     load() {
       const that: any = this;
-      const stateStoringController = (this as any)._stateStoringController;
+      const stateStoringController = this._stateStoringController;
 
       if (stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
         stateStoringController.load().always((state) => {
@@ -997,34 +997,34 @@ export const DataController = Class.inherit((function () {
     },
 
     setViewportPosition(left, top) {
-      (this as any)._rowsScrollController.setViewportPosition(top || 0);
-      (this as any)._columnsScrollController.setViewportPosition(left || 0);
+      this._rowsScrollController.setViewportPosition(top || 0);
+      this._columnsScrollController.setViewportPosition(left || 0);
     },
 
     subscribeToWindowScrollEvents($element) {
-      (this as any)._rowsScrollController?.subscribeToWindowScrollEvents($element);
+      this._rowsScrollController?.subscribeToWindowScrollEvents($element);
     },
 
     updateWindowScrollPosition(position) {
-      (this as any)._rowsScrollController?.scrollTo(position);
+      this._rowsScrollController?.scrollTo(position);
     },
 
     updateViewOptions(options) {
-      extend((this as any)._options, options);
+      extend(this._options, options);
       this._update();
     },
 
     _handleExpandValueChanging(e) {
-      (this as any).expandValueChanging.fire(e);
+      this.expandValueChanging.fire(e);
     },
     _handleLoadingChanged(isLoading) {
-      (this as any).loadingChanged.fire(isLoading);
+      this.loadingChanged.fire(isLoading);
     },
     _handleProgressChanged(progress) {
-      (this as any).progressChanged.fire(progress);
+      this.progressChanged.fire(progress);
     },
     _handleFieldsPrepared(e) {
-      (this as any)._options.onFieldsPrepared && (this as any)._options.onFieldsPrepared(e);
+      this._options.onFieldsPrepared && this._options.onFieldsPrepared(e);
     },
     _createDataSource(options) {
       const that: any = this;
@@ -1062,16 +1062,16 @@ export const DataController = Class.inherit((function () {
     },
 
     getDataSource() {
-      return (this as any)._dataSource;
+      return this._dataSource;
     },
     isLoading() {
-      return (this as any)._dataSource.isLoading();
+      return this._dataSource.isLoading();
     },
     beginLoading() {
-      (this as any)._dataSource.beginLoading();
+      this._dataSource.beginLoading();
     },
     endLoading() {
-      (this as any)._dataSource.endLoading();
+      this._dataSource.endLoading();
     },
     _update() {
       const that: any = this;
@@ -1125,7 +1125,7 @@ export const DataController = Class.inherit((function () {
       };
 
       const notifyProgress = function (progress) {
-        //- @ts-expect-error
+        // - @ts-expect-error
         this.progress = progress;
         that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
       };
@@ -1217,7 +1217,7 @@ export const DataController = Class.inherit((function () {
 
         foreachRowInfo(
           newRowsInfo,
-          //- @ts-expect-error
+          // - @ts-expect-error
           (rowInfo, visibleIndex, rowIndex, columnIndex, realColumnIndex) => {
             const colspan = rowInfo.colspan || 1;
 
@@ -1252,21 +1252,21 @@ export const DataController = Class.inherit((function () {
     },
 
     totalRowCount() {
-      return (this as any)._rowsInfo.length;
+      return this._rowsInfo.length;
     },
 
     rowPageIndex(index) {
       if (index !== undefined) {
-        (this as any)._rowPageIndex = index;
+        this._rowPageIndex = index;
       }
-      return (this as any)._rowPageIndex || 0;
+      return this._rowPageIndex || 0;
     },
 
     totalColumnCount() {
       let count = 0;
-      if ((this as any)._columnsInfo && (this as any)._columnsInfo.length) {
-        for (let i = 0; i < (this as any)._columnsInfo[0].length; i += 1) {
-          count += (this as any)._columnsInfo[0][i].colspan || 1;
+      if (this._columnsInfo && this._columnsInfo.length) {
+        for (let i = 0; i < this._columnsInfo[0].length; i += 1) {
+          count += this._columnsInfo[0][i].colspan || 1;
         }
       }
 
@@ -1275,37 +1275,37 @@ export const DataController = Class.inherit((function () {
 
     rowPageSize(size) {
       if (size !== undefined) {
-        (this as any)._rowPageSize = size;
+        this._rowPageSize = size;
       }
-      return (this as any)._rowPageSize || 20;
+      return this._rowPageSize || 20;
     },
 
     columnPageSize(size) {
       if (size !== undefined) {
-        (this as any)._columnPageSize = size;
+        this._columnPageSize = size;
       }
-      return (this as any)._columnPageSize || 20;
+      return this._columnPageSize || 20;
     },
 
     columnPageIndex(index) {
       if (index !== undefined) {
-        (this as any)._columnPageIndex = index;
+        this._columnPageIndex = index;
       }
-      return (this as any)._columnPageIndex || 0;
+      return this._columnPageIndex || 0;
     },
 
     getCellsInfo(getAllData) {
       const rowsInfo = this.getRowsInfo(getAllData);
       const columnsInfo = this.getColumnsInfo(getAllData);
-      const data = (this as any)._dataSource.getData();
-      const texts = (this as any)._options.texts || {};
+      const data = this._dataSource.getData();
+      const texts = this._options.texts || {};
 
       return createCellsInfo(
         rowsInfo,
         columnsInfo,
         data,
-        (this as any)._dataSource.getAreaFields('data'),
-        (this as any)._options.dataFieldArea,
+        this._dataSource.getAreaFields('data'),
+        this._options.dataFieldArea,
         texts.dataNotAvailable,
       );
     },

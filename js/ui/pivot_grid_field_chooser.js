@@ -1,2 +1,2 @@
-import FieldChooser from './pivot_grid/ui.pivot_grid.field_chooser';
+import FieldChooser from './pivot_grid/field_chooser/module';
 export default FieldChooser;

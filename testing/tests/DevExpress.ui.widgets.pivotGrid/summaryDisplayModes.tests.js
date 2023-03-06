@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import summaryDisplayModes, { applyDisplaySummaryMode, applyRunningTotal, summaryDictionary } from 'ui/pivot_grid/ui.pivot_grid.summary_display_modes'; // arguments: description, data
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
+import summaryDisplayModes, { applyDisplaySummaryMode, applyRunningTotal, summaryDictionary } from 'ui/pivot_grid/summary_display_modes/module'; // arguments: description, data
+import pivotGridUtils from 'ui/pivot_grid/module_utils';
 
 const data = {
     columns: [{

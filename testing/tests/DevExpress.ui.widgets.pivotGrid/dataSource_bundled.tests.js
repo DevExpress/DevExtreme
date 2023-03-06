@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import DataSource from 'ui/pivot_grid/data_source';
+import DataSource from 'ui/pivot_grid/data_source/module';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import inflector from 'core/utils/inflector';
-import summaryDisplayModes from 'ui/pivot_grid/ui.pivot_grid.summary_display_modes';
-import xmlaStore, { XmlaStore } from 'ui/pivot_grid/xmla_store/xmla_store';
-import { LocalStore } from 'ui/pivot_grid/local_store';
-import RemoteStore from 'ui/pivot_grid/remote_store';
-import pivotGridUtils, { setFieldProperty } from 'ui/pivot_grid/ui.pivot_grid.utils';
+import summaryDisplayModes from 'ui/pivot_grid/summary_display_modes/module';
+import xmlaStore, { XmlaStore } from 'ui/pivot_grid/xmla_store/module';
+import { LocalStore } from 'ui/pivot_grid/local_store/module';
+import RemoteStore from 'ui/pivot_grid/remote_store/module';
+import pivotGridUtils, { setFieldProperty } from 'ui/pivot_grid/module_utils';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import '../../../testing/content/orders.js';

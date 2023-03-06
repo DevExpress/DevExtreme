@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import Class from 'core/class';
-import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller';
+import { DataController } from 'ui/pivot_grid/data_controller/module';
 import virtualScrolling from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import stateStoring from 'ui/grid_core/ui.grid_core.state_storing_core';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import pivotGridUtils from 'ui/pivot_grid/module_utils';
+import PivotGridDataSource from 'ui/pivot_grid/data_source/module';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 const moduleConfig = {

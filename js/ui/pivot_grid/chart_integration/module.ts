@@ -1,7 +1,7 @@
-import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import { foreachTree, formatValue, createPath } from './ui.pivot_grid.utils';
-import { each } from '../../core/utils/iterator';
+import $ from '../../../core/renderer';
+import { extend } from '../../../core/utils/extend';
+import { foreachTree, formatValue, createPath } from '../module_utils';
+import { each } from '../../../core/utils/iterator';
 
 const FORMAT_DICTIONARY = {
   number: 'numeric',
@@ -311,7 +311,7 @@ export default {
     };
 
     chart.on('disposing', disposeBinding);
-    (this as any).on('disposing', disposeBinding);
+    this.on('disposing', disposeBinding);
 
     chart.$element().data(UNBIND_KEY, disposeBinding);
 

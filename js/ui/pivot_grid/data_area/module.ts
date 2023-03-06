@@ -1,7 +1,7 @@
-import $ from '../../core/renderer';
-import { AreaItem } from './ui.pivot_grid.area_item';
-import { nativeScrolling } from '../../core/utils/support';
-import { calculateScrollbarWidth } from './utils/calculate_scrollbar_width';
+import $ from '../../../core/renderer';
+import { AreaItem } from '../area_item/module';
+import { nativeScrolling } from '../../../core/utils/support';
+import { calculateScrollbarWidth } from '../utils/calculate_scrollbar_width';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data';

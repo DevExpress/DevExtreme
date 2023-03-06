@@ -1,15 +1,15 @@
 import {
   getOuterWidth, getOuterHeight, getHeight, getWidth, setWidth, setHeight,
-} from '../../core/utils/size';
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
-import { addNamespace } from '../../events/utils/index';
-import registerComponent from '../../core/component_registrator';
-import DOMComponent from '../../core/dom_component';
-import domAdapter from '../../core/dom_adapter';
+} from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import eventsEngine from '../../../events/core/events_engine';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { addNamespace } from '../../../events/utils/index';
+import registerComponent from '../../../core/component_registrator';
+import DOMComponent from '../../../core/dom_component';
+import domAdapter from '../../../core/dom_adapter';
 import {
   start as dragEventStart,
   move as dragEventMove,
@@ -17,8 +17,8 @@ import {
   enter as dragEventEnter,
   leave as dragEventLeave,
   drop as dragEventDrop,
-} from '../../events/drag';
-import swatchContainer from '../widget/swatch_container';
+} from '../../../events/drag';
+import swatchContainer from '../../widget/swatch_container';
 
 const { getSwatchContainer } = swatchContainer;
 

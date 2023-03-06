@@ -1,4 +1,4 @@
-import PivotGrid from './pivot_grid/ui.pivot_grid';
+import PivotGrid from './pivot_grid/module';
 export default PivotGrid;
 
 /**

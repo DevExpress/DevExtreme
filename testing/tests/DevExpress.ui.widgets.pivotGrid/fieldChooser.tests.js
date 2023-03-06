@@ -12,12 +12,12 @@ import renderer from 'core/renderer';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
+import PivotGridDataSource from 'ui/pivot_grid/data_source/module';
+import 'ui/pivot_grid/field_chooser/module';
 import pointerMock from '../../helpers/pointerMock.js';
 import { isDefined } from 'core/utils/type';
 
-import 'ui/pivot_grid/ui.pivot_grid';
+import 'ui/pivot_grid/module';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';

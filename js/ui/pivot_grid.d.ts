@@ -14,7 +14,7 @@ import PivotGridDataSource, {
     Field,
     Options as PivotGridDataSourceOptions,
     dxPivotGridSummaryCell as SummaryCell,
-} from './pivot_grid/public_types/data_source';
+} from './pivot_grid/data_source';
 
 import dxPopup from './popup';
 

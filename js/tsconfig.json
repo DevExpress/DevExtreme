@@ -3,12 +3,6 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./",
-
-//    "allowJs": true,
-//    "checkJs": false,
-//    "skipDefaultLibCheck": true,
-//    "skipLibCheck": true,
-
     "noEmitOnError": true,
     "resolveJsonModule": false,
     "sourceMap": false,
@@ -25,8 +19,6 @@
     "module": "es6",
     "target": "es6",
     "moduleResolution": "node",
-    // TODO: set to true after typescript update
-//    "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": false,
     "noPropertyAccessFromIndexSignature": true,
@@ -35,13 +27,9 @@
     "strict": true,
     // TODO: set to true
     "noImplicitAny": false,
-//    "strictBindCallApply": true,
-//    "strictFunctionTypes": true,
-//    "strictNullChecks": true,
-//    "strictPropertyInitialization": true,
-//    "useDefineForClassFields": true,
     // TODO: set to true after typescript update
     //"useUnknownInCatchVariables": true,
+    //"noImplicitOverride": true,
   },
   "include": [
     "ui/pivot_grid/**/*.ts"

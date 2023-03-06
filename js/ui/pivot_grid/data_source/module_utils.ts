@@ -4,9 +4,9 @@ import {
   getCompareFunction,
   createPath,
   foreachDataLevel,
-} from './ui.pivot_grid.utils';
-import { isDefined } from '../../core/utils/type';
-import { map } from '../../core/utils/iterator';
+} from '../module_utils';
+import { isDefined } from '../../../core/utils/type';
+import { map } from '../../../core/utils/iterator';
 
 export function sort(loadOptions, dataSource, getAscOrder) {
   sortDimension(dataSource, loadOptions, 'rows', getAscOrder);

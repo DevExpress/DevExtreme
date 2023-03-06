@@ -1,25 +1,25 @@
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import ArrayStore from '../../data/array_store';
-import { name as clickEventName } from '../../events/click';
-import { noop } from '../../core/utils/common';
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { each, map } from '../../core/utils/iterator';
-import localizationMessage from '../../localization/message';
-import registerComponent from '../../core/component_registrator';
-import Widget from '../widget/ui.widget';
+import $ from '../../../core/renderer';
+import eventsEngine from '../../../events/core/events_engine';
+import ArrayStore from '../../../data/array_store';
+import { name as clickEventName } from '../../../events/click';
+import { noop } from '../../../core/utils/common';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { each, map } from '../../../core/utils/iterator';
+import localizationMessage from '../../../localization/message';
+import registerComponent from '../../../core/component_registrator';
+import Widget from '../../widget/ui.widget';
 import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
   headerFilterMixin,
-} from '../grid_core/ui.grid_core.header_filter_core';
-import columnStateMixin from '../grid_core/ui.grid_core.column_state_mixin';
-import sortingMixin from '../grid_core/ui.grid_core.sorting_mixin';
-import { foreachTree, createPath } from './ui.pivot_grid.utils';
-import Sortable from './ui.sortable';
-import { Deferred } from '../../core/utils/deferred';
-import { sortableItemRender } from './sortable/index';
+} from '../../grid_core/ui.grid_core.header_filter_core';
+import columnStateMixin from '../../grid_core/ui.grid_core.column_state_mixin';
+import sortingMixin from '../../grid_core/ui.grid_core.sorting_mixin';
+import { foreachTree, createPath } from '../module_utils';
+import Sortable from '../sortable/module';
+import { Deferred } from '../../../core/utils/deferred';
+import { sortableItemRender } from '../sortable/index';
 
 const DIV = '<div>';
 

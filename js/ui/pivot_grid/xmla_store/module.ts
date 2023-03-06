@@ -12,7 +12,7 @@ import {
 import { map, each } from '../../../core/utils/iterator';
 import {
   sendRequest, getExpandedLevel, storeDrillDownMixin, foreachTree,
-} from '../ui.pivot_grid.utils';
+} from '../module_utils';
 import { when, Deferred } from '../../../core/utils/deferred';
 import { getLanguageId } from '../../../localization/language_codes';
 
@@ -1011,11 +1011,11 @@ export const XmlaStore = Class.inherit((function () {
 
   return {
     ctor(options) {
-      (this as any)._options = options;
+      this._options = options;
     },
 
     getFields() {
-      const options = (this as any)._options;
+      const options = this._options;
       const { catalog } = options;
       const { cube } = options;
       const localeIdProperty = getLocaleIdProperty();
@@ -1062,7 +1062,7 @@ export const XmlaStore = Class.inherit((function () {
     load(options) {
       // @ts-expect-error
       const result = new Deferred();
-      const storeOptions = (this as any)._options;
+      const storeOptions = this._options;
       const parseOptions = {
         skipValues: options.skipValues,
       };
@@ -1125,7 +1125,7 @@ export const XmlaStore = Class.inherit((function () {
     getDrillDownItems(options, params) {
       // @ts-expect-error
       const result = new Deferred();
-      const storeOptions = (this as any)._options;
+      const storeOptions = this._options;
       const mdxString = generateDrillDownMDX(options, storeOptions.cube, params);
 
       if (mdxString) {

@@ -1,18 +1,18 @@
-import $ from '../../core/renderer';
-import { getImageContainer } from '../../core/utils/icon';
-import { hasWindow as hasWindowFn } from '../../core/utils/window';
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
-import localizationMessage from '../../localization/message';
-import registerComponent from '../../core/component_registrator';
-import { getCompareFunction, foreachDataLevel } from './ui.pivot_grid.utils';
-import TreeView from '../tree_view';
-import ContextMenu from '../context_menu';
-import BaseFieldChooser from './ui.pivot_grid.field_chooser_base';
+import $ from '../../../core/renderer';
+import { getImageContainer } from '../../../core/utils/icon';
+import { hasWindow as hasWindowFn } from '../../../core/utils/window';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import localizationMessage from '../../../localization/message';
+import registerComponent from '../../../core/component_registrator';
+import { getCompareFunction, foreachDataLevel } from '../module_utils';
+import TreeView from '../../tree_view';
+import ContextMenu from '../../context_menu';
+import BaseFieldChooser from './module_base';
 
-import './data_source';
-import { SortableConst } from './sortable/index';
+import '../data_source/module';
+import { SortableConst } from '../sortable/index';
 
 const DIV = '<div>';
 const hasWindow = hasWindowFn();

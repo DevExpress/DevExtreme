@@ -1,19 +1,19 @@
-import { isString, isDefined } from '../../core/utils/type';
-import Class from '../../core/class';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
-import { DataSource } from '../../data/data_source/data_source';
-import { when, Deferred } from '../../core/utils/deferred';
+import { isString, isDefined } from '../../../core/utils/type';
+import Class from '../../../core/class';
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { DataSource } from '../../../data/data_source/data_source';
+import { when, Deferred } from '../../../core/utils/deferred';
 import {
   getFiltersByPath,
   capitalizeFirstLetter,
   getExpandedLevel,
   discoverObjectFields,
   setDefaultFieldValueFormatting,
-} from './ui.pivot_grid.utils';
-import { forEachGroup } from './remote_store.utils';
-import dateSerialization from '../../core/utils/date_serialization';
-import { normalizeLoadResult } from '../../data/data_source/utils';
+} from '../module_utils';
+import { forEachGroup } from './module_utils';
+import dateSerialization from '../../../core/utils/date_serialization';
+import { normalizeLoadResult } from '../../../data/data_source/utils';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
   const groupingOptions: any = [];
@@ -501,15 +501,15 @@ function prepareFields(fields) {
 export default Class.inherit((function () {
   return {
     ctor(options) {
-      (this as any)._dataSource = new DataSource(options);
-      (this as any)._store = (this as any)._dataSource.store();
+      this._dataSource = new DataSource(options);
+      this._store = this._dataSource.store();
     },
 
     getFields(fields) {
       // @ts-expect-error
       const d = new Deferred();
 
-      (this as any)._store.load({
+      this._store.load({
         skip: 0,
         take: 20,
       }).done((data) => {
@@ -521,7 +521,7 @@ export default Class.inherit((function () {
     },
 
     key() {
-      return (this as any)._store.key();
+      return this._store.key();
     },
 
     load(options) {
@@ -584,7 +584,7 @@ export default Class.inherit((function () {
     },
 
     filter() {
-      return (this as any)._dataSource.filter.apply((this as any)._dataSource, arguments);
+      return this._dataSource.filter.apply(this._dataSource, arguments);
     },
 
     supportPaging() {
@@ -595,7 +595,7 @@ export default Class.inherit((function () {
       loadOptions = loadOptions || {};
       params = params || {};
 
-      const store = (this as any)._store;
+      const store = this._store;
       const filters = getFiltersByPath(loadOptions.rows, params.rowPath)
         .concat(getFiltersByPath(loadOptions.columns, params.columnPath))
         .concat(getFiltersForDimension(loadOptions.rows))

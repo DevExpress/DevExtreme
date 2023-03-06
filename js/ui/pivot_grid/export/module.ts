@@ -1,22 +1,22 @@
-import Class from '../../core/class';
-import { isDefined, isFunction } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
-import { hasWindow } from '../../core/utils/window';
-import { getDefaultAlignment } from '../../core/utils/position';
-import formatHelper from '../../format_helper';
-import localizationNumber from '../../localization/number';
-import { prepareItems } from '../grid_core/ui.grid_core.export';
-import { when, Deferred } from '../../core/utils/deferred';
+import Class from '../../../core/class';
+import { isDefined, isFunction } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { hasWindow } from '../../../core/utils/window';
+import { getDefaultAlignment } from '../../../core/utils/position';
+import formatHelper from '../../../format_helper';
+import localizationNumber from '../../../localization/number';
+import { prepareItems } from '../../grid_core/ui.grid_core.export';
+import { when, Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
 export const ExportController = {
   exportTo() {
-    const onExporting = (this as any).getAction('onExporting');
+    const onExporting = this.getAction('onExporting');
     const eventArgs = {
-      rtlEnabled: (this as any).option('rtlEnabled'),
+      rtlEnabled: this.option('rtlEnabled'),
       fileName: 'PivotGrid',
       cancel: false,
     };
@@ -98,7 +98,7 @@ export const ExportController = {
       {},
       this._getEmptyCell(),
       {
-        alignment: getDefaultAlignment((this as any)._options.rtlEnabled),
+        alignment: getDefaultAlignment(this._options.rtlEnabled),
         colspan: rowsLength,
         rowspan: headerRowsCount,
       },

@@ -11,9 +11,9 @@ define(function(require) {
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
     const $ = require('jquery');
-    const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
-    const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source.utils');
-    const XmlaStore = require('ui/pivot_grid/xmla_store');
+    const pivotGridUtils = require('ui/pivot_grid/module_utils');
+    const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source/module_utils');
+    const XmlaStore = require('ui/pivot_grid/xmla_store/module');
 
     const CATEGORIES_DATA = [
         { key: '[Product].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },

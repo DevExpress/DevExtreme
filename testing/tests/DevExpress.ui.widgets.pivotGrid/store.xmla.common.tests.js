@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
-import Store from 'ui/pivot_grid/xmla_store';
+import pivotGridUtils from 'ui/pivot_grid/module_utils';
+import Store from 'ui/pivot_grid/xmla_store/module';
 import { errors } from 'data/errors';
 import localization from 'localization';
 import { getLanguageId } from 'localization/language_codes';

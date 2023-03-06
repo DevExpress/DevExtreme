@@ -1,25 +1,25 @@
-import { when, Deferred } from '../../core/utils/deferred';
+import { when, Deferred } from '../../../core/utils/deferred';
 // eslint-disable-next-line import/extensions
 // @ts-expect-error
-import { aggregators } from '../../data/utils';
-import dataQuery from '../../data/query';
-import dateSerialization from '../../core/utils/date_serialization';
-import { DataSource } from '../../data/data_source/data_source';
-import CustomStore from '../../data/custom_store';
+import { aggregators } from '../../../data/utils';
+import dataQuery from '../../../data/query';
+import dateSerialization from '../../../core/utils/date_serialization';
+import { DataSource } from '../../../data/data_source/data_source';
+import CustomStore from '../../../data/custom_store';
 // @ts-expect-error
-import { compileGetter, toComparable } from '../../core/utils/data';
-import Class from '../../core/class';
-import { noop } from '../../core/utils/common';
-import { isNumeric, isDefined, isString } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
+import { compileGetter, toComparable } from '../../../core/utils/data';
+import Class from '../../../core/class';
+import { noop } from '../../../core/utils/common';
+import { isNumeric, isDefined, isString } from '../../../core/utils/type';
+import { each } from '../../../core/utils/iterator';
 import {
   getFiltersByPath,
   setFieldProperty,
   setDefaultFieldValueFormatting,
   storeDrillDownMixin,
   discoverObjectFields,
-} from './ui.pivot_grid.utils';
-import ArrayStore from '../../data/array_store';
+} from '../module_utils';
+import ArrayStore from '../../../data/array_store';
 
 const PATH_DELIMETER = '/./';
 
@@ -501,9 +501,9 @@ export const LocalStore = Class.inherit((function () {
 
   return {
     ctor(options) {
-      (this as any)._progressChanged = options.onProgressChanged || noop;
-      (this as any)._dataSource = new DataSource(options);
-      (this as any)._dataSource.paginate(false);
+      this._progressChanged = options.onProgressChanged || noop;
+      this._dataSource = new DataSource(options);
+      this._dataSource.paginate(false);
     },
 
     getFields(fields) {
@@ -520,7 +520,7 @@ export const LocalStore = Class.inherit((function () {
     },
 
     key() {
-      return (this as any)._dataSource.key();
+      return this._dataSource.key();
     },
 
     load(options) {
@@ -539,7 +539,7 @@ export const LocalStore = Class.inherit((function () {
     },
 
     filter() {
-      const dataSource = (this as any)._dataSource;
+      const dataSource = this._dataSource;
 
       return dataSource.filter.apply(dataSource, arguments);
     },
@@ -554,7 +554,7 @@ export const LocalStore = Class.inherit((function () {
       prepareLoadOption(loadOptions);
 
       const drillDownItems: any = [];
-      const items = (this as any)._dataSource.items();
+      const items = this._dataSource.items();
       let item;
       const { maxRowCount } = params;
       const { customColumns } = params;

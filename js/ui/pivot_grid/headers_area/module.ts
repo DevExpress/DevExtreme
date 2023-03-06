@@ -1,10 +1,10 @@
-import { setWidth, setHeight } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import { isDefined } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
-import { AreaItem } from './ui.pivot_grid.area_item';
-import Scrollable from '../scroll_view/ui.scrollable';
-import domAdapter from '../../core/dom_adapter';
+import { setWidth, setHeight } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import { isDefined } from '../../../core/utils/type';
+import { each } from '../../../core/utils/iterator';
+import { AreaItem } from '../area_item/module';
+import Scrollable from '../../scroll_view/ui.scrollable';
+import domAdapter from '../../../core/dom_adapter';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_COLUMN_CLASS = 'dx-pivotgrid-horizontal-headers';
