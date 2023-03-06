@@ -920,7 +920,7 @@ const columnsViewMembers = {
 
     waitAsyncTemplates: function(forceWaiting = false) {
         const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && [...this._templateDeferreds] || [];
+        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && Array.from(this._templateDeferreds) || [];
 
         return when.apply(this, templateDeferreds);
     },
