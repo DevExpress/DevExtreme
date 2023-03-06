@@ -511,17 +511,13 @@ const columnsViewMembers = {
                 that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
             }
 
-            this._templateDeferreds.push(templateDeferred);
+            this._templateDeferreds.add(templateDeferred);
         } else {
             templateDeferred.reject();
         }
 
         return templateDeferred.promise().always(() => {
-            const index = this._templateDeferreds.indexOf(templateDeferred);
-
-            if(index >= 0) {
-                this._templateDeferreds.splice(index, 1);
-            }
+            this._templateDeferreds.delete(templateDeferred);
         });
     },
 
@@ -843,26 +839,25 @@ const columnsViewMembers = {
     },
 
     init: function() {
-        const that = this;
-        that._scrollLeft = -1;
-        that._columnsController = that.getController('columns');
-        that._dataController = that.getController('data');
-        that._delayedTemplates = [];
-        this._templateDeferreds = [];
-        that._templatesCache = {};
-        that.createAction('onCellClick');
-        that.createAction('onRowClick');
-        that.createAction('onCellDblClick');
-        that.createAction('onRowDblClick');
-        that.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
-        that.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-        that.createAction('onRowPrepared', {
-            excludeValidators: ['disabled', 'readOnly'], category: 'rendering', afterExecute: function(e) {
-                that._afterRowPrepared(e);
+        this._scrollLeft = -1;
+        this._columnsController = this.getController('columns');
+        this._dataController = this.getController('data');
+        this._delayedTemplates = [];
+        this._templateDeferreds = new Set();
+        this._templatesCache = {};
+        this.createAction('onCellClick');
+        this.createAction('onRowClick');
+        this.createAction('onCellDblClick');
+        this.createAction('onRowDblClick');
+        this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
+        this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+        this.createAction('onRowPrepared', {
+            excludeValidators: ['disabled', 'readOnly'], category: 'rendering', afterExecute: (e) => {
+                this._afterRowPrepared(e);
             } });
 
-        that._columnsController.columnsChanged.add(that._columnOptionChanged.bind(that));
-        that._dataController && that._dataController.changed.add(that._handleDataChanged.bind(that));
+        this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
+        this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
     },
 
     _afterRowPrepared: noop,
@@ -923,9 +918,9 @@ const columnsViewMembers = {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    waitAsyncTemplates: function(forceWaiting) {
+    waitAsyncTemplates: function(forceWaiting = false) {
         const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && this._templateDeferreds || [];
+        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && [...this._templateDeferreds] || [];
 
         return when.apply(this, templateDeferreds);
     },

@@ -7731,11 +7731,11 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
                     rowsView.render($testElement, { changeType: 'refresh' });
 
                     // assert
-                    assert.deepEqual(rowsView._templateDeferreds.length, 1, 'templateDeferreds array isn\'t empty');
+                    assert.strictEqual(rowsView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                     this.clock.tick(50);
 
                     // assert
-                    assert.deepEqual(rowsView._templateDeferreds, [], 'templateDeferreds array is empty');
+                    assert.strictEqual(rowsView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
                 });
             });
 
@@ -7782,11 +7782,11 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
                 rowsView.render($testElement, { changeType: 'refresh' });
 
                 // assert
-                assert.deepEqual(rowsView._templateDeferreds.length, 1, 'templateDeferreds array isn\'t empty');
+                assert.strictEqual(rowsView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                 this.clock.tick(50);
 
                 // assert
-                assert.deepEqual(rowsView._templateDeferreds, [], 'templateDeferreds array is empty');
+                assert.strictEqual(rowsView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
             });
         });
     });

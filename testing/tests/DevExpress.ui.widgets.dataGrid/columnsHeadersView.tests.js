@@ -3002,11 +3002,11 @@ QUnit.module('Render templates with renderAsync', {
                 this.columnHeadersView.render($testElement);
 
                 // assert
-                assert.deepEqual(this.columnHeadersView._templateDeferreds.length, 1, 'templateDeferreds array isn\'t empty');
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                 this.clock.tick(50);
 
                 // assert
-                assert.deepEqual(this.columnHeadersView._templateDeferreds, [], 'templateDeferreds array is empty');
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
             });
         });
     });

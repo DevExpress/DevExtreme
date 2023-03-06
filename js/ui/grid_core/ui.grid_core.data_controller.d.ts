@@ -8,7 +8,6 @@ type HandleDataChangedArguments = {
   changeType?: 'refresh' | 'update' | 'loadError';
   isDelayed?: boolean;
   isLiveUpdate?: boolean;
-  isMasterDetail?: boolean;
   error?: any;
 };
 
