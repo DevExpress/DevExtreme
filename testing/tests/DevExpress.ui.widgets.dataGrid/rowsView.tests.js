@@ -7696,7 +7696,7 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
             ['cellTemplate', 'editCellTemplate', 'groupCellTemplate'].forEach((templateName) => {
                 QUnit.test(`Render column with ${templateName} when renderAsync = ${renderAsync} and templatesRenderAsynchronously = ${templatesRenderAsynchronously}`, function(assert) {
                     // arrange
-                    assert.expect(1);
+                    assert.expect(3);
 
                     const items = templateName === 'groupCellTemplate' ? this.groupItems : this.items;
                     const $testElement = $('#container');
@@ -7729,13 +7729,19 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
 
                     // act
                     rowsView.render($testElement, { changeType: 'refresh' });
+
+                    // assert
+                    assert.strictEqual(rowsView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                     this.clock.tick(50);
+
+                    // assert
+                    assert.strictEqual(rowsView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
                 });
             });
 
             QUnit.test(`Render column buttons with template when renderAsync = ${renderAsync}  and templatesRenderAsynchronously = ${templatesRenderAsynchronously}`, function(assert) {
                 // arrange
-                assert.expect(1);
+                assert.expect(3);
 
                 const items = [
                     { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', null], rowType: 'data', dataIndex: 0 }
@@ -7774,7 +7780,13 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
 
                 // act
                 rowsView.render($testElement, { changeType: 'refresh' });
+
+                // assert
+                assert.strictEqual(rowsView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                 this.clock.tick(50);
+
+                // assert
+                assert.strictEqual(rowsView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
             });
         });
     });
