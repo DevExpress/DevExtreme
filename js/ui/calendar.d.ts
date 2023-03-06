@@ -64,6 +64,7 @@ export type CellTemplateData = {
 /**
  * @docid
  * @public
+ * @type object
  */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 

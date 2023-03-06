@@ -177,6 +177,7 @@ export type Store<TItem = any, TKey = any> =
  * @docid
  * @public
  * @namespace DevExpress.data.utils
+ * @type object
  */
 export type StoreOptions<TItem = any, TKey = any> =
     CustomStoreOptions<TItem, TKey> |

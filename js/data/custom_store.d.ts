@@ -26,6 +26,7 @@ type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
 /**
  * @docid
  * @public
+ * @type object
  */
 export type ResolvedData<
     TItem = any,
