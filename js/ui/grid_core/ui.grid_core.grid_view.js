@@ -60,9 +60,7 @@ const resizingControllerMembers = {
             this._refreshSizesHandler = (e) => {
                 dataController.changed.remove(this._refreshSizesHandler);
 
-                this._rowsView.waitAsyncTemplates(e).done(() => {
-                    this._refreshSizes(e);
-                });
+                this._refreshSizes(e);
             };
             // TODO remove resubscribing
             dataController.changed.add(() => {
@@ -88,10 +86,15 @@ const resizingControllerMembers = {
             }
             if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                 !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
-                deferUpdate(() => deferRender(() => deferUpdate(() => {
-                    that._setScrollerSpacing();
-                    that._rowsView.resize();
-                })));
+                resizeDeferred = new Deferred();
+
+                this._waitAsyncTemplates().done(() => {
+                    deferUpdate(() => deferRender(() => deferUpdate(() => {
+                        that._setScrollerSpacing();
+                        that._rowsView.resize();
+                        resizeDeferred.resolve();
+                    })));
+                }).fail(resizeDeferred.reject);
             } else {
                 resizeDeferred = that.resize();
             }
@@ -514,8 +517,28 @@ const resizingControllerMembers = {
         return ['resize', 'updateDimensions'];
     },
 
+    _waitAsyncTemplates: function() {
+        return when(
+            this._columnHeadersView?.waitAsyncTemplates(),
+            this._rowsView?.waitAsyncTemplates(),
+            this._footerView?.waitAsyncTemplates()
+        );
+    },
+
     resize: function() {
-        return !this.component._requireResize && this.updateDimensions();
+        if(this.component._requireResize) {
+            return;
+        }
+
+        const d = new Deferred();
+
+        this._waitAsyncTemplates().done(() => {
+            when(this.updateDimensions())
+                .done(d.resolve)
+                .fail(d.reject);
+        }).fail(d.reject);
+
+        return d.promise();
     },
 
     updateDimensions: function(checkSize) {

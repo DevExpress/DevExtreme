@@ -10,6 +10,8 @@ export class ColumnsView extends View {
 
   _delayedTemplates: any[];
 
+  _templateDeferreds: Set<DeferredObj<void>>;
+
   _templatesCache: any;
 
   _tableElement: any;
@@ -121,7 +123,7 @@ export class ColumnsView extends View {
 
   needWaitAsyncTemplates: (this: this) => boolean;
 
-  waitAsyncTemplates: (this: this, change: HandleDataChangedArguments, forceWaiting?: boolean) => DeferredObj<unknown>;
+  waitAsyncTemplates: (this: this, forceWaiting?: boolean) => DeferredObj<unknown>;
 
   _updateContent: (this: this, $newTableElement, change) => any;
 
