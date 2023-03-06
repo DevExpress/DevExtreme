@@ -10,7 +10,7 @@ export class ColumnsView extends View {
 
   _delayedTemplates: any[];
 
-  _templateDeferreds: Set;
+  _templateDeferreds: Set<DeferredObj>;
 
   _templatesCache: any;
 
