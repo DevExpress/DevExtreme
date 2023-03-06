@@ -3435,6 +3435,75 @@ testModule('preventScrollEvents', () => {
             $($wrapper).off('dxmousewheel');
         });
     });
+
+    [true, false].forEach((preventScrollEvents) => {
+        QUnit.test('should be logged if preventScrollEvents is used on initialization', function(assert) {
+            assert.expect(2);
+
+            const stub = sinon.stub(errors, 'log', () => {
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    'preventScrollEvents',
+                    '23.1',
+                    '// TODO: some text'
+                ], 'args of the log method');
+            });
+
+            $('#overlay').dxOverlay({
+                visible: true,
+                preventScrollEvents,
+            });
+
+            assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
+            stub.restore();
+        });
+
+        QUnit.test('should not be logged if preventScrollEvents is not used on initialization', function(assert) {
+            assert.expect(1);
+
+            const stub = sinon.stub(errors, 'log', () => {
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    'preventScrollEvents',
+                    '23.1',
+                    '// TODO: some text'
+                ], 'args of the log method');
+            });
+
+            $('#overlay').dxOverlay({
+                visible: true,
+            });
+
+            assert.strictEqual(stub.callCount, 0, 'error.log.callCount');
+            stub.restore();
+        });
+
+        QUnit.test('should be logged if preventScrollEvents is changed in runtime', function(assert) {
+            assert.expect(2);
+
+            const overlay = $('#overlay').dxOverlay({
+                visible: true,
+                preventScrollEvents,
+            }).dxOverlay('instance');
+
+            const stub = sinon.stub(errors, 'log', () => {
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    'preventScrollEvents',
+                    '23.1',
+                    '// TODO: some text'
+                ], 'args of the log method');
+            });
+
+            overlay.option('preventScrollEvents', !preventScrollEvents);
+
+            assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
+            stub.restore();
+        });
+    });
 });
 
 testModule('scrollable interaction', {

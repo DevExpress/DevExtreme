@@ -39,8 +39,6 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 themes.setDefaultTimeout(0);
 
-const scrollbarWidth = positionUtils.calculateScrollbarWidth();
-
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
@@ -1427,6 +1425,8 @@ QUnit.module('options changed callbacks', {
             };
 
             this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+
+            this.scrollbarWidth = positionUtils.calculateScrollbarWidth();
         },
         afterEach: function() {
             this.instance.dispose();
@@ -1457,14 +1457,15 @@ QUnit.module('options changed callbacks', {
         QUnit.test('body should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
             window.scrollTo(200, 200);
 
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
             const popup = this.createPopup({
                 visible: true,
                 enableBodyScroll: false
             });
 
-            assert.strictEqual(this.getBodyStyleAttr(), 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyleAttr(), `padding-right: ${this.scrollbarWidth}px; overflow: hidden;`, 'body style attribute');
             assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
-            assert.strictEqual(this.getBodyStyle('paddingRight'), scrollbarWidth ? `${scrollbarWidth}px` : '', 'body padding right style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
 
             popup.hide();
 
@@ -1491,7 +1492,7 @@ QUnit.module('options changed callbacks', {
                 });
 
                 assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
-                assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth + bodyPaddingValue}px`, 'body padding right style');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${this.scrollbarWidth + bodyPaddingValue}px`, 'body padding right style');
 
                 popup.hide();
 

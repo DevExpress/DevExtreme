@@ -221,7 +221,17 @@ const Overlay = Widget.inherit({
             if(options.elementAttr && !options._ignoreElementAttrDeprecation) {
                 this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
             }
+            if('preventScrollEvents' in options) {
+                this._logDeprecatedPreventScrollEventsInfo();
+            }
         }
+    },
+
+    _logDeprecatedPreventScrollEventsInfo() {
+        this._logDeprecatedOptionWarning('preventScrollEvents', (() => ({
+            since: '23.1',
+            message: '// TODO: some text'
+        }))());
     },
 
     _init: function() {
@@ -1221,6 +1231,7 @@ const Overlay = Widget.inherit({
                 this._positionController.restorePosition = value;
                 break;
             case 'preventScrollEvents':
+                this._logDeprecatedPreventScrollEventsInfo();
                 this._toggleWrapperScrollEventsSubscription(value);
                 break;
             default:
