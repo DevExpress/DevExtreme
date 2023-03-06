@@ -75,6 +75,9 @@ export const createBodyOverflowManager = () => {
         restoreBodyPaddingRight();
 
         ['overflow', 'overflowX', 'overflowY'].forEach((property) => {
+            if(!isDefined(prevSettings[property])) {
+                return;
+            }
             const propertyInKebabCase = property.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
             if(prevSettings[property]) {
                 body.style.setProperty(propertyInKebabCase, prevSettings[property]);

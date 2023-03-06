@@ -33,6 +33,7 @@ import 'ui/scroll_view';
 import 'ui/date_box';
 
 const IS_SAFARI = !!browser.safari;
+const IS_IOS_DEVICE = devices.real().platform === 'ios';
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
@@ -1409,14 +1410,22 @@ QUnit.module('options changed callbacks', {
     QUnit.module('enableBodyScroll on desktop', {
         beforeEach: function() {
             fx.off = true;
-            devices.current('desktop');
-            this.instance = $('#popup').dxPopup().dxPopup('instance');
 
             this.getBodyStyle = (property) => {
                 return this.$body.get(0).style[property];
             };
 
+            this.getBodyStyleAttr = () => {
+                return this.$body.get(0).getAttribute('style');
+            };
+
             this.$body = $('body');
+            this.$body.get(0).removeAttribute('style');
+
+            this.createPopup = (options) => {
+                return $('#popup').dxPopup(options).dxPopup('instance');
+            };
+
             this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
         },
         afterEach: function() {
@@ -1426,87 +1435,75 @@ QUnit.module('options changed callbacks', {
             fx.off = false;
         }
     }, () => {
+        if(IS_IOS_DEVICE) {
+            return;
+        }
+
         QUnit.test('body should not have overflow styles after showing with enableBodyScroll is true', function(assert) {
-            this.instance.dispose();
             window.scrollTo(200, 200);
 
-            $('#popup').dxPopup({
+            this.createPopup({
                 visible: true,
                 enableBodyScroll: true
             });
 
             const { overflow, paddingRight } = this.$body.get(0).style;
 
-            assert.strictEqual(overflow, '');
-            assert.strictEqual(paddingRight, '');
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+            assert.strictEqual(overflow, '', 'body overflow style');
+            assert.strictEqual(paddingRight, '', 'body padding right style');
         });
 
         QUnit.test('body should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
-            this.instance.dispose();
             window.scrollTo(200, 200);
 
-            const popup = $('#popup').dxPopup({
+            const popup = this.createPopup({
                 visible: true,
                 enableBodyScroll: false
-            }).dxPopup('instance');
+            });
 
-            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden');
-            assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth}px`);
+            assert.strictEqual(this.getBodyStyleAttr(), 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), scrollbarWidth ? `${scrollbarWidth}px` : '', 'body padding right style');
 
             popup.hide();
 
-            assert.strictEqual(this.getBodyStyle('overflow'), '');
-            assert.strictEqual(this.getBodyStyle('paddingRight'), '');
+            assert.strictEqual(this.getBodyStyleAttr(), '', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), '', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), '', 'body padding right style');
         });
 
-        QUnit.test('body with inline style should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
-            this.instance.dispose();
-            window.scrollTo(200, 200);
+        ['overflow', 'overflowX', 'overflowY'].forEach((overflow) => {
+            QUnit.test(`body with ${overflow} inline style should have overflow styles after showing and restore them after hidden, enableBodyScroll is false`, function(assert) {
+                window.scrollTo(200, 200);
 
-            try {
                 const bodyPaddingValue = 10;
+                const propertyInKebabCase = overflow.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
+
+                $('body').get(0).style[overflow] = 'scroll';
                 $('body').get(0).style.paddingRight = `${bodyPaddingValue}px`;
 
-                const popup = $('#popup').dxPopup({
+                assert.strictEqual(this.getBodyStyleAttr(), `${propertyInKebabCase}: scroll; padding-right: ${bodyPaddingValue}px;`, 'body style attribute');
+
+                const popup = this.createPopup({
                     visible: true,
                     enableBodyScroll: false
-                }).dxPopup('instance');
+                });
 
-                assert.strictEqual(this.getBodyStyle('overflow'), 'hidden');
-                assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth + bodyPaddingValue}px`);
+                assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth + bodyPaddingValue}px`, 'body padding right style');
 
                 popup.hide();
 
-                assert.strictEqual(this.getBodyStyle('overflow'), '');
-                assert.strictEqual(this.getBodyStyle('paddingRight'), `${bodyPaddingValue}px`);
-            } finally {
-                $('body').get(0).style.removeProperty('padding-right');
-            }
-        });
+                if(overflow === 'overflow') {
+                    assert.strictEqual(this.getBodyStyleAttr(), `${propertyInKebabCase}: scroll; padding-right: ${bodyPaddingValue}px;`, 'body style attribute');
+                } else {
+                    assert.strictEqual(this.getBodyStyleAttr(), `padding-right: ${bodyPaddingValue}px; ${propertyInKebabCase}: scroll;`, 'body style attribute');
+                }
 
-        QUnit.test('body with css styles should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
-            this.instance.dispose();
-            window.scrollTo(200, 200);
-
-            try {
-                const bodyPaddingValue = 10;
-                $('body').get(0).style.paddingRight = `${bodyPaddingValue}px`;
-
-                const popup = $('#popup').dxPopup({
-                    visible: true,
-                    enableBodyScroll: false
-                }).dxPopup('instance');
-
-                assert.strictEqual(this.getBodyStyle('overflow'), 'hidden');
-                assert.strictEqual(this.getBodyStyle('paddingRight'), `${scrollbarWidth + bodyPaddingValue}px`);
-
-                popup.hide();
-
-                assert.strictEqual(this.getBodyStyle('overflow'), '');
-                assert.strictEqual(this.getBodyStyle('paddingRight'), `${bodyPaddingValue}px`);
-            } finally {
-                $('body').get(0).style.removeProperty('padding-right');
-            }
+                assert.strictEqual(this.getBodyStyle(overflow), 'scroll', 'body overflow style');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${bodyPaddingValue}px`, 'body padding right style');
+            });
         });
     });
 
@@ -1531,11 +1528,6 @@ QUnit.module('options changed callbacks', {
         }
     }, () => {
         QUnit.test('body should not have PREVENT_SAFARI_SCROLLING_CLASS if container is window and shading is enabled on popup init, enableBodyScroll: false', function(assert) {
-            if(!IS_SAFARI) {
-                assert.expect(0);
-                return;
-            }
-
             this.instance.dispose();
             $('#popup').dxPopup({ visible: true, enableBodyScroll: false });
 
@@ -1543,11 +1535,6 @@ QUnit.module('options changed callbacks', {
         });
 
         QUnit.test('body should have position fixed after showing if enableBodyScroll: false', function(assert) {
-            if(!IS_SAFARI) {
-                assert.expect(0);
-                return;
-            }
-
             this.instance.dispose();
             window.scrollTo(200, 200);
             const popup = $('#popup').dxPopup({ visible: true, enableBodyScroll: false }).dxPopup('instance');
@@ -1564,11 +1551,6 @@ QUnit.module('options changed callbacks', {
         });
 
         QUnit.test('body should change the fixed position after change of enableBodyScroll option in runtime', function(assert) {
-            if(!IS_SAFARI) {
-                assert.expect(0);
-                return;
-            }
-
             this.instance.dispose();
             window.scrollTo(200, 200);
 
