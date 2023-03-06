@@ -24,10 +24,11 @@ QUnit.test('wrapped value', function(assert) {
     assert.equal(variableWrapper.unwrap(observableValue), 3, 'unwrap method for observable variable');
     assert.equal(variableWrapper.unwrap(3), 3, 'unwrap method for not observable variable');
 
-    const loggerErrorSpy = sinon.spy(logger, 'error');
     variableWrapper.assign(observableValue, 5);
     assert.equal(observableValue(), 5, 'assign method for observable variable');
 
+    const loggerErrorSpy = sinon.spy(logger, 'error');
+    variableWrapper.assign(notWrappedValue, 5);
     assert.strictEqual(loggerErrorSpy.callCount, 1, 'assign method for not observable variable');
 
     variableWrapper.resetInjection();
