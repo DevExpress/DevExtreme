@@ -10324,9 +10324,6 @@ declare module DevExpress.ui {
     >;
     export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
     export type DateType = 'date' | 'datetime' | 'time';
-    /**
-     * [descr:DisabledDate]
-     */
     export type DisabledDate =
       DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateBox>;
