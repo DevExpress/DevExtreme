@@ -3512,7 +3512,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default undefined
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
      * @default 'solid'

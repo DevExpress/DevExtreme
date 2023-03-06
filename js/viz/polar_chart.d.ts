@@ -1954,7 +1954,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode
      * @default 'onlyPoint'
@@ -1997,7 +1997,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.size
        * @default 12
@@ -2073,7 +2073,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.size
        * @default 12
