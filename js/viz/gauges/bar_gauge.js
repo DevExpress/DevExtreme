@@ -269,7 +269,6 @@ export const dxBarGauge = BaseGauge.inherit({
         }
         if(overlapStrategy === 'shift') {
             const newBars = that._dividePoints();
-
             overlapping.resolveLabelOverlappingInOneDirection(newBars.left, that._canvas, false, false, shiftFunction);
             overlapping.resolveLabelOverlappingInOneDirection(newBars.right, that._canvas, false, false, shiftFunction);
             that._clearLabelsCrossTitle();
@@ -285,6 +284,10 @@ export const dxBarGauge = BaseGauge.inherit({
         const { connectorWidth } = that._getOption('label');
 
         bars.forEach((bar) => {
+            if(!bar._isLabelShifted) {
+                return;
+            }
+
             const x = bar._bar.attr('x');
             const y = bar._bar.attr('y');
             const innerRadius = bar._bar.attr('innerRadius');
@@ -296,16 +299,23 @@ export const dxBarGauge = BaseGauge.inherit({
             const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
             const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
             const box = bar._text.getBBox();
+            const indent = 4;
             const lastCoords = bar._text._lastCoords;
             const originalPoints = [
                 xStart,
                 yStart,
                 box.x + lastCoords.x,
-                box.y + box.height / 2 + lastCoords.y
+                box.y + lastCoords.y
             ];
 
             if(bar._angle > 90) {
-                originalPoints[2] += box.width;
+                originalPoints[2] += box.width + indent;
+            } else {
+                originalPoints[2] -= indent;
+            }
+
+            if(bar._angle <= 180 && bar._angle > 0) {
+                originalPoints[3] += box.height;
             }
 
             if(connectorWidth % 2) {
@@ -324,6 +334,7 @@ export const dxBarGauge = BaseGauge.inherit({
             const points = originalPoints.map(coordinate => roundFloatPart(coordinate, 4));
             bar._line.attr({ points });
             bar._line.rotate(0);
+            bar._isLabelShifted = false;
         });
     },
 
@@ -360,6 +371,7 @@ export const dxBarGauge = BaseGauge.inherit({
 
                             bar._text._lastCoords = { x: x - box.x, y: y - box.y };
                             bar._text.attr({ translateX: x - box.x, translateY: y - box.y });
+                            bar._isLabelShifted = true;
                         },
                         draw: () => bar.hideLabel(),
                         getData: () => { return { value: bar.getValue() }; },
