@@ -1,5 +1,6 @@
 const ko = require('knockout');
 const variableWrapper = require('core/utils/variable_wrapper');
+const { logger } = require('core/utils/console')
 
 require('integration/knockout');
 
@@ -23,10 +24,11 @@ QUnit.test('wrapped value', function(assert) {
     assert.equal(variableWrapper.unwrap(observableValue), 3, 'unwrap method for observable variable');
     assert.equal(variableWrapper.unwrap(3), 3, 'unwrap method for not observable variable');
 
+    const loggerErrorSpy = sinon.spy(logger, 'error');
     variableWrapper.assign(observableValue, 5);
     assert.equal(observableValue(), 5, 'assign method for observable variable');
 
-    // assert.throws(variableWrapper.assign(notWrappedValue, 5), 'assign method for not observable variable');
+    assert.strictEqual(loggerErrorSpy.callCount, 1, 'assign method for not observable variable');
 
     variableWrapper.resetInjection();
     assert.equal(variableWrapper.wrap(3), 3, 'reset method');
