@@ -30,8 +30,6 @@ import { FieldChooserBase } from './field_chooser/module_base';
 import { ExportController } from './export/module';
 import { ChartIntegrationMixin } from './chart_integration/module';
 
-// STYLE pivotGrid
-
 const window = getWindow();
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';

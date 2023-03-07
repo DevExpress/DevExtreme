@@ -1,8 +1,10 @@
+// NOTE: This import should be first! Because it overrides window.Intl.
+import '../../helpers/noIntl.js';
+
 import $ from 'jquery';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import '../../helpers/noIntl.js';
 
 /* global orders */
 import '../../../testing/content/orders.js';
@@ -88,6 +90,7 @@ QUnit.module('Chart Binding', {
     });
 
     QUnit.test('Bind chart instance to pivotGrid', function(assert) {
+        console.log('here');
         const pivotGrid = createPivotGrid(this.pivotGridOptions);
         const chart = createChart();
         const chartBinding = pivotGrid.bindChart(chart);
