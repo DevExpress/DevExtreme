@@ -323,11 +323,11 @@ const MultiView = CollectionWidget.inherit({
     _findBoundaryAvailableIndices() {
         const items = this.option('items');
 
-        let firstIndex;
-        let lastIndex;
+        let firstIndex = 0;
+        let lastIndex = items.length - 1;
 
         items.forEach((item, index) => {
-            const isDisabled = Boolean(item.disabled);
+            const isDisabled = Boolean(item?.disabled);
 
             if(!isDisabled && !isDefined(firstIndex)) {
                 firstIndex = index;
