@@ -36,6 +36,7 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $(gridMarkup).appendTo('body');
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import '../../../node_modules/underscore/underscore-min.js';
@@ -47,6 +48,7 @@ import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from 'core/devices';
 import { version } from 'core/version';
 import errors from 'core/errors';

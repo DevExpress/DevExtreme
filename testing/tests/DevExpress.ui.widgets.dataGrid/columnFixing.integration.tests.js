@@ -6,12 +6,14 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(gridMarkup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import { DataSource } from 'data/data_source/data_source';
 import commonUtils from 'core/utils/common';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';

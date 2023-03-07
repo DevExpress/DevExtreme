@@ -13,6 +13,7 @@ QUnit.testStart(function() {
         </div>`;
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';
@@ -22,6 +23,7 @@ import 'ui/data_grid';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 const generateData = function(rowCount) {
     const result = [];

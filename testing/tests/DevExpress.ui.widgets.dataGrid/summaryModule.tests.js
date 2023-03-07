@@ -5,6 +5,7 @@ QUnit.testStart(function() {
 </div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 
@@ -14,6 +15,7 @@ import 'ui/data_grid';
 
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import summaryModule from 'ui/data_grid/ui.data_grid.summary';
 

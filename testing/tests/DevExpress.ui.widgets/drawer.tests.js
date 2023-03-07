@@ -5,6 +5,7 @@ import 'generic_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import eventsEngine from 'events/core/events_engine';
 import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
@@ -91,6 +92,7 @@ QUnit.testStart(() => {
     </div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 QUnit.module('Drawer behavior', () => {

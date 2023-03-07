@@ -12,6 +12,7 @@ QUnit.testStart(function() {
 </div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import config from 'core/config';
@@ -25,6 +26,7 @@ import {
     getWidth,
 } from 'core/utils/size';
 import { isRenderer } from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
