@@ -22569,12 +22569,7 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
-    /**
-     * [descr:dxTooltipOptions.enableBodyScroll]
-     */
-    enableBodyScroll?: boolean;
-  }
+  export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {}
   /**
    * [descr:dxTrackBar]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

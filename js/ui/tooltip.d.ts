@@ -37,13 +37,7 @@ export type ShownEvent = EventInfo<dxTooltip>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
-    /**
-     * @docid
-     * @hidden
-     */
-    enableBodyScroll?: boolean;
-}
+export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> { }
 /**
  * @docid
  * @inherits dxPopover
