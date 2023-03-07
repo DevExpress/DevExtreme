@@ -3617,11 +3617,12 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Gauge Title Customized",
+            "Title": "Title And Center Label Customized",
             "Name": "GaugeTitleCustomized",
             "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Title_and_Subtitle",
             "Widget": "Gauges",
-            "DemoType": "Viz"
+            "DemoType": "Viz",
+            "Badge": "Updated"
           },
           {
             "Title": "Gauge Tooltip",
