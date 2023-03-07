@@ -55,7 +55,7 @@ const fakeFileText = {
 
 const createFakeFile = (name, size, type) => new File(new Array(size).fill('a'), name, {
     type: type || 'image/png',
-    lastModified: (new Date).getTime()
+    lastModified: Date.now()
 });
 
 const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
