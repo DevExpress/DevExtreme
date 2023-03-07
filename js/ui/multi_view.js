@@ -323,8 +323,8 @@ const MultiView = CollectionWidget.inherit({
     _findBoundaryAvailableIndices() {
         const items = this.option('items');
 
-        let firstIndex = 0;
-        let lastIndex = items.length - 1;
+        let firstIndex;
+        let lastIndex;
 
         items.forEach((item, index) => {
             const isDisabled = Boolean(item?.disabled);
@@ -339,8 +339,8 @@ const MultiView = CollectionWidget.inherit({
         });
 
         this._boundaryAvailableIndices = {
-            firstIndex,
-            lastIndex,
+            firstIndex: firstIndex ?? 0,
+            lastIndex: lastIndex ?? items.length - 1,
         };
     },
 
@@ -377,8 +377,16 @@ const MultiView = CollectionWidget.inherit({
     },
 
     _findNextAvailableIndex(index, offset) {
-        const { items } = this.option();
+        const { items, loop } = this.option();
         const { firstIndex, lastIndex } = this._boundaryAvailableIndices;
+
+        if(loop) {
+            if(index === firstIndex) {
+                return lastIndex;
+            } else if(index === lastIndex) {
+                return firstIndex;
+            }
+        }
 
         for(let i = index + offset; i >= firstIndex && i <= lastIndex; i += offset) {
             const isDisabled = Boolean(items[i].disabled);

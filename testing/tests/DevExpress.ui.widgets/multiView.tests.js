@@ -508,7 +508,7 @@ QUnit.module('interaction via swipe', {
         const multiView = $('#multiView').dxMultiView('instance');
         const pointer = pointerMock($multiView);
 
-        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(-1);
 
         assert.equal(multiView.option('selectedIndex'), 2, 'selected index was changed');
     });
@@ -715,6 +715,19 @@ QUnit.module('loop', {
         assert.equal(multiView.option('selectedIndex'), 2, 'selected index changed correctly');
     });
 
+    QUnit.test('selected index should be set to second item after right swipe from first one if last is disabled', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, 2, { disabled: true, text: 3 }],
+            selectedIndex: 0,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index changed correctly');
+    });
+
     QUnit.test('selected index should be set to first item after left swipe from last one', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
@@ -726,6 +739,19 @@ QUnit.module('loop', {
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
         assert.equal(multiView.option('selectedIndex'), 0, 'selected index changed correctly');
+    });
+
+    QUnit.test('selected index should be set to second item after left swipe from last one if first is disabled', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [{ disabled: true, text: 1 }, 2, 3],
+            selectedIndex: 2,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(-1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index changed correctly');
     });
 
     QUnit.test('selected index change from first item to last via right swipe should cause correct animation', function(assert) {
