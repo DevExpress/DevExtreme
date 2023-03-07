@@ -4,7 +4,7 @@ import { ExcelJSDataGridTestHelper, ExcelJSPivotGridTestHelper } from './ExcelJS
 import { exportDataGrid, exportPivotGrid } from 'excel_exporter';
 
 import 'ui/data_grid';
-import 'ui/pivot_grid/module';
+import 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSLocalizationFormatTests = {
     runCurrencyTests(values) {

@@ -1,8 +1,8 @@
 {
 
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./",
+    "baseUrl": "../",
+    "outDir": "./build",
     "noEmitOnError": true,
     "resolveJsonModule": false,
     "sourceMap": false,
@@ -21,21 +21,17 @@
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": false,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "strict": true,
     // TODO: set to true
     "noImplicitAny": false,
     // TODO: set to true after typescript update
     //"useUnknownInCatchVariables": true,
     //"noImplicitOverride": true,
+    "paths": {
+      "@js/*": ["./*"]
+    },
   },
-  "include": [
-    "ui/pivot_grid/**/*.ts"
-  ],
-  "exclude": [
-    "**/*.js",
-    "**/*.d.ts",
-  ]
 }

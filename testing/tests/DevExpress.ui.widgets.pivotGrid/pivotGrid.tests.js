@@ -2978,8 +2978,6 @@ QUnit.module('dxPivotGrid', {
         this.clock.tick();
         assert.ok(pivotGrid);
 
-        console.log('here');
-
         const dataAreaScrollable = pivotGrid._dataArea._getScrollable();
         const columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
         const dataAreaFakeTable = pivotGrid.$element().find('.dx-pivotgrid-area-data .dx-pivot-grid-fake-table');
@@ -5012,7 +5010,6 @@ QUnit.module('Tests with stubs', {
         };
 
         that.dataController = sinon.createStubInstance(DataController);
-        console.log('sinono: ', that.dataController);
         that.dataController.getCellsInfo.returns([]);
         that.dataController.getColumnsInfo.returns([]);
         that.dataController.getRowsInfo.returns([]);
@@ -5035,8 +5032,6 @@ QUnit.module('Tests with stubs', {
         });
 
         moduleConfig.beforeEach.apply(this, arguments);
-
-        console.log('prepare: ', DataControllerModule.DataController);
     },
     afterEach: function() {
         HeadersAreaModule.HorizontalHeadersArea.restore();
@@ -5080,7 +5075,6 @@ QUnit.module('Tests with stubs', {
 
         createPivotGrid(this.testOptions);
 
-        console.log('calls: ', this.verticalArea.setRowsHeight.lastCall, this.dataArea.setRowsHeight.lastCall);
         assert.deepEqual(this.verticalArea.setRowsHeight.lastCall.args[0], [30, 28, 70, 30]);
         assert.deepEqual(this.dataArea.setRowsHeight.lastCall.args[0], [30, 28, 70, 30]);
     });

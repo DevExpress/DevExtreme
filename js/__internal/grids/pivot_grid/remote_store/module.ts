@@ -506,7 +506,6 @@ const RemoteStore = Class.inherit((function () {
     },
 
     getFields(fields) {
-      console.log('get fields');
       // @ts-expect-error
       const d = new Deferred();
 
@@ -514,7 +513,6 @@ const RemoteStore = Class.inherit((function () {
         skip: 0,
         take: 20,
       }).done((data) => {
-        console.log('resolve', pivotGridUtils.discoverObjectFields);
         const normalizedArguments = normalizeLoadResult(data);
         d.resolve(pivotGridUtils.discoverObjectFields(normalizedArguments.data, fields));
       }).fail(d.reject);

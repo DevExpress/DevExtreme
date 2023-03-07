@@ -31,7 +31,6 @@ const moduleConfig = {
 };
 
 function prepareLoadedData(data) {
-    console.log('utils: ', pivotGridUtils);
     pivotGridUtils.foreachTree(data, function(items) {
         delete items[0].text;
     });
@@ -150,7 +149,6 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
     });
 
     QUnit.test('dataSource by instance disposing', function(assert) {
-        console.log('ds: ', PivotGridDataSource);
         const dataSource = new PivotGridDataSource({});
         const dataController = new DataController({
             dataSource: dataSource

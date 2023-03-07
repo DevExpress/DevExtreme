@@ -686,7 +686,7 @@ QUnit.module('Discover', () => {
 
     QUnit.test('Take only 20 first items for discover', function(assert) {
         sinon.spy(pivotGridUtils, 'discoverObjectFields');
-        console.log('test mock: ', pivotGridUtils.discoverObjectFields);
+
         const dataSource = [];
 
         for(let i = 0; i < 20; i++) {

@@ -284,7 +284,6 @@ const PivotGridDataSource = Class.inherit((function () {
 
       storeOptions = dataSourceOptions.store;
 
-      console.log('create store: ', xmlaStore);
       if (storeOptions.type === 'xmla') {
         store = new xmlaStore.XmlaStore(storeOptions);
       } else if ((isPlainObject(storeOptions) && storeOptions.type)
@@ -766,7 +765,6 @@ const PivotGridDataSource = Class.inherit((function () {
 
     // eslint-disable-next-line object-shorthand
     load: function (options) {
-      console.log('load', when);
       const that: any = this;
       // @ts-expect-error
       const d = new Deferred();
@@ -810,7 +808,6 @@ const PivotGridDataSource = Class.inherit((function () {
     _createDescriptions(currentField) {
       const that: any = this;
       const fields = that.fields();
-      console.log('create desc');
       const descriptions: any = {
         rows: [],
         columns: [],

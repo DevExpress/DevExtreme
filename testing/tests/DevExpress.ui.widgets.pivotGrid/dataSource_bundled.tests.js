@@ -10,12 +10,8 @@ import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/module';
 import pivotGridUtils, { setFieldProperty } from '__internal/grids/pivot_grid/widget_utils';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-
 import '../../../testing/content/orders.js';
-
 import PivotGridTestSettings from '../../helpers/pivotGridTestSettings.js';
-
-console.log('remote store: ', RemoteStore);
 
 function createDataSource(options) {
     const dataSource = new PivotGridDataSource(options);
@@ -129,9 +125,7 @@ QUnit.module('dxPivotGrid dataSource with Store', {
 }, () => {
 
     QUnit.test('Create XmlaStore', function(assert) {
-        console.log('store: ', xmlaStoreModule, XmlaStore);
         sinon.spy(xmlaStoreModule, 'XmlaStore');
-        console.log('spy: ', xmlaStoreModule.XmlaStore);
 
         const dataSource = createDataSource({
             store: {
@@ -5359,7 +5353,6 @@ QUnit.module('Apply summary mode', {
         });
     },
     afterEach: function() {
-        console.log('s: ', summaryDisplayModesModule.applyDisplaySummaryMode);
         defaultEnvironment.afterEach.apply(this, arguments);
         summaryDisplayModesModule.applyDisplaySummaryMode.restore();
         summaryDisplayModesModule.applyRunningTotal.restore();

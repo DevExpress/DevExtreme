@@ -7,12 +7,12 @@ import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 
 import { isDefined, isFunction } from 'core/utils/type';
-import 'ui/pivot_grid/module';
+import 'ui/pivot_grid/ui.pivot_grid';
 
 import 'generic_light.css!';
 
-import { DataController__internals } from 'ui/pivot_grid/data_controller/module';
-import { PivotGridExport } from 'ui/pivot_grid/export/module';
+import { DataController__internals } from 'ui/pivot_grid/data_controller';
+import { PivotGridExport } from 'ui/pivot_grid/export';
 
 let helper;
 

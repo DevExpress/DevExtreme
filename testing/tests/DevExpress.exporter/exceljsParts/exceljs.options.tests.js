@@ -1,6 +1,6 @@
 import { runCommonOptionTests } from '../commonParts/options.tests.js';
 import DataGrid from 'ui/data_grid';
-import PivotGrid from 'ui/pivot_grid/module';
+import PivotGrid from 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSOptionTests = {
     runTests(moduleConfig, _getFullOptions, getComponent) {

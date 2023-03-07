@@ -265,7 +265,6 @@ const PivotGrid = (Widget as any).inherit({
 
     that._dataController = new DataControllerImport
       .DataController(that._getDataControllerOptions());
-    console.log('usage: ', DataControllerImport.DataController, that._dataController);
 
     if (hasWindow()) {
       that._dataController.changed.add(() => {
@@ -1482,7 +1481,6 @@ const PivotGrid = (Widget as any).inherit({
   .inherit(ExportController)
   .include(ChartIntegrationMixin);
 
-console.log('register component');
 registerComponent('dxPivotGrid', PivotGrid);
 
 export default { PivotGrid };

@@ -192,8 +192,6 @@ QUnit.module('Chart Binding', {
         const chart = createChart();
         const chartReady = sinon.stub();
 
-        console.log('test');
-
         pivotGrid.bindChart(chart);
         pivotGrid.bindChart(chart);
 
@@ -218,7 +216,6 @@ QUnit.module('Chart Binding', {
     });
 
     QUnit.test('Unbind chart after pivotGrid disposing', function(assert) {
-        console.log('ctor: ', PivotGridDataSource);
         const pivotGridDataSource = new PivotGridDataSource(this.pivotGridOptions.dataSource);
         const pivotGrid = createPivotGrid({ dataSource: pivotGridDataSource });
         const chart = createChart();
