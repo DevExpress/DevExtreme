@@ -500,6 +500,19 @@ QUnit.module('interaction via swipe', {
         assert.equal(multiView.option('selectedIndex'), 1, 'selected index was changed');
     });
 
+    QUnit.test('selectedIndex should not be equal index of disabled item after swipe if next item is disabled', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, { disabled: true }, 3],
+            selectedIndex: 0,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+
+        assert.equal(multiView.option('selectedIndex'), 2, 'selected index was changed');
+    });
+
     QUnit.test('item container should be animated back after canceled swipe', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
