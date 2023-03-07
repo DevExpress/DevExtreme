@@ -14,7 +14,7 @@
         if(isNoJQueryTest)
             return Url.Content("~/testing/helpers/noJQuery.js");
 
-        return Url.Content("~/artifacts/js/jquery.js");
+        return Url.Content("~/js/core/renderer.js");
     }
 
     IEnumerable<string> GetJQueryIntegrationImports() {
@@ -24,7 +24,7 @@
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
-                yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
+                yield return Url.Content("~/js/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
             }
@@ -134,16 +134,87 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
+    <base href="@Url.Content("~/artifacts/transpiled-renovation")">
+    <script type="systemjs-importmap">
+        {
+            "imports": {
+                "globalize": "@Url.Content("~/artifacts/js/globalize")",
+                "intl": "@Url.Content("~/node_modules/intl/index.js")",
+                "cldr": "@Url.Content("~/artifacts/js/cldr")",
+                "jquery": "@GetJQueryUrl()",
+                "knockout": "@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")",
+                "angular": "@Url.Content("~/artifacts/js/angular.js")",
+                "inferno": "@Url.Content("~/node_modules/inferno/dist/inferno.js")",
+                "inferno-hydrate": "@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")",
+                "inferno-compat": "@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")",
+                "inferno-clone-vnode": "@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")",
+                "inferno-create-element": "@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")",
+                "inferno-create-class": "@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")",
+                "inferno-extras": "@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")",
+                "jszip": "@Url.Content("~/artifacts/js/jszip.js")",
 
+                "@@devextreme/vdom": "@Url.Content("~/node_modules/@devextreme/vdom")",
+                "@@devextreme/runtime/common": "@Url.Content("~/node_modules/@devextreme/runtime/common")",
+                "@@devextreme/runtime/inferno": "@Url.Content("~/node_modules/@devextreme/runtime/inferno")",
+                "@@devextreme/runtime/declarations": "@Url.Content("~/node_modules/@devextreme/runtime/declarations")",
+                "@@devextreme/runtime/angular": "@Url.Content("~/node_modules/@devextreme/runtime/angular")",
+                "@@devextreme/runtime/vue": "@Url.Content("~/node_modules/@devextreme/runtime/vue")",
+                "@@devextreme/runtime/react": "@Url.Content("~/node_modules/@devextreme/runtime/react")",
+                "devextreme-quill": "@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")",
+                "devexpress-diagram": "@Url.Content("~/artifacts/js/dx-diagram.js")",
+                "devexpress-gantt": "@Url.Content("~/artifacts/js/dx-gantt.js")",
+                "exceljs": "@Url.Content("~/node_modules/exceljs/dist/exceljs.js")",
+                "fflate": "@Url.Content("~/node_modules/fflate/esm/browser.js")",
+                "jspdf": "@Url.Content("~/node_modules/jspdf/dist/jspdf.umd.js")",
+                "jspdf-autotable": "@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")",
+                "turndown": "@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")",
+                "devextreme-showdown": "@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")",
+                "rrule": "@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")",
+                "generic_light.css!": "@Url.Content("~/artifacts/css/dx.light.css")",
+                "material_blue_light.css!": "@Url.Content("~/artifacts/css/dx.material.blue.light.css")",
+                "css": "@Url.Content("~/node_modules/systemjs-plugin-css/css.js")",
+                "text": "@Url.Content("~/node_modules/systemjs-plugin-text/text.js")",
+                "json": "@Url.Content("~/node_modules/systemjs-plugin-json/json.js")",
+                "plugin-babel": "@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")",
+                "systemjs-babel-build": "@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")",
+                "animation/": "/js/animation/",
+                "events/": "/js/events/",
+                "core/": "/js/core/",
+                "localization": "/js/localization",
+                "localization/": "/js/localization/",
+                "ui/": "/js/ui/"
+            }
+        }
+    </script>
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs-babel/dist/systemjs-babel.js")"></script>
     <script>
         (function() {
             jQuery.noConflict();
 
+            const systemPrototype = System.constructor.prototype;
+            const originalFetch = systemPrototype.fetch;
+
+            systemPrototype.fetch = function(url, options) {
+                if (/!$/.test(url)) {
+                    return originalFetch(url.replace('!', ''), options);
+                }
+
+                if (url.includes('renovation/ui')) {
+                    return originalFetch(url + '.ts', options);
+                }
+
+                if (!/\.(js|json|css)$/.test(url)) {
+                    return originalFetch(url + '.js', options);
+                }
+
+                return originalFetch(url, options);
+            };
+
             var cacheBuster = '@Url.CacheBuster()';
             if(cacheBuster.length) {
-                var systemLocate = SystemJS.locate;
-                SystemJS.locate = function(load) {
+                var systemLocate = System.locate;
+                System.locate = function(load) {
                     return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
                         return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
                     });
@@ -154,54 +225,8 @@
                 ? '@Url.Content("~/artifacts/transpiled")'
                 : '@Url.Content("~/artifacts/transpiled-renovation")';
 
-            SystemJS.config({
+            System.addImportMap({
                 baseURL: baseURL,
-                transpiler: 'plugin-babel',
-                map: {
-                    // Deps
-                    'globalize': '@Url.Content("~/artifacts/js/globalize")',
-                    'intl': '@Url.Content("~/node_modules/intl/index.js")',
-                    'cldr': '@Url.Content("~/artifacts/js/cldr")',
-                    'jquery': '@GetJQueryUrl()',
-                    'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
-                    'angular': '@Url.Content("~/artifacts/js/angular.js")',
-                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
-                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
-                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
-                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
-                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
-                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
-                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
-                    'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
-                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
-                    '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
-                    '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
-                    '@@devextreme/runtime/declarations': '@Url.Content("~/node_modules/@devextreme/runtime/declarations")',
-                    '@@devextreme/runtime/angular': '@Url.Content("~/node_modules/@devextreme/runtime/angular")',
-                    '@@devextreme/runtime/vue': '@Url.Content("~/node_modules/@devextreme/runtime/vue")',
-                    '@@devextreme/runtime/react': '@Url.Content("~/node_modules/@devextreme/runtime/react")',
-                    'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
-                    'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
-                    'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
-                    'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
-                    'fflate': '@Url.Content("~/node_modules/fflate/esm/browser.js")',
-                    'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.umd.js")',
-                    'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
-                    'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
-                    'devextreme-showdown': '@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")',
-                    'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
-
-                    // Global CSS
-                    'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
-                    'material_blue_light.css': '@Url.Content("~/artifacts/css/dx.material.blue.light.css")',
-
-                    // SystemJS plugins
-                    'css': '@Url.Content("~/node_modules/systemjs-plugin-css/css.js")',
-                    'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
-                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
-                    'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
-                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
-                },
                 packages: {
                     '@@devextreme/runtime/common': {
                         main: '../cjs/common/index.js',
@@ -266,7 +291,7 @@
                     '@Url.Content("~/artifacts/js/angular.js")': {
                         deps: ['jquery'],
                         format: 'global',
-                        expots: 'angular'
+                        exports: 'angular'
                     }
                 }
             });
@@ -282,7 +307,7 @@
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
         var imports = integrationImportPaths.map(function(importPath) {
-            return SystemJS.import(importPath);
+            return System.import(importPath);
         });
 
         imports.push(new Promise(function(resolve) {
@@ -297,7 +322,7 @@
                 return;
             }
 
-            return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
+            return System.import("@Url.Content(Model.ScriptVirtualPath)");
         })
         .then(function() {
             QUnit.start();
