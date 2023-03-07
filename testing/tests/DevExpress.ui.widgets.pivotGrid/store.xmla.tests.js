@@ -1,3 +1,4 @@
+// TODO: Doesn this test cases still alive?
 define(function(require) {
     if('callPhantom' in window) return;
 
@@ -6,14 +7,14 @@ define(function(require) {
         return;
     }
 
+    const $ = require('jquery');
     const browser = require('core/utils/browser');
     const devices = require('core/devices');
-    const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
+    const pivotGridUtils = require('__internal/grids/pivot_grid/module_utils');
+    const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/module_utils');
+    const XmlaStore = require('__internal/grids/pivot_grid/xmla_store/module');
 
-    const $ = require('jquery');
-    const pivotGridUtils = require('ui/pivot_grid/module_utils');
-    const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source/module_utils');
-    const XmlaStore = require('ui/pivot_grid/xmla_store/module');
+    const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
     const CATEGORIES_DATA = [
         { key: '[Product].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },

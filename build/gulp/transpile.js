@@ -22,6 +22,8 @@ const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./ren
 const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
+// eslint-disable-next-line spellcheck/spell-checker
+const tscAlias = require('tsc-alias');
 
 require('./generator/gulpfile');
 
@@ -56,6 +58,26 @@ const generatedTs = [
 
 const bundlesSrc = ['js/bundles/**/*.js'];
 
+const internalTsConfig = path.resolve(__dirname, '../../js/__internal/tsconfig.json');
+const tsAliasBaseDir = path.resolve(__dirname, '../../js');
+const aliasTranspileConfig = {
+    configFile: internalTsConfig,
+    outDir: tsAliasBaseDir,
+    resolveFullPaths: true,
+}
+const createAliasTranspileAsync = async (config) => {
+    // eslint-disable-next-line spellcheck/spell-checker
+    const transpileFunc = await tscAlias.prepareSingleFileReplaceTscAliasPaths(config);
+
+    return (buffer, path) => {
+        const newFileContentStr = transpileFunc({
+            fileContents: buffer.toString(),
+            filePath: path,
+        });
+        return Buffer.from(newFileContentStr);
+    }
+}
+
 const createModuleConfig = (name, dir, filePath) => {
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(srcDir, ''), name);
@@ -81,17 +103,15 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
-function compileTS(settings) {
-    return ts.createProject('js/tsconfig.json', {
-        // typescript: require('typescript-min'),
-        // types: ['jquery'],
-        // noEmitOnError: true,
-        // allowJs: true,
-        // lib: [ 'es6', 'es7', 'es2017.object', 'dom' ],
-        // strict: true,
-        // noImplicitAny: false,
-        // ...settings
-    })(ts.reporter.fullReporter());
+function compileTS() {
+    return ts.createProject(internalTsConfig)(ts.reporter.fullReporter());
+}
+
+function transpileTSAlias(transpileFunc) {
+    return through2.obj((file, _, callback) => {
+            file.contents = transpileFunc(file.contents, file.path);
+            return callback(null, file);
+        });
 }
 
 function transpile(src, dist, pipes = []) {
@@ -108,11 +128,17 @@ function transpile(src, dist, pipes = []) {
 
     return gulp.parallel([
         task,
-        () => gulp.src([
-            'js/**/*.ts',
-            '!js/renovation/**/*',
-            '!js/**/*.d.ts',
-        ]).pipe(compileTS()).js.pipe(gulp.dest(dist))
+        async () => {
+            const transpileTSAliasFunc = await createAliasTranspileAsync(aliasTranspileConfig);
+            return gulp.src([
+                'js/**/*.ts',
+                '!js/renovation/**/*',
+                '!js/**/*.d.ts'
+            ]).pipe(compileTS())
+                .js
+                .pipe(transpileTSAlias(transpileTSAliasFunc))
+                .pipe(gulp.dest(dist))
+        }
     ]);
 }
 

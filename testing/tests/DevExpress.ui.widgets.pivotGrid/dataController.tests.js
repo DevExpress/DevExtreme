@@ -1,10 +1,11 @@
 import $ from 'jquery';
 import Class from 'core/class';
-import { DataController } from 'ui/pivot_grid/data_controller/module';
+import { DataController } from '__internal/grids/pivot_grid/data_controller/module';
 import virtualScrolling from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import stateStoring from 'ui/grid_core/ui.grid_core.state_storing_core';
-import pivotGridUtils from 'ui/pivot_grid/module_utils';
-import PivotGridDataSource from 'ui/pivot_grid/data_source/module';
+import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 const moduleConfig = {
@@ -30,6 +31,7 @@ const moduleConfig = {
 };
 
 function prepareLoadedData(data) {
+    console.log('utils: ', pivotGridUtils);
     pivotGridUtils.foreachTree(data, function(items) {
         delete items[0].text;
     });
@@ -148,6 +150,7 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
     });
 
     QUnit.test('dataSource by instance disposing', function(assert) {
+        console.log('ds: ', PivotGridDataSource);
         const dataSource = new PivotGridDataSource({});
         const dataController = new DataController({
             dataSource: dataSource

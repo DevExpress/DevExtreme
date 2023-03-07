@@ -1,21 +1,24 @@
 import $ from 'jquery';
-import DataSource from 'ui/pivot_grid/data_source/module';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import inflector from 'core/utils/inflector';
-import summaryDisplayModes from 'ui/pivot_grid/summary_display_modes/module';
-import xmlaStore, { XmlaStore } from 'ui/pivot_grid/xmla_store/module';
-import { LocalStore } from 'ui/pivot_grid/local_store/module';
-import RemoteStore from 'ui/pivot_grid/remote_store/module';
-import pivotGridUtils, { setFieldProperty } from 'ui/pivot_grid/module_utils';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+import summaryDisplayModesModule from '__internal/grids/pivot_grid/summary_display_modes/module';
+import xmlaStoreModule, { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/module';
+import { LocalStore } from '__internal/grids/pivot_grid/local_store/module';
+import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/module';
+import pivotGridUtils, { setFieldProperty } from '__internal/grids/pivot_grid/widget_utils';
+
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import '../../../testing/content/orders.js';
 
 import PivotGridTestSettings from '../../helpers/pivotGridTestSettings.js';
 
+console.log('remote store: ', RemoteStore);
+
 function createDataSource(options) {
-    const dataSource = new DataSource(options);
+    const dataSource = new PivotGridDataSource(options);
     dataSource.load();
     return dataSource;
 }
@@ -126,8 +129,9 @@ QUnit.module('dxPivotGrid dataSource with Store', {
 }, () => {
 
     QUnit.test('Create XmlaStore', function(assert) {
-
-        sinon.spy(xmlaStore, 'XmlaStore');
+        console.log('store: ', xmlaStoreModule, XmlaStore);
+        sinon.spy(xmlaStoreModule, 'XmlaStore');
+        console.log('spy: ', xmlaStoreModule.XmlaStore);
 
         const dataSource = createDataSource({
             store: {
@@ -136,19 +140,19 @@ QUnit.module('dxPivotGrid dataSource with Store', {
             }
         });
         assert.ok(dataSource.store() instanceof XmlaStore);
-        assert.ok(xmlaStore.XmlaStore.calledOnce);
-        assert.ok(xmlaStore.XmlaStore.calledWithNew);
-        assert.deepEqual(xmlaStore.XmlaStore.lastCall.args, [{
+        assert.ok(xmlaStoreModule.XmlaStore.calledOnce);
+        assert.ok(xmlaStoreModule.XmlaStore.calledWithNew);
+        assert.deepEqual(xmlaStoreModule.XmlaStore.lastCall.args, [{
             type: 'xmla',
             url: ''
         }]);
 
-        xmlaStore.XmlaStore.restore();
+        xmlaStoreModule.XmlaStore.restore();
     });
 
     QUnit.test('Create XmlaStore with paginate', function(assert) {
 
-        sinon.spy(xmlaStore, 'XmlaStore');
+        sinon.spy(xmlaStoreModule, 'XmlaStore');
 
         const dataSource = createDataSource({
             paginate: true,
@@ -160,28 +164,28 @@ QUnit.module('dxPivotGrid dataSource with Store', {
         assert.ok(dataSource.store() instanceof XmlaStore);
         assert.ok(dataSource.paginate());
 
-        xmlaStore.XmlaStore.restore();
+        xmlaStoreModule.XmlaStore.restore();
     });
 
     QUnit.test('Create XmlaStore by Instance', function(assert) {
 
-        sinon.spy(xmlaStore, 'XmlaStore');
+        sinon.spy(xmlaStoreModule, 'XmlaStore');
 
         const dataSource = createDataSource({
-            store: new xmlaStore.XmlaStore({
+            store: new xmlaStoreModule.XmlaStore({
                 type: 'xmla',
                 url: ''
             })
         });
-        assert.ok(dataSource.store() instanceof xmlaStore.XmlaStore);
-        assert.ok(xmlaStore.XmlaStore.calledOnce);
-        assert.ok(xmlaStore.XmlaStore.calledWithNew);
-        assert.deepEqual(xmlaStore.XmlaStore.lastCall.args, [{
+        assert.ok(dataSource.store() instanceof xmlaStoreModule.XmlaStore);
+        assert.ok(xmlaStoreModule.XmlaStore.calledOnce);
+        assert.ok(xmlaStoreModule.XmlaStore.calledWithNew);
+        assert.deepEqual(xmlaStoreModule.XmlaStore.lastCall.args, [{
             type: 'xmla',
             url: ''
         }]);
 
-        xmlaStore.XmlaStore.restore();
+        xmlaStoreModule.XmlaStore.restore();
     });
 
     QUnit.test('Create LocalStore when store with type', function(assert) {
@@ -5346,18 +5350,19 @@ QUnit.module('Apply summary mode', {
         const that = this;
         defaultEnvironment.beforeEach.apply(this, arguments);
 
-        sinon.stub(summaryDisplayModes, 'applyDisplaySummaryMode', function(descriptions, data) {
+        sinon.stub(summaryDisplayModesModule, 'applyDisplaySummaryMode', function(descriptions, data) {
             that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
         });
 
-        sinon.stub(summaryDisplayModes, 'applyRunningTotal', function(descriptions, data) {
+        sinon.stub(summaryDisplayModesModule, 'applyRunningTotal', function(descriptions, data) {
             that.applyRunningTotalPassedData = $.extend(true, {}, data);
         });
     },
     afterEach: function() {
+        console.log('s: ', summaryDisplayModesModule.applyDisplaySummaryMode);
         defaultEnvironment.afterEach.apply(this, arguments);
-        summaryDisplayModes.applyDisplaySummaryMode.restore();
-        summaryDisplayModes.applyRunningTotal.restore();
+        summaryDisplayModesModule.applyDisplaySummaryMode.restore();
+        summaryDisplayModesModule.applyRunningTotal.restore();
     }
 }, () => {
 
@@ -5513,12 +5518,12 @@ QUnit.module('Apply summary mode', {
                 value: 1991
             }]);
 
-        assert.ok(summaryDisplayModes.applyDisplaySummaryMode.calledOnce);
+        assert.ok(summaryDisplayModesModule.applyDisplaySummaryMode.calledOnce);
 
         const descriptions = this.testStore.load.lastCall.args[0];
         delete descriptions.columnExpandedPaths;
         delete descriptions.rowExpandedPaths;
-        assert.deepEqual(summaryDisplayModes.applyDisplaySummaryMode.lastCall.args[0], descriptions);
+        assert.deepEqual(summaryDisplayModesModule.applyDisplaySummaryMode.lastCall.args[0], descriptions);
     });
 
     QUnit.test('apply Display Summary Mode when summaryDisplayType was used', function(assert) {
@@ -5608,7 +5613,7 @@ QUnit.module('Apply summary mode', {
 
         def.resolve(this.storeData);
 
-        assert.ok(summaryDisplayModes.applyRunningTotal.calledOnce);
+        assert.ok(summaryDisplayModesModule.applyRunningTotal.calledOnce);
 
         assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.rows), [
             {
@@ -6742,7 +6747,7 @@ QUnit.module('State storing', defaultEnvironment, () => {
         this.testStore.getFields.returns(retrieveFieldsDef);
         // act
 
-        const dataSource = new DataSource({
+        const dataSource = new PivotGridDataSource({
             fields: [],
             store: this.testStore,
             retrieveFields: true
@@ -6776,7 +6781,7 @@ QUnit.module('State storing', defaultEnvironment, () => {
     });
 
     QUnit.test('Set default state', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = new PivotGridDataSource({
             fields: [
                 { dataField: 'Field1', area: 'row' },
                 { dataField: 'Field2', area: 'column', sortOrder: 'asc' }
@@ -6821,7 +6826,7 @@ QUnit.module('State storing', defaultEnvironment, () => {
     });
 
     QUnit.test('T388396. update auto generated caption if state is reset', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = new PivotGridDataSource({
             fields: [
                 { dataField: 'Field1', area: 'data', summaryType: 'sum' },
             ],
@@ -6849,7 +6854,7 @@ QUnit.module('State storing', defaultEnvironment, () => {
             values: []
         }));
 
-        const dataSource = new DataSource({
+        const dataSource = new PivotGridDataSource({
             fields: [
                 { dataField: 'Field1', area: 'row' },
                 { dataField: 'Field2', area: 'row' },

@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import pivotGridUtils from 'ui/pivot_grid/module_utils';
-import Store from 'ui/pivot_grid/xmla_store/module';
+import ajax from 'core/utils/ajax';
+import pivotGridUtils from '__internal/grids/pivot_grid/module_utils';
+import { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/module';
 import { errors } from 'data/errors';
 import localization from 'localization';
 import { getLanguageId } from 'localization/language_codes';
-import ajax from 'core/utils/ajax';
 
 const languageId = getLanguageId();
 const ERROR_RESPONCE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><soap:Fault xmlns="http://schemas.xmlsoap.org/soap/envelope/"><faultcode>XMLAnalysisError.0xc10a004d</faultcode><faultstring>Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.</faultstring><detail><Error ErrorCode="3238658125" Description="Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function." Source="Microsoft SQL Server 2008 R2 Analysis Services" HelpFile=""><Location xmlns="http://schemas.microsoft.com/analysisservices/2003/engine" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100="http://schemas.microsoft.com/analysisservices/2008/engine/100" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"><Start><Line>1</Line><Column>77</Column></Start><End><Line>1</Line><Column>203</Column></End><LineOffset>0</LineOffset><TextLength>127</TextLength></Location></Error></detail></soap:Fault></soap:Body></soap:Envelope>';
@@ -15,7 +15,7 @@ const stubsEnvironment = {
         sinon.spy(errors, 'log');
         sinon.spy(errors, 'Error');
 
-        this.store = new Store(this.dataSource);
+        this.store = new XmlaStore(this.dataSource);
         that.sendDeferred = $.Deferred();
 
         that.sendRequest = sinon.stub(pivotGridUtils, 'sendRequest', function() {
@@ -552,7 +552,7 @@ QUnit.module('Send Request', {
 }, () => {
 
     QUnit.test('send ajax request on load', function(assert) {
-        const store = new Store(this.dataSource);
+        const store = new XmlaStore(this.dataSource);
 
         store.load(this.loadOptions);
 
@@ -583,7 +583,7 @@ QUnit.module('Send Request', {
         };
         dataSource.beforeSend = beforeSend;
 
-        const store = new Store(dataSource);
+        const store = new XmlaStore(dataSource);
 
         store.load(this.loadOptions);
         // assert
