@@ -472,7 +472,6 @@ const MultiView = CollectionWidget.inherit({
                 break;
             case 'items':
                 this._updateSwipeDisabledState();
-                // TODO: тест на рантайм
                 this._findBoundaryAvailableIndices();
                 this.callBase(args);
                 break;

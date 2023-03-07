@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,109 +31,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-    <!-- <div id="tabpanel"></div> -->
-    <div id="multiView"></div>
+    <div id="button"></div>
     <script>
-
-        // const tabPanelItems = [{
-        //     title: '0',
-        //     text: '0',
-        //     disabled: true,
-        // }, {
-        //     title: '1',
-        //     text: '1',
-        //     disabled: true,
-        // }, {
-        //     title: '2',
-        //     text: '2',
-        //     disabled: true,
-        // }, {
-        //     title: '3',
-        //     text: '3',
-        // }, {
-        //     title: '4',
-        //     text: '4',
-        // }, {
-        //     title: '5',
-        //     text: '5',
-        // }, {
-        //     title: '6',
-        //     text: '6',
-        // }, {
-        //     title: '7',
-        //     text: '7',
-        // }, {
-        //     title: '8',
-        //     text: '8',
-        // }, {
-        //     title: '9',
-        //     text: '9',
-        //     disabled: true,
-        // }, {
-        //     title: '10',
-        //     text: '10',
-        //     disabled: true,
-        // }, {
-        //     title: '11',
-        //     text: '11',
-        // }, {
-        //     title: '12',
-        //     text: '12',
-        // }, {
-        //     title: '13',
-        //     text: '13',
-        //     disabled: true,
-        // }, {
-        //     title: '14',
-        //     text: '14',
-        //     disabled: true,
-        // }, {
-        //     title: '15',
-        //     text: '15',
-        // }, {
-        //     title: '16',
-        //     text: '16',
-        //     disabled: true,
-        // }, {
-        //     title: '17',
-        //     text: '17',
-        //     disabled: true,
-        // }];
-
-
-
-        // const tabPanelItems = [{
-        //     title: '0',
-        //     text: '0',
-        //     // disabled: true,
-        // }, {
-        //     title: '1',
-        //     text: '1',
-        //     disabled: true,
-        // }, {
-        //     title: '2',
-        //     text: '2',
-        //     // disabled: true,
-        // }];
-
-        $(function () {
-            // const tabPanel = $('#tabpanel').dxTabPanel({
-            //     height: 260,
-            //     dataSource: tabPanelItems,
-            //     animationEnabled: true,
-            //     swipeEnabled: true,
-            // }).dxTabPanel('instance');
-
-            const $multiView = $('#multiView').dxMultiView({
-                // items: [1, 2, { disabled: true, text: 3 }],
-                items: [{ disabled: true, text: 1 }, 2, { text: 3 }],
-                selectedIndex: 0,
-                loop: true,
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
 </body>
-
 </html>

@@ -702,6 +702,24 @@ QUnit.module('loop', {
         pointer.swipeEnd();
     });
 
+    QUnit.test('selectedIndex not equal disabled item index after swipe if disabled state changed at runtime', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [{ text: 1 }, 2, 3],
+            selectedIndex: 0,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        assert.equal(multiView.option('selectedIndex'), 2, 'selected index was changed correct');
+
+        multiView.option('items[0].disabled', true);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(-1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index was changed correct');
+    });
+
     QUnit.test('selected index should be set to last item after right swipe from first one', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
