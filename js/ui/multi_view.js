@@ -153,6 +153,7 @@ const MultiView = CollectionWidget.inherit({
         this._$itemContainer.appendTo(this._$wrapper);
 
         this.option('loopItemFocus', this.option('loop'));
+        this._findBoundaryAvailableIndices();
 
         this._initSwipeable();
     },
@@ -319,20 +320,37 @@ const MultiView = CollectionWidget.inherit({
         });
     },
 
+    _findBoundaryAvailableIndices() {
+        const items = this.option('items');
+
+        let firstIndex;
+        let lastIndex;
+
+        items.forEach((item, index) => {
+            const isDisabled = Boolean(item.disabled);
+
+            if(!isDisabled && !isDefined(firstIndex)) {
+                firstIndex = index;
+            }
+
+            if(!isDisabled) {
+                lastIndex = index;
+            }
+        });
+
+        this._boundaryAvailableIndices = {
+            firstIndex,
+            lastIndex,
+        };
+    },
+
     _swipeStartHandler: function(e) {
         animation.complete(this._$itemContainer);
 
         const selectedIndex = this.option('selectedIndex');
         const loop = this.option('loop');
 
-        const itemsCount = this._itemsCount();
-        const itemElements = this.itemElements();
-
-        const isLastDisabled = this._isDisabled(itemElements[itemElements.length - 1]);
-        const lastIndex = itemsCount - (isLastDisabled ? 2 : 1);
-
-        const isFirstDisabled = this._isDisabled(itemElements[0]);
-        const firstIndex = isFirstDisabled ? 1 : 0;
+        const { firstIndex, lastIndex } = this._boundaryAvailableIndices;
 
         const rtl = this.option('rtlEnabled');
 
@@ -358,20 +376,30 @@ const MultiView = CollectionWidget.inherit({
         }
     },
 
+    _findNextAvailableIndex(index, offset) {
+        const { items } = this.option();
+        const { firstIndex, lastIndex } = this._boundaryAvailableIndices;
+
+        for(let i = index + offset; i >= firstIndex && i <= lastIndex; i += offset) {
+            const isDisabled = Boolean(items[i].disabled);
+
+            if(!isDisabled) {
+                return i;
+            }
+        }
+
+        return index;
+    },
+
     _swipeEndHandler: function(e) {
         const targetOffset = e.targetOffset * this._getRTLSignCorrection();
 
         if(targetOffset) {
+            const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
+            this.option('selectedIndex', newSelectedIndex);
+
             // TODO: change focusedElement on focusedItem
-            const itemElements = this.itemElements();
-            const nextItemIndex = this._normalizeIndex(this.option('selectedIndex') - targetOffset);
-            const isNextDisabled = this._isDisabled(itemElements[nextItemIndex]);
-            const selectedIndex = isNextDisabled ? this._normalizeIndex(nextItemIndex - targetOffset) : nextItemIndex;
-
-            this.option('selectedIndex', selectedIndex);
-
             const $selectedElement = this.itemElements().filter('.dx-item-selected');
-
             this.option('focusStateEnabled') && this.option('focusedElement', getPublicElement($selectedElement));
         } else {
             this._animateItemContainer(0, noop);
@@ -436,6 +464,8 @@ const MultiView = CollectionWidget.inherit({
                 break;
             case 'items':
                 this._updateSwipeDisabledState();
+                // TODO: тест на рантайм
+                this._findBoundaryAvailableIndices();
                 this.callBase(args);
                 break;
             default:
