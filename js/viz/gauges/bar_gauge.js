@@ -299,19 +299,20 @@ export const dxBarGauge = BaseGauge.inherit({
             const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
             const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
             const box = bar._text.getBBox();
-            const indent = 4;
             const lastCoords = bar._text._lastCoords;
+            const indentFromLabel = that._context.textWidth / 2;
+            const originalXLabelCoord = box.x + box.width / 2 + lastCoords.x;
             const originalPoints = [
                 xStart,
                 yStart,
-                box.x + lastCoords.x,
+                originalXLabelCoord,
                 box.y + lastCoords.y
             ];
 
             if(bar._angle > 90) {
-                originalPoints[2] += box.width + indent;
+                originalPoints[2] += indentFromLabel;
             } else {
-                originalPoints[2] -= indent;
+                originalPoints[2] -= indentFromLabel;
             }
 
             if(bar._angle <= 180 && bar._angle > 0) {
