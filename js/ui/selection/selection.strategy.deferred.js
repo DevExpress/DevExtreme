@@ -47,7 +47,7 @@ export default SelectionStrategy.inherit({
                 if(isDeselect) {
                     this.removeSelectedItem(keys[i]);
                 } else {
-                    this.addSelectedItem(keys[i]);
+                    this.addSelectedItem(keys[i], isSelectAll, !preserve);
                 }
             }
         }
@@ -111,10 +111,10 @@ export default SelectionStrategy.inherit({
         return filter;
     },
 
-    addSelectedItem: function(key) {
+    addSelectedItem: function(key, isSelectAll, skipFilter) {
         const filter = this._getFilterByKey(key);
 
-        this._addSelectionFilter(false, filter);
+        this._addSelectionFilter(false, filter, isSelectAll, skipFilter);
     },
 
     removeSelectedItem: function(key) {
@@ -179,7 +179,7 @@ export default SelectionStrategy.inherit({
         });
     },
 
-    _addSelectionFilter: function(isDeselect, filter, isSelectAll) {
+    _addSelectionFilter: function(isDeselect, filter, isSelectAll, skipFilter) {
         const that = this;
         const currentFilter = isDeselect ? ['!', filter] : filter;
         const currentOperation = isDeselect ? 'and' : 'or';
@@ -187,28 +187,30 @@ export default SelectionStrategy.inherit({
         let selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
+        if(selectionFilter && selectionFilter.length && !skipFilter) {
 
-        if(selectionFilter && selectionFilter.length) {
             const removedIndex = that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
             const shouldCleanFilter =
-                isDeselect &&
-                (removedIndex !== -1 || filterIndex !== -1) &&
-                this._isOnlyNegativeFiltersLeft(selectionFilter);
+                    isDeselect &&
+                    (removedIndex !== -1 || filterIndex !== -1) &&
+                    this._isOnlyNegativeFiltersLeft(selectionFilter);
 
             if(shouldCleanFilter) {
                 selectionFilter = [];
             }
 
+
             const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
             needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
-
-            if(needAddFilter) {
-                selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
-            }
         }
+
+        if(needAddFilter) {
+            selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
+        }
+
 
         if(needAddFilter) {
             selectionFilter.push(currentFilter);
