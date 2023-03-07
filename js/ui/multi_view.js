@@ -362,6 +362,7 @@ const MultiView = CollectionWidget.inherit({
         const targetOffset = e.targetOffset * this._getRTLSignCorrection();
 
         if(targetOffset) {
+            // TODO: change focusedElement on focusedItem
             const itemElements = this.itemElements();
             const nextItemIndex = this._normalizeIndex(this.option('selectedIndex') - targetOffset);
             const isNextDisabled = this._isDisabled(itemElements[nextItemIndex]);
