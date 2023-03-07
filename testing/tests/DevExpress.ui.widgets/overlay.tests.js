@@ -3446,7 +3446,7 @@ testModule('preventScrollEvents', () => {
                     'dxOverlay',
                     'preventScrollEvents',
                     '23.1',
-                    '// TODO: some text'
+                    'If you enable this option, end-users may experience scrolling issues.'
                 ], 'args of the log method');
             });
 
@@ -3468,7 +3468,7 @@ testModule('preventScrollEvents', () => {
                     'dxOverlay',
                     'preventScrollEvents',
                     '23.1',
-                    '// TODO: some text'
+                    'If you enable this option, end-users may experience scrolling issues.'
                 ], 'args of the log method');
             });
 
@@ -3494,7 +3494,7 @@ testModule('preventScrollEvents', () => {
                     'dxOverlay',
                     'preventScrollEvents',
                     '23.1',
-                    '// TODO: some text'
+                    'If you enable this option, end-users may experience scrolling issues.'
                 ], 'args of the log method');
             });
 
