@@ -587,7 +587,7 @@ QUnit.test('Connectors should be moved by turning if labels are not moved', func
     const text1 = group.children[3];
     const text2 = group.children[7];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 78.5, 200, 10], 'line 1 coords');
         assert.deepEqual(line1.rotate.lastCall.args, [-108, 200, 174], 'line 1 shifted by turning');
         assert.roughEqual(text1._stored_settings.x, 34, 1, 'text 1 is coord x');
@@ -597,7 +597,7 @@ QUnit.test('Connectors should be moved by turning if labels are not moved', func
         assert.roughEqual(text2._stored_settings.x, 371, 1, 'text 2 is coord x');
         assert.roughEqual(text2._stored_settings.y, 136, 1, 'text 2 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('The connector should move without turning', function(assert) {
@@ -614,7 +614,7 @@ QUnit.test('The connector should move without turning', function(assert) {
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.deepEqual(line1.rotate.lastCall.args, [-108, 200, 174], 'line 1 is shifted Shifted by rotation, because the first bar');
         assert.roughEqual(text1._stored_settings.x, 34, 1, 'text 1 is coord x');
@@ -628,7 +628,7 @@ QUnit.test('The connector should move without turning', function(assert) {
         assert.roughEqual(text3._stored_settings.x, 34, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, 222, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
@@ -648,7 +648,7 @@ QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift, w
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.roughEqual(text1._stored_settings.x, 34, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, 222, 1, 'text 1 is coord y');
@@ -659,7 +659,7 @@ QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift, w
         assert.roughEqual(text3._stored_settings.x, 29, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, 207, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('label location if the angle < 90, resolveLabelOverlapping - shift', function(assert) {
@@ -676,7 +676,7 @@ QUnit.test('label location if the angle < 90, resolveLabelOverlapping - shift', 
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.roughEqual(text1._stored_settings.x, 34, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, 222, 1, 'text 1 is coord y');
@@ -687,7 +687,7 @@ QUnit.test('label location if the angle < 90, resolveLabelOverlapping - shift', 
         assert.roughEqual(text3._stored_settings.x, 29, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, 207, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('if the labels go beyond the canvas and resolveLabelOverlapping - shift', function(assert) {
@@ -702,7 +702,7 @@ QUnit.test('if the labels go beyond the canvas and resolveLabelOverlapping - shi
     });
     const group = this.getBarsGroup();
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.strictEqual(group.children[2]._stored_settings.visibility, 'hidden', 'line 1 is hidden');
         assert.strictEqual(group.children[3]._stored_settings.visibility, 'hidden', 'text 1 is hidden');
         assert.strictEqual(group.children[6]._stored_settings.visibility, 'hidden', 'line 2 is hidden');
@@ -716,7 +716,7 @@ QUnit.test('if the labels go beyond the canvas and resolveLabelOverlapping - shi
         assert.strictEqual(group.children[22]._stored_settings.visibility, null, 'line 6 is visible');
         assert.strictEqual(group.children[23]._stored_settings.visibility, null, 'text 6 is visible');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
@@ -736,7 +736,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift, w
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.roughEqual(text1._stored_settings.x, 192, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, -1, 1, 'text 1 is coord y');
@@ -747,7 +747,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift, w
         assert.roughEqual(text3._stored_settings.x, 207, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, -1, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift', function(assert) {
@@ -764,7 +764,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift', 
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.roughEqual(text1._stored_settings.x, 192, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, -1, 1, 'text 1 is coord y');
@@ -775,7 +775,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift', 
         assert.roughEqual(text3._stored_settings.x, 207, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, -1, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('label location if the angle > 90, resolveLabelOverlapping - shift, width of the connector is odd', function(assert) {
@@ -795,7 +795,7 @@ QUnit.test('label location if the angle > 90, resolveLabelOverlapping - shift, w
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.roughEqual(text1._stored_settings.x, 371, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, 136, 1, 'text 1 is coord y');
@@ -806,7 +806,7 @@ QUnit.test('label location if the angle > 90, resolveLabelOverlapping - shift, w
         assert.roughEqual(text3._stored_settings.x, 368, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, 121, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('label location if the angle is > 90, resolveLabelOverlapping - shift', function(assert) {
@@ -823,7 +823,7 @@ QUnit.test('label location if the angle is > 90, resolveLabelOverlapping - shift
     const text2 = group.children[7];
     const text3 = group.children[11];
 
-    group.animationComplete = $.proxy(function() {
+    group.animationComplete = () => {
         assert.deepEqual(line1._stored_settings.points, [200, 61, 200, 10], 'line 1 coords');
         assert.roughEqual(text1._stored_settings.x, 371, 1, 'text 1 is coord x');
         assert.roughEqual(text1._stored_settings.y, 136, 1, 'text 1 is coord y');
@@ -834,7 +834,7 @@ QUnit.test('label location if the angle is > 90, resolveLabelOverlapping - shift
         assert.roughEqual(text3._stored_settings.x.toFixed(3), 368, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y.toFixed(3), 121, 1, 'text 3 is coord y');
         done();
-    }, this);
+    };
 });
 
 QUnit.test('labels on almost straight lines (delta less than indent)', function(assert) {
