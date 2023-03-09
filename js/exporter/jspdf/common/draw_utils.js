@@ -1,7 +1,10 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { calculateTextHeight, toPdfUnit } from './pdf_utils';
-import { capitalizeFirstLetter } from '../../../ui/pivot_grid/ui.pivot_grid.utils';
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
