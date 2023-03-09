@@ -45,8 +45,7 @@ class App extends React.Component {
       <div className="widget-container">
         <List
           dataSource={this.state.plannedTasks}
-          keyExpr="id"
-          repaintChangesOnly={true}>
+          keyExpr="id">
           <ItemDragging
             allowReordering={true}
             group="tasks"
@@ -59,8 +58,7 @@ class App extends React.Component {
         </List>
         <List
           dataSource={this.state.doingTasks}
-          keyExpr="id"
-          repaintChangesOnly={true}>
+          keyExpr="id">
           <ItemDragging
             allowReordering={true}
             group="tasks"

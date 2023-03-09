@@ -54,9 +54,6 @@ export default {
     DxSelectBox,
     Group,
   },
-  created() {
-    this.fromPregroupedData.load();
-  },
   data() {
     return {
       fromUngroupedData: new DataSource({
@@ -80,6 +77,9 @@ export default {
         },
       }),
     };
+  },
+  created() {
+    this.fromPregroupedData.load();
   },
 };
 </script>

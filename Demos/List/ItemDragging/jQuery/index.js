@@ -2,7 +2,6 @@ $(() => {
   function createList(selector, tasks) {
     $(selector).dxList({
       dataSource: tasks,
-      repaintChangesOnly: true,
       keyExpr: 'id',
       itemDragging: {
         allowReordering: true,

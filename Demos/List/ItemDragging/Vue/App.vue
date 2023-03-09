@@ -3,7 +3,6 @@
     <div class="widget-container">
       <DxList
         :data-source="plannedTasks"
-        :repaint-changes-only="true"
         key-expr="id"
       >
         <DxItemDragging
@@ -17,7 +16,6 @@
       </DxList>
       <DxList
         :data-source="doingTasks"
-        :repaint-changes-only="true"
         key-expr="id"
       >
         <DxItemDragging
