@@ -153,7 +153,7 @@ const MultiView = CollectionWidget.inherit({
         this._$itemContainer.appendTo(this._$wrapper);
 
         this.option('loopItemFocus', this.option('loop'));
-        this._findBoundaryAvailableIndices();
+        this._findBoundaryIndices();
 
         this._initSwipeable();
     },
@@ -320,7 +320,7 @@ const MultiView = CollectionWidget.inherit({
         });
     },
 
-    _findBoundaryAvailableIndices() {
+    _findBoundaryIndices() {
         const items = this.option('items');
 
         let firstIndex;
@@ -329,16 +329,13 @@ const MultiView = CollectionWidget.inherit({
         items.forEach((item, index) => {
             const isDisabled = Boolean(item?.disabled);
 
-            if(!isDisabled && !isDefined(firstIndex)) {
-                firstIndex = index;
-            }
-
             if(!isDisabled) {
+                firstIndex ??= index;
                 lastIndex = index;
             }
         });
 
-        this._boundaryAvailableIndices = {
+        this._boundaryIndices = {
             firstIndex: firstIndex ?? 0,
             lastIndex: lastIndex ?? items.length - 1,
         };
@@ -350,7 +347,7 @@ const MultiView = CollectionWidget.inherit({
         const selectedIndex = this.option('selectedIndex');
         const loop = this.option('loop');
 
-        const { firstIndex, lastIndex } = this._boundaryAvailableIndices;
+        const { firstIndex, lastIndex } = this._boundaryIndices;
 
         const rtl = this.option('rtlEnabled');
 
@@ -378,7 +375,7 @@ const MultiView = CollectionWidget.inherit({
 
     _findNextAvailableIndex(index, offset) {
         const { items, loop } = this.option();
-        const { firstIndex, lastIndex } = this._boundaryAvailableIndices;
+        const { firstIndex, lastIndex } = this._boundaryIndices;
 
         if(loop) {
             if(index === firstIndex) {
@@ -455,6 +452,11 @@ const MultiView = CollectionWidget.inherit({
         Swipeable.getInstance(this.$element()).option('disabled', disabled);
     },
 
+    _dispose: function() {
+        delete this._boundaryIndices;
+        this.callBase();
+    },
+
     _optionChanged: function(args) {
         const value = args.value;
 
@@ -472,7 +474,7 @@ const MultiView = CollectionWidget.inherit({
                 break;
             case 'items':
                 this._updateSwipeDisabledState();
-                this._findBoundaryAvailableIndices();
+                this._findBoundaryIndices();
                 this.callBase(args);
                 break;
             default:

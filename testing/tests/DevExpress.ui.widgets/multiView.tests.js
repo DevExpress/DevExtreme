@@ -500,7 +500,7 @@ QUnit.module('interaction via swipe', {
         assert.equal(multiView.option('selectedIndex'), 1, 'selected index was changed');
     });
 
-    QUnit.test('selectedIndex should not be equal index of disabled item after swipe if next item is disabled', function(assert) {
+    QUnit.test('swipe should skip disabled tabs', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, { disabled: true }, 3],
             selectedIndex: 0,
@@ -545,7 +545,7 @@ QUnit.module('interaction via swipe', {
 
         const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
+        assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not moved');
     });
 
     QUnit.test('item container should not be moved left if selected index is 0 in RTL mode', function(assert) {
@@ -569,7 +569,7 @@ QUnit.module('interaction via swipe', {
 
         const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not be moved');
+        assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not moved');
     });
 
     QUnit.test('item container should not be moved right if selected index is last in RTL mode', function(assert) {
@@ -593,7 +593,7 @@ QUnit.module('interaction via swipe', {
 
         const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
+        assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not moved');
     });
 
     QUnit.test('item container should not be moved left if selected index is last', function(assert) {
@@ -615,7 +615,7 @@ QUnit.module('interaction via swipe', {
 
         const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not be moved');
+        assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not moved');
     });
 
     QUnit.test('item container left animation should  be completed correctly if selected index is last', function(assert) {
@@ -702,7 +702,7 @@ QUnit.module('loop', {
         pointer.swipeEnd();
     });
 
-    QUnit.test('selectedIndex not equal disabled item index after swipe if disabled state changed at runtime', function(assert) {
+    QUnit.test('swipe should skip disabled tabs after items runtime change', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [{ text: 1 }, 2, 3],
             selectedIndex: 0,

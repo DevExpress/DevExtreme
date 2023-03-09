@@ -22,7 +22,7 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-const FOCUS_ON_DISABLED_CLASS = 'dx-disabled-tab-focused';
+const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 
 const TabPanel = MultiView.inherit({
 
@@ -252,8 +252,8 @@ const TabPanel = MultiView.inherit({
         this._toggleFocusClass(isFocused, this._$wrapper);
     },
 
-    _toggleFocusOnDisabledClass(isFocused) {
-        this._focusTarget().toggleClass(FOCUS_ON_DISABLED_CLASS, isFocused);
+    _toggleDisabledFocusedClass(isFocused) {
+        this._focusTarget().toggleClass(DISABLED_FOCUSED_TAB_CLASS, isFocused);
     },
 
     _updateFocusState: function(e, isFocused) {
@@ -270,7 +270,7 @@ const TabPanel = MultiView.inherit({
             const isDisabled = this._isDisabled(this.option('focusedElement'));
 
             this._toggleWrapperFocusedClass(isFocused && !isDisabled);
-            this._toggleFocusOnDisabledClass(isFocused && isDisabled);
+            this._toggleDisabledFocusedClass(isFocused && isDisabled);
         }
 
         if(isMultiViewTarget) {
@@ -365,7 +365,7 @@ const TabPanel = MultiView.inherit({
                 const isDisabled = this._isDisabled(value);
 
                 this._toggleWrapperFocusedClass(!isDisabled);
-                this._toggleFocusOnDisabledClass(isDisabled);
+                this._toggleDisabledFocusedClass(isDisabled);
 
                 this.callBase(args);
                 break;

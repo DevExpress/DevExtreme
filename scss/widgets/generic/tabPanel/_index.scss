@@ -117,7 +117,7 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right,
     @include tabpanel-navigation-shadow-mixin($accent-color);
   }
 
-  &.dx-disabled-tab-focused {
+  &.dx-disabled-focused-tab {
     & > .dx-tabpanel-tabs {
       @include tabpanel-tabs-shadow-mixin($tabs-border-color);
     }
