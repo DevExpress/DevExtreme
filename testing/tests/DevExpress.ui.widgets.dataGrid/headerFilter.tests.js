@@ -18,7 +18,7 @@ import { noop } from 'core/utils/common';
 import ODataStore from 'data/odata/store';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
-import { invertFilterExpression } from 'ui/grid_core/filtering/header_filter';
+import { invertFilterExpression } from 'ui/grid_core/filtering/module_header_filter';
 import dragEvents from 'events/drag';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import viewPortUtils from 'core/utils/view_port';
