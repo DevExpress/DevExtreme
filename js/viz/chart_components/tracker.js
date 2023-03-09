@@ -62,7 +62,7 @@ function eventCanceled({ event, cancel }, target, clickTarget) {
     const eventCanceled = cancel || deprecatedCancel;
 
     if(deprecatedCancel) {
-        errors.log('W0003', `${clickTarget}Ckick handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
+        errors.log('W0003', `${clickTarget}Click handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
     }
 
     return eventCanceled || !target.getOptions();

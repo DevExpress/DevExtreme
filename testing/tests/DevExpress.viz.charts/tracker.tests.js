@@ -1022,7 +1022,7 @@ QUnit.test('dxpointermove on series, click, pointClick with cancel (DEPRECATED) 
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
     assert.deepEqual(errors.log.lastCall.args, [
         'W0003',
-        'PointCkick handler argument',
+        'PointClick handler argument',
         'event.cancel',
         '22.1',
         'Use the \'cancel\' field instead'
@@ -1421,7 +1421,7 @@ QUnit.test('click on legend with chancel (DEPRECATED) in legendClick handler', f
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
     assert.deepEqual(errors.log.lastCall.args, [
         'W0003',
-        'LegendCkick handler argument',
+        'LegendClick handler argument',
         'event.cancel',
         '22.1',
         'Use the \'cancel\' field instead'
