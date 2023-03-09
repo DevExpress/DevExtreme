@@ -15,6 +15,8 @@ QUnit.testStart(function() {
     addShadowDomStyles($('#qunit-fixture'));
 });
 
+import fx from 'animation/fx';
+import eventsEngine from 'events/core/events_engine';
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
@@ -31,18 +33,16 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
 import 'ui/pivot_grid/ui.pivot_grid';
-import { getRealElementWidth } from 'ui/pivot_grid/ui.pivot_grid.area_item';
-import dataArea from 'ui/pivot_grid/ui.pivot_grid.data_area';
-import pivotGridDataController from 'ui/pivot_grid/ui.pivot_grid.data_controller';
-import headersArea from 'ui/pivot_grid/ui.pivot_grid.headers_area';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
+import { getRealElementWidth } from '__internal/grids/pivot_grid/area_item/module';
+import DataAreaModule from '__internal/grids/pivot_grid/data_area/module';
+import DataControllerModule from '__internal/grids/pivot_grid/data_controller/module';
+import HeadersAreaModule from '__internal/grids/pivot_grid/headers_area/module';
+import pivotGridUtils, { getScrollbarWidth } from '__internal/grids/pivot_grid/widget_utils';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
+
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
-import eventsEngine from 'events/core/events_engine';
-import { getScrollbarWidth } from 'ui/pivot_grid/utils/get_scrollbar_width.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
@@ -4937,10 +4937,10 @@ QUnit.module('Tests with real timer', {}, () => {
 QUnit.module('Tests with stubs', {
     beforeEach: function() {
         const that = this;
-        const HorizontalHeadersArea = headersArea.HorizontalHeadersArea;
-        const VerticalHeadersArea = headersArea.VerticalHeadersArea;
-        const DataArea = dataArea.DataArea;
-        const DataController = pivotGridDataController.DataController;
+        const HorizontalHeadersArea = HeadersAreaModule.HorizontalHeadersArea;
+        const VerticalHeadersArea = HeadersAreaModule.VerticalHeadersArea;
+        const DataArea = DataAreaModule.DataArea;
+        const DataController = DataControllerModule.DataController;
 
         that.horizontalArea = sinon.createStubInstance(HorizontalHeadersArea);
         that.horizontalArea.tableElement.returns($('<div>'));
@@ -4949,7 +4949,7 @@ QUnit.module('Tests with stubs', {
         that.horizontalArea.on.returns(that.horizontalArea);
         that.horizontalArea.off.returns(that.horizontalArea);
 
-        sinon.stub(headersArea, 'HorizontalHeadersArea', function() {
+        sinon.stub(HeadersAreaModule, 'HorizontalHeadersArea', function() {
             return that.horizontalArea;
         });
 
@@ -4962,7 +4962,7 @@ QUnit.module('Tests with stubs', {
         that.verticalArea.on.returns(that.verticalArea);
         that.verticalArea.off.returns(that.verticalArea);
 
-        sinon.stub(headersArea, 'VerticalHeadersArea', function() {
+        sinon.stub(HeadersAreaModule, 'VerticalHeadersArea', function() {
             return that.verticalArea;
         });
 
@@ -4976,7 +4976,7 @@ QUnit.module('Tests with stubs', {
         that.dataArea.on.returns(that.dataArea);
         that.dataArea.off.returns(that.dataArea);
 
-        sinon.stub(dataArea, 'DataArea', function() {
+        sinon.stub(DataAreaModule, 'DataArea', function() {
             return that.dataArea;
         });
 
@@ -5014,7 +5014,7 @@ QUnit.module('Tests with stubs', {
         that.dataController.getColumnsInfo.returns([]);
         that.dataController.getRowsInfo.returns([]);
 
-        sinon.stub(pivotGridDataController, 'DataController', function(options) {
+        sinon.stub(DataControllerModule, 'DataController', function(options) {
             const dataController = that.dataController;
             const dataSource = createMockDataSource(options.dataSource);
 
@@ -5034,10 +5034,10 @@ QUnit.module('Tests with stubs', {
         moduleConfig.beforeEach.apply(this, arguments);
     },
     afterEach: function() {
-        headersArea.HorizontalHeadersArea.restore();
-        headersArea.VerticalHeadersArea.restore();
-        dataArea.DataArea.restore();
-        pivotGridDataController.DataController.restore();
+        HeadersAreaModule.HorizontalHeadersArea.restore();
+        HeadersAreaModule.VerticalHeadersArea.restore();
+        DataAreaModule.DataArea.restore();
+        DataControllerModule.DataController.restore();
     }
 }, () => {
 
@@ -5351,10 +5351,10 @@ QUnit.module('Tests with stubs', {
             rowHeaderLayout: 'tree'
         });
 
-        assert.ok(pivotGridDataController.DataController.calledWithNew);
-        assert.ok(pivotGridDataController.DataController.calledOnce);
+        assert.ok(DataControllerModule.DataController.calledWithNew);
+        assert.ok(DataControllerModule.DataController.calledOnce);
 
-        const dataControllerOptions = pivotGridDataController.DataController.lastCall.args[0];
+        const dataControllerOptions = DataControllerModule.DataController.lastCall.args[0];
 
         assert.deepEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
         assert.deepEqual(dataControllerOptions.texts, texts);
@@ -5404,10 +5404,10 @@ QUnit.module('Tests with stubs', {
             widget.option(optionName, index);
         });
 
-        assert.ok(pivotGridDataController.DataController.calledWithNew);
-        assert.ok(pivotGridDataController.DataController.calledOnce);
+        assert.ok(DataControllerModule.DataController.calledWithNew);
+        assert.ok(DataControllerModule.DataController.calledOnce);
 
-        const dataController = pivotGridDataController.DataController.lastCall.returnValue;
+        const dataController = DataControllerModule.DataController.lastCall.returnValue;
         const dataControllerOptions = dataController.updateViewOptions.lastCall.args[0];
 
         assert.strictEqual(dataController.updateViewOptions.callCount, 8);
@@ -5445,9 +5445,9 @@ function getStubComponent(options) {
 function createHeadersArea(dataSource, isVertical, componentOptions) {
     const component = getStubComponent(componentOptions);
     if(!isVertical) {
-        return new headersArea.HorizontalHeadersArea(component);
+        return new HeadersAreaModule.HorizontalHeadersArea(component);
     } else {
-        return new headersArea.VerticalHeadersArea(component);
+        return new HeadersAreaModule.VerticalHeadersArea(component);
     }
 }
 
@@ -6985,7 +6985,7 @@ QUnit.module('Vertical headers', {
 QUnit.module('Data area', () => {
 
     function createDataArea(componentOptions) {
-        return new dataArea.DataArea(getStubComponent(componentOptions));
+        return new DataAreaModule.DataArea(getStubComponent(componentOptions));
     }
 
     QUnit.test('Render', function(assert) {
