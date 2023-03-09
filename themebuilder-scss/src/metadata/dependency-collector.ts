@@ -85,7 +85,11 @@ export default class DependencyCollector {
         directory: '../js',
         filename: filePath,
         ast: precinct.ast,
+        tsConfig: '../js/__internal/tsconfig.json',
       }))
+        // NOTE: Workaround for the filing-cabinet issue:
+        // https://github.com/dependents/node-filing-cabinet/issues/112
+        .map((path: string) => path.replace(/\.d\.ts$/, '.js'))
         .filter((path: string): boolean => path !== null
             && existsSync(path)
             && !path.includes('node_modules')
