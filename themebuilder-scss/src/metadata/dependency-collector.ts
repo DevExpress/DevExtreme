@@ -87,6 +87,8 @@ export default class DependencyCollector {
         ast: precinct.ast,
         tsConfig: '../js/__internal/tsconfig.json',
       }))
+        // TODO Vinogradov: Add NOTE for this workaround.
+        .map((path: string) => path.replace(/\.d\.ts$/, '.js'))
         .filter((path: string): boolean => path !== null
             && existsSync(path)
             && !path.includes('node_modules')
