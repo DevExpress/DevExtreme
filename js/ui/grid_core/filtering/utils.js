@@ -12,67 +12,29 @@ function normalizeGroupingLoadOptions(group) {
         group = [group];
     }
 
-    return group.map((item, i) => {
-        if(isString(item)) {
-            return {
-                selector: item,
-                isExpanded: i < group.length - 1,
-            };
-        }
-
-        return item;
-    });
+    return group.map((item, i) =>
+        isString(item) ? {
+            selector: item,
+            isExpanded: i < group.length - 1,
+        } : item
+    );
 }
 
-/**
- *
- * @param {import('../columns_controller/types').Lookup} lookup
- */
-export function normalizeLookupDataSource(lookup) {
-    let lookupDataSourceOptions;
-    if(lookup.items) {
-        lookupDataSourceOptions = lookup.items;
-    } else {
-        lookupDataSourceOptions = lookup.dataSource;
-        if(isFunction(lookupDataSourceOptions) && !variableWrapper.isWrapped(lookupDataSourceOptions)) {
-            lookupDataSourceOptions = lookupDataSourceOptions({});
-        }
-    }
+const sliceItems = (items, loadOptions) => {
+    const start = loadOptions.skip ?? 0;
+    const end = loadOptions.take ? start + loadOptions.take : items.length;
+    return items.slice(start, end);
+};
 
-    return normalizeDataSourceOptions(lookupDataSourceOptions);
-}
-
-/**
- *
- * @param {import('../columns_controller/types').LookupColumn} column
- * @param {import('../ui.grid_core.data_source_adapter').DataSourceAdapter} dataSource
- * @param {*} filter
- */
-export function getWrappedLookupDataSource(column, dataSource, filter) {
-    if(!dataSource) {
-        return [];
-    }
-
-    const lookupDataSourceOptions = normalizeLookupDataSource(column.lookup);
-
-    if(column.calculateCellValue !== column.defaultCalculateCellValue) {
-        return lookupDataSourceOptions;
-    }
-
+const createUniqueItemsLoader = (dataSource, column, filter) => {
     const hasGroupPaging = dataSource.remoteOperations().groupPaging;
     const hasLookupOptimization = column.displayField && isString(column.displayField);
-
-    const sliceItems = (items, loadOptions) => {
-        const start = loadOptions.skip ?? 0;
-        const end = loadOptions.take ? start + loadOptions.take : items.length;
-        return items.slice(start, end);
-    };
 
     let cachedUniqueRelevantItems;
     let previousTake;
     let previousSkip;
 
-    const loadUniqueRelevantItems = (loadOptions) => {
+    return (loadOptions) => {
         const group = normalizeGroupingLoadOptions(
             hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
         );
@@ -101,11 +63,49 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
 
         return d;
     };
+};
+
+/**
+ *
+ * @param {import('../columns_controller/types').Lookup} lookup
+ */
+export function normalizeLookupDataSource(lookup) {
+    if(lookup.items) {
+        return normalizeDataSourceOptions(lookup.items);
+    } else if(
+        isFunction(lookup.dataSource)
+        && !variableWrapper.isWrapped(lookup.dataSource)
+    ) {
+        return normalizeDataSourceOptions(lookup.dataSource({}));
+    }
+
+    return normalizeDataSourceOptions(lookup.dataSource);
+}
+
+/**
+ *
+ * @param {import('../columns_controller/types').LookupColumn} column
+ * @param {import('../ui.grid_core.data_source_adapter').DataSourceAdapter} dataSource
+ * @param {*} filter
+ */
+export function getWrappedLookupDataSource(column, dataSource, filter) {
+    if(!dataSource) {
+        return [];
+    }
+
+    const lookupDataSourceOptions = normalizeLookupDataSource(column.lookup);
+
+    if(column.calculateCellValue !== column.defaultCalculateCellValue) {
+        return lookupDataSourceOptions;
+    }
+
+    const loadUniqueRelevantItems = createUniqueItemsLoader(dataSource, column, filter);
 
     const lookupDataSource = {
         ...lookupDataSourceOptions,
         __dataGridSourceFilter: filter,
-        load: (loadOptions) => {
+        key: column.lookup.valueExpr,
+        load(loadOptions) {
             const d = Deferred();
             loadUniqueRelevantItems(loadOptions).done((items) => {
                 if(items.length === 0) {
@@ -135,7 +135,6 @@ export function getWrappedLookupDataSource(column, dataSource, filter) {
             }).fail(d.fail);
             return d;
         },
-        key: column.lookup.valueExpr,
         byKey(key) {
             const d = Deferred();
             this.load({
