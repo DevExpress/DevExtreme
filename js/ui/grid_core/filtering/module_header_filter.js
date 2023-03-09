@@ -2,7 +2,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import modules from '../ui.grid_core.modules';
 import filterUtils from '../../shared/filtering';
 import gridCoreUtils from '../ui.grid_core.utils';
-import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from './header_filter_core';
+import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from './module_header_filter_core';
 import messageLocalization from '../../../localization/message';
 import { name as clickEventName } from '../../../events/click';
 import { compileGetter } from '../../../core/utils/data';

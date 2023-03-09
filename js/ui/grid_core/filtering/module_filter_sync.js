@@ -8,7 +8,7 @@ import {
 import errors from '../../widget/ui.errors';
 import gridCoreUtils from '../ui.grid_core.utils';
 import filterUtils from '../../shared/filtering';
-import { anyOf, noneOf } from './filter_custom_operations';
+import { anyOf, noneOf } from './module_filter_custom_operations';
 
 const FILTER_ROW_OPERATIONS = ['=', '<>', '<', '<=', '>', '>=', 'notcontains', 'contains', 'startswith', 'endswith', 'between'];
 const FILTER_TYPES_INCLUDE = 'include';
