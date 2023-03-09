@@ -3982,6 +3982,45 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Mark2', 'FocusedRowkey');
         assert.equal(this.pageIndex(), 2, 'PageIndex with the \'Mark2\' row');
     });
+    // T1148741
+    QUnit.test('Navigate to next page when focusedRowIndex and customizeColumns have defined', function(assert) {
+        // arrange
+        this.options = {
+            focusedRowEnabled: true,
+            autoNavigateToFocusedRow: true,
+            paging: {
+                pageSize: 2
+            },
+            keyExpr: 'name',
+            focusedRowIndex: 1,
+            customizeColumns: function() { },
+            columns: [
+                'name', { dataField: 'phone', sortOrder: 'asc' }, 'room'
+            ]
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '6666666', room: 2 },
+            { name: 'Dan', phone: '553355', room: 3 },
+            { name: 'Mark1', phone: '777777', room: 4 },
+            { name: 'Mark2', phone: '888888', room: 5 },
+            { name: 'Mark3', phone: '99999999', room: 6 }
+        ];
+
+        this.setupModule();
+
+        this.gridView.render($('#container'));
+
+        // act
+        this.pageIndex(1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Mark1', 'FocusedRowkey');
+        assert.equal(this.pageIndex(), 1, 'PageIndex with the \'Mark1\' row');
+    });
 
     QUnit.testInActiveWindow('Row should not focus on scrolling with the pointer (T861577)', function(assert) {
         if(device.deviceType === 'desktop') {
