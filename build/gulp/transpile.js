@@ -103,8 +103,14 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
-function compileTS() {
-    return ts.createProject(internalTsConfig)(ts.reporter.fullReporter());
+function compileTS(isEsm) {
+    return ts.createProject(
+        internalTsConfig,
+        {
+            module: isEsm ? 'es6' : 'commonJs',
+            target: isEsm ? 'es6' : 'es5'
+        }
+    )(ts.reporter.fullReporter());
 }
 
 function transpileTSAlias(transpileFunc) {
@@ -114,7 +120,7 @@ function transpileTSAlias(transpileFunc) {
         });
 }
 
-function transpile(src, dist, pipes = []) {
+function transpile(src, dist, pipes = [], isEsm = false) {
     const task = () => {
         let result = gulp.src(src);
 
@@ -134,7 +140,7 @@ function transpile(src, dist, pipes = []) {
                 'js/**/*.ts',
                 '!js/renovation/**/*',
                 '!js/**/*.d.ts'
-            ]).pipe(compileTS())
+            ]).pipe(compileTS(isEsm))
                 .js
                 .pipe(transpileTSAlias(transpileTSAliasFunc))
                 .pipe(gulp.dest(dist))
@@ -168,11 +174,15 @@ const transpileRenovation = (watch) => transpile(src, ctx.TRANSPILED_RENOVATION_
     touch()
 ], watch);
 
-const transpileProd = (dist, isEsm, watch) => transpile(src, dist, [
-    removeDebug(),
-    replaceWidgets(false),
-    isEsm ? babelEsm() : babelCjs(),
-], watch);
+const transpileProd = (dist, isEsm) => transpile(
+    src,
+    dist,
+    [
+        removeDebug(),
+        replaceWidgets(false),
+        isEsm ? babelEsm() : babelCjs(),
+    ],
+    isEsm);
 
 const transpileRenovationProd = (watch) => transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch);
 
