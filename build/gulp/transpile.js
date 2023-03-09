@@ -257,6 +257,22 @@ gulp.task('renovated-components-watch', () => {
 
 });
 
+gulp.task('compile-ts-watch', () => {
+    gulp.watch(['js/**/*.ts', '!js/**/*.d.ts'], () => {
+        return gulp
+            .src([
+                'js/**/*.ts',
+                '!js/renovation/**/*',
+                '!js/**/*.d.ts',
+            ])
+            .pipe(compileTS())
+            .js
+            .pipe(gulp.dest(ctx.TRANSPILED_PATH))
+            .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH))
+            .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
+    });
+});
+
 gulp.task('transpile-watch', gulp.series(
     () => {
         const watchTask = watch(src)
