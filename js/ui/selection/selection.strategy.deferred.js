@@ -187,7 +187,7 @@ export default SelectionStrategy.inherit({
         let selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
-        if(selectionFilter && selectionFilter.length && !skipFilter) {
+        if(selectionFilter?.length && !skipFilter) {
 
             const removedIndex = that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
@@ -209,10 +209,6 @@ export default SelectionStrategy.inherit({
 
         if(needAddFilter) {
             selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
-        }
-
-
-        if(needAddFilter) {
             selectionFilter.push(currentFilter);
         }
 
