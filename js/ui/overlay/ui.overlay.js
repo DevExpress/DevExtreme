@@ -228,10 +228,10 @@ const Overlay = Widget.inherit({
     },
 
     _logDeprecatedPreventScrollEventsInfo() {
-        this._logDeprecatedOptionWarning('preventScrollEvents', (() => ({
+        this._logDeprecatedOptionWarning('preventScrollEvents', {
             since: '23.1',
             message: 'If you enable this option, end-users may experience scrolling issues.'
-        }))());
+        });
     },
 
     _init: function() {

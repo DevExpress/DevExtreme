@@ -79,8 +79,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
     });
 
     [true, false].forEach(enableBodyScroll => {
-        QUnit.performanceTest(`showing dxPopup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be shown with minimum count of relayouts`, function(assert) {
-
+        QUnit.performanceTest(`Popup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be shown with minimum count of relayouts`, function(assert) {
             const $additionalElement = $('<div>').height(2000).appendTo($('body'));
 
             try {
@@ -102,7 +101,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             }
         });
 
-        QUnit.performanceTest(`showing dxPopup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be hidden with minimum count of relayouts`, function(assert) {
+        QUnit.performanceTest(`Popup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be hidden with minimum count of relayouts`, function(assert) {
 
             const $additionalElement = $('<div>').height(2000).appendTo($('body'));
 

@@ -37,6 +37,8 @@ const IS_IOS_DEVICE = devices.real().platform === 'ios';
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
+const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
+
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
@@ -2381,13 +2383,13 @@ QUnit.module('rendering', {
 
         const $popupContent = this.instance.$content();
 
-        assert.strictEqual($popupContent.hasClass('dx-popup-content-scrollable'), true, 'scrollable class is attached');
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_SCROLLABLE_CLASS), true, 'scrollable class is attached');
 
         this.instance.option('preventScrollEvents', true);
-        assert.strictEqual($popupContent.hasClass('dx-popup-content-scrollable'), false, 'scrollable class is detached');
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_SCROLLABLE_CLASS), false, 'scrollable class is detached');
 
         this.instance.option('preventScrollEvents', false);
-        assert.strictEqual($popupContent.hasClass('dx-popup-content-scrollable'), true, 'scrollable class is attached');
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_SCROLLABLE_CLASS), true, 'scrollable class is attached');
     });
 });
 

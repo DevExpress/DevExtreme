@@ -1,9 +1,19 @@
-import { getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { isDefined } from '../../core/utils/type';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
+import { noop } from '../../core/utils/common';
+
+const overflowManagerMock = {
+    setOverflow: noop,
+    restoreOverflow: noop,
+};
 
 export const createBodyOverflowManager = () => {
+    if(!hasWindow()) {
+        return overflowManagerMock;
+    }
+
     const window = getWindow();
     const documentElement = domAdapter.getDocument().documentElement;
     const body = domAdapter.getBody();

@@ -272,9 +272,7 @@ const Popup = Overlay.inherit({
     },
 
     _createBodyOverflowManager: function() {
-        if(hasWindow()) {
-            this._bodyOverflowManager = createBodyOverflowManager();
-        }
+        this._bodyOverflowManager = createBodyOverflowManager();
     },
 
     _toggleFullScreenClass: function(value) {
