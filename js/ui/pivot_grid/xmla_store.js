@@ -1,3 +1,2 @@
-import { XmlaStore } from './xmla_store/xmla_store';
-
+import { XmlaStore } from '../../__internal/grids/pivot_grid/xmla_store/module';
 export default XmlaStore;
