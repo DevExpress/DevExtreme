@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "../",
     "outDir": "./build",
+    "allowJs": true,
     "noEmitOnError": true,
     "resolveJsonModule": false,
     "sourceMap": false,

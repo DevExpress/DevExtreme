@@ -85,6 +85,7 @@ export default class DependencyCollector {
         directory: '../js',
         filename: filePath,
         ast: precinct.ast,
+        tsConfig: '../js/__internal/tsconfig.json',
       }))
         .filter((path: string): boolean => path !== null
             && existsSync(path)
