@@ -17,7 +17,9 @@
     "isolatedModules": true,
     // -- ts config
     "alwaysStrict": true,
+    // NOTE: gulp transpile task overrides it
     "module": "commonJs",
+    // NOTE: gulp transpile task overrides it
     "target": "es5",
     "moduleResolution": "node",
     "noImplicitReturns": true,
