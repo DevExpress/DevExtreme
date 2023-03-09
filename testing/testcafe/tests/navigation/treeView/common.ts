@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -70,5 +71,33 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
         },
       });
     });
+  });
+});
+
+[true, false].forEach((rtlEnabled) => {
+  ['normal', 'none'].forEach((showCheckBoxesMode) => {
+    test(`TreeView with custom expander icons,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      const screenshotName = `Treeview with custom icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
+
+      await t.click(Selector('.dx-treeview-item').nth(1));
+
+      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', shouldTestInCompact: true });
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => createWidget('dxTreeView', {
+      items: employees,
+      width: 300,
+      showCheckBoxesMode,
+      rtlEnabled,
+      expandIcon: 'add',
+      collapseIcon: 'minus',
+      itemTemplate(item) {
+        return `<div>${item.fullName} (${item.position})</div>`;
+      },
+    }));
   });
 });

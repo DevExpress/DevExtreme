@@ -12,20 +12,29 @@ export interface EventType { }
  */
 export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface InitializedEventInfo<TComponent> {
     readonly component?: TComponent;
     readonly element?: DxElement;
 }
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface EventInfo<TComponent> {
     readonly component: TComponent;
     readonly element: DxElement;
     readonly model?: any;
 }
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly component: TComponent;
     readonly element: DxElement;
@@ -33,7 +42,10 @@ export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly event?: DxEvent<TNativeEvent>;
 }
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;
@@ -47,7 +59,10 @@ export interface ItemInfo<TItemData = any> {
     readonly itemIndex: number;
 }
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface Cancelable {
     cancel?: boolean;
 }

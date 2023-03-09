@@ -285,7 +285,7 @@ class RadioGroup extends Editor {
             keyExpr: this._getCollectionKeyExpr(),
             noDataText: '',
             scrollingEnabled: false,
-            selectionByClick: false,
+            selectByClick: false,
             selectionMode: 'single',
             selectedItemKeys: this._getSelectedItemKeys(),
             tabIndex

@@ -10,6 +10,7 @@ QUnit.testStart(() => {
 
 import './jspdfParts/jspdf.dataGrid.customDrawCell.tests.js';
 import './jspdfParts/jspdf.dataGrid.splitting.tests.js';
+import './jspdfParts/jspdf.dataGrid.splittingMultipageRow.tests.js';
 import './jspdfParts/jspdf.dataGrid.measureUnits.tests.js';
 import './jspdfParts/jspdf.dataGrid.columnDataTypes.tests.js';
 import './jspdfParts/jspdf.dataGrid.columnDataFormats.tests.js';

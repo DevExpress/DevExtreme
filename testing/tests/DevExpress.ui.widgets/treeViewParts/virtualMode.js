@@ -199,6 +199,20 @@ QUnit.test('Remove toggle icon after expand childless item', function(assert) {
     assert.equal($icons.length, 2);
 });
 
+QUnit.test('No custom expander icons should be visible after expand childless item', function(assert) {
+    const treeView = new TreeView(this.$element, {
+        dataSource: $.extend(true, [], data2),
+        dataStructure: 'plain',
+        expandIcon: 'add',
+        collapseIcon: 'minus',
+        virtualModeEnabled: true
+    });
+
+    treeView.expandItem(16);
+
+    assert.notOk($(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(2).is(':visible'));
+});
+
 QUnit.test('Remove loadindicator after expand childless item', function(assert) {
     new TreeView(this.$element, {
         dataSource: makeSlowDataSource($.extend(true, [], data2)),

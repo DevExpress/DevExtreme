@@ -187,7 +187,10 @@ export type DataGridPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton'
 
 type GroupKey = any[];
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type GroupData<TRowData> = {
   key: any;
   items: Array<TRowData> | Array<GroupData<TRowData>> | null;

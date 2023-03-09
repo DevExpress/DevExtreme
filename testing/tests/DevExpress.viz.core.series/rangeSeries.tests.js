@@ -707,7 +707,8 @@ const environmentWithSinonStubPoint = {
             'fill': 'n color',
             'hatching': undefined,
             'opacity': 'n opacity',
-            'stroke': 'none'
+            'stroke': 'none',
+            filter: null
         });
 
         assert.deepEqual(series._bordersGroup._stored_settings, {
@@ -736,7 +737,8 @@ const environmentWithSinonStubPoint = {
             'fill': 'h color',
             'opacity': 'h opacity',
             'stroke': 'none',
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            filter: null
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
@@ -764,7 +766,8 @@ const environmentWithSinonStubPoint = {
             'fill': 'n color',
             'opacity': 'n opacity',
             'stroke': 'none',
-            hatching: undefined
+            hatching: undefined,
+            filter: null
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
@@ -791,7 +794,8 @@ const environmentWithSinonStubPoint = {
             'fill': 's color',
             'opacity': 's opacity',
             'stroke': 'none',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: null
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
@@ -818,7 +822,8 @@ const environmentWithSinonStubPoint = {
             'fill': 's color',
             'opacity': 's opacity',
             'stroke': 'none',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: null
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {

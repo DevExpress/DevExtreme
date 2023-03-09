@@ -316,6 +316,18 @@ export interface dxTreeViewOptions<TKey = any>
     showCheckBoxesMode?: TreeViewCheckBoxMode;
     /**
      * @docid
+     * @default null
+     * @public
+     */
+    collapseIcon?: string;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    expandIcon?: string;
+    /**
+     * @docid
      * @default false
      * @public
      */

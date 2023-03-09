@@ -60,9 +60,7 @@ const resizingControllerMembers = {
             this._refreshSizesHandler = (e) => {
                 dataController.changed.remove(this._refreshSizesHandler);
 
-                this._rowsView.waitAsyncTemplates(e).done(() => {
-                    this._refreshSizes(e);
-                });
+                this._refreshSizes(e);
             };
             // TODO remove resubscribing
             dataController.changed.add(() => {
@@ -88,10 +86,15 @@ const resizingControllerMembers = {
             }
             if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                 !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
-                deferUpdate(() => deferRender(() => deferUpdate(() => {
-                    that._setScrollerSpacing();
-                    that._rowsView.resize();
-                })));
+                resizeDeferred = new Deferred();
+
+                this._waitAsyncTemplates().done(() => {
+                    deferUpdate(() => deferRender(() => deferUpdate(() => {
+                        that._setScrollerSpacing();
+                        that._rowsView.resize();
+                        resizeDeferred.resolve();
+                    })));
+                }).fail(resizeDeferred.reject);
             } else {
                 resizeDeferred = that.resize();
             }
@@ -179,21 +182,17 @@ const resizingControllerMembers = {
         this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);
         this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
-        this._toggleContentMinHeight(isBestFit); // T1047239
-
         if(this._needStretch()) {
             $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
         }
     },
 
-    _toggleContentMinHeight: function(isBestFit) {
-        if(this.option('wordWrapEnabled')) {
-            const scrollable = this._rowsView.getScrollable();
-            const $contentElement = this._rowsView._findContentElement();
+    _toggleContentMinHeight: function(value) {
+        const scrollable = this._rowsView.getScrollable();
+        const $contentElement = this._rowsView._findContentElement();
 
-            if(scrollable?.option('useNative') === false) {
-                $contentElement.css({ minHeight: isBestFit ? gridCoreUtils.getContentHeightLimit(browser) : '' });
-            }
+        if(scrollable?.option('useNative') === false) {
+            $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : '' });
         }
     },
 
@@ -201,6 +200,7 @@ const resizingControllerMembers = {
         const columnsController = this._columnsController;
         const visibleColumns = columnsController.getVisibleColumns();
         const columnAutoWidth = this.option('columnAutoWidth');
+        const wordWrapEnabled = this.option('wordWrapEnabled');
         let needBestFit = this._needBestFit();
         let hasMinWidth = false;
         let resetBestFitMode;
@@ -250,7 +250,8 @@ const resizingControllerMembers = {
             resetBestFitMode = true;
         }
 
-        // @ts-expect-error
+        this._toggleContentMinHeight(wordWrapEnabled); // T1047239
+
         if($element && $element.get(0) && this._maxWidth) {
             delete this._maxWidth;
             $element[0].style.maxWidth = '';
@@ -302,6 +303,10 @@ const resizingControllerMembers = {
             deferRender(() => {
                 if(needBestFit || isColumnWidthsCorrected) {
                     this._setVisibleWidths(visibleColumns, resultWidths);
+                }
+
+                if(wordWrapEnabled) {
+                    this._toggleContentMinHeight(false);
                 }
             });
         });
@@ -512,8 +517,28 @@ const resizingControllerMembers = {
         return ['resize', 'updateDimensions'];
     },
 
+    _waitAsyncTemplates: function() {
+        return when(
+            this._columnHeadersView?.waitAsyncTemplates(),
+            this._rowsView?.waitAsyncTemplates(),
+            this._footerView?.waitAsyncTemplates()
+        );
+    },
+
     resize: function() {
-        return !this.component._requireResize && this.updateDimensions();
+        if(this.component._requireResize) {
+            return;
+        }
+
+        const d = new Deferred();
+
+        this._waitAsyncTemplates().done(() => {
+            when(this.updateDimensions())
+                .done(d.resolve)
+                .fail(d.reject);
+        }).fail(d.reject);
+
+        return d.promise();
     },
 
     updateDimensions: function(checkSize) {

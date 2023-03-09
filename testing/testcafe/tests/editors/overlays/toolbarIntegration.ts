@@ -70,7 +70,7 @@ fixture.disablePageReloads`Popup_toolbar`
           location: 'center',
           locateInMenu: 'never',
           template() {
-            return $("<div><b>Popup's</b> title</div>");
+            return $('<div><b>Popup\'s</b> title</div>');
           },
           toolbar,
         }, {

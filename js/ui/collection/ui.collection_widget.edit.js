@@ -49,13 +49,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             */
             selectionRequired: false,
 
-            /**
-            * @name CollectionWidgetOptions.selectionByClick
-            * @type boolean
-            * @default true
-            * @hidden
-            */
-            selectionByClick: true,
+            selectByClick: true,
 
             selectedItems: [],
 
@@ -467,7 +461,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     _itemSelectHandler: function(e) {
         let itemSelectPromise;
 
-        if(!this.option('selectionByClick')) {
+        if(!this.option('selectByClick')) {
             return;
         }
 
@@ -597,7 +591,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             case 'selectionRequired':
                 this._normalizeSelectedItems();
                 break;
-            case 'selectionByClick':
+            case 'selectByClick':
             case 'onSelectionChanged':
             case 'onItemDeleting':
             case 'onItemDeleted':

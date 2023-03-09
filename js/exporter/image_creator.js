@@ -419,31 +419,46 @@ function drawElement(element, context, parentOptions, shared) {
 
     if(!isText) {
         applyFilter(context, options, shared);
-        fillElement(context, options, shared);
+        if(!isImage) {
+            promise = fillElement(context, options, shared);
+        }
         strokeElement(context, options);
     }
 
-    applyGradient(context, options, shared, element);
+    applyGradient(context, options, shared, element, 'linear');
+    applyGradient(context, options, shared, element, 'radial');
 
     context.restore();
 
     return promise;
 }
 
-function applyGradient(context, options, { gradients }, element) {
-    if(gradients.length === 0) {
+function applyGradient(context, options, { linearGradients, radialGradients }, element, type) {
+    const gradients = type === 'linear' ? linearGradients : radialGradients;
+    if(Object.keys(gradients).length === 0) {
         return;
     }
     const id = parseUrl(options.fill);
     if(id && gradients[id]) {
         const box = element.getBBox();
-        const gradient = context.createLinearGradient(box.x, 0, box.x + box.width, 0);
+        const horizontalCenter = box.x + box.width / 2;
+        const verticalCenter = box.y + box.height / 2;
+        const maxRadius = Math.max(box.height / 2, box.width / 2);
+        const gradient = type === 'linear' ?
+            context.createLinearGradient(box.x, 0, box.x + box.width, 0) :
+            context.createRadialGradient(horizontalCenter, verticalCenter, 0, horizontalCenter, verticalCenter, maxRadius);
 
-        gradients[id].forEach(opt => {
+        gradients[id].colors.forEach(opt => {
             const offset = parseInt(opt.offset.replace(/%/, ''));
             gradient.addColorStop(offset / 100, opt.stopColor);
         });
 
+        if(type === 'linear') {
+            const angle = gradients[id].transform?.replace(/\D/g, '') * Math.PI / 180 ?? 0;
+            context.translate(horizontalCenter, verticalCenter);
+            context.rotate(angle);
+            context.translate(-horizontalCenter, -verticalCenter);
+        }
         context.globalAlpha = options.opacity;
         context.fillStyle = gradient;
         context.fill();
@@ -510,10 +525,10 @@ function hex2rgba(hexColor, alpha) {
 }
 
 function createGradient(element) {
-    const options = [];
+    const options = { colors: [], transform: element.attributes.gradientTransform?.textContent };
 
     _each(element.childNodes, (_, { attributes }) => {
-        options.push({
+        options.colors.push({
             offset: attributes.offset.value,
             stopColor: attributes['stop-color'].value
         });
@@ -590,14 +605,14 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                 const onDone = () => {
                     context.restore();
                 };
-                const d = drawCanvasElements(element.childNodes, context, options, shared);
+                const promise = drawCanvasElements(element.childNodes, context, options, shared);
 
-                if(isPromise(d)) {
-                    d.then(onDone);
+                if(isPromise(promise)) {
+                    promise.then(onDone);
                 } else {
                     onDone();
                 }
-                return d;
+                return promise;
             }
             case 'defs':
                 return drawCanvasElements(element.childNodes, context, {}, shared);
@@ -611,7 +626,10 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                 shared.filters[element.id] = createFilter(element);
                 break;
             case 'lineargradient':
-                shared.gradients[element.attributes.id.textContent] = createGradient(element);
+                shared.linearGradients[element.attributes.id.textContent] = createGradient(element);
+                break;
+            case 'radialgradient':
+                shared.radialGradients[element.attributes.id.textContent] = createGradient(element);
                 break;
             default:
                 return drawElement(element, context, parentOptions, shared);
@@ -644,33 +662,50 @@ function strokeElement(context, options, isText) {
     }
 }
 
-function getPattern(context, pattern, shared) {
+function getPattern(context, pattern, shared, parentOptions) {
     const options = getElementOptions(pattern, shared.rootAppended);
     const patternCanvas = imageCreator._createCanvas(options.width, options.height, 0);
     const patternContext = patternCanvas.getContext('2d');
 
-    drawCanvasElements(pattern.childNodes, patternContext, options, shared);
+    const promise = drawCanvasElements(pattern.childNodes, patternContext, options, shared);
+    const onDone = () => {
+        context.fillStyle = context.createPattern(patternCanvas, 'repeat');
+        context.globalAlpha = parentOptions.fillOpacity;
+        context.fill();
+        context.globalAlpha = 1;
+    };
 
-    return context.createPattern(patternCanvas, 'repeat');
+    if(isPromise(promise)) {
+        promise.then(onDone);
+    } else {
+        onDone();
+    }
+
+    return promise;
 }
 
 function fillElement(context, options, shared) {
     const fill = options.fill;
+    let promise;
 
     if(fill && fill !== 'none') {
         if(fill.search(/url/) === -1) {
             context.fillStyle = fill;
+
+            context.globalAlpha = options.fillOpacity;
+            context.fill();
+            context.globalAlpha = 1;
         } else {
             const pattern = shared.patterns[parseUrl(fill)];
             if(!pattern) {
                 return;
             }
-            context.fillStyle = getPattern(context, pattern, shared);
+
+            promise = getPattern(context, pattern, shared, options);
         }
-        context.globalAlpha = options.fillOpacity;
-        context.fill();
-        context.globalAlpha = 1;
     }
+
+    return promise;
 }
 
 parseAttributes = function(attributes) {
@@ -705,7 +740,8 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
         clipPaths: {},
         patterns: {},
         filters: {},
-        gradients: {},
+        linearGradients: {},
+        radialGradients: {},
         rootAppended
     });
 }

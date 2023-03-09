@@ -2,6 +2,7 @@ import { setWidth, getWidth, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import 'generic_light.css!';
 import Pager from 'ui/pager';
@@ -12,6 +13,7 @@ const PAGER_LIGHT_MODE_WIDTH = 200;
 QUnit.testStart(function() {
     const markup = '<div id="container"></div>';
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 function getText(element) {

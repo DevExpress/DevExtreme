@@ -1199,14 +1199,6 @@ QUnit.test('Draw title (text is not specified)', function(assert) {
 QUnit.module('Panes backgroundColor', commons.environment);
 
 QUnit.test('CommonPaneSetting. Background color', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1236,14 +1228,6 @@ QUnit.test('CommonPaneSetting. Background color', function(assert) {
 });
 
 QUnit.test('CommonPaneSetting. Background color. Two panes. second pane has background', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1281,14 +1265,6 @@ QUnit.test('CommonPaneSetting. Background color. Two panes. second pane has back
 });
 
 QUnit.test('CommonPaneSetting. Background color. Two panes. Both panes has background', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1315,14 +1291,6 @@ QUnit.test('CommonPaneSetting. Background color. Two panes. Both panes has backg
 });
 
 QUnit.test('CommonPaneSetting. Background color. Two panes. First pane has background is none', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1346,6 +1314,32 @@ QUnit.test('CommonPaneSetting. Background color. Two panes. First pane has backg
     assert.equal(chart.panesBackground.length, 2);
     assert.equal(chart.panesBackground[0], null);
     assert.equal(chart.panesBackground[1].attr.firstCall.args[0].fill, 'red');
+});
+
+QUnit.test('CommonPaneSetting. Two panes, color set as object with gradients', function(assert) {
+    const stubSeries = new MockSeries();
+    chartMocks.seriesMockData.series.push(stubSeries);
+    const chart = this.createChart({
+        size: {
+            width: 800,
+            height: 800
+        },
+        margin: {
+            left: 60,
+            right: 50,
+            top: 20,
+            bottom: 80
+        },
+        commonPaneSettings: {
+            backgroundColor: { fillId: 'id_gradient' }
+        },
+        panes: [{ name: 'pane1', backgroundColor: { fillId: 'id_gradient1' } }, { name: 'pane2' }]
+    });
+
+    assert.ok(chart.panesBackground);
+    assert.equal(chart.panesBackground.length, 2);
+    assert.equal(chart.panesBackground[0].attr.firstCall.args[0].fill, 'id_gradient1');
+    assert.equal(chart.panesBackground[1].attr.firstCall.args[0].fill, 'id_gradient');
 });
 
 QUnit.module('Panes border preparations', $.extend({}, commons.environment, {

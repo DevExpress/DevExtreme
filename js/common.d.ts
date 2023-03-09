@@ -734,7 +734,6 @@ export type ToolbarItemLocation = 'after' | 'before' | 'center';
 export type TooltipShowMode = 'always' | 'onHover';
 
 /**
- * @docid
  * @public
  * @namespace DevExpress.common
  */
