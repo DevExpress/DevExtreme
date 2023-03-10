@@ -4,7 +4,6 @@ const window = getWindow();
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { noop } from '../../core/utils/common';
 import { isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import pointerEvents from '../../events/pointer';
@@ -85,13 +84,10 @@ const Toast = Overlay.inherit({
             * @hidden
             */
 
-
             height: 'auto',
-
             hideTopOverlayHandler: null,
-
+            preventScrollEvents: false,
             closeOnSwipe: true,
-
             closeOnClick: false
         });
     },
@@ -209,8 +205,6 @@ const Toast = Overlay.inherit({
         this._toggleCloseEvents('Swipe');
         this._toggleCloseEvents('Click');
     },
-
-    _renderScrollTerminator: noop,
 
     _toggleCloseEvents: function(event) {
         const dxEvent = 'dx' + event.toLowerCase();

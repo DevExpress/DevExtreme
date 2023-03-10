@@ -32,6 +32,7 @@ import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
 import { PopupPositionController } from './popup_position_controller';
+import { createBodyOverflowManager } from './popup_overflow_manager';
 
 const window = getWindow();
 
@@ -43,6 +44,7 @@ const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
 const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
@@ -119,36 +121,21 @@ const Popup = Overlay.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             fullScreen: false,
-
             title: '',
-
             showTitle: true,
-
-
             titleTemplate: 'title',
-
             onTitleRendered: null,
-
             dragOutsideBoundary: false,
-
             dragEnabled: false,
-
             dragAndResizeArea: undefined,
-
+            enableBodyScroll: true,
             outsideDragFactor: 0,
-
             onResizeStart: null,
-
             onResize: null,
-
             onResizeEnd: null,
-
             resizeEnabled: false,
-
             toolbarItems: [],
-
             showCloseButton: false,
-
             bottomTemplate: 'bottom',
             useDefaultToolbarButtons: false,
             useFlatToolbarButtons: false,
@@ -264,6 +251,8 @@ const Popup = Overlay.inherit({
             : POPUP_WRAPPER_CLASS;
 
         this.callBase();
+
+        this._createBodyOverflowManager();
         this._updateResizeCallbackSkipCondition();
 
         this.$element().addClass(POPUP_CLASS);
@@ -271,6 +260,8 @@ const Popup = Overlay.inherit({
         this._$popupContent = this._$content
             .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
             .children().eq(0);
+
+        this._toggleContentScrollClass();
     },
 
     _render: function() {
@@ -278,6 +269,10 @@ const Popup = Overlay.inherit({
 
         this._toggleFullScreenClass(isFullscreen);
         this.callBase();
+    },
+
+    _createBodyOverflowManager: function() {
+        this._bodyOverflowManager = createBodyOverflowManager();
     },
 
     _toggleFullScreenClass: function(value) {
@@ -608,6 +603,12 @@ const Popup = Overlay.inherit({
         }
     },
 
+    _toggleContentScrollClass() {
+        const isNativeScrollingEnabled = !this.option('preventScrollEvents');
+
+        this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
+    },
+
     _getPositionControllerConfig() {
         const {
             fullScreen,
@@ -877,8 +878,36 @@ const Popup = Overlay.inherit({
         this._observeContentResize(false);
     },
 
+    _dispose: function() {
+        this.callBase();
+
+        this._toggleBodyScroll(true);
+    },
+
     _renderFullscreenWidthClass: function() {
         this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, getOuterWidth(this.$overlayContent()) === getWidth(window));
+    },
+
+    _toggleSafariScrolling() {
+        if(!this.option('enableBodyScroll')) {
+            return;
+        }
+
+        this.callBase();
+    },
+
+    _toggleBodyScroll: function(enabled) {
+        if(!this._bodyOverflowManager) {
+            return;
+        }
+
+        const { setOverflow, restoreOverflow } = this._bodyOverflowManager;
+
+        if(enabled) {
+            restoreOverflow();
+        } else {
+            setOverflow();
+        }
     },
 
     refreshPosition: function() {
@@ -886,9 +915,9 @@ const Popup = Overlay.inherit({
     },
 
     _optionChanged: function(args) {
-        const value = args.value;
+        const { value, name } = args;
 
-        switch(args.name) {
+        switch(name) {
             case 'disabled':
                 this.callBase(args);
                 this._renderTitle();
@@ -896,6 +925,9 @@ const Popup = Overlay.inherit({
                 break;
             case 'animation':
                 this._updateResizeCallbackSkipCondition();
+                break;
+            case 'enableBodyScroll':
+                this._toggleBodyScroll(value);
                 break;
             case 'showTitle':
             case 'title':
@@ -918,10 +950,10 @@ const Popup = Overlay.inherit({
             case 'width':
             case 'height':
                 this.callBase(args);
-                this._resizable?.option(args.name, args.value);
+                this._resizable?.option(name, value);
                 break;
             case 'onTitleRendered':
-                this._createTitleRenderAction(args.value);
+                this._createTitleRenderAction(value);
                 break;
             case 'toolbarItems':
             case 'useDefaultToolbarButtons':
@@ -967,9 +999,9 @@ const Popup = Overlay.inherit({
                 triggerResizeEvent(this.$overlayContent());
                 break;
             case 'fullScreen':
-                this._positionController.fullScreen = args.value;
+                this._positionController.fullScreen = value;
 
-                this._toggleFullScreenClass(args.value);
+                this._toggleFullScreenClass(value);
                 this._toggleSafariScrolling();
 
                 this._renderGeometry();
@@ -977,6 +1009,11 @@ const Popup = Overlay.inherit({
                 break;
             case 'showCloseButton':
                 this._renderTitle();
+                break;
+            case 'preventScrollEvents':
+                this.callBase(args);
+
+                this._toggleContentScrollClass();
                 break;
             default:
                 this.callBase(args);

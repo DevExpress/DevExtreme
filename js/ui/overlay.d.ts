@@ -55,7 +55,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default false
      * @public
      */
-     copyRootClassesToWrapper?: boolean;
+    copyRootClassesToWrapper?: boolean;
     /**
      * @docid
      * @default true

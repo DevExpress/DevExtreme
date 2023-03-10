@@ -126,7 +126,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @default false
      * @public
      */
-     dragOutsideBoundary?: boolean;
+    dragOutsideBoundary?: boolean;
     /**
      * @docid
      * @default true &for(desktop)
@@ -189,6 +189,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @public
      */
     position?: PositionAlignment | PositionConfig | Function;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    enableBodyScroll?: boolean;
     /**
      * @docid
      * @default false

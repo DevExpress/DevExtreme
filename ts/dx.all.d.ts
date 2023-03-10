@@ -19143,6 +19143,10 @@ declare module DevExpress.ui {
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
     /**
+     * [descr:dxPopupOptions.enableBodyScroll]
+     */
+    enableBodyScroll?: boolean;
+    /**
      * [descr:dxPopupOptions.resizeEnabled]
      */
     resizeEnabled?: boolean;
