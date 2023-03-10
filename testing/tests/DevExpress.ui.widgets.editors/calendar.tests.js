@@ -2178,6 +2178,7 @@ QUnit.module('Options', {
                 selectionMode: 'range',
                 views: 2,
             });
+            this.viewWidth = this.calendar._viewWidth();
         }
     }, () => {
         QUnit.test('additionalView should be moved to the right by viewWidth + views gap', function(assert) {
