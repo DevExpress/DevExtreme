@@ -81,3 +81,17 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
     selectionMode,
   }));
 });
+
+test('Calendar with multiview rendered correct', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Calendar with multiview.png', { element: '#container', shouldTestInCompact: true });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCalendar', {
+  values: [new Date(2023, 0, 5), new Date(2023, 1, 14)],
+  selectionMode: 'range',
+  views: 2,
+}));

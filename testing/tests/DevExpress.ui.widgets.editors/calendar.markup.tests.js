@@ -16,6 +16,7 @@ const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
 const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
+const VIEWS_GAP = 32;
 
 const toSelector = function(className) {
     return '.' + className;
@@ -44,11 +45,59 @@ QUnit.module('Calendar markup', {
         assert.equal(this.$element.find(toSelector(CALENDAR_NAVIGATOR_CLASS)).length, 1, 'navigator is rendered');
     });
 
-    QUnit.test('views are rendered', function(assert) {
+    [1, 2].forEach((views) => {
+        QUnit.test(`rendered views amount is correct when views option equals ${views}`, function(assert) {
+            this.calendar.option('views', views);
+            if(windowUtils.hasWindow()) {
+                const hiddenViews = 2;
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, views + hiddenViews, 'all views are rendered');
+            } else {
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, views, 'only one view is rendered');
+            }
+        });
+    });
+
+    QUnit.module('multiview', {
+        beforeEach: function() {
+            this.calendar.option('views', 2);
+            this.viewWidth = this.calendar._viewWidth();
+        }
+    }, () => {
+        QUnit.test('calendar should have inline width equals to two views width plus views gap', function(assert) {
+            const elementWidth = this.$element[0].style.width;
+
+            assert.strictEqual(elementWidth, `${this.viewWidth * 2 + VIEWS_GAP}px`);
+        });
+
+        QUnit.test('calendar should not have inline width after multiview runtime disable', function(assert) {
+            this.calendar.option('views', 1);
+
+            const elementWidth = this.$element[0].style.width;
+
+            assert.strictEqual(elementWidth, '');
+        });
+
+        QUnit.test('additionalView should be moved to the right by viewWidth + views gap', function(assert) {
+            const transform = this.calendar._additionalView.$element().css('transform');
+            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
+
+            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
+        });
+
         if(windowUtils.hasWindow()) {
-            assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 3, 'all views are rendered');
-        } else {
-            assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 1, 'only one view is rendered');
+            QUnit.test('beforeView should be moved to the left by viewWidth + views gap', function(assert) {
+                const transform = this.calendar._beforeView.$element().css('transform');
+                const translateX = -transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
+
+                assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
+            });
+
+            QUnit.test('afterView should be moved to the right by 2 * (viewWidth + views gap)', function(assert) {
+                const transform = this.calendar._afterView.$element().css('transform');
+                const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
+
+                assert.strictEqual(translateX, 2 * (this.viewWidth + VIEWS_GAP));
+            });
         }
     });
 
@@ -136,6 +185,12 @@ QUnit.module('Navigator', {
     QUnit.test('Calendar must display the current month and year', function(assert) {
         const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
         assert.equal(navigatorCaption.text(), 'June 2015');
+    });
+
+    QUnit.test('Calendar with two views should display 2 months', function(assert) {
+        this.calendar.option('views', 2);
+        const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+        assert.equal(navigatorCaption.text(), 'June 2015 - July 2015');
     });
 });
 

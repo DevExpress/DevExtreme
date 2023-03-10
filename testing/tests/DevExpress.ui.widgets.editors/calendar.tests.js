@@ -65,6 +65,9 @@ const getBeforeViewInstance = (calendar) => {
 const getCurrentViewInstance = (calendar) => {
     return calendar._view;
 };
+const getAdditionalViewInstance = (calendar) => {
+    return calendar._additionalView;
+};
 const getAfterViewInstance = (calendar) => {
     return calendar._afterView;
 };
@@ -2164,6 +2167,50 @@ QUnit.module('Options', {
 
                 assert.ok(selectedRange.length < 240);
             });
+        });
+    });
+
+    QUnit.module('Views', {
+        beforeEach: function() {
+            this.reinit({
+                values: [new Date('01/15/2023'), new Date('02/05/2023')],
+                selectionMode: 'range',
+                views: 2,
+            });
+        }
+    }, () => {
+        QUnit.test('Click on date in additinal view should not trigger views movement', function(assert) {
+            let $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+            $cell.trigger('dxclick');
+
+            $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+            assert.strictEqual($cell.length, 1);
+        });
+
+        QUnit.test('Click on next month date in additinal view should trigger views movement', function(assert) {
+            let $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/03/03"]'));
+
+            $cell.trigger('dxclick');
+
+            $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+            assert.strictEqual($cell.length, 0);
+        });
+
+        QUnit.test('contouredDate should be moved to additional view after keyboard moving from the last date on main view', function(assert) {
+            const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/31"]'));
+            const keyboard = keyboardMock(this.$element);
+
+            $cell.trigger('dxclick');
+            keyboard.press('right');
+
+            const viewContouredDate = getCurrentViewInstance(this.calendar).option('contouredDate');
+            const additionalViewContouredDate = getAdditionalViewInstance(this.calendar).option('contouredDate');
+
+            assert.strictEqual(viewContouredDate, null);
+            assert.deepEqual(additionalViewContouredDate, new Date('2023/02/01'));
         });
     });
 });
