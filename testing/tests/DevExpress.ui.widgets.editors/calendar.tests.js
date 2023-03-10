@@ -2174,6 +2174,7 @@ QUnit.module('Options', {
     QUnit.module('Views', {
         beforeEach: function() {
             this.reinit({
+                focusStateEnabled: true,
                 values: [new Date('01/15/2023'), new Date('02/05/2023')],
                 selectionMode: 'range',
                 views: 2,
