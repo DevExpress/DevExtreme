@@ -5996,8 +5996,17 @@ declare module DevExpress.events {
    * [descr:EventInfo]
    */
   export interface EventInfo<TComponent> {
+    /**
+     * [descr:EventInfo.component]
+     */
     readonly component: TComponent;
+    /**
+     * [descr:EventInfo.element]
+     */
     readonly element: DevExpress.core.DxElement;
+    /**
+     * [descr:EventInfo.model]
+     */
     readonly model?: any;
   }
   /**
@@ -6082,9 +6091,21 @@ declare module DevExpress.events {
    * [descr:NativeEventInfo]
    */
   export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
+    /**
+     * [descr:NativeEventInfo.component]
+     */
     readonly component: TComponent;
+    /**
+     * [descr:NativeEventInfo.element]
+     */
     readonly element: DevExpress.core.DxElement;
+    /**
+     * [descr:NativeEventInfo.model]
+     */
     readonly model?: any;
+    /**
+     * [descr:NativeEventInfo.event]
+     */
     readonly event?: DxEvent<TNativeEvent>;
   }
   /**
