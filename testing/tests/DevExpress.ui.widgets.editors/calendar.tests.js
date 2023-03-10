@@ -42,6 +42,7 @@ const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
 const VIEW_ANIMATION_DURATION = 350;
+const VIEWS_GAP = 32;
 
 const ACTIVE_STATE_CLASS = 'dx-state-active';
 
@@ -2179,6 +2180,27 @@ QUnit.module('Options', {
             });
         }
     }, () => {
+        QUnit.test('additionalView should be moved to the right by viewWidth + views gap', function(assert) {
+            const transform = this.calendar._additionalView.$element().css('transform');
+            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
+
+            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
+        });
+
+        QUnit.test('beforeView should be moved to the left by viewWidth + views gap', function(assert) {
+            const transform = this.calendar._beforeView.$element().css('transform');
+            const translateX = -transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
+
+            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
+        });
+
+        QUnit.test('afterView should be moved to the right by 2 * (viewWidth + views gap)', function(assert) {
+            const transform = this.calendar._afterView.$element().css('transform');
+            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
+
+            assert.strictEqual(translateX, 2 * (this.viewWidth + VIEWS_GAP));
+        });
+
         QUnit.test('Click on date in additinal view should not trigger views movement', function(assert) {
             let $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
 

@@ -76,35 +76,6 @@ QUnit.module('Calendar markup', {
 
             assert.strictEqual(elementWidth, '');
         });
-
-        QUnit.test('additionalView should be moved to the right by viewWidth + views gap', function(assert) {
-            const transform = this.calendar._additionalView.$element().css('transform');
-            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
-
-            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
-        });
-
-        QUnit.test('beforeView should be moved to the left by viewWidth + views gap', function(assert) {
-            if(!windowUtils.hasWindow()) {
-                assert.ok(true);
-            }
-
-            const transform = this.calendar._beforeView.$element().css('transform');
-            const translateX = -transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
-
-            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
-        });
-
-        QUnit.test('afterView should be moved to the right by 2 * (viewWidth + views gap)', function(assert) {
-            if(!windowUtils.hasWindow()) {
-                assert.ok(true);
-            }
-
-            const transform = this.calendar._afterView.$element().css('transform');
-            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
-
-            assert.strictEqual(translateX, 2 * (this.viewWidth + VIEWS_GAP));
-        });
     });
 
     QUnit.test('Calendar must render with dx-rtl class', function(assert) {
