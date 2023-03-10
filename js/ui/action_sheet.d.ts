@@ -189,9 +189,7 @@ export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
      * @docid
      * @default null
-     * @type_function_param1_field component:dxActionSheet
-     * @type_function_param1_field model:object
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:NativeEventInfo
      * @type function
      * @public
      */

@@ -86,8 +86,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @notUsedInTheme
      * @action
      * @public
@@ -96,8 +95,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */

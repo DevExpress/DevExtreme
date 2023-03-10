@@ -92,8 +92,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */
@@ -101,8 +100,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */
