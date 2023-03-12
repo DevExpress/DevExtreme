@@ -418,7 +418,10 @@ const EditingController = modules.ViewController.inherit((function() {
                     this._renderEditingButtons($container, buttons, options, change);
 
                     options.watch && options.watch(
-                        () => buttons.map(button => this._isButtonVisible(button, options)),
+                        () => buttons.map(button => ({
+                            visible: this._isButtonVisible(button, options),
+                            disabled: this._isButtonDisabled(button, options),
+                        })),
                         () => {
                             $container.empty();
                             this._renderEditingButtons($container, buttons, options);
