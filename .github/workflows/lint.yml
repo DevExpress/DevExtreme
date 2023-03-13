@@ -223,7 +223,7 @@ jobs:
         npm run generate-component-exports
 
         if git diff --exit-code ; then
-          echo "Generated component exports are valid"
+          echo "Generated component exports are up-to-date"
         else
             echo "Generated component exports are outdated. Execute 'npm run generate-component-exports' and commit changes."
             exit 1
