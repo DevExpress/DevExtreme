@@ -214,18 +214,18 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Check generated component exports
+    - name: Check generated component reexports
       run: |
         node -v
         npm -v
         npm install --no-audit --no-fund --ignore-scripts
 
-        npm run generate-component-exports
+        npm run generate-component-reexports
 
         if git diff --exit-code ; then
-          echo "Generated component exports are up-to-date"
+          echo "Generated component reexports are up-to-date"
         else
-            echo "Generated component exports are outdated. Execute 'npm run generate-component-exports' and commit changes."
+            echo "Generated component reexports are outdated. Execute 'npm run generate-component-reexports' and commit changes."
             exit 1
         fi
 
