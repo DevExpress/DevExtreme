@@ -26,20 +26,8 @@ export interface InitializedEventInfo<TComponent> {
  * @public
  */
 export interface EventInfo<TComponent> {
-    /**
-     * @docid
-     * @public
-     */
     readonly component: TComponent;
-    /**
-     * @docid
-     * @public
-     */
     readonly element: DxElement;
-    /**
-     * @docid
-     * @public
-     */
     readonly model?: any;
 }
 
@@ -48,25 +36,9 @@ export interface EventInfo<TComponent> {
  * @public
  */
 export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
-    /**
-     * @docid
-     * @public
-     */
     readonly component: TComponent;
-    /**
-     * @docid
-     * @public
-     */
     readonly element: DxElement;
-    /**
-     * @docid
-     * @public
-     */
     readonly model?: any;
-    /**
-     * @docid
-     * @public
-     */
     readonly event?: DxEvent<TNativeEvent>;
 }
 
