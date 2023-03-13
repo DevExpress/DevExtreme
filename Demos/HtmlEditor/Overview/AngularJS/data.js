@@ -41,7 +41,7 @@ const markup = `
         </tr>
         <tr>
             <td><strong>Angular</strong></td>
-            <td style="text-align: right;">v7.0.x - v10.0.x</td>
+            <td style="text-align: right;">v7.0+</td>
         </tr>
         <tr>
             <td><strong>React</strong></td>
