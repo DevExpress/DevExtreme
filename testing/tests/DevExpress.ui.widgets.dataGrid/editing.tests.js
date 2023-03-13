@@ -26,6 +26,7 @@ import { getCells, generateItems, MockColumnsController, MockDataController, set
 import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
+import { DataSource } from 'data/data_source/data_source';
 
 QUnit.testStart(function() {
     const markup =
@@ -10609,8 +10610,8 @@ QUnit.module('Refresh modes', {
         assert.strictEqual($cellElement.find('.dx-textbox').length, 1, 'has textbox');
     });
 
-    // T690041
-    QUnit.test('Changing edit icon in the \'buttons\' command column if repaintChangesOnly is true', function(assert) {
+    // T690041, T1147659
+    QUnit.test('Changing command column if repaintChangesOnly is true', function(assert) {
         // arrange
         let $linkElements;
 
@@ -10619,12 +10620,14 @@ QUnit.module('Refresh modes', {
             allowUpdating: true,
             allowDeleting: true
         });
+        
         this.options.columns = [
             {
                 type: 'buttons',
                 buttons: [
-                    { name: 'edit', icon: 'active-icon', visible: e => e.row.data.state === 'active' },
-                    { name: 'delete', icon: 'remove', visible: e => e.row.data.state !== 'active' }
+                    { name: 'edit',   icon: 'active-icon', visible: e => e.row.data.state === 'active' },
+                    { name: 'delete', icon: 'remove',      visible: e => e.row.data.state !== 'active' },
+                    { name: 'custom', icon: 'custom',     disabled: e => e.row.data.state !== 'active' },
                 ]
             },
             'state'
@@ -10638,13 +10641,78 @@ QUnit.module('Refresh modes', {
         this.setupModules();
         this.cellValue(0, 'state', 'active');
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
-        assert.equal($linkElements.length, 1);
+        
+        // assert
+        assert.equal($linkElements.length, 2);
         assert.ok($linkElements.eq(0).hasClass('dx-icon-active-icon'), 'the edit link');
-
+        assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
+        assert.notOk($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is enabled');
+        
+        // act
         this.cellValue(0, 'state', 'disabled');
+        
+        // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
-        assert.equal($linkElements.length, 1);
+        assert.equal($linkElements.length, 2);
         assert.ok($linkElements.eq(0).hasClass('dx-icon-remove'));
+        assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
+        assert.ok($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is disabled');
+    });
+
+    // T690041, T1147659
+    QUnit.test('Changing command column if repaintChangesOnly is true and push API is used', function(assert) {
+        // arrange
+        let $linkElements;
+        
+        this.options.columns = [
+            {
+                type: 'buttons',
+                buttons: [
+                    { name: 'edit',   icon: 'active-icon', visible: e => e.row.data.state === 'active' },
+                    { name: 'delete', icon: 'remove',      visible: e => e.row.data.state !== 'active' },
+                    { name: 'custom', icon: 'custom',     disabled: e => e.row.data.state !== 'active' },
+                ]
+            },
+            'state'
+        ];
+
+        this.options.dataSource = new DataSource({
+            reshapeOnPush: true,
+            store: {
+                type: 'array',
+                key: 'id',
+                data: [{ id: 1, state: 'active' }],
+            }
+        });
+
+        this.options.repaintChangesOnly = true;
+
+        // act
+        this.setupModules();
+        
+        // assert
+        $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
+        assert.equal($linkElements.length, 2);
+        assert.ok($linkElements.eq(0).hasClass('dx-icon-active-icon'), 'the edit link');
+        assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
+        assert.notOk($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is enabled');
+        
+        // act
+        this.options.dataSource.store().push([
+            {
+              type: 'update',
+              key: 1,
+              data: { state: 'disabled'}
+            }
+        ]);
+        this.clock.tick();
+        
+        // assert
+        $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
+        assert.equal($linkElements.length, 2);
+        assert.ok($linkElements.eq(0).hasClass('dx-icon-remove'));
+        assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
+        assert.ok($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is disabled');
     });
 
     // T700691
