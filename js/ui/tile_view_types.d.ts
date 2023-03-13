@@ -1,0 +1,15 @@
+export {
+  Orientation,
+  ScrollbarMode,
+  ContentReadyEvent,
+  DisposingEvent,
+  InitializedEvent,
+  ItemClickEvent,
+  ItemContextMenuEvent,
+  ItemHoldEvent,
+  ItemRenderedEvent,
+  OptionChangedEvent,
+  dxTileViewOptions,
+  Item,
+  Properties,
+} from './tile_view';
