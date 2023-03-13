@@ -219,8 +219,15 @@ jobs:
         node -v
         npm -v
         npm install --no-audit --no-fund --ignore-scripts
+
         npm run generate-component-exports
-        git diff --exit-code
+
+        if git diff --exit-code ; then
+          echo "Generated component exports are valid"
+        else
+            echo "Generated component exports are outdated. Execute 'npm run generate-component-exports' and commit changes."
+            exit 1
+        fi
 
   notify:
     runs-on: devextreme-shr2
