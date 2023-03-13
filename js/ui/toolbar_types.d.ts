@@ -2,7 +2,7 @@ export {
   LocateInMenuMode,
   ShowTextMode,
   ToolbarItemLocation,
-  ToolbarItemComponent,
+  ToolbarItemWidget,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

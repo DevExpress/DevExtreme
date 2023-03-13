@@ -1,7 +1,7 @@
 export {
   PositionAlignment,
   ToolbarItemLocation,
-  ToolbarItemComponent,
+  ToolbarItemWidget,
   ToolbarLocation,
   ContentReadyEvent,
   DisposingEvent,
