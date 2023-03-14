@@ -321,6 +321,8 @@ const processModules = function(that, componentClass) {
             controllers && each(controllers, function(name, type) {
                 if(controllerTypes[name]) {
                     throw errors.Error('E1001', moduleName, name);
+                } else if(type && !type.subclassOf) {
+                    throw errors.Error('E1002', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(Controller))) {
                     type.subclassOf(Controller);
                     throw errors.Error('E1002', moduleName, name);
@@ -343,7 +345,11 @@ const processModules = function(that, componentClass) {
             if(extenders) {
                 extenders.controllers && each(extenders.controllers, function(name, extender) {
                     if(controllerTypes[name]) {
-                        controllerTypes[name] = controllerTypes[name].inherit(extender);
+                        if(isFunction(extender)) {
+                            controllerTypes[name] = extender(controllerTypes[name]);
+                        } else {
+                            controllerTypes[name] = controllerTypes[name].inherit(extender);
+                        }
                     }
                 });
                 extenders.views && each(extenders.views, function(name, extender) {

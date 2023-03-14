@@ -1,5 +1,4 @@
 import modules from 'ui/grid_core/ui.grid_core.modules';
-import Class from 'core/class';
 
 
 QUnit.module('Modules used class', {}, () => {
@@ -36,6 +35,11 @@ QUnit.module('Modules used class', {}, () => {
     */
     class RootController extends modules.Controller {
         static calls = [];
+        static constructors = []
+        constructor(component) {
+            super(component);
+            RootController.constructors.push('RootController');
+        }
         publicMethods() {
             return ['method'];
         }
@@ -79,7 +83,6 @@ QUnit.module('Modules used class', {}, () => {
         QUnit.test('call controller method', function(assert) {
             const instance = {};
             modules.processModules(instance, modules);
-
             const controllerInstance = instance._controllers['root-controller'];
             assert.equal(controllerInstance.method('val'), 'val', 'call method');
             assert.deepEqual(RootController.calls[0], { instance: controllerInstance, param: 'val' }, 'check calls');
@@ -138,64 +141,28 @@ QUnit.module('Modules used class', {}, () => {
             assert.deepEqual(RootController.calls[1], { instance: controllerInstance, param: 'val4override' }, 'check calls');
         });
     });
-    const Extender = {
-        extenderMethod: function() {
-            RootController.calls.push({ type: 'extender', name: 'extenderMethod' });
-        },
-        method: function(param) {
-            RootController.calls.push({ instance: this, param, type: 'extender' });
-            return this.callBase(param);
-        },
-        useRootControllerMethod: function(param) {
-            const val = this.additionalMethod(param);
-            RootController.calls.push({ instance: this, param, val, type: 'extender' });
-            return param;
-        }
-    };
-    /*  Possible solution for typescript:
 
-        class Controller {
-            getExtender<T>(): T {
-                return Object.getPrototypeOf(Object.getPrototypeOf(this)) as T
+    const applyExtender = (Base) => {
+        return class Extender extends Base {
+            constructor() {
+                super();
+                RootController.constructors.push('Extender');
+            }
+            extenderMethod() {
+                RootController.calls.push({ instance: this, type: 'extender', name: 'extenderMethod' });
+            }
+            method(param) {
+                RootController.calls.push({ instance: this, param, type: 'extender' });
+                return super.method(param);
+            }
+            useRootControllerMethod(param) {
+                const val = this.additionalMethod(param);
+                RootController.calls.push({ instance: this, param, val, type: 'extender' });
+                return param;
             }
         }
 
-        interface IExtender {
-            a(): number;
-        }
-
-        class Extender extends Controller implements IExtender {
-            a() { return 1; }
-        }
-
-        class ExtenderOfExtender extends Controller {
-            useA() {
-                return this.getExtender<IExtender>().a();
-            }
-            overrideA() {
-                return this.getExtender<IExtender>().a() + 1;
-            }
-        }
-        Object.setPrototypeOf(ExtenderOfExtender.prototype, Extender.prototype);
-        const c = new ExtenderOfExtender();
-        console.log(c.overrideA());
-        console.log(c.useA());
-
-    */
-    // class Extender extends RootController /* implements IExtender */{
-    //     extenderMethod() {
-    //         RootController.calls.push({ instance: this, type: 'extender', name: 'extenderMethod' });
-    //     }
-    //     method(param) {
-    //         RootController.calls.push({ instance: this, param, type: 'extender' });
-    //         return super.method(param);
-    //     }
-    //     useRootControllerMethod(param) {
-    //         const val = this.additionalMethod(param);
-    //         RootController.calls.push({ instance: this, param, val, type: 'extender' });
-    //         return param;
-    //     }
-    // }
+    }
     QUnit.module('Extender', {
         beforeEach: function() {
             // clean all registerd modules
@@ -206,11 +173,12 @@ QUnit.module('Modules used class', {}, () => {
                 },
                 extenders: {
                     controllers: {
-                        'root-controller': Extender
+                        'root-controller': applyExtender
                     }
                 }
             });
             RootController.calls = [];
+            RootController.constructors = [];
         }
     }, () => {
         QUnit.test('call base method', function(assert) {
@@ -242,17 +210,17 @@ QUnit.module('Modules used class', {}, () => {
                     this.callBase();
                 }
             };*/
-            class ExtendedExtender extends RootController {
+            const applyExtendedExtender = (Base) =>
+            (class ExtendedExtender extends Base {
                 extenderMethod() {
                     RootController.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
-                    // typescript version (super as IExtender).extenderMethod();
                     super.extenderMethod();
                 }
-            }
+            });
             modules.registerModule('extenderOfExtender', {
                 extenders: {
                     controllers: {
-                        'root-controller': ExtendedExtender
+                        'root-controller': applyExtendedExtender
                     }
                 }
             });
@@ -265,6 +233,44 @@ QUnit.module('Modules used class', {}, () => {
             assert.deepEqual(RootController.calls[1].type, 'extender', 'check type class.inherit');
 
         });
+        QUnit.test.skip('Constructor override', function(assert) {
+            const applyExtendedExtender = (Base) => {
+                return class ExtendedExtender extends Base {
+                    constructor(component) {
+                        super(component)
+                        RootController.constructors.push('ExtendedExtender');
+                    }
+                }
+            }
+            /*const classInheritExtender = {
+                ctor: function(component) {
+                    this.callBase(component);
+                    RootController.constructors.push('class.inherit');
+                }
+            }
+
+            modules.registerModule('class.inherit', {
+                extenders: {
+                    controllers: {
+                        'root-controller': classInheritExtender
+                    }
+                }
+            });*/
+
+            modules.registerModule('extenderOfExtender', {
+                extenders: {
+                    controllers: {
+                        'root-controller': applyExtendedExtender
+                    }
+                }
+            });
+            const component = {};
+            modules.processModules(component, modules);
+            const controllerInstance = component._controllers['root-controller'];
+            assert.deepEqual(RootController.constructors[0], 'RootController','RootController');
+            assert.deepEqual(RootController.constructors[1], 'Extender', 'Extender');
+            assert.deepEqual(controllerInstance.component, component, 'component');
+        });
 
         QUnit.test('Use extender method in other extender', function(assert) {
             /*
@@ -275,18 +281,18 @@ QUnit.module('Modules used class', {}, () => {
                 }
             };
             */
-            class ExtendedExtender extends RootController {
+           const applyExtendedExtender = (Base) =>
+            (class ExtendedExtender extends Base {
                 methodUsedExtender() {
-                    RootController.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
-                    // typescript version this.getExtender<IExtender>().extenderMethod();
+                    RootController.calls.push({ instance: this, name: 'methodUsedExtender', type: 'extenderOfExtender' });
                     super.extenderMethod();
                 }
-            }
+            });
 
             modules.registerModule('extenderOfExtender', {
                 extenders: {
                     controllers: {
-                        'root-controller': ExtendedExtender
+                        'root-controller': applyExtendedExtender
                     }
                 }
             });
@@ -297,8 +303,8 @@ QUnit.module('Modules used class', {}, () => {
             controllerInstance.methodUsedExtender();
             assert.deepEqual(RootController.calls[0].name, 'methodUsedExtender', 'check type es6Class');
             assert.deepEqual(RootController.calls[0].type, 'extenderOfExtender', 'check type es6Class');
-            assert.deepEqual(RootController.calls[1].type, 'extender', 'check type class.inherit');
             assert.deepEqual(RootController.calls[1].name, 'extenderMethod', 'check type es6Class');
+            assert.deepEqual(RootController.calls[1].type, 'extender', 'check type class.inherit');
 
         });
 
@@ -320,36 +326,35 @@ QUnit.module('Modules used class', {}, () => {
                 }
             };
             */
-
-            class Extender1 extends RootController {
+            const applyExtender1 = (Base) =>
+            (class Extender1 extends Base {
                 extenderMethod1() {
                     RootController.calls.push({ name: 'extenderMethod1', type: 'Extender1' });
                 }
-            }
-            class ExtendedExtender extends RootController {
+            });
+            const applyExtendedExtender = (Base) =>
+            (class ExtendedExtender extends Base {
                 extenderMethod() {
                     RootController.calls.push({ name: 'extenderMethod', type: 'extenderOfExtender' });
-                    // typescript version this.getExtender<IExtender>().extenderMethod();
                     super.extenderMethod();
                 }
                 extenderMethod1() {
                     RootController.calls.push({ name: 'extenderMethod1', type: 'extenderOfExtender' });
-                    // typescript version this.getExtender<IExtender1>().extenderMethod1();
                     super.extenderMethod1();
                 }
-            }
+            });
 
             modules.registerModule('extender1', {
                 extenders: {
                     controllers: {
-                        'root-controller': Extender1
+                        'root-controller': applyExtender1
                     }
                 }
             });
             modules.registerModule('extenderOfExtender', {
                 extenders: {
                     controllers: {
-                        'root-controller': ExtendedExtender
+                        'root-controller': applyExtendedExtender
                     }
                 }
             });
@@ -360,7 +365,7 @@ QUnit.module('Modules used class', {}, () => {
             controllerInstance.extenderMethod();
             controllerInstance.extenderMethod1();
             assert.deepEqual(RootController.calls[0], { name: 'extenderMethod', type: 'extenderOfExtender' });
-            assert.deepEqual(RootController.calls[1], { name: 'extenderMethod', type: 'extender' });
+            assert.deepEqual(RootController.calls[1], { instance: controllerInstance, name: 'extenderMethod', type: 'extender' });
             assert.deepEqual(RootController.calls[2], { name: 'extenderMethod1', type: 'extenderOfExtender' });
             assert.deepEqual(RootController.calls[3], { name: 'extenderMethod1', type: 'Extender1' });
         });
@@ -384,12 +389,13 @@ QUnit.module('Modules used class', {}, () => {
                     return this.callBase(param);
                 },
             };
-            class ES6Class extends RootController {
+            const applyES6Class = (Base) =>
+            (class ES6Class extends Base {
                 method(param) {
                     RootController.calls.push({ instance: this, param, type: 'es6Class' });
                     return super.method(param);
                 }
-            }
+            });
             modules.registerModule('classInherit', {
                 extenders:
                 {
@@ -402,7 +408,7 @@ QUnit.module('Modules used class', {}, () => {
                 extenders:
                 {
                     controllers: {
-                        'root-controller': ES6Class
+                        'root-controller': applyES6Class
                     }
                 }
             });
