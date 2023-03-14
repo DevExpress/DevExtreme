@@ -1,336 +1,348 @@
-import Class from '../../core/class';
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
-import { hasWindow } from '../../core/utils/window';
-import { getDefaultAlignment } from '../../core/utils/position';
-import formatHelper from '../../format_helper';
-import localizationNumber from '../../localization/number';
-import { excel as excelExporter, export as exportMethod } from '../../exporter';
-import { prepareItems } from '../grid_core/ui.grid_core.export';
-import { when, Deferred } from '../../core/utils/deferred';
+import Class from '@js/core/class';
+import { isDefined } from '@js/core/utils/type';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { hasWindow } from '@js/core/utils/window';
+import { getDefaultAlignment } from '@js/core/utils/position';
+import formatHelper from '@js/format_helper';
+import localizationNumber from '@js/localization/number';
+import { excel as excelExporter, export as exportMethod } from '@js/exporter';
+import { prepareItems } from '@js/ui/grid_core/ui.grid_core.export';
+import { when, Deferred } from '@js/core/utils/deferred';
 
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
 export const ExportController = {
-    exportToExcel: function() {
-        const that = this;
+  exportToExcel() {
+    const that = this;
 
-        exportMethod(that.getDataProvider(), {
-            fileName: that.option('export.fileName'),
-            format: 'EXCEL',
-            rtlEnabled: that.option('rtlEnabled'),
-            exportingAction: that._actions.onExporting,
-            exportedAction: that._actions.onExported,
-            fileSavingAction: that._actions.onFileSaving
-        }, excelExporter.getData);
-    },
+    exportMethod(that.getDataProvider(), {
+      fileName: that.option('export.fileName'),
+      format: 'EXCEL',
+      rtlEnabled: that.option('rtlEnabled'),
+      exportingAction: that._actions.onExporting,
+      exportedAction: that._actions.onExported,
+      fileSavingAction: that._actions.onFileSaving,
+    }, excelExporter.getData);
+  },
 
-    _getLength: function(items) {
-        let i;
-        const itemCount = items[0].length;
-        let cellCount = 0;
+  _getLength(items) {
+    let i;
+    const itemCount = items[0].length;
+    let cellCount = 0;
 
-        for(i = 0; i < itemCount; i++) {
-            cellCount += items[0][i].colspan || 1;
-        }
-
-        return cellCount;
-    },
-
-    _correctCellsInfoItemLengths: function(cellsInfo, expectedLength) {
-        for(let i = 0; i < cellsInfo.length; i++) {
-            while(cellsInfo[i].length < expectedLength) {
-                cellsInfo[i].push({});
-            }
-        }
-        return cellsInfo;
-    },
-
-    _calculateCellInfoItemLength: function(columnsRow) {
-        let result = 0;
-        for(let columnIndex = 0; columnIndex < columnsRow.length; columnIndex++) {
-            result += isDefined(columnsRow[columnIndex].colspan) ? columnsRow[columnIndex].colspan : 1;
-        }
-        return result;
-    },
-
-    _getEmptyCell: function() {
-        return {
-            text: '',
-            value: undefined,
-            colspan: 1,
-            rowspan: 1
-        };
-    },
-
-    _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
-        let cellIndex;
-        let rowIndex;
-        let correctedCellsInfo = cellsInfo;
-        const rowsLength = this._getLength(rowsInfoItems);
-        const headerRowsCount = columnsInfo.length;
-
-        if(columnsInfo.length > 0 && columnsInfo[0].length > 0 && cellsInfo.length > 0 && cellsInfo[0].length === 0) {
-            const cellInfoItemLength = this._calculateCellInfoItemLength(columnsInfo[0]);
-            if(cellInfoItemLength > 0) {
-                correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
-            }
-        }
-        const sourceItems = columnsInfo.concat(correctedCellsInfo);
-
-        for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
-            for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
-                if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
-                    sourceItems[rowIndex + headerRowsCount] = [];
-                }
-
-                sourceItems[rowIndex + headerRowsCount].splice(0, 0,
-                    extend({}, rowsInfoItems[rowIndex][cellIndex]));
-            }
-        }
-
-        sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
-            {
-                alignment: getDefaultAlignment(this._options.rtlEnabled),
-                colspan: rowsLength,
-                rowspan: headerRowsCount
-            }));
-
-        return prepareItems(sourceItems, this._getEmptyCell());
-    },
-
-    getDataProvider: function() {
-        return new DataProvider(this);
+    for (i = 0; i < itemCount; i += 1) {
+      cellCount += items[0][i].colspan || 1;
     }
+
+    return cellCount;
+  },
+
+  _correctCellsInfoItemLengths(cellsInfo, expectedLength) {
+    for (let i = 0; i < cellsInfo.length; i += 1) {
+      while (cellsInfo[i].length < expectedLength) {
+        cellsInfo[i].push({});
+      }
+    }
+    return cellsInfo;
+  },
+
+  _calculateCellInfoItemLength(columnsRow) {
+    let result = 0;
+    for (let columnIndex = 0; columnIndex < columnsRow.length; columnIndex += 1) {
+      result += isDefined(columnsRow[columnIndex].colspan) ? columnsRow[columnIndex].colspan : 1;
+    }
+    return result;
+  },
+
+  _getEmptyCell() {
+    return {
+      text: '',
+      value: undefined,
+      colspan: 1,
+      rowspan: 1,
+    };
+  },
+
+  _getAllItems(columnsInfo, rowsInfoItems, cellsInfo) {
+    let cellIndex;
+    let rowIndex;
+    let correctedCellsInfo = cellsInfo;
+    const rowsLength = this._getLength(rowsInfoItems);
+    const headerRowsCount = columnsInfo.length;
+
+    if (columnsInfo.length > 0
+      && columnsInfo[0].length > 0
+      && cellsInfo.length > 0
+      && cellsInfo[0].length === 0) {
+      const cellInfoItemLength = this._calculateCellInfoItemLength(columnsInfo[0]);
+      if (cellInfoItemLength > 0) {
+        correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
+      }
+    }
+    const sourceItems = columnsInfo.concat(correctedCellsInfo);
+
+    for (rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex += 1) {
+      for (cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex -= 1) {
+        if (!isDefined(sourceItems[rowIndex + headerRowsCount])) {
+          sourceItems[rowIndex + headerRowsCount] = [];
+        }
+
+        sourceItems[rowIndex + headerRowsCount].splice(
+          0,
+          0,
+          extend({}, rowsInfoItems[rowIndex][cellIndex]),
+        );
+      }
+    }
+
+    sourceItems[0].splice(0, 0, extend(
+      {},
+      this._getEmptyCell(),
+      {
+        alignment: getDefaultAlignment(this._options.rtlEnabled),
+        colspan: rowsLength,
+        rowspan: headerRowsCount,
+      },
+    ));
+
+    return prepareItems(sourceItems, this._getEmptyCell());
+  },
+
+  getDataProvider() {
+    return new DataProvider(this);
+  },
 };
 
 export const DataProvider = Class.inherit({
-    ctor: function(exportController) {
-        this._exportController = exportController;
-    },
+  ctor(exportController) {
+    this._exportController = exportController;
+  },
 
-    ready: function() {
-        this._initOptions();
-        const options = this._options;
+  ready() {
+    this._initOptions();
+    const options = this._options;
 
-        return when(options.items).done((items) => {
-            const headerSize = items[0][0].rowspan;
-            const columns = items[headerSize - 1];
+    return when(options.items).done((items) => {
+      const headerSize = items[0][0].rowspan;
+      const columns = items[headerSize - 1];
 
-            each(columns, (columnIndex, column) => {
-                column.width = DEFAUL_COLUMN_WIDTH;
-            });
+      each(columns, (columnIndex, column) => {
+        column.width = DEFAUL_COLUMN_WIDTH;
+      });
 
-            options.columns = columns;
-            options.items = items;
+      options.columns = columns;
+      options.items = items;
+    });
+  },
+
+  _initOptions() {
+    const exportController = this._exportController;
+    const dataController = exportController._dataController;
+    // @ts-expect-error
+    const items = new Deferred();
+
+    dataController.beginLoading();
+    setTimeout(() => {
+      const columnsInfo = extend(true, [], dataController.getColumnsInfo(true));
+      const rowsInfoItems = extend(true, [], dataController.getRowsInfo(true));
+      const cellsInfo = dataController.getCellsInfo(true);
+
+      items.resolve(exportController._getAllItems(columnsInfo, rowsInfoItems, cellsInfo));
+      dataController.endLoading();
+    });
+
+    this._options = {
+      items,
+      rtlEnabled: exportController.option('rtlEnabled'),
+      dataFields: exportController.getDataSource().getAreaFields('data'),
+      customizeExcelCell: exportController.option('export.customizeExcelCell'),
+      rowsArea: exportController._rowsArea,
+      columnsArea: exportController._columnsArea,
+    };
+  },
+
+  getColumns() {
+    return this._options.columns;
+  },
+
+  getColumnsWidths() {
+    const colsArea = this._options.columnsArea;
+    const { rowsArea } = this._options;
+    const { columns } = this._options;
+    const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().is(':hidden');
+    return useDefaultWidth
+      ? columns.map(() => DEFAUL_COLUMN_WIDTH)
+      : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());
+  },
+
+  getRowsCount() {
+    return this._options.items.length;
+  },
+
+  getGroupLevel() {
+    return 0;
+  },
+
+  getCellMerging(rowIndex, cellIndex) {
+    const { items } = this._options;
+    const item = items[rowIndex] && items[rowIndex][cellIndex];
+
+    return item ? {
+      colspan: item.colspan - 1,
+      rowspan: item.rowspan - 1,
+    } : { colspan: 0, rowspan: 0 };
+  },
+
+  getFrozenArea() {
+    return { x: this.getRowAreaColCount(), y: this.getColumnAreaRowCount() };
+  },
+
+  getCellType(rowIndex, cellIndex) {
+    const style = this.getStyles()[this.getStyleId(rowIndex, cellIndex)];
+    return style && style.dataType || 'string';
+  },
+
+  getCellData(rowIndex, cellIndex, isExcelJS) {
+    const result: any = {};
+    const { items } = this._options;
+    const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+
+    if (isExcelJS) {
+      result.cellSourceData = item;
+      const areaName = this._tryGetAreaName(item, rowIndex, cellIndex);
+      if (areaName) {
+        result.cellSourceData.area = areaName;
+      }
+      result.cellSourceData.rowIndex = rowIndex;
+      result.cellSourceData.columnIndex = cellIndex;
+    }
+
+    if (this.getCellType(rowIndex, cellIndex) === 'string') {
+      result.value = item.text;
+    } else {
+      result.value = item.value;
+    }
+
+    if (result.cellSourceData && result.cellSourceData.isWhiteSpace) {
+      result.value = '';
+    }
+
+    return result;
+  },
+
+  _tryGetAreaName(item, rowIndex, cellIndex) {
+    if (this.isColumnAreaCell(rowIndex, cellIndex)) {
+      return 'column';
+    } if (this.isRowAreaCell(rowIndex, cellIndex)) {
+      return 'row';
+    } if (isDefined(item.dataIndex)) {
+      return 'data';
+    }
+
+    return undefined;
+  },
+
+  isRowAreaCell(rowIndex, cellIndex) {
+    return rowIndex >= this.getColumnAreaRowCount() && cellIndex < this.getRowAreaColCount();
+  },
+
+  isColumnAreaCell(rowIndex, cellIndex) {
+    return cellIndex >= this.getRowAreaColCount() && rowIndex < this.getColumnAreaRowCount();
+  },
+
+  getColumnAreaRowCount() {
+    return this._options.items[0][0].rowspan;
+  },
+
+  getRowAreaColCount() {
+    return this._options.items[0][0].colspan;
+  },
+
+  getHeaderStyles() {
+    return [
+      { alignment: 'center', dataType: 'string' },
+      { alignment: getDefaultAlignment(this._options.rtlEnabled), dataType: 'string' },
+    ];
+  },
+
+  getDataFieldStyles() {
+    const { dataFields } = this._options;
+    const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
+    const dataFieldStyles: any = [];
+
+    if (dataFields.length) {
+      dataFields.forEach((dataField) => {
+        dataFieldStyles.push({
+          ...dataItemStyle,
+          ...{ format: dataField.format, dataType: this.getCellDataType(dataField) },
         });
-    },
+      });
 
-    _initOptions: function() {
-        const exportController = this._exportController;
-        const dataController = exportController._dataController;
-        const items = new Deferred();
+      return dataFieldStyles;
+    }
 
-        dataController.beginLoading();
-        setTimeout(function() {
-            const columnsInfo = extend(true, [], dataController.getColumnsInfo(true));
-            const rowsInfoItems = extend(true, [], dataController.getRowsInfo(true));
-            const cellsInfo = dataController.getCellsInfo(true);
+    return [dataItemStyle];
+  },
 
-            items.resolve(exportController._getAllItems(columnsInfo, rowsInfoItems, cellsInfo));
-            dataController.endLoading();
-        });
+  getStyles() {
+    if (this._styles) {
+      return this._styles;
+    }
 
-        this._options = {
-            items: items,
-            rtlEnabled: exportController.option('rtlEnabled'),
-            dataFields: exportController.getDataSource().getAreaFields('data'),
-            customizeExcelCell: exportController.option('export.customizeExcelCell'),
-            rowsArea: exportController._rowsArea,
-            columnsArea: exportController._columnsArea
-        };
-    },
+    this._styles = [...this.getHeaderStyles(), ...this.getDataFieldStyles()];
 
-    getColumns: function() {
-        return this._options.columns;
-    },
+    return this._styles;
+  },
 
-    getColumnsWidths: function() {
-        const colsArea = this._options.columnsArea;
-        const rowsArea = this._options.rowsArea;
-        const columns = this._options.columns;
-        const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().is(':hidden');
-        return useDefaultWidth
-            ? columns.map(_ => DEFAUL_COLUMN_WIDTH)
-            : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());
-    },
+  getCellDataType(field) {
+    if (field && field.customizeText) {
+      return 'string';
+    }
 
-    getRowsCount: function() {
-        return this._options.items.length;
-    },
+    if (field.dataType) {
+      return field.dataType;
+    }
 
-    getGroupLevel: function() {
-        return 0;
-    },
+    if (field.format) {
+      if (localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
+        return 'number';
+      }
+      if (formatHelper.format(new Date(), field.format)) {
+        return 'date';
+      }
+    }
 
-    getCellMerging: function(rowIndex, cellIndex) {
-        const items = this._options.items;
-        const item = items[rowIndex] && items[rowIndex][cellIndex];
+    return DEFAULT_DATA_TYPE;
+  },
 
-        return item ? {
-            colspan: item.colspan - 1,
-            rowspan: item.rowspan - 1
-        } : { colspan: 0, rowspan: 0 };
-    },
+  getStyleId(rowIndex, cellIndex) {
+    const { items } = this._options;
+    const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-    getFrozenArea: function() {
-        return { x: this.getRowAreaColCount(), y: this.getColumnAreaRowCount() };
-    },
+    if ((cellIndex === 0 && rowIndex === 0) || this.isColumnAreaCell(rowIndex, cellIndex)) {
+      return 0;
+    } if (this.isRowAreaCell(rowIndex, cellIndex)) {
+      return 1;
+    }
 
-    getCellType: function(rowIndex, cellIndex) {
-        const style = this.getStyles()[this.getStyleId(rowIndex, cellIndex)];
-        return style && style.dataType || 'string';
-    },
+    return this.getHeaderStyles().length + (item.dataIndex || 0);
+  },
 
-    getCellData: function(rowIndex, cellIndex, isExcelJS) {
-        const result = {};
-        const items = this._options.items;
-        const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+  hasCustomizeExcelCell() {
+    return isDefined(this._options.customizeExcelCell);
+  },
 
-        if(isExcelJS) {
-            result.cellSourceData = item;
-            const areaName = this._tryGetAreaName(item, rowIndex, cellIndex);
-            if(areaName) {
-                result.cellSourceData.area = areaName;
-            }
-            result.cellSourceData.rowIndex = rowIndex;
-            result.cellSourceData.columnIndex = cellIndex;
-        }
-
-        if(this.getCellType(rowIndex, cellIndex) === 'string') {
-            result.value = item.text;
-        } else {
-            result.value = item.value;
-        }
-
-        if(result.cellSourceData && result.cellSourceData.isWhiteSpace) {
-            result.value = '';
-        }
-
-        return result;
-    },
-
-    _tryGetAreaName(item, rowIndex, cellIndex) {
-        if(this.isColumnAreaCell(rowIndex, cellIndex)) {
-            return 'column';
-        } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
-            return 'row';
-        } else if(isDefined(item.dataIndex)) {
-            return 'data';
-        }
-    },
-
-    isRowAreaCell(rowIndex, cellIndex) {
-        return rowIndex >= this.getColumnAreaRowCount() && cellIndex < this.getRowAreaColCount();
-    },
-
-    isColumnAreaCell(rowIndex, cellIndex) {
-        return cellIndex >= this.getRowAreaColCount() && rowIndex < this.getColumnAreaRowCount();
-    },
-
-    getColumnAreaRowCount() {
-        return this._options.items[0][0].rowspan;
-    },
-
-    getRowAreaColCount() {
-        return this._options.items[0][0].colspan;
-    },
-
-    getHeaderStyles() {
-        return [
-            { alignment: 'center', dataType: 'string' },
-            { alignment: getDefaultAlignment(this._options.rtlEnabled), dataType: 'string' }
-        ];
-    },
-
-    getDataFieldStyles() {
-        const dataFields = this._options.dataFields;
-        const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
-        const dataFieldStyles = [];
-
-        if(dataFields.length) {
-            dataFields.forEach((dataField) => {
-                dataFieldStyles.push({
-                    ...dataItemStyle,
-                    ...{ format: dataField.format, dataType: this.getCellDataType(dataField) }
-                });
-            });
-
-            return dataFieldStyles;
-        }
-
-        return [dataItemStyle];
-    },
-
-    getStyles: function() {
-        if(this._styles) {
-            return this._styles;
-        }
-
-        this._styles = [...this.getHeaderStyles(), ...this.getDataFieldStyles()];
-
-        return this._styles;
-    },
-
-    getCellDataType: function(field) {
-        if(field && field.customizeText) {
-            return 'string';
-        }
-
-        if(field.dataType) {
-            return field.dataType;
-        }
-
-        if(field.format) {
-            if(localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
-                return 'number';
-            }
-            if(formatHelper.format(new Date(), field.format)) {
-                return 'date';
-            }
-        }
-
-        return DEFAULT_DATA_TYPE;
-    },
-
-    getStyleId: function(rowIndex, cellIndex) {
-        const items = this._options.items;
-        const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
-
-        if((cellIndex === 0 && rowIndex === 0) || this.isColumnAreaCell(rowIndex, cellIndex)) {
-            return 0;
-        } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
-            return 1;
-        }
-
-        return this.getHeaderStyles().length + (item.dataIndex || 0);
-    },
-
-    hasCustomizeExcelCell: function() {
-        return isDefined(this._options.customizeExcelCell);
-    },
-
-    customizeExcelCell: function(e) {
-        if(this._options.customizeExcelCell) {
-            this._options.customizeExcelCell(e);
-        }
-    },
+  customizeExcelCell(e) {
+    if (this._options.customizeExcelCell) {
+      this._options.customizeExcelCell(e);
+    }
+  },
 });
 
-//#DEBUG
+// #DEBUG
 export const PivotGridExport = {
-    DEFAUL_COLUMN_WIDTH
+  DEFAUL_COLUMN_WIDTH,
 };
-//#ENDDEBUG
+// #ENDDEBUG
