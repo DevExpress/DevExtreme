@@ -268,7 +268,8 @@ gulp.task('renovated-components-watch', () => {
 });
 
 gulp.task('compile-ts-watch', () => {
-    gulp.watch(['js/**/*.ts', '!js/**/*.d.ts'], () => {
+    gulp.watch(['js/**/*.ts', '!js/**/*.d.ts'], async () => {
+        const transpileTSAliasFunc = await createAliasTranspileAsync(aliasTranspileConfig);
         return gulp
             .src([
                 'js/**/*.ts',
@@ -277,6 +278,7 @@ gulp.task('compile-ts-watch', () => {
             ])
             .pipe(compileTS())
             .js
+            .pipe(transpileTSAlias(transpileTSAliasFunc))
             .pipe(gulp.dest(ctx.TRANSPILED_PATH))
             .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH))
             .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
