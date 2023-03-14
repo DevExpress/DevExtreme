@@ -1,6 +1,9 @@
+// NOTE: This import should be first! Because it overrides window.Intl.
 import '../../helpers/noIntl.js';
+
 import $ from 'jquery';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 /* global orders */
@@ -14,6 +17,7 @@ import 'viz/chart';
 
 $('<div id="pivotGridContainer">').appendTo('#qunit-fixture');
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
+
 
 function createPivotGrid(options, container) {
     container = container === undefined ? $('#pivotGridContainer') : $(container);
@@ -86,6 +90,7 @@ QUnit.module('Chart Binding', {
     });
 
     QUnit.test('Bind chart instance to pivotGrid', function(assert) {
+        console.log('here');
         const pivotGrid = createPivotGrid(this.pivotGridOptions);
         const chart = createChart();
         const chartBinding = pivotGrid.bindChart(chart);

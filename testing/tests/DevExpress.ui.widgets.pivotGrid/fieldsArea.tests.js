@@ -1,5 +1,8 @@
 import $ from 'jquery';
+import 'generic_light.css!';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
+import { FieldsArea } from '__internal/grids/pivot_grid/fields_area/module';
+import { AreaItem } from '__internal/grids/pivot_grid/area_item/module';
 
 
 QUnit.testStart(function() {
@@ -10,11 +13,6 @@ QUnit.testStart(function() {
     addShadowDomStyles($('#qunit-fixture'));
 });
 
-
-import 'generic_light.css!';
-
-import { FieldsArea } from 'ui/pivot_grid/ui.pivot_grid.fields_area';
-import { AreaItem } from 'ui/pivot_grid/ui.pivot_grid.area_item';
 
 QUnit.module('Creation', () => {
 
