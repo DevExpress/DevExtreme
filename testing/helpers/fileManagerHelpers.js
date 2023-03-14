@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 import { isDefined } from 'core/utils/type.js';
-import { deserializeDate } from 'core/utils/date_serialization';
+import dateSerialization from 'core/utils/date_serialization';
 import FileSystemItem from 'file_management/file_system_item';
 
 import FileReaderMock from './fileManager/file_reader.mock.js';
@@ -914,7 +914,7 @@ export const createSampleFileItems = () => {
 
 const createFileSystemItem = (parentPath, dataObj) => {
     const item = new FileSystemItem(parentPath, dataObj.name, dataObj.isDirectory);
-    item.dateModified = deserializeDate(dataObj.dateModified);
+    item.dateModified = dateSerialization.deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;
     if(dataObj.isDirectory) {
