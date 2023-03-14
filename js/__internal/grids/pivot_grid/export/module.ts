@@ -13,7 +13,7 @@ import { when, Deferred } from '@js/core/utils/deferred';
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
-export const ExportController = {
+const ExportController = {
   exportToExcel() {
     const that = this;
 
@@ -115,7 +115,7 @@ export const ExportController = {
   },
 };
 
-export const DataProvider = Class.inherit({
+const DataProvider = Class.inherit({
   ctor(exportController) {
     this._exportController = exportController;
   },
@@ -341,8 +341,9 @@ export const DataProvider = Class.inherit({
   },
 });
 
-// #DEBUG
-export const PivotGridExport = {
+const PivotGridExport = {
   DEFAUL_COLUMN_WIDTH,
 };
-// #ENDDEBUG
+
+export default { ExportController, PivotGridExport, DataProvider };
+export { ExportController, PivotGridExport, DataProvider };

@@ -20,19 +20,17 @@ import Popup from '@js/ui/popup/ui.popup';
 import ContextMenu from '@js/ui/context_menu';
 import { when, Deferred } from '@js/core/utils/deferred';
 
-import { setFieldProperty, findField, mergeArraysByMaxValue } from './widget_utils';
-import { DataController } from './data_controller/module';
-import { DataArea } from './data_area/module';
-import { VerticalHeadersArea, HorizontalHeadersArea } from './headers_area/module';
+import { setFieldProperty, findField, mergeArraysByMaxValue } from './module_widget_utils';
+import DataControllerImport from './data_controller/module';
+import DataAreaImport from './data_area/module';
+import HeadersArea from './headers_area/module';
 import { FieldsArea } from './fields_area/module';
-import PivotGridFieldChooser from './field_chooser/module';
-import PivotGridFieldChooserBase from './field_chooser/module_base';
+import { FieldChooser } from './field_chooser/module';
+import { FieldChooserBase } from './field_chooser/module_base';
 import { ExportController } from './export/module';
-import chartIntegrationMixin from './chart_integration/module';
+import { ChartIntegrationMixin } from './chart_integration/module';
 
 const window = getWindow();
-
-// STYLE pivotGrid
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 const ROW_AREA_CELL_CLASS = 'dx-area-row-cell';
@@ -103,32 +101,6 @@ function getCommonBorderWidth(elements, direction) {
 function clickedOnFieldsArea($targetElement) {
   return $targetElement.closest(`.${FIELDS_CLASS}`).length || $targetElement.find(`.${FIELDS_CLASS}`).length;
 }
-
-/**
-* @name dxPivotGridOptions.activeStateEnabled
-* @hidden
-*/
-
-/**
-* @name dxPivotGridOptions.hoverStateEnabled
-* @hidden
-*/
-
-/**
-* @name dxPivotGridOptions.focusStateEnabled
-* @hidden
-*/
-
-/**
-* @name dxPivotGridOptions.accessKey
-* @hidden
-*/
-
-/**
-* @name dxPivotGrid.registerKeyHandler
-* @publicName registerKeyHandler(key, handler)
-* @hidden
-*/
 
 const PivotGrid = (Widget as any).inherit({
   _getDefaultOptions() {
@@ -291,7 +263,9 @@ const PivotGrid = (Widget as any).inherit({
     const that = this;
     that._dataController && that._dataController.dispose();
 
-    that._dataController = new DataController(that._getDataControllerOptions());
+    that._dataController = new DataControllerImport.DataController(
+      that._getDataControllerOptions(),
+    );
 
     if (hasWindow()) {
       that._dataController.changed.add(() => {
@@ -578,7 +552,7 @@ const PivotGrid = (Widget as any).inherit({
       onShown(e) {
         that._createComponent(
           e.component.content(),
-          PivotGridFieldChooser,
+          FieldChooser,
           fieldChooserComponentOptions,
         );
       },
@@ -991,7 +965,7 @@ const PivotGrid = (Widget as any).inherit({
 
   _renderDataArea(dataAreaElement) {
     const that = this;
-    const dataArea = that._dataArea || new DataArea(that);
+    const dataArea = that._dataArea || new DataAreaImport.DataArea(that);
     that._dataArea = dataArea;
     dataArea.render(dataAreaElement, that._dataController.getCellsInfo());
 
@@ -1000,7 +974,7 @@ const PivotGrid = (Widget as any).inherit({
 
   _renderRowsArea(rowsAreaElement) {
     const that = this;
-    const rowsArea = that._rowsArea || new VerticalHeadersArea(that);
+    const rowsArea = that._rowsArea || new HeadersArea.VerticalHeadersArea(that);
     that._rowsArea = rowsArea;
     rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
 
@@ -1009,7 +983,7 @@ const PivotGrid = (Widget as any).inherit({
 
   _renderColumnsArea(columnsAreaElement) {
     const that = this;
-    const columnsArea = that._columnsArea || new HorizontalHeadersArea(that);
+    const columnsArea = that._columnsArea || new HeadersArea.HorizontalHeadersArea(that);
     that._columnsArea = columnsArea;
     columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
 
@@ -1086,7 +1060,7 @@ const PivotGrid = (Widget as any).inherit({
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    that._createComponent(that.$element(), PivotGridFieldChooserBase, {
+    that._createComponent(that.$element(), FieldChooserBase, {
       dataSource: that.getDataSource(),
       encodeHtml: that.option('encodeHtml'),
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
@@ -1502,8 +1476,9 @@ const PivotGrid = (Widget as any).inherit({
   },
 })
   .inherit(ExportController)
-  .include(chartIntegrationMixin);
+  .include(ChartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);
 
-export default PivotGrid;
+export default { PivotGrid };
+export { PivotGrid };

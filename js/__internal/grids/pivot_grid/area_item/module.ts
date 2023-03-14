@@ -60,12 +60,7 @@ function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
   return offset;
 }
 
-/// #DEBUG
-export { getRealElementWidth };
-
-/// #ENDDEBUG
-
-export const AreaItem = Class.inherit({
+const AreaItem = Class.inherit({
   ctor(component) {
     this.component = component;
   },
@@ -694,3 +689,6 @@ export const AreaItem = Class.inherit({
     return tableElement ? tableElement.data('data') : [];
   },
 });
+
+export default { AreaItem, getRealElementWidth };
+export { AreaItem, getRealElementWidth };

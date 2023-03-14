@@ -2,7 +2,7 @@ import $ from '@js/core/renderer';
 import { nativeScrolling } from '@js/core/utils/support';
 
 import { AreaItem } from '../area_item/module';
-import { calculateScrollbarWidth } from '../widget_utils';
+import { calculateScrollbarWidth } from '../module_widget_utils';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data';

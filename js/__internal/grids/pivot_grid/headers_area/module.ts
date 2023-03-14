@@ -32,7 +32,7 @@ function getCellPath(tableElement, cell) {
   return undefined;
 }
 
-export const HorizontalHeadersArea = AreaItem.inherit({
+const HorizontalHeadersArea = AreaItem.inherit({
   ctor(component) {
     this.callBase(component);
     this._scrollBarWidth = 0;
@@ -172,7 +172,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
   },
 });
 
-export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
+const VerticalHeadersArea = HorizontalHeadersArea.inherit({
   _getAreaClassName() {
     return PIVOTGRID_AREA_ROW_CLASS;
   },
@@ -324,3 +324,6 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     }
   },
 });
+
+export default { HorizontalHeadersArea, VerticalHeadersArea };
+export { HorizontalHeadersArea, VerticalHeadersArea };
