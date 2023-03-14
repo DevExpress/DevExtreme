@@ -1,6 +1,7 @@
-import 'ui/pivot_grid/ui.pivot_grid';
 import $ from 'jquery';
 import windowUtils from 'core/utils/window';
+
+import '__internal/grids/pivot_grid/widget';
 
 QUnit.module('PivotGrid markup tests', () => {
 

@@ -1,7 +1,8 @@
 import $ from 'jquery';
-import { DataProvider } from 'ui/pivot_grid/ui.pivot_grid.export';
+import { DataProvider } from '__internal/grids/pivot_grid/export/module';
 import clientExporter from 'exporter';
 import dateLocalization from 'localization/date';
+
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 
