@@ -1,4 +1,4 @@
-name: TestCafe tests
+name: TestCafe tests (proxyless)
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
@@ -26,13 +26,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm install --no-audit --no-fund
@@ -92,13 +85,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm install --no-audit --no-fund

@@ -108,9 +108,10 @@ createTestCafe({
             }
         }
 
-        if(args.browsers === 'chrome:docker') {
-            runOptions.disableScreenshots = true;
-        }
+        // if(args.browsers === 'chrome:docker') {
+        //     runOptions.disableScreenshots = true;
+        // }
+        runOptions.disableScreenshots = true;
 
         return runner.run(runOptions);
     })
