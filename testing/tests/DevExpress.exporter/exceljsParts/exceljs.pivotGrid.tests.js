@@ -13,8 +13,8 @@ import 'ui/pivot_grid/ui.pivot_grid';
 
 import 'generic_light.css!';
 
-import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
-import { PivotGridExport } from 'ui/pivot_grid/ui.pivot_grid.export.js';
+import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller';
+import { PivotGridExport } from 'ui/pivot_grid/ui.pivot_grid.export';
 
 let helper;
 
