@@ -20,7 +20,6 @@
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
-
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
@@ -144,7 +143,7 @@
                 "jquery": "@GetJQueryUrl()",
                 "knockout": "@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")",
                 "angular": "@Url.Content("~/artifacts/js/angular.js")",
-                "inferno": "@Url.Content("~/node_modules/inferno/dist/inferno.js")",
+                "inferno": "@Url.Content("~/node_modules/inferno/dist/index.esm.js")",
                 "inferno-hydrate": "@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")",
                 "inferno-compat": "@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")",
                 "inferno-clone-vnode": "@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")",
@@ -170,16 +169,17 @@
                 "turndown": "@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")",
                 "devextreme-showdown": "@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")",
                 "rrule": "@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")",
-                "generic_light.css!": "@Url.Content("~/artifacts/css/dx.light.css")",
-                "material_blue_light.css!": "@Url.Content("~/artifacts/css/dx.material.blue.light.css")",
+                "generic_light.css": "@Url.Content("~/artifacts/css/dx.light.css")",
+                "material_blue_light.css": "@Url.Content("~/artifacts/css/dx.material.blue.light.css")",
                 "css": "@Url.Content("~/node_modules/systemjs-plugin-css/css.js")",
                 "text": "@Url.Content("~/node_modules/systemjs-plugin-text/text.js")",
                 "json": "@Url.Content("~/node_modules/systemjs-plugin-json/json.js")",
                 "plugin-babel": "@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")",
                 "systemjs-babel-build": "@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")",
                 "animation/": "/js/animation/",
-                "events/": "/js/events/",
                 "core/": "/js/core/",
+                "data/": "/js/data/",
+                "events/": "/js/events/",
                 "localization": "/js/localization",
                 "localization/": "/js/localization/",
                 "ui/": "/js/ui/"
@@ -188,11 +188,14 @@
     </script>
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs-babel/dist/systemjs-babel.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/extras/global.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/extras/amd.js")"></script>
     <script>
         (function() {
             jQuery.noConflict();
 
             const systemPrototype = System.constructor.prototype;
+
             const originalFetch = systemPrototype.fetch;
 
             systemPrototype.fetch = function(url, options) {
@@ -209,6 +212,34 @@
                 }
 
                 return originalFetch(url, options);
+            };
+
+            const originalInstantiate = systemPrototype.instantiate;
+
+            systemPrototype.instantiate = function() {
+                const url = arguments[0];
+
+                if (/\.css$/.test(url)) {
+                    return new Promise((resolve, reject) => {
+                        const link = document.createElement('link');
+                        link.type = 'text/css';
+                        link.rel = 'stylesheet';
+                        link.href = url;
+                        document.head.appendChild(link);
+
+                        link.onload = function() {
+                            resolve([[], function() {
+                                return {};
+                            }]);
+                        };
+
+                        link.onerror = function(error) {
+                            reject(error);
+                        };
+                    });
+                }
+
+                return originalInstantiate.apply(this, arguments);
             };
 
             var cacheBuster = '@Url.CacheBuster()';
