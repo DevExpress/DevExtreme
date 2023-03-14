@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import 'ui/html_editor/converters/markdown';
+import config from 'core/config';
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
@@ -119,6 +120,29 @@ export default function() {
             if(isQuillRendered) {
                 assert.strictEqual($editorContent.attr('role'), 'textbox');
             }
+        });
+    });
+
+    QUnit.module('Props from global config', {
+        beforeEach() {
+            config({
+                editorStylingMode: 'filled',
+            });
+        }, 
+        afterEach() {
+            config({
+                editorStylingMode: 'outlined',
+            });
+        }
+    }, () => {
+
+        test('editorStylingMode should be applyed', function(assert) {
+            const $element = $('#htmlEditor').dxHtmlEditor({
+                value: 'Test'
+            });
+
+            assert.strictEqual($element.hasClass(HTML_EDITOR_OUTLINED_CLASS), false, 'has no old styling mode class');
+            assert.strictEqual($element.hasClass(HTML_EDITOR_FILLED_CLASS), true, 'has new styling mode class');
         });
     });
 }
