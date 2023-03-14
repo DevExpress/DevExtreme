@@ -1724,6 +1724,27 @@ QUnit.module('adaptivity without hiding in menu', {
     });
 });
 
+QUnit.module('Toolbar disposing', () => {
+    QUnit.test('_dimensionChanged skipped if widget is disposed (T1147410)', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => true;
+
+        const toolbar = $('#toolbar').dxToolbar().dxToolbar('instance');
+
+        toolbar.dispose();
+
+        try {
+            toolbar.option('width', 250);
+        } catch (e) {
+            assert.ok(false, e);
+        } finally {
+            assert.ok(true, 'the exception is not thrown');
+        }
+
+        themes.isMaterial = origIsMaterial;
+    })
+});
+
 QUnit.module('Waiting fonts for material theme', moduleConfig, () => {
     QUnit.test('Toolbar calls font-waiting function for labels (T736793)', function(assert) {
         const estimatedData = [
@@ -1800,4 +1821,3 @@ QUnit.module('Waiting fonts for material theme', moduleConfig, () => {
         themes.isMaterial = origIsMaterial;
     });
 });
-
