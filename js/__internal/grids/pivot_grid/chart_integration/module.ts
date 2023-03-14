@@ -1,322 +1,324 @@
-import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import { foreachTree, formatValue, createPath } from './ui.pivot_grid.utils';
-import { each } from '../../core/utils/iterator';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+
+import { foreachTree, formatValue, createPath } from '../widget_utils';
 
 const FORMAT_DICTIONARY = {
-    number: 'numeric',
-    date: 'datetime'
+  number: 'numeric',
+  date: 'datetime',
 };
 const UNBIND_KEY = 'dxPivotGridUnbinding';
 
 function getFormattedValue(path, fields) {
-    const value = [];
-    const lastFieldIndex = fields.length - 1;
+  const value: any = [];
+  const lastFieldIndex = fields.length - 1;
 
-    each(path, function(i, item) {
-        value.push(item.text || formatValue(item.value, fields[lastFieldIndex - i]));
-    });
+  each(path, (i: number, item) => {
+    value.push(item.text || formatValue(item.value, fields[lastFieldIndex - i]));
+  });
 
-    return value.reverse();
+  return value.reverse();
 }
 
 function getExpandedLevel(node) {
-    let level = 0;
-    foreachTree(node, function(members) {
-        level = Math.max(level, members.length - 1);
-    });
-    return level;
+  let level = 0;
+  foreachTree(node, (members) => {
+    level = Math.max(level, members.length - 1);
+  });
+  return level;
 }
 
 function processDataCell(processCellArgs, processCell) {
-    let chartDataItem = processCellArgs.chartDataItem;
-    let processedCell = processCell && processCell(processCellArgs);
+  let { chartDataItem } = processCellArgs;
+  let processedCell = processCell && processCell(processCellArgs);
 
-    if(processedCell) {
-        chartDataItem = extend({}, chartDataItem, processedCell.chartDataItem);
-        processedCell = extend({}, processCellArgs, processedCell, {
-            chartDataItem: chartDataItem
-        });
+  if (processedCell) {
+    chartDataItem = extend({}, chartDataItem, processedCell.chartDataItem);
+    processedCell = extend({}, processCellArgs, processedCell, {
+      chartDataItem,
+    });
 
-        return processedCell;
-    }
+    return processedCell;
+  }
 
-    return processCellArgs;
+  return processCellArgs;
 }
 
 function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) {
-    const data = pivotGridDataSource.getData();
-    const dataSource = [];
+  const data = pivotGridDataSource.getData();
+  const dataSource: any = [];
 
-    const dataFields = pivotGridDataSource.getAreaFields('data');
-    const rowFields = pivotGridDataSource.getAreaFields('row');
-    const columnFields = pivotGridDataSource.getAreaFields('column');
+  const dataFields = pivotGridDataSource.getAreaFields('data');
+  const rowFields = pivotGridDataSource.getAreaFields('row');
+  const columnFields = pivotGridDataSource.getAreaFields('column');
 
-    const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
-    const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
+  const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
+  const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
 
-    const rowLevel = getExpandedLevel(rowElements);
-    const columnLevel = getExpandedLevel(columnElements);
+  const rowLevel = getExpandedLevel(rowElements);
+  const columnLevel = getExpandedLevel(columnElements);
 
-    let measureIndex;
-    let dataField;
+  let measureIndex;
+  let dataField;
 
-    let rowMemberIndex;
-    let rowVisibility;
-    let rowPathFormatted;
-    let rowPath;
+  let rowMemberIndex;
+  let rowVisibility;
+  let rowPathFormatted;
+  let rowPath;
 
-    let columnMemberIndex;
-    let columnVisibility;
-    let columnPath;
-    let columnPathFormatted;
+  let columnMemberIndex;
+  let columnVisibility;
+  let columnPath;
+  let columnPathFormatted;
 
-    function createDataItem() {
-        const dataCell = ((data.values[rowMemberIndex] || [])[columnMemberIndex] || []);
-        const value = dataCell[measureIndex];
-        let axis;
-        let processCellArgs = {
-            rowPath: rowPath,
-            maxRowLevel: rowLevel,
-            rowPathFormatted: rowPathFormatted,
-            rowFields: rowFields,
+  function createDataItem() {
+    const dataCell = (data.values[rowMemberIndex] || [])[columnMemberIndex] || [];
+    const value = dataCell[measureIndex];
+    let axis;
+    let processCellArgs: any = {
+      rowPath,
+      maxRowLevel: rowLevel,
+      rowPathFormatted,
+      rowFields,
 
-            columnPathFormatted: columnPathFormatted,
-            maxColumnLevel: columnLevel,
-            columnPath: columnPath,
-            columnFields: columnFields,
+      columnPathFormatted,
+      maxColumnLevel: columnLevel,
+      columnPath,
+      columnFields,
 
-            dataFields: dataFields,
-            dataIndex: measureIndex,
-            dataValues: dataCell,
+      dataFields,
+      dataIndex: measureIndex,
+      dataValues: dataCell,
 
-            visible: columnVisibility && rowVisibility
-        };
-        let seriesName = (mapOptions.inverted ? columnPathFormatted : rowPathFormatted).join(' - ');
-        let argument = (mapOptions.inverted ? rowPathFormatted : columnPathFormatted).join('/');
+      visible: columnVisibility && rowVisibility,
+    };
+    let seriesName = (mapOptions.inverted ? columnPathFormatted : rowPathFormatted).join(' - ');
+    let argument = (mapOptions.inverted ? rowPathFormatted : columnPathFormatted).join('/');
 
-        if(dataFields.length > 1) {
-            if(mapOptions.putDataFieldsInto === 'args' || mapOptions.putDataFieldsInto === 'both') {
-                argument += ' | ' + dataField.caption;
+    if (dataFields.length > 1) {
+      if (mapOptions.putDataFieldsInto === 'args' || mapOptions.putDataFieldsInto === 'both') {
+        argument += ` | ${dataField.caption}`;
+      }
 
-            }
+      if (mapOptions.putDataFieldsInto !== 'args') {
+        seriesName += ` | ${dataField.caption}`;
+        if (mapOptions.dataFieldsDisplayMode !== 'singleAxis') {
+          axis = dataField.caption;
+        }
+      }
+    }
 
-            if(mapOptions.putDataFieldsInto !== 'args') {
-                seriesName += ' | ' + dataField.caption;
-                if(mapOptions.dataFieldsDisplayMode !== 'singleAxis') {
-                    axis = dataField.caption;
-                }
-            }
+    processCellArgs.chartDataItem = {
+      val: value === undefined ? null : value,
+      series: seriesName,
+      arg: argument,
+    };
 
+    processCellArgs = processDataCell(processCellArgs, mapOptions.processCell);
+
+    if (processCellArgs.visible) {
+      axisDictionary[
+        processCellArgs.chartDataItem.series
+      ] = axisDictionary[processCellArgs.chartDataItem.series] || axis;
+      dataSource.push(processCellArgs.chartDataItem);
+    }
+  }
+
+  function foreachRowColumn(callBack) {
+    foreachTree(rowElements, (rowMembers) => {
+      rowMemberIndex = rowMembers[0].index;
+
+      rowMembers = rowMembers.slice(0, rowMembers.length - 1);
+
+      rowVisibility = rowLevel === rowMembers.length;
+
+      rowPath = createPath(rowMembers);
+      rowPathFormatted = getFormattedValue(rowMembers, rowFields);
+
+      if (rowPath.length === 0) {
+        rowPathFormatted = [mapOptions.grandTotalText];
+      }
+
+      foreachTree(columnElements, (columnMembers) => {
+        columnMemberIndex = columnMembers[0].index;
+
+        columnMembers = columnMembers.slice(0, columnMembers.length - 1);
+        columnVisibility = columnLevel === columnMembers.length;
+
+        columnPath = createPath(columnMembers);
+        columnPathFormatted = getFormattedValue(columnMembers, columnFields);
+
+        if (columnPath.length === 0) {
+          columnPathFormatted = [mapOptions.grandTotalText];
         }
 
-        processCellArgs.chartDataItem = {
-            val: value === undefined ? null : value,
-            series: seriesName,
-            arg: argument
-        };
+        callBack();
+      });
+    });
+  }
 
-        processCellArgs = processDataCell(processCellArgs, mapOptions.processCell);
+  function foreachDataField(callback) {
+    each(dataFields, (index, field) => {
+      dataField = field;
+      measureIndex = index;
+      callback();
+    });
+  }
 
-        if(processCellArgs.visible) {
+  if (mapOptions.alternateDataFields === false) {
+    foreachDataField(() => {
+      foreachRowColumn(createDataItem);
+    });
+  } else {
+    foreachRowColumn(() => {
+      foreachDataField(createDataItem);
+    });
+  }
 
-            axisDictionary[processCellArgs.chartDataItem.series] = axisDictionary[processCellArgs.chartDataItem.series] || axis;
-            dataSource.push(processCellArgs.chartDataItem);
-        }
-
-    }
-
-    function foreachRowColumn(callBack) {
-        foreachTree(rowElements, function(rowMembers) {
-            rowMemberIndex = rowMembers[0].index;
-
-            rowMembers = rowMembers.slice(0, rowMembers.length - 1);
-
-            rowVisibility = rowLevel === rowMembers.length;
-
-            rowPath = createPath(rowMembers);
-            rowPathFormatted = getFormattedValue(rowMembers, rowFields);
-
-            if(rowPath.length === 0) {
-                rowPathFormatted = [mapOptions.grandTotalText];
-            }
-
-            foreachTree(columnElements, function(columnMembers) {
-                columnMemberIndex = columnMembers[0].index;
-
-                columnMembers = columnMembers.slice(0, columnMembers.length - 1);
-                columnVisibility = columnLevel === columnMembers.length;
-
-                columnPath = createPath(columnMembers);
-                columnPathFormatted = getFormattedValue(columnMembers, columnFields);
-
-                if(columnPath.length === 0) {
-                    columnPathFormatted = [mapOptions.grandTotalText];
-                }
-
-                callBack();
-            });
-        });
-    }
-
-    function foreachDataField(callback) {
-        each(dataFields, function(index, field) {
-            dataField = field;
-            measureIndex = index;
-            callback();
-        });
-    }
-
-    if(mapOptions.alternateDataFields === false) {
-        foreachDataField(function() {
-            foreachRowColumn(createDataItem);
-        });
-    } else {
-        foreachRowColumn(function() {
-            foreachDataField(createDataItem);
-        });
-    }
-
-    return dataSource;
+  return dataSource;
 }
 
 function createValueAxisOptions(dataSource, options) {
-    const dataFields = dataSource.getAreaFields('data');
-    if(options.putDataFieldsInto !== 'args' && options.dataFieldsDisplayMode !== 'singleAxis' || dataFields.length === 1) {
-        const valueAxisSettings = [];
-        each(dataFields, function(_, dataField) {
-            const valueAxisOptions = {
-                name: dataField.caption,
-                title: dataField.caption,
-                valueType: FORMAT_DICTIONARY[dataField.dataType] || dataField.dataType,
-                label: { format: dataField.format }
-            };
+  const dataFields = dataSource.getAreaFields('data');
+  if (options.putDataFieldsInto !== 'args' && options.dataFieldsDisplayMode !== 'singleAxis' || dataFields.length === 1) {
+    const valueAxisSettings: any = [];
+    each(dataFields, (_, dataField) => {
+      const valueAxisOptions: any = {
+        name: dataField.caption,
+        title: dataField.caption,
+        valueType: FORMAT_DICTIONARY[dataField.dataType] || dataField.dataType,
+        label: { format: dataField.format },
+      };
 
-            if(dataField.customizeText) {
-                valueAxisOptions.label.customizeText = function(formatObject) {
-                    return dataField.customizeText.call(dataField, formatObject);
-                };
-            }
+      if (dataField.customizeText) {
+        valueAxisOptions.label.customizeText = function (formatObject) {
+          return dataField.customizeText.call(dataField, formatObject);
+        };
+      }
 
-            if(options.dataFieldsDisplayMode === 'splitPanes') {
-                valueAxisOptions.pane = dataField.caption;
-            }
+      if (options.dataFieldsDisplayMode === 'splitPanes') {
+        valueAxisOptions.pane = dataField.caption;
+      }
 
-            valueAxisSettings.push(valueAxisOptions);
-        });
+      valueAxisSettings.push(valueAxisOptions);
+    });
 
-        return valueAxisSettings;
-    }
+    return valueAxisSettings;
+  }
 
-    return [{}];
+  return [{}];
 }
 
 function createPanesOptions(dataSource, options) {
-    const panes = [];
-    const dataFields = dataSource.getAreaFields('data');
+  const panes: any = [];
+  const dataFields = dataSource.getAreaFields('data');
 
-    if(dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args') {
-        each(dataFields, function(_, dataField) {
-            panes.push({
-                name: dataField.caption
-            });
-        });
-    }
+  if (dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args') {
+    each(dataFields, (_, dataField) => {
+      panes.push({
+        name: dataField.caption,
+      });
+    });
+  }
 
-    if(!panes.length) {
-        panes.push({});
-    }
+  if (!panes.length) {
+    panes.push({});
+  }
 
-    return panes;
+  return panes;
 }
 
 function createChartOptions(dataSource, options) {
-    const customizeSeries = options.customizeSeries;
-    const customizeChart = options.customizeChart;
-    let chartOptions = {
-        valueAxis: createValueAxisOptions(dataSource, options),
-        panes: createPanesOptions(dataSource, options)
-    };
-    const axisDictionary = {};
+  const { customizeSeries } = options;
+  const { customizeChart } = options;
+  let chartOptions: any = {
+    valueAxis: createValueAxisOptions(dataSource, options),
+    panes: createPanesOptions(dataSource, options),
+  };
+  const axisDictionary = {};
 
-    if(customizeChart) {
-        chartOptions = extend(true, {}, chartOptions, customizeChart(chartOptions));
-    }
+  if (customizeChart) {
+    chartOptions = extend(true, {}, chartOptions, customizeChart(chartOptions));
+  }
 
-    chartOptions.dataSource = createChartDataSource(dataSource, options, axisDictionary);
+  chartOptions.dataSource = createChartDataSource(dataSource, options, axisDictionary);
 
-    chartOptions.seriesTemplate = {
-        nameField: 'series',
-        customizeSeries: function(seriesName) {
-            let seriesOptions = {};
+  chartOptions.seriesTemplate = {
+    nameField: 'series',
+    customizeSeries(seriesName) {
+      let seriesOptions: any = {};
 
-            if(options.dataFieldsDisplayMode === 'splitPanes') {
-                seriesOptions.pane = axisDictionary[seriesName];
-            } else if(options.dataFieldsDisplayMode !== 'singleAxis') {
-                seriesOptions.axis = axisDictionary[seriesName];
-            }
+      if (options.dataFieldsDisplayMode === 'splitPanes') {
+        seriesOptions.pane = axisDictionary[seriesName];
+      } else if (options.dataFieldsDisplayMode !== 'singleAxis') {
+        seriesOptions.axis = axisDictionary[seriesName];
+      }
 
-            if(customizeSeries) {
-                seriesOptions = extend(seriesOptions, customizeSeries(seriesName, seriesOptions));
-            }
+      if (customizeSeries) {
+        seriesOptions = extend(seriesOptions, customizeSeries(seriesName, seriesOptions));
+      }
 
-            return seriesOptions;
-        }
-    };
+      return seriesOptions;
+    },
+  };
 
-    return chartOptions;
+  return chartOptions;
 }
 
 function getChartInstance(chartElement) {
-    if(!chartElement) {
-        return false;
-    }
+  if (!chartElement) {
+    return false;
+  }
 
-    if(chartElement.NAME) {
-        return chartElement.NAME === 'dxChart' && chartElement;
-    }
+  if (chartElement.NAME) {
+    return chartElement.NAME === 'dxChart' && chartElement;
+  }
 
-    const element = $(chartElement);
-    return element.data('dxChart') && element.dxChart('instance');
+  const element: any = $(chartElement);
+  return element.data('dxChart') && element.dxChart('instance');
 }
 
 function removeBinding(chart) {
-    const unbind = chart.$element().data(UNBIND_KEY);
-    unbind && unbind();
+  const unbind = chart.$element().data(UNBIND_KEY);
+  unbind && unbind();
 }
 
-export default {
-    bindChart: function(chart, integrationOptions) {
-        integrationOptions = extend({}, integrationOptions);
+const ChartIntegrationMixin = {
+  bindChart(chart, integrationOptions) {
+    integrationOptions = extend({}, integrationOptions);
 
-        const that = this;
-        const updateChart = function() {
-            integrationOptions.grandTotalText = that.option('texts.grandTotal');
-            const chartOptions = createChartOptions(that.getDataSource(), integrationOptions);
-            chart.option(chartOptions);
-        };
+    const that: any = this;
+    const updateChart = function () {
+      integrationOptions.grandTotalText = that.option('texts.grandTotal');
+      const chartOptions = createChartOptions(that.getDataSource(), integrationOptions);
+      chart.option(chartOptions);
+    };
 
-        chart = getChartInstance(chart);
+    chart = getChartInstance(chart);
 
-        if(!chart) {
-            return null;
-        }
-
-        removeBinding(chart);
-
-        that.on('changed', updateChart);
-        updateChart();
-
-        const disposeBinding = function() {
-            chart.$element().removeData(UNBIND_KEY);
-            that.off('changed', updateChart);
-        };
-
-        chart.on('disposing', disposeBinding);
-        this.on('disposing', disposeBinding);
-
-        chart.$element().data(UNBIND_KEY, disposeBinding);
-
-        return disposeBinding;
+    if (!chart) {
+      return null;
     }
+
+    removeBinding(chart);
+
+    that.on('changed', updateChart);
+    updateChart();
+
+    const disposeBinding = function () {
+      chart.$element().removeData(UNBIND_KEY);
+      that.off('changed', updateChart);
+    };
+
+    chart.on('disposing', disposeBinding);
+    this.on('disposing', disposeBinding);
+
+    chart.$element().data(UNBIND_KEY, disposeBinding);
+
+    return disposeBinding;
+  },
 };
+
+export default { ChartIntegrationMixin };
+export { ChartIntegrationMixin };
