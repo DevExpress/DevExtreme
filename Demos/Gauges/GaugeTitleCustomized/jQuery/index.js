@@ -17,7 +17,7 @@ $(() => {
     },
     value: 7.78,
     title: {
-      text: 'Amount of Produced Gold (Kilos)',
+      text: 'Amount of Produced Gold',
       verticalAlignment: 'bottom',
       font: {
         size: 25,
@@ -29,19 +29,14 @@ $(() => {
     centerTemplate: (gauge, container) => {
       const topGroup = createGroup(50, 0);
       const bottomGroup = createGroup(43, 140);
-      const tspan1 = createTSpan(57, 0, 'Capacity: 10kg');
-      const tspan2 = createTSpan(57, 20, 'Graduation: 10g');
 
       const baseRect = createRect(200, 200, 'transparent', 0);
-      const topRect = createRect(100, 50, '#f2f2f2', 25);
+      const topRect = createRect(100, 70, '#f2f2f2', 8);
       const bottomRect = createRect(114, 56, '#fff', 8);
-      const valueText = createText(50, 25, 20, gauge.value());
-      const bottomText = createText(57, 23, 12, '');
+      const valueText = createText(50, 27, 20, 'middle', 30, gauge.value(), 'Kilos');
+      const bottomText = createText(15, 23, 12, 'start', 20, 'Capacity: 10kg', 'Graduation: 10g');
 
       bottomRect.setAttribute('class', 'description');
-
-      bottomText.appendChild(tspan1);
-      bottomText.appendChild(tspan2);
 
       topGroup.appendChild(topRect);
       topGroup.appendChild(valueText);
@@ -69,16 +64,20 @@ function createRect(width, height, fill, radius) {
   return rect;
 }
 
-function createText(x, y, fontSize, content) {
+function createText(x, y, fontSize, textAnchor, dy, content1, content2) {
   const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 
   text.setAttribute('x', x);
   text.setAttribute('y', y);
   text.setAttribute('fill', '#000');
-  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('text-anchor', textAnchor);
   text.setAttribute('font-size', fontSize);
-  text.setAttribute('alignment-baseline', 'middle');
-  text.textContent = content;
+
+  const tspan1 = createTSpan(x, 0, content1);
+  const tspan2 = createTSpan(x, dy, content2);
+
+  text.appendChild(tspan1);
+  text.appendChild(tspan2);
 
   return text;
 }
