@@ -8,7 +8,7 @@ if(Quill) {
 
     ExtLink = class ExtLink extends Link {
         static create(data) {
-            const HREF = data && data.href || data;
+            const HREF = data?.href ?? data;
             const node = super.create(HREF);
 
             if(isObject(data)) {

@@ -613,6 +613,67 @@ export default function() {
             $okDialogButton.trigger('dxclick');
         });
 
+        test('href in markup should be empty when empty href is passed in value (T1134100)', function(assert) {
+            const $container = $('#htmlEditor').dxHtmlEditor({
+                value: '<a href="">test</a>',
+            });
+            const linkHref = $container.find('a').attr('href');
+
+            assert.strictEqual(linkHref, '')
+        });
+
+        test('href should be empty on empty URL input submit (T1134100)', function(assert) {
+            const done = assert.async();
+            const $container = $('#htmlEditor');
+
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: '<p>test</p>',
+                onValueChanged: ({ value }) => {
+                    checkLink(assert, {
+                        href: '',
+                        content: '123'
+                    }, value);
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(0, 4);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+            const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+            $textInput
+                .val('123')
+                .change();
+
+            $okDialogButton.trigger('dxclick');
+        });
+
+        test('Update link dialog should display link text when link href is empty (T1134100)', function(assert) {
+            const $container = $('#htmlEditor');
+            const linkText = 'test';
+
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: `<a href="">${linkText}</a>`,
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(2, 0);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+            
+            assert.strictEqual(linkText, $textInput.val());
+        });
+
         test('Update whole link by dialog (zero-length selection)', function(assert) {
             const done = assert.async();
             const initialUrl = 'http://test.test';
