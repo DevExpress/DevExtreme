@@ -654,6 +654,26 @@ export default function() {
             $okDialogButton.trigger('dxclick');
         });
 
+        test('Update link dialog should display link text when link href is empty (T1134100)', function(assert) {
+            const $container = $('#htmlEditor');
+            const linkText = 'test';
+
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: `<a href="">${linkText}</a>`,
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(2, 0);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+            
+            assert.strictEqual(linkText, $textInput.val());
+        });
+
         test('Update whole link by dialog (zero-length selection)', function(assert) {
             const done = assert.async();
             const initialUrl = 'http://test.test';
