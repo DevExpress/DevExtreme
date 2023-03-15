@@ -6,8 +6,8 @@ import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
-import localization from 'localization';
-import ja from 'localization/messages/ja.json!';
+import * as localization from 'localization';
+import ja from 'localization/messages/ja.json';
 import { Deferred } from 'core/utils/deferred';
 import dxButton from 'ui/button';
 
