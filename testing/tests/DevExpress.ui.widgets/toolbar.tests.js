@@ -1725,23 +1725,18 @@ QUnit.module('adaptivity without hiding in menu', {
 });
 
 QUnit.module('Toolbar disposing', () => {
-    QUnit.test('_dimensionChanged skipped if widget is disposed (T1147410)', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => true;
-
+    QUnit.test('_dimensionChanged call should not raise any error if toolbar is disposed (T1147410)', function(assert) {
         const toolbar = $('#toolbar').dxToolbar().dxToolbar('instance');
 
         toolbar.dispose();
 
         try {
-            toolbar.option('width', 250);
+            toolbar._dimensionChanged();
         } catch (e) {
             assert.ok(false, e);
         } finally {
             assert.ok(true, 'the exception is not thrown');
         }
-
-        themes.isMaterial = origIsMaterial;
     })
 });
 
