@@ -104,7 +104,7 @@ function babelEsm() {
 }
 
 const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, [
-    babelCjs()
+    babelEsm()
 ]);
 
 const touch = () => through2.obj(function(file, enc, cb) {
@@ -117,7 +117,7 @@ const touch = () => through2.obj(function(file, enc, cb) {
 
 const transpileRenovation = (watch) => transpile(src, ctx.TRANSPILED_RENOVATION_PATH, [
     replaceWidgets(true),
-    babelCjs(),
+    babelEsm(),
     touch()
 ], watch);
 

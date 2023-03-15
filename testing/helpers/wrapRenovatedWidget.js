@@ -1,16 +1,15 @@
-// eslint-disable-next-line spellcheck/spell-checker
-const reRender = require('inferno').rerender;
+import { rerender } from 'inferno';
 
-exports.wrapRenovatedWidget = function wrapRenovatedWidget(renovatedWidget) {
+export function wrapRenovatedWidget(renovatedWidget) {
     class WrappedWidget extends renovatedWidget {
         callMethod(name, ...args) {
             const result = super[name](...args);
-            reRender();
+            rerender();
             return result;
         }
         constructor(...args) {
             super(...args);
-            reRender();
+            rerender();
         }
         option(...args) {
             return this.callMethod('option', ...args);
@@ -28,4 +27,4 @@ exports.wrapRenovatedWidget = function wrapRenovatedWidget(renovatedWidget) {
     const result = WrappedWidget;
     result.IS_RENOVATED_WIDGET = true;
     return result;
-};
+}

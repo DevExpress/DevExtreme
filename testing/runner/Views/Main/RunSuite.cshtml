@@ -23,7 +23,7 @@
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
-                yield return Url.Content("~/js/integration/jquery/component_registrator.js");
+                yield return Url.Content("~/artifacts/transpiled-renovation/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
             }
@@ -133,7 +133,7 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
-    <base href="@Url.Content("~/artifacts/transpiled-renovation")">
+    <base href="@Url.Content("~/artifacts/transpiled-esm-npm/esm/")">
     <script type="systemjs-importmap">
         {
             "imports": {
@@ -146,15 +146,17 @@
                 "inferno": "@Url.Content("~/node_modules/inferno/dist/index.esm.js")",
                 "inferno-hydrate": "@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")",
                 "inferno-compat": "@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")",
-                "inferno-clone-vnode": "@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")",
-                "inferno-create-element": "@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")",
-                "inferno-create-class": "@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")",
-                "inferno-extras": "@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")",
+                "inferno-clone-vnode": "@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.esm.js")",
+                "inferno-create-element": "@Url.Content("~/node_modules/inferno-create-element/dist/index.esm.js")",
+                "inferno-create-class": "@Url.Content("~/node_modules/inferno-create-class/dist/index.esm.js")",
+                "inferno-extras": "@Url.Content("~/node_modules/inferno-extras/dist/index.esm.js")",
                 "jszip": "@Url.Content("~/artifacts/js/jszip.js")",
 
+                "@@babel/runtime/": "@Url.Content("~/node_modules/@babel/runtime/")",
                 "@@devextreme/vdom": "@Url.Content("~/node_modules/@devextreme/vdom")",
                 "@@devextreme/runtime/common": "@Url.Content("~/node_modules/@devextreme/runtime/common")",
-                "@@devextreme/runtime/inferno": "@Url.Content("~/node_modules/@devextreme/runtime/inferno")",
+                "@@devextreme/runtime/inferno": "@Url.Content("~/node_modules/@devextreme/runtime/esm/inferno/index.js")",
+                "@@devextreme/runtime/inferno/": "@Url.Content("~/node_modules/@devextreme/runtime/esm/inferno/")",
                 "@@devextreme/runtime/declarations": "@Url.Content("~/node_modules/@devextreme/runtime/declarations")",
                 "@@devextreme/runtime/angular": "@Url.Content("~/node_modules/@devextreme/runtime/angular")",
                 "@@devextreme/runtime/vue": "@Url.Content("~/node_modules/@devextreme/runtime/vue")",
@@ -169,20 +171,20 @@
                 "turndown": "@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")",
                 "devextreme-showdown": "@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")",
                 "rrule": "@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")",
-                "generic_light.css": "@Url.Content("~/artifacts/css/dx.light.css")",
-                "material_blue_light.css": "@Url.Content("~/artifacts/css/dx.material.blue.light.css")",
+                "generic_light.css!": "@Url.Content("~/artifacts/css/dx.light.css")",
+                "material_blue_light.css!": "@Url.Content("~/artifacts/css/dx.material.blue.light.css")",
                 "css": "@Url.Content("~/node_modules/systemjs-plugin-css/css.js")",
                 "text": "@Url.Content("~/node_modules/systemjs-plugin-text/text.js")",
                 "json": "@Url.Content("~/node_modules/systemjs-plugin-json/json.js")",
                 "plugin-babel": "@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")",
                 "systemjs-babel-build": "@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")",
-                "animation/": "/js/animation/",
-                "core/": "/js/core/",
-                "data/": "/js/data/",
-                "events/": "/js/events/",
-                "localization": "/js/localization",
-                "localization/": "/js/localization/",
-                "ui/": "/js/ui/"
+                "animation/": "/artifacts/transpiled-renovation/animation/",
+                "core/": "/artifacts/transpiled-renovation/core/",
+                "data/": "/artifacts/transpiled-renovation/data/",
+                "events/": "/artifacts/transpiled-renovation/events/",
+                "localization": "/artifacts/transpiled-renovation/localization",
+                "localization/": "/artifacts/transpiled-renovation/localization/",
+                "ui/": "/artifacts/transpiled-renovation/ui/"
             }
         }
     </script>
@@ -204,7 +206,7 @@
                 }
 
                 if (url.includes('renovation/ui')) {
-                    return originalFetch(url + '.ts', options);
+                    return originalFetch(url + '.js', options);
                 }
 
                 if (!/\.(js|json|css)$/.test(url)) {

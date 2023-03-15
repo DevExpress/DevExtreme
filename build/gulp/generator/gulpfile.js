@@ -160,7 +160,7 @@ gulp.task('generate-components', gulp.series(
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
-    generateInfernoComponents('./', transpileConfig.cjs, true),
+    generateInfernoComponents('./', transpileConfig.esm, true),
     processRenovationMeta
 ));
 
