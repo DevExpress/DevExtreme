@@ -13,7 +13,7 @@ import { StateStoringController } from '@js/ui/grid_core/ui.grid_core.state_stor
 import { PivotGridDataSource } from '../data_source/module';
 import {
   findField, foreachTree, foreachTreeAsync, createPath, formatValue,
-} from '../widget_utils';
+} from '../module_widget_utils';
 
 const math = Math;
 const GRAND_TOTAL_TYPE = 'GT';

@@ -7,7 +7,7 @@ import {
   getCompareFunction,
   createPath,
   foreachDataLevel,
-} from '../widget_utils';
+} from '../module_widget_utils';
 
 function sort(loadOptions, dataSource, getAscOrder) {
   sortDimension(dataSource, loadOptions, 'rows', getAscOrder);

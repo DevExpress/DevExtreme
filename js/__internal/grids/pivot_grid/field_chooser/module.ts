@@ -9,7 +9,7 @@ import registerComponent from '@js/core/component_registrator';
 import TreeView from '@js/ui/tree_view';
 import ContextMenu from '@js/ui/context_menu';
 
-import { getCompareFunction, foreachDataLevel } from '../widget_utils';
+import { getCompareFunction, foreachDataLevel } from '../module_widget_utils';
 import { FieldChooserBase } from './module_base';
 
 import '../data_source/module';

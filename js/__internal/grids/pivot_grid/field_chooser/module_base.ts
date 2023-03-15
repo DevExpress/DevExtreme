@@ -18,7 +18,7 @@ import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
 import { Deferred } from '@js/core/utils/deferred';
 
-import { foreachTree, createPath } from '../widget_utils';
+import { foreachTree, createPath } from '../module_widget_utils';
 import { Sortable } from '../sortable/module';
 import { sortableItemRender } from '../sortable/index';
 
