@@ -664,7 +664,7 @@ const ColorView = Editor.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const startColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '1' : '0'})`;
         const finishColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '0' : '1'})`;
-        const backgroundImage = `background-image: linear-gradient(-90deg, ${startColor}, ${finishColor})`;
+        const backgroundImage = `linear-gradient(-90deg, ${startColor}, ${finishColor})`;
 
         $el.css('backgroundImage', backgroundImage);
     },
