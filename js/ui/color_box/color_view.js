@@ -666,7 +666,7 @@ const ColorView = Editor.inherit({
         const finishColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '0' : '1'})`;
         const backgroundImage = `background-image: linear-gradient(-90deg, ${startColor}, ${finishColor})`;
 
-        $el.css('background-image', backgroundImage);
+        $el.css('backgroundImage', backgroundImage);
     },
 
     _renderAlphaChannelInput: function() {
