@@ -12,7 +12,7 @@ import pivotGridUtils, {
   capitalizeFirstLetter,
   getExpandedLevel,
   setDefaultFieldValueFormatting,
-} from '../widget_utils';
+} from '../module_widget_utils';
 import { forEachGroup } from './module_utils';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {

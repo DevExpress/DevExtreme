@@ -2,7 +2,7 @@ import { getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import ScrollView from '../scroll_view';
-import { calculateScrollbarWidth } from '../../__internal/grids/pivot_grid/widget_utils';
+import { calculateScrollbarWidth } from '../../__internal/grids/pivot_grid/module_widget_utils';
 
 import { getDiagram } from './diagram.importer';
 

@@ -26,7 +26,7 @@ import {
   createPath,
   setFieldProperty,
   getFieldsDataType,
-} from '../widget_utils';
+} from '../module_widget_utils';
 
 const DESCRIPTION_NAME_BY_AREA = {
   row: 'rows',

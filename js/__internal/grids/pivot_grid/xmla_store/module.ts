@@ -15,7 +15,7 @@ import { getLanguageId } from '@js/localization/language_codes';
 
 import pivotGridUtils, {
   getExpandedLevel, storeDrillDownMixin, foreachTree,
-} from '../widget_utils';
+} from '../module_widget_utils';
 
 const window = getWindow();
 

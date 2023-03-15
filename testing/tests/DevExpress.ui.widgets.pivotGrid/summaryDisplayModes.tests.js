@@ -4,7 +4,7 @@ import summaryDisplayModes, {
     applyRunningTotal,
     summaryDictionary ,
 } from '__internal/grids/pivot_grid/summary_display_modes/module'; // arguments: description, data
-import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
+import pivotGridUtils from '__internal/grids/pivot_grid/module_widget_utils';
 
 const data = {
     columns: [{
