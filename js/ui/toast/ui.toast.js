@@ -29,8 +29,6 @@ const toastTypes = ['info', 'warning', 'error', 'success'];
 const TOAST_STACK = [];
 const FIRST_Z_INDEX_OFFSET = 8000;
 
-let visibleToastInstance = null;
-
 const POSITION_ALIASES = {
     'top': { my: 'top', at: 'top', of: null, offset: '0 0' },
     'bottom': { my: 'bottom', at: 'bottom', of: null, offset: '0 -20' },
@@ -238,23 +236,11 @@ const Toast = Overlay.inherit({
     },
 
     _show: function() {
-        if(visibleToastInstance && visibleToastInstance !== this) {
-            clearTimeout(visibleToastInstance._hideTimeout);
-            visibleToastInstance.hide();
-        }
-
-        visibleToastInstance = this;
-
         return this.callBase.apply(this, arguments).done((function() {
             clearTimeout(this._hideTimeout);
 
             this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
         }).bind(this));
-    },
-
-    _hide: function() {
-        visibleToastInstance = null;
-        return this.callBase.apply(this, arguments);
     },
 
     _overlayStack: function() {
@@ -267,7 +253,6 @@ const Toast = Overlay.inherit({
 
     _dispose: function() {
         clearTimeout(this._hideTimeout);
-        visibleToastInstance = null;
         this.callBase();
     },
 
