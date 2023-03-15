@@ -1259,11 +1259,10 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const testName = `"URL" field should be ${length ? 'not' : ''} empty when selection length is ${length} and selection stays at link`;
         test(testName, function(assert) {
             const text = length ? 'T' : '';
-            const link = length ? 'http://test.com' : '';
             this.options.items = ['link'];
             this.quillMock.getFormat = () => {
                 return {
-                    link,
+                    link: length ? 'http://test.com' : undefined,
                     target: undefined,
                     text
                 };
@@ -1277,7 +1276,7 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
 
             const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-            assert.equal($fieldInputs.eq(0).val(), link, 'URL');
+            assert.equal($fieldInputs.eq(0).val(), length ? 'http://test.com' : '', 'URL');
             assert.equal($fieldInputs.eq(1).val(), text, 'Text');
         });
     });
