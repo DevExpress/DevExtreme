@@ -4425,6 +4425,31 @@ QUnit.module('Deferred selection', {
         // assert
         assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter is empty');
     });
+
+    QUnit.test('Selecting multiple rows with deffered selection and preserve:false should not check for filter duplication (T1147676)', function(assert) {
+        const data = generateItems(100);
+        this.setupDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            height: 400,
+            selection: {
+                deferred: true,
+                mode: 'multiple'
+            },
+        });
+        this.clock.tick();
+        const spy = sinon.spy(this.selectionController._selection._selectionStrategy, '_removeSameFilter');
+        this.selectRows(data.map(data => data.id).slice(2));
+        this.clock.tick(100);
+        assert.equal(spy.callCount, 0, 'no extra calls');
+        this.selectRows([0]);
+        this.clock.tick();
+        this.selectRows([1], true);
+        this.clock.tick();
+        assert.notEqual(spy.callCount, 0, 'called for preserved selection');
+        spy.restore();
+    });
+
 });
 
 QUnit.module('Selection with virtual scrolling', {
