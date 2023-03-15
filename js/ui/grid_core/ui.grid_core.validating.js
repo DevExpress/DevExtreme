@@ -472,8 +472,13 @@ const ValidatingController = modules.Controller.inherit((function() {
             const stateRestored = validationResultIsValid(validationResult);
             const adapter = validator.option('adapter');
             if(!stateRestored) {
-                const isSameValue = validationResult ? adapter.getValue() === validationResult.value : false;
-                if(!isSameValue) { validationResult = validator.validate(); }
+                validationResult = validator.validate();
+            } else {
+                const currentCellValue = adapter.getValue();
+                const isSameValue = currentCellValue === validationResult.value;
+                if(!isSameValue) {
+                    validationResult = validator.validate();
+                }
             }
             const deferred = new Deferred();
             if(stateRestored && validationResult.status === VALIDATION_STATUS.pending) {
