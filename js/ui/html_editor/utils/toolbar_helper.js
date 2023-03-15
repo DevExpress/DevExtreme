@@ -195,7 +195,7 @@ function prepareLinkHandler(module) {
         let selection = module.quill.getSelection();
         const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
-        const isCursorAtLink = formats.link && selection?.length === 0;
+        const isCursorAtLink = formats.link !== undefined && selection?.length === 0;
         let href = formats.link || '';
 
         if(isCursorAtLink) {
