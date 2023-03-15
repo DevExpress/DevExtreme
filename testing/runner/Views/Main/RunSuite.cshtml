@@ -23,7 +23,7 @@
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
-                yield return Url.Content("~/artifacts/transpiled-renovation/integration/jquery/component_registrator.js");
+                yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
             }
@@ -133,7 +133,7 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
-    <base href="@Url.Content("~/artifacts/transpiled-esm-npm/esm/")">
+    <base href="@Url.Content("~/artifacts/" + npmModule + "/")">
     <script type="systemjs-importmap">
         {
             "imports": {
@@ -178,13 +178,13 @@
                 "json": "@Url.Content("~/node_modules/systemjs-plugin-json/json.js")",
                 "plugin-babel": "@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")",
                 "systemjs-babel-build": "@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")",
-                "animation/": "/artifacts/transpiled-renovation/animation/",
-                "core/": "/artifacts/transpiled-renovation/core/",
-                "data/": "/artifacts/transpiled-renovation/data/",
-                "events/": "/artifacts/transpiled-renovation/events/",
-                "localization": "/artifacts/transpiled-renovation/localization",
-                "localization/": "/artifacts/transpiled-renovation/localization/",
-                "ui/": "/artifacts/transpiled-renovation/ui/"
+                "animation/": "./animation/",
+                "core/": "./core/",
+                "data/": "./data/",
+                "events/": "./events/",
+                "localization": "./localization",
+                "localization/": "./localization/",
+                "ui/": "./ui/"
             }
         }
     </script>
