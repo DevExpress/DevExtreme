@@ -1,7 +1,7 @@
 import { isFunction, isDefined, isObject } from '@js/core/utils/type';
 import { extend } from '@js/core/utils/extend';
 
-import pivotGridUtils, { findField, foreachTree } from '../widget_utils';
+import pivotGridUtils, { findField, foreachTree } from '../module_widget_utils';
 
 const COLUMN = 'column';
 const ROW = 'row';

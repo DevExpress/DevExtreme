@@ -7,7 +7,7 @@ import summaryDisplayModesModule from '__internal/grids/pivot_grid/summary_displ
 import xmlaStoreModule, { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/module';
 import { LocalStore } from '__internal/grids/pivot_grid/local_store/module';
 import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/module';
-import pivotGridUtils, { setFieldProperty } from '__internal/grids/pivot_grid/widget_utils';
+import pivotGridUtils, { setFieldProperty } from '__internal/grids/pivot_grid/module_widget_utils';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import '../../../testing/content/orders.js';

@@ -6,7 +6,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import Button from '@js/ui/button';
 
 import { AreaItem } from '../area_item/module';
-import { capitalizeFirstLetter } from '../widget_utils';
+import { capitalizeFirstLetter } from '../module_widget_utils';
 import '../field_chooser/module_base';
 
 const DIV = '<div>';

@@ -112,7 +112,7 @@ const ExportController = {
   },
 };
 
-export const DataProvider = Class.inherit({
+const DataProvider = Class.inherit({
   ctor(exportController) {
     this._exportController = exportController;
   },
@@ -331,5 +331,5 @@ const PivotGridExport = {
   DEFAUL_COLUMN_WIDTH,
 };
 
-export default { ExportController, PivotGridExport };
-export { ExportController, PivotGridExport };
+export default { ExportController, PivotGridExport, DataProvider };
+export { ExportController, PivotGridExport, DataProvider };

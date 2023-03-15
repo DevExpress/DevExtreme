@@ -15,7 +15,7 @@ import { getLanguageId } from '@js/localization/language_codes';
 
 import pivotGridUtils, {
   getExpandedLevel, storeDrillDownMixin, foreachTree,
-} from '../widget_utils';
+} from '../module_widget_utils';
 
 const window = getWindow();
 
@@ -914,7 +914,7 @@ const XmlaStore = Class.inherit((function () {
     };
 
     each($(xml).find('row'), function () {
-      const $row = $(this);
+      const $row = $(this as any);
       const type = $row.children('DIMENSION_TYPE').text();
       const dimensionName = type === MD_DIMTYPE_MEASURE ? MEASURE_DEMENSION_KEY : $row.children('DIMENSION_UNIQUE_NAME').text();
 

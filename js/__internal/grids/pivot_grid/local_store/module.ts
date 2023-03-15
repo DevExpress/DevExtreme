@@ -20,7 +20,7 @@ import {
   setDefaultFieldValueFormatting,
   storeDrillDownMixin,
   discoverObjectFields,
-} from '../widget_utils';
+} from '../module_widget_utils';
 
 const PATH_DELIMETER = '/./';
 

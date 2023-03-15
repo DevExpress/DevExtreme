@@ -15,7 +15,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
 import '__internal/grids/pivot_grid/field_chooser/module';
-import '__internal/grids/pivot_grid/widget';
+import '__internal/grids/pivot_grid/module_widget';
 
 import pointerMock from '../../helpers/pointerMock.js';
 
