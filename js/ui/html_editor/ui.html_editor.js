@@ -23,6 +23,7 @@ import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import FormDialog from './ui/formDialog';
+import config from '../../core/config';
 
 // STYLE htmlEditor
 
@@ -62,7 +63,7 @@ const HtmlEditor = Editor.inherit({
 
             imageUpload: null,
 
-            stylingMode: 'outlined'
+            stylingMode: config().editorStylingMode || 'outlined',
         });
     },
 
