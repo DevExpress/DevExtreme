@@ -21,19 +21,17 @@ import ContextMenu from '@js/ui/context_menu';
 // @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 
-import { setFieldProperty, findField, mergeArraysByMaxValue } from './widget_utils';
-import { DataController } from './data_controller/module';
-import { DataArea } from './data_area/module';
-import { VerticalHeadersArea, HorizontalHeadersArea } from './headers_area/module';
+import { setFieldProperty, findField, mergeArraysByMaxValue } from './module_widget_utils';
+import DataControllerImport from './data_controller/module';
+import DataAreaImport from './data_area/module';
+import HeadersArea from './headers_area/module';
 import { FieldsArea } from './fields_area/module';
-import PivotGridFieldChooser from './field_chooser/module';
-import PivotGridFieldChooserBase from './field_chooser/module_base';
+import { FieldChooser } from './field_chooser/module';
+import { FieldChooserBase } from './field_chooser/module_base';
 import { ExportController } from './export/module';
-import chartIntegrationMixin from './chart_integration/module';
+import { ChartIntegrationMixin } from './chart_integration/module';
 
 const window = getWindow();
-
-// STYLE pivotGrid
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 const ROW_AREA_CELL_CLASS = 'dx-area-row-cell';
@@ -104,32 +102,6 @@ function getCommonBorderWidth(elements, direction) {
 function clickedOnFieldsArea($targetElement) {
   return $targetElement.closest(`.${FIELDS_CLASS}`).length || $targetElement.find(`.${FIELDS_CLASS}`).length;
 }
-
-/**
-* @name dxPivotGridOptions.activeStateEnabled
-* @hidden
-*/
-
-/**
-* @name dxPivotGridOptions.hoverStateEnabled
-* @hidden
-*/
-
-/**
-* @name dxPivotGridOptions.focusStateEnabled
-* @hidden
-*/
-
-/**
-* @name dxPivotGridOptions.accessKey
-* @hidden
-*/
-
-/**
-* @name dxPivotGrid.registerKeyHandler
-* @publicName registerKeyHandler(key, handler)
-* @hidden
-*/
 
 const PivotGrid = (Widget as any).inherit({
   _getDefaultOptions() {
@@ -256,11 +228,11 @@ const PivotGrid = (Widget as any).inherit({
 
   _updateCalculatedOptions(fields) {
     const that = this;
-    each(fields, (index, field) => {
+    each(fields, (_, field) => {
       each(FIELD_CALCULATED_OPTIONS, (_, optionName) => {
         const isCalculated = field._initProperties
-                    && (optionName in field._initProperties)
-                    && (field._initProperties[optionName] === undefined);
+          && (optionName in field._initProperties)
+          && (field._initProperties[optionName] === undefined);
         const needUpdate = field[optionName] === undefined || isCalculated;
         if (needUpdate) {
           setFieldProperty(field, optionName, that.option(optionName));
@@ -294,7 +266,8 @@ const PivotGrid = (Widget as any).inherit({
     const that = this;
     that._dataController && that._dataController.dispose();
 
-    that._dataController = new DataController(that._getDataControllerOptions());
+    that._dataController = new DataControllerImport
+      .DataController(that._getDataControllerOptions());
 
     if (hasWindow()) {
       that._dataController.changed.add(() => {
@@ -581,7 +554,7 @@ const PivotGrid = (Widget as any).inherit({
       onShown(e) {
         that._createComponent(
           e.component.content(),
-          PivotGridFieldChooser,
+          FieldChooser,
           fieldChooserComponentOptions,
         );
       },
@@ -675,7 +648,7 @@ const PivotGrid = (Widget as any).inherit({
 
       if (e.cell.isLast && !dataSource.paginate()) {
         let sortingBySummaryItemCount = 0;
-        each(oppositeAreaFields, (index, field) => {
+        each(oppositeAreaFields, (_, field) => {
           if (!field.allowSortingBySummary) {
             return;
           }
@@ -706,7 +679,7 @@ const PivotGrid = (Widget as any).inherit({
             sortingBySummaryItemCount += 1;
           });
         });
-        each(oppositeAreaFields, (index, field) => {
+        each(oppositeAreaFields, (_, field) => {
           if (!field.allowSortingBySummary || !isDefined(field.sortBySummaryField)) {
             return undefined;
           }
@@ -715,7 +688,7 @@ const PivotGrid = (Widget as any).inherit({
             icon: 'none',
             text: texts.removeAllSorting,
             onItemClick() {
-              each(oppositeAreaFields, (index, field) => {
+              each(oppositeAreaFields, (_, field) => {
                 dataSource.field(field.index, {
                   sortBySummaryField: undefined,
                   sortBySummaryPath: undefined,
@@ -859,8 +832,9 @@ const PivotGrid = (Widget as any).inherit({
         visible: isLoading,
       };
       if (isLoading) {
-        visibilityOptions.position = gridCoreUtils
-          .calculateLoadPanelPosition(that._dataArea.groupElement());
+        visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition(
+          that._dataArea.groupElement(),
+        );
       }
       that._loadPanel.option(visibilityOptions);
       that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
@@ -894,7 +868,11 @@ const PivotGrid = (Widget as any).inherit({
       !!(fieldPanel.visible && fieldPanel.showFilterFields),
     );
 
-    $descriptionCell.toggleClass('dx-pivotgrid-background', fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields));
+    $descriptionCell.toggleClass(
+      'dx-pivotgrid-background',
+      fieldPanel.visible
+      && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields),
+    );
 
     this.$element().find('.dx-pivotgrid-toolbar').remove();
 
@@ -938,7 +916,7 @@ const PivotGrid = (Widget as any).inherit({
     if (isDefined(that._hasHeight)) {
       const height = that.option('height') || that.$element().get(0).style.height;
 
-      if (height && ((that._hasHeight ^ height) as any !== 'auto')) {
+      if (height && (that._hasHeight ^ (height !== 'auto') as any)) {
         that._hasHeight = null;
       }
     }
@@ -948,7 +926,7 @@ const PivotGrid = (Widget as any).inherit({
     }
 
     that._pivotGridContainer.addClass('dx-hidden');
-    const testElement = $(DIV) as any;
+    const testElement: any = $(DIV);
     setHeight(testElement, TEST_HEIGHT);
     element.append(testElement);
     that._hasHeight = getHeight(element) !== TEST_HEIGHT;
@@ -994,7 +972,7 @@ const PivotGrid = (Widget as any).inherit({
 
   _renderDataArea(dataAreaElement) {
     const that = this;
-    const dataArea = that._dataArea || new DataArea(that);
+    const dataArea = that._dataArea || new DataAreaImport.DataArea(that);
     that._dataArea = dataArea;
     dataArea.render(dataAreaElement, that._dataController.getCellsInfo());
 
@@ -1003,7 +981,7 @@ const PivotGrid = (Widget as any).inherit({
 
   _renderRowsArea(rowsAreaElement) {
     const that = this;
-    const rowsArea = that._rowsArea || new VerticalHeadersArea(that);
+    const rowsArea = that._rowsArea || new HeadersArea.VerticalHeadersArea(that);
     that._rowsArea = rowsArea;
     rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
 
@@ -1012,7 +990,7 @@ const PivotGrid = (Widget as any).inherit({
 
   _renderColumnsArea(columnsAreaElement) {
     const that = this;
-    const columnsArea = that._columnsArea || new HorizontalHeadersArea(that);
+    const columnsArea = that._columnsArea || new HeadersArea.HorizontalHeadersArea(that);
     that._columnsArea = columnsArea;
     columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
 
@@ -1089,7 +1067,7 @@ const PivotGrid = (Widget as any).inherit({
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    that._createComponent(that.$element(), PivotGridFieldChooserBase, {
+    that._createComponent(that.$element(), FieldChooserBase, {
       dataSource: that.getDataSource(),
       encodeHtml: that.option('encodeHtml'),
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
@@ -1253,14 +1231,15 @@ const PivotGrid = (Widget as any).inherit({
       hasRowsScroll,
       hasColumnsScroll,
       scrollBarWidth,
-    ) => (hasRowsScroll ? dataAreaHeight : totalHeight + (hasColumnsScroll ? scrollBarWidth : 0));
+    ) => (hasRowsScroll
+      ? dataAreaHeight
+      : totalHeight + (hasColumnsScroll ? scrollBarWidth : 0)
+    );
 
     deferUpdate(() => {
       const rowHeights = that._rowsArea.getRowsHeight();
-      const descriptionCellHeight = getOuterHeight(
-        descriptionCell[0],
-        true,
-      ) + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
+      const descriptionCellHeight = getOuterHeight(descriptionCell[0], true)
+        + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
       let filterAreaHeight = 0;
       let dataAreaHeight = 0;
@@ -1278,7 +1257,9 @@ const PivotGrid = (Widget as any).inherit({
             getHeight(that._dataArea.headElement()),
             getHeight(columnAreaCell),
             descriptionCellHeight,
-          ) + bordersWidth);
+          )
+            + bordersWidth
+          );
       }
 
       const scrollBarWidth = that._dataArea.getScrollbarWidth();
@@ -1396,7 +1377,7 @@ const PivotGrid = (Widget as any).inherit({
         }
 
         if (that._hasHeight && that._filterFields.isVisible()
-                    && getHeight(filterHeaderCell) !== filterAreaHeight) {
+          && getHeight(filterHeaderCell) !== filterAreaHeight) {
           const diff = getHeight(filterHeaderCell) - filterAreaHeight;
           if (diff > 0) {
             hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
@@ -1505,7 +1486,7 @@ const PivotGrid = (Widget as any).inherit({
   },
 })
   .inherit(ExportController)
-  .include(chartIntegrationMixin);
+  .include(ChartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);
 

@@ -1,2 +1,2 @@
 export * from './const';
-export * from './item_render';
+export * from './module_item_render';

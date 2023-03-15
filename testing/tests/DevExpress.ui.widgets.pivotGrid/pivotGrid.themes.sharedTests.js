@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { PivotGrid } from '__internal/grids/pivot_grid/widget';
+import { PivotGrid } from '__internal/grids/pivot_grid/module_widget';
 
 const PIVOTGRID_EXPANDED_CLASS = 'dx-pivotgrid-expanded';
 const PIVOTGRID_TOTAL_CLASS = 'dx-total';
