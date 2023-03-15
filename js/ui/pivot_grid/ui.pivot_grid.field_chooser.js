@@ -1,4 +1,4 @@
 import { FieldChooser } from '../../__internal/grids/pivot_grid/field_chooser/module';
-/** @deprecated **/
+// deprecated
 export default FieldChooser;
 

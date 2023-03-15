@@ -8,11 +8,22 @@ module.exports = {
     overrides: [
         {
             files: [
-                '**/module_*.ts',
-                '**/module.ts',
-                '**/widget_*.ts',
-                '**/widget.ts',
-                'grids/pivot-grid/sortable/*.ts',
+                '**/[!module]*.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                'complexity': ['error', 3],
+                'no-inner-declarations': ['error', 'both'],
+            },
+        },
+        {
+            files: [
+                '**/module*.ts',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {

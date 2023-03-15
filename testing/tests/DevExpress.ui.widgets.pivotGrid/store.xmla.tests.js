@@ -10,7 +10,7 @@ define(function(require) {
     const $ = require('jquery');
     const browser = require('core/utils/browser');
     const devices = require('core/devices');
-    const pivotGridUtils = require('__internal/grids/pivot_grid/widget_utils');
+    const pivotGridUtils = require('__internal/grids/pivot_grid/module_widget_utils');
     const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/module_utils');
     const XmlaStore = require('__internal/grids/pivot_grid/xmla_store/module');
 
