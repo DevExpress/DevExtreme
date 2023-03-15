@@ -20,7 +20,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import ContextMenu from '@js/ui/context_menu';
 import { when, Deferred } from '@js/core/utils/deferred';
 
-import { setFieldProperty, findField, mergeArraysByMaxValue } from './widget_utils';
+import { setFieldProperty, findField, mergeArraysByMaxValue } from './module_widget_utils';
 import DataControllerImport from './data_controller/module';
 import DataAreaImport from './data_area/module';
 import HeadersArea from './headers_area/module';
