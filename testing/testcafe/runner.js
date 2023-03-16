@@ -68,7 +68,8 @@ createTestCafe({
         const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
-
+        // eslint-disable-next-line spellcheck/spell-checker
+        allowTestcafeCSP();
         setTestingPlatform(args);
         setTestingTheme(args);
 
@@ -172,6 +173,16 @@ function setTestingPlatform(args) {
 
 function setTestingTheme(args) {
     process.env.theme = args.theme || 'generic.light';
+}
+
+// eslint-disable-next-line spellcheck/spell-checker
+function allowTestcafeCSP() {
+    const filePath = `${__dirname}/../../node_modules/testcafe/lib/proxyless/request-pipeline/index.js`
+    const file = fs.readFileSync(filePath).toString()
+    fs.writeFileSync(filePath, Buffer.from(file.replace(
+        'await this._client.Page.setBypassCSP({ enabled: true });',
+        'await this._client.Page.setBypassCSP({ enabled: false });'
+    )));
 }
 
 function expandBrowserAlias(browser) {
