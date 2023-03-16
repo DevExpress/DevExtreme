@@ -58,6 +58,8 @@ declare function notify(options: any, type?: string, displayTime?: number): void
  * @static
  * @publicName notify(message,stack)
  * @param2 stack:object
+ * @param2_field direction:string
+ * @param2_field position:string
  * @public
  */
 declare function notify(message: string, stack?: Stack): void;
@@ -68,6 +70,8 @@ declare function notify(message: string, stack?: Stack): void;
  * @publicName notify(options,stack)
  * @param1 options:object
  * @param2 stack:object
+ * @param2_field direction:string
+ * @param2_field position:string
  * @public
  */
 declare function notify(options: any, stack?: Stack): void;

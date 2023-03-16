@@ -358,6 +358,7 @@ export default class dxTreeView<TKey = any>
      * @docid
      * @publicName collapseItem(itemData)
      * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
      * @public
      */
@@ -386,6 +387,7 @@ export default class dxTreeView<TKey = any>
      * @docid
      * @publicName expandItem(itemData)
      * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
      * @public
      */
@@ -441,6 +443,7 @@ export default class dxTreeView<TKey = any>
      * @docid
      * @publicName selectItem(itemData)
      * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @public
      */
     selectItem(itemData: Item): boolean;
@@ -466,6 +469,7 @@ export default class dxTreeView<TKey = any>
      * @docid
      * @publicName unselectItem(itemData)
      * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @public
      */
     unselectItem(itemData: Item): boolean;
@@ -492,6 +496,7 @@ export default class dxTreeView<TKey = any>
      * @docid
      * @publicName scrollToItem(itemData)
      * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
      * @public
      */
@@ -567,7 +572,11 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     [key: string]: any;
 }
 
-/** @public */
+/**
+ * @public
+ * @docid dxTreeViewNode
+ * @type object
+ */
 export type Node<TKey = any> = dxTreeViewNode<TKey>;
 
 /**

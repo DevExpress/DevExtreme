@@ -134,7 +134,10 @@ export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 
 /**
  * @public
+ * @docid PieChartLegendItem
  * @namespace DevExpress.viz.dxPieChart
+ * @inherits BaseLegendItem
+ * @type object
  */
 export type LegendItem = PieChartLegendItem;
 

@@ -71,6 +71,9 @@ export type FunnelLabelOverlap = ShiftLabelOverlap;
 
 /**
  * @public
+ * @docid FunnelLegendItem
+ * @inherits BaseLegendItem
+ * @type object
  * @namespace DevExpress.viz.dxFunnel
  */
 export type LegendItem = FunnelLegendItem;

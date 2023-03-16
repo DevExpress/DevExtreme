@@ -5931,6 +5931,9 @@ declare module DevExpress.data {
   }
 }
 declare module DevExpress.data.PivotGridDataSource {
+  /**
+   * [descr:PivotGridDataSourceOptions.fields]
+   */
   export type Field = PivotGridDataSourceField;
 }
 declare module DevExpress.data.utils {
@@ -7113,6 +7116,10 @@ declare module DevExpress.pdfExporter {
   }
 }
 declare module DevExpress.ui {
+  /**
+   * [descr:dxSchedulerAppointment]
+   */
+  export type Appointment = dxSchedulerAppointment;
   /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -13627,7 +13634,6 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
-    export type Field = dxFilterBuilderField;
     export type FieldEditorTemplate = {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
@@ -13681,7 +13687,7 @@ declare module DevExpress.ui {
      */
     calculateFilterExpression?: (
       filterValue: any,
-      field: DevExpress.ui.dxFilterBuilder.Field
+      field: Field
     ) => string | Array<any> | Function;
     /**
      * [descr:dxFilterBuilderCustomOperation.caption]
@@ -13693,7 +13699,7 @@ declare module DevExpress.ui {
     customizeText?: (fieldInfo: {
       value?: string | number | Date;
       valueText?: string;
-      field?: DevExpress.ui.dxFilterBuilder.Field;
+      field?: Field;
     }) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
@@ -13826,7 +13832,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.fields]
      */
-    fields?: Array<DevExpress.ui.dxFilterBuilder.Field>;
+    fields?: Array<Field>;
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
      */
@@ -19638,16 +19644,16 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: dxSchedulerAppointment): void;
+    addAppointment(appointment: Appointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: dxSchedulerAppointment): void;
+    deleteAppointment(appointment: Appointment): void;
     /**
      * [descr:dxScheduler.deleteRecurrence(appointment, date, recurrenceEditMode)]
      */
     deleteRecurrence(
-      appointmentData: dxSchedulerAppointment,
+      appointmentData: Appointment,
       date: Date | string,
       recurrenceEditMode: DevExpress.ui.dxScheduler.RecurrenceEditMode
     ): void;
@@ -19681,37 +19687,33 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: dxSchedulerAppointment,
+      appointmentData?: Appointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: dxSchedulerAppointment
+      currentAppointmentData?: Appointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: dxSchedulerAppointment,
+      appointmentData: Appointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: dxSchedulerAppointment
+      currentAppointmentData?: Appointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(
-      target: dxSchedulerAppointment,
-      appointment: dxSchedulerAppointment
-    ): void;
+    updateAppointment(target: Appointment, appointment: Appointment): void;
   }
   module dxScheduler {
     export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
-    export type Appointment = dxSchedulerAppointment;
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
@@ -19743,12 +19745,12 @@ declare module DevExpress.ui {
       };
     export type AppointmentDeletedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         readonly error?: Error;
       };
     export type AppointmentDeletingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -19786,7 +19788,7 @@ declare module DevExpress.ui {
       AppointmentDraggingEvent;
     export type AppointmentFormOpeningEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData?: dxSchedulerAppointment;
+        readonly appointmentData?: Appointment;
         readonly form: dxForm;
         readonly popup: dxPopup;
       };
@@ -19814,7 +19816,7 @@ declare module DevExpress.ui {
     };
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
@@ -19856,8 +19858,8 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     interface TargetedAppointmentInfo {
-      readonly appointmentData: dxSchedulerAppointment;
-      readonly targetedAppointmentData?: dxSchedulerAppointment;
+      readonly appointmentData: Appointment;
+      readonly targetedAppointmentData?: Appointment;
     }
     export type ViewType =
       | 'agenda'
@@ -20060,7 +20062,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxScheduler.Appointment> | null;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<Appointment> | null;
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
      */
@@ -24014,6 +24016,9 @@ declare module DevExpress.ui {
       ItemInfo<TKey>;
     export type ItemSelectionChangedEvent<TKey = any> =
       DevExpress.events.EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+    /**
+     * [descr:dxTreeViewNode]
+     */
     export type Node<TKey = any> = dxTreeViewNode<TKey>;
     export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
       dxTreeView<TKey>
@@ -24641,6 +24646,10 @@ declare module DevExpress.ui {
     stylingMode?: DevExpress.common.EditorStyle;
   }
   /**
+   * [descr:dxFilterBuilderField]
+   */
+  export type Field = dxFilterBuilderField;
+  /**
    * [descr:Format]
    */
   export type Format =
@@ -25016,6 +25025,9 @@ declare module DevExpress.ui.dxDataGrid {
   };
 }
 declare module DevExpress.ui.dxDiagram {
+  /**
+   * [descr:dxDiagramItem]
+   */
   export type Item = dxDiagramItem;
 }
 declare module DevExpress.ui.dxDropDownButton {
@@ -36355,16 +36367,28 @@ declare module DevExpress.viz {
     | dxBarGauge;
 }
 declare module DevExpress.viz.dxBarGauge {
+  /**
+   * [descr:BarGaugeLegendItem]
+   */
   export type LegendItem = BarGaugeLegendItem;
 }
 declare module DevExpress.viz.dxFunnel {
   export type Item = dxFunnelItem;
+  /**
+   * [descr:FunnelLegendItem]
+   */
   export type LegendItem = FunnelLegendItem;
 }
 declare module DevExpress.viz.dxPieChart {
+  /**
+   * [descr:PieChartLegendItem]
+   */
   export type LegendItem = PieChartLegendItem;
 }
 declare module DevExpress.viz.dxVectorMap {
+  /**
+   * [descr:VectorMapLegendItem]
+   */
   export type LegendItem = VectorMapLegendItem;
 }
 declare module DevExpress.viz.map {
