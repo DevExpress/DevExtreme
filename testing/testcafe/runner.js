@@ -177,12 +177,13 @@ function setTestingTheme(args) {
 
 // eslint-disable-next-line spellcheck/spell-checker
 function allowTestcafeCSP() {
-    const filePath = `${__dirname}/../../node_modules/testcafe/lib/proxyless/request-pipeline/index.js`
-    const file = fs.readFileSync(filePath).toString()
+    const filePath = `${__dirname}/../../node_modules/testcafe/lib/proxyless/request-pipeline/index.js`;
+    const file = fs.readFileSync(filePath).toString();
     fs.writeFileSync(filePath, Buffer.from(file.replace(
         'await this._client.Page.setBypassCSP({ enabled: true });',
         'await this._client.Page.setBypassCSP({ enabled: false });'
     )));
+    console.log(fs.readFileSync(filePath).toString());
 }
 
 function expandBrowserAlias(browser) {
@@ -199,12 +200,12 @@ function expandBrowserAlias(browser) {
 function getArgs() {
     return parseArgs(process.argv.slice(1), {
         default: {
-            concurrency: 0,
+            concurrency: 1,
             browsers: 'chrome',
             test: '',
             reporter: ['minimal', dashboardReporter],
-            componentFolder: '',
-            file: '*',
+            componentFolder: 'editors/list',
+            file: 'paging',
             cache: true,
             quarantineMode: false,
             indices: '',
