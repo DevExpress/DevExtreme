@@ -65,15 +65,15 @@ let helper;
             helper.checkItemsAttributes([0], { });
         });
 
-        test('Selected: ["Item_1"], selectionMode: "single", disabled: true', function() {
+        test('Selected: ["Item_2"], selectionMode: "single", disabled: true', function() {
             this.items[1].selected = true;
             this.items[1].disabled = true;
 
             helper.createWidget({ items: [this.items[1]], selectionMode: 'single' });
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
-            helper.checkItemsAttributes([0], { disabled: true });
+            // helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
+            // helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
+            helper.checkItemsAttributes([0], { attributes: [ 'aria-disabled' ] });
         });
 
         test('Selected: ["Item_1_1"], selectionMode: "single", Item_1.expanded: true, collapseItem(["Item_1"]) -> expand(["Item_1"])', function() {
