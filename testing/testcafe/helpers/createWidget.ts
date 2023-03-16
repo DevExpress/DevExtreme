@@ -43,6 +43,7 @@ export type WidgetName =
 'dxTreeView' |
 'dxDateBox' |
 'dxLookup' |
+'dxOverlay' |
 'dxList' |
 'dxHtmlEditor' |
 'dxNumberBox' |
@@ -69,15 +70,17 @@ export default async function createWidget(
     },
   })();
 
-  await ClientFunction(() => {
-    const widgetOptions = typeof componentOptions === 'function' ? componentOptions() : componentOptions;
-    (window as any).widget = $(`${selector}`)[componentName](widgetOptions)[componentName]('instance');
-  },
-  {
-    dependencies: {
-      componentName,
-      componentOptions,
-      selector,
+  await ClientFunction(
+    () => {
+      const widgetOptions = typeof componentOptions === 'function' ? componentOptions() : componentOptions;
+      (window as any).widget = $(`${selector}`)[componentName](widgetOptions)[componentName]('instance');
     },
-  })();
+    {
+      dependencies: {
+        componentName,
+        componentOptions,
+        selector,
+      },
+    },
+  )();
 }

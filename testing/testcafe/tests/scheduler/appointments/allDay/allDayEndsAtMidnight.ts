@@ -24,20 +24,22 @@ const setViewOptions = (startDayHour, endDayHour) => {
 
 ['week', 'month', 'timelineDay', 'timelineMonth'].forEach((view) => {
   VIEW_RANGE_HOURS.forEach(([startDayHour, endDayHour]) => {
-    test(`all-day appointment ends at midnight.
+    test(
+      `all-day appointment ends at midnight.
      view=${view}, startDayHour=${startDayHour}, endDayHour=${endDayHour} (T1128938)`,
-    async (t) => {
-      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      async (t) => {
+        const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshot(
-        `midnight_all-day-appt_view=${view}_start=${startDayHour}_end=${endDayHour}.png`,
-        scheduler.workSpace,
-      );
+        await takeScreenshot(
+          `midnight_all-day-appt_view=${view}_start=${startDayHour}_end=${endDayHour}.png`,
+          scheduler.workSpace,
+        );
 
-      await t.expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
+        await t.expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      },
+    ).before(async () => {
       await createWidget(
         'dxScheduler',
         {

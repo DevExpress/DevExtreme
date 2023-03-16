@@ -1,7 +1,4 @@
-import { ColumnsController } from './ui.grid_core.columns_controller';
-import { DataController } from './ui.grid_core.data_controller';
-import { ViewController } from './ui.grid_core.modules';
-import { RowsView } from './ui.grid_core.rows';
+import { Controllers, ViewController, Views } from './ui.grid_core.modules';
 
 interface State {
   _hiddenColumns: any;
@@ -9,10 +6,10 @@ interface State {
   _form: any;
   _hidingColumnsQueue: any;
 
-  _columnsController: ColumnsController;
-  _dataController: DataController;
-  _editingController: any;
-  _rowsView: RowsView;
+  _columnsController: Controllers['columns'];
+  _dataController: Controllers['data'];
+  _editingController: Controllers['editing'];
+  _rowsView: Views['rowsView'];
 }
 
 interface AdaptiveColumnsController extends ViewController, State {

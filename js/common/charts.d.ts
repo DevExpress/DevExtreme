@@ -1,3 +1,7 @@
+import {
+    template,
+} from '../core/templates/template';
+
 /**
  * @public
  * @namespace DevExpress.common.charts
@@ -277,3 +281,59 @@ export type WordWrap = 'normal' | 'breakWord' | 'none';
  * @namespace DevExpress.common.charts
  */
 export type ZoomPanAction = 'zoom' | 'pan';
+
+/**
+ * @docid
+ * @type object
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type ChartsColor = {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    base?: string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    fillId?: string;
+};
+
+/**
+ * @docid viz.registerGradient
+ * @publicName registerGradient(type, options)
+ * @namespace DevExpress.common.charts
+ * @static
+ * @public
+ */
+export function registerGradient(type: string, options: { rotationAngle?: number; colors: Array<GradientColor> }): string;
+/**
+ * @docid viz.registerPattern
+ * @publicName registerPattern(options)
+ * @namespace DevExpress.common.charts
+ * @static
+ * @public
+ */
+export function registerPattern(options: { width: number | string; height: number | string; template: template }): string;
+/**
+ * @namespace DevExpress.common.charts
+ * @public
+ */
+export type GradientColor = {
+   /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+    offset: number | string;
+   /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+    color: string;
+};

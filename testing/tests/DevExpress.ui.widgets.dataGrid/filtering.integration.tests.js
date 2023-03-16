@@ -1721,4 +1721,88 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(grid.getVisibleRows().length, 1);
         assert.deepEqual(grid.getVisibleRows()[0].data, { a: 'asd' });
     });
+
+    QUnit.test('Date in filter data should be serialized to string in correct format when focusedRowKey is set (T1147560)', function(assert) {
+        const actualFilterValues = [];
+        const expectedFilterValues = [
+            [
+                'Id', '=', 3
+            ],
+            [
+                [
+                    ['Date', '<', '10.00.00__31/00/2022'],
+                    'or',
+                    ['Date', '=', null]
+                ],
+                'or',
+                [
+                    ['Date', '=', '10.00.00__31/00/2022'],
+                    'and',
+                    [
+                        [
+                            ['Id', '<', 0],
+                            'or',
+                            ['Id', '=', null]
+                        ],
+                        'or',
+                        [
+                            ['Id', '=', 0],
+                            'and',
+                            ['Id', '<', 3]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        const loadedData = [
+            {
+                Id: 0,
+                Date: new Date(2023, 0, 0, 10),
+            },
+            {
+                Id: 1,
+                Date: new Date(2023, 0, 1, 10),
+            }
+        ];
+        const store = new ArrayStore({
+            data: [],
+            key: 'Id',
+        });
+        const originLoad = store.load;
+        store.load = sinon.spy(function(loadOptions) {
+            loadOptions.filter && actualFilterValues.push(loadOptions.filter);
+            return originLoad.call(store, loadOptions).then(() => {
+                return {
+                    data: loadedData,
+                    totalCount: 4,
+                };
+            });
+        });
+
+        createDataGrid({
+            dataSource: {
+                store,
+            },
+            columns: [
+                {
+                    dataField: 'Id',
+                },
+                {
+                    dataField: 'Date',
+                    dataType: 'date',
+                    sortOrder: 'asc',
+                },
+            ],
+            dateSerializationFormat: 'HH.mm.ss__dd/mm/yyyy',
+            remoteOperations: true,
+            focusedRowKey: 3,
+            focusedRowEnabled: true,
+        });
+
+        this.clock.tick(100);
+
+        assert.equal(actualFilterValues.length, expectedFilterValues.length);
+        assert.deepEqual(actualFilterValues[0], expectedFilterValues[0]);
+        assert.deepEqual(actualFilterValues[1], expectedFilterValues[1]);
+    });
 });

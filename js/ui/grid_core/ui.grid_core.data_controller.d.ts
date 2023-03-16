@@ -3,14 +3,12 @@ import { DataSourceAdapter, OperationTypes, RemoteOperations } from './ui.grid_c
 import { Store } from '../../data/index';
 
 import { Controller, Controllers, OptionChangedArgs } from './ui.grid_core.modules';
-import { DeferredObj } from '../../core/utils/deferred';
 
 type HandleDataChangedArguments = {
-  changeType?: 'refresh' | 'update';
+  changeType?: 'refresh' | 'update' | 'loadError';
   isDelayed?: boolean;
   isLiveUpdate?: boolean;
-  isMasterDetail?: boolean;
-  templateDeferreds?: DeferredObj<void>[];
+  error?: any;
 };
 
 type UserData = Record<string, unknown>;
@@ -281,7 +279,7 @@ export interface DataController extends State, Controller {
 
   _updatePageIndexes: (this: this, ...args: any) => any;
 
-  processUpdateFocusedRow: (this: this, ...args: any) => any;
+  _updateFocusedRow: (this: this, ...args: any) => any;
 
   isPagingByRendering: (this: this, ...args: any) => any;
 

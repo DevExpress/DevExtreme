@@ -121,8 +121,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @notUsedInTheme
      * @action
      * @public

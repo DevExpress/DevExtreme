@@ -169,7 +169,7 @@ test('Resize without navigation buttons', async (t) => {
   });
 });
 
-test("Changing pageSize to 'all' with rowRenderingMode='virtual' should work (T1090331)", async (t) => {
+test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work (T1090331)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
 

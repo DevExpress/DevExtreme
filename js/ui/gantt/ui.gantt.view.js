@@ -401,4 +401,7 @@ export class GanttView extends Widget {
         const helper = this.option('exportHelper');
         return helper[methodName](...args);
     }
+    applyTasksExpandedState(state) {
+        this._ganttViewCore?.applyTasksExpandedState(state);
+    }
 }

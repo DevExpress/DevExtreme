@@ -53,6 +53,7 @@ import {
     ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
+    ChartsColor,
 } from '../common/charts';
 
 export {
@@ -199,6 +200,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @default undefined
+     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -523,7 +525,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
      * @default 'onlyPoint'
@@ -564,7 +566,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
        * @default undefined
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -590,6 +592,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            */
           width?: number;
       };
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.lightening
+       * @default true
+       */
+      lightening?: boolean;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
@@ -757,7 +764,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
        * @default undefined
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */
@@ -783,6 +790,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            */
           width?: number;
       };
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.lightening
+       * @default true
+       */
+      lightening?: boolean;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping

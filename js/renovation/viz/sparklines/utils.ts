@@ -46,7 +46,8 @@ export const createAxis = (isHorizontal: boolean): Axis => {
 };
 
 const generateDefaultCustomizeTooltipCallback = (
-  fontOptions?: Font, rtlEnabled?: boolean,
+  fontOptions?: Font,
+  rtlEnabled?: boolean,
 ): CustomizeTooltipFn => {
   const { lineSpacing, size } = fontOptions ?? { };
   const lineHeight = (lineSpacing ?? DEFAULT_LINE_SPACING) + (size ?? 0);
@@ -71,13 +72,17 @@ export const generateCustomizeTooltipCallback = (
 
   if (isFunction(customizeTooltip)) {
     return (customizeObject: SparklineTooltipData): CustomizedOptions => {
-      let res = customizeTooltip.call(customizeObject,
-        customizeObject as Record<string, unknown>) ?? { };
+      let res = customizeTooltip.call(
+        customizeObject,
+        customizeObject as Record<string, unknown>,
+      ) ?? { };
       if (!('html' in res) && !('text' in res)) {
         res = {
           ...res,
-          ...defaultCustomizeTooltip.call(customizeObject,
-            customizeObject as Record<string, unknown>),
+          ...defaultCustomizeTooltip.call(
+            customizeObject,
+            customizeObject as Record<string, unknown>,
+          ),
         };
       }
       return res;

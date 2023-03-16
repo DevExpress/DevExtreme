@@ -83,6 +83,7 @@ const columnChooserControllerMembers = {
                         that.getView('columnChooserView').showColumnChooser();
                     },
                     hint: that.option('columnChooser.title'),
+                    // @ts-expect-error
                     integrationOptions: {}
                 });
             } else {
@@ -218,6 +219,9 @@ const columnChooserMembers = {
         const that = this;
         const columnChooser = this.option('columnChooser');
         const isSelectMode = columnChooser.mode === 'select';
+        /**
+         * @type {import('../tree_view').Options}
+         */
         const treeViewConfig = {
             items: items,
             dataStructure: 'plain',
@@ -230,7 +234,9 @@ const columnChooserMembers = {
             searchEnabled: columnChooser.allowSearch,
             searchTimeout: columnChooser.searchTimeout,
             onItemRendered: function(e) {
+                // @ts-expect-error
                 if(e.itemData.disableCheckBox) {
+                    // @ts-expect-error
                     const $treeViewNode = $(e.itemElement).closest(TREEVIEW_NODE_SELECTOR);
                     let $checkBox;
 

@@ -127,12 +127,13 @@ export const ListBase = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-
             hoverStateEnabled: true,
 
             pullRefreshEnabled: false,
 
             scrollingEnabled: true,
+
+            selectByClick: true,
 
             showScrollbar: 'onScroll',
 
@@ -942,6 +943,7 @@ export const ListBase = CollectionWidget.inherit({
             case '_swipeEnabled':
                 break;
             case '_listAttributes':
+            case 'selectByClick':
                 break;
             default:
                 this.callBase(args);

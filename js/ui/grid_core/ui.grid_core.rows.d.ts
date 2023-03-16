@@ -2,8 +2,7 @@ import { ColumnsView } from './ui.grid_core.columns_view';
 import LoadPanel from '../load_panel';
 import dxScrollable from '../scroll_view/ui.scrollable';
 import { dxElementWrapper } from '../../core/renderer';
-import { AdaptiveColumnsController } from './ui.grid_core.adaptivity';
-import { EditingController } from './ui.grid_core.editing';
+import { Controllers } from './ui.grid_core.modules';
 
 interface State {
   _loadPanel: LoadPanel;
@@ -23,8 +22,8 @@ interface State {
   _pointerDownTimeout: any;
   _scrollToFocusOnResize: any;
 
-  _adaptiveColumnsController: AdaptiveColumnsController;
-  _editingController: EditingController;
+  _adaptiveColumnsController: Controllers['adaptiveColumns'];
+  _editingController: Controllers['editing'];
 }
 
 export interface RowsView extends State, ColumnsView {
@@ -146,9 +145,9 @@ export interface RowsView extends State, ColumnsView {
 
   scrollTo: (this: this, location) => any;
 
-  height: (this: this, height, hasHeight) => any;
+  height: (this: this, height) => any;
 
-  hasHeight: (this: this) => any;
+  hasHeight: (this: this, hasHeight) => any;
 
   setLoading: (this: this, isLoading, messageText) => any;
 

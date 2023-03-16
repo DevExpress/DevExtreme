@@ -508,7 +508,7 @@ const Sortable = Draggable.inherit({
 
     _normalizeToIndex: function(toIndex, skipOffsetting) {
         const isAnotherDraggable = this._getSourceDraggable() !== this._getTargetDraggable();
-        const fromIndex = this.option('fromIndex');
+        const fromIndex = this._getActualFromIndex();
 
         if(toIndex === null) {
             return fromIndex;
@@ -627,13 +627,11 @@ const Sortable = Draggable.inherit({
     _getEventArgs: function(e) {
         const sourceDraggable = this._getSourceDraggable();
         const targetDraggable = this._getTargetDraggable();
-        const isTargetInDom = this._getSourceElement()?.parent()?.length ?? true;
         const dropInsideItem = targetDraggable.option('dropInsideItem');
-        const skipOffsetting = dropInsideItem || !isTargetInDom;
 
         return extend(this.callBase.apply(this, arguments), {
             fromIndex: sourceDraggable.option('fromIndex'),
-            toIndex: this._normalizeToIndex(targetDraggable.option('toIndex'), skipOffsetting),
+            toIndex: this._normalizeToIndex(targetDraggable.option('toIndex'), dropInsideItem),
             dropInsideItem: dropInsideItem
         });
     },

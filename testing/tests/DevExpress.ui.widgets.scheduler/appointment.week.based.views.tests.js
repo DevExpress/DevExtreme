@@ -339,7 +339,7 @@ module('Integration: Appointment Day, Week views', {
 
                     assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 15), 'End date is OK');
 
-                }, 10);
+                });
             });
 
             test('Task should be placed in correct group', function(assert) {

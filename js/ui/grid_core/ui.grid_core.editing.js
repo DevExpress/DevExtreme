@@ -418,7 +418,10 @@ const EditingController = modules.ViewController.inherit((function() {
                     this._renderEditingButtons($container, buttons, options, change);
 
                     options.watch && options.watch(
-                        () => buttons.map(button => this._isButtonVisible(button, options)),
+                        () => buttons.map(button => ({
+                            visible: this._isButtonVisible(button, options),
+                            disabled: this._isButtonDisabled(button, options),
+                        })),
                         () => {
                             $container.empty();
                             this._renderEditingButtons($container, buttons, options);
@@ -452,6 +455,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         getFirstEditableCellInRow: function(rowIndex) {
             const rowsView = this.getView('rowsView');
+            // @ts-expect-error
             return rowsView && rowsView._getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
         },
 
@@ -994,8 +998,10 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             d.done(() => {
-                this._showAddedRow(rowIndex);
-                this._afterInsertRow(change.key);
+                this._rowsView?.waitAsyncTemplates(true).done(() => {
+                    this._showAddedRow(rowIndex);
+                    this._afterInsertRow(change.key);
+                });
             });
 
             return d.promise();
@@ -1301,6 +1307,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const rowsView = this.getView('rowsView');
             const editColumnIndex = this._getVisibleEditColumnIndex();
 
+            // @ts-expect-error
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
 
             if($editCell) {
@@ -1980,6 +1987,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
 
                 if(columnIndex >= 0) {
+                    // @ts-expect-error
                     const $focusedItem = this._rowsView._getCellElement(row.rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItem, () => {
                         setTimeout(() => {
@@ -2603,10 +2611,11 @@ export const editingModule = {
                     this.callBase.apply(this, arguments);
                     clearTimeout(this._pointerDownTimeout);
                 },
-                _renderCore: function(change) {
+                _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    return this.waitAsyncTemplates(change, true).done(() => {
+                    return this.waitAsyncTemplates(true).done(() => {
+                        // @ts-expect-error
                         this._editingController._focusEditorIfNeed();
                     });
                 }

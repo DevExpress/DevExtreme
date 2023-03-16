@@ -12,7 +12,8 @@ const disableMouseUpEvent = ClientFunction(() => {
   // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle
   (window as any)._originalMouseup = proto._mouseup;
 
-  // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle, no-promise-executor-return
   proto._mouseup = () => new Promise((r) => setTimeout(r, 1));
 });
 

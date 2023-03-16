@@ -126,6 +126,10 @@ class ToolbarBase extends AsyncCollectionWidget {
     }
 
     _dimensionChanged() {
+        if(this._disposed) {
+            return;
+        }
+
         this._arrangeItems();
         this._applyCompactMode();
     }

@@ -5,11 +5,16 @@ const CLASS = {
   hiddenColumn: 'hidden-column',
 };
 
-export default class HeaderCell extends FocusableElement {
+export default class HeaderCell {
+  element: Selector;
+
+  isFocused: Promise<boolean>;
+
   isHidden: Promise<boolean>;
 
   constructor(headerRow: Selector, index: number, widgetName: string) {
-    super(headerRow.find(`td[aria-colindex='${index + 1}']`));
+    this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);
+    this.isFocused = this.element.focused;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 

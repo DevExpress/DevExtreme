@@ -16,6 +16,7 @@ import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
 import { when } from '../../core/utils/deferred';
+import { getGraphicObjects } from '../../common/charts';
 import {
     createEventTrigger,
     createResizeHandler,
@@ -135,6 +136,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
 
         that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
+
+        that._graphicObjects = {};
 
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
@@ -398,6 +401,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         this._renderer.dispose();
     },
 
+    _disposeGraphicObjects: function() {
+        for(const id in this._graphicObjects) {
+            this._graphicObjects[id].dispose();
+        }
+        this._graphicObjects = null;
+    },
+
     _getAnimationOptions: noop,
 
     render: function() {
@@ -443,6 +453,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._eventTrigger.dispose();
         that._disposeCore();
         that._disposePlugins();
+        that._disposeGraphicObjects();
         that._disposeRenderer();
         that._themeManager.dispose();
         that._themeManager = that._renderer = that._eventTrigger = null;
@@ -718,6 +729,28 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _resetIsReady: function() {
         this.isReady = getFalse;
+    },
+
+    _renderGraphicObjects: function() {
+        const renderer = this._renderer;
+        const graphics = getGraphicObjects();
+        for(const id in graphics) {
+            if(!this._graphicObjects[id]) {
+                const { type, colors, rotationAngle, template, width, height } = graphics[id];
+
+                switch(type) {
+                    case 'linear':
+                        this._graphicObjects[id] = renderer.linearGradient(colors, id, rotationAngle);
+                        break;
+                    case 'radial':
+                        this._graphicObjects[id] = renderer.radialGradient(colors, id);
+                        break;
+                    case 'pattern':
+                        this._graphicObjects[id] = renderer.customPattern(id, this._getTemplate(template), width, height);
+                        break;
+                }
+            }
+        }
     },
 
     _drawn: function() {

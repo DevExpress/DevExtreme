@@ -2,6 +2,7 @@ import 'generic_light.css!';
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/tabs';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 
 const TABS_ITEM_CLASS = 'dx-tab';
@@ -31,6 +32,7 @@ QUnit.module('Width', () => {
             }).dxTabs('instance');
 
             this.$container.appendTo('#qunit-fixture');
+            addShadowDomStyles($('#qunit-fixture'));
 
             if(!this._isOptionApproach()) {
                 this.setContainerWidth(width);

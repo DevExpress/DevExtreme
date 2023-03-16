@@ -128,6 +128,7 @@ export interface ColumnBase<TRowData = any> {
   allowHeaderFiltering?: boolean;
   /**
    * @docid GridBaseColumn.allowHiding
+   * @default false &for(command column)
    * @default true
    * @public
    */
@@ -375,7 +376,6 @@ export interface ColumnBase<TRowData = any> {
   /**
    * @docid GridBaseColumn.sortIndex
    * @default undefined
-   * @fires GridBaseOptions.onOptionChanged
    * @public
    */
   sortIndex?: number;
@@ -457,6 +457,7 @@ export interface ColumnButtonBase {
 }
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1630,6 +1631,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @docid
    * @type object
    * @public
+   * @inherits ColumnChooser
    */
   columnChooser?: ColumnChooser;
   /**

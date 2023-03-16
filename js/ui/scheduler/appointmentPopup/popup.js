@@ -25,6 +25,8 @@ const POPUP_CONFIG = {
     maxHeight: '100%',
     showCloseButton: false,
     showTitle: false,
+    preventScrollEvents: false,
+    enableBodyScroll: false,
     defaultOptionsRules: [
         {
             device: () => devices.current().android,

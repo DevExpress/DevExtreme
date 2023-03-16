@@ -3,6 +3,7 @@ import TextBox from 'ui/text_box';
 import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { getWidth, getOuterWidth } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
@@ -16,6 +17,7 @@ QUnit.testStart(() => {
         </div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 const TEXTBOX_CLASS = 'dx-textbox';
@@ -309,8 +311,8 @@ QUnit.module('label integration', {
         };
 
         class TextEditorLabelMock extends TextEditorLabel {
-            updateMaxWidth = sinon.stub()
-            updateBeforeWidth = sinon.stub()
+            updateMaxWidth = sinon.stub();
+            updateBeforeWidth = sinon.stub();
         }
 
         this.TextEditorLabelMock = (args) => { this.labelArgs = args; return this.labelMock = new TextEditorLabelMock(args); };

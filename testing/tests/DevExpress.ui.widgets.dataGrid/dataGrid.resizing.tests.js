@@ -20,6 +20,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import $ from 'jquery';
@@ -27,6 +28,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import browser from 'core/utils/browser';
 import { getWindow } from 'core/utils/window';
 import { getWidth, getHeight } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 QUnit.module('Initialization', baseModuleConfig, () => {
@@ -648,7 +650,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // T450683
-    QUnit.test('rowsview height should not be reseted during updateDimension when min-height/max-height are not specified', function(assert) {
+    QUnit.test('rowsview hasHeight should not be reseted during updateDimension when min-height/max-height are not specified', function(assert) {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
             showBorders: true,
@@ -665,14 +667,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataGrid = $dataGrid.dxDataGrid('instance');
         const rowsView = dataGrid.getView('rowsView');
 
-        sinon.spy(rowsView, 'height');
+        sinon.spy(rowsView, 'hasHeight');
 
         // act
         dataGrid.updateDimensions();
 
         // assert
-        const heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-        assert.equal(heightCalls.length, 1, 'rowsview height is assigned once');
+        const heightCalls = rowsView.hasHeight.getCalls().filter(function(call) { return call.args.length > 0; });
+        assert.equal(heightCalls.length, 1, 'rowsview hasHeight is assigned once');
     });
 
     // T108204

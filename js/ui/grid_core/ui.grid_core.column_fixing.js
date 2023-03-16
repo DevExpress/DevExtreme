@@ -476,7 +476,6 @@ const baseFixedColumns = {
     },
 
     synchronizeRows: function() {
-        const that = this;
         const rowHeights = [];
         const fixedRowHeights = [];
         let rowIndex;
@@ -484,36 +483,37 @@ const baseFixedColumns = {
         let $fixedRowElements;
         let $contentElement;
 
+        this.waitAsyncTemplates(true).done(() => {
+            if(this._isFixedColumns && this._tableElement && this._fixedTableElement) {
+                const heightTable = this._getClientHeight(this._tableElement.get(0));
+                const heightFixedTable = this._getClientHeight(this._fixedTableElement.get(0));
+                $rowElements = this._getRowElements(this._tableElement);
+                $fixedRowElements = this._getRowElements(this._fixedTableElement);
+                $contentElement = this._findContentElement();
 
-        if(that._isFixedColumns && that._tableElement && that._fixedTableElement) {
-            const heightTable = that._getClientHeight(that._tableElement.get(0));
-            const heightFixedTable = that._getClientHeight(that._fixedTableElement.get(0));
-            $rowElements = that._getRowElements(that._tableElement);
-            $fixedRowElements = that._getRowElements(that._fixedTableElement);
-            $contentElement = that._findContentElement();
+                if(heightTable !== heightFixedTable) {
+                    $contentElement && $contentElement.css('height', heightTable);
+                    $rowElements.css('height', '');
+                    $fixedRowElements.css('height', '');
 
-            if(heightTable !== heightFixedTable) {
-                $contentElement && $contentElement.css('height', heightTable);
-                $rowElements.css('height', '');
-                $fixedRowElements.css('height', '');
-
-                for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
-                    rowHeights.push(that._getClientHeight($rowElements.get(rowIndex)));
-                    fixedRowHeights.push(that._getClientHeight($fixedRowElements.get(rowIndex)));
-                }
-                for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
-                    const rowHeight = rowHeights[rowIndex];
-                    const fixedRowHeight = fixedRowHeights[rowIndex];
-                    if(rowHeight > fixedRowHeight) {
-                        $fixedRowElements.eq(rowIndex).css('height', rowHeight);
-                    } else if(rowHeight < fixedRowHeight) {
-                        $rowElements.eq(rowIndex).css('height', fixedRowHeight);
+                    for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
+                        rowHeights.push(this._getClientHeight($rowElements.get(rowIndex)));
+                        fixedRowHeights.push(this._getClientHeight($fixedRowElements.get(rowIndex)));
                     }
-                }
+                    for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
+                        const rowHeight = rowHeights[rowIndex];
+                        const fixedRowHeight = fixedRowHeights[rowIndex];
+                        if(rowHeight > fixedRowHeight) {
+                            $fixedRowElements.eq(rowIndex).css('height', rowHeight);
+                        } else if(rowHeight < fixedRowHeight) {
+                            $rowElements.eq(rowIndex).css('height', fixedRowHeight);
+                        }
+                    }
 
-                $contentElement && $contentElement.css('height', '');
+                    $contentElement && $contentElement.css('height', '');
+                }
             }
-        }
+        });
     },
 
     setScrollerSpacing: function(width) {
@@ -637,31 +637,40 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
     },
 
+    _getScrollDelay: function() {
+        const hasResizeTimeout = this.getController('resizing')?.hasResizeTimeout();
+
+        if(hasResizeTimeout) {
+            return this.option('scrolling.updateTimeout');
+        }
+
+        return browser.mozilla ? 60 : 0;
+    },
+
     _findContentElement: function() {
-        const that = this;
         let $content;
         let scrollTop;
-        const contentClass = that.addWidgetPrefix(CONTENT_CLASS);
-        const element = that.element();
-        const scrollDelay = browser.mozilla ? 60 : 0;
+        const contentClass = this.addWidgetPrefix(CONTENT_CLASS);
+        const element = this.element();
 
-        if(element && that._isFixedTableRendering) {
+        if(element && this._isFixedTableRendering) {
             $content = element.children('.' + contentClass);
 
-            const scrollable = that.getScrollable();
+            const scrollable = this.getScrollable();
             if(!$content.length && scrollable) {
                 $content = $('<div>').addClass(contentClass);
 
-                eventsEngine.on($content, 'scroll', function(e) {
+                eventsEngine.on($content, 'scroll', (e) => {
                     const target = e.target;
+                    const scrollDelay = this._getScrollDelay();
 
-                    clearTimeout(that._fixedScrollTimeout);
-                    that._fixedScrollTimeout = setTimeout(function() {
+                    clearTimeout(this._fixedScrollTimeout);
+                    this._fixedScrollTimeout = setTimeout(() => {
                         scrollTop = $(target).scrollTop();
                         scrollable.scrollTo({ y: scrollTop });
                     }, scrollDelay);
                 });
-                eventsEngine.on($content, wheelEventName, function(e) {
+                eventsEngine.on($content, wheelEventName, (e) => {
                     const $nearestScrollable = $(e.target).closest('.dx-scrollable');
                     let shouldScroll = false;
 
@@ -678,7 +687,11 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                         scrollTop = scrollable.scrollTop();
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 
-                        if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
+                        const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
+                        const scrollableHeight = scrollable.scrollHeight() + this.getScrollbarWidth();
+                        const isPreventDefault = scrollable.scrollTop() > 0 && scrollableTop < scrollableHeight;
+
+                        if(isPreventDefault) {
                             return false;
                         }
                     }
@@ -690,7 +703,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             return $content;
         }
 
-        return that.callBase();
+        return this.callBase();
     },
 
     _updateScrollable: function() {

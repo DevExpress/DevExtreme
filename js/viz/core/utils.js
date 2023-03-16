@@ -21,6 +21,8 @@ const _isNaN = isNaN;
 const _Number = Number;
 const _NaN = NaN;
 
+let numDefsSvgElements = 1;
+
 export const PANE_PADDING = 10;
 
 export const getLog = function(value, base) {
@@ -631,4 +633,18 @@ export function valueOf(value) {
 
 export function pointInCanvas(canvas, x, y) {
     return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
+}
+
+export const getNextDefsSvgId = () => {
+    return `DevExpress_${numDefsSvgElements++}`;
+};
+
+export function extractColor(color, isBase) {
+    if(isString(color) || !color) {
+        return color;
+    } else if(isBase) {
+        return color.base;
+    } else {
+        return color.fillId || color.base;
+    }
 }

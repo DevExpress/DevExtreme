@@ -61,7 +61,11 @@ export type CellTemplateData = {
     readonly text?: string;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ * @type object
+ */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
 /**
@@ -92,8 +96,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 data:object
-     * @type_function_param1_field component:object
+     * @type_function_param1 data:DisabledDate
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);

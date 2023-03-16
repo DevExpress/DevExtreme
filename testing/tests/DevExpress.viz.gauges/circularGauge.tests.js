@@ -130,7 +130,6 @@ const TestPointerElement = TestElement.inherit({
 
         },
         afterEach: function() {
-            this.container.remove();
             this.renderer = null;
             axisModule.Axis.reset();
             rendererModule.Renderer.reset();
@@ -537,6 +536,81 @@ const TestPointerElement = TestElement.inherit({
         assert.deepEqual(gauge._canvas, canvas, 'gauge canvas is not changed');
     });
 
+    QUnit.module('Center Template', environment);
+
+    QUnit.test('Should create group for center template on widget creating', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate });
+
+        const centerTemplateGroup = gauge._renderer.g.getCall(10).returnValue;
+
+        assert.deepEqual(centerTemplateGroup.attr.args[0][0], { class: 'dxg-hole-template' });
+        assert.deepEqual(centerTemplateGroup.linkOn.args[0][0], gauge._renderer.root);
+        assert.strictEqual(centerTemplateGroup.linkOn.args[0][1], 'center-template');
+        assert.ok(centerTemplateGroup.linkAppend.called);
+    });
+
+    QUnit.test('Should render center template in group on widget creating', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate });
+
+        const centerTemplateGroup = gauge._renderer.g.getCall(10).returnValue;
+
+        assert.deepEqual(centerTemplateGroup.css.args[0][0], {
+            cursor: 'default',
+            fill: '#767676',
+            'font-family': '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+            'font-size': 12,
+            'font-weight': 400
+        }, 'styles applied on group');
+        assert.deepEqual(centerTemplateGroup.attr.args[1][0], { visibility: 'hidden' }, 'group was hidden on start render');
+        assert.deepEqual(centerTemplateGroup.attr.args[2][0], { visibility: 'visible' }, 'group start visible after render');
+        assert.strictEqual(centerTemplate.callCount, 1, 'template function is called');
+        assert.deepEqual(centerTemplateGroup.move.args[0], [389, 340], 'group was moved to center');
+    });
+
+    QUnit.test('Should render center template on option update', function(assert) {
+        const firstCenterTemplate = sinon.stub();
+        const secondCenterTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate: firstCenterTemplate });
+
+        const centerTemplateGroup = gauge._renderer.g.getCall(10).returnValue;
+        centerTemplateGroup.clear.reset();
+
+        gauge.option('centerTemplate', secondCenterTemplate);
+
+        assert.ok(centerTemplateGroup.clear.called, 'group was cleared');
+        assert.strictEqual(secondCenterTemplate.callCount, 1, 'new template function is called');
+    });
+
+    QUnit.test('Should rerender center template on value update', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate: centerTemplate, value: 10 });
+
+        const centerTemplateGroup = this.renderer.g.getCall(10).returnValue;
+        centerTemplateGroup.clear.reset();
+        centerTemplate.reset();
+
+        gauge.option('value', 13);
+
+        assert.ok(centerTemplateGroup.clear.called, 'group was cleared');
+        assert.strictEqual(centerTemplate.callCount, 1, 'new template function is called');
+    });
+
+    QUnit.test('Should rerender center template on subvalues update', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate: centerTemplate, subvalues: [3, 4] });
+
+        const centerTemplateGroup = this.renderer.g.getCall(10).returnValue;
+        centerTemplateGroup.clear.reset();
+        centerTemplate.reset();
+
+        gauge.option('subvalues', [5]);
+
+        assert.ok(centerTemplateGroup.clear.called, 'group was cleared');
+        assert.strictEqual(centerTemplate.callCount, 1, 'new template function is called');
+    });
+
     QUnit.module('Disposing', environment);
 
     QUnit.test('Disposing', function(assert) {
@@ -546,5 +620,17 @@ const TestPointerElement = TestElement.inherit({
         this.container.remove();
 
         assert.strictEqual(group.linkOff.callCount, 1);
+    });
+
+    QUnit.test('Should dispose center template on remove container', function(assert) {
+        const centerTemplate = sinon.stub();
+        const gauge = new dxCircularGauge(this.container, { centerTemplate });
+
+        const centerTemplateGroup = gauge._renderer.g.getCall(10).returnValue;
+
+        this.container.remove();
+
+        assert.ok(centerTemplateGroup.linkOff.called);
+        assert.ok(centerTemplateGroup.dispose.called);
     });
 })();

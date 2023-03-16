@@ -7,6 +7,7 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { equalByValue } from '../../core/utils/common';
 import { isDefined, isBoolean } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
+import { UiGridCoreFocusUtils } from './ui.grid_core.focus.utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = '.dx-row' + '.' + ROW_FOCUSED_CLASS;
@@ -56,6 +57,7 @@ const FocusController = core.ViewController.inherit((function() {
                 const rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
                 if(rowIndex >= 0) {
                     const $rowElement = $(this.getView('rowsView').getRowElement(rowIndex));
+                    // @ts-expect-error
                     this.getController('keyboardNavigation')._fireFocusedRowChanged($rowElement, focusedRowIndex);
                 }
             }
@@ -88,6 +90,7 @@ const FocusController = core.ViewController.inherit((function() {
                     let rowIndex = index - dataController.getRowIndexOffset(true);
 
                     if(!operationTypes || operationTypes.paging && !operationTypes.filtering) {
+                        // @ts-expect-error
                         const lastItemIndex = dataController._getLastItemIndex();
                         rowIndex = Math.min(rowIndex, lastItemIndex);
                     }
@@ -113,6 +116,7 @@ const FocusController = core.ViewController.inherit((function() {
         },
         _isLocalRowIndex(index) {
             const dataController = this.getController('data');
+            // @ts-expect-error
             const isVirtualScrolling = this.getController('keyboardNavigation')._isVirtualScrolling();
 
             if(isVirtualScrolling) {
@@ -167,6 +171,7 @@ const FocusController = core.ViewController.inherit((function() {
                 focusedRowKey: null
             });
 
+            // @ts-expect-error
             keyboardController._fireFocusedRowChanged(undefined, -1);
         },
 
@@ -250,6 +255,7 @@ const FocusController = core.ViewController.inherit((function() {
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
             const that = this;
             const dataController = this.getController('data');
+            // @ts-expect-error
             const rowsScrollController = dataController._rowsScrollController;
             const rowIndex = gridCoreUtils.getIndexByKey(key, dataController.items(true));
             const scrollable = that.getView('rowsView').getScrollable();
@@ -316,6 +322,7 @@ const FocusController = core.ViewController.inherit((function() {
             if(isDefined(focusedRowKey)) {
                 const visibleRowIndex = dataController.getRowIndexByKey(focusedRowKey);
                 if(visibleRowIndex >= 0) {
+                    // @ts-expect-error
                     if(keyboardController._isVirtualScrolling()) {
                         currentFocusedRowIndex = visibleRowIndex + dataController.getRowIndexOffset();
                     }
@@ -331,6 +338,7 @@ const FocusController = core.ViewController.inherit((function() {
                     });
                 }
             } else if(currentFocusedRowIndex >= 0) {
+                // @ts-expect-error
                 this.getController('focus')._focusRowByIndex(currentFocusedRowIndex);
             }
         },
@@ -401,6 +409,7 @@ const FocusController = core.ViewController.inherit((function() {
                 const tabIndex = this.option('tabindex') || 0;
                 const rowsView = this.getView('rowsView');
 
+                // @ts-expect-error
                 $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
             }
@@ -510,6 +519,7 @@ export const focusModule = {
                     if(!focusedRowEnabled || !keyboardController?.isRowFocusType() || editingController.isEditing()) {
                         this.callBase($element, isHideBorder);
                     } else if(focusedRowEnabled) {
+                        // @ts-expect-error
                         const isRowElement = keyboardController._getElementType($element) === 'row';
 
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
@@ -524,6 +534,7 @@ export const focusModule = {
                 getSortDataSourceParameters: function(_, sortByKey) {
                     let result = this.callBase.apply(this, arguments);
                     const dataController = this.getController('data');
+                    // @ts-expect-error
                     const dataSource = dataController._dataSource;
                     const store = dataController.store();
                     let key = store && store.key();
@@ -564,11 +575,11 @@ export const focusModule = {
 
                         if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
                             this._updatePageIndexes();
-                            this.processUpdateFocusedRow(e);
+                            this._updateFocusedRow(e);
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
                         } else if(e.changeType === 'update' && e.repaintChangesOnly) {
-                            this.processUpdateFocusedRow(e);
+                            this._updateFocusedRow(e);
                         }
                     }
                 },
@@ -585,36 +596,44 @@ export const focusModule = {
                     return this._isPagingByRendering;
                 },
 
-                processUpdateFocusedRow: function(e) {
+                _updateFocusedRow: function(e) {
                     const operationTypes = e.operationTypes || {};
                     const focusController = this.getController('focus');
-                    const { reload, fullReload } = operationTypes;
+                    const { reload, fullReload, pageIndex, paging } = operationTypes;
                     const keyboardController = this.getController('keyboardNavigation');
+                    // @ts-expect-error
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
+                    const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
-
-                    if(reload && !fullReload && isDefined(focusedRowKey)) {
-                        focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
-                            if(focusedRowIndex < 0) {
-                                focusController._focusRowByIndex(undefined, operationTypes);
-                            }
-                        });
-                    } else if(operationTypes.paging && !isVirtualScrolling) {
-                        if(isAutoNavigate) {
-                            const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
-                            const isValidRowIndexByKey = rowIndexByKey >= 0;
-                            const focusedRowIndex = this.option('focusedRowIndex');
-                            const needFocusRowByIndex = focusedRowIndex >= 0 && (focusedRowIndex === rowIndexByKey || !isValidRowIndexByKey);
-                            if(needFocusRowByIndex) {
-                                focusController._focusRowByIndex(undefined, operationTypes);
-                            }
-                        } else {
-                            if(this.getRowIndexByKey(focusedRowKey) < 0) {
-                                this.option('focusedRowIndex', -1);
-                            }
+                    const isReload = (reload && pageIndex === false);
+                    if(isReload && !fullReload && isDefined(focusedRowKey)) {
+                        // @ts-expect-error
+                        focusController._navigateToRow(focusedRowKey, true)
+                            .done(function(focusedRowIndex) {
+                                if(focusedRowIndex < 0) {
+                                // @ts-expect-error
+                                    focusController._focusRowByIndex(undefined, operationTypes);
+                                }
+                            });
+                    } else if(pagingWithoutVirtualScrolling && isAutoNavigate) {
+                        const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
+                        const focusedRowIndex = this.option('focusedRowIndex');
+                        const isValidRowIndexByKey = rowIndexByKey >= 0;
+                        const isValidFocusedRowIndex = focusedRowIndex >= 0;
+                        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
+                        if(isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
+                            // @ts-expect-error
+                            focusController._focusRowByIndex(focusedRowIndex, operationTypes);
                         }
+                    } else if(
+                        pagingWithoutVirtualScrolling
+                        && !isAutoNavigate
+                        && (this.getRowIndexByKey(focusedRowKey) < 0)
+                    ) {
+                        this.option('focusedRowIndex', -1);
                     } else if(operationTypes.fullReload) {
+                        // @ts-expect-error
                         focusController._focusRowByKeyOrIndex();
                     }
                 },
@@ -675,24 +694,32 @@ export const focusModule = {
                     return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
                 },
                 _generateBooleanFilter: function(selector, value, sortInfo) {
-                    let result;
+                    const { desc } = sortInfo;
 
-                    if(value === false) {
-                        result = [selector, '=', sortInfo.desc ? true : null];
-                    } else if(value === true ? !sortInfo.desc : sortInfo.desc) {
-                        result = [selector, '<>', value];
+                    switch(true) {
+                        case value === false && desc:
+                            return [selector, '=', true];
+                        case value === false && !desc:
+                            return [selector, '=', null];
+                        case value === true && !desc:
+                        case !isBoolean(value) && desc:
+                            return [selector, '<>', value];
+                        default:
+                            return undefined;
                     }
-
-                    return result;
                 },
+                // TODO Vinogradov: Move this method implementation to the UiGridCoreFocusUtils
+                // and cover with unit tests.
                 _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     const that = this;
-                    const dataSource = that._dataSource;
+                    const dateSerializationFormat = that.option('dateSerializationFormat');
+                    const isRemoteFiltering = that._dataSource.remoteOperations().filtering;
+
                     let filter = that._generateFilterByKey(key, '<');
-                    let sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering, true);
+                    let sort = that._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
                     if(useGroup) {
-                        const group = that._columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().filtering);
+                        const group = that._columnsController.getGroupDataSourceParameters(!isRemoteFiltering);
                         if(group) {
                             sort = sort ? group.concat(sort) : group;
                         }
@@ -700,39 +727,40 @@ export const focusModule = {
 
                     if(sort) {
                         sort.slice().reverse().forEach(function(sortInfo) {
-                            const selector = sortInfo.selector;
-                            let getter;
+                            const { selector, desc, compare } = sortInfo;
+                            const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
+                                sortInfo,
+                                rowData,
+                                {
+                                    isRemoteFiltering,
+                                    dateSerializationFormat,
+                                    getSelector: (selector) => that._columnsController.columnOption(selector, 'selector'),
+                                }
+                            );
 
-                            if(typeof selector === 'function') {
-                                getter = selector;
-                            } else {
-                                getter = that._columnsController.columnOption(selector, 'selector');
-                            }
+                            filter = [[selector, '=', safeValue], 'and', filter];
 
-                            const value = getter ? getter(rowData) : rowData[selector];
-                            filter = [[selector, '=', value], 'and', filter];
-
-                            if(value === null || isBoolean(value)) {
-                                const booleanFilter = that._generateBooleanFilter(selector, value, sortInfo);
+                            if(rawValue === null || isBoolean(rawValue)) {
+                                const booleanFilter = that._generateBooleanFilter(selector, safeValue, desc);
 
                                 if(booleanFilter) {
                                     filter = [booleanFilter, 'or', filter];
                                 }
                             } else {
-                                const filterOperation = sortInfo.desc ? '>' : '<';
+                                const filterOperation = desc ? '>' : '<';
 
                                 let sortFilter;
-                                if(sortInfo.compare) {
+                                if(compare) {
                                     sortFilter = (data) => {
                                         if(filterOperation === '<') {
-                                            return sortInfo.compare(value, getter(data)) >= 1;
+                                            return compare(rawValue, getter(data)) >= 1;
                                         } else {
-                                            return sortInfo.compare(value, getter(data)) <= -1;
+                                            return compare(rawValue, getter(data)) <= -1;
                                         }
                                     };
                                 } else {
-                                    sortFilter = [selector, filterOperation, value];
-                                    if(!sortInfo.desc) {
+                                    sortFilter = [selector, filterOperation, safeValue];
+                                    if(!desc) {
                                         sortFilter = [sortFilter, 'or', [selector, '=', null]];
                                     }
                                 }
@@ -785,6 +813,7 @@ export const focusModule = {
                         const visibleRows = dataController.getVisibleRows();
 
                         if(rowIndex === -1 && !visibleRows.length) {
+                            // @ts-expect-error
                             this.getController('focus')._resetFocusedRow();
                         }
                     });

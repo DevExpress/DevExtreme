@@ -77,4 +77,51 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
 
         assert.measureStyleRecalculation(measureFunction, shading ? 18 : 17);
     });
+
+    [true, false].forEach(enableBodyScroll => {
+        QUnit.performanceTest(`Popup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be shown with minimum count of relayouts`, function(assert) {
+            const $additionalElement = $('<div>').height(2000).appendTo($('body'));
+
+            try {
+                const popup = $('#element').dxPopup({
+                    shading,
+                    enableBodyScroll,
+                    visible: false,
+                    animation: null,
+                    useResizeObserver: false
+                }).dxPopup('instance');
+
+                const measureFunction = function() {
+                    popup.show();
+                };
+
+                assert.measureStyleRecalculation(measureFunction, shading ? 16 : 15);
+            } finally {
+                $additionalElement.remove();
+            }
+        });
+
+        QUnit.performanceTest(`Popup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be hidden with minimum count of relayouts`, function(assert) {
+
+            const $additionalElement = $('<div>').height(2000).appendTo($('body'));
+
+            try {
+                const popup = $('#element').dxPopup({
+                    shading,
+                    enableBodyScroll,
+                    visible: true,
+                    animation: null,
+                    useResizeObserver: false
+                }).dxPopup('instance');
+
+                const measureFunction = function() {
+                    popup.hide();
+                };
+
+                assert.measureStyleRecalculation(measureFunction, shading || !enableBodyScroll ? 3 : 2);
+            } finally {
+                $additionalElement.remove();
+            }
+        });
+    });
 });

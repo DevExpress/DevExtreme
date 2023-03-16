@@ -23,6 +23,7 @@ import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import FormDialog from './ui/formDialog';
+import config from '../../core/config';
 
 // STYLE htmlEditor
 
@@ -62,7 +63,7 @@ const HtmlEditor = Editor.inherit({
 
             imageUpload: null,
 
-            stylingMode: 'outlined'
+            stylingMode: config().editorStylingMode || 'outlined',
         });
     },
 
@@ -501,7 +502,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _moduleOptionChanged: function(moduleName, args) {
-        const moduleInstance = this._quillInstance?.getModule(moduleName);
+        const moduleInstance = this.getModule(moduleName);
         const shouldPassOptionsToModule = Boolean(moduleInstance);
 
         if(shouldPassOptionsToModule) {
@@ -576,7 +577,7 @@ const HtmlEditor = Editor.inherit({
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
-                    this._quillInstance.getModule('resizing').option(args.name, args.value);
+                    this.getModule('resizing').option(args.name, args.value);
                 }
                 break;
             case 'width':
@@ -592,8 +593,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _repaintToolbar: function() {
-        const toolbar = this._quillInstance.getModule('toolbar');
-        toolbar && toolbar.repaint();
+        this._applyToolbarMethod('repaint');
     },
 
     _updateHtmlContent: function(html) {
@@ -631,6 +631,10 @@ const HtmlEditor = Editor.inherit({
         if(this._quillInstance && this._quillInstance.history) {
             this._quillInstance.history[methodName]();
         }
+    },
+
+    _applyToolbarMethod(methodName) {
+        this.getModule('toolbar')?.[methodName]();
     },
 
     addCleanCallback(callback) {
@@ -695,6 +699,7 @@ const HtmlEditor = Editor.inherit({
 
     clearHistory: function() {
         this._applyQuillHistoryMethod('clear');
+        this._applyToolbarMethod('updateHistoryWidgets');
     },
 
     undo: function() {

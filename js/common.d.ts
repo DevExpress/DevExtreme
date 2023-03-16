@@ -753,6 +753,7 @@ export type ValidationCallbackData = {
 export type ValidationMessageMode = 'always' | 'auto';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */

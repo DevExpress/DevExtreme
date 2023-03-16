@@ -26,12 +26,14 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $(gridMarkup).appendTo('body');
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
@@ -43,6 +45,35 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Chrome DevTools device emulation
     // Erase differences in user agent stylesheet
     $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
+}
+
+function checkScrollWorks(dataGrid, scrollBy = 10, isHorizontal = false) {
+    const scrollable = dataGrid.getScrollable();
+
+    if(scrollable && scrollable.element()) {
+        if(isHorizontal) {
+            const initScrollPosition = scrollable.scrollLeft();
+
+            scrollable.scrollBy({ left: scrollBy });
+
+            return initScrollPosition + scrollBy === scrollable.scrollLeft();
+        } else {
+            const initScrollPosition = scrollable.scrollTop();
+
+            scrollable.scrollBy({ top: scrollBy });
+
+            return initScrollPosition + scrollBy === scrollable.scrollTop();
+        }
+    }
+
+    return false;
+}
+
+function checkHeaderRowScrollPadding(dataGrid) {
+    const headerPadding = parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight'));
+    const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth();
+
+    return headerPadding === scrollbarWidth;
 }
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
@@ -699,9 +730,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             columnAutoWidth: true,
             columns: [
                 { dataField: 'field1', width: 100 },
-                { dataField: 'field1', width: 100 },
-                { dataField: 'field1', width: 100 },
-                { dataField: 'field1', width: 100 }
+                { dataField: 'field2', width: 100 },
+                { dataField: 'field3', width: 100 },
+                { dataField: 'field4', width: 100 }
             ]
         });
 
@@ -1156,13 +1187,13 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+        assert.ok(checkHeaderRowScrollPadding(dataGrid), 'padding-right');
 
         // act
         dataGrid.expandRow(0);
 
         // assert
-        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+        assert.ok(checkHeaderRowScrollPadding(dataGrid), 'padding-right');
     });
 
     QUnit.test('New mode. Rows should be scrolled properly when rowRenderingMode is virtual', function(assert) {
@@ -1431,5 +1462,184 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         assert.strictEqual(table.find('tr').length, 3);
         assert.strictEqual(tableFixed.find('tr').length, 3);
+    });
+
+    QUnit.test('DataGrid scrollbar padding should be added after grid showed and updateDimensions called', function(assert) {
+        // arrange
+        $('#dataGrid').css('display', 'none');
+
+        const dataSource = [];
+
+        for(let i = 0; i < 25; i++) { dataSource.push({ value: i, value2: i }); }
+
+        const dataGrid = createDataGrid({
+            dataSource,
+            columns: ['value', 'value2'],
+            scrolling: {
+                useNative: true
+            }
+        });
+        this.clock.tick();
+
+        dataGrid.$element().addClass('fixed-height');
+
+        // act
+        $('#dataGrid').css('display', '');
+
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.ok(checkHeaderRowScrollPadding(dataGrid), 'padding-right');
+    });
+
+    QUnit.test('DataGrid scrollbar should appear and dissapear when height option is changed to \'auto\' and to a specific value', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, name: 'test1' },
+                { id: 2, name: 'test2' }
+            ],
+            keyExpr: 'id',
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    $('<div>')
+                        .dxDataGrid({
+                            keyExpr: 'id',
+                            dataSource: [
+                                { id: 1 }
+                            ],
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // assert
+        assert.notOk(checkScrollWorks(dataGrid), 'scroll should not work if height is not specified');
+
+        // act
+        dataGrid.option('height', 150);
+        dataGrid.expandRow(2);
+        this.clock.tick();
+
+        // assert
+        assert.ok(checkScrollWorks(dataGrid), 'scroll should work as height is specified and content height is bigger than height');
+
+        // act
+        dataGrid.option('height', 'auto');
+        this.clock.tick();
+
+        // assert
+        assert.notOk(checkScrollWorks(dataGrid), 'scroll should not work if height is \'auto\'');
+    });
+
+    // T1139557
+    QUnit.test('DataGrid should be scrollable if max-height is set and master detail was expanded', function(assert) {
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 0, column1: 'item 1' }, { id: 1, column1: 'item 2' }],
+            keyExpr: 'id',
+            showBorders: true,
+            columns: ['column1'],
+            masterDetail: {
+                enabled: true,
+                template(container, options) {
+                    $('<div>').dxDataGrid({
+                        columnAutoWidth: true,
+                        showBorders: true,
+                        columns: ['MasterColumn'],
+                        dataSource: [{ masterColumn: 'test' }]
+                    }).appendTo(container);
+                },
+            },
+        });
+        this.clock.tick(300);
+
+        dataGrid.expandRow(1);
+        this.clock.tick();
+
+        assert.ok(checkScrollWorks(dataGrid), 'vertical scrollbar should work');
+    });
+
+    QUnit.test('DataGrid should be scrollable if max-height is set and form editing was expanded', function(assert) {
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 0, column1: 'item 1' }, { id: 1, column1: 'item 2' }],
+            keyExpr: 'id',
+            showBorders: true,
+            columns: ['column1'],
+            editing: {
+                mode: 'form',
+                allowUpdating: true
+            }
+        });
+        this.clock.tick(300);
+
+        dataGrid.editRow(1);
+        this.clock.tick();
+
+        assert.ok(checkScrollWorks(dataGrid), 'vertical scrollbar should work');
+    });
+
+    QUnit.test('DataGrid should be scrollable if max-height is set and adaptive was expanded', function(assert) {
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            width: 400,
+            dataSource: [{ id: 0, column1: 'item 1', column2: 'test' }, { id: 1, column1: 'item 2', column2: 'test' }],
+            keyExpr: 'id',
+            showBorders: true,
+            columnHidingEnabled: true,
+            columns: [{
+                dataField: 'column1',
+                width: 340
+            }, 'column2'],
+        });
+        this.clock.tick(300);
+
+        dataGrid.expandAdaptiveDetailRow(1);
+        this.clock.tick();
+
+        assert.ok(checkScrollWorks(dataGrid), 'vertical scrollbar should work');
+    });
+
+    QUnit.test('DataGrid should not be scrollable on last page where rows height is less than max-height', function(assert) {
+        const getData = () => {
+            const data = [];
+
+            for(let i = 0; i < 5; i++) {
+                data.push({ id: i, column: 'item ' + i });
+            }
+
+            return data;
+        };
+
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            width: 400,
+            dataSource: getData(),
+            keyExpr: 'id',
+            showBorders: true,
+            columnHidingEnabled: true,
+            columns: ['column'],
+            paging: {
+                pageSize: 4
+            }
+        });
+        this.clock.tick(300);
+        window.grid = dataGrid;
+
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+
+        assert.ok($('#dataGrid').height() < 150, 'second page should not have scrollbar');
     });
 });

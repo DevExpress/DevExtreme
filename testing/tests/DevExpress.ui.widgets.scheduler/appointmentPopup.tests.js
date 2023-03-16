@@ -749,6 +749,17 @@ if(isDesktopEnvironment()) {
 }
 
 QUnit.module('Appointment Popup Content', moduleOptions, () => {
+    QUnit.test('appointmentPopup should not prevent mouse/touch events by default (T968188)', function(assert) {
+        const scheduler = createInstance({});
+
+        scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+
+        const appointmentPopupOptions = scheduler.instance._appointmentPopup.popup.option();
+
+        assert.strictEqual(appointmentPopupOptions.enableBodyScroll, false, 'enable body scroll');
+        assert.strictEqual(appointmentPopupOptions.preventScrollEvents, false, 'prevent scroll events');
+    });
+
     QUnit.test('showAppointmentPopup method with passed a recurrence appointment should render popup(T698732)', function(assert) {
         const appointments = [
             {

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isDefined, isFunction, isString } from '../../core/utils/type';
@@ -7,9 +9,11 @@ import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
+// @ts-expect-error
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
+// @ts-expect-error
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '../../data/utils';
 import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
@@ -52,6 +56,9 @@ const DATE_INTERVAL_SELECTORS = {
     }
 };
 
+/**
+ * @this {any}
+ */
 const getIntervalSelector = function() {
     const data = arguments[1];
     const value = this.calculateCellValue(data);
@@ -170,6 +177,9 @@ function normalizeGroupingLoadOptions(group) {
     });
 }
 
+/**
+ * @type {import('./ui.grid_core.utils').Utils}
+ */
 export default {
     renderNoDataText: function($element) {
         const that = this;
@@ -221,6 +231,7 @@ export default {
     },
 
     calculateLoadPanelPosition($element) {
+        // @ts-expect-error
         const $window = $(getWindow());
         if(getHeight($element) > getHeight($window)) {
             return {
@@ -350,6 +361,9 @@ export default {
     },
 
     getHeaderFilterGroupParameters: function(column, remoteGrouping) {
+        /**
+         * @type {any}
+         */
         let result = [];
         const dataField = column.dataField || column.name;
         const groupInterval = sharedFiltering.getGroupInterval(column);
@@ -420,6 +434,7 @@ export default {
 
             const point = {
                 index: columnIndex,
+                // @ts-expect-error
                 x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? getBoundingRect(item[0]).width : 0) : 0,
                 y: offset ? offset.top + ((isVertical && i === cellsLength) ? getBoundingRect(item[0]).height : 0) : 0,
                 columnIndex: columnIndex
@@ -496,7 +511,7 @@ export default {
 
     focusAndSelectElement: function(component, $element) {
         const isFocused = $element.is(':focus');
-
+        // @ts-expect-error
         eventsEngine.trigger($element, 'focus');
 
         const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
@@ -608,6 +623,7 @@ export default {
             const group = normalizeGroupingLoadOptions(
                 hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
             );
+            // @ts-expect-error
             const d = new Deferred();
 
             if(!hasGroupPaging && cachedUniqueRelevantItems) {
@@ -631,6 +647,7 @@ export default {
             ...lookupDataSourceOptions,
             __dataGridSourceFilter: filter,
             load: (loadOptions) => {
+                // @ts-expect-error
                 const d = new Deferred();
                 loadUniqueRelevantItems(loadOptions).done((items) => {
                     if(items.length === 0) {
@@ -653,6 +670,7 @@ export default {
                     });
 
                     newDataSource
+                        // @ts-expect-error
                         .load()
                         .done(d.resolve)
                         .fail(d.fail);

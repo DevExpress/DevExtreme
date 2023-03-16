@@ -25,6 +25,12 @@ const Tooltip = Popover.inherit({
             showCloseButton: false,
 
             /**
+            * @name dxTooltipOptions.enableBodyScroll
+            * @hidden
+            */
+            enableBodyScroll: true,
+
+            /**
             * @name dxTooltipOptions.showTitle
             * @hidden
             */

@@ -14,6 +14,8 @@ import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAnd
 import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
 import dxCircularGauge from './circular_gauge';
 import { plugin as pluginLegend } from '../components/legend';
+import { plugins as centerTemplatePlugins } from '../core/center_template';
+import { roundFloatPart } from '../../core/utils/math';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
@@ -245,6 +247,10 @@ export const dxBarGauge = BaseGauge.inherit({
         }
     },
 
+    _getCenter: function() {
+        return { x: this._context.x, y: this._context.y };
+    },
+
     _updateBars: function() {
         this._bars.forEach(bar => bar.applyValue());
         this._checkOverlap();
@@ -263,7 +269,6 @@ export const dxBarGauge = BaseGauge.inherit({
         }
         if(overlapStrategy === 'shift') {
             const newBars = that._dividePoints();
-
             overlapping.resolveLabelOverlappingInOneDirection(newBars.left, that._canvas, false, false, shiftFunction);
             overlapping.resolveLabelOverlappingInOneDirection(newBars.right, that._canvas, false, false, shiftFunction);
             that._clearLabelsCrossTitle();
@@ -279,6 +284,10 @@ export const dxBarGauge = BaseGauge.inherit({
         const { connectorWidth } = that._getOption('label');
 
         bars.forEach((bar) => {
+            if(!bar._isLabelShifted) {
+                return;
+            }
+
             const x = bar._bar.attr('x');
             const y = bar._bar.attr('y');
             const innerRadius = bar._bar.attr('innerRadius');
@@ -286,28 +295,47 @@ export const dxBarGauge = BaseGauge.inherit({
             const startAngle = bar._bar.attr('startAngle');
             const endAngle = bar._bar.attr('endAngle');
             const coordStart = getStartCoordsArc.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
-            const xStart = Number(coordStart.x);
-            const yStart = Number(coordStart.y);
+            const { cos, sin } = _getCosAndSin(bar._angle);
+            const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
+            const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
             const box = bar._text.getBBox();
-            const shiftConnector = connectorWidth / 2;
             const lastCoords = bar._text._lastCoords;
+            const indentFromLabel = that._context.textWidth / 2;
+            const originalXLabelCoord = box.x + box.width / 2 + lastCoords.x;
+            const originalPoints = [
+                xStart,
+                yStart,
+                originalXLabelCoord,
+                box.y + lastCoords.y
+            ];
 
             if(bar._angle > 90) {
-                bar._line.attr({ points: [
-                    xStart + shiftConnector,
-                    yStart + shiftConnector,
-                    box.x + box.width + lastCoords.x,
-                    box.y + box.height / 2 + lastCoords.y
-                ] });
-            } else if(bar._angle <= 90) {
-                bar._line.attr({ points: [
-                    xStart - shiftConnector,
-                    yStart + shiftConnector,
-                    box.x + lastCoords.x,
-                    box.y + box.height / 2 + lastCoords.y
-                ] });
+                originalPoints[2] += indentFromLabel;
+            } else {
+                originalPoints[2] -= indentFromLabel;
             }
+
+            if(bar._angle <= 180 && bar._angle > 0) {
+                originalPoints[3] += box.height;
+            }
+
+            if(connectorWidth % 2) {
+                const xDeviation = -sin / 2;
+                const yDeviation = -cos / 2;
+
+                if(bar._angle > 180) {
+                    originalPoints[0] -= xDeviation;
+                    originalPoints[1] -= yDeviation;
+                } else if(bar._angle > 0 && bar._angle <= 90) {
+                    originalPoints[0] += xDeviation;
+                    originalPoints[1] += yDeviation;
+                }
+            }
+
+            const points = originalPoints.map(coordinate => roundFloatPart(coordinate, 4));
+            bar._line.attr({ points });
             bar._line.rotate(0);
+            bar._isLabelShifted = false;
         });
     },
 
@@ -344,6 +372,7 @@ export const dxBarGauge = BaseGauge.inherit({
 
                             bar._text._lastCoords = { x: x - box.x, y: y - box.y };
                             bar._text.attr({ translateX: x - box.x, translateY: y - box.y });
+                            bar._isLabelShifted = true;
                         },
                         draw: () => bar.hideLabel(),
                         getData: () => { return { value: bar.getValue() }; },
@@ -772,6 +801,7 @@ function getStartCoordsArc(x, y, innerR, outerR, startAngleCos, startAngleSin) {
 registerComponent('dxBarGauge', dxBarGauge);
 
 dxBarGauge.addPlugin(pluginLegend);
+dxBarGauge.addPlugin(centerTemplatePlugins.gauge);
 
 ///#DEBUG
 const __BarWrapper = BarWrapper;
