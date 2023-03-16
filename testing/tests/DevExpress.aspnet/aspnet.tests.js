@@ -1,358 +1,348 @@
-(function(factory) {
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            require('integration/jquery'),
-            require('ui/button');
-            require('ui/check_box');
-            require('ui/drop_down_button');
-            require('ui/form');
-            require('ui/popup');
-            require('ui/select_box');
-            require('ui/text_box');
-            require('ui/toolbar');
-            require('ui/validator');
-            require('ui/validation_summary');
+import 'integration/jquery';
+import 'ui/button';
+import 'ui/check_box';
+import 'ui/drop_down_button';
+import 'ui/form';
+import 'ui/popup';
+import 'ui/select_box';
+import 'ui/text_box';
+import 'ui/toolbar';
+import 'ui/validator';
+import 'ui/validation_summary';
+import $ from 'jquery';
+import { setTemplateEngine } from 'core/templates/template_engine_registry';
+import aspnet from 'aspnet.js';
+import uiErrors from 'ui/widget/ui.errors';
+import * as ajaxMock from '../../helpers/ajaxMock.js';
 
-            const aspnet = require('aspnet');
-            window.DevExpress = { aspnet: aspnet }; // for DevExpress.aspnet.createComponent in templates
+const errorsAccessor = function() {
+    return uiErrors;
+};
+const ajaxMockAccessor = function() {
+    return ajaxMock;
+};
 
-            module.exports = factory(
-                require('jquery'),
-                require('core/templates/template_engine_registry').setTemplateEngine,
-                aspnet,
-                function() { return require('ui/widget/ui.errors'); },
-                function() { return require('../../helpers/ajaxMock.js'); }
-            );
+if(QUnit.urlParams['nojquery']) {
+    return;
+}
+
+window.DevExpress = { aspnet: aspnet };
+window.$ = $;
+
+QUnit.module(
+    'Client Validation',
+    {
+        beforeEach: function() {
+            $('#qunit-fixture').html('<div id=\'editor\'></div><div id=\'editor2\'></div><div id=\'summary\'></div>');
+        },
+    },
+    function() {
+        QUnit.test('Get comparison target value', function(assert) {
+            $('#editor').dxTextBox({
+                value: 'testMVC',
+                name: 'FullName',
+            });
+
+            assert.equal(aspnet.getEditorValue('FullName'), 'testMVC', 'value of editor');
         });
-    } else {
-        factory(
-            window.jQuery,
-            DevExpress.setTemplateEngine,
-            DevExpress.aspnet,
-            function() { return window.DevExpress_ui_widget_errors; },
-            function() { return window.ajaxMock; }
-        );
-    }
-}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
 
-    if(QUnit.urlParams['nojquery']) {
-        return;
-    }
+        QUnit.test('Create validationSummary items', function(assert) {
+            const validationGroup = 'test-group';
 
-    QUnit.module(
-        'Client Validation',
-        {
-            beforeEach: function() {
-                $('#qunit-fixture').html('<div id=\'editor\'></div><div id=\'editor2\'></div><div id=\'summary\'></div>');
-            }
-        },
-        function() {
-            QUnit.test('Get comparison target value', function(assert) {
-                $('#editor').dxTextBox({
-                    value: 'testMVC',
-                    name: 'FullName'
+            $('#editor')
+                .dxTextBox({
+                    name: 'FullName',
+                    validationError: {
+                        message: 'Server exception',
+                    },
+                })
+                .dxValidator({
+                    validationGroup: validationGroup,
                 });
 
-                assert.equal(aspnet.getEditorValue('FullName'), 'testMVC', 'value of editor');
+            $('#summary').dxValidationSummary({
+                validationGroup: validationGroup,
             });
 
-            QUnit.test('Create validationSummary items', function(assert) {
-                const validationGroup = 'test-group';
+            aspnet.createValidationSummaryItems(validationGroup, ['FullName']);
 
-                $('#editor')
-                    .dxTextBox({
-                        name: 'FullName',
-                        validationError: {
-                            message: 'Server exception'
-                        }
-                    })
-                    .dxValidator({
-                        validationGroup: validationGroup
-                    });
+            const summary = $('#summary').dxValidationSummary('instance');
+            const item = summary.option('items')[0];
+            const editor = item.validator.$element().dxTextBox('instance');
 
-                $('#summary').dxValidationSummary({
-                    validationGroup: validationGroup
+            assert.equal(summary.option('items').length, 1, 'item count is OK');
+            assert.equal(item.text, 'Server exception', 'text of first item is OK');
+            assert.equal(editor.option('name'), 'FullName', 'validator is OK');
+        });
+
+        QUnit.test('Create validationSummary items for different validationGroup', function(assert) {
+            const validationGroup = 'custom-group';
+
+            $('#editor')
+                .dxTextBox({
+                    name: 'FullName',
+                    validationError: {
+                        message: 'Server exception',
+                    },
+                })
+                .dxValidator({
+                    validationGroup: validationGroup,
                 });
 
-                aspnet.createValidationSummaryItems(validationGroup, ['FullName']);
-
-                const summary = $('#summary').dxValidationSummary('instance');
-                const item = summary.option('items')[0];
-                const editor = item.validator.$element().dxTextBox('instance');
-
-                assert.equal(summary.option('items').length, 1, 'item count is OK');
-                assert.equal(item.text, 'Server exception', 'text of first item is OK');
-                assert.equal(editor.option('name'), 'FullName', 'validator is OK');
+            $('#summary').dxValidationSummary({
+                validationGroup: validationGroup,
             });
 
-            QUnit.test('Create validationSummary items for different validationGroup', function(assert) {
-                const validationGroup = 'custom-group';
+            aspnet.createValidationSummaryItems('custom-group-2', ['FullName']);
 
-                $('#editor')
-                    .dxTextBox({
-                        name: 'FullName',
-                        validationError: {
-                            message: 'Server exception'
-                        }
-                    })
-                    .dxValidator({
-                        validationGroup: validationGroup
-                    });
+            const summary = $('#summary').dxValidationSummary('instance');
 
-                $('#summary').dxValidationSummary({
-                    validationGroup: validationGroup
+            assert.notOk(summary.option('items').length, 'items not found');
+        });
+
+        QUnit.test('Create validationSummary items only for editor with related option name', function(assert) {
+            const validationGroup = 'test-group';
+
+            $('#editor')
+                .dxTextBox({
+                    name: 'FullName',
+                    validationError: {
+                        message: 'Server exception',
+                    },
+                })
+                .dxValidator({
+                    validationGroup: validationGroup,
                 });
 
-                aspnet.createValidationSummaryItems('custom-group-2', ['FullName']);
-
-                const summary = $('#summary').dxValidationSummary('instance');
-
-                assert.notOk(summary.option('items').length, 'items not found');
-            });
-
-            QUnit.test('Create validationSummary items only for editor with related option name', function(assert) {
-                const validationGroup = 'test-group';
-
-                $('#editor')
-                    .dxTextBox({
-                        name: 'FullName',
-                        validationError: {
-                            message: 'Server exception'
-                        }
-                    })
-                    .dxValidator({
-                        validationGroup: validationGroup
-                    });
-
-                $('#editor2')
-                    .dxTextBox({
-                        name: 'City'
-                    })
-                    .dxValidator({
-                        validationGroup: validationGroup
-                    });
-
-                $('#summary').dxValidationSummary({
-                    validationGroup: validationGroup
+            $('#editor2')
+                .dxTextBox({
+                    name: 'City',
+                })
+                .dxValidator({
+                    validationGroup: validationGroup,
                 });
 
-                aspnet.createValidationSummaryItems(validationGroup, ['FullName']);
-
-                const summary = $('#summary').dxValidationSummary('instance');
-                const item = summary.option('items')[0];
-
-                assert.equal(summary.option('items').length, 1, 'item length is OK');
-                assert.equal(item.text, 'Server exception', 'text of first item is OK');
-            });
-        }
-    );
-
-    QUnit.module(
-        'Render component',
-        {
-            beforeEach: function() {
-                $('#qunit-fixture').html(
-                    '<div id="button"></div>\
-                    \
-                    <script id="templateWithCreateComponent" type="text/html">\
-                    <div id="templateContent">\
-                        <div id="inner-button"></div>\
-                        <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
-                    </div>\
-                    </script>\
-                    <script id="simpleTemplate" type="text/html">\
-                    <div id="templateContent">\
-                        <%= DevExpress.aspnet.renderComponent("dxButton") %>\
-                    </div>\
-                    </script>\
-                    \
-                    <script id="templateWithOptions" type="text/html">\
-                    <div id="templateContent">\
-                        <%= DevExpress.aspnet.renderComponent("dxButton", { text: "text" }) %>\
-                    </div>\
-                    </script>\
-                    \
-                    <script id="templateWithID" type="text/html">\
-                    <div id="templateContent">\
-                        <%= DevExpress.aspnet.renderComponent("dxButton", { }, "test-id") %>\
-                    </div>\
-                    </script>\
-                    \
-                    <script id="templateWithExoticId" type="text/html">\
-                    <div id="templateContent">\
-                        <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\\\\]^`{|}~") %>\
-                    </div>\
-                    </script>\
-                    \
-                    <script id="templateWithValidator" type="text/html">\
-                    <div id="templateContent">\
-                        <%= DevExpress.aspnet.renderComponent("dxTextBox", { }, "test-id", { validationGroup: "my-group" }) %>\
-                    </div>\
-                    </script>\
-                    \
-                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
-                );
-
-                aspnet.setTemplateEngine();
-            },
-            afterEach: function() {
-                setTemplateEngine('default');
-            }
-        },
-        function() {
-
-            function renderTemplate(templateId) {
-                $('#button').dxButton({
-                    template: $(templateId)
-                });
-
-                return $('#templateContent').children();
-            }
-
-            QUnit.test('Create component', function(assert) {
-                const $result = renderTemplate('#templateWithCreateComponent');
-                assert.ok($result.is('.dx-button'));
+            $('#summary').dxValidationSummary({
+                validationGroup: validationGroup,
             });
 
-            QUnit.test('Component element rendering', function(assert) {
-                const $result = renderTemplate('#simpleTemplate');
-                assert.ok($result.is('div[id|=dx]'));
-            });
+            aspnet.createValidationSummaryItems(validationGroup, ['FullName']);
 
-            QUnit.test('Component rendering', function(assert) {
-                const $result = renderTemplate('#simpleTemplate');
-                assert.ok($result.is('.dx-button'));
-            });
+            const summary = $('#summary').dxValidationSummary('instance');
+            const item = summary.option('items')[0];
 
-            QUnit.test('Component rendering with options', function(assert) {
-                const $result = renderTemplate('#templateWithOptions');
-                assert.equal($result.dxButton('option', 'text'), 'text');
-            });
+            assert.equal(summary.option('items').length, 1, 'item length is OK');
+            assert.equal(item.text, 'Server exception', 'text of first item is OK');
+        });
+    },
+);
 
-            QUnit.test('Component element rendering with custom ID', function(assert) {
-                const $result = renderTemplate('#templateWithID');
-                assert.ok($result.is('#test-id'));
-            });
-
-            QUnit.test('Component element rendering with validator', function(assert) {
-                const $result = renderTemplate('#templateWithValidator');
-                assert.equal($result.dxValidator('option', 'validationGroup'), 'my-group');
-            });
-
-            QUnit.test('Exotic characters in component ID should be escaped (T531137)', function(assert) {
-                const $result = renderTemplate('#templateWithExoticId');
-                assert.ok($result.dxButton('instance'));
-            });
-
-            QUnit.test('Inner template is rendered correctly when another script tags exist', function(assert) {
-                const $buttonElement = $('#buttonWithInnerTemplate').dxButton();
-                $buttonElement.find('script').remove();
-                assert.equal($buttonElement.text(), 'BUTTON_CONTENT');
-            });
-        }
-    );
-
-    QUnit.module('Template engine', {
+QUnit.module(
+    'Render component',
+    {
         beforeEach: function() {
             $('#qunit-fixture').html(
                 '<div id="button"></div>\
-                <script id="simpleTemplate" type="text/html"></script>'
+                \
+                <script id="templateWithCreateComponent" type="text/html">\
+                <div id="templateContent">\
+                    <div id="inner-button"></div>\
+                    <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
+                </div>\
+                </script>\
+                <script id="simpleTemplate" type="text/html">\
+                <div id="templateContent">\
+                    <%= DevExpress.aspnet.renderComponent("dxButton") %>\
+                </div>\
+                </script>\
+                \
+                <script id="templateWithOptions" type="text/html">\
+                <div id="templateContent">\
+                    <%= DevExpress.aspnet.renderComponent("dxButton", { text: "text" }) %>\
+                </div>\
+                </script>\
+                \
+                <script id="templateWithID" type="text/html">\
+                <div id="templateContent">\
+                    <%= DevExpress.aspnet.renderComponent("dxButton", { }, "test-id") %>\
+                </div>\
+                </script>\
+                \
+                <script id="templateWithExoticId" type="text/html">\
+                <div id="templateContent">\
+                    <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\\\\]^`{|}~") %>\
+                </div>\
+                </script>\
+                \
+                <script id="templateWithValidator" type="text/html">\
+                <div id="templateContent">\
+                    <%= DevExpress.aspnet.renderComponent("dxTextBox", { }, "test-id", { validationGroup: "my-group" }) %>\
+                </div>\
+                </script>\
+                \
+                <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>',
             );
+
             aspnet.setTemplateEngine();
         },
         afterEach: function() {
             setTemplateEngine('default');
-        }
-    }, function() {
-        const testTemplate = function(name, templateSource, expected) {
-            QUnit.test(name, function(assert) {
-                const $template = $('#simpleTemplate');
+        },
+    },
+    function() {
 
-                $template.text(templateSource);
-
-                $('#button').dxButton({
-                    text: 'Test button',
-                    template: $template
-                });
-
-                assert.equal($('.dx-button-content').text(), expected);
+        function renderTemplate(templateId) {
+            $('#button').dxButton({
+                template: $(templateId),
             });
+
+            return $('#templateContent').children();
+        }
+
+        QUnit.test('Create component', function(assert) {
+            const $result = renderTemplate('#templateWithCreateComponent');
+            assert.ok($result.is('.dx-button'));
+        });
+
+        QUnit.test('Component element rendering', function(assert) {
+            const $result = renderTemplate('#simpleTemplate');
+            assert.ok($result.is('div[id|=dx]'));
+        });
+
+        QUnit.test('Component rendering', function(assert) {
+            const $result = renderTemplate('#simpleTemplate');
+            assert.ok($result.is('.dx-button'));
+        });
+
+        QUnit.test('Component rendering with options', function(assert) {
+            const $result = renderTemplate('#templateWithOptions');
+            assert.equal($result.dxButton('option', 'text'), 'text');
+        });
+
+        QUnit.test('Component element rendering with custom ID', function(assert) {
+            const $result = renderTemplate('#templateWithID');
+            assert.ok($result.is('#test-id'));
+        });
+
+        QUnit.test('Component element rendering with validator', function(assert) {
+            const $result = renderTemplate('#templateWithValidator');
+            assert.equal($result.dxValidator('option', 'validationGroup'), 'my-group');
+        });
+
+        QUnit.test('Exotic characters in component ID should be escaped (T531137)', function(assert) {
+            const $result = renderTemplate('#templateWithExoticId');
+            assert.ok($result.dxButton('instance'));
+        });
+
+        QUnit.test('Inner template is rendered correctly when another script tags exist', function(assert) {
+            const $buttonElement = $('#buttonWithInnerTemplate').dxButton();
+            $buttonElement.find('script').remove();
+            assert.equal($buttonElement.text(), 'BUTTON_CONTENT');
+        });
+    },
+);
+
+QUnit.module('Template engine', {
+    beforeEach: function() {
+        $('#qunit-fixture').html(
+            '<div id="button"></div>\
+            <script id="simpleTemplate" type="text/html"></script>',
+        );
+        aspnet.setTemplateEngine();
+    },
+    afterEach: function() {
+        setTemplateEngine('default');
+    },
+}, function() {
+    const testTemplate = function(name, templateSource, expected) {
+        QUnit.test(name, function(assert) {
+            const $template = $('#simpleTemplate');
+
+            $template.text(templateSource);
+
+            $('#button').dxButton({
+                text: 'Test button',
+                template: $template,
+            });
+
+            assert.equal($('.dx-button-content').text(), expected);
+        });
+    };
+
+    testTemplate('Echo constant',
+        'a <%= \'b\' %> c',
+        'a b c',
+    );
+
+    testTemplate('Echo variable',
+        '[<%= text %>]',
+        '[Test button]',
+    );
+
+    testTemplate('Multiple blocks',
+        '[<%= 1 %>][<%= 2 %>][<%= 3 %>]',
+        '[1][2][3]',
+    );
+
+    testTemplate('Evaluate',
+        '<% text %>',
+        '',
+    );
+
+    testTemplate('Evalute expr w/ semicolon',
+        '<% text %>abc',
+        'abc',
+    );
+
+    testTemplate('For loop',
+        '<% for(var i = 0; i < 5; i++) { %><%= i %><% } %>',
+        '01234',
+    );
+
+    testTemplate('Text escaping',
+        '\'"\\\n',
+        '\'"\\\n',
+    );
+
+    testTemplate('Html encode: inline',
+        '<%- \'<img />\' %>',
+        '<img />',
+    );
+
+    testTemplate('Html encode: stored in variable',
+        '<% var a = \'<script>alert(1)</script>\'; %><%- a %>',
+        '<script>alert(1)</script>',
+    );
+
+    testTemplate('obj', '<%- obj.text %>', 'Test button');
+
+    testTemplate('null', '<% var a = null; %><%- a %>', '');
+    testTemplate('undefined', '<% var a = undefined; %><%- a %>', '');
+    testTemplate('empty', '<%-%>', 'undefined');
+    testTemplate('space', '<%- %>', 'undefined');
+    testTemplate('tab', '<%-\t%>', 'undefined');
+    testTemplate('new line', '<%-\n%>', 'undefined');
+    testTemplate('return', '<%-\r%>', 'undefined');
+    testTemplate('two spaces', '<%-  %>', 'undefined');
+    testTemplate('empty string', '<%- \'\' %>', '');
+    testTemplate('nonempty string', '<%- \'a\' %>', 'a');
+    testTemplate('WA from T954324, null', '<% var value = null; %><%- (value != null ? value : \'\') %>', '');
+    testTemplate('WA from T954324, undefined', '<% var value = undefined; %><%- (value != null ? value : \'\') %>', '');
+    testTemplate('WA from T954324, nempty string', '<% var value = \'\'; %><%- (value != null ? value : \'\') %>', '');
+    testTemplate('WA from T954324, nonempty string', '<% var value = \'a\'; %><%- (value != null ? value : \'\') %>', 'a');
+
+    testTemplate('Alternative syntax (T831170)', 'a [%= \'b\' %] c', 'a b c');
+});
+
+QUnit.test('Transcluded content (T691770, T693379)', function(assert) {
+    aspnet.setTemplateEngine();
+    try {
+        window.testCounters = {
+            innerEval: 0,
+            innerClick: 0,
         };
 
-        testTemplate('Echo constant',
-            'a <%= \'b\' %> c',
-            'a b c'
-        );
-
-        testTemplate('Echo variable',
-            '[<%= text %>]',
-            '[Test button]'
-        );
-
-        testTemplate('Multiple blocks',
-            '[<%= 1 %>][<%= 2 %>][<%= 3 %>]',
-            '[1][2][3]'
-        );
-
-        testTemplate('Evaluate',
-            '<% text %>',
-            ''
-        );
-
-        testTemplate('Evalute expr w/ semicolon',
-            '<% text %>abc',
-            'abc'
-        );
-
-        testTemplate('For loop',
-            '<% for(var i = 0; i < 5; i++) { %><%= i %><% } %>',
-            '01234'
-        );
-
-        testTemplate('Text escaping',
-            '\'"\\\n',
-            '\'"\\\n'
-        );
-
-        testTemplate('Html encode: inline',
-            '<%- \'<img />\' %>',
-            '<img />'
-        );
-
-        testTemplate('Html encode: stored in variable',
-            '<% var a = \'<script>alert(1)</script>\'; %><%- a %>',
-            '<script>alert(1)</script>'
-        );
-
-        testTemplate('obj', '<%- obj.text %>', 'Test button');
-
-        testTemplate('null', '<% var a = null; %><%- a %>', '');
-        testTemplate('undefined', '<% var a = undefined; %><%- a %>', '');
-        testTemplate('empty', '<%-%>', 'undefined');
-        testTemplate('space', '<%- %>', 'undefined');
-        testTemplate('tab', '<%-\t%>', 'undefined');
-        testTemplate('new line', '<%-\n%>', 'undefined');
-        testTemplate('return', '<%-\r%>', 'undefined');
-        testTemplate('two spaces', '<%-  %>', 'undefined');
-        testTemplate('empty string', '<%- \'\' %>', '');
-        testTemplate('nonempty string', '<%- \'a\' %>', 'a');
-        testTemplate('WA from T954324, null', '<% var value = null; %><%- (value != null ? value : \'\') %>', '');
-        testTemplate('WA from T954324, undefined', '<% var value = undefined; %><%- (value != null ? value : \'\') %>', '');
-        testTemplate('WA from T954324, nempty string', '<% var value = \'\'; %><%- (value != null ? value : \'\') %>', '');
-        testTemplate('WA from T954324, nonempty string', '<% var value = \'a\'; %><%- (value != null ? value : \'\') %>', 'a');
-
-        testTemplate('Alternative syntax (T831170)', 'a [%= \'b\' %] c', 'a b c');
-    });
-
-    QUnit.test('Transcluded content (T691770, T693379)', function(assert) {
-        aspnet.setTemplateEngine();
-        try {
-            window.testCounters = {
-                innerEval: 0,
-                innerClick: 0
-            };
-
-            $('#qunit-fixture').html('\
+        $('#qunit-fixture').html('\
                 <div id=test-button>\
                     <div id=test-button-inner></div>\
                     <script>\
@@ -366,299 +356,297 @@
                 </div>\
             ');
 
-            $('#test-button').dxButton();
-            $('#test-button-inner').trigger('click');
+        $('#test-button').dxButton();
+        $('#test-button-inner').trigger('click');
 
-            assert.equal(window.testCounters.innerEval, 1);
-            assert.equal(window.testCounters.innerClick, 1);
-            assert.equal($('#test-button-inner').html(), 'test-button-inner-text');
-        } finally {
-            setTemplateEngine('default');
-            delete window.testCounters;
-        }
-    });
+        assert.equal(window.testCounters.innerEval, 1);
+        assert.equal(window.testCounters.innerClick, 1);
+        assert.equal($('#test-button-inner').html(), 'test-button-inner-text');
+    } finally {
+        setTemplateEngine('default');
+        delete window.testCounters;
+    }
+});
 
-    QUnit.test('T744904 - MVCx extension in template', function(assert) {
-        aspnet.setTemplateEngine();
-        window['MVCx'] = { };
-        try {
-            $('#qunit-fixture').html(
-                '<div id="test-widget"></div>' +
-                '<script id="test-template" type="text/html">' +
-                '  <script id="dxss_123456789" type="text/javascript"></<% %>script>' +
-                '</script>'
-            );
+QUnit.test('T744904 - MVCx extension in template', function(assert) {
+    aspnet.setTemplateEngine();
+    window['MVCx'] = {};
+    try {
+        $('#qunit-fixture').html(
+            '<div id="test-widget"></div>' +
+            '<script id="test-template" type="text/html">' +
+            '  <script id="dxss_123456789" type="text/javascript"></<% %>script>' +
+            '</script>',
+        );
 
-            const widgetElement = $('#test-widget');
-            widgetElement.dxButton({
-                template: $('#test-template')
-            });
+        const widgetElement = $('#test-widget');
+        widgetElement.dxButton({
+            template: $('#test-template'),
+        });
 
-            assert.ok(widgetElement.html().indexOf('dxss_') < 0);
+        assert.ok(widgetElement.html().indexOf('dxss_') < 0);
 
-            window['MVCx'].isDXScriptInitializedOnLoad = true;
-            widgetElement.dxButton('instance').repaint();
-            assert.ok(widgetElement.html().indexOf('dxss_') > -1);
-        } finally {
-            setTemplateEngine('default');
-            delete window['MVCx'];
-        }
-    });
+        window['MVCx'].isDXScriptInitializedOnLoad = true;
+        widgetElement.dxButton('instance').repaint();
+        assert.ok(widgetElement.html().indexOf('dxss_') > -1);
+    } finally {
+        setTemplateEngine('default');
+        delete window['MVCx'];
+    }
+});
 
-    QUnit.test('T758209', function(assert) {
-        aspnet.setTemplateEngine();
+QUnit.test('T758209', function(assert) {
+    aspnet.setTemplateEngine();
 
-        const errors = errorsAccessor();
-        const spy = sinon.spy(errors, 'log');
+    const errors = errorsAccessor();
+    const spy = sinon.spy(errors, 'log');
 
-        try {
-            const formID = 'bd859c15-674f-49bf-a6d0-9368508e8d11';
-            const textBoxID = '682b4545-09d9-4f63-82ed-91570d869eb6';
+    try {
+        const formID = 'bd859c15-674f-49bf-a6d0-9368508e8d11';
+        const textBoxID = '682b4545-09d9-4f63-82ed-91570d869eb6';
 
-            window.__createForm = function() {
-                const config = {
-                    formData: { testField: 'testValue' },
-                    items: [
-                        {
-                            dataField: 'testField',
-                            editorType: 'dxSelectBox',
-                            editorOptions: {
-                                items: [ 'testValue' ],
-                                fieldTemplate: $('#popup1_form_fieldTempalte')
-                            }
-                        }
-                    ]
-                };
-                DevExpress.aspnet.createComponent('dxForm', config, formID);
-            };
-
-            window.__createTextBox = function(obj) {
-                DevExpress.aspnet.createComponent('dxTextBox', { value: obj + ' in template' }, textBoxID);
-            };
-
-
-            $('#qunit-fixture').html(
-                '<div id="popup1">' +
-                '</div>' +
-
-                '<script id="popup1_contentTemplate" type="text/html">' +
-                '  <div id=' + formID + '></div>' +
-                '  <% __createForm() %>' +
-                '</script>' +
-
-                '<script id="popup1_form_fieldTempalte" type="text/html">' +
-                '  <div id=' + textBoxID + '></div>' +
-                '  <% __createTextBox(obj) %>' +
-                '</script>'
-            );
-
-            $('#popup1').dxPopup({
-                contentTemplate: $('#popup1_contentTemplate'),
-                visible: true
-            });
-
-            errors.log.args.forEach(function(a) {
-                if(a[0] === 'E1035') {
-                    throw 'E1035 is found in the log';
-                }
-            });
-
-            assert.equal(
-                $('#' + textBoxID).dxTextBox('instance').option('value'),
-                'testValue in template'
-            );
-
-        } finally {
-            setTemplateEngine('default');
-            spy.restore();
-            delete window.__createForm;
-            delete window.__createTextBox;
-        }
-    });
-
-    QUnit.test('T810336', function(assert) {
-        aspnet.setTemplateEngine();
-
-        window.__createButton = function(buttonID) {
-            DevExpress.aspnet.createComponent('dxButton', { text: buttonID }, buttonID);
-        };
-
-        try {
-            $('#qunit-fixture').html(
-                '<div id="popup1"></div>' +
-                '<script id="popup1_contentTemplate" type="text/html">' +
-                '  <div id="b1"></div><% __createButton("b1") %>' +
-                '  <div id="b2"></div><% __createButton("b2") %>' +
-                '</script>'
-            );
-
-            $('#popup1').dxPopup({
-                contentTemplate: $('#popup1_contentTemplate'),
-                visible: true
-            });
-
-            assert.ok($('#b1').dxButton('instance'));
-            assert.ok($('#b2').dxButton('instance'));
-
-        } finally {
-            setTemplateEngine('default');
-            delete window.__createButton;
-        }
-    });
-
-    QUnit.test('T836885', function(assert) {
-        aspnet.setTemplateEngine();
-
-        try {
-            $('#qunit-fixture').html(
-                '<div id=list1></div>' +
-                '<script id="list1_itemTemplate" type="text/html">' +
-                '  <div id="<%= key %>"></div><% DevExpress.aspnet.createComponent("dxTextBox", { }, key) %>' +
-                '</script>'
-            );
-
-            // Per https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute
-            // "IDs can consist of just digits"
-            const NUMERIC_ID = 20191205;
-
-            $('#list1').dxList({
-                items: [ { key: NUMERIC_ID } ],
-                itemTemplate: $('#list1_itemTemplate')
-            });
-
-            assert.ok($('#' + NUMERIC_ID).dxTextBox('instance'));
-        } finally {
-            setTemplateEngine('default');
-        }
-    });
-
-    QUnit.test('T886572', function(assert) {
-        aspnet.setTemplateEngine();
-        window.__createCheckBox = function(id) {
-            DevExpress.aspnet.createComponent('dxCheckBox', { text: id }, id);
-        };
-
-        try {
-            $('#qunit-fixture').html(
-                '<div id=toolbar1></div>' +
-                '<script id=template1 type=text/html>' +
-                '  <div id=checkBox1></div><% __createCheckBox("checkBox1") %>' +
-                '</script>'
-            );
-            $('#toolbar1').dxToolbar({
+        window.__createForm = function() {
+            const config = {
+                formData: { testField: 'testValue' },
                 items: [
                     {
-                        widget: 'dxDropDownButton',
-                        options: {
-                            deferRendering: false,
-                            items: [
-                                { template: $('#template1') }
-                            ]
-                        }
-                    }
-                ]
-            });
+                        dataField: 'testField',
+                        editorType: 'dxSelectBox',
+                        editorOptions: {
+                            items: ['testValue'],
+                            fieldTemplate: $('#popup1_form_fieldTempalte'),
+                        },
+                    },
+                ],
+            };
+            DevExpress.aspnet.createComponent('dxForm', config, formID);
+        };
 
-            assert.ok($('#checkBox1').dxCheckBox('instance'));
-        } finally {
-            setTemplateEngine('default');
-            delete window.__createCheckBox;
-        }
+        window.__createTextBox = function(obj) {
+            DevExpress.aspnet.createComponent('dxTextBox', { value: obj + ' in template' }, textBoxID);
+        };
+
+
+        $('#qunit-fixture').html(
+            '<div id="popup1">' +
+            '</div>' +
+
+            '<script id="popup1_contentTemplate" type="text/html">' +
+            '  <div id=' + formID + '></div>' +
+            '  <% __createForm() %>' +
+            '</script>' +
+
+            '<script id="popup1_form_fieldTempalte" type="text/html">' +
+            '  <div id=' + textBoxID + '></div>' +
+            '  <% __createTextBox(obj) %>' +
+            '</script>',
+        );
+
+        $('#popup1').dxPopup({
+            contentTemplate: $('#popup1_contentTemplate'),
+            visible: true,
+        });
+
+        errors.log.args.forEach(function(a) {
+            if(a[0] === 'E1035') {
+                throw 'E1035 is found in the log';
+            }
+        });
+
+        assert.equal(
+            $('#' + textBoxID).dxTextBox('instance').option('value'),
+            'testValue in template',
+        );
+
+    } finally {
+        setTemplateEngine('default');
+        spy.restore();
+        delete window.__createForm;
+        delete window.__createTextBox;
+    }
+});
+
+QUnit.test('T810336', function(assert) {
+    aspnet.setTemplateEngine();
+
+    window.__createButton = function(buttonID) {
+        DevExpress.aspnet.createComponent('dxButton', { text: buttonID }, buttonID);
+    };
+
+    try {
+        $('#qunit-fixture').html(
+            '<div id="popup1"></div>' +
+            '<script id="popup1_contentTemplate" type="text/html">' +
+            '  <div id="b1"></div><% __createButton("b1") %>' +
+            '  <div id="b2"></div><% __createButton("b2") %>' +
+            '</script>',
+        );
+
+        $('#popup1').dxPopup({
+            contentTemplate: $('#popup1_contentTemplate'),
+            visible: true,
+        });
+
+        assert.ok($('#b1').dxButton('instance'));
+        assert.ok($('#b2').dxButton('instance'));
+
+    } finally {
+        setTemplateEngine('default');
+        delete window.__createButton;
+    }
+});
+
+QUnit.test('T836885', function(assert) {
+    aspnet.setTemplateEngine();
+
+    try {
+        $('#qunit-fixture').html(
+            '<div id=list1></div>' +
+            '<script id="list1_itemTemplate" type="text/html">' +
+            '  <div id="<%= key %>"></div><% DevExpress.aspnet.createComponent("dxTextBox", { }, key) %>' +
+            '</script>',
+        );
+
+        // Per https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute
+        // "IDs can consist of just digits"
+        const NUMERIC_ID = 20191205;
+
+        $('#list1').dxList({
+            items: [{ key: NUMERIC_ID }],
+            itemTemplate: $('#list1_itemTemplate'),
+        });
+
+        assert.ok($('#' + NUMERIC_ID).dxTextBox('instance'));
+    } finally {
+        setTemplateEngine('default');
+    }
+});
+
+QUnit.test('T886572', function(assert) {
+    aspnet.setTemplateEngine();
+    window.__createCheckBox = function(id) {
+        DevExpress.aspnet.createComponent('dxCheckBox', { text: id }, id);
+    };
+
+    try {
+        $('#qunit-fixture').html(
+            '<div id=toolbar1></div>' +
+            '<script id=template1 type=text/html>' +
+            '  <div id=checkBox1></div><% __createCheckBox("checkBox1") %>' +
+            '</script>',
+        );
+        $('#toolbar1').dxToolbar({
+            items: [
+                {
+                    widget: 'dxDropDownButton',
+                    options: {
+                        deferRendering: false,
+                        items: [
+                            { template: $('#template1') },
+                        ],
+                    },
+                },
+            ],
+        });
+
+        assert.ok($('#checkBox1').dxCheckBox('instance'));
+    } finally {
+        setTemplateEngine('default');
+        delete window.__createCheckBox;
+    }
+});
+
+QUnit.module('Remote validation', {
+    beforeEach: function() {
+        this.ajaxMock = ajaxMockAccessor();
+    },
+    afterEach: function() {
+        this.ajaxMock.clear();
+    },
+}, function() {
+
+    QUnit.test('sendValidationRequest - ajax options', function(assert) {
+        assert.expect(4);
+
+        this.ajaxMock.setup({
+            url: 'ctrl/action',
+            callback: function(options) {
+                assert.equal(options.url, 'ctrl/action');
+                assert.deepEqual(options.data, { prop: 'val' });
+                assert.equal(options.dataType, 'json');
+                assert.equal(options.method, 'POST');
+            },
+        });
+
+        aspnet.sendValidationRequest(
+            'prop',
+            'val',
+            'ctrl/action',
+            'POST',
+        );
     });
 
-    QUnit.module('Remote validation', {
-        beforeEach: function() {
-            this.ajaxMock = ajaxMockAccessor();
-        },
-        afterEach: function() {
-            this.ajaxMock.clear();
-        }
-    }, function() {
-
-        QUnit.test('sendValidationRequest - ajax options', function(assert) {
-            assert.expect(4);
-
-            this.ajaxMock.setup({
-                url: 'ctrl/action',
-                callback: function(options) {
-                    assert.equal(options.url, 'ctrl/action');
-                    assert.deepEqual(options.data, { prop: 'val' });
-                    assert.equal(options.dataType, 'json');
-                    assert.equal(options.method, 'POST');
-                }
-            });
-
-            aspnet.sendValidationRequest(
-                'prop',
-                'val',
-                'ctrl/action',
-                'POST'
-            );
-        });
-
-        [true, false].forEach(function(responseValue) {
-            QUnit.test('sendValidationRequest - \'' + responseValue + '\' response', function(assert) {
-                const done = assert.async();
-
-                this.ajaxMock.setup({
-                    url: 'url',
-                    responseText: responseValue
-                });
-
-                aspnet.sendValidationRequest(
-                    'prop',
-                    'val',
-                    'url'
-                ).done(function(response) {
-                    assert.strictEqual(response, responseValue);
-                    done();
-                });
-            });
-        });
-
-        QUnit.test('sendValidationRequest - string response', function(assert) {
+    [true, false].forEach(function(responseValue) {
+        QUnit.test('sendValidationRequest - \'' + responseValue + '\' response', function(assert) {
             const done = assert.async();
 
             this.ajaxMock.setup({
                 url: 'url',
-                responseText: 'custom error'
+                responseText: responseValue,
             });
 
             aspnet.sendValidationRequest(
                 'prop',
                 'val',
-                'url'
+                'url',
             ).done(function(response) {
-                assert.deepEqual(response, {
-                    isValid: false,
-                    message: 'custom error'
-                });
-                done();
-            });
-
-        });
-
-        QUnit.test('sendValidationRequest - server error response', function(assert) {
-            const done = assert.async();
-
-            this.ajaxMock.setup({
-                url: 'url',
-                status: 0,
-                responseText: 'server error'
-            });
-
-            aspnet.sendValidationRequest(
-                'prop',
-                'val',
-                'url'
-            ).fail(function(response) {
-                assert.deepEqual(response, {
-                    isValid: false,
-                    message: 'server error'
-                });
+                assert.strictEqual(response, responseValue);
                 done();
             });
         });
     });
 
-}));
+    QUnit.test('sendValidationRequest - string response', function(assert) {
+        const done = assert.async();
+
+        this.ajaxMock.setup({
+            url: 'url',
+            responseText: 'custom error',
+        });
+
+        aspnet.sendValidationRequest(
+            'prop',
+            'val',
+            'url',
+        ).done(function(response) {
+            assert.deepEqual(response, {
+                isValid: false,
+                message: 'custom error',
+            });
+            done();
+        });
+
+    });
+
+    QUnit.test('sendValidationRequest - server error response', function(assert) {
+        const done = assert.async();
+
+        this.ajaxMock.setup({
+            url: 'url',
+            status: 0,
+            responseText: 'server error',
+        });
+
+        aspnet.sendValidationRequest(
+            'prop',
+            'val',
+            'url',
+        ).fail(function(response) {
+            assert.deepEqual(response, {
+                isValid: false,
+                message: 'server error',
+            });
+            done();
+        });
+    });
+});

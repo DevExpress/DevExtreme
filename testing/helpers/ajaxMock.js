@@ -1,7 +1,7 @@
-const ajax = require('core/utils/ajax');
-const extend = require('core/utils/extend').extend;
-const typeUtils = require('core/utils/type');
-const $ = require('jquery');
+import ajax from 'core/utils/ajax';
+import { extend } from 'core/utils/extend';
+import * as typeUtils from 'core/utils/type';
+import $ from 'jquery';
 const originSendRequest = ajax.sendRequest;
 let urlMap = {};
 const timers = [];
@@ -20,7 +20,7 @@ const findUrlOptions = function(requestUrl) {
     }
 };
 
-exports.setup = function(options) {
+export const setup = function(options) {
     urlMap[options.url] = options;
 
     ajax.sendRequest = function(request) {
@@ -50,7 +50,7 @@ exports.setup = function(options) {
     };
 };
 
-exports.clear = function() {
+export const clear = function() {
     ajax.sendRequest = originSendRequest;
     urlMap = {};
     timers.forEach(function(timerId) {
