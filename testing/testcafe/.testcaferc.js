@@ -33,7 +33,18 @@ class Hook extends RequestHook {
 
 module.exports = {
     hooks: {
-        request: new Hook(url(__dirname, 'tests/container.html')),
-        // request: new Hook(url(__dirname, '../../artifacts/js/dx.all.js')),
+        request: new Hook([
+            url(__dirname, 'tests/container.html'),
+            url(__dirname, 'tests/containerAspNet.html'),
+            url(__dirname, 'tests/containerQuill.html'),
+        ]),
     },
+    screenshots: {
+        path: './',
+        takeOnFails: true,
+        pathPattern: '/testing/testcafe/artifacts/failedtests/${TEST}'
+    },
+    'screenshots-comparer': {
+        path: './testing/testcafe'
+    }
 }
