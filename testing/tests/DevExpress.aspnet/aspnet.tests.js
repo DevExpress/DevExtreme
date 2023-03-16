@@ -415,6 +415,33 @@
         }
     });
 
+    QUnit.test('T1146301 - NamedTemplate with expression inside Content RazorBlock', function(assert) {
+        aspnet.setTemplateEngine();
+        try {
+            $('#qunit-fixture').html(
+                '<div id="template-holder-widget"></div>' +
+                '<script>var rawJsStringWithHtmlTags = "<b>Encoded</b>";</script>' +
+                '<script id="template-nested-func" type="text/html">' +
+                '<%!function(){%>\
+                   <div id="<%=arguments[0]%>">\
+                     <div id="nested-function-expr"><%- rawJsStringWithHtmlTags %></div>\
+                   </div>\
+                   <%DevExpress.aspnet.createComponent("dxScrollView",{},arguments[0])%>\
+                 <%}("dx-data-guid")%>' +
+                '</script>'
+            );
+
+            const widgetElement = $('#template-holder-widget');
+            widgetElement.dxButton({
+                template: $('#template-nested-func')
+            });
+
+            assert.equal($('#nested-function-expr').html(), '&lt;b&gt;Encoded&lt;/b&gt;');
+        } finally {
+            setTemplateEngine('default');
+        }
+    });
+
     QUnit.test('T758209', function(assert) {
         aspnet.setTemplateEngine();
 
