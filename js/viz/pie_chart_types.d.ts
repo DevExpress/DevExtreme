@@ -29,11 +29,5 @@ export {
   TooltipHiddenEvent,
   TooltipShownEvent,
   LegendItem,
-  PieChartSeries,
-  dxPieChartAnnotationConfig,
-  dxPieChartCommonAnnotationConfig,
-  dxPieChartSeriesTypes,
-  piePointObject,
-  pieChartSeriesObject,
   Properties,
 } from './pie_chart';

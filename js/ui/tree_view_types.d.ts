@@ -20,7 +20,6 @@ export {
   dxTreeViewOptions,
   Item,
   Node,
-  dxTreeViewNode,
   Scrollable,
   Properties,
 } from './tree_view';

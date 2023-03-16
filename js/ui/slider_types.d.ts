@@ -6,6 +6,5 @@ export {
   InitializedEvent,
   OptionChangedEvent,
   ValueChangedEvent,
-  dxSliderBaseOptions,
   Properties,
 } from './slider';

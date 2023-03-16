@@ -1,5 +1,4 @@
 export {
-  DraggableBase,
   DisposingEvent,
   DragEndEvent,
   DragMoveEvent,

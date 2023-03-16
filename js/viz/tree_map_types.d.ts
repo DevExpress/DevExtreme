@@ -20,6 +20,5 @@ export {
   NodesRenderingEvent,
   OptionChangedEvent,
   SelectionChangedEvent,
-  dxTreeMapNode,
   Properties,
 } from './tree_map';

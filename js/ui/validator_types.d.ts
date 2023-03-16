@@ -5,6 +5,5 @@ export {
   OptionChangedEvent,
   ValidatedEvent,
   ValidationResult,
-  dxValidatorResult,
   Properties,
 } from './validator';

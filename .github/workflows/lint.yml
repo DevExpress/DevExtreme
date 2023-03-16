@@ -220,12 +220,12 @@ jobs:
         npm -v
         npm install --no-audit --no-fund --ignore-scripts
 
-        npm run generate-component-reexports
+        npm run update-ts-reexports
 
         if git diff --exit-code ; then
           echo "Generated component reexports are up-to-date"
         else
-            echo "Generated component reexports are outdated. Execute 'npm run generate-component-reexports' and commit changes."
+            echo "Generated component reexports are outdated. Execute 'npm run update-ts-reexports' and commit changes."
             exit 1
         fi
 

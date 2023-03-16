@@ -15,7 +15,6 @@ export {
   SubmenuShowingEvent,
   SubmenuShownEvent,
   dxMenuOptions,
-  dxMenuBaseItem,
   Item,
   Properties,
 } from './menu';

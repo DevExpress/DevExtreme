@@ -20,10 +20,6 @@ export {
   TooltipHiddenEvent,
   TooltipShownEvent,
   ZoomFactorChangedEvent,
-  MapLayer,
-  MapLayerElement,
   LegendItem,
-  dxVectorMapAnnotationConfig,
-  dxVectorMapCommonAnnotationConfig,
   Properties,
 } from './vector_map';

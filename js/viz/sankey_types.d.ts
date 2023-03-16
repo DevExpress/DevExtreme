@@ -16,8 +16,5 @@ export {
   NodeClickEvent,
   NodeHoverEvent,
   OptionChangedEvent,
-  dxSankeyConnectionInfoObject,
-  dxSankeyLink,
-  dxSankeyNode,
   Properties,
 } from './sankey';

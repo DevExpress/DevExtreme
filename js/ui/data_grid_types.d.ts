@@ -53,8 +53,6 @@ export {
   StateStoreType,
   StateStoring,
   SummaryType,
-  ColumnBase,
-  ColumnButtonBase,
   DataGridCommandColumnType,
   DataGridExportFormat,
   DataGridScrollMode,

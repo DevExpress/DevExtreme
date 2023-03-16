@@ -4,6 +4,5 @@ export {
   InitializedEvent,
   OptionChangedEvent,
   ValidationResult,
-  dxValidationGroupResult,
   Properties,
 } from './validation_group';

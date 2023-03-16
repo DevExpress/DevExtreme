@@ -111,7 +111,6 @@ export {
   Scrolling,
   dxTreeListSelection,
   Selection,
-  ToolbarItem,
   Toolbar,
   Column,
   ColumnButton,

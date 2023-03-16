@@ -3,7 +3,6 @@ export {
   Palette,
   PaletteExtensionMode,
   ShiftLabelOverlap,
-  BarGaugeBarInfo,
   LegendItem,
   DisposingEvent,
   DrawnEvent,

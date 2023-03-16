@@ -31,10 +31,7 @@ export {
   FileUploadingEvent,
   FileUploadedEvent,
   ItemDownloadingEvent,
-  dxFileManagerContextMenu,
   ContextMenuItem,
-  dxFileManagerToolbar,
   ToolbarItem,
-  dxFileManagerDetailsColumn,
   Properties,
 } from './file_manager';

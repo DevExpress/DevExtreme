@@ -38,11 +38,5 @@ export {
   TooltipShownEvent,
   ZoomEndEvent,
   ZoomStartEvent,
-  PolarChartSeries,
-  dxPolarChartAnnotationConfig,
-  dxPolarChartCommonAnnotationConfig,
-  dxPolarChartSeriesTypes,
-  polarPointObject,
-  polarChartSeriesObject,
   Properties,
 } from './polar_chart';
