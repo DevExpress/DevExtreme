@@ -242,6 +242,7 @@ export interface PivotGridDataSourceOptions {
 
 /**
  * @public
+ * @docid PivotGridDataSourceOptions.fields
  * @namespace DevExpress.data.PivotGridDataSource
  */
 export type Field = PivotGridDataSourceField;

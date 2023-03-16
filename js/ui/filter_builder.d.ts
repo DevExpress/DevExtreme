@@ -361,6 +361,9 @@ export type FilterLookupDataSource<T> = Exclude<DataSourceLike<T>, string | Data
 
 /**
  * @public
+ * @docid dxFilterBuilderField
+ * @namespace DevExpress.ui
+ * @type object
  */
 export type Field = dxFilterBuilderField;
 
