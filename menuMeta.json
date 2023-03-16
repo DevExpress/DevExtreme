@@ -5582,7 +5582,8 @@
             "Title": "Scrolling",
             "Name": "Scrolling",
             "DocUrl": "Guide/UI_Components/ScrollView/Overview/",
-            "Widget": "Popup"
+            "Widget": "Popup",
+            "Badge": "Updated"
           }
         ]
       },

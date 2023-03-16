@@ -1,13 +1,35 @@
-::ng-deep #textBlock {
-  padding-left: 20px;
-  padding-right: 20px;
-  line-height: 1.6em;
+::ng-deep .label {
+  color: rgba(51, 51, 51, 0.6);
+  font-size: 12px;
 }
 
-::ng-deep .center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 20px;
-  width: 300px;
+::ng-deep .demo-container {
+  height: 450px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+}
+
+::ng-deep .button-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+}
+
+::ng-deep .dx-popup-content {
+  font-size: 12px;
+}
+
+::ng-deep .caption {
+  padding-bottom: 8px;
+  font-weight: 500;
+}
+
+::ng-deep .content {
+  display: flex;
+  justify-content: space-between;
 }
