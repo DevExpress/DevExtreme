@@ -1,0 +1,15 @@
+export {
+  SingleOrMultiple,
+  ContentReadyEvent,
+  DisposingEvent,
+  InitializedEvent,
+  ItemClickEvent,
+  ItemContextMenuEvent,
+  ItemHoldEvent,
+  ItemRenderedEvent,
+  OptionChangedEvent,
+  SelectionChangedEvent,
+  dxTabsOptions,
+  Item,
+  Properties,
+} from './tabs';

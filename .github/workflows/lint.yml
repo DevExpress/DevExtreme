@@ -202,10 +202,37 @@ jobs:
         npm install --no-audit --no-fund --ignore-scripts
         git diff --exit-code package-lock.json
 
+  component_exports:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Check generated component reexports
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund --ignore-scripts
+
+        npm run update-ts-reexports
+
+        if git diff --exit-code ; then
+          echo "Generated component reexports are up-to-date"
+        else
+            echo "Generated component reexports are outdated. Execute 'npm run update-ts-reexports' and commit changes."
+            exit 1
+        fi
+
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [Renovation, TS, JS, CSS, texts, package_lock, package_lock_npm_6]
+    needs: [Renovation, TS, JS, CSS, texts, package_lock, package_lock_npm_6, component_exports]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
