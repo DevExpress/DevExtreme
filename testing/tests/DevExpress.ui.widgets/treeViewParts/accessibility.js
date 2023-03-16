@@ -71,8 +71,8 @@ let helper;
 
             helper.createWidget({ items: [this.items[1]], selectionMode: 'single' });
 
-            // helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
-            // helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0], { attributes: [ 'aria-disabled' ] });
         });
 
