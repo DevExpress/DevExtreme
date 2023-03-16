@@ -29,6 +29,8 @@ app.post('/report', (request, response) => {
             'line-number': lineNumber
         } = report;
 
+        reports.push({ originalPolicy, violatedDirective, blockedUri, lineNumber, sourceFile });
+
         if(blockedUri != null && !blockedUri.includes('testcafe') && !blockedUri.includes('hammerhead')) {
             if(sourceFile == null) {
                 reports.push({ originalPolicy, violatedDirective, blockedUri, lineNumber });
@@ -183,7 +185,6 @@ function allowTestcafeCSP() {
         'await this._client.Page.setBypassCSP({ enabled: true });',
         'await this._client.Page.setBypassCSP({ enabled: false });'
     )));
-    console.log(fs.readFileSync(filePath).toString());
 }
 
 function expandBrowserAlias(browser) {
@@ -200,12 +201,12 @@ function expandBrowserAlias(browser) {
 function getArgs() {
     return parseArgs(process.argv.slice(1), {
         default: {
-            concurrency: 1,
+            concurrency: 0,
             browsers: 'chrome',
             test: '',
             reporter: ['minimal', dashboardReporter],
-            componentFolder: 'editors/list',
-            file: 'paging',
+            componentFolder: '',
+            file: '*',
             cache: true,
             quarantineMode: false,
             indices: '',
