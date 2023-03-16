@@ -32,8 +32,10 @@ const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
 const Widget = require('ui/widget/ui.widget');
+const Overlay = require('ui/overlay/ui.overlay');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
+const Tooltip = require('ui/tooltip');
 const RadioGroup = require('ui/radio_group');
 const Resizable = require('ui/resizable');
 const Scheduler = require('ui/scheduler/ui.scheduler');
@@ -190,6 +192,7 @@ testComponentDefaults(ValidationMessage,
         animation: null,
         visible: true,
         propagateOutsideClick: true,
+        preventScrollEvents: false,
         _checkParentVisibility: false,
         rtlEnabled: false,
         contentTemplate: ValidationMessage._renderInnerHtml,
@@ -576,6 +579,21 @@ testComponentDefaults(Popup,
     }
 );
 
+testComponentDefaults(Popup,
+    {},
+    {
+        preventScrollEvents: false,
+        enableBodyScroll: true,
+    }
+);
+
+testComponentDefaults(Overlay,
+    {},
+    {
+        preventScrollEvents: true,
+    }
+);
+
 testComponentDefaults(Widget,
     {},
     {
@@ -596,6 +614,8 @@ testComponentDefaults(Widget,
 testComponentDefaults(Popover,
     {},
     {
+        preventScrollEvents: false,
+        enableBodyScroll: true,
         position: {
             at: 'bottom center',
             collision: 'fit flip',
@@ -614,6 +634,14 @@ testComponentDefaults(Popover,
                 to: 0
             }
         }
+    }
+);
+
+testComponentDefaults(Tooltip,
+    {},
+    {
+        preventScrollEvents: true,
+        enableBodyScroll: true,
     }
 );
 
@@ -930,6 +958,7 @@ testComponentDefaults(LoadPanel,
     {
         focusStateEnabled: false,
         propagateOutsideClick: true,
+        preventScrollEvents: false,
     }
 );
 

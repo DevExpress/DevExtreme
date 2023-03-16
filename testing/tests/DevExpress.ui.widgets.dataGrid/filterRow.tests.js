@@ -9,6 +9,7 @@ QUnit.testStart(function() {
 </div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';
@@ -24,6 +25,7 @@ window.Hogan = hogan;
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';

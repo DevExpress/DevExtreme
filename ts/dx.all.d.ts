@@ -19143,6 +19143,10 @@ declare module DevExpress.ui {
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
     /**
+     * [descr:dxPopupOptions.enableBodyScroll]
+     */
+    enableBodyScroll?: boolean;
+    /**
      * [descr:dxPopupOptions.resizeEnabled]
      */
     resizeEnabled?: boolean;
@@ -24254,11 +24258,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.collapseIcon]
      */
-    collapseIcon?: string;
+    collapseIcon?: string | null;
     /**
      * [descr:dxTreeViewOptions.expandIcon]
      */
-    expandIcon?: string;
+    expandIcon?: string | null;
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */

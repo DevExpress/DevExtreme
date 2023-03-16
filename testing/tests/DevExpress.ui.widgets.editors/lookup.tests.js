@@ -6,6 +6,7 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import errors from 'core/errors';
 import { isRenderer } from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import { normalizeKeyName } from 'events/utils/index';
 
 import ArrayStore from 'data/array_store';
@@ -60,6 +61,7 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';

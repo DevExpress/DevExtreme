@@ -660,23 +660,13 @@ const ColorView = Editor.inherit({
 
     _makeCSSLinearGradient: function($el) {
         const color = this._currentColor;
-        const colorAsRgb = [color.r, color.g, color.b].join(',');
-        const colorAsHex = color.toHex().replace('#', '');
+        const colorAsRgb = `${color.r},${color.g},${color.b}`;
+        const rtlEnabled = this.option('rtlEnabled');
+        const startColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '1' : '0'})`;
+        const finishColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '0' : '1'})`;
+        const backgroundImage = `linear-gradient(-90deg, ${startColor}, ${finishColor})`;
 
-        const combineGradientString = function(colorAsRgb, colorAsHex) {
-            const rtlEnabled = this.option('rtlEnabled');
-            const startColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '1' : '0') + ')';
-            const finishColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '0' : '1') + ')';
-
-            return [
-                'background-image: -webkit-linear-gradient(180deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: -moz-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: -o-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')'
-            ].join(';');
-        };
-
-        $el.attr('style', combineGradientString.call(this, colorAsRgb, colorAsHex));
+        $el.css('backgroundImage', backgroundImage);
     },
 
     _renderAlphaChannelInput: function() {

@@ -4,7 +4,6 @@ const window = getWindow();
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { noop } from '../../core/utils/common';
 import { isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import pointerEvents from '../../events/pointer';
@@ -28,8 +27,6 @@ const toastTypes = ['info', 'warning', 'error', 'success'];
 
 const TOAST_STACK = [];
 const FIRST_Z_INDEX_OFFSET = 8000;
-
-let visibleToastInstance = null;
 
 const POSITION_ALIASES = {
     'top': { my: 'top', at: 'top', of: null, offset: '0 0' },
@@ -85,13 +82,10 @@ const Toast = Overlay.inherit({
             * @hidden
             */
 
-
             height: 'auto',
-
             hideTopOverlayHandler: null,
-
+            preventScrollEvents: false,
             closeOnSwipe: true,
-
             closeOnClick: false
         });
     },
@@ -210,8 +204,6 @@ const Toast = Overlay.inherit({
         this._toggleCloseEvents('Click');
     },
 
-    _renderScrollTerminator: noop,
-
     _toggleCloseEvents: function(event) {
         const dxEvent = 'dx' + event.toLowerCase();
 
@@ -238,23 +230,11 @@ const Toast = Overlay.inherit({
     },
 
     _show: function() {
-        if(visibleToastInstance && visibleToastInstance !== this) {
-            clearTimeout(visibleToastInstance._hideTimeout);
-            visibleToastInstance.hide();
-        }
-
-        visibleToastInstance = this;
-
         return this.callBase.apply(this, arguments).done((function() {
             clearTimeout(this._hideTimeout);
 
             this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
         }).bind(this));
-    },
-
-    _hide: function() {
-        visibleToastInstance = null;
-        return this.callBase.apply(this, arguments);
     },
 
     _overlayStack: function() {
@@ -267,7 +247,6 @@ const Toast = Overlay.inherit({
 
     _dispose: function() {
         clearTimeout(this._hideTimeout);
-        visibleToastInstance = null;
         this.callBase();
     },
 

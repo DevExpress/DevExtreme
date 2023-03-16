@@ -29,8 +29,17 @@ QUnit.testStart(function() {
 
 
 import 'ui/data_grid';
+import 'ui/autocomplete';
+import 'ui/calendar';
+import 'ui/color_box';
+import 'ui/drop_down_box';
+import 'ui/html_editor';
 import 'ui/lookup';
+import 'ui/radio_group';
+import 'ui/range_slider';
+import 'ui/slider';
 import 'ui/switch';
+import 'ui/tag_box';
 import TextArea from 'ui/text_area';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -58,6 +67,39 @@ QUnit.module('Editor Factory', {
         this.dispose();
     }
 }, () => {
+
+    ['dxAutocomplete', 'dxCalendar', 'dxCheckBox', 'dxColorBox', 'dxDateBox', 'dxDropDownBox', 'dxHtmlEditor', 'dxLookup', 'dxNumberBox', 'dxRadioGroup', 'dxRangeSlider', 'dxSelectBox', 'dxSlider', 'dxSwitch', 'dxTagBox', 'dxTextArea', 'dxTextBox'].forEach((editorType) => {
+        QUnit.test(`Prepare editor based on editorType: ${editorType}`, function(assert) {
+            // arrange
+            const $container = $('#container');
+            const editorOptions = {
+                editorType,
+                dataType: 'string'
+            };
+
+            if(editorType === 'dxDateBox') {
+                editorOptions.dataType = 'date';
+            } else if(editorType === 'dxRangeSlider') {
+                editorOptions.value = [];
+            }
+
+            this.options.onEditorPreparing = function(options) {
+                // assert
+                assert.strictEqual(options.editorName, editorType, `editorName is set correctly: ${editorType}`);
+                if(['dxSelectBox', 'dxLookup'].includes(editorType)) { // T1145047
+                    assert.strictEqual(options.editorOptions.valueChangeEvent, undefined, `Prepare ${editorType} without the 'valueChangeEvent' option`);
+                }
+            };
+            this.editorFactoryController.init();
+
+            // act
+            this.editorFactoryController.createEditor($container, editorOptions);
+            const editor = $container[editorType]('instance');
+
+            // assert
+            assert.ok(editor, 'editor created');
+        });
+    });
 
     QUnit.test('Text editor', function(assert) {
         const $container = $('#container');

@@ -1,7 +1,7 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import { WidgetName } from '../helpers/createWidget';
-import Widget from './internal/widget';
 import Button from './button';
+import Overlay from './overlay';
 
 const CLASS = {
   content: 'dx-overlay-content',
@@ -10,37 +10,21 @@ const CLASS = {
   bottomToolbar: 'dx-popup-bottom',
   closeButton: 'dx-closebutton',
 };
-export default class Popup extends Widget {
+export default class Popup extends Overlay {
   public static className = '.dx-popup-wrapper';
 
   public static footerToolbarClassName = '.dx-popup-bottom';
-
-  content: Selector;
-
-  wrapper: Selector;
 
   topToolbar: Selector;
 
   constructor(id: string | Selector) {
     super(id);
 
-    this.content = this.element.find(`.${CLASS.content}`);
-    this.wrapper = this.element.find(`.${CLASS.wrapper}`);
     this.topToolbar = this.element.find(`.${CLASS.topToolbar}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxPopup'; }
-
-  // eslint-disable-next-line class-methods-use-this
-  getWrapper(): Selector {
-    return Selector(`.${CLASS.wrapper}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getContent(): Selector {
-    return Selector(`.${CLASS.content}`);
-  }
 
   // eslint-disable-next-line class-methods-use-this
   getToolbar(): Selector {
@@ -54,14 +38,5 @@ export default class Popup extends Widget {
 
   getCloseButton(): Button {
     return new Button(this.getWrapper().find(`.${CLASS.closeButton}`));
-  }
-
-  show(): Promise<{ top: number; left: number }> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).show(),
-      { dependencies: { getInstance } },
-    )();
   }
 }

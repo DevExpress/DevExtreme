@@ -418,7 +418,10 @@ const EditingController = modules.ViewController.inherit((function() {
                     this._renderEditingButtons($container, buttons, options, change);
 
                     options.watch && options.watch(
-                        () => buttons.map(button => this._isButtonVisible(button, options)),
+                        () => buttons.map(button => ({
+                            visible: this._isButtonVisible(button, options),
+                            disabled: this._isButtonDisabled(button, options),
+                        })),
                         () => {
                             $container.empty();
                             this._renderEditingButtons($container, buttons, options);
@@ -995,8 +998,10 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             d.done(() => {
-                this._showAddedRow(rowIndex);
-                this._afterInsertRow(change.key);
+                this._rowsView?.waitAsyncTemplates(true).done(() => {
+                    this._showAddedRow(rowIndex);
+                    this._afterInsertRow(change.key);
+                });
             });
 
             return d.promise();
@@ -2606,10 +2611,10 @@ export const editingModule = {
                     this.callBase.apply(this, arguments);
                     clearTimeout(this._pointerDownTimeout);
                 },
-                _renderCore: function(change) {
+                _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    return this.waitAsyncTemplates(change, true).done(() => {
+                    return this.waitAsyncTemplates(true).done(() => {
                         // @ts-expect-error
                         this._editingController._focusEditorIfNeed();
                     });

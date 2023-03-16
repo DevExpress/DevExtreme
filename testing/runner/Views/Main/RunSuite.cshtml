@@ -37,8 +37,8 @@
 <!DOCTYPE html>
 <head>
     <title>@Model.Title - QUnit test page</title>
-    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.css")" />
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.js")"></script>
+    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.css")" />
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.js")"></script>
 
     <script>
         window.ROOT_URL = "@Url.Content("~/")";
@@ -46,6 +46,7 @@
         window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
 
         QUnit.config.autostart = false;
+        QUnit.config.failOnZeroTests = false;
     </script>
     <script src="@Url.ContentWithCacheBuster("~/testing/helpers/qunitExtensions.js")"></script>
 

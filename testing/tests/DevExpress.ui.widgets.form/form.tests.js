@@ -2524,6 +2524,23 @@ QUnit.test('No errors should occur on form reset twice when dxNumberBox is set a
     assert.ok(true, 'There are no exceptions');
 });
 
+QUnit.test('The exception is not thrown when tabs property in TabbedItem is not defined (T1151539)', function(assert) {
+    try {
+        $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    deferRendering: false,
+                },
+            }]
+        });
+    } catch(e) {
+        assert.ok(false, e);
+    } finally {
+        assert.ok(true, 'the exception is not thrown');
+    }
+});
+
 [false, true].forEach(useItemOption => {
     const optionWay = useItemOption ? 'itemOption' : 'option';
     QUnit.test(`Changing an editor/button options without re-render Form when use the ${optionWay} method (T311892, T681241)`, function(assert) {

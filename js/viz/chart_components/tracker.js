@@ -62,7 +62,7 @@ function eventCanceled({ event, cancel }, target, clickTarget) {
     const eventCanceled = cancel || deprecatedCancel;
 
     if(deprecatedCancel) {
-        errors.log('W0003', `${clickTarget}Ckick handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
+        errors.log('W0003', `${clickTarget}Click handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
     }
 
     return eventCanceled || !target.getOptions();
@@ -285,7 +285,7 @@ const baseTrackerPrototype = {
         const eventTrigger = this._eventTrigger;
 
         eventTrigger(LEGEND_CLICK, eventArgs, function() {
-            !eventCanceled(eventArgs, eventArgs.target, 'Legend') && eventTrigger(elementClick, eventArgs);
+            !eventCanceled(eventArgs, eventArgs.target, 'legend') && eventTrigger(elementClick, eventArgs);
         });
     },
 
@@ -497,7 +497,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         const eventArgs = { target: point, event: event };
 
         eventTrigger(POINT_CLICK, eventArgs, function() {
-            !eventCanceled(eventArgs, series, 'Point') && eventTrigger(SERIES_CLICK, { target: series, event: event });
+            !eventCanceled(eventArgs, series, 'point') && eventTrigger(SERIES_CLICK, { target: series, event: event });
         });
     },
     ///#DEBUG

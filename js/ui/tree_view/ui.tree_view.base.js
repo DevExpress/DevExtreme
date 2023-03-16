@@ -696,6 +696,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this.setAria('selected', nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
+
+        if(nodeData.disabled) {
+            this.setAria('disabled', nodeData.disabled, $node);
+        }
+
         this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
@@ -1451,16 +1456,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.option('focusedElement', getPublicElement($activeItem.closest('.' + NODE_CLASS)));
     },
 
-    _setFocusedItem: function($target) {
-        if(!$target || !$target.length) {
-            return;
-        }
-
-        if(!$target.children().hasClass(DISABLED_STATE_CLASS)) {
-            this.callBase($target);
-        }
-    },
-
     _itemPointerDownHandler: function(e) {
         if(!this.option('focusStateEnabled')) {
             return;
@@ -1494,7 +1489,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             fx.stop(this, true);
         });
 
-        const $items = this._findNonDisabledNodes(this._nodeElements());
+        const $items = this._nodeElements();
 
         if(!$items || !$items.length) {
             return;
