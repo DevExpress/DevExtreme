@@ -71,7 +71,10 @@ export interface BarGaugeBarInfo {
 
 /**
  * @public
+ * @docid BarGaugeLegendItem
  * @namespace DevExpress.viz.dxBarGauge
+ * @inherits BaseLegendItem
+ * @type object
  */
 export type LegendItem = BarGaugeLegendItem;
 

@@ -1172,6 +1172,7 @@ export interface dxDiagramConnector extends Item {
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
+ * @docid dxDiagramItem
  */
 export type Item = dxDiagramItem;
 
