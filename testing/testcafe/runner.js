@@ -17,19 +17,17 @@ const reports = [];
 
 app.use(express.json({ type: 'application/csp-report' }));
 
-app.post('/report', (req, res, next) => {
-    const { 'csp-report': cspReport } = req.body;
+app.post('/report', (request, response) => {
+    const { 'csp-report': report } = request.body;
 
-    if(cspReport != null) {
+    if(report != null) {
         const {
             'source-file': sourceFile,
             'original-policy': originalPolicy,
             'violated-directive': violatedDirective,
             'blocked-uri': blockedUri,
             'line-number': lineNumber
-        } = cspReport;
-
-        reports.push({ originalPolicy, violatedDirective, blockedUri, lineNumber, sourceFile });
+        } = report;
 
         if(blockedUri != null && !blockedUri.includes('testcafe') && !blockedUri.includes('hammerhead')) {
             if(sourceFile == null) {
@@ -40,8 +38,8 @@ app.post('/report', (req, res, next) => {
         }
     }
 
-    res.status(200);
-    res.end();
+    response.status(200);
+    response.end();
 });
 
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
@@ -155,7 +153,7 @@ createTestCafe({
     .then(failedCount => {
         testCafe.close();
 
-        const dedup = reports.filter((obj, index) => {
+        const messages = reports.filter((obj, index) => {
             return index === reports.findIndex(o => (
                 obj.violatedDirective === o.violatedDirective &&
                 obj.blockedUri === o.blockedUri &&
@@ -163,7 +161,7 @@ createTestCafe({
             ));
         });
 
-        console.log(dedup);
+        console.log(messages);
 
         process.exit(failedCount);
     });

@@ -105,6 +105,7 @@
     "eslint-plugin-spellcheck": "^0.0.20",
     "eslint-plugin-testcafe": "0.2.1",
     "exceljs": "4.3.0",
+    "express": "^4.18.2",
     "fancy-log": "^2.0.0",
     "file-saver": "2.0.5",
     "globalize": "1.7.0",
@@ -196,8 +197,7 @@
     "webpack": "5.76.0",
     "webpack-stream": "7.0.0",
     "yaml": "1.10.2",
-    "yargs": "7.1.2",
-    "express": "^4.18.2"
+    "yargs": "7.1.2"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
