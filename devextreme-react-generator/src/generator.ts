@@ -8,9 +8,12 @@ import {
 } from 'path';
 
 import {
+  IArrayDescr,
   IComplexProp,
   ICustomType,
+  IFunctionDescr,
   IModel,
+  IObjectDescr,
   IProp,
   ITypeDescr,
   IWidget,
@@ -44,12 +47,79 @@ enum BaseTypes {
   Number = 'number',
   Boolean = 'boolean',
   Object = 'object',
+  Null = 'null',
+  True = 'true',
+  False = 'false',
+}
+
+function isFunctionDescriptor(typeDescriptor: ITypeDescr): typeDescriptor is IFunctionDescr {
+  return typeDescriptor.type === 'Function';
+}
+
+function isArrayDescriptor(typeDescriptor: ITypeDescr): typeDescriptor is IArrayDescr {
+  return typeDescriptor.type === 'Array';
+}
+
+function isObjectDescriptor(typeDescriptor: ITypeDescr): typeDescriptor is IObjectDescr {
+  return typeDescriptor.type === 'Object' && (typeDescriptor as IObjectDescr).fields !== undefined;
+}
+
+export function convertToBaseType(type: string): BaseTypes {
+  return BaseTypes[type];
+}
+
+export function getComplexOptionType(types: ITypeDescr[]): string | undefined {
+  function formatTypeDescriptor(typeDescriptor: ITypeDescr): string {
+    function formatArrayDescriptor(arrayDescriptor: IArrayDescr): string {
+      const itemTypes = arrayDescriptor.itemTypes?.map((t) => formatTypeDescriptor(t))
+        .filter((t) => t !== undefined)
+        .join(' | ')
+      || BaseTypes.Any;
+      return `Array<${itemTypes}>`;
+    }
+
+    function formatFunctionDescriptor(functionDescriptor: IFunctionDescr): string {
+      const parameters = functionDescriptor.params?.map((p) => `${p.name}: ${getComplexOptionType(p.types) || BaseTypes.Any}`)
+        .join(', ') || '';
+      const returnType = (
+        functionDescriptor.returnValueType && (convertToBaseType(functionDescriptor.returnValueType.type) || (functionDescriptor.returnValueType.type === 'void' && 'void'))
+      ) || BaseTypes.Any;
+      return `(${parameters}) => ${returnType}`;
+    }
+
+    function formatObjectDescriptor(objectDescriptor: IObjectDescr): string {
+      const fields = objectDescriptor.fields.map((f) => `${f.name}: ${getComplexOptionType(f.types) || BaseTypes.Any}`);
+      return fields ? `{ ${fields.join(', ')} }` : BaseTypes.Object;
+    }
+
+    if (isArrayDescriptor(typeDescriptor)) {
+      return formatArrayDescriptor(typeDescriptor);
+    }
+    if (isFunctionDescriptor(typeDescriptor)) {
+      const result = formatFunctionDescriptor(typeDescriptor);
+      // TS1385
+      return `(${result})`;
+    }
+    if (isObjectDescriptor(typeDescriptor)) {
+      return formatObjectDescriptor(typeDescriptor);
+    }
+    if (typeDescriptor.acceptableValues !== undefined
+       && typeDescriptor.acceptableValues.length > 0) {
+      return typeDescriptor.acceptableValues.join(' | ');
+    }
+    return convertToBaseType(typeDescriptor.type);
+  }
+
+  return types && isNotEmptyArray(types) ? types
+    .map((t) => formatTypeDescriptor(t))
+    .filter((t) => t !== undefined)
+    .join(' | ') : undefined;
 }
 
 export function mapSubscribableOption(prop: IProp): ISubscribableOption {
   return {
     name: prop.name,
-    type: 'any',
+    type: getComplexOptionType(prop.types) || BaseTypes.Any,
     isSubscribable: prop.isSubscribable || undefined,
   };
 }
@@ -64,21 +134,11 @@ export function isNestedOptionArray(prop: IProp): boolean {
   return isNotEmptyArray(prop.types) && (prop.types[0].type === 'Array');
 }
 
-export function convertToBaseType(type: string) {
-  return BaseTypes[type];
-}
-
-export function getComplexOptionType(types: ITypeDescr[]) {
-  return types && isNotEmptyArray(types) ? types
-    .filter((t) => convertToBaseType(t.type))
-    .map((f) => convertToBaseType(f.type)).join(' | ') : undefined;
-}
-
 export function mapOption(prop: IProp): IOption {
   return isEmptyArray(prop.props)
     ? {
       name: prop.name,
-      type: 'any',
+      type: getComplexOptionType(prop.types) || BaseTypes.Any,
       isSubscribable: prop.isSubscribable || undefined,
 
     } : {

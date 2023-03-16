@@ -392,7 +392,7 @@ describe('mapOption', () => {
       nested: [{
         isSubscribable: undefined,
         name: 'prop1',
-        type: 'any',
+        type: 'number',
       }],
       isSubscribable: undefined,
     });
