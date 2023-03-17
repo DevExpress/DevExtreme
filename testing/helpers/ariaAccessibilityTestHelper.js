@@ -67,6 +67,7 @@ class ariaAccessibilityTestHelper {
     }
 
     _checkCheckboxAttributes(options, index, defaultValue) {
+        const { attributes } = options;
         const $checkBox = this.getItems().eq(index).prev();
 
         const expectedAttributes = {
@@ -74,7 +75,7 @@ class ariaAccessibilityTestHelper {
             'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue
         };
 
-        if(options.disabled) {
+        if(attributes && attributes.includes('aria-disabled')) {
             expectedAttributes['aria-disabled'] = 'true';
         }
 

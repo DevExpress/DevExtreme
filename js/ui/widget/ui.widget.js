@@ -226,13 +226,15 @@ const Widget = DOMComponent.inherit({
         return focusTargets.includes(element);
     },
 
+    _findActiveTarget($element) {
+        return $element.find(this._activeStateUnit).not('.dx-state-disabled');
+    },
+
     _getActiveElement() {
         const activeElement = this._eventBindingTarget();
 
         if(this._activeStateUnit) {
-            return activeElement
-                .find(this._activeStateUnit)
-                .not('.dx-state-disabled');
+            return this._findActiveTarget(activeElement);
         }
 
         return activeElement;
