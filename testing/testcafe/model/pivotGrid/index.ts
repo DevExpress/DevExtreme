@@ -8,6 +8,7 @@ const CLASS = {
   fieldChooser: 'dx-pivotgridfieldchooser',
   fieldChooserButton: 'dx-pivotgrid-field-chooser-button',
   fieldChooserPopup: 'dx-fieldchooser-popup',
+  exportBtn: 'dx-pivotgrid-export-button',
 };
 
 export default class PivotGrid extends Widget {
@@ -48,5 +49,9 @@ export default class PivotGrid extends Widget {
 
   getFieldChooser(): FieldChooser {
     return new FieldChooser(this.getFieldChooserPopup().getWrapper().find(`.${CLASS.fieldChooser}`));
+  }
+
+  getExportButton(): Selector {
+    return this.element.find(`.${CLASS.exportBtn}`);
   }
 }
