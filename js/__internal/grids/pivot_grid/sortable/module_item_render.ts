@@ -11,19 +11,19 @@ function getTreeViewItem($sourceItem) {
     .clone()
     .addClass(SortableConst.classes.areaBox)
     // eslint-disable-next-line radix
-    .css('width', parseInt(getOuterWidth($sourceItem)));
+    .css('width', parseFloat(getOuterWidth($sourceItem)));
 }
 
-function getAreaBoxItem($sourceItem, target) {
-  const $item = $sourceItem.clone();
+function getAreaBoxItemArray($sourceItem, target) {
+  const $itemArray = $sourceItem.clone();
   if (target === SortableConst.targets.drag) {
     each($sourceItem, (idx, sourceItem) => {
-      const width = parseInt(getOuterWidth(sourceItem), 10);
-      $item.eq(idx).css('width', width);
+      const width = parseFloat(getOuterWidth(sourceItem));
+      $itemArray.eq(idx).css('width', width);
     });
   }
 
-  return $item;
+  return $itemArray;
 }
 
 function getDefaultItem($sourceItem) {
@@ -33,12 +33,12 @@ function getDefaultItem($sourceItem) {
     .text($sourceItem.text());
 }
 
-function getItem($sourceItem, target) {
+function getItemArray($sourceItem, target) {
   const isAreaBox = $sourceItem.hasClass(SortableConst.classes.areaBox);
   const isTreeList = $sourceItem.attr(SortableConst.attrs.treeViewItem);
 
   if (isAreaBox) {
-    return getAreaBoxItem($sourceItem, target);
+    return getAreaBoxItemArray($sourceItem, target);
   }
 
   if (isTreeList) {
@@ -48,16 +48,24 @@ function getItem($sourceItem, target) {
   return getDefaultItem($sourceItem);
 }
 
-function wrapInFieldsContainer($item) {
-  return $('<div>')
-    .addClass(SortableConst.classes.fieldsContainer)
-    .addClass(SortableConst.classes.widget)
-    .append($item);
+function wrapItemsInFieldsContainer($itemArray) {
+  const $wrappedTmpContainer = $('<div>');
+
+  each($itemArray, (_, item) => {
+    const $wrappedItem = $('<div>')
+      .addClass(SortableConst.classes.fieldsContainer)
+      .addClass(SortableConst.classes.widget)
+      .append($(item));
+    $wrappedTmpContainer.append($wrappedItem);
+  });
+
+  return $wrappedTmpContainer.children();
 }
 
 export function sortableItemRender($sourceItem, target) {
-  const $item = getItem($sourceItem, target);
+  const $itemArray = getItemArray($sourceItem, target);
+
   return target === SortableConst.targets.drag
-    ? wrapInFieldsContainer($item)
-    : $item;
+    ? wrapItemsInFieldsContainer($itemArray)
+    : $itemArray;
 }

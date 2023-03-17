@@ -1,26 +1,11 @@
 import { ClientFunction } from 'testcafe';
+import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import createScheduler from '../dragAndDrop/init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Cancel appointment Resizing`
   .page(url(__dirname, '../../container.html'));
-
-const disableMouseUpEvent = ClientFunction(() => {
-  const proto = (window as any)['%testCafeAutomation%'].DragToOffset.prototype.constructor.prototype;
-
-  // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle
-  (window as any)._originalMouseup = proto._mouseup;
-
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle, no-promise-executor-return
-  proto._mouseup = () => new Promise((r) => setTimeout(r, 1));
-});
-
-const enableMouseUpEvent = ClientFunction(() => {
-  // eslint-disable-next-line no-underscore-dangle,spellcheck/spell-checker
-  (window as any)['%testCafeAutomation%'].DragToOffset.prototype.constructor.prototype._mouseup = (window as any)._originalMouseup;
-});
 
 test('onAppointmentUpdating - newDate should be correct after cancel appointment resize and cellDuration=24h (T1070565)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -94,13 +79,13 @@ test('on escape - date should not changed when it\'s pressed after resize (T1125
 test('on escape - date should not changed when it\'s pressed during resize (T1125615)', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Test Resize');
-  await disableMouseUpEvent();
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await t
     .drag(resizableAppointment.resizableHandle.right, 150, 0)
     .pressKey('esc');
 
-  await enableMouseUpEvent();
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   await t
     .expect(resizableAppointment.date.time)
