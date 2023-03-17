@@ -713,7 +713,7 @@ const PivotGrid = (Widget as any).inherit({
         icon: 'xlsxfile',
         text: texts.exportToExcel,
         onItemClick() {
-          that.exportToExcel();
+          that.exportTo();
         },
       });
     }
@@ -894,7 +894,7 @@ const PivotGrid = (Widget as any).inherit({
         icon: 'xlsxfile',
         hint: this.option('texts.exportToExcel'),
         onClick: () => {
-          this.exportToExcel();
+          this.exportTo();
         },
       };
 

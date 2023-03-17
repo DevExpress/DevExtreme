@@ -14,7 +14,7 @@ const DEFAUL_COLUMN_WIDTH = 100;
 
 const ExportController = {
   exportTo() {
-    const onExporting = this.getAction('onExporting');
+    const onExporting = this._createActionByOption('onExporting');
     const eventArgs = {
       rtlEnabled: this.option('rtlEnabled'),
       fileName: 'PivotGrid',
