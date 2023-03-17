@@ -229,7 +229,7 @@ export interface baseLabelObject {
     getBoundingRect(): any;
     /**
      * @docid
-     * @publicName shift()
+     * @publicName shift(x, y)
      * @return object
      * @public
      */

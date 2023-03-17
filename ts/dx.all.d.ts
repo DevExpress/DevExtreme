@@ -25762,7 +25762,7 @@ declare module DevExpress.viz {
      */
     getBoundingRect(): any;
     /**
-     * [descr:baseLabelObject.shift()]
+     * [descr:baseLabelObject.shift(x, y)]
      */
     shift(x: number, y: number): any;
     /**
