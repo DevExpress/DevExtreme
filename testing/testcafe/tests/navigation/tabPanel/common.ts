@@ -134,3 +134,48 @@ test('TabPanel borders without scrolling', async (t) => {
 
   return createWidget('dxTabPanel', tabPanelOptions);
 });
+
+test('TabPanel when its disabled item has focus', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel without focus.png', { element: '#container' });
+
+  await t.pressKey('tab');
+  await testScreenshot(t, takeScreenshot, 'TabPanel when its available item has focus.png', { element: '#container' });
+
+  await t.pressKey('right');
+  await testScreenshot(t, takeScreenshot, 'TabPanel when its disabled item has focus.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      disabled: true,
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    height: 120,
+    width: 350,
+    showNavButtons: true,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});

@@ -44,6 +44,8 @@ $tabs-border-color: $base-border-color !default;
 */
 $tabs-focused-border-color: null !default;
 
+$tabs-focused-disabled-border-color: null !default;
+
 /**
 * $name 50. Hover background color
 * $type color
@@ -58,6 +60,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $tabs-tab-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }
@@ -70,6 +73,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $base-icon-color !default;
   $tabs-tab-icon-selected-color: $base-inverted-text-color !default;
   $tabs-focused-border-color: $base-focus-color !default;
+  $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-active-bg: $base-inverted-bg !default;
 }
 
@@ -80,6 +84,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $tabs-tab-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: lighten($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(lighten($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }
@@ -91,6 +96,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $tabs-tab-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: lighten($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(lighten($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }
@@ -102,6 +108,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $tabs-tab-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: lighten($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(lighten($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }
@@ -113,6 +120,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $tabs-tab-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }
@@ -124,6 +132,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $tabs-tab-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }
@@ -135,6 +144,7 @@ $tabs-tab-active-bg: null !default;
   $tabs-tab-icon-color: $base-icon-color !default;
   $tabs-tab-icon-selected-color: $tabs-tab-icon-color !default;
   $tabs-focused-border-color: $base-focus-bg !default;
+  $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
 }

@@ -282,6 +282,10 @@ const CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, false);
     },
 
+    _findActiveTarget($element) {
+        return $element.find(this._activeStateUnit);
+    },
+
     _getActiveItem: function(last) {
         const $focusedElement = $(this.option('focusedElement'));
 
@@ -341,7 +345,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     _getAvailableItems: function($itemElements) {
-        return this._getVisibleItems($itemElements).not('.dx-state-disabled');
+        return this._getVisibleItems($itemElements);
     },
 
     _prevItem: function($items) {
@@ -400,6 +404,10 @@ const CollectionWidget = Widget.inherit({
         }
     },
 
+    _isDisabled($element) {
+        return $element && $($element).attr('aria-disabled') === 'true';
+    },
+
     _setFocusedItem: function($target) {
         if(!$target || !$target.length) {
             return;
@@ -408,7 +416,10 @@ const CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, true);
         this.onFocusedItemChanged(this.getFocusedItemId());
 
-        if(this.option('selectOnFocus')) {
+        const { selectOnFocus } = this.option();
+        const isTargetDisabled = this._isDisabled($target);
+
+        if(selectOnFocus && !isTargetDisabled) {
             this._selectFocusedItem($target);
         }
     },
