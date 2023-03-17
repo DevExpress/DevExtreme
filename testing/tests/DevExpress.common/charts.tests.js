@@ -1,5 +1,5 @@
 import { registerPattern, registerGradient, getGraphicObjects } from 'common/charts';
-import utils from 'viz/core/utils';
+import * as utils from 'viz/core/utils';
 
 
 QUnit.module('Graphic objects', {

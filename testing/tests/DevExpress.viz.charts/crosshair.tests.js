@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const axisModule = require('viz/axes/base_axis');
-const Crosshair = require('viz/chart_components/crosshair').Crosshair;
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as axisModule from 'viz/axes/base_axis';
+import { Crosshair } from 'viz/chart_components/crosshair';
 const Axis = vizMocks.stubClass(axisModule.Axis);
 const environment = {
     beforeEach: function() {
