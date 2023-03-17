@@ -1,11 +1,10 @@
-
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const commons = require('./chartParts/commons.js');
-const dataValidatorModule = require('viz/components/data_validator');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const dxPieChart = require('viz/pie_chart');
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as commons from './chartParts/commons.js';
+import * as dataValidatorModule from 'viz/components/data_validator';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import dxPieChart from 'viz/pie_chart';
+import * as chartMocks from '../../helpers/chartMocks.js';
 const MockSeries = chartMocks.MockSeries;
 const MockPoint = chartMocks.MockPoint;
 const insertMockFactory = chartMocks.insertMockFactory;

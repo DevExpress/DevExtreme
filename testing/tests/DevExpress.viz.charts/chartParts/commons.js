@@ -1,54 +1,51 @@
-const $ = require('jquery');
-const mock = require('../../../helpers/mockModule.js').mock;
-const vizMocks = require('../../../helpers/vizMocks.js');
-const { Label } = require('viz/series/points/label');
-const LabelCtor = new vizMocks.ObjectPool(Label);
-const ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
-const vizUtils = require('viz/core/utils');
-const StubTooltip = vizMocks.Tooltip;
-const seriesFamilyModule = require('viz/core/series_family');
-const legendModule = require('viz/components/legend');
-const rendererModule = require('viz/core/renderers/renderer');
-const tooltipModule = require('viz/core/tooltip');
-const titleModule = require('viz/core/title');
-const crosshairModule = require('viz/chart_components/crosshair');
-const Crosshair = crosshairModule.Crosshair;
-const chartThemeManagerModule = require('viz/components/chart_theme_manager');
-const scrollBarClassModule = require('viz/chart_components/scroll_bar');
-const ScrollBarClass = scrollBarClassModule.ScrollBar;
-const { ChartTracker, PieTracker } = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
-const PieTrackerSub = vizMocks.stubClass(PieTracker);
-const dataValidatorModule = require('viz/components/data_validator');
-const chartMocks = require('../../../helpers/chartMocks.js');
+import $ from 'jquery';
+import { mock } from '../../../helpers/mockModule.js';
+import vizMocks from '../../../helpers/vizMocks.js';
+import { Label } from 'viz/series/points/label';
+import { ThemeManager as OriginalThemeManager } from 'viz/components/chart_theme_manager';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import vizUtils from 'viz/core/utils';
+import * as seriesFamilyModule from 'viz/core/series_family';
+import * as legendModule from 'viz/components/legend';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import * as tooltipModule from 'viz/core/tooltip';
+import * as titleModule from 'viz/core/title';
+import * as crosshairModule from 'viz/chart_components/crosshair';
+import * as chartThemeManagerModule from 'viz/components/chart_theme_manager';
+import * as scrollBarClassModule from 'viz/chart_components/scroll_bar';
+import { ChartTracker, PieTracker } from 'viz/chart_components/tracker';
+
+import dataValidatorModule from 'viz/components/data_validator';
+import * as chartMocks from '../../../helpers/chartMocks.js';
+import exportModule from 'viz/core/export';
+import { _test_prepareSegmentRectPoints } from 'viz/utils';
+
 const insertMockFactory = chartMocks.insertMockFactory;
 const resetMockFactory = chartMocks.resetMockFactory;
-const exportModule = require('viz/core/export');
-const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
+const ThemeManager = vizMocks.stubClass(OriginalThemeManager);
 const restoreMockFactory = chartMocks.restoreMockFactory;
-
+const StubTooltip = vizMocks.Tooltip;
+const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
 const tooltipOrig = tooltipModule.Tooltip;
-
-exports.LabelCtor = LabelCtor;
-exports.rendererModule = rendererModule;
+const ScrollBarClass = scrollBarClassModule.ScrollBar;
+const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
+const PieTrackerSub = vizMocks.stubClass(PieTracker);
+const Crosshair = crosshairModule.Crosshair;
 
 function stubExport() {
-    const that = this;
-    that.export = new vizMocks.ExportMenu();
-    that.export.stub('measure').returns([0, 0]);
-    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
-        return that.export;
-    }));
+    // const that = this;
+    // that.export = new vizMocks.ExportMenu();
+    // that.export.stub('measure').returns([0, 0]);
+    // exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
+    //     return that.export;
+    // }));
 }
 
 stubExport();
 
-vizMocks.Element.prototype.updateRectangle = sinon.spy(window.vizMocks.Element.prototype.updateRectangle);
+vizMocks.Element.prototype.updateRectangle = sinon.spy(vizMocks.Element.prototype.updateRectangle);
 
 const categories = ['First', 2005, 'Last'];
-exports.categories = categories;
 
 const baseEnvironment = {
     beforeEach: function() {
@@ -103,7 +100,7 @@ const trackerModule = mock('viz/chart_components/tracker', {
     PieTracker: sinon.spy((parameters) => new PieTrackerSub(parameters))
 });
 
-const resetModules = exports.resetModules = function() {
+const resetModules = function() {
     trackerModule.ChartTracker.reset();
     trackerModule.PieTracker.reset();
 
@@ -115,25 +112,21 @@ const resetModules = exports.resetModules = function() {
 };
 
 // stubs getters
-function getTitleStub() {
+export function getTitleStub() {
     return titleModule.Title.lastCall.returnValue;
 }
-exports.getTitleStub = getTitleStub;
 
-function getLegendStub() {
+export function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;
 }
-exports.getLegendStub = getLegendStub;
 
-function getTrackerStub(isPie) {
+export function getTrackerStub(isPie) {
     return trackerModule[isPie ? 'PieTracker' : 'ChartTracker'].lastCall.returnValue;
 }
-exports.getTrackerStub = getTrackerStub;
 
-function createChartInstance(options, chartContainer) {
+export function createChartInstance(options, chartContainer) {
     return chartContainer.dxChart(options).dxChart('instance');
 }
-exports.createChartInstance = createChartInstance;
 
 function setupMocks($container) {
     $container.width(300);
@@ -142,7 +135,7 @@ function setupMocks($container) {
     insertMockFactory();
 }
 
-exports.environment = {
+export const environment = {
     beforeEach: function() {
         const that = this;
         baseEnvironment.beforeEach.apply(that, arguments);
@@ -243,7 +236,7 @@ exports.environment = {
         resetMockFactory();
         this.createThemeManager.reset();
         this.createThemeManager.restore();
-        window.vizMocks.Element.prototype.updateRectangle.reset();
+        vizMocks.Element.prototype.updateRectangle.reset();
         scrollBarClassModule.ScrollBar.restore();
         this.createSeriesFamily.restore();
         this.prepareSegmentRectPoints.restore();
@@ -289,4 +282,12 @@ exports.environment = {
     }
 };
 
-require('viz/chart');
+import 'viz/chart';
+
+export const LabelCtor = new vizMocks.ObjectPool(Label);
+
+export {
+    rendererModule,
+    categories,
+    resetModules,
+};

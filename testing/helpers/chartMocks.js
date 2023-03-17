@@ -1,14 +1,14 @@
 /* global currentAssert */
 import $ from 'jquery';
 import Class from 'core/class';
-import commonUtils from 'core/utils/common';
-import typeUtils from 'core/utils/type';
+import * as commonUtils from 'core/utils/common';
+import * as typeUtils from 'core/utils/type';
 import * as loadingIndicatorModule from 'viz/core/loading_indicator';
-import axisModule from 'viz/axes/base_axis';
-import pointModule from 'viz/series/points/base_point';
-import translator2DModule from 'viz/translators/translator2d';
+import * as axisModule from 'viz/axes/base_axis';
+import * as pointModule from 'viz/series/points/base_point';
+import * as translator2DModule from 'viz/translators/translator2d';
 import * as seriesFamilyModule from 'viz/core/series_family';
-import seriesModule from 'viz/series/base_series';
+import * as seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
 import { isDefined } from '../../js/core/utils/type.js';
 import { Range } from 'viz/translators/range';
