@@ -90,9 +90,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -100,9 +98,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -110,9 +106,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -120,9 +114,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -130,9 +122,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -140,9 +130,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -150,19 +138,15 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
     onInput?: ((e: NativeEventInfo<TComponent, UIEvent>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:NativeEventInfo
      * @default null
-     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -170,9 +154,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */
@@ -180,9 +162,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:NativeEventInfo
      * @action
      * @public
      */

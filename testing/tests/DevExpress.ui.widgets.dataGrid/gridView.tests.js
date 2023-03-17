@@ -19,6 +19,7 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $('body').append(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 
@@ -30,6 +31,7 @@ import 'ui/data_grid';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 function getTextFromCell(cell) {
     return $(cell).text();

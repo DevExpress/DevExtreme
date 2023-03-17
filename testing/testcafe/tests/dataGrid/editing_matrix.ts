@@ -126,11 +126,9 @@ const getEditForm = (mode): EditForm | null => {
   return null;
 };
 
-const editCell = async (
-  t: TestController, {
-    mode, dataField, useKeyboard, columnIndex,
-  }, rowIndex: number, modifyFirstColumn = false,
-): Promise<{ cell: DataCell; editor: CellEditor }> => {
+const editCell = async (t: TestController, {
+  mode, dataField, useKeyboard, columnIndex,
+}, rowIndex: number, modifyFirstColumn = false): Promise<{ cell: DataCell; editor: CellEditor }> => {
   const cell = dataGrid.getDataCell(rowIndex, columnIndex);
   let editor = cell.getEditor();
 
@@ -177,11 +175,9 @@ const editCell = async (
   return { cell, editor };
 };
 
-const addRow = async (
-  t: TestController, {
-    mode, dataField, columnIndex, useKeyboard,
-  },
-): Promise<{ cell: DataCell; editor: CellEditor }> => {
+const addRow = async (t: TestController, {
+  mode, dataField, columnIndex, useKeyboard,
+}): Promise<{ cell: DataCell; editor: CellEditor }> => {
   const cell = dataGrid.getDataCell(0, columnIndex);
   let editor = cell.getEditor();
 
@@ -212,9 +208,7 @@ const addRow = async (
   return { cell, editor };
 };
 
-const checkEditCell = async (
-  t: TestController, { mode, dataField }, cell: DataCell | undefined, editor: CellEditor | undefined,
-): Promise<void> => {
+const checkEditCell = async (t: TestController, { mode, dataField }, cell: DataCell | undefined, editor: CellEditor | undefined): Promise<void> => {
   if (mode !== 'form' && mode !== 'popup') {
     await t.expect(cell?.isFocused).ok();
   }
@@ -245,9 +239,7 @@ const getCellText = async (dataField: string, cell: DataCell): Promise<string | 
   return cell.element.textContent;
 };
 
-const checkModifiedCell = async (
-  t: TestController, { mode, dataField }, cell: DataCell, editor: CellEditor, value: string,
-): Promise<void> => {
+const checkModifiedCell = async (t: TestController, { mode, dataField }, cell: DataCell, editor: CellEditor, value: string): Promise<void> => {
   const editorText = mode === 'batch' || mode === 'cell'
     ? await getCellText(dataField, cell)
     : await getEditorValue(dataField, editor);
@@ -269,9 +261,7 @@ const checkModifiedCell = async (
   }
 };
 
-const checkSavedCell = async (
-  t: TestController, { dataField }, cell: DataCell, value: string,
-): Promise<void> => {
+const checkSavedCell = async (t: TestController, { dataField }, cell: DataCell, value: string): Promise<void> => {
   await t
     .expect(await getCellText(dataField, cell))
     .eql(value);
@@ -316,11 +306,9 @@ const clickSaveButton = async (t: TestController, {
   }
 };
 
-const setEditorValue = async (
-  t: TestController, {
-    mode, dataField, useKeyboard, useMask, newMaskValue, newValue,
-  }, editor: CellEditor,
-): Promise<void> => {
+const setEditorValue = async (t: TestController, {
+  mode, dataField, useKeyboard, useMask, newMaskValue, newValue,
+}, editor: CellEditor): Promise<void> => {
   const value: string = useMask ? newMaskValue : newValue;
   if (dataField === 'date' && !useKeyboard && !useMask) {
     await t.click(editor.getDropDownButton());
@@ -348,15 +336,13 @@ const setEditorValue = async (
   }
 };
 
-const editNextCell = async (
-  t: TestController, {
-    mode, dataField, columnInfoIndex, columnIndex, useKeyboard,
-  }, rowIndex: number,
-): Promise<{ nextEditor: CellEditor | undefined; nextCell: DataCell | undefined }> => {
+const editNextCell = async (t: TestController, {
+  mode, dataField, columnInfoIndex, columnIndex, useKeyboard,
+}, rowIndex: number): Promise<{ nextEditor: CellEditor | undefined; nextCell: DataCell | undefined }> => {
   const form = getEditForm(mode);
 
-  let nextEditor: CellEditor | undefined = undefined;
-  let nextCell: DataCell | undefined = undefined;
+  let nextEditor: CellEditor | undefined;
+  let nextCell: DataCell | undefined;
   if (form) {
     const nextColumnInfo = columnInfos[columnInfoIndex === 0 ? 1 : columnInfoIndex - 1];
     if (nextColumnInfo) {
@@ -435,9 +421,12 @@ editingModes.forEach((mode) => {
               await setEditorValue(t, options, editor);
 
               await clickSaveButton(t, options, isAdding ? rowIndex : 0);
-              await checkSavedCell(t, options,
+              await checkSavedCell(
+                t,
+                options,
                 isAdding ? dataGrid.getDataCell(2, columnIndex) : cell,
-                newValue);
+                newValue,
+              );
             }).before(createDataGrid(options));
 
             if (isBasicColumn && !isAdding) {

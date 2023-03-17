@@ -50,6 +50,7 @@ const nativeCaretMock = {
                 start = input.selectionStart;
                 end = input.selectionEnd;
             } catch(e) {
+                // empty
             }
         }
         return { start: start, end: end };
@@ -85,7 +86,9 @@ const nativeCaretMock = {
             } else {
                 input.setSelectionRange(start, end);
             }
-        } catch(e) { }
+        } catch(e) {
+            // empty
+        }
     }
 };
 

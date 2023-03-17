@@ -8,7 +8,10 @@ export type Options<
     TKey = any,
 > = CustomStoreOptions<TItem, TKey>;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type GroupItem<
     TItem = any,
 > = {
@@ -20,7 +23,11 @@ export type GroupItem<
 
 type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ * @type object
+ */
 export type ResolvedData<
     TItem = any,
 > =

@@ -127,7 +127,7 @@ const EditorFactoryMixin = (function() {
 
     const prepareBooleanEditor = function(options) {
         if(options.parentType === 'filterRow' || options.parentType === 'filterBuilder') {
-            prepareSelectBox(extend(options, {
+            prepareLookupEditor(extend(options, {
                 lookup: {
                     displayExpr: function(data) {
                         if(data === true) {
@@ -170,7 +170,7 @@ const EditorFactoryMixin = (function() {
         }
     }
 
-    function prepareSelectBox(options) {
+    function prepareLookupEditor(options) {
         const lookup = options.lookup;
         let displayGetter;
         let dataSource;
@@ -206,7 +206,7 @@ const EditorFactoryMixin = (function() {
 
             const allowClearing = Boolean(lookup.allowClearing && !isFilterRow);
 
-            options.editorName = 'dxSelectBox';
+            options.editorName = options.editorType ?? 'dxSelectBox';
             options.editorOptions = getResultConfig({
                 searchEnabled: true,
                 value: options.value,
@@ -281,6 +281,47 @@ const EditorFactoryMixin = (function() {
             }
         }
     };
+
+    const prepareCustomEditor = (options) => {
+        options.editorName = options.editorType;
+        options.editorOptions = getResultConfig({
+            value: options.value,
+            onValueChanged: function(args) {
+                options.setValue(args.value);
+            },
+        }, options);
+    };
+
+    const prepareEditor = (options) => {
+        const prepareDefaultEditor = {
+            'dxDateBox': prepareDateBox,
+            'dxCheckBox': prepareCheckBox,
+            'dxNumberBox': prepareNumberBox,
+            'dxTextBox': prepareTextBox,
+        };
+
+        if(options.lookup) {
+            prepareLookupEditor(options);
+        } else if(options.editorType) {
+            (prepareDefaultEditor[options.editorType] ?? prepareCustomEditor)(options);
+        } else {
+            switch(options.dataType) {
+                case 'date':
+                case 'datetime':
+                    prepareDateBox(options);
+                    break;
+                case 'boolean':
+                    prepareBooleanEditor(options);
+                    break;
+                case 'number':
+                    prepareNumberBox(options);
+                    break;
+                default:
+                    prepareTextBox(options);
+                    break;
+            }
+        }
+    };
     return {
         createEditor: function($container, options) {
             options.cancel = false;
@@ -290,29 +331,7 @@ const EditorFactoryMixin = (function() {
                 options.tabIndex = this.option('tabIndex');
             }
 
-            if(options.lookup) {
-                prepareSelectBox(options);
-            } else {
-                switch(options.dataType) {
-                    case 'date':
-                    case 'datetime':
-                        prepareDateBox(options);
-                        break;
-                    case 'boolean':
-                        prepareBooleanEditor(options);
-                        break;
-                    case 'number':
-                        prepareNumberBox(options);
-                        break;
-                    default:
-                        prepareTextBox(options);
-                        break;
-                }
-            }
-
-            if(options.parentType === 'dataRow' && options.editorType) {
-                options.editorName = options.editorType;
-            }
+            prepareEditor(options);
 
             this.executeAction('onEditorPreparing', options);
 

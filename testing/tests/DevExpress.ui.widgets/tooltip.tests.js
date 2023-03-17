@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { value as viewPort } from 'core/utils/view_port';
 import fx from 'animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
@@ -14,9 +13,6 @@ const DX_INVISIBILITY_CLASS = 'dx-state-invisible';
 const wrapper = function() {
     return $('body').find('.' + TOOLTIP_WRAPPER_CLASS);
 };
-
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
 
 QUnit.testStart(function() {
     const markup =

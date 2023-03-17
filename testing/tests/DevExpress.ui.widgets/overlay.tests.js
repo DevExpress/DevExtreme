@@ -3366,6 +3366,145 @@ testModule('focus policy', {
     });
 });
 
+testModule('preventScrollEvents', () => {
+    test('wrapper scroll subscription after change preventScrollEvents option', function(assert) {
+        if(QUnit.urlParams['nojquery']) {
+            assert.ok(true);
+            return;
+        }
+
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+        }).dxOverlay('instance');
+
+        const $wrapper = $(overlay.content()).parent();
+
+
+        const getWrapperEventListeners = () => $._data($wrapper.get(0)).events || {};
+
+        assert.strictEqual('dxdrag' in getWrapperEventListeners(), true, 'scroll subscribed');
+
+        overlay.option('preventScrollEvents', false);
+
+        assert.strictEqual('dxdrag' in getWrapperEventListeners(), false, 'scroll unsubscribed');
+
+        overlay.option('preventScrollEvents', true);
+
+        assert.strictEqual('dxdrag' in getWrapperEventListeners(), true, 'scroll subscribed');
+    });
+
+    [true, false].forEach((shading) => {
+        test(`dxmousewheel event should not be prevented on overlay shader if shading is ${shading}`, function(assert) {
+            assert.expect(1);
+
+            const overlay = $('#overlay').dxOverlay({
+                shading,
+                visible: true,
+                preventScrollEvents: false,
+            }).dxOverlay('instance');
+
+            const $wrapper = $(overlay.content()).parent();
+
+            $($wrapper.parent()).on('dxmousewheel', (e) => {
+                assert.strictEqual(e.isDefaultPrevented(), false, 'event is not prevented');
+            });
+
+            pointerMock($wrapper).start().wheel(10);
+
+            $($wrapper.parent()).off('dxmousewheel');
+        });
+
+        test(`dxmousewheel event should not be prevented on overlay content if shading is ${shading}`, function(assert) {
+            assert.expect(1);
+
+            const overlay = $('#overlay').dxOverlay({
+                shading,
+                visible: true,
+                preventScrollEvents: false,
+            }).dxOverlay('instance');
+
+            const $content = $(overlay.content());
+            const $wrapper = $(overlay.content()).parent();
+
+            $($wrapper).on('dxmousewheel', (e) => {
+                assert.strictEqual(e.isDefaultPrevented(), false, 'event is not prevented');
+            });
+
+            pointerMock($content).start().wheel(10);
+
+            $($wrapper).off('dxmousewheel');
+        });
+    });
+
+    [true, false].forEach((preventScrollEvents) => {
+        QUnit.test('should be logged if preventScrollEvents is used on initialization', function(assert) {
+            assert.expect(2);
+
+            const stub = sinon.stub(errors, 'log', () => {
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    'preventScrollEvents',
+                    '23.1',
+                    'If you enable this option, end-users may experience scrolling issues.'
+                ], 'args of the log method');
+            });
+
+            $('#overlay').dxOverlay({
+                visible: true,
+                preventScrollEvents,
+            });
+
+            assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
+            stub.restore();
+        });
+
+        QUnit.test('should not be logged if preventScrollEvents is not used on initialization', function(assert) {
+            assert.expect(1);
+
+            const stub = sinon.stub(errors, 'log', () => {
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    'preventScrollEvents',
+                    '23.1',
+                    'If you enable this option, end-users may experience scrolling issues.'
+                ], 'args of the log method');
+            });
+
+            $('#overlay').dxOverlay({
+                visible: true,
+            });
+
+            assert.strictEqual(stub.callCount, 0, 'error.log.callCount');
+            stub.restore();
+        });
+
+        QUnit.test('should be logged if preventScrollEvents is changed in runtime', function(assert) {
+            assert.expect(2);
+
+            const overlay = $('#overlay').dxOverlay({
+                visible: true,
+                preventScrollEvents,
+            }).dxOverlay('instance');
+
+            const stub = sinon.stub(errors, 'log', () => {
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    'preventScrollEvents',
+                    '23.1',
+                    'If you enable this option, end-users may experience scrolling issues.'
+                ], 'args of the log method');
+            });
+
+            overlay.option('preventScrollEvents', !preventScrollEvents);
+
+            assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
+            stub.restore();
+        });
+    });
+});
 
 testModule('scrollable interaction', {
     beforeEach: function() {

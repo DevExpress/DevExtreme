@@ -591,24 +591,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -648,24 +649,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 0
+                'stroke-width': 0,
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 0,
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 0
+                'stroke-width': 0,
             }
         });
     });
@@ -700,24 +702,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'n-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -753,24 +756,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'seriesColor',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'seriesColor',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'seriesColor',
                 r: 2.5,
                 stroke: 'seriesColor',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'seriesColor',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -819,24 +823,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -877,24 +882,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1282,6 +1288,44 @@ function setDiscreteType(series) {
             assert.ok(path.sharp.called);
             assert.ok(path.sharp.lastCall.calledAfter(path.attr.lastCall));
         });
+    });
+
+    QUnit.test('Custom styles should not apply, normal state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{ color: { fillId: 'id_color', base: 'n-color' } } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
+    QUnit.test('Custom styles should not apply, hover state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{
+            color: { fillId: 'id_color', base: 'n-color' },
+            hoverStyle: { color: { fillId: 'id_color', base: 'n-color' } }
+        } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.hover();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
+    QUnit.test('Custom styles should not apply, selection state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{
+            color: { fillId: 'id_color', base: 'n-color' },
+            selectionStyle: { color: { fillId: 'id_color', base: 'n-color' } }
+        } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.select();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
     });
 
     QUnit.test('Undefined dashStyle', function(assert) {

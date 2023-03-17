@@ -53,6 +53,7 @@ import {
     ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
+    ChartsColor,
 } from '../common/charts';
 
 export {
@@ -133,7 +134,10 @@ export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 
 /**
  * @public
+ * @docid PieChartLegendItem
  * @namespace DevExpress.viz.dxPieChart
+ * @inherits BaseLegendItem
+ * @type object
  */
 export type LegendItem = PieChartLegendItem;
 
@@ -524,7 +528,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
      * @default 'onlyPoint'
@@ -565,7 +569,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
        * @default undefined
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -591,6 +595,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            */
           width?: number;
       };
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.lightening
+       * @default true
+       */
+      lightening?: boolean;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
@@ -758,7 +767,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
        * @default undefined
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */
@@ -784,6 +793,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            */
           width?: number;
       };
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.lightening
+       * @default true
+       */
+      lightening?: boolean;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping

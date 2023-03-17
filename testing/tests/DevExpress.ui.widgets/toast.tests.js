@@ -138,7 +138,7 @@ QUnit.module('general', moduleConfig, () => {
         assert.equal(hidden, 1);
     });
 
-    QUnit.test('T179647 - only one toast is visible at the same time', function(assert) {
+    QUnit.test('should not hide previous Toasts on new Toast showing (T1153204)', function(assert) {
         const $first = $('#firstToast');
         const $second = $('#secondToast');
         const first = $first.dxToast().dxToast('instance');
@@ -150,7 +150,7 @@ QUnit.module('general', moduleConfig, () => {
 
         second.show();
 
-        assert.equal($('.dx-toast-content').filter(':visible').length, 1, 'only the second toast is visible');
+        assert.equal($('.dx-toast-content').filter(':visible').length, 2, 'both toasts are visible');
     });
 });
 

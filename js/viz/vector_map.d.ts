@@ -218,7 +218,10 @@ export interface MapLayerElement {
 
 /**
  * @public
+ * @docid VectorMapLegendItem
  * @namespace DevExpress.viz.dxVectorMap
+ * @inherits BaseLegendItem
+ * @type object
  */
 export type LegendItem = VectorMapLegendItem;
 

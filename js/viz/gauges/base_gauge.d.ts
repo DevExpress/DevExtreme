@@ -32,6 +32,7 @@ import {
     Palette,
     PaletteExtensionMode,
     LabelOverlap,
+    ChartsColor,
 } from '../../common/charts';
 
 export interface TooltipInfo {
@@ -151,7 +152,7 @@ export interface BaseGaugeRangeContainer {
      * @default '#808080'
      * @public
      */
-    backgroundColor?: string;
+    backgroundColor?: string | ChartsColor;
     /**
      * @docid BaseGaugeOptions.rangeContainer.offset
      * @default 0
@@ -179,9 +180,8 @@ export interface BaseGaugeRangeContainer {
     ranges?: Array<{
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
-       *
        */
-      color?: string;
+      color?: string | ChartsColor;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
        */
@@ -452,7 +452,7 @@ export interface CommonIndicator {
      * @docid
      * @public
      */
-    color?: string;
+    color?: string | ChartsColor;
     /**
      * @docid
      * @default 'right' &for(value_indicators)

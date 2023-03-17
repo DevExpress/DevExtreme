@@ -848,14 +848,16 @@ test('New mode. Rows should be rendered properly when rowRenderingMode is virtua
 test('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const scrollWindowTo = async (position: number) => {
-    await ClientFunction(() => {
-      (window as any).scroll({ top: position });
-    },
-    {
-      dependencies: {
-        position,
+    await ClientFunction(
+      () => {
+        (window as any).scroll({ top: position });
       },
-    })();
+      {
+        dependencies: {
+          position,
+        },
+      },
+    )();
   };
   const getWindowScrollPosition = ClientFunction(() => (window as any).scrollY);
 

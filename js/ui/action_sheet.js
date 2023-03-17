@@ -106,7 +106,7 @@ const ActionSheet = CollectionWidget.inherit({
              */
             focusStateEnabled: false,
 
-            selectionByClick: false
+            selectByClick: false
         });
     },
 

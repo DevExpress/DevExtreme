@@ -1966,10 +1966,33 @@ declare module DevExpress.common.charts {
     visible?: boolean;
   }
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
+  /**
+   * [descr:ChartsColor]
+   */
+  export type ChartsColor = {
+    /**
+     * [descr:ChartsColor.base]
+     */
+    base?: string;
+    /**
+     * [descr:ChartsColor.fillId]
+     */
+    fillId?: string;
+  };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
+  export type GradientColor = {
+    /**
+     * [descr:GradientColor.offset]
+     */
+    offset: number | string;
+    /**
+     * [descr:GradientColor.color]
+     */
+    color: string;
+  };
   export type HatchDirection = 'left' | 'none' | 'right';
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
@@ -2006,6 +2029,21 @@ declare module DevExpress.common.charts {
     | 'triangle'
     | 'triangleDown'
     | 'triangleUp';
+  /**
+   * [descr:viz.registerGradient(type, options)]
+   */
+  export function registerGradient(
+    type: string,
+    options: { rotationAngle?: number; colors: Array<GradientColor> }
+  ): string;
+  /**
+   * [descr:viz.registerPattern(options)]
+   */
+  export function registerPattern(options: {
+    width: number | string;
+    height: number | string;
+    template: DevExpress.core.template;
+  }): string;
   export type RelativePosition = 'inside' | 'outside';
   /**
    * [descr:ScaleBreak]
@@ -4129,6 +4167,9 @@ declare module DevExpress.core {
     : {
         [P in keyof T]?: DeepPartial<T[P]>;
       };
+  /**
+   * [descr:DefaultOptionsRule]
+   */
   export type DefaultOptionsRule<T> = {
     device?: Device | Device[] | ((device: Device) => boolean);
     options: DeepPartial<T>;
@@ -4406,6 +4447,9 @@ declare module DevExpress.data {
     >;
   }
   module CustomStore {
+    /**
+     * [descr:GroupItem]
+     */
     export type GroupItem<TItem = any> = {
       key: any | string | number;
       items: Array<TItem> | Array<GroupItem<TItem>> | null;
@@ -4427,6 +4471,9 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
+    /**
+     * [descr:ResolvedData]
+     */
     export type ResolvedData<TItem = any> =
       | Object
       | ItemsArray<TItem>
@@ -5884,6 +5931,9 @@ declare module DevExpress.data {
   }
 }
 declare module DevExpress.data.PivotGridDataSource {
+  /**
+   * [descr:PivotGridDataSourceOptions.fields]
+   */
   export type Field = PivotGridDataSourceField;
 }
 declare module DevExpress.data.utils {
@@ -5900,6 +5950,9 @@ declare module DevExpress.data.utils {
     | ArrayStore<TItem, TKey>
     | LocalStore<TItem, TKey>
     | ODataStore<TItem, TKey>;
+  /**
+   * [descr:StoreOptions]
+   */
   export type StoreOptions<TItem = any, TKey = any> =
     | DevExpress.data.CustomStore.Options<TItem, TKey>
     | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
@@ -5913,9 +5966,15 @@ declare module DevExpress.data.utils.odata {
   export var keyConverters: any;
 }
 declare module DevExpress.events {
+  /**
+   * [descr:Cancelable]
+   */
   export interface Cancelable {
     cancel?: boolean;
   }
+  /**
+   * [descr:ChangedOptionInfo]
+   */
   export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;
@@ -5936,6 +5995,9 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type event = DxEvent;
+  /**
+   * [descr:EventInfo]
+   */
   export interface EventInfo<TComponent> {
     readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
@@ -6004,6 +6066,9 @@ declare module DevExpress.events {
   interface EventType extends JQueryEventObject {
     cancel?: boolean;
   }
+  /**
+   * [descr:InitializedEventInfo]
+   */
   export interface InitializedEventInfo<TComponent> {
     readonly component?: TComponent;
     readonly element?: DevExpress.core.DxElement;
@@ -6016,6 +6081,9 @@ declare module DevExpress.events {
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
+  /**
+   * [descr:NativeEventInfo]
+   */
   export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
@@ -7048,6 +7116,10 @@ declare module DevExpress.pdfExporter {
   }
 }
 declare module DevExpress.ui {
+  /**
+   * [descr:dxSchedulerAppointment]
+   */
+  export type Appointment = dxSchedulerAppointment;
   /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8151,6 +8223,9 @@ declare module DevExpress.ui {
       readonly view: string;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCalendar>;
+    /**
+     * [descr:DisabledDate]
+     */
     export type DisabledDate = ComponentDisabledDate<dxCalendar>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCalendar>;
     export type InitializedEvent =
@@ -9298,6 +9373,9 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row<TRowData, TKey>>;
       };
+    /**
+     * [descr:GroupData]
+     */
     export type GroupData<TRowData> = {
       key: any;
       items: Array<TRowData> | Array<GroupData<TRowData>> | null;
@@ -13556,7 +13634,6 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
-    export type Field = dxFilterBuilderField;
     export type FieldEditorTemplate = {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
@@ -13610,7 +13687,7 @@ declare module DevExpress.ui {
      */
     calculateFilterExpression?: (
       filterValue: any,
-      field: DevExpress.ui.dxFilterBuilder.Field
+      field: Field
     ) => string | Array<any> | Function;
     /**
      * [descr:dxFilterBuilderCustomOperation.caption]
@@ -13622,7 +13699,7 @@ declare module DevExpress.ui {
     customizeText?: (fieldInfo: {
       value?: string | number | Date;
       valueText?: string;
-      field?: DevExpress.ui.dxFilterBuilder.Field;
+      field?: Field;
     }) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
@@ -13755,7 +13832,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.fields]
      */
-    fields?: Array<DevExpress.ui.dxFilterBuilder.Field>;
+    fields?: Array<Field>;
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
      */
@@ -19072,6 +19149,10 @@ declare module DevExpress.ui {
      */
     position?: DevExpress.common.PositionAlignment | PositionConfig | Function;
     /**
+     * [descr:dxPopupOptions.enableBodyScroll]
+     */
+    enableBodyScroll?: boolean;
+    /**
      * [descr:dxPopupOptions.resizeEnabled]
      */
     resizeEnabled?: boolean;
@@ -19563,16 +19644,16 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: dxSchedulerAppointment): void;
+    addAppointment(appointment: Appointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: dxSchedulerAppointment): void;
+    deleteAppointment(appointment: Appointment): void;
     /**
      * [descr:dxScheduler.deleteRecurrence(appointment, date, recurrenceEditMode)]
      */
     deleteRecurrence(
-      appointmentData: dxSchedulerAppointment,
+      appointmentData: Appointment,
       date: Date | string,
       recurrenceEditMode: DevExpress.ui.dxScheduler.RecurrenceEditMode
     ): void;
@@ -19606,37 +19687,33 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: dxSchedulerAppointment,
+      appointmentData?: Appointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: dxSchedulerAppointment
+      currentAppointmentData?: Appointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: dxSchedulerAppointment,
+      appointmentData: Appointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: dxSchedulerAppointment
+      currentAppointmentData?: Appointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(
-      target: dxSchedulerAppointment,
-      appointment: dxSchedulerAppointment
-    ): void;
+    updateAppointment(target: Appointment, appointment: Appointment): void;
   }
   module dxScheduler {
     export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
-    export type Appointment = dxSchedulerAppointment;
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
@@ -19668,12 +19745,12 @@ declare module DevExpress.ui {
       };
     export type AppointmentDeletedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         readonly error?: Error;
       };
     export type AppointmentDeletingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -19711,7 +19788,7 @@ declare module DevExpress.ui {
       AppointmentDraggingEvent;
     export type AppointmentFormOpeningEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData?: dxSchedulerAppointment;
+        readonly appointmentData?: Appointment;
         readonly form: dxForm;
         readonly popup: dxPopup;
       };
@@ -19721,6 +19798,9 @@ declare module DevExpress.ui {
           readonly appointmentElement: DevExpress.core.DxElement;
         };
     export type AppointmentTemplateData = TargetedAppointmentInfo;
+    /**
+     * [descr:AppointmentTooltipShowingAppointmentInfo]
+     */
     export type AppointmentTooltipShowingAppointmentInfo = {
       readonly appointmentData: Appointment;
       readonly currentAppointmentData: Appointment;
@@ -19736,7 +19816,7 @@ declare module DevExpress.ui {
     };
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: dxSchedulerAppointment;
+        readonly appointmentData: Appointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
@@ -19778,8 +19858,8 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     interface TargetedAppointmentInfo {
-      readonly appointmentData: dxSchedulerAppointment;
-      readonly targetedAppointmentData?: dxSchedulerAppointment;
+      readonly appointmentData: Appointment;
+      readonly targetedAppointmentData?: Appointment;
     }
     export type ViewType =
       | 'agenda'
@@ -19982,7 +20062,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxScheduler.Appointment> | null;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<Appointment> | null;
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
      */
@@ -23936,6 +24016,9 @@ declare module DevExpress.ui {
       ItemInfo<TKey>;
     export type ItemSelectionChangedEvent<TKey = any> =
       DevExpress.events.EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+    /**
+     * [descr:dxTreeViewNode]
+     */
     export type Node<TKey = any> = dxTreeViewNode<TKey>;
     export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
       dxTreeView<TKey>
@@ -24177,6 +24260,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
      */
     showCheckBoxesMode?: DevExpress.ui.dxTreeView.TreeViewCheckBoxMode;
+    /**
+     * [descr:dxTreeViewOptions.collapseIcon]
+     */
+    collapseIcon?: string | null;
+    /**
+     * [descr:dxTreeViewOptions.expandIcon]
+     */
+    expandIcon?: string | null;
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
@@ -24555,6 +24646,10 @@ declare module DevExpress.ui {
     stylingMode?: DevExpress.common.EditorStyle;
   }
   /**
+   * [descr:dxFilterBuilderField]
+   */
+  export type Field = dxFilterBuilderField;
+  /**
    * [descr:Format]
    */
   export type Format =
@@ -24930,6 +25025,9 @@ declare module DevExpress.ui.dxDataGrid {
   };
 }
 declare module DevExpress.ui.dxDiagram {
+  /**
+   * [descr:dxDiagramItem]
+   */
   export type Item = dxDiagramItem;
 }
 declare module DevExpress.ui.dxDropDownButton {
@@ -25487,7 +25585,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.rangeContainer.backgroundColor]
      */
-    backgroundColor?: string;
+    backgroundColor?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.offset]
      */
@@ -25507,7 +25605,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseGaugeOptions.rangeContainer.ranges.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:BaseGaugeOptions.rangeContainer.ranges.endValue]
        */
@@ -26668,7 +26766,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:CommonIndicator.horizontalOrientation]
      */
@@ -27870,7 +27968,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonPaneSettings.backgroundColor]
      */
-    backgroundColor?: string;
+    backgroundColor?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartOptions.commonPaneSettings.border]
      */
@@ -28865,7 +28963,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.cornerRadius]
      */
@@ -29077,7 +29175,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
      */
@@ -29090,6 +29188,10 @@ declare module DevExpress.viz {
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.width]
      */
     width?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.lightening]
+     */
+    lightening?: boolean;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -29252,7 +29354,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
      */
@@ -29281,7 +29383,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
        */
@@ -29367,7 +29469,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
        */
@@ -29397,7 +29499,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
      */
@@ -29410,6 +29512,10 @@ declare module DevExpress.viz {
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.width]
      */
     width?: number;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.lightening]
+     */
+    lightening?: boolean;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -31730,7 +31836,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode]
      */
@@ -31763,7 +31869,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching]
        */
@@ -31785,6 +31891,10 @@ declare module DevExpress.viz {
          */
         width?: number;
       };
+      /**
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.lightening]
+       */
+      lightening?: boolean;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label]
@@ -31917,7 +32027,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching]
        */
@@ -31939,6 +32049,10 @@ declare module DevExpress.viz {
          */
         width?: number;
       };
+      /**
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.lightening]
+       */
+      lightening?: boolean;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping]
@@ -32881,7 +32995,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
      */
@@ -32918,7 +33032,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
@@ -32944,6 +33058,10 @@ declare module DevExpress.viz {
          */
         width?: number;
       };
+      /**
+       * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening]
+       */
+      lightening?: boolean;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width]
        */
@@ -33005,7 +33123,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */
@@ -33031,6 +33149,10 @@ declare module DevExpress.viz {
          */
         width?: number;
       };
+      /**
+       * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening]
+       */
+      lightening?: boolean;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width]
        */
@@ -33209,7 +33331,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color]
      */
-    color?: string;
+    color?: string | DevExpress.common.charts.ChartsColor;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode]
      */
@@ -33238,7 +33360,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.size]
        */
@@ -33291,7 +33413,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.color]
        */
-      color?: string;
+      color?: string | DevExpress.common.charts.ChartsColor;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.size]
        */
@@ -36245,16 +36367,28 @@ declare module DevExpress.viz {
     | dxBarGauge;
 }
 declare module DevExpress.viz.dxBarGauge {
+  /**
+   * [descr:BarGaugeLegendItem]
+   */
   export type LegendItem = BarGaugeLegendItem;
 }
 declare module DevExpress.viz.dxFunnel {
   export type Item = dxFunnelItem;
+  /**
+   * [descr:FunnelLegendItem]
+   */
   export type LegendItem = FunnelLegendItem;
 }
 declare module DevExpress.viz.dxPieChart {
+  /**
+   * [descr:PieChartLegendItem]
+   */
   export type LegendItem = PieChartLegendItem;
 }
 declare module DevExpress.viz.dxVectorMap {
+  /**
+   * [descr:VectorMapLegendItem]
+   */
   export type LegendItem = VectorMapLegendItem;
 }
 declare module DevExpress.viz.map {

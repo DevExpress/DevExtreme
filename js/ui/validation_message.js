@@ -33,6 +33,7 @@ const ValidationMessage = Overlay.inherit({
             target: undefined,
             mode: 'auto',
             validationErrors: undefined,
+            preventScrollEvents: false,
             positionSide: 'top',
             boundary: undefined,
             offset: { h: 0, v: 0 },

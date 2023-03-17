@@ -530,7 +530,7 @@ QUnit.test('dataSource', function(assert) {
     widget.option('dataSource', [{ value: 1 }, { value: 2 }]);
 
     assert.deepEqual(this.tilesGroup().clear.lastCall.args, [], 'tiles group is cleared');
-    assert.deepEqual(this.renderer.initHatching.lastCall.args, [], 'hatching');
+    assert.deepEqual(this.renderer.initDefsElements.lastCall.args, [], 'hatching');
     assert.strictEqual(this.renderer.simpleRect.callCount, 2, 'tiles are created');
     let i;
     for(i = 0; i < this.tileCount(); ++i) {

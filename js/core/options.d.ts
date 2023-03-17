@@ -6,7 +6,10 @@ import {
     DeepPartial,
 } from './index';
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type DefaultOptionsRule<T> = {
     device?: Device | Device[] | ((device: Device) => boolean);
     options: DeepPartial<T>;

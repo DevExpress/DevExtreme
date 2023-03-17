@@ -91,6 +91,11 @@
   }
 }
 
+.dx-popup-content-scrollable {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
 .dx-dialog-root {
   .dx-overlay-shader {
     background-color: #444;

@@ -36,6 +36,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "26.0.24",
     "@types/less": "3.0.3",
+    "@types/node": "^18.14.2",
     "express": "4.18.2",
     "filing-cabinet": "2.6.0",
     "fs-extra": "9.1.0",

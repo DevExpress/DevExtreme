@@ -128,6 +128,7 @@ export interface ColumnBase<TRowData = any> {
   allowHeaderFiltering?: boolean;
   /**
    * @docid GridBaseColumn.allowHiding
+   * @default false &for(command column)
    * @default true
    * @public
    */
@@ -1630,6 +1631,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @docid
    * @type object
    * @public
+   * @inherits ColumnChooser
    */
   columnChooser?: ColumnChooser;
   /**

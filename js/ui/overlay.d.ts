@@ -55,7 +55,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default false
      * @public
      */
-     copyRootClassesToWrapper?: boolean;
+    copyRootClassesToWrapper?: boolean;
     /**
      * @docid
      * @default true
@@ -116,8 +116,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */
@@ -145,8 +144,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */

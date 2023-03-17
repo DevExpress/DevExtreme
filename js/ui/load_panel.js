@@ -34,7 +34,6 @@ const LoadPanel = Overlay.inherit({
 
             height: 90,
 
-
             animation: null,
 
             /**
@@ -57,6 +56,8 @@ const LoadPanel = Overlay.inherit({
             focusStateEnabled: false,
 
             propagateOutsideClick: true,
+
+            preventScrollEvents: false,
 
             /**
             * @name dxLoadPanelOptions.contentTemplate

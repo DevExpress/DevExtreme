@@ -223,9 +223,9 @@ const environment = {
 
 function getDefaultStates() {
     return {
-        hover: { hatching: { direction: 'right' }, fill: 'blue' },
+        hover: { hatching: { direction: 'right' }, fill: 'blue', filter: 'filter' },
         normal: { fill: '#00FF00' },
-        selection: { hatching: { direction: 'right' }, fill: 'black' }
+        selection: { hatching: { direction: 'right' }, fill: 'black', filter: 'filter' }
     };
 }
 
@@ -314,7 +314,7 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
     for(let i = 0; i < this.data.length; i++) {
         marker = this.renderer.rect.getCall(i).returnValue;
         text = this.renderer.text.getCall(i).returnValue;
-        assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: 1 }, 'Rect element not found for series ' + i);
+        assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: 1, filter: undefined }, 'Rect element not found for series ' + i);
 
         assert.equal(text.typeOfNode, 'text', 'Text element for series ' + i);
         assert.equal(text.stub('setTitle').callCount, 0, 'Text element for series ' + i);
@@ -1556,9 +1556,9 @@ QUnit.test('Pass color & opacity to markers on create', function(assert) {
     this.createSimpleLegend()
         .draw(200, 200);
 
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], { fill: 'color_0', opacity: 0.1 });
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: 'color_1', opacity: 1 });
-    assert.deepEqual(this.renderer.rect.getCall(2).returnValue.attr.getCall(0).args[0], { fill: 'color_2', opacity: 0.2 });
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], { fill: 'color_0', opacity: 0.1, filter: undefined });
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: 'color_1', opacity: 1, filter: undefined });
+    assert.deepEqual(this.renderer.rect.getCall(2).returnValue.attr.getCall(0).args[0], { fill: 'color_2', opacity: 0.2, filter: undefined });
 });
 
 QUnit.test('Pass color & opacity to markers on update', function(assert) {
@@ -1582,7 +1582,7 @@ QUnit.test('Pass color & opacity to markers on update', function(assert) {
 
     legend.draw();
 
-    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5 });
+    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5, filter: undefined });
 });
 
 QUnit.module('getLayoutOptions', environment);
@@ -1827,7 +1827,7 @@ QUnit.module('States', $.extend({}, environment, {
         environment.beforeEach.apply(this, arguments);
         const states = getDefaultStates();
 
-        this.renderer.stub('lockHatching').returns('DevExpress');
+        this.renderer.stub('lockDefsElements').returns('DevExpress');
 
         this.data = [{
             text: 'first item',
@@ -1862,6 +1862,7 @@ QUnit.test('Change state - leads to redraw marker', function(assert) {
     assert.equal(marker.append.lastCall.args[0].element, markersGroup.children[0].children[0].element);
     assert.deepEqual(marker._stored_settings, {
         fill: 'url(#DevExpress)',
+        filter: undefined,
         height: 14,
         opacity: 1,
         width: 14,
@@ -1876,16 +1877,18 @@ QUnit.test('applyHover', function(assert) {
     this.legend.applyHover(0);
 
     assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, 'url(#DevExpress)');
-    assert.deepEqual(this.renderer.lockHatching.lastCall.args[0], 'blue');
-    assert.deepEqual(this.renderer.lockHatching.lastCall.args[1], {
-        'direction': 'right',
-        'step': 5,
-        'width': 2
+    assert.deepEqual(this.renderer.lockDefsElements.lastCall.args[0], {
+        color: 'blue',
+        hatching: {
+            direction: 'right',
+            step: 5,
+            width: 2
+        }
     });
 });
 
 QUnit.test('do not wrap fill to url if not pattern', function(assert) {
-    this.renderer.lockHatching.returns('red');
+    this.renderer.lockDefsElements.returns('red');
     this.legend.applyHover(0);
 
     assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, 'red');
@@ -1895,7 +1898,14 @@ QUnit.test('applySelected', function(assert) {
     this.legend.applySelected(0);
 
     assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, 'url(#DevExpress)');
-    assert.equal(this.renderer.lockHatching.lastCall.args[0], 'black');
+    assert.deepEqual(this.renderer.lockDefsElements.lastCall.args[0], {
+        color: 'black',
+        hatching: {
+            direction: 'right',
+            step: 5,
+            width: 2
+        }
+    });
 });
 
 QUnit.test('resetItem', function(assert) {
@@ -2041,7 +2051,7 @@ QUnit.test('Colors', function(assert) {
 
     const createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, filter: undefined }], String(i));
     });
 });
 
@@ -2054,7 +2064,7 @@ QUnit.test('Common color', function(assert) {
 
     const createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: 1 }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: 1, filter: undefined }], String(i));
     });
 });
 
@@ -2067,7 +2077,7 @@ QUnit.test('No state color, no marker color - use default color', function(asser
 
     const createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: 1 }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: 1, filter: undefined }], String(i));
     });
 });
 
@@ -2101,7 +2111,7 @@ QUnit.test('Items in inverted order', function(assert) {
 
     const createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, filter: undefined }], String(i));
     });
 });
 
@@ -2113,7 +2123,7 @@ QUnit.test('Customize order using customizeItems', function(assert) {
 
     const createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, filter: undefined }], String(i));
     });
 });
 
@@ -2123,7 +2133,7 @@ QUnit.test('Process items return nothing - get original items', function(assert)
 
     const createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, filter: undefined }], String(i));
     });
 });
 
@@ -2158,7 +2168,7 @@ QUnit.test('markers centering(partial markers sizes).', function(assert) {
     const createMarker = this.createMarker;
 
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1 }]);
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1, filter: undefined }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');
     });
 });
@@ -2173,7 +2183,7 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
 
     const createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1 }]);
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1, filter: undefined }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');
     });
 });

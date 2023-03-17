@@ -83,7 +83,8 @@ export function Point(series, dataItem, options) {
     this._emptySettings = {
         fill: null,
         stroke: null,
-        dashStyle: null
+        dashStyle: null,
+        filter: null
     };
 }
 

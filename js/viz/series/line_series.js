@@ -6,7 +6,8 @@ import { each } from '../../core/utils/iterator';
 import {
     map,
     normalizeAngle,
-    getCosAndSin
+    getCosAndSin,
+    extractColor
 } from '../core/utils';
 import { solveCubicEquation, trunc } from '../../core/utils/math';
 
@@ -91,7 +92,7 @@ const lineMethods = {
 
     _parseLineOptions: function(options, defaultColor) {
         return {
-            stroke: options.color || defaultColor,
+            stroke: extractColor(options.color, true) || defaultColor,
             'stroke-width': options.width,
             dashStyle: options.dashStyle || 'solid'
         };

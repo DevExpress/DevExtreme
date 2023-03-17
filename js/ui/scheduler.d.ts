@@ -48,8 +48,8 @@ interface AppointmentDraggingEvent {
 }
 
 interface TargetedAppointmentInfo {
-  readonly appointmentData: dxSchedulerAppointment;
-  readonly targetedAppointmentData?: dxSchedulerAppointment;
+  readonly appointmentData: Appointment;
+  readonly targetedAppointmentData?: Appointment;
 }
 
 export {
@@ -69,13 +69,13 @@ export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMon
 
 /** @public */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: dxSchedulerAppointment;
+  readonly appointmentData: Appointment;
   readonly error?: Error;
 };
 
 /** @public */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: dxSchedulerAppointment;
+  readonly appointmentData: Appointment;
   cancel: boolean | PromiseLike<boolean>;
 };
 
@@ -96,24 +96,27 @@ export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler,
 
 /** @public */
 export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: dxSchedulerAppointment;
+  readonly appointmentData: Appointment;
   readonly error?: Error;
 };
 
 /** @public */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: dxSchedulerAppointment;
+  readonly appointmentData: Appointment;
   cancel: boolean | PromiseLike<boolean>;
 };
 
 /** @public */
 export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
-  readonly appointmentData?: dxSchedulerAppointment;
+  readonly appointmentData?: Appointment;
   readonly form: dxForm;
   readonly popup: dxPopup;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type AppointmentTooltipShowingAppointmentInfo = {
   readonly appointmentData: Appointment;
   readonly currentAppointmentData: Appointment;
@@ -133,7 +136,7 @@ export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointm
 
 /** @public */
 export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: dxSchedulerAppointment;
+  readonly appointmentData: Appointment;
   readonly error?: Error;
 };
 
@@ -510,6 +513,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @action
      * @public
      */
@@ -519,6 +523,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
      * @public
@@ -530,6 +535,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
      * @type_function_param1_field event:event
      * @action
      * @public
@@ -541,6 +548,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
      * @type_function_param1_field event:event
      * @action
      * @public
@@ -552,6 +561,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
      * @type_function_param1_field event:event
      * @action
      * @public
@@ -561,6 +572,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @type_function_param1_field component:dxScheduler
      * @action
      * @public
@@ -572,6 +584,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
      * @public
@@ -592,6 +605,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @action
      * @public
      */
@@ -601,6 +615,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment|undefined
      * @action
      * @public
@@ -610,6 +625,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @type_function_param1_field component:dxScheduler
      * @action
      * @public
@@ -953,22 +969,25 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
      * @docid
      * @publicName addAppointment(appointment)
+     * @param1 appointment:dxSchedulerAppointment
      * @public
      */
-    addAppointment(appointment: dxSchedulerAppointment): void;
+    addAppointment(appointment: Appointment): void;
     /**
      * @docid
      * @publicName deleteAppointment(appointment)
+     * @param1 appointment:dxSchedulerAppointment
      * @public
      */
-    deleteAppointment(appointment: dxSchedulerAppointment): void;
+    deleteAppointment(appointment: Appointment): void;
     /**
      * @docid
      * @publicName deleteRecurrence(appointment, date, recurrenceEditMode)
+     * @param1 appointmentData:dxSchedulerAppointment
      * @public
      */
     deleteRecurrence(
-      appointmentData: dxSchedulerAppointment,
+      appointmentData: Appointment,
       date: Date | string,
       recurrenceEditMode: RecurrenceEditMode,
     ): void;
@@ -1022,25 +1041,32 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
      * @public
      */
-    showAppointmentPopup(appointmentData?: dxSchedulerAppointment, createNewAppointment?: boolean, currentAppointmentData?: dxSchedulerAppointment): void;
+    showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean, currentAppointmentData?: Appointment): void;
     /**
      * @docid
      * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
+     * @param1 appointmentData:dxSchedulerAppointment
      * @param2 target:string|Element|jQuery
      * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
      * @public
      */
-    showAppointmentTooltip(appointmentData: dxSchedulerAppointment, target: string | UserDefinedElement, currentAppointmentData?: dxSchedulerAppointment): void;
+    showAppointmentTooltip(appointmentData: Appointment, target: string | UserDefinedElement, currentAppointmentData?: Appointment): void;
     /**
      * @docid
      * @publicName updateAppointment(target, appointment)
+     * @param1 target:dxSchedulerAppointment
+     * @param2 appointment:dxSchedulerAppointment
      * @public
      */
-    updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void;
+    updateAppointment(target: Appointment, appointment: Appointment): void;
 }
 
 /**
  * @public
+ * @docid dxSchedulerAppointment
+ * @namespace DevExpress.ui
+ * @inherits CollectionWidgetItem
+ * @type object
  */
 export type Appointment = dxSchedulerAppointment;
 

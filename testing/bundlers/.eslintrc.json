@@ -1,6 +1,0 @@
-{
-    "extends": ["devextreme/spell-check"],
-    "env": {
-        "node": true
-    }
-}

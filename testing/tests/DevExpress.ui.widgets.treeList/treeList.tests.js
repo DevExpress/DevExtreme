@@ -9,11 +9,13 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $('body').append(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from 'core/devices';
 import { getOuterHeight } from 'core/utils/size';
 import fx from 'animation/fx';

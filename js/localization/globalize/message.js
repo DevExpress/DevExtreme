@@ -5,7 +5,7 @@ import Globalize from 'globalize';
 import messageLocalization from '../message';
 import coreLocalization from '../core';
 
-// eslint-disable-next-line no-restricted-imports
+// eslint-disable-next-line no-restricted-imports, import/no-unresolved
 import 'globalize/message';
 
 if(Globalize && Globalize.formatMessage) {

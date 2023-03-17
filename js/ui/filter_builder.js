@@ -6,9 +6,3 @@ export default FilterBuilder;
  * @namespace DevExpress.ui
  * @type object
  */
-
-/**
- * @name dxFilterBuilderField
- * @namespace DevExpress.ui
- * @type object
- */

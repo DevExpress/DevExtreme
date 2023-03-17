@@ -5,6 +5,7 @@ QUnit.testStart(function() {
         </div>`;
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';
@@ -18,6 +19,7 @@ import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerEvents from 'events/pointer';
 import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
 import {

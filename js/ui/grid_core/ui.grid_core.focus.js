@@ -575,11 +575,11 @@ export const focusModule = {
 
                         if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
                             this._updatePageIndexes();
-                            this.processUpdateFocusedRow(e);
+                            this._updateFocusedRow(e);
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
                         } else if(e.changeType === 'update' && e.repaintChangesOnly) {
-                            this.processUpdateFocusedRow(e);
+                            this._updateFocusedRow(e);
                         }
                     }
                 },
@@ -596,39 +596,42 @@ export const focusModule = {
                     return this._isPagingByRendering;
                 },
 
-                processUpdateFocusedRow: function(e) {
+                _updateFocusedRow: function(e) {
                     const operationTypes = e.operationTypes || {};
                     const focusController = this.getController('focus');
-                    const { reload, fullReload } = operationTypes;
+                    const { reload, fullReload, pageIndex, paging } = operationTypes;
                     const keyboardController = this.getController('keyboardNavigation');
                     // @ts-expect-error
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
+                    const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
-
-                    if(reload && !fullReload && isDefined(focusedRowKey)) {
+                    const isReload = (reload && pageIndex === false);
+                    if(isReload && !fullReload && isDefined(focusedRowKey)) {
                         // @ts-expect-error
-                        focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
-                            if(focusedRowIndex < 0) {
+                        focusController._navigateToRow(focusedRowKey, true)
+                            .done(function(focusedRowIndex) {
+                                if(focusedRowIndex < 0) {
                                 // @ts-expect-error
-                                focusController._focusRowByIndex(undefined, operationTypes);
-                            }
-                        });
-                    } else if(operationTypes.paging && !isVirtualScrolling) {
-                        if(isAutoNavigate) {
-                            const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
-                            const isValidRowIndexByKey = rowIndexByKey >= 0;
-                            const focusedRowIndex = this.option('focusedRowIndex');
-                            const needFocusRowByIndex = focusedRowIndex >= 0 && (focusedRowIndex === rowIndexByKey || !isValidRowIndexByKey);
-                            if(needFocusRowByIndex) {
-                                // @ts-expect-error
-                                focusController._focusRowByIndex(undefined, operationTypes);
-                            }
-                        } else {
-                            if(this.getRowIndexByKey(focusedRowKey) < 0) {
-                                this.option('focusedRowIndex', -1);
-                            }
+                                    focusController._focusRowByIndex(undefined, operationTypes);
+                                }
+                            });
+                    } else if(pagingWithoutVirtualScrolling && isAutoNavigate) {
+                        const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
+                        const focusedRowIndex = this.option('focusedRowIndex');
+                        const isValidRowIndexByKey = rowIndexByKey >= 0;
+                        const isValidFocusedRowIndex = focusedRowIndex >= 0;
+                        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
+                        if(isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
+                            // @ts-expect-error
+                            focusController._focusRowByIndex(focusedRowIndex, operationTypes);
                         }
+                    } else if(
+                        pagingWithoutVirtualScrolling
+                        && !isAutoNavigate
+                        && (this.getRowIndexByKey(focusedRowKey) < 0)
+                    ) {
+                        this.option('focusedRowIndex', -1);
                     } else if(operationTypes.fullReload) {
                         // @ts-expect-error
                         focusController._focusRowByKeyOrIndex();

@@ -379,44 +379,47 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr', function(assert) {
-        const lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern');
+        const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
         const element = (new this.Element(this.rendererStub, 'rect'));
+        const attr = { fill: 'red', hatching: { direction: 'left' } };
 
-        element.smartAttr({ fill: 'red', hatching: { direction: 'left' } });
+        element.smartAttr(attr);
 
-        assert.strictEqual(element._settings.fill, 'test-pattern', 'fill');
-        assert.deepEqual(lock.lastCall.args, ['red', { direction: 'left' }, undefined], 'lock');
+        assert.deepEqual(element._settings, { fill: 'test-pattern' }, 'attrs');
+        assert.deepEqual(lock.lastCall.args, [{
+            color: attr.fill, hatching: attr.hatching
+        }, undefined, 'pattern'], 'lock');
     });
 
     QUnit.test('smartAttr / no hatching', function(assert) {
-        const lock = this.rendererStub.lockHatching = sinon.spy();
+        const lock = this.rendererStub.lockDefsElements = sinon.spy();
         const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red' });
 
-        assert.strictEqual(element._settings.fill, 'red', 'fill');
+        assert.deepEqual(element._settings, { fill: 'red' }, 'attrs');
         assert.strictEqual(lock.lastCall, null, 'lock');
     });
 
     QUnit.test('smartAttr with \'none\' hatching', function(assert) {
-        const lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern');
+        const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
         const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red', hatching: { direction: 'NoNe' } });
 
-        assert.strictEqual(element._settings.fill, 'red', 'fill');
+        assert.deepEqual(element._settings, { fill: 'red' }, 'attrs');
         assert.ok(!lock.called, 'lock');
     });
 
     QUnit.test('smartAttr / no hatching and previous hatching', function(assert) {
-        const release = this.rendererStub.releaseHatching = sinon.spy();
+        const release = this.rendererStub.releaseDefsElements = sinon.spy();
         const element = (new this.Element(this.rendererStub, 'rect'));
-        this.rendererStub.lockHatching = function() { return 'test-pattern'; };
+        this.rendererStub.lockDefsElements = function() { return 'test-pattern'; };
         element.smartAttr({ fill: 'red', hatching: { direction: 'left' } });
 
         element.smartAttr({ fill: 'blue' });
 
-        assert.strictEqual(element._settings.fill, 'blue', 'fill');
+        assert.deepEqual(element._settings, { fill: 'blue' }, 'attrs');
         assert.deepEqual(release.lastCall.args, ['test-pattern'], 'release');
     });
 
@@ -424,11 +427,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const element = (new this.Element(this.rendererStub, 'rect'));
         const attrs = { fill: 'red', hatching: { direction: 'left' } };
 
-        this.rendererStub.lockHatching = function() { return 'test-pattern'; };
+        this.rendererStub.lockDefsElements = function() { return 'test-pattern'; };
 
         element.smartAttr(attrs);
 
-        assert.strictEqual(attrs.fill, 'red');
+        assert.deepEqual(attrs.fill, 'red');
         assert.strictEqual(attrs.hatching.direction, 'left');
     });
 
@@ -436,12 +439,33 @@ function checkDashStyle(assert, elem, result, style, value) {
         const element = (new this.Element(this.rendererStub, 'rect'));
         const attrs = { fill: 'red', stroke: 'green' };
 
-        this.rendererStub.lockHatching = function() { return 'test-pattern'; };
+        this.rendererStub.lockDefsElements = function() { return 'test-pattern'; };
         element.attr = sinon.spy();
 
         element.smartAttr(attrs);
 
         assert.deepEqual(element.attr.lastCall.args, [{ fill: 'red', stroke: 'green' }]);
+    });
+
+    QUnit.test('smartAttr, filter', function(assert) {
+        const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
+        const element = (new this.Element(this.rendererStub, 'rect'));
+
+        element.smartAttr({ fill: 'red', filter: true });
+
+        assert.deepEqual(element._settings, { fill: 'red', filter: 'test-pattern' }, 'attrs');
+        assert.deepEqual(lock.lastCall.args, [{}, undefined, 'filter'], 'lock');
+    });
+
+    QUnit.test('smartAttr, dispose filter', function(assert) {
+        const release = this.rendererStub.releaseDefsElements = sinon.spy();
+        this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
+        const element = (new this.Element(this.rendererStub, 'rect'));
+
+        element.smartAttr({ filter: true });
+        element.smartAttr({ filter: false });
+
+        assert.deepEqual(release.lastCall.args, ['test-pattern'], 'release');
     });
 
     QUnit.module('SvgElement markup method');

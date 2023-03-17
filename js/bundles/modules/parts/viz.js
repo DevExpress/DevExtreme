@@ -1,6 +1,7 @@
 /* eslint-disable import/no-commonjs */
 const DevExpress = require('./core');
 require('./data');
+require('../common.charts');
 
 /// BUNDLER_PARTS
 /* Viz core (dx.module-viz-core.js) */

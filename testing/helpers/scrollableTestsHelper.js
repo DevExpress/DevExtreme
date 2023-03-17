@@ -1,5 +1,5 @@
 import devices from 'core/devices';
-import { calculateScrollbarWidth } from 'ui/pivot_grid/utils/calculate_scrollbar_width';
+import { calculateScrollbarWidth } from '__internal/grids/pivot_grid/module_widget_utils';
 
 const SCROLLABLE_CONTAINER = 'dx-scrollable-container';
 const SCROLLABLE_CONTENT = 'dx-scrollable-content';

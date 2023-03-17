@@ -501,7 +501,7 @@ QUnit.test('right arrow should update \'expanded\' field of item and node', func
         keyExpr: 'key',
         items: $.extend(true, [], DATA[1])
     });
-    const treeViewInstance = $treeView.dxTreeView('instance');
+    const treeView = $treeView.dxTreeView('instance');
     const keyboard = keyboardMock($treeView);
     const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
@@ -509,8 +509,8 @@ QUnit.test('right arrow should update \'expanded\' field of item and node', func
 
     keyboard.keyDown('right');
 
-    const items = treeViewInstance.option('items');
-    const nodes = treeViewInstance.getNodes();
+    const items = treeView.option('items');
+    const nodes = treeView.getNodes();
 
     assert.ok(items[0].expanded);
     assert.ok(nodes[0].expanded);
@@ -526,7 +526,7 @@ QUnit.test('left arrow should update \'expanded\' field of item and node', funct
         keyExpr: 'key',
         items: data
     });
-    const treeViewInstance = $treeView.dxTreeView('instance');
+    const treeView = $treeView.dxTreeView('instance');
     const keyboard = keyboardMock($treeView);
     const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
@@ -534,8 +534,8 @@ QUnit.test('left arrow should update \'expanded\' field of item and node', funct
 
     keyboard.keyDown('left');
 
-    const items = treeViewInstance.option('items');
-    const nodes = treeViewInstance.getNodes();
+    const items = treeView.option('items');
+    const nodes = treeView.getNodes();
 
     assert.ok(!items[0].expanded);
     assert.ok(!nodes[0].expanded);
