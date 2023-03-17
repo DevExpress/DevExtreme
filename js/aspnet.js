@@ -60,9 +60,9 @@
                 bag.push('_.push(');
                 var expression = value;
                 if(encode) {
-                    expression = 'arguments[1]((' + value + ' !== null && ' + value + ' !== undefined) ? ' + value + ' : "")';
+                    expression = 'encodeHtml((' + value + ' !== null && ' + value + ' !== undefined) ? ' + value + ' : "")';
                     if(/^\s*$/.test(value)) {
-                        expression = 'arguments[1](' + value + ')';
+                        expression = 'encodeHtml(' + value + ')';
                     }
                 }
                 bag.push(expression);
@@ -97,7 +97,7 @@
             bag.push('}', 'return _.join(\'\')');
 
             // eslint-disable-next-line no-new-func
-            return new Function('obj', bag.join(''));
+            return new Function('obj', 'encodeHtml', bag.join(''));
         };
     }
 
