@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { sales } from '../data.js';
 import PivotGrid from '../../../model/pivotGrid';
 
-fixture.disablePageReloads`PivotGrid_fieldChooser`
+fixture`PivotGrid_fieldChooser`
   .page(url(__dirname, '../container.html'));
 
 test('Change dataFiels order with one invisible field (T1079461)', async (t) => {

@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Re-render on resize`
+fixture`Re-render on resize`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (container, options?): Promise<void> => createWidget('dxScheduler', {

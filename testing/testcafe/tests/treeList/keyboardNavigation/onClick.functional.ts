@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
 
 fixture
-  .disablePageReloads`Keyboard Navigation - focus on click`
+  `Keyboard Navigation - focus on click`
   .page(url(__dirname, '../../container.html'));
 
 // T861048

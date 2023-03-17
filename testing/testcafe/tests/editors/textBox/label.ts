@@ -12,7 +12,7 @@ import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
 import Guid from '../../../../../js/core/guid';
 
-fixture.disablePageReloads`TextBox_Label`
+fixture`TextBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 const labelModes = ['floating', 'static', 'hidden'];

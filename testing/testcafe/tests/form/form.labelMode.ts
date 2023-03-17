@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`Form`
+fixture`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
 ['left', 'right', 'top'].forEach((formLabelLocation) => {

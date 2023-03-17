@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Hide tooltip`
+fixture`Hide tooltip`
   .page(url(__dirname, '../../container.html'));
 
 test('Appointment tooltip should be hidden when drag is started', async (t) => {

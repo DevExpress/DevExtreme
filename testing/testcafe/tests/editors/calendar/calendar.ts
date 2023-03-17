@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Calendar`
+fixture`Calendar`
   .page(url(__dirname, '../../container.html'));
 
 test('Calendar with showWeekNumbers rendered correct', async (t) => {

@@ -2,7 +2,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture.disablePageReloads`Delete appointments`
+fixture`Delete appointments`
   .page(url(__dirname, '../container.html'));
 
 const createRecurrenceData = (): Record<string, unknown>[] => [{

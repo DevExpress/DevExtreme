@@ -18,7 +18,7 @@ const getVisibleColumns = (dataGrid: DataGrid): Promise<string[]> => {
 };
 const getColumnsSeparatorOffset = ClientFunction(() => $(`.${CLASS.columnsSeparator}`).offset(), { dependencies: { CLASS } });
 
-fixture.disablePageReloads`Column reordering`
+fixture`Column reordering`
   .page(url(__dirname, '../container.html'));
 
 // T975549

@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/accordion.d';
 import Accordion from '../../../model/accordion';
 
-fixture.disablePageReloads`Accordion_common`
+fixture`Accordion_common`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {

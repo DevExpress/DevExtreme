@@ -4,7 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { changeTheme } from '../../helpers/changeTheme';
 
-fixture.disablePageReloads`FilterRow`
+fixture`FilterRow`
   .page(url(__dirname, '../container.html'));
 
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {

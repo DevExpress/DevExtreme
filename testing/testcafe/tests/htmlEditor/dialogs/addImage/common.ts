@@ -5,7 +5,7 @@ import { BASE64_IMAGE_1 } from './images/base64';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 
-fixture.disablePageReloads`HtmlEditor - common`
+fixture`HtmlEditor - common`
   .page(url(__dirname, '../../../containerQuill.html'));
 
 test('Add button should be enabled after switch to url form', async (t) => {

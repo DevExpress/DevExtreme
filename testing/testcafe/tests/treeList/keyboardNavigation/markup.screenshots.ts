@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
 
 fixture
-  .disablePageReloads`Keyboard Navigation - screenshots`
+  `Keyboard Navigation - screenshots`
   .page(url(__dirname, '../../container.html'));
 
 const TREE_LIST_SELECTOR = '#container';

@@ -3,7 +3,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
+fixture`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../container.html'));
 
 ['day', 'week', 'workWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {

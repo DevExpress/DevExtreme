@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
 
 fixture
-  .disablePageReloads`Keyboard Navigation - custom buttons`
+  `Keyboard Navigation - custom buttons`
   .page(url(__dirname, '../../container.html'));
 
 const TREE_LIST_SELECTOR = '#container';

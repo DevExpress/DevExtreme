@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:Appointments:longAppointments(T1086079)`
+fixture`Layout:Appointments:longAppointments(T1086079)`
   .page(url(__dirname, '../../../container.html'));
 
 const dataSource = [{

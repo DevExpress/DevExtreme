@@ -9,7 +9,7 @@ const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
 const UPDATED_APPOINTMENT_TITLE = `${INITIAL_APPOINTMENT_TITLE}${ADDITIONAL_TITLE_TEXT}`;
 
-fixture.disablePageReloads`Appointment Editing`
+fixture`Appointment Editing`
   .page(url(__dirname, '../../container.html'));
 
 test('Should correctly update appointment if dataSource is a simple array', async (t) => {

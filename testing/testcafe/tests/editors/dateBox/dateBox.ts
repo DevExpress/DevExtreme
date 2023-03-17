@@ -4,7 +4,7 @@ import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
 import { isMaterial } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`DateBox`
+fixture`DateBox`
   .page(url(__dirname, '../../container.html'));
 
 const TIME_TO_WAIT = 1500;

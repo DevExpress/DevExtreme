@@ -5,7 +5,7 @@ import ScrollView from '../../../model/scrollView/scrollView';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
-fixture.disablePageReloads`ScrollView`
+fixture`ScrollView`
   .page(url(__dirname, '../../container.html'));
 
 [150, 300].forEach((scrollableContentSize) => {

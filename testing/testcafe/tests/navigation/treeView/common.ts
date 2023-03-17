@@ -8,7 +8,7 @@ import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
 import TreeView from '../../../model/treeView';
 
-fixture.disablePageReloads`TreeView`
+fixture`TreeView`
   .page(url(__dirname, '../../container.html'));
 
 test('TreeView: height should be calculated correctly when searchEnabled is true (T1138605)', async (t) => {

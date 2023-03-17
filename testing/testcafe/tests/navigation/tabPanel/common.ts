@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tab_panel.d';
 
-fixture.disablePageReloads`TabPanel_common`
+fixture`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
 
 test('TabPanel borders with scrolling', async (t) => {

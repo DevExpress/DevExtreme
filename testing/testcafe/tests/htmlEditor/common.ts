@@ -4,7 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`HtmlEditor`
+fixture`HtmlEditor`
   .page(url(__dirname, '../containerQuill.html'));
 
 [false, true].forEach((toolbar) => {

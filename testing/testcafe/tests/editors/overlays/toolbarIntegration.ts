@@ -7,7 +7,7 @@ import Popover from '../../../model/popover';
 import Toolbar from '../../../model/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Popup_toolbar`
+fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
 [

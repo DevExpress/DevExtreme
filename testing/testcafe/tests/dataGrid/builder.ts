@@ -9,7 +9,7 @@ const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-fixture.disablePageReloads`Filter Builder`
+fixture`Filter Builder`
   .page(url(__dirname, '../container.html'));
 
 test('Field menu should be opened on field click if window scroll exists (T852701)', async (t) => {

@@ -3,7 +3,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: ScrollToTime`
+fixture`Scheduler: ScrollToTime`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (options): Promise<void> => createWidget('dxScheduler', options);

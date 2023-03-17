@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`Drop Down Button's Popup`
+fixture`Drop Down Button's Popup`
   .page(url(__dirname, '../../container.html'));
 
 test('Popup should have correct position when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
