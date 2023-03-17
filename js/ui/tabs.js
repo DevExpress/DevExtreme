@@ -446,6 +446,10 @@ const Tabs = CollectionWidget.inherit({
             case 'badgeExpr':
                 this._invalidate();
                 break;
+            case 'focusedElement':
+                this.callBase(args);
+                this._scrollToItem(args.value);
+                break;
             default:
                 this.callBase(args);
         }
