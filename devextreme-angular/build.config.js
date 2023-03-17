@@ -26,7 +26,12 @@ module.exports = {
                         './metadata/generated'
                     ]
                 }
-            }
+            },
+            commonImports: [
+                './common/common',
+                './common/grids',
+                './common/charts',
+            ]
         },
         moduleFacadeGenerator: {
             importFrom: 'devextreme-angular-generator/dist/module.facade-generator',
