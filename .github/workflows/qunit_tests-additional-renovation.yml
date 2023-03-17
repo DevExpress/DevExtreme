@@ -64,6 +64,7 @@ jobs:
           { CONSTEL: "misc", TZ: 'PST8PDT', name: 'misc-PST8PDT' },
           { CONSTEL: "misc", TZ: 'Japan', name: 'misc-Japan' },
           { CONSTEL: "misc", TZ: 'Australia/ACT', name: 'misc-Australia' },
+          { CONSTEL: "misc", JQUERY: true, name: 'misc-jQuery' },
           { CONSTEL: "ui.editors", TZ: 'PST8PDT', name: 'ui.editors-PST8PDT' },
           { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors-Japan' },
           { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors-Australia' },
