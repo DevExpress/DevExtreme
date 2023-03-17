@@ -1,4 +1,4 @@
-const formatHelper = require('format_helper');
+import formatHelper from 'format_helper';
 const getDateFormatByTickInterval = formatHelper.getDateFormatByTickInterval;
 
 function checkDateWithFormat(date, format, expected, assert) {
