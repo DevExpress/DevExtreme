@@ -14828,41 +14828,80 @@ QUnit.module('Editing with validation', {
         });
     });
     // T1152491 - DataGrid - Cell values are not re-validated when changed via the 'editing.changes' option
+    QUnit.test('validatingController.validateCell should call the validate method of the current validator if cell value chenged (first modify using editing API)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: '' },
+            type: 'update'
+        }]);
+
+        // act
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: 'val' },
+            type: 'update'
+        }]);
+
+        const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+        this.validatingController.validateCell(validator).done(result => {
+            // assert
+            assert.strictEqual(result.status, 'valid', 'status === "valid"');
+
+            done();
+        });
+    });
     QUnit.test('validatingController.validateCell should call the validate method of the current validator if cell value chenged', function(assert) {
-            // arrange
-            const rowsView = this.rowsView;
-            const testElement = $('#container');
-            const done = assert.async();
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
 
-            rowsView.render(testElement);
+        rowsView.render(testElement);
 
-            this.applyOptions({
-                editing: {
-                    mode: 'batch'
-                },
-                columns: [{
-                    dataField: 'name',
-                    validationRules: [{ type: 'required' }]
-                }]
-            });
+        this.applyOptions({
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
 
-            this.editCell(0, 0);
-            this.cellValue(0, 0, '');
+        this.editCell(0, 0);
+        this.cellValue(0, 0, '');
 
-            // act
-            this.option('editing.changes', [{
-                key: this.getKeyByRowIndex(0),
-                data: { name: 'val' },
-                type: 'update'
-            }]);
+        // act
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: 'val' },
+            type: 'update'
+        }]);
 
-            const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
-            this.validatingController.validateCell(validator).done(result => {
-                // assert
-                assert.strictEqual(result.status, 'valid', 'status === "invalid"');
+        const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+        this.validatingController.validateCell(validator).done(result => {
+            // assert
+            assert.strictEqual(result.status, 'valid', 'status === "valid"');
 
-                done();
-            });
+            done();
+        });
     });
 
 

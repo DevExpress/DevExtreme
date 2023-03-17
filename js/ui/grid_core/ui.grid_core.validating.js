@@ -475,7 +475,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 validationResult = validator.validate();
             } else {
                 const currentCellValue = adapter.getValue();
-                if(equalByValue(currentCellValue, validationResult.value)) {
+                if(!equalByValue(currentCellValue, validationResult.value)) {
                     validationResult = validator.validate();
                 }
             }
