@@ -13,12 +13,14 @@ import Form, {
   AsyncRule,
 } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
+import Validator from 'devextreme/ui/validator';
 import 'devextreme-react/autocomplete';
 import service from './data.js';
 
 class App extends React.Component {
   constructor() {
     super();
+    this.formInstance = null;
     this.buttonOptions = {
       text: 'Register',
       type: 'success',
@@ -37,6 +39,38 @@ class App extends React.Component {
     };
     this.passwordOptions = {
       mode: 'password',
+      onValueChanged: () => {
+        const editor = this.formInstance.getEditor('ConfirmPassword');
+        if (editor.option('value')) {
+          const instance = Validator.getInstance(editor.element());
+          instance.validate();
+        }
+      },
+      buttons: [
+        {
+          name: 'password',
+          location: 'after',
+          options: {
+            icon: '../../../../images/icons/eye.png',
+            type: 'default',
+            onClick: () => this.changePasswordMode('Password'),
+          },
+        },
+      ],
+    };
+    this.confirmOptions = {
+      mode: 'password',
+      buttons: [
+        {
+          name: 'password',
+          location: 'after',
+          options: {
+            icon: '../../../../images/icons/eye.png',
+            type: 'default',
+            onClick: () => this.changePasswordMode('ConfirmPassword'),
+          },
+        },
+      ],
     };
     this.phoneEditorOptions = {
       mask: '+1 (X00) 000-0000',
@@ -55,6 +89,17 @@ class App extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.passwordComparison = this.passwordComparison.bind(this);
+    this.onInitialized = this.onInitialized.bind(this);
+    this.changePasswordMode = this.changePasswordMode.bind(this);
+  }
+
+  changePasswordMode(name) {
+    const editor = this.formInstance.getEditor(name);
+    editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
+  }
+
+  onInitialized(e) {
+    this.formInstance = e.component;
   }
 
   render() {
@@ -67,6 +112,7 @@ class App extends React.Component {
           <Form
             formData={customer}
             readOnly={false}
+            onInitialized={this.onInitialized}
             showColonAfterLabel={true}
             showValidationSummary={true}
             validationGroup="customerData"
@@ -82,7 +128,7 @@ class App extends React.Component {
               <SimpleItem dataField="Password" editorType="dxTextBox" editorOptions={this.passwordOptions}>
                 <RequiredRule message="Password is required" />
               </SimpleItem>
-              <SimpleItem editorType="dxTextBox" editorOptions={this.passwordOptions}>
+              <SimpleItem name="ConfirmPassword" editorType="dxTextBox" editorOptions={this.confirmOptions}>
                 <Label text="Confirm Password" />
                 <RequiredRule message="Confirm Password is required" />
                 <CompareRule

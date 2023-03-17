@@ -20,11 +20,15 @@
         >
         </dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="Password" [editorOptions]="{ mode: 'password' }">
+      <dxi-item dataField="Password" [editorOptions]="passwordOptions">
         <dxi-validation-rule type="required" message="Password is required">
         </dxi-validation-rule>
       </dxi-item>
-      <dxi-item editorType="dxTextBox" [editorOptions]="{ mode: 'password' }">
+      <dxi-item
+        name="ConfirmPassword"
+        editorType="dxTextBox"
+        [editorOptions]="confirmOptions"
+      >
         <dxo-label text="Confirm Password"> </dxo-label>
         <dxi-validation-rule
           type="required"

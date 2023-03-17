@@ -8,6 +8,7 @@
         <DxForm
           v-model:form-data="customer"
           :read-only="false"
+          @initialized="saveFormInstance"
           :show-colon-after-label="true"
           :show-validation-summary="true"
           validation-group="customerData"
@@ -28,7 +29,8 @@
               <DxRequiredRule message="Password is required"/>
             </DxSimpleItem>
             <DxSimpleItem
-              :editor-options="passwordOptions"
+              name="ConfirmPassword"
+              :editor-options="confirmPasswordOptions"
               editor-type="dxTextBox"
             >
               <DxLabel text="Confirm Password"/>
@@ -136,6 +138,7 @@ import DxForm, {
 import DxAutocomplete from 'devextreme-vue/autocomplete';
 
 import notify from 'devextreme/ui/notify';
+import Validator from 'devextreme/ui/validator';
 
 import service from './data.js';
 
@@ -167,6 +170,7 @@ export default {
   },
   data() {
     return {
+      formInstance: null,
       customer: service.getCustomer(),
       buttonOptions: {
         text: 'Register',
@@ -175,6 +179,38 @@ export default {
       },
       passwordOptions: {
         mode: 'password',
+        onValueChanged: () => {
+          const editor = this.formInstance.getEditor('ConfirmPassword');
+          if (editor.option('value')) {
+            const instance = Validator.getInstance(editor.element());
+            instance.validate();
+          }
+        },
+        buttons: [
+          {
+            name: 'password',
+            location: 'after',
+            options: {
+              icon: '../../../../images/icons/eye.png',
+              type: 'default',
+              onClick: () => this.changePasswordMode('Password'),
+            },
+          },
+        ],
+      },
+      confirmPasswordOptions: {
+        mode: 'password',
+        buttons: [
+          {
+            name: 'password',
+            location: 'after',
+            options: {
+              icon: '../../../../images/icons/eye.png',
+              type: 'default',
+              onClick: () => this.changePasswordMode('ConfirmPassword'),
+            },
+          },
+        ],
       },
       dateBoxOptions: {
         invalidDateMessage:
@@ -205,6 +241,16 @@ export default {
     };
   },
   methods: {
+    saveFormInstance(e) {
+      this.formInstance = e.component;
+    },
+    changePasswordMode(name) {
+      const editor = this.formInstance.getEditor(name);
+      editor.option(
+        'mode',
+        editor.option('mode') === 'text' ? 'password' : 'text',
+      );
+    },
     passwordComparison() {
       return this.customer.Password;
     },

@@ -8,6 +8,11 @@ $(() => {
     return d.promise();
   };
 
+  const changePasswordMode = function (name) {
+    const editor = formWidget.getEditor(name);
+    editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
+  };
+
   const formWidget = $('#form').dxForm({
     formData,
     readOnly: false,
@@ -36,18 +41,43 @@ $(() => {
         dataField: 'Password',
         editorOptions: {
           mode: 'password',
+          onValueChanged() {
+            const editor = formWidget.getEditor('ConfirmPassword');
+            if (editor.option('value')) {
+              editor.element().dxValidator('validate');
+            }
+          },
+          buttons: [{
+            name: 'password',
+            location: 'after',
+            options: {
+              icon: '../../../../images/icons/eye.png',
+              type: 'default',
+              onClick: () => changePasswordMode('Password'),
+            },
+          }],
         },
         validationRules: [{
           type: 'required',
           message: 'Password is required',
         }],
       }, {
+        name: 'ConfirmPassword',
         label: {
           text: 'Confirm Password',
         },
         editorType: 'dxTextBox',
         editorOptions: {
           mode: 'password',
+          buttons: [{
+            name: 'password',
+            location: 'after',
+            options: {
+              icon: '../../../../images/icons/eye.png',
+              type: 'default',
+              onClick: () => changePasswordMode('ConfirmPassword'),
+            },
+          }],
         },
         validationRules: [{
           type: 'required',
