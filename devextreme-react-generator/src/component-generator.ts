@@ -24,6 +24,7 @@ type IComponent = {
 } & {
   nestedComponents?: INestedComponent[];
   configComponentPath?: string;
+  containsReexports?: boolean
 };
 
 interface INestedComponent {
@@ -167,6 +168,7 @@ const renderModule: (model: {
   renderedNestedComponents?: string[];
   defaultExport: string;
   renderedExports: string;
+  renderedReExports?: string;
 }) => string = createTempate(
   '<#= it.renderedImports #>\n'
 
@@ -186,7 +188,10 @@ const renderModule: (model: {
 + `export {
 <#= it.renderedExports #>
 };
-`,
+`
++ '<#? it.renderedReExports #>'
+    + '<#= it.renderedReExports #>\n\n'
++ '<#?#>',
 );
 
 const renderImports: (model: {
@@ -402,6 +407,11 @@ function renderExports(exportsNames: string[]) {
     .join(',\n');
 }
 
+function renderReExports(componentName: string, exportPath: string) {
+  return `import type * as ${componentName}Types from '${exportPath}_types';\n`
+  + `export { ${componentName}Types };`;
+}
+
 function formatTemplatePropName(name: string, suffix: string): string {
   return lowercaseFirst(name.replace(/template$/i, suffix));
 }
@@ -441,7 +451,7 @@ function createPropTypingModel(typing: IPropTyping): IRenderedPropTyping {
   };
 }
 
-function generate(component: IComponent): string {
+function generate(component: IComponent, generateReexports = false): string {
   const nestedComponents = component.nestedComponents
     ? component.nestedComponents
       .sort(createKeyComparator<INestedComponent>((o) => o.className))
@@ -549,6 +559,8 @@ function generate(component: IComponent): string {
       .map((t) => renderPropTyping(createPropTypingModel(t)))
     : undefined;
 
+  const hasExplicitTypes = !!component.optionsTypeParams?.length;
+
   return renderModule({
 
     renderedImports: renderImports({
@@ -561,7 +573,7 @@ function generate(component: IComponent): string {
       optionsAliasName: hasExtraOptions ? undefined : optionsName,
       hasExtraOptions,
       hasPropTypings: isNotEmptyArray(renderedPropTypings),
-      hasExplicitTypes: !!component.optionsTypeParams?.length,
+      hasExplicitTypes,
       configComponentPath: isNotEmptyArray(nestedComponents)
         ? component.configComponentPath
         : undefined,
@@ -598,6 +610,9 @@ function generate(component: IComponent): string {
 
     defaultExport: component.name,
     renderedExports: renderExports(exportNames),
+    renderedReExports: generateReexports && component.containsReexports
+      ? renderReExports(component.name, component.dxExportPath)
+      : undefined,
   });
 }
 
