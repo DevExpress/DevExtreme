@@ -1,8 +1,8 @@
 import $ from 'jquery';
-import testing from './utils.js';
+import * as testing from './utils.js';
 import Map from 'ui/map';
 import GoogleStaticProvider from 'ui/map/provider.google_static';
-import ajaxMock from '../../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../../helpers/ajaxMock.js';
 
 const MARKERS = testing.MARKERS;
 const ROUTES = testing.ROUTES;
