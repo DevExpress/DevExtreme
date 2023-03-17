@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import { ScrollBar } from 'viz/chart_components/scroll_bar';
-import translator2DModule from 'viz/translators/translator2d';
+import * as translator2DModule from 'viz/translators/translator2d';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
 

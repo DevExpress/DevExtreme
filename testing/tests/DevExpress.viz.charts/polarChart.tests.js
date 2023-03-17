@@ -1,29 +1,30 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const mock = require('../../helpers/mockModule.js').mock;
-const { ChartTracker } = require('viz/chart_components/tracker');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import { mock } from '../../helpers/mockModule.js';
+import { ChartTracker } from 'viz/chart_components/tracker';
+import * as chartThemeManagerModule from 'viz/components/chart_theme_manager';
+import * as legendModule from 'viz/components/legend';
+import * as seriesModule from 'viz/series/base_series';
+import * as seriesFamilyModule from 'viz/core/series_family';
+import * as axisModule from 'viz/axes/base_axis';
+import dxPolarChart from 'viz/polar_chart';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import * as dataValidatorModule from 'viz/components/data_validator';
+import * as rangeModule from 'viz/translators/range';
+import * as tooltipModule from 'viz/core/tooltip';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import * as exportModule from 'viz/core/export';
+
+const Series = seriesModule.Series;
 const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
 const trackerModule = mock('viz/chart_components/tracker', {
     ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
 });
-const chartThemeManagerModule = require('viz/components/chart_theme_manager');
-const legendModule = require('viz/components/legend');
-const seriesModule = require('viz/series/base_series');
-const Series = seriesModule.Series;
-const seriesFamilyModule = require('viz/core/series_family');
-const axisModule = require('viz/axes/base_axis');
-const dxPolarChart = require('viz/polar_chart');
-const rendererModule = require('viz/core/renderers/renderer');
-const dataValidatorModule = require('viz/components/data_validator');
-const rangeModule = require('viz/translators/range');
-const tooltipModule = require('viz/core/tooltip');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
+const stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 const stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip);
 const stubRange = sinon.createStubInstance(rangeModule.Range);
 const stubSeriesFamily = createStubSeriesFamily();
 const stubThemeManager = createStubThemeManager();
-const exportModule = require('viz/core/export');
-const stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
@@ -42,16 +43,16 @@ legendModule.Legend = sinon.spy(function(parameters) {
 });
 
 
-function stubExport() {
-    const that = this;
-    that.export = new vizMocks.ExportMenu();
-    that.export.stub('measure').returns([0, 0]);
-    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
-        return that.export;
-    }));
-}
-
-stubExport();
+// function stubExport() {
+//     const that = this;
+//     that.export = new vizMocks.ExportMenu();
+//     that.export.stub('measure').returns([0, 0]);
+//     exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
+//         return that.export;
+//     }));
+// }
+//
+// stubExport();
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {

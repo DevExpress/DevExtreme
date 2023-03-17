@@ -1,24 +1,25 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const seriesModule = require('viz/series/base_series');
-const pointModule = require('viz/series/points/base_point');
-const axisModule = require('viz/axes/base_axis');
-const titleModule = require('viz/core/title');
-const dataValidatorModule = require('viz/components/data_validator');
-const legendModule = require('viz/components/legend');
-const errors = require('core/errors.js');
-const rangeModule = require('viz/translators/range');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as seriesModule from 'viz/series/base_series';
+import * as pointModule from 'viz/series/points/base_point';
+import * as axisModule from 'viz/axes/base_axis';
+import * as titleModule from 'viz/core/title';
+import * as dataValidatorModule from 'viz/components/data_validator';
+import * as legendModule from 'viz/components/legend';
+import errors from 'core/errors.js';
+import * as rangeModule from 'viz/translators/range';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import { DataSource } from 'data/data_source/data_source';
+
 const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
 const Legend = vizMocks.Legend;
 const ChartTitle = vizMocks.Title;
 const Axis = vizMocks.stubClass(axisModule.Axis);
 const Range = vizMocks.stubClass(rangeModule.Range);
-const DataSource = require('data/data_source/data_source').DataSource;
 const DataSourceMock = vizMocks.stubClass(DataSource);
 
-require('viz/chart');
+import 'viz/chart';
 
 const environment = {
     beforeEach: function() {
