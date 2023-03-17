@@ -2042,7 +2042,7 @@ declare module DevExpress.common.charts {
   export function registerPattern(options: {
     width: number | string;
     height: number | string;
-    template: DevExpress.core.template;
+    template: (container: SVGGElement) => void;
   }): string;
   export type RelativePosition = 'inside' | 'outside';
   /**
