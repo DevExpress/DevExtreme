@@ -171,7 +171,7 @@ jobs:
 
     - name: Clone devextreme-angular repo
       run: |
-        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+        test -d ../devextreme-angular-repo || git clone -b 22.2 https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
