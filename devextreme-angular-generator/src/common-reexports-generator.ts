@@ -5,7 +5,7 @@ import { createTemplateFromString } from './dot-generator';
 const render: (model: { module: string, reexports: string[] }) => string = createTemplateFromString(`
 export {<#~ it.reexports :reExport #>
     <#= reExport #>,<#~#>
-} from "devextreme/<#= it.module #>";
+} from 'devextreme/<#= it.module #>';
 `.trimLeft());
 
 export default class CommonReexportsGenerator {

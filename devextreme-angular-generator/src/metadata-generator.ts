@@ -125,6 +125,10 @@ export class FSObjectStore implements IObjectStore {
     }
 }
 
+interface Reexports {
+    renderReexports?: boolean;
+}
+
 export default class DXComponentMetadataGenerator {
     constructor(private _store?: IObjectStore) {
         if (!this._store) {
@@ -226,7 +230,9 @@ export default class DXComponentMetadataGenerator {
                     return result;
                 }, []);
 
-            const widgetMetadata: WidgetComponent & File = {
+            const containsReexports = !!widget.Reexports?.filter((r) => r !== 'default').length;
+
+            const widgetMetadata: WidgetComponent & File & Reexports = {
                 docID: widget.DocID,
                 isDeprecated: widget.IsDeprecated,
                 className: className,
@@ -243,6 +249,7 @@ export default class DXComponentMetadataGenerator {
                 imports: buildImports(getValues(widget.Options), config.widgetPackageName),
                 nestedComponents: widgetNestedComponents,
                 optionsTypeParams: widget.OptionsTypeParams,
+                renderReexports: config.generateReexports && containsReexports,
             };
 
             logger('Write metadata to file ' + outputFilePath);
@@ -563,10 +570,10 @@ export default class DXComponentMetadataGenerator {
 
                 return result;
             }, [])
-            .forEach(componet => {
+            .forEach(component => {
                 let outputFilePath = path.join(config.outputFolderPath,
-                    config.nestedPathPart, config.basePathPart, componet.path + '.json');
-                this._store.write(outputFilePath, normalizeMeta(componet));
+                    config.nestedPathPart, config.basePathPart, component.path + '.json');
+                this._store.write(outputFilePath, normalizeMeta(component));
             });
 
         interface NestedComponentFile {
@@ -596,15 +603,15 @@ export default class DXComponentMetadataGenerator {
 
                 return component;
             })
-            .forEach(componet => {
-                let outputFilePath = path.join(config.outputFolderPath, config.nestedPathPart, componet.path + '.json');
-                this._store.write(outputFilePath, normalizeMeta(componet));
+            .forEach(component => {
+                let outputFilePath = path.join(config.outputFolderPath, config.nestedPathPart, component.path + '.json');
+                this._store.write(outputFilePath, normalizeMeta(component));
             });
     }
 }
 
-function normalizeMeta(meta: Container & File): Container & File {
-    const result: Container & File = {
+function normalizeMeta(meta: Container & File & Reexports): Container & File & Reexports {
+    const result: Container & File & Reexports = {
         ...meta,
         properties: meta.properties && meta.properties.map(({option, ...rest}) => ({ ...rest })),
         events: meta.events && meta.events.map(({option, ...rest}) => ({ ...rest }))
@@ -614,6 +621,6 @@ function normalizeMeta(meta: Container & File): Container & File {
         result.imports = undefined;
         delete result.imports;
     }
-
+    logger(result);
     return result;
 }

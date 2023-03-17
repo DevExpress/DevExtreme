@@ -8,7 +8,8 @@ module.exports = {
             nestedPathPart: 'nested',
             basePathPart: 'base',
             widgetPackageName: "devextreme",
-            wrapperPackageName: 'devextreme-angular'
+            wrapperPackageName: 'devextreme-angular',
+            generateReexports: true,
         },
         componentGenerator: {
             importFrom: 'devextreme-angular-generator/dist/dot-generator',
