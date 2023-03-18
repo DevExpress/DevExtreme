@@ -164,12 +164,12 @@ export const HeaderFilterView = modules.View.inherit({
         const useDefaultSearchExpr = options.useDefaultSearchExpr;
         const headerFilterDataSource = headerFilterOptions.dataSource;
 
-        if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
-            return DEFAULT_SEARCH_EXPRESSION;
-        }
-
         if(headerFilterOptions.search.searchExpr) {
             return headerFilterOptions.search.searchExpr;
+        }
+
+        if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
+            return DEFAULT_SEARCH_EXPRESSION;
         }
 
         if(lookup) {
