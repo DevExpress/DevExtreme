@@ -26,6 +26,7 @@ import {
     Mode,
     FieldChooserLayout,
     ScrollMode,
+    SearchMode,
 } from '../common';
 
 import {
@@ -303,8 +304,14 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        * @default false
+       * @deprecated
        */
       allowSearch?: boolean;
+      /**
+       * @docid
+       * @default true
+       */
+      allowSelectAll?: boolean;
       /**
        * @docid
        * @default 325
@@ -312,7 +319,33 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       height?: number;
       /**
        * @docid
+       */
+      search?: {
+        /**
+         * @docid
+         * @default false
+         */
+        enabled?: boolean;
+        /**
+         * @docid
+         * @default {}
+         */
+        editorOptions?: any;
+        /**
+         * @docid
+         * @default 'contains'
+         */
+        mode?: SearchMode;
+        /**
+         * @docid
+         * @default 500
+         */
+        timeout?: number;
+      };
+      /**
+       * @docid
        * @default 500
+       * @deprecated
        */
       searchTimeout?: number;
       /**

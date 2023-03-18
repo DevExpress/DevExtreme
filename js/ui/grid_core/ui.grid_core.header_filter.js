@@ -192,6 +192,9 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
         },
 
         getDataSource: function(column) {
+            /*
+            columnElement, column, applyFilter, apply, type, remoteFiltering, onShowing, onHidden
+            */
             const dataSource = this._dataController.dataSource();
             const remoteGrouping = dataSource?.remoteOperations().grouping;
             const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
@@ -510,8 +513,13 @@ export const headerFilterModule = {
                 visible: false,
                 width: 252,
                 height: 325,
-                allowSearch: false,
-                searchTimeout: 500,
+                allowSelectAll: true,
+                search: {
+                    enabled: false,
+                    timeout: 500,
+                    mode: 'contains',
+                    editorOptions: {},
+                },
                 texts: {
                     emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
                     ok: messageLocalization.format('dxDataGrid-headerFilterOK'),

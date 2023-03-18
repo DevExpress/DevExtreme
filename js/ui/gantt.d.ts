@@ -39,6 +39,7 @@ import {
 
 import {
     FirstDayOfWeek,
+    SearchMode,
     SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
@@ -1388,8 +1389,14 @@ export interface dxGanttHeaderFilter {
     /**
      * @docid
      * @default false
+     * @deprecated
      */
     allowSearch?: boolean;
+    /**
+     * @docid
+     * @default true
+     */
+    allowSelectAll?: boolean;
     /**
      * @docid
      * @default 315 &for(Material)
@@ -1398,11 +1405,18 @@ export interface dxGanttHeaderFilter {
     height?: number;
     /**
      * @docid
+     * @type object
+     */
+    search?: dxGanttHeaderFilterSearch;
+    /**
+     * @docid
      * @default 500
+     * @deprecated
      */
     searchTimeout?: number;
     /**
      * @docid
+     * @type object
      */
     texts?: dxGanttHeaderFilterTexts;
     /**
@@ -1415,6 +1429,34 @@ export interface dxGanttHeaderFilter {
      * @default 252
      */
     width?: number;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxGanttHeaderFilterSearch {
+      /**
+     * @docid
+     * @default {}
+     */
+    editorOptions?: any;
+    /**
+     * @docid
+     * @default false
+     */
+    enabled?: boolean;
+    /**
+     * @docid
+     * @default 'contains'
+     */
+    mode?: SearchMode;
+    /**
+     * @docid
+     * @default 500
+     */
+    timeout?: number;
 }
 
 /**

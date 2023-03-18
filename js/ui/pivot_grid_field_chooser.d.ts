@@ -14,7 +14,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    FieldChooserLayout,
+    FieldChooserLayout, SearchMode,
 } from '../common';
 
 import {
@@ -84,8 +84,14 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
       /**
        * @docid
        * @default undefined
+       * @deprecated
        */
       allowSearch?: boolean;
+      /**
+       * @docid
+       * @default true
+       */
+      allowSelectAll?: boolean;
       /**
        * @docid
        * @default 325
@@ -93,7 +99,33 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
       height?: number;
       /**
        * @docid
+       */
+      search?: {
+        /**
+         * @docid
+         * @default false
+         */
+        enabled?: boolean;
+        /**
+         * @docid
+         * @default {}
+         */
+        editorOptions?: any;
+        /**
+         * @docid
+         * @default 'contains'
+         */
+        mode?: SearchMode;
+        /**
+         * @docid
+         * @default 500
+         */
+        timeout?: number;
+      };
+      /**
+       * @docid
        * @default 500
+       * @deprecated
        */
       searchTimeout?: number;
       /**

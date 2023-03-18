@@ -209,9 +209,14 @@ const PivotGrid = (Widget as any).inherit({
       headerFilter: {
         width: 252,
         height: 325,
-        allowSearch: false,
+        allowSelectAll: true,
         showRelevantValues: false,
-        searchTimeout: 500,
+        search: {
+          enabled: false,
+          timeout: 500,
+          editorOptions: {},
+          mode: 'contains'
+        },
         texts: {
           emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),
           ok: localizationMessage.format('dxDataGrid-headerFilterOK'),
