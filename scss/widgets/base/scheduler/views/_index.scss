@@ -620,10 +620,6 @@ $scheduler-month-date-text-padding: 6px;
   table-layout: fixed;
 }
 
-.dx-scheduler-date-table-cell { // stylelint-disable-line no-duplicate-selectors
-  height: $scheduler-workspace-date-table-cell-height;
-}
-
 // stylelint-disable-next-line no-duplicate-selectors
 .dx-scheduler-all-day-table-cell,
 .dx-scheduler-date-table-cell {
@@ -731,7 +727,7 @@ $scheduler-month-date-text-padding: 6px;
   }
 
   .dx-scheduler-all-day-table-row { // TODO !
-    height: $scheduler-workspace-date-table-cell-height;
+    height: $scheduler-workspace-date-table-cell-height; // 50px
   }
 
   .dx-scheduler-time-panel-cell {
