@@ -269,7 +269,6 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-date-table-cell {
   border-top: $scheduler-base-border;
-  height: $scheduler-workspace-date-table-cell-height;
 }
 
 .dx-scheduler-date-table-cell,
@@ -731,8 +730,8 @@ $scheduler-month-date-text-padding: 6px;
     position: relative;
   }
 
-  .dx-scheduler-all-day-table-row {
-    height: 50px;
+  .dx-scheduler-all-day-table-row { // TODO !
+    height: $scheduler-workspace-date-table-cell-height;
   }
 
   .dx-scheduler-time-panel-cell {
