@@ -37,7 +37,9 @@
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-text-color: $agenda-appointment-text-color,
-  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
+  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size,
+
+  $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height // TODO !
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;

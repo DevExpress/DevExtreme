@@ -36,7 +36,8 @@ $scheduler-small-font-size: 14px;
 
 $scheduler-current-time-cell-border-size: 2px;
 
-$scheduler-workspace-date-table-cell-height: 50px;
+// $scheduler-workspace-date-table-cell-height: 50px;
+$scheduler-workspace-date-table-cell-height: null !default; // TODO
 $scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5;
 $scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
 $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
@@ -713,10 +714,10 @@ $scheduler-month-date-text-padding: 6px;
   &.dx-scheduler-work-space-day,
   &.dx-scheduler-work-space-week,
   &.dx-scheduler-work-space-work-week {
-    .dx-scheduler-all-day-title {
+    .dx-scheduler-all-day-title { // TODO !
       top: 0;
-      height: 50px !important; // stylelint-disable-line declaration-no-important
-      line-height: 50px !important; // stylelint-disable-line declaration-no-important
+      height: $scheduler-workspace-date-table-cell-height;
+      line-height: $scheduler-workspace-date-table-cell-height;
       border-bottom: none;
     }
   }

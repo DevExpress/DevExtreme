@@ -3,6 +3,7 @@
 
 // adduse
 
+$scheduler-workspace-date-table-cell-height: null !default; // TODO
 $generic-scheduler-workspace-date-table-cell-height: null !default;
 $generic-scheduler-timeline-date-table-cell-height: null !default;
 $generic-scheduler-header-panel-top-gap: null !default;
@@ -30,6 +31,7 @@ $generic-scheduler-navigator-border-radius: $button-border-radius !default;
 $generic-scheduler-group-header-agenda-font-size: 14px !default;
 
 @if $size == "default" {
+  $scheduler-workspace-date-table-cell-height: 50px !default; // TODO
   $generic-scheduler-workspace-date-table-cell-height: 50px !default;
   $generic-scheduler-timeline-date-table-cell-height: 75px !default;
 
@@ -61,6 +63,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
 }
 
 @else if $size == "compact" {
+  $scheduler-workspace-date-table-cell-height: 36px !default; // TODO
   $generic-scheduler-workspace-date-table-cell-height: 36px !default;
   $generic-scheduler-timeline-date-table-cell-height: 50px !default;
 

@@ -4,6 +4,7 @@
 
 // adduse
 
+$scheduler-workspace-date-table-cell-height: null !default; // TODO
 $material-scheduler-workspace-date-table-cell-height: null !default;
 $material-scheduler-toolbar-item-offset: null !default;
 $material-scheduler-navigator-height: null !default;
@@ -48,6 +49,7 @@ $scheduler-timeline-cell-height: 50px !default;
 
 
 @if $size == "default" {
+  $scheduler-workspace-date-table-cell-height: 38px !default; // TODO
   $material-scheduler-workspace-date-table-cell-height: 38px !default;
 
   $material-scheduler-toolbar-item-offset: 0 16px !default;
@@ -75,6 +77,7 @@ $scheduler-timeline-cell-height: 50px !default;
 }
 
 @else if $size == "compact" {
+  $scheduler-workspace-date-table-cell-height: 28px !default; // TODO
   $material-scheduler-workspace-date-table-cell-height: 28px !default;
 
   $material-scheduler-toolbar-item-offset: 0 11px !default;

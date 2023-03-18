@@ -22,6 +22,8 @@ $scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-timeline-cell-height: null !default;
 
+$scheduler-workspace-date-table-cell-height: null !default; // TODO
+
 $scheduler-appointment-overlay-bg: null !default;
 $agenda-appointment-hover-bg: null !default;
 $agenda-appointment-active-bg: null !default;
@@ -143,6 +145,8 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
 
   $scheduler-panel-text-color: $scheduler-panel-text-color,
+
+  $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height
 );
 
 @function calculate-small-left-column-size($size) {
