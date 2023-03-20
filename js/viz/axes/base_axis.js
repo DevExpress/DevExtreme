@@ -1526,7 +1526,7 @@ Axis.prototype = {
 
                 let start = min;
                 let end = max;
-                if(!useAllAggregatedPoints) {
+                if(!useAllAggregatedPoints && isDefined(tickInterval)) {
                     const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
                     start = add(min, maxMinDistance, -1);
                     end = add(max, maxMinDistance);
