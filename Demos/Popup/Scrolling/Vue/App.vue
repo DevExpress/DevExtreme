@@ -25,6 +25,7 @@
       :width="360"
       :height="320"
       :hide-on-outside-click="true"
+      :show-close-button="true"
       title="Downtown Inn"
     >
       <template #content>
@@ -64,11 +65,12 @@
     </DxPopup>
 
     <DxPopup
-      v-model:visible="popupScrollViewVisible"
+      v-model:visible="popupWithScrollViewVisible"
       :width="360"
       :height="320"
       :visible="false"
       :hide-on-outside-click="true"
+      :show-close-button="true"
       title="Downtown Inn"
     >
       <template #content>
@@ -126,14 +128,15 @@ export default {
   data() {
     return {
       popupVisible: false,
-      popupScrollViewVisible: false,
+      popupWithScrollViewVisible: false,
       bookButtonOptions: {
         width: 300,
         text: 'Book',
         type: 'default',
+        stylingMode: 'contained',
         onClick: () => {
           this.popupVisible = false;
-          this.popupScrollViewVisible = false;
+          this.popupWithScrollViewVisible = false;
         },
       },
     };
@@ -143,7 +146,7 @@ export default {
       this.popupVisible = true;
     },
     showPopupWithScrollView() {
-      this.popupScrollViewVisible = true;
+      this.popupWithScrollViewVisible = true;
     },
   },
 };

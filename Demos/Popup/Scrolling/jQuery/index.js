@@ -23,6 +23,7 @@ $(() => {
       visible: false,
       title: 'Downtown Inn',
       hideOnOutsideClick: true,
+      showCloseButton: true,
       toolbarItems: [
         {
           widget: 'dxButton',
@@ -32,6 +33,7 @@ $(() => {
             width: 300,
             text: 'Book',
             type: 'default',
+            stylingMode: 'contained',
             onClick() {
               popup.hide();
             },
@@ -48,6 +50,7 @@ $(() => {
       visible: false,
       title: 'Downtown Inn',
       hideOnOutsideClick: true,
+      showCloseButton: true,
       toolbarItems: [
         {
           widget: 'dxButton',
@@ -57,6 +60,7 @@ $(() => {
             width: 300,
             text: 'Book',
             type: 'default',
+            stylingMode: 'contained',
             onClick() {
               popupWithScrollView.hide();
             },

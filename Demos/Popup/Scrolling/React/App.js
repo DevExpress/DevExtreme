@@ -6,25 +6,26 @@ import ScrollView from 'devextreme-react/scroll-view';
 
 export default function App() {
   const [popupVisible, setPopupVisible] = React.useState(false);
-  const [popupScrollViewVisible, setPopupScrollViewVisible] = React.useState(false);
+  const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = React.useState(false);
 
   const showPopup = React.useCallback(() => {
     setPopupVisible(true);
   }, [setPopupVisible]);
 
   const showPopupWithScrollView = React.useCallback(() => {
-    setPopupScrollViewVisible(true);
-  }, [setPopupScrollViewVisible]);
+    setPopupWithScrollViewVisible(true);
+  }, [setPopupWithScrollViewVisible]);
 
   const hide = React.useCallback(() => {
     setPopupVisible(false);
-    setPopupScrollViewVisible(false);
-  }, [setPopupVisible, setPopupScrollViewVisible]);
+    setPopupWithScrollViewVisible(false);
+  }, [setPopupVisible, setPopupWithScrollViewVisible]);
 
   const bookButtonOptions = React.useMemo(() => ({
     width: 300,
     text: 'Book',
     type: 'default',
+    stylingMode: 'contained',
     onClick: hide,
   }));
 
@@ -57,6 +58,7 @@ export default function App() {
         visible={popupVisible}
         onHiding={hide}
         hideOnOutsideClick={true}
+        showCloseButton={true}
         title="Downtown Inn">
         <div className="popup-content">
           <div className="caption">Description</div>
@@ -95,9 +97,10 @@ export default function App() {
       <Popup
         width={360}
         height={320}
-        visible={popupScrollViewVisible}
+        visible={popupWithScrollViewVisible}
         onHiding={hide}
         hideOnOutsideClick={true}
+        showCloseButton={true}
         title="Downtown Inn">
         <ScrollView width='100%' height='100%'>
           <div className="caption">Description</div>

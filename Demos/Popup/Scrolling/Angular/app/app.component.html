@@ -25,6 +25,7 @@
   [width]="360"
   [height]="320"
   [hideOnOutsideClick]="true"
+  [showCloseButton]="true"
   [(visible)]="popupVisible"
   title="Downtown Inn"
 >
@@ -69,7 +70,8 @@
   [width]="360"
   [height]="320"
   [hideOnOutsideClick]="true"
-  [(visible)]="popupScrollViewVisible"
+  [showCloseButton]="true"
+  [(visible)]="popupWithScrollViewVisible"
   title="Downtown Inn"
 >
   <div *dxTemplate="let data of 'content'">
