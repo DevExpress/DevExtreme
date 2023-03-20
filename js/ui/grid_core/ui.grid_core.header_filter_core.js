@@ -367,15 +367,37 @@ export const HeaderFilterView = modules.View.inherit({
             }
         };
 
-        const columnDeprecated = {
+        const specificDeprecated = {
             search: {
-                mode: specificHeaderFilter.searchMode,
                 enabled: specificHeaderFilter.allowSearch,
+                mode: specificHeaderFilter.searchMode,
                 timeout: specificHeaderFilter.searchTimeout
             }
         };
 
-        return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, columnDeprecated);
+        if(isDefined(generalDeprecated.allowSearch)) {
+            this.component._logDeprecatedOptionWarning('headerFilter.allowSearch', { alias: 'headerFilter.search.enabled', since: '23.1' });
+        }
+
+        if(isDefined(generalDeprecated.searchTimeout)) {
+            this.component._logDeprecatedOptionWarning('headerFilter.searchTimeout', { alias: 'headerFilter.search.timeout', since: '23.1' });
+        }
+
+        const prefix = options.column ? 'columns' : 'dataSource.fields';
+
+        if(isDefined(specificHeaderFilter.allowSearch)) {
+            this.component._logDeprecatedOptionWarning(`${prefix}[].headerFilter.allowSearch`, { alias: `${prefix}[].headerFilter.search.enabled`, since: '23.1' });
+        }
+
+        if(isDefined(specificHeaderFilter.searchMode)) {
+            this.component._logDeprecatedOptionWarning(`${prefix}[].headerFilter.searchMode`, { alias: `${prefix}[].headerFilter.search.mode`, since: '23.1' });
+        }
+
+        if(isDefined(specificHeaderFilter.searchTimeout)) {
+            this.component._logDeprecatedOptionWarning(`${prefix}[].headerFilter.searchTimeout`, { alias: `${prefix}[].headerFilter.search.timeout`, since: '23.1' });
+        }
+
+        return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
     },
 
     _renderCore: function() {
