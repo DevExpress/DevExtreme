@@ -1197,7 +1197,7 @@ QUnit.test('Groups are added to the corresponding elements', function(assert) {
     assert.equal(label._group.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test('Label should be moved', function(assert) {
+QUnit.test('shift method call should move a label on specified delta', function(assert) {
     const label = this.createLabel();
     const shifts = { x: 10, y: 10 };
 
