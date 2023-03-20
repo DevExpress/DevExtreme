@@ -25764,7 +25764,7 @@ declare module DevExpress.viz {
     /**
      * [descr:baseLabelObject.shift(x, y)]
      */
-    shift(x: number, y: number): any;
+    shift(x: number, y: number): baseLabelObject;
     /**
      * [descr:baseLabelObject.hide()]
      */
