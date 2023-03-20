@@ -1,5 +1,4 @@
 {
-
   "compilerOptions": {
     "baseUrl": "../",
     "outDir": "./build",
@@ -34,7 +33,16 @@
     //"useUnknownInCatchVariables": true,
     //"noImplicitOverride": true,
     "paths": {
-      "@js/*": ["./*"]
+      "@core-utils/*": ["./__internal/core/utils/*"],
+      "@js/*": ["./*"],
     },
   },
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true,
+    "fileExtensions": {
+      "inputGlob": "js,ts",
+      "outputCheck": ["js", "ts"]
+    }
+  }
 }
