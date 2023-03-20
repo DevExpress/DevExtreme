@@ -1996,6 +1996,10 @@ QUnit.module('events', moduleSetup, () => {
     });
 
     QUnit.test('onClick for item should be fired on \'enter\' key pressed', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
         const $element = this.element.dxList({
             items:[{
                 text: 'item 1',
