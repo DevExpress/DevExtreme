@@ -10622,7 +10622,7 @@ QUnit.module('Refresh modes', {
             allowUpdating: true,
             allowDeleting: true
         });
-        
+
         this.options.columns = [
             {
                 type: 'buttons',
@@ -10643,16 +10643,16 @@ QUnit.module('Refresh modes', {
         this.setupModules();
         this.cellValue(0, 'state', 'active');
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
-        
+
         // assert
         assert.equal($linkElements.length, 2);
         assert.ok($linkElements.eq(0).hasClass('dx-icon-active-icon'), 'the edit link');
         assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
         assert.notOk($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is enabled');
-        
+
         // act
         this.cellValue(0, 'state', 'disabled');
-        
+
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
         assert.equal($linkElements.length, 2);
@@ -10665,7 +10665,7 @@ QUnit.module('Refresh modes', {
     QUnit.test('Changing command column if repaintChangesOnly is true and push API is used', function(assert) {
         // arrange
         let $linkElements;
-        
+
         this.options.columns = [
             {
                 type: 'buttons',
@@ -10691,14 +10691,14 @@ QUnit.module('Refresh modes', {
 
         // act
         this.setupModules();
-        
+
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
         assert.equal($linkElements.length, 2);
         assert.ok($linkElements.eq(0).hasClass('dx-icon-active-icon'), 'the edit link');
         assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
         assert.notOk($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is enabled');
-        
+
         // act
         this.options.dataSource.store().push([
             {
@@ -10708,7 +10708,7 @@ QUnit.module('Refresh modes', {
             }
         ]);
         this.clock.tick();
-        
+
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
         assert.equal($linkElements.length, 2);
@@ -14827,6 +14827,83 @@ QUnit.module('Editing with validation', {
             done();
         });
     });
+    // T1152491 - DataGrid - Cell values are not re-validated when changed via the 'editing.changes' option
+    QUnit.test('validatingController.validateCell should call the validate method of the current validator if cell value chenged (first modify using editing API)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: '' },
+            type: 'update'
+        }]);
+
+        // act
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: 'val' },
+            type: 'update'
+        }]);
+
+        const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+        this.validatingController.validateCell(validator).done(result => {
+            // assert
+            assert.strictEqual(result.status, 'valid', 'status === "valid"');
+
+            done();
+        });
+    });
+    QUnit.test('validatingController.validateCell should call the validate method of the current validator if cell value chenged', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        this.editCell(0, 0);
+        this.cellValue(0, 0, '');
+
+        // act
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: 'val' },
+            type: 'update'
+        }]);
+
+        const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+        this.validatingController.validateCell(validator).done(result => {
+            // assert
+            assert.strictEqual(result.status, 'valid', 'status === "valid"');
+
+            done();
+        });
+    });
+
 
     QUnit.test('validatingController - validation result should be cached', function(assert) {
         // arrange
