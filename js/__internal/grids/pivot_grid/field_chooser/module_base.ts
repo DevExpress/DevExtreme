@@ -101,7 +101,7 @@ const FieldChooserBase = (Widget as any)
             enabled: false,
             timeout: 500,
             editorOptions: {},
-            mode: 'contains'
+            mode: 'contains',
           },
           texts: {
             emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),

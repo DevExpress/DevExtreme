@@ -215,7 +215,7 @@ const PivotGrid = (Widget as any).inherit({
           enabled: false,
           timeout: 500,
           editorOptions: {},
-          mode: 'contains'
+          mode: 'contains',
         },
         texts: {
           emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),
