@@ -1995,6 +1995,24 @@ QUnit.module('events', moduleSetup, () => {
         assert.strictEqual(actionData.itemIndex.group, 1, 'correct groupIndex passed');
     });
 
+    QUnit.test('onClick for item should be fired on \'enter\' key pressed', function(assert) {
+        const $element = this.element.dxList({
+            items:[{
+                text: 'item 1',
+                onClick: () => {
+                    assert.ok('onClick was fired');
+                }
+              }
+            ]
+        });
+
+        const $item = $element.find(toSelector(LIST_ITEM_CLASS));
+
+        $item.trigger('dxpointerdown');
+        this.clock.tick();
+        keyboardMock($element).keyDown('enter');
+    });
+    
     QUnit.test('onItemHold should be fired when item is held', function(assert) {
         let actionFired;
         let actionData;
