@@ -192,9 +192,6 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
         },
 
         getDataSource: function(column) {
-            /*
-            columnElement, column, applyFilter, apply, type, remoteFiltering, onShowing, onHidden
-            */
             const dataSource = this._dataController.dataSource();
             const remoteGrouping = dataSource?.remoteOperations().grouping;
             const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
