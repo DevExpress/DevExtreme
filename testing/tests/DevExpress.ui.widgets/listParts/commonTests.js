@@ -1995,7 +1995,7 @@ QUnit.module('events', moduleSetup, () => {
         assert.strictEqual(actionData.itemIndex.group, 1, 'correct groupIndex passed');
     });
 
-    QUnit.test('onClick for item should be fired on \'enter\' key pressed', function(assert) {
+    QUnit.test('item onClick handler should be fired on "enter" key press', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -2006,8 +2006,7 @@ QUnit.module('events', moduleSetup, () => {
                 onClick: () => {
                     assert.ok('onClick was fired');
                 }
-              }
-            ]
+            }]
         });
 
         const $item = $element.find(toSelector(LIST_ITEM_CLASS));

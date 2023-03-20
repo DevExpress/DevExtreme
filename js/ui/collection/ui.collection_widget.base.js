@@ -62,7 +62,7 @@ const CollectionWidget = Widget.inherit({
             }
 
             const itemData = this._getItemData($itemElement);
-            if(itemData && itemData.onClick) {
+            if(itemData?.onClick) {
                 this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                     event: e
                 });
