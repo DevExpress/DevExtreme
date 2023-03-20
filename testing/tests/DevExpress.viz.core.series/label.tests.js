@@ -1186,13 +1186,19 @@ QUnit.module('Layouted label', $.extend({}, environment, {
 
 QUnit.test('simple shift', function(assert) {
     const label = this.createLabel();
-    label.show();
+    const bBox = label.getBoundingRect();
+    const shifts = { x: 10, y: 10 }
 
-    label.shift(10, 10);
+    label.show();
+    label.shift(shifts.x, shifts.y);
 
     const innerGroup = label._insideGroup;
+
     assert.ok(innerGroup);
-    assert.deepEqual(innerGroup._stored_settings, { translateX: 10 - 1, translateY: 10 - 2 });
+    assert.deepEqual(innerGroup._stored_settings, {
+        translateX: shifts.x - bBox.x,
+        translateY: shifts.y - bBox.y,
+    }, 'label has been moved correctly');
     assert.equal(label._insideGroup.stub('append').lastCall.args[0], label._group);
     assert.equal(label._group.stub('append').lastCall.args[0], this.group);
 });
