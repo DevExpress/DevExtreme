@@ -42,7 +42,6 @@ const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
 const VIEW_ANIMATION_DURATION = 350;
-const VIEWS_GAP = 32;
 
 const ACTIVE_STATE_CLASS = 'dx-state-active';
 
@@ -537,7 +536,7 @@ QUnit.module('Views initial positions', {
         }
     });
 
-    QUnit.test('calendar views position', function(assert) {
+    QUnit.test('calendar views position (views = 1)', function(assert) {
         const $view = $(getCurrentViewInstance(this.instance).$element());
         const viewWidth = $view.width();
 
@@ -546,7 +545,20 @@ QUnit.module('Views initial positions', {
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, viewWidth, 'main view is at the right');
     });
 
-    QUnit.test('calendar views position in RTL', function(assert) {
+    QUnit.test('calendar views position (views = 2)', function(assert) {
+        this.reinit({
+            views: 2
+        });
+        const $view = $(getCurrentViewInstance(this.instance).$element());
+        const viewWidth = $view.width();
+
+        assert.equal($view.position().left, 0, 'main view is at 0');
+        assert.equal(getAdditionalViewInstance(this.instance).$element().position().left, viewWidth);
+        assert.equal(getBeforeViewInstance(this.instance).$element().position().left, -viewWidth,);
+        assert.equal(getAfterViewInstance(this.instance).$element().position().left, 2 * viewWidth);
+    });
+
+    QUnit.test('calendar views position (views = 1; rtlEnabled)', function(assert) {
         this.reinit({ rtlEnabled: true });
 
         const $view = $(getCurrentViewInstance(this.instance).$element());
@@ -555,6 +567,20 @@ QUnit.module('Views initial positions', {
         assert.equal($view.position().left, 0, 'main view is at 0');
         assert.equal(getBeforeViewInstance(this.instance).$element().position().left, viewWidth, 'main view is at the left');
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, -viewWidth, 'main view is at the right');
+    });
+
+    QUnit.test('calendar views position (views = 2; rtlEnabled)', function(assert) {
+        this.reinit({
+            views: 2,
+            rtlEnabled: true
+        });
+        const $view = $(getCurrentViewInstance(this.instance).$element());
+        const viewWidth = $view.width();
+
+        assert.equal($view.position().left, viewWidth);
+        assert.equal(getAdditionalViewInstance(this.instance).$element().position().left, 0);
+        assert.equal(getBeforeViewInstance(this.instance).$element().position().left, 2 * viewWidth,);
+        assert.equal(getAfterViewInstance(this.instance).$element().position().left, -viewWidth);
     });
 });
 
@@ -2182,27 +2208,6 @@ QUnit.module('Options', {
             this.viewWidth = this.calendar._viewWidth();
         }
     }, () => {
-        QUnit.test('additionalView should be moved to the right by viewWidth + views gap', function(assert) {
-            const transform = this.calendar._additionalView.$element().css('transform');
-            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
-
-            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
-        });
-
-        QUnit.test('beforeView should be moved to the left by viewWidth + views gap', function(assert) {
-            const transform = this.calendar._beforeView.$element().css('transform');
-            const translateX = -transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
-
-            assert.strictEqual(translateX, this.viewWidth + VIEWS_GAP);
-        });
-
-        QUnit.test('afterView should be moved to the right by 2 * (viewWidth + views gap)', function(assert) {
-            const transform = this.calendar._afterView.$element().css('transform');
-            const translateX = +transform.replace(/[^0-9\-.,]/g, '').split(',')[4];
-
-            assert.strictEqual(translateX, 2 * (this.viewWidth + VIEWS_GAP));
-        });
-
         QUnit.test('Click on date in additinal view should not trigger views movement', function(assert) {
             let $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
 
@@ -2235,6 +2240,48 @@ QUnit.module('Options', {
 
             assert.strictEqual(viewContouredDate, null);
             assert.deepEqual(additionalViewContouredDate, new Date('2023/02/01'));
+        });
+
+        [
+            {
+                offset: 2,
+                button: 'next',
+                focusedView: 'main'
+            },
+            {
+                offset: 1,
+                button: 'next',
+                focusedView: 'additional'
+            },
+            {
+                offset: -1,
+                button: 'previous',
+                focusedView: 'main'
+            },
+            {
+                offset: -2,
+                button: 'previous',
+                focusedView: 'additional'
+            },
+        ].forEach(({ offset, button, focusedView }) => {
+            QUnit.test(`Click on ${button} month button should change currentDate on ${offset} months if ${focusedView} view is focused`, function(assert) {
+                if(focusedView === 'additional') {
+                    const $additionalViewCell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+                    $additionalViewCell.trigger('dxclick');
+                }
+
+                const currentDate = this.calendar.option('currentDate');
+                const navigatorButtonClass = button === 'next' ? CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS : CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS;
+                const $navigatorButton = this.$element.find(toSelector(navigatorButtonClass));
+
+                $navigatorButton.trigger('dxclick');
+
+                const newCurrentDate = this.calendar.option('currentDate');
+                const expectedCurrentDate = new Date(currentDate.setMonth(currentDate.getMonth() + offset));
+
+                assert.deepEqual(newCurrentDate, expectedCurrentDate);
+            });
         });
     });
 });
@@ -4121,6 +4168,19 @@ QUnit.module('Aria accessibility', {
 
         $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
+    });
+
+    QUnit.test('aria-selected on selected date cells on both views when views option equals 2', function(assert) {
+        const calendar = this.$element.dxCalendar({
+            value: '01/31/2015',
+            views: 2
+        }).dxCalendar('instance');
+
+        let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the main view cell');
+
+        $cell = $(getAdditionalViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the additional view cell');
     });
 
     ['multi', 'range'].forEach((selectionMode) => {

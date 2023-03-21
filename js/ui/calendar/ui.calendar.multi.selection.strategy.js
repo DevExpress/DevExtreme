@@ -24,6 +24,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
             values.push(selectedValue);
         }
 
+        this.skipNavigate();
         this._updateCurrentDate(selectedValue);
         this._currentDateChanged = true;
         this.dateValue(values, e);

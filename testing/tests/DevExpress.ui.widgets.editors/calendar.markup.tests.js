@@ -16,7 +16,7 @@ const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
 const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
-const VIEWS_GAP = 32;
+const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 
 const toSelector = function(className) {
     return '.' + className;
@@ -61,12 +61,14 @@ QUnit.module('Calendar markup', {
         beforeEach: function() {
             this.calendar.option('views', 2);
             this.viewWidth = this.calendar._viewWidth();
+            this.getViews = () => this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
         }
     }, () => {
-        QUnit.test('calendar should have inline width equals to two views width plus views gap', function(assert) {
+        QUnit.test('calendar should have inline width equals  views * view width', function(assert) {
+            const viewWidth = this.calendar._viewWidth();
             const elementWidth = this.$element[0].style.width;
 
-            assert.strictEqual(elementWidth, `${this.viewWidth * 2 + VIEWS_GAP}px`);
+            assert.strictEqual(elementWidth, `${viewWidth * 2}px`);
         });
 
         QUnit.test('calendar should not have inline width after multiview runtime disable', function(assert) {
@@ -75,6 +77,12 @@ QUnit.module('Calendar markup', {
             const elementWidth = this.$element[0].style.width;
 
             assert.strictEqual(elementWidth, '');
+        });
+
+        QUnit.test('views should have multiview class', function(assert) {
+            this.getViews().each((_, element) => {
+                assert.ok($(element).hasClass(CALENDAR_MULTIVIEW_CLASS),);
+            });
         });
     });
 
@@ -168,6 +176,15 @@ QUnit.module('Navigator', {
         this.calendar.option('views', 2);
         const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
         assert.equal(navigatorCaption.text(), 'June 2015 - July 2015');
+    });
+
+    QUnit.test('Calendar with two views and rtlEnabled should display 2 months in reverse order', function(assert) {
+        this.calendar.option({
+            views: 2,
+            rtlEnabled: true
+        });
+        const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+        assert.equal(navigatorCaption.text(), 'July 2015 - June 2015');
     });
 });
 

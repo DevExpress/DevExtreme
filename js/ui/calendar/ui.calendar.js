@@ -35,12 +35,12 @@ const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
+const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
 const POP_ANIMATION_FROM = 0.6;
 const POP_ANIMATION_TO = 1;
-const VIEWS_GAP = 32;
 
 const CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd';
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
@@ -336,6 +336,7 @@ const Calendar = Editor.inherit({
         if(this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
             this._waitRenderView(offset > 0 ? 1 : -1);
         } else {
+            this._skipNavigate = true;
             this.option('currentDate', currentDate);
         }
     },
@@ -520,25 +521,46 @@ const Calendar = Editor.inherit({
         if(offset !== 0 && !this._isMaxZoomLevel() && this._isOtherViewCellClicked) { offset = 0; }
 
         if(this._view && offset !== 0 && !this._suppressNavigation) {
-            if(this._additionalView && offset === 1 && !this._shouldNavigate) {
-                this._setViewContoured(normalizedDate, true);
+            if(this._additionalView) {
+                if(offset > 2 || offset < -1) {
+                    this._refreshViews();
+                    this._renderNavigator();
+                }
+
+                if(offset === 1 && this._skipNavigate) {
+                    this._setViewContoured(normalizedDate);
+                    this._updateAriaId(normalizedDate);
+                } else {
+                    this._navigate(offset, normalizedDate);
+                }
             } else {
                 this._navigate(offset, normalizedDate);
             }
-            this._shouldNavigate = false;
         } else {
             this._renderNavigator();
             this._setViewContoured(normalizedDate);
             this._updateAriaId(normalizedDate);
         }
+        this._skipNavigate = false;
     },
 
-    _setViewContoured: function(date, isAdditionalView) {
-        const viewToSet = isAdditionalView ? this._additionalView : this._view;
-        const viewToDisable = isAdditionalView ? this._view : this._additionalView;
+    _isAdditionalViewDate(date) {
+        const view = this._additionalView;
+        return view && dateUtils.sameMonthAndYear(date, view.option('date'));
+    },
+
+    _getActiveView: function(date) {
+        return this._isAdditionalViewDate(date) ? this._additionalView : this._view;
+    },
+
+    _setViewContoured: function(date) {
         if(this.option('skipFocusCheck') || elementHasFocus(this._focusTarget())) {
-            viewToSet.option('contouredDate', date);
-            viewToDisable?.option('contouredDate', null);
+            this._view.option('contouredDate', null);
+            this._additionalView?.option('contouredDate', null);
+
+            const view = this._isAdditionalViewDate(date) ? this._additionalView : this._view;
+
+            view.option('contouredDate', date);
         }
     },
 
@@ -690,11 +712,11 @@ const Calendar = Editor.inherit({
             this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
         }
 
-        if(views !== 1) {
+        if(views > 1) {
             this._additionalView = this._renderSpecificView(this._getDateByOffset(1, currentDate));
 
             const viewWidth = this._viewWidth();
-            const elementWidth = viewWidth * views + VIEWS_GAP * (views - 1);
+            const elementWidth = viewWidth * views;
 
             this.$element().css('width', elementWidth);
         }
@@ -710,7 +732,7 @@ const Calendar = Editor.inherit({
         const view = this._createComponent($view, specificView, config);
 
         if(this.option('views') !== 1) {
-            view.$element().css('width', this._viewWidth());
+            $view.addClass(CALENDAR_MULTIVIEW_CLASS);
         }
 
         return view;
@@ -759,25 +781,21 @@ const Calendar = Editor.inherit({
 
     _translateViews: function() {
         const views = this.option('views');
-        const viewWidth = this._viewWidth();
-        const beforeViewLeft = views === 1 ? this._getViewPosition(-1) : -viewWidth - VIEWS_GAP;
-        const afterViewLeft = views === 1 ? this._getViewPosition(1) : views * (viewWidth + VIEWS_GAP);
-        const additionalViewLeft = viewWidth + VIEWS_GAP;
 
-        move(this._view.$element(), { left: 0, top: 0 });
+        move(this._view.$element(), { left: 0, top: 0 }); // 0
 
         this._beforeView && move(this._beforeView.$element(), {
-            left: beforeViewLeft,
+            left: this._getViewPosition(-1),
             top: 0
         });
 
         this._afterView && move(this._afterView.$element(), {
-            left: afterViewLeft,
+            left: this._getViewPosition(views),
             top: 0
         });
 
         this._additionalView && move(this._additionalView.$element(), {
-            left: additionalViewLeft,
+            left: this._getViewPosition(1),
             top: 0
         });
     },
@@ -858,12 +876,7 @@ const Calendar = Editor.inherit({
             this._navigator = new Navigator($('<div>'), this._navigatorConfig());
         }
 
-        let caption = this._view.getNavigatorCaption();
-
-        if(this.option('views') !== 1) {
-            caption += ` - ${this._additionalView.getNavigatorCaption()}`;
-        }
-        this._navigator.option('text', caption);
+        this._navigator.option('text', this._getViewsCaption(this._view, this._additionalView));
         this._updateButtonsVisibility();
     },
 
@@ -877,10 +890,20 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorClickHandler: function(e) {
-        const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
+        const { currentDate, views } = this.option();
+        let offset = e.direction;
 
-        this._shouldNavigate = true;
-        this._moveToClosestAvailableDate(currentDate);
+        if(views > 1) {
+            const additionalViewActive = this._isAdditionalViewDate(currentDate);
+            const shouldDoubleOffset = additionalViewActive && offset < 0 || !additionalViewActive && offset > 0;
+
+            if(shouldDoubleOffset) {
+                offset *= 2;
+            }
+        }
+
+        const newCurrentDate = this._getDateByOffset(offset, currentDate);
+        this._moveToClosestAvailableDate(newCurrentDate);
     },
 
     _navigateUp: function() {
@@ -926,9 +949,10 @@ const Calendar = Editor.inherit({
 
     _swipeStartHandler: function(e) {
         fx.stop(this._$viewsWrapper, true);
+        const views = this.option('views');
 
-        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 : 0;
-        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 : 0;
+        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / views : 0;
+        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / views : 0;
     },
 
     _getRequiredView: function(name) {
@@ -952,15 +976,22 @@ const Calendar = Editor.inherit({
     },
 
     _swipeEndHandler: function(e) {
+        const { views, currentDate, rtlEnabled } = this.option();
         const targetOffset = e.event.targetOffset;
         const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
+
+        const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
+        const shouldDoubleOffset = views > 1 && rtlEnabled
+            ? isAdditionalViewActive && moveOffset === -1
+            : isAdditionalViewActive && moveOffset === 1;
 
         if(moveOffset === 0) {
             this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
             return;
         }
 
-        let date = this._getDateByOffset(-moveOffset * this._getRtlCorrection());
+        const offset = -moveOffset * this._getRtlCorrection() * (shouldDoubleOffset ? 2 : 1);
+        let date = this._getDateByOffset(offset);
 
         if(this._isDateInInvalidRange(date)) {
             if(moveOffset >= 0) {
@@ -969,7 +1000,6 @@ const Calendar = Editor.inherit({
                 date = new Date(this._getMaxDate());
             }
         }
-        this._shouldNavigate = true;
         this.option('currentDate', date);
     },
 
@@ -983,23 +1013,37 @@ const Calendar = Editor.inherit({
 
     _updateNavigatorCaption: function(offset) {
         offset *= this._getRtlCorrection();
-        const views = this.option('views');
+        const isMultiView = this.option('views') > 1;
 
-        let text;
+        let view;
+        let additionalView;
 
         if(offset > 0.5 && this._beforeView) {
-            text = this._beforeView.getNavigatorCaption();
-            text += views === 1 ? '' : ` - ${this._view.getNavigatorCaption()}`;
-
+            view = this._beforeView;
+            additionalView = isMultiView && this._view;
         } else if(offset < -0.5 && this._afterView) {
-            text = views === 1 ? '' : `${this._additionalView.getNavigatorCaption()} - `;
-            text += this._afterView.getNavigatorCaption();
+            view = isMultiView ? this._additionalView : this._afterView;
+            additionalView = isMultiView ? this._afterView : null;
         } else {
-            text = this._view.getNavigatorCaption();
-            text += views === 1 ? '' : ` - ${this._additionalView.getNavigatorCaption()}`;
+            view = this._view;
+            additionalView = isMultiView ? this._additionalView : null;
         }
 
-        this._navigator.option('text', text);
+        this._navigator.option('text', this._getViewsCaption(view, additionalView));
+    },
+
+    _getViewsCaption: function(view, additionalView) {
+        let caption = view.getNavigatorCaption();
+        const { views, rtlEnabled } = this.option();
+
+        if(views !== 1 && additionalView) {
+            const additionalViewCaption = additionalView.getNavigatorCaption();
+            caption = rtlEnabled
+                ? `${additionalViewCaption} - ${caption}`
+                : `${caption} - ${additionalViewCaption}`;
+        }
+
+        return caption;
     },
 
     _isDateInInvalidRange: function(date) {
@@ -1057,7 +1101,12 @@ const Calendar = Editor.inherit({
 
     _animateShowView: function() {
         fx.stop(this._view.$element(), true);
-        return this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW).promise();
+        this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+
+        if(this.option('views') > 1) {
+            fx.stop(this._additionalView.$element(), true);
+            this._popAnimationView(this._additionalView, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+        }
     },
 
     _popAnimationView: function(view, from, to, duration) {
@@ -1092,8 +1141,7 @@ const Calendar = Editor.inherit({
 
         const rtlCorrection = this._getRtlCorrection();
         const offsetSign = offset > 0 ? 1 : offset < 0 ? -1 : 0;
-        const viewWidth = this._viewWidth() + (this.option('views') !== 1 ? VIEWS_GAP : 0);
-        const endPosition = -rtlCorrection * offsetSign * viewWidth;
+        const endPosition = -rtlCorrection * offsetSign * this._viewWidth();
 
         const viewsWrapperPosition = this._$viewsWrapper.position().left;
 
@@ -1245,8 +1293,7 @@ const Calendar = Editor.inherit({
 
     _focusInHandler: function() {
         this.callBase.apply(this, arguments);
-        this._view.option('contouredDate', this.option('currentDate'));
-        this._additionalView?.option('contouredDate', this.option('currentDate'));
+        this._setViewContoured(this.option('currentDate'));
     },
 
     _focusOutHandler: function() {
@@ -1276,7 +1323,8 @@ const Calendar = Editor.inherit({
         value = value ?? this.option('currentDate');
 
         const ariaId = 'dx-' + new Guid();
-        const $newCell = this._view._getCellByDate(value);
+        const view = this._getActiveView(value);
+        const $newCell = view._getCellByDate(value);
 
         this.setAria('id', ariaId, $newCell);
         this.setAria('activedescendant', ariaId);
