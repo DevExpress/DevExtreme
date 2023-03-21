@@ -59,7 +59,8 @@ test('Image url should be validate before wil be inserted by add enter press', a
       paste: true,
     })
     .pressKey('enter');
-
+  
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'editor-add-validated-url-image-by-enter.png', { element: htmlEditor.content });
 
   await t.expect(compareResults.isValid())
@@ -91,6 +92,7 @@ test('Image url should be updated', async (t) => {
     })
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'editor-add-url-image-before-updated.png', { element: htmlEditor.content });
 
   await t
@@ -106,6 +108,7 @@ test('Image url should be updated', async (t) => {
     })
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'editor-add-url-image-after-updated.png', { element: htmlEditor.content });
 
   await t.expect(compareResults.isValid())
