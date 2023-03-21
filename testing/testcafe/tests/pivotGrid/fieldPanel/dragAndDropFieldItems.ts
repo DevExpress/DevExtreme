@@ -20,14 +20,17 @@ test('Field panel items markup in the middle of the drag-n-drop', async (t) => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await t.drag(columnFirstAction, 30, 30, DRAG_MOUSE_OPTIONS);
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'field-panel_column-action_dnd.png', { element: pivotGrid.element });
   await t.dispatchEvent(columnFirstAction, 'mouseup');
 
   await t.drag(rowFirstAction, 30, 30, DRAG_MOUSE_OPTIONS);
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'field-panel_row-action_dnd.png', { element: pivotGrid.element });
   await t.dispatchEvent(columnFirstAction, 'mouseup');
 
   await t.drag(dataFirstAction, 30, 30, DRAG_MOUSE_OPTIONS);
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'field-panel_data-action_dnd.png', { element: pivotGrid.element });
   await t.dispatchEvent(columnFirstAction, 'mouseup');
 

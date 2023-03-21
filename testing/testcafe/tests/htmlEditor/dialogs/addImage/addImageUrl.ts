@@ -25,7 +25,8 @@ test('Image url should be validate before wil be inserted by add button click', 
       paste: true,
     })
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
-
+    
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'add-validated-url-image-by-click.png', { element: htmlEditor.content });
 
   await t.expect(compareResults.isValid())
