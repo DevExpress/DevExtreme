@@ -125,6 +125,11 @@ export default class BaseMaskStrategy {
 
     _pasteHandler(event) {
         const { editor } = this;
+
+        if(editor.option('disabled')) {
+            return;
+        }
+
         this._keyPressHandled = true;
         const caret = this.editorCaret();
 
