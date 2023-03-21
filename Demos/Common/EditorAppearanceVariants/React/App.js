@@ -165,6 +165,7 @@ class App extends React.Component {
           <div className="option">
             <label>Styling Mode</label>
             <SelectBox
+              stylingMode={this.state.stylingMode}
               items={stylingModes}
               value={this.state.stylingMode}
               onValueChanged={this.stylingModeChange}
@@ -173,6 +174,7 @@ class App extends React.Component {
           <div className="option">
             <label>Label Mode</label>
             <SelectBox
+              stylingMode={this.state.stylingMode}
               items={labelModes}
               value={this.state.labelMode}
               onValueChanged={this.labelModeChange}

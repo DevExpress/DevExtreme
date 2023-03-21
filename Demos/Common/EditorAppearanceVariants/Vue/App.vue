@@ -124,6 +124,7 @@
       <div class="option">
         <label>Styling Mode</label>
         <DxSelectBox
+          :styling-mode="stylingMode"
           :items="[ 'outlined', 'filled', 'underlined' ]"
           v-model:value="stylingMode"
         />
@@ -131,6 +132,7 @@
       <div class="option">
         <label>Label Mode</label>
         <DxSelectBox
+          :styling-mode="stylingMode"
           :items="[ 'static', 'floating', 'hidden' ]"
           v-model:value="labelMode"
         />

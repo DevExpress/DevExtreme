@@ -124,6 +124,7 @@
     <dx-select-box
       [items]="['outlined', 'filled', 'underlined']"
       [(value)]="stylingMode"
+      [stylingMode]="stylingMode"
     ></dx-select-box>
   </div>
   <div class="option">
@@ -131,6 +132,7 @@
     <dx-select-box
       [items]="['floating', 'static', 'hidden']"
       [(value)]="labelMode"
+      [stylingMode]="stylingMode"
     ></dx-select-box>
   </div>
 </div>
