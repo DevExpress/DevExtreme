@@ -93,5 +93,5 @@ test('Calendar with multiview rendered correct', async (t) => {
 }).before(async () => createWidget('dxCalendar', {
   values: [new Date(2023, 0, 5), new Date(2023, 1, 14)],
   selectionMode: 'range',
-  views: 2,
+  viewsCount: 2,
 }));
