@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import PivotGrid from '../../../model/pivotGrid';
 
-fixture.disablePageReloads`PivotGrid_fieldChooser`
+fixture`PivotGrid_fieldChooser`
   .page(url(__dirname, '../../container.html'));
 
 test('Should call \'onExporting\' when export button clicked', async (t) => {
