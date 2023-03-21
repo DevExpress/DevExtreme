@@ -13,29 +13,32 @@ test('Start and end dates should be reflect the current day(appointment is alrea
   await t
     .click(scheduler.getAppointment('Text').element)
     .click(scheduler.appointmentTooltip.getListItem('Text').element)
-
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('appointment-form-before-click-all-day.png'))
     .ok();
 
   await t
     .click(scheduler.appointmentPopup.allDayElement)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('appointment-form-after-click-all-day.png'))
     .ok();
 
   await t
     .click(scheduler.appointmentPopup.doneButton)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('all-day-appointment-on-tables.png'))
     .ok();
 
   await t
     .click(scheduler.getAppointment('Text').element)
     .click(scheduler.appointmentTooltip.getListItem('Text').element)
-
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('appointment-form-after-render-on-table.png'))
     .ok();
 
   await t
     .click(scheduler.appointmentPopup.allDayElement)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('appointment-form-after-switch-off-all-day.png'))
     .ok();
 
@@ -62,28 +65,32 @@ test('Start and end dates should be reflect the current day(create new appointme
 
   await t
     .doubleClick(scheduler.getDateTableCell(2, 3))
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('new-appointment-form-before-click-all-day.png'))
     .ok();
 
   await t
     .click(scheduler.appointmentPopup.allDayElement)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('new-appointment-form-after-click-all-day.png'))
     .ok();
 
   await t
     .click(scheduler.appointmentPopup.doneButton)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('new-all-day-appointment-on-tables.png'))
     .ok();
 
   await t
     .click(scheduler.getAppointment('').element)
     .click(scheduler.appointmentTooltip.getListItem('').element)
-
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('new-appointment-form-after-render-on-table.png'))
     .ok();
 
   await t
     .click(scheduler.appointmentPopup.allDayElement)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('new-appointment-form-after-switch-off-all-day.png'))
     .ok();
 

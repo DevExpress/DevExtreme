@@ -14,7 +14,7 @@ test('Appointment key should be deleted when removing an appointment from series
   await t
     .doubleClick(scheduler.getAppointmentByIndex(1).element)
     .click(scheduler.appointmentPopup.doneButton)
-
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('exclude-appointment-from-series-via-form-editing.png', scheduler.workSpace))
     .ok()
 

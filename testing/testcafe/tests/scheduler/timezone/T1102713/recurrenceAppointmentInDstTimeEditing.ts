@@ -68,7 +68,7 @@ async function dragAndDropTestFunction(
 
   const appointmentDialog = new AppointmentDialog();
   await t.click(appointmentDialog.series);
-
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -94,7 +94,7 @@ async function resizeTestFunction(
 
   const appointmentDialog = new AppointmentDialog();
   await t.click(appointmentDialog.series);
-
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
