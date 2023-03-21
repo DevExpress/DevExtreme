@@ -33,7 +33,6 @@
     //"useUnknownInCatchVariables": true,
     //"noImplicitOverride": true,
     "paths": {
-      "@dom_utils/*": ["./__internal/dom_utils/*"],
       "@js/*": ["./*"],
     },
   },
