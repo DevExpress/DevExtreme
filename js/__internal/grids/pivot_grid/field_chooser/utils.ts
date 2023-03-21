@@ -1,7 +1,7 @@
-import { SortOrder } from './const';
+import { SORT_ORDER, SortOrderType } from './const';
 
 export const reverseSortOrder = (
-  sortOrder: SortOrder,
-): SortOrder => (sortOrder === SortOrder.descending
-  ? SortOrder.ascending
-  : SortOrder.descending);
+  sortOrder: SortOrderType,
+): SortOrderType => (sortOrder === SORT_ORDER.descending
+  ? SORT_ORDER.ascending
+  : SORT_ORDER.descending);

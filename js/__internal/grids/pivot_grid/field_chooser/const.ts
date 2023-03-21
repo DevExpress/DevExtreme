@@ -2,7 +2,7 @@ export const ATTRIBUTES = {
   treeViewItem: 'tree-view-item',
   allowScrolling: 'allow-scrolling',
   itemGroup: 'item-group',
-};
+} as const;
 
 export const CLASSES = {
   area: {
@@ -41,21 +41,22 @@ export const CLASSES = {
   headerFilter: 'dx-header-filter',
   row: 'dx-row',
   widget: 'dx-widget',
-};
+} as const;
 
 export const ICONS = {
   measure: 'measure',
   hierarchy: 'hierarchy',
   dimension: 'dimension',
-};
+} as const;
 
 export const SORTABLE_CONST = {
   targets: {
     drag: 'drag',
   },
-};
+} as const;
 
-export enum SortOrder {
-  descending = 'desc',
-  ascending = 'asc',
-}
+export const SORT_ORDER = {
+  descending: 'desc',
+  ascending: 'asc',
+} as const;
+export type SortOrderType = typeof SORT_ORDER[keyof typeof SORT_ORDER];

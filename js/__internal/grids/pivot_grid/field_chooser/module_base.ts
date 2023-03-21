@@ -102,6 +102,7 @@ const FieldChooserBase = (Widget as any)
             cancel: localizationMessage.format('dxDataGrid-headerFilterCancel'),
           },
         },
+        // NOTE: private option added in fix of the T1150523 ticket.
         remoteSort: false,
       });
     },
