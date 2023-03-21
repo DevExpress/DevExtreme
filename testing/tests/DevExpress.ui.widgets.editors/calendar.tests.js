@@ -536,7 +536,7 @@ QUnit.module('Views initial positions', {
         }
     });
 
-    QUnit.test('calendar views position (views = 1)', function(assert) {
+    QUnit.test('calendar views position (viewsCount = 1)', function(assert) {
         const $view = $(getCurrentViewInstance(this.instance).$element());
         const viewWidth = $view.width();
 
@@ -545,9 +545,9 @@ QUnit.module('Views initial positions', {
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, viewWidth, 'main view is at the right');
     });
 
-    QUnit.test('calendar views position (views = 2)', function(assert) {
+    QUnit.test('calendar views position (viewsCount = 2)', function(assert) {
         this.reinit({
-            views: 2
+            viewsCount: 2
         });
         const $view = $(getCurrentViewInstance(this.instance).$element());
         const viewWidth = $view.width();
@@ -558,7 +558,7 @@ QUnit.module('Views initial positions', {
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, 2 * viewWidth);
     });
 
-    QUnit.test('calendar views position (views = 1; rtlEnabled)', function(assert) {
+    QUnit.test('calendar views position (viewsCount = 1; rtlEnabled)', function(assert) {
         this.reinit({ rtlEnabled: true });
 
         const $view = $(getCurrentViewInstance(this.instance).$element());
@@ -569,9 +569,9 @@ QUnit.module('Views initial positions', {
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, -viewWidth, 'main view is at the right');
     });
 
-    QUnit.test('calendar views position (views = 2; rtlEnabled)', function(assert) {
+    QUnit.test('calendar views position (viewsCount = 2; rtlEnabled)', function(assert) {
         this.reinit({
-            views: 2,
+            viewsCount: 2,
             rtlEnabled: true
         });
         const $view = $(getCurrentViewInstance(this.instance).$element());
@@ -2197,13 +2197,13 @@ QUnit.module('Options', {
         });
     });
 
-    QUnit.module('Views', {
+    QUnit.module('ViewsCount', {
         beforeEach: function() {
             this.reinit({
                 focusStateEnabled: true,
                 values: [new Date('01/15/2023'), new Date('02/05/2023')],
                 selectionMode: 'range',
-                views: 2,
+                viewsCount: 2,
             });
             this.viewWidth = this.calendar._viewWidth();
         }
@@ -4170,10 +4170,10 @@ QUnit.module('Aria accessibility', {
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
     });
 
-    QUnit.test('aria-selected on selected date cells on both views when views option equals 2', function(assert) {
+    QUnit.test('aria-selected on selected date cells on both views when viewsCount option equals 2', function(assert) {
         const calendar = this.$element.dxCalendar({
             value: '01/31/2015',
-            views: 2
+            viewsCount: 2
         }).dxCalendar('instance');
 
         let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
