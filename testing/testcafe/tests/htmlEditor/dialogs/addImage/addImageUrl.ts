@@ -55,9 +55,7 @@ test('Image url should be validate before wil be inserted by add enter press', a
     .eql(true);
 
   await t
-    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
-      paste: true,
-    })
+    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1)
     .pressKey('enter');
   
   await t.hover('body', { offsetX: 0, offsetY: 0 });
