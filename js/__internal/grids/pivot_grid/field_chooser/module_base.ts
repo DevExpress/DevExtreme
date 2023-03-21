@@ -18,6 +18,7 @@ import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
 import { Deferred } from '@js/core/utils/deferred';
 
+import { reverseSortOrder } from './utils';
 import { foreachTree, createPath } from '../module_widget_utils';
 import { Sortable } from '../sortable/module';
 
@@ -101,6 +102,7 @@ const FieldChooserBase = (Widget as any)
             cancel: localizationMessage.format('dxDataGrid-headerFilterCancel'),
           },
         },
+        remoteSort: false,
       });
     },
 
@@ -126,6 +128,7 @@ const FieldChooserBase = (Widget as any)
           this._refreshDataSource();
           break;
         case 'applyChangesMode':
+        case 'remoteSort':
           break;
         case 'state':
           if (this._skipStateChange || !this._dataSource) {
@@ -312,6 +315,13 @@ const FieldChooserBase = (Widget as any)
       });
     },
 
+    _applyLocalSortChanges(fieldIdx, sortOrder): void {
+      this._processDemandState((dataSource) => {
+        dataSource.field(fieldIdx, { sortOrder });
+        dataSource.sortLocal();
+      });
+    },
+
     _adjustSortableOnChangedArgs(e) {
       e.removeSourceElement = false;
       e.removeTargetElement = true;
@@ -386,9 +396,14 @@ const FieldChooserBase = (Widget as any)
             },
           }));
         } else if (field.allowSorting && field.area !== 'data') {
-          that._applyChanges([field], {
-            sortOrder: field.sortOrder === 'desc' ? 'asc' : 'desc',
-          });
+          const isRemoteSort = that.option('remoteSort');
+          const sortOrder = reverseSortOrder(field.sortOrder);
+
+          if (isRemoteSort) {
+            that._applyChanges([field], { sortOrder });
+          } else {
+            that._applyLocalSortChanges(field.index, sortOrder);
+          }
         }
       };
 

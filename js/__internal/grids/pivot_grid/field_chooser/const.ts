@@ -54,3 +54,8 @@ export const SORTABLE_CONST = {
     drag: 'drag',
   },
 };
+
+export enum SortOrder {
+  descending = 'desc',
+  ascending = 'asc',
+}
