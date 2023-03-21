@@ -1460,6 +1460,23 @@ QUnit.module('paste', moduleConfig, () => {
         assert.equal($input.val(), '(xx)', 'paste event handled correctly');
     });
 
+    QUnit.test('disabled editor should not allow paste text', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            disabled: true,
+            mask: '(XX)',
+            maskRules: {
+                'X': 'x'
+            }
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.caret(0).paste('bxbxb');
+
+        assert.strictEqual($input.val(), '(__)', 'paste event handled correctly');
+    });
+
     QUnit.test('paste in the middle', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '(XX)',
