@@ -13,8 +13,13 @@ $(() => {
     baseItemWidth: 185,
     itemMargin: 10,
     itemTemplate(itemData, itemIndex, itemElement) {
-      itemElement.append(`<div class="price">${formatCurrency(itemData.Price)
-      }</div><div class="image" style="background-image: url('${itemData.ImageSrc}')"></div>`);
+      const $image = $('<div>')
+        .addClass('image')
+        .css('background-image', `url(${itemData.ImageSrc})`);
+
+      itemElement
+        .append(`<div class="price">${formatCurrency(itemData.Price)}</div>`)
+        .append($image);
     },
   });
 });

@@ -4,7 +4,11 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.tileViewOptions = {
     items: homes,
     itemTemplate(itemData, itemIndex, itemElement) {
-      itemElement.append(`<div class="image" style="background-image: url(${itemData.ImageSrc})"></div>`);
+      const $image = $('<div>')
+        .addClass('image')
+        .css('background-image', `url(${itemData.ImageSrc})`);
+
+      itemElement.append($image);
     },
   };
 });

@@ -11,7 +11,11 @@ window.onload = function () {
       itemMargin: 10,
       direction,
       itemTemplate(itemData, itemIndex, itemElement) {
-        itemElement.append(`<div class="image" style="background-image: url(${itemData.ImageSrc})"></div>`);
+        const $image = $('<div>')
+          .addClass('image')
+          .css('background-image', `url(${itemData.ImageSrc})`);
+
+        itemElement.append($image);
       },
     },
 
