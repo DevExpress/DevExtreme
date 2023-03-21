@@ -111,7 +111,7 @@ createTestCafe({
         if(args.browsers === 'chrome:docker') {
             runOptions.disableScreenshots = true;
         }
-        runOptions.disableScreenshots = true;
+        runOptions.disableScreenshots = false;
 
         return runner.run(runOptions);
     })
