@@ -60,7 +60,7 @@ afterEach(() => {
 
 describe('Misc cases', () => {
   it('empty component creation does not fail', () => {
-    expect(() => $('#component').dxEmptyTestWidget({})).not.toThrowError();
+    expect(() => $('#component').dxEmptyTestWidget({})).not.toThrow();
   });
 
   it('component creation does not fail if component does not have template', () => {
@@ -107,7 +107,7 @@ describe('Misc cases', () => {
     $('<div>').appendTo($component).dxTemplatedTestWidget({});
     $component.dxTemplatedTestWidget({});
 
-    expect(() => $('#components').empty()).not.toThrowError();
+    expect(() => $('#components').empty()).not.toThrow();
   });
 
   it('should forward API calls to component', () => {
@@ -160,7 +160,7 @@ describe('Misc cases', () => {
 
       expect(checkParam).toEqual(element);
 
-      expect(getPublicElement).toBeCalledTimes(1);
+      expect(getPublicElement).toHaveBeenCalledTimes(1);
       expect(getPublicElement).toHaveBeenNthCalledWith(1, $(element));
     });
   });
@@ -467,7 +467,7 @@ describe('Widget\'s container manipulations', () => {
       </div>
       `;
 
-    expect(() => $('#component').dxTestWidget({})).not.toThrowError();
+    expect(() => $('#component').dxTestWidget({})).not.toThrow();
     expect($('#component')[0].nodeName.toLowerCase()).toBe('a');
   });
 });
@@ -513,7 +513,7 @@ describe('option', () => {
     const spyUpdatePropsImmutable = jest.spyOn(UpdatePropsImmutable, 'updatePropsImmutable');
 
     component.option('nestedObject.nestedProp', 'new value');
-    expect(spyUpdatePropsImmutable).toBeCalledWith(
+    expect(spyUpdatePropsImmutable).toHaveBeenCalledWith(
       // eslint-disable-next-line no-underscore-dangle
       component._props,
       component.option(),
@@ -547,7 +547,7 @@ describe('option', () => {
 
     $('#component').dxOptionsTestWidget('updateTwoWayPropCheck');
 
-    expect(optionChanged).toBeCalledTimes(1);
+    expect(optionChanged).toHaveBeenCalledTimes(1);
     expect(optionChanged.mock.calls[0][0]).toEqual({
       fullName: 'twoWayProp',
       name: 'twoWayProp',
@@ -847,7 +847,7 @@ describe('templates and slots', () => {
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
-      expect(template).toBeCalledTimes(1);
+      expect(template).toHaveBeenCalledTimes(1);
       expect(template.mock.calls[0]).toEqual([{ simpleTemplate: 'data' }, templateRoot]);
     });
 
@@ -863,7 +863,7 @@ describe('templates and slots', () => {
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
-      expect(template).toBeCalledTimes(1);
+      expect(template).toHaveBeenCalledTimes(1);
       expect(template.mock.calls[0]).toEqual([indexedTemplatePayload, 1, templateRoot]);
     });
 
@@ -880,7 +880,7 @@ describe('templates and slots', () => {
         elementTemplatePayload: { nodeParam: param1, nonNodeParam: param2 },
       });
 
-      expect(template).toBeCalledTimes(1);
+      expect(template).toHaveBeenCalledTimes(1);
       expect(template.mock.calls[0][0]).toMatchObject({
         nodeParam: param1, nonNodeParam: param2,
       });
@@ -970,7 +970,7 @@ describe('templates and slots', () => {
     });
     const root = $('#component').children('.templates-root')[0];
 
-    expect($(root.lastChild)[0]).toBe(template[0]);
+    expect($(root.lastChild as Element)[0]).toBe(template[0]);
   });
 
   it('should render content in right order if children placed between other nodes', () => {
@@ -991,7 +991,7 @@ describe('templates and slots', () => {
       .append($('<span>').text('text'))
       .addClass('modified_container');
 
-    expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrowError();
+    expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrow();
   });
 
   it('should have default templates for jQuery', () => {
@@ -1035,12 +1035,12 @@ describe('templates and slots', () => {
       template,
     }).dxTemplatedTestWidget('instance');
 
-    expect(render).toBeCalledTimes(1);
+    expect(render).toHaveBeenCalledTimes(1);
 
     const widgetTemplate = instance.option('template');
     instance.option('template', widgetTemplate);
 
-    expect(render).toBeCalledTimes(1);
+    expect(render).toHaveBeenCalledTimes(1);
   });
 
   it('should not re-render template if new data shadow equal', () => {
@@ -1051,13 +1051,13 @@ describe('templates and slots', () => {
       elementTemplatePayload: { value: 'test' },
     }).dxTemplatedTestWidget('instance');
 
-    expect(template).toBeCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
 
     instance.option('elementTemplatePayload', { value: 'test' });
-    expect(template).toBeCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
 
     instance.option('elementTemplatePayload', { value: 'newValue' });
-    expect(template).toBeCalledTimes(2);
+    expect(template).toHaveBeenCalledTimes(2);
   });
 
   it('should not re-render template with custom equal is used', () => {
@@ -1070,17 +1070,17 @@ describe('templates and slots', () => {
       elementTemplatePayload: { value: 'test' },
     }).dxTemplatedTestWidget('instance');
 
-    expect(template).toBeCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
 
     instance.option('elementTemplatePayload', { value: 'test', isEqual: isEqual1 });
-    expect(isEqual1).toBeCalledTimes(1);
-    expect(template).toBeCalledTimes(1);
+    expect(isEqual1).toHaveBeenCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
 
     isEqual1.mockReset();
     instance.option('elementTemplatePayload', { value: 'newValue', isEqual: isEqual2 });
-    expect(isEqual1).not.toBeCalled();
-    expect(isEqual2).toBeCalledTimes(1);
-    expect(template).toBeCalledTimes(2);
+    expect(isEqual1).not.toHaveBeenCalled();
+    expect(isEqual2).toHaveBeenCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(2);
   });
 
   it('should not re-render template if non-related option changed', () => {
@@ -1091,10 +1091,10 @@ describe('templates and slots', () => {
       elementTemplatePayload: { value: 'test' },
     }).dxTemplatedTestWidget('instance');
 
-    expect(template).toBeCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
 
     instance.option('text', { value: 'test' });
-    expect(template).toBeCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
   });
 
   it('should rerender if index changed', () => {
@@ -1107,14 +1107,14 @@ describe('templates and slots', () => {
       index: 123,
     }).dxTemplatedTestWidget('instance');
 
-    expect(template).toBeCalledTimes(1);
+    expect(template).toHaveBeenCalledTimes(1);
     expect(template.mock.calls[0][1]).toEqual(123);
 
     instance.option({
       indexedTemplatePayload,
       index: 456,
     });
-    expect(template).toBeCalledTimes(2);
+    expect(template).toHaveBeenCalledTimes(2);
     expect(template.mock.calls[1][1]).toEqual(456);
   });
 });
@@ -1166,7 +1166,7 @@ describe('events/actions', () => {
       element: $('#component').get(0),
     });
 
-    expect(getPublicElement).toBeCalledTimes(3);
+    expect(getPublicElement).toHaveBeenCalledTimes(3);
     expect(getPublicElement).toHaveBeenNthCalledWith(1, $(element1));
     expect(getPublicElement).toHaveBeenNthCalledWith(2, $(element2));
     expect(getPublicElement).toHaveBeenNthCalledWith(3, $('#component'));
@@ -1186,8 +1186,8 @@ describe('events/actions', () => {
     $('#component').dxTestWidget('eventPropCheck', 'payload');
 
     expect($('#component').dxTestWidget('option').onEventProp).toBe(onEventProp2);
-    expect(onEventProp1).toBeCalledTimes(0);
-    expect(onEventProp2).toBeCalledTimes(1);
+    expect(onEventProp1).toHaveBeenCalledTimes(0);
+    expect(onEventProp2).toHaveBeenCalledTimes(1);
     expect(onEventProp2.mock.calls[0][0]).toEqual({
       actionValue: 'payload',
       component: $('#component').dxTestWidget('instance'),
