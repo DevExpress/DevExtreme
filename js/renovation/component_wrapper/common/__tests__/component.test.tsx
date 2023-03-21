@@ -945,7 +945,7 @@ describe('templates and slots', () => {
     });
     const root = $('#component').children('.templates-root')[0];
 
-    expect($(root.firstChild)[0]).toBe(template[0]);
+    expect($(root.lastChild as Element)[0]).toBe(template[0]);
   });
 
   it('should render content in right order if children placed between other nodes', () => {

@@ -8,8 +8,9 @@ module.exports = {
     overrides: [
         {
             files: [
-                '**/[!module]*.ts',
+                '**/*.ts',
             ],
+            excludedFiles: '**/module*.ts',
             parser: '@typescript-eslint/parser',
             parserOptions: {
                 createDefaultProgram: true,
@@ -17,8 +18,19 @@ module.exports = {
                 tsconfigRootDir: __dirname,
             },
             rules: {
-                'complexity': ['error', 3],
+                'max-depth': ['error', 3],
                 'no-inner-declarations': ['error', 'both'],
+                'no-restricted-imports': 'off',
+                '@typescript-eslint/no-restricted-imports': [
+                    'error',
+                    {
+                        paths: [{
+                            name: '@js/core/utils/iterator',
+                            message: 'Please use @dom_utils/element_wrapper_iterator or native js methods instead.',
+                        }],
+                        patterns: ['../'],
+                    }
+                ]
             },
         },
         {
