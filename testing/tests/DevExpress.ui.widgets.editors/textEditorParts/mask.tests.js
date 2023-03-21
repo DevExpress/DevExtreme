@@ -1460,7 +1460,7 @@ QUnit.module('paste', moduleConfig, () => {
         assert.equal($input.val(), '(xx)', 'paste event handled correctly');
     });
 
-    QUnit.test('disabled editor should not allow paste text', function(assert) {
+    QUnit.test('disabled editor should not allow text paste (T1150263)', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             disabled: true,
             mask: '(XX)',
