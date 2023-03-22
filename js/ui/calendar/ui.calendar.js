@@ -1256,14 +1256,12 @@ const Calendar = Editor.inherit({
     },
 
     _disposeViews: function() {
-        this._view.$element().remove();
-        this._additionalView?.$element().remove();
-        this._beforeView?.$element().remove();
-        this._afterView?.$element().remove();
-        delete this._view;
-        delete this._additionalView;
-        delete this._beforeView;
-        delete this._afterView;
+        const views = [this._view, this._additionalView, this._beforeView, this._afterView];
+
+        for(let i = 0; i < views.length; i += 1) {
+            views[i]?.$element().remove();
+            delete views[i];
+        }
     },
 
     _dispose: function() {
