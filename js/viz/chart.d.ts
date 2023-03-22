@@ -233,7 +233,7 @@ export interface baseLabelObject {
      * @return object
      * @public
      */
-    shift(x: number, y: number): baseLabelObject;
+    shift(x: number, y: number): this;
     /**
      * @docid
      * @publicName hide()
