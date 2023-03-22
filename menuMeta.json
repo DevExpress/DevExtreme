@@ -3619,7 +3619,6 @@
           {
             "Title": "Title And Center Label Customized",
             "Name": "GaugeTitleCustomized",
-            "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Title_and_Subtitle",
             "Widget": "Gauges",
             "DemoType": "Viz",
             "Badge": "Updated"
