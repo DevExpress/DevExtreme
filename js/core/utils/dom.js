@@ -93,22 +93,10 @@ export const contains = (container, element) => {
     if(!element) {
         return false;
     }
-
-    if(domAdapter.isTextNode(element)) {
-        element = element.parentNode;
-    }
-
-    if(domAdapter.isDocument(container)) {
-        return container.documentElement.contains(element);
-    }
-
     if(isWindow(container)) {
         return contains(container.document, element);
     }
-
-    return container.contains
-        ? container.contains(element)
-        : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
+    return container.contains(element) || element.getRootNode && contains(container, element.getRootNode().host);
 };
 
 export const createTextElementHiddenCopy = (element, text, options) => {
