@@ -2208,6 +2208,7 @@ export const columnsControllerModule = {
 
                     for(let i = 0; i < columnCount; i++) {
                         that.columnOption(i, 'sortOrder', undefined);
+                        delete findColumn(that._columns, i).sortOrder;
                     }
                     that.endUpdate();
                 },
