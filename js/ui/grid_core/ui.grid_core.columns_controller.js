@@ -2208,6 +2208,7 @@ export const columnsControllerModule = {
 
                     for(let i = 0; i < columnCount; i++) {
                         that.columnOption(i, 'sortOrder', undefined);
+                        // option needs to be deleted from column to prevert conflicts in syncing loadOptions from dataSource. See T1147379
                         delete findColumn(that._columns, i).sortOrder;
                     }
                     that.endUpdate();
