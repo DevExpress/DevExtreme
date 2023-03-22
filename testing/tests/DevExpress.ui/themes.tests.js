@@ -35,9 +35,9 @@ function loadCss(frame, cssFileName) {
     };
 }
 
-// TODO: remove wrapper after fix blinking tests
-const timeoutCbWrapper = (callback) => {
-    setTimeout(callback, 200)
+// TODO: remove this wrapper after fix blinking tests
+const timeoutDoneWrapper = (done) => {
+    setTimeout(done, 200)
 };
 
 const defaultTimeout = 2000;
@@ -221,7 +221,7 @@ QUnit.module('dx-theme changing', (hooks) => {
             });
 
             linksContainer.remove();
-            done();
+            timeoutDoneWrapper(done);
         });
     });
 
@@ -238,7 +238,7 @@ QUnit.module('dx-theme changing', (hooks) => {
             assert.equal(themes.isGeneric(), true, 'isGeneric returns \'true\' if css has been added after themes initialization');
 
             linksContainer.remove();
-            done();
+            timeoutDoneWrapper(done);
         });
 
     });
@@ -277,7 +277,7 @@ QUnit.module('dx-theme links', (hooks) => {
         // assert
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 0, 'No stylesheets should be added');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('should throw if non-existing platform requested', function(assert) {
@@ -300,7 +300,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'myCss');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('theme by platform and color scheme', function(assert) {
@@ -315,7 +315,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'style2.css');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('change theme by string', function(assert) {
@@ -331,7 +331,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'style1.css');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('change theme by configuration object', function(assert) {
@@ -347,7 +347,7 @@ QUnit.module('dx-theme links', (hooks) => {
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, 'Single dx-theme should be converted to regular stylesheet');
         assert.equal(realStylesheets.attr('href'), 'style2.css');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('method themes.ready calls a callback function after themes loading', function(assert) {
@@ -359,11 +359,11 @@ QUnit.module('dx-theme links', (hooks) => {
 
         themes.init({ theme: 'myPlatform.theme1', context: frameDoc() });
 
-        themes.ready(timeoutCbWrapper(() => {
+        themes.ready(() => {
             assert.equal(themes.current(), 'sampleTheme.sampleColorScheme');
 
-            done();
-        }));
+            timeoutDoneWrapper(done);
+        });
 
         themes.current('sampleTheme.sampleColorScheme');
     });
@@ -378,7 +378,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.init({ theme: 'myPlatform', context: frameDoc() });
         // assert
         assert.equal(getFrameStyleLinks().attr('href'), 'style1.css');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('default theme defined by active attribute if not specified', function(assert) {
@@ -391,7 +391,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.init({ theme: 'myPlatform', context: frameDoc() });
         // assert
         assert.equal(getFrameStyleLinks().attr('href'), 'style2.css');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('dx-theme should change compact theme to normal if compact has data-active=\'true\' (T449216)', function(assert) {
@@ -404,7 +404,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.init({ theme: 'myPlatform.theme1', context: frameDoc() });
         // assert
         assert.equal(themes.current(), 'myPlatform.theme1');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('dx-theme should select active theme if theme name is incomplete (T449216)', function(assert) {
@@ -418,7 +418,7 @@ QUnit.module('dx-theme links', (hooks) => {
         themes.current({ theme: 'myPlatform' });
         // assert
         assert.equal(themes.current(), 'myPlatform.theme1.compact');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('read current theme name', function(assert) {
@@ -432,7 +432,7 @@ QUnit.module('dx-theme links', (hooks) => {
         assert.equal(themes.current(), 'theme1');
         themes.current('theme2');
         assert.equal(themes.current(), 'theme2.dark');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
     test('loadCallback option for init', function(assert) {
@@ -566,7 +566,7 @@ QUnit.module('dx-theme links', (hooks) => {
 
         assert.equal($element.hasClass('dx-theme-oldtheme'), false, 'old theme class deleted');
         assert.equal($element.hasClass('dx-theme-oldtheme-typography'), false, 'old typography class deleted');
-        themes.initialized(timeoutCbWrapper(done));
+        themes.initialized(timeoutDoneWrapper(done));
     });
 
 
