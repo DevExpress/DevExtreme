@@ -1425,41 +1425,6 @@ QUnit.test('StopPropagation is called on the pointer down event', function(asser
     });
 });
 
-QUnit.test('StopPropagation is not called when gestureHandling of map is cooperative', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-    const real = devices.real;
-    let isPropagationStopped;
-
-    devices.real = function() {
-        return {
-            deviceType: 'tablet'
-        };
-    };
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        width: 400,
-        height: 500,
-        onReady: function(e) {
-            e.originalMap.setOptions({ gestureHandling: 'cooperative' });
-            d.resolve();
-        }
-    });
-
-    $map.on('dxpointerdown', function(e) {
-        isPropagationStopped = e.isPropagationStopped();
-    });
-
-    d.done(function() {
-        $map.children().trigger('dxpointerdown');
-        assert.ok(!isPropagationStopped);
-
-        devices.real = real;
-        done();
-    });
-});
-
 QUnit.test('Event propagation isn\'t stopped for the infoBox content', function(assert) {
     const done = assert.async();
     const d = $.Deferred();
@@ -1495,6 +1460,41 @@ QUnit.test('Event propagation isn\'t stopped for the infoBox content', function(
         assert.notOk(isContentEventStopped, 'Event dispatched on the info box content element isn\'t canceled');
         assert.ok(isMapEventStopped, 'Event dispatched on the map content element is canceled');
 
+        done();
+    });
+});
+
+QUnit.test('StopPropagation is not called when gestureHandling of map is cooperative', function(assert) {
+    const done = assert.async();
+    const d = $.Deferred();
+    const real = devices.real;
+    let isPropagationStopped;
+
+    devices.real = function() {
+        return {
+            deviceType: 'tablet'
+        };
+    };
+
+    const $map = $('#map').dxMap({
+        provider: 'google',
+        width: 400,
+        height: 500,
+        onReady: function(e) {
+            e.originalMap.setOptions({ gestureHandling: 'cooperative' });
+            d.resolve();
+        }
+    });
+
+    $map.on('dxpointerdown', function(e) {
+        isPropagationStopped = e.isPropagationStopped();
+    });
+
+    d.done(function() {
+        $map.children().trigger('dxpointerdown');
+        assert.ok(!isPropagationStopped);
+
+        devices.real = real;
         done();
     });
 });
