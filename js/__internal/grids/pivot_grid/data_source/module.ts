@@ -1094,6 +1094,15 @@ const PivotGridDataSource = Class.inherit((function () {
       }
     },
 
+    sortLocal(): void {
+      this._sort(
+        this._descriptions,
+        this._data,
+        areExpressionsUsed(this._descriptions.values),
+      );
+      this._eventsStrategy.fireEvent('changed');
+    },
+
     paginate() {
       return this._paginate
         && this._store
