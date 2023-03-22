@@ -1066,6 +1066,7 @@ const PivotGrid = (Widget as any).inherit({
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
       headerFilter: that.option('headerFilter'),
       visible: that.option('visible'),
+      remoteSort: that.option('scrolling.mode') === 'virtual',
     });
 
     const dataArea = that._renderDataArea(dataAreaElement);
