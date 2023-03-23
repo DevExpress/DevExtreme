@@ -62,7 +62,7 @@ const ExportController = {
     };
   },
 
-  _getAllItems(columnsInfo: any[], rowsInfoItems: any[], cellsInfo: any[]) {
+  _getAllItems(columnsInfo: any[][], rowsInfoItems: any[], cellsInfo: any[]) {
     let cellIndex;
     let rowIndex;
     let correctedCellsInfo = cellsInfo;
@@ -83,18 +83,14 @@ const ExportController = {
     // for the correct layout of the export table
     if (correctedCellsInfo.length === 0) {
       const rowsCount = rowsInfoItems.length;
-      const columnCount = columnsInfo.reduce<number>((
-        count,
-        columnRow,
-      ) => {
-        const collapsedColumnCount: number = columnRow.filter((row) => !row.expanded).length;
-        return count + collapsedColumnCount;
-      }, 0);
+      const collapsedColumnCount = columnsInfo
+        .map((headerRowWithColumns) => headerRowWithColumns.filter((row) => !row.expanded).length)
+        .reduce((result, collapsedCount) => result + collapsedCount, 0);
 
       for (let rowIdx = 0; rowIdx < rowsCount; rowIdx += 1) {
         correctedCellsInfo[rowIdx] = [];
 
-        for (let colIdx = 0; colIdx < columnCount; colIdx += 1) {
+        for (let colIdx = 0; colIdx < collapsedColumnCount; colIdx += 1) {
           correctedCellsInfo[rowIdx][colIdx] = this._getEmptyCell();
         }
       }
