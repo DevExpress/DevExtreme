@@ -100,3 +100,9 @@ export const setStylePropertyValue = ClientFunction((selector, property, value) 
 
   element.style[property] = value;
 });
+
+export const getPropertyValue = ClientFunction((selector, property) => {
+  const element = selector();
+
+  return element.style[property];
+});
