@@ -316,6 +316,33 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), undefined);
         assert.deepEqual(dataGrid.columnOption('b', 'filterValue'), undefined);
     });
+
+    QUnit.test('Applying sorting from dataSource should work after calling clearSorting (T1147379)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ a: 'a', b: 'b' }],
+            columns: ['a', 'b'],
+            filterSyncEnabled: true,
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.clearSorting();
+        dataGrid.getDataSource().sort('a');
+        dataGrid.getDataSource().load();
+        
+        // assert
+        assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), 'asc');
+        
+        // act
+        // same actions second time
+        dataGrid.clearSorting();
+        dataGrid.getDataSource().sort('a');
+        dataGrid.getDataSource().load();
+
+        // assert
+        assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), 'asc');
+    });
 });
 
 
