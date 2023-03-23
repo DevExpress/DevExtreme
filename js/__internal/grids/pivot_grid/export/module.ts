@@ -62,7 +62,7 @@ const ExportController = {
     };
   },
 
-  _getAllItems(columnsInfo, rowsInfoItems, cellsInfo) {
+  _getAllItems(columnsInfo: any[][], rowsInfoItems: any[], cellsInfo: any[]) {
     let cellIndex;
     let rowIndex;
     let correctedCellsInfo = cellsInfo;
@@ -78,6 +78,24 @@ const ExportController = {
         correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
       }
     }
+
+    // NOTE (T1155137): If the data area is empty - fill in empty cells
+    // for the correct layout of the export table
+    if (correctedCellsInfo.length === 0) {
+      const rowsCount = rowsInfoItems.length;
+      const collapsedColumnCount = columnsInfo
+        .map((headerRowWithColumns) => headerRowWithColumns.filter((row) => !row.expanded).length)
+        .reduce((result, collapsedCount) => result + collapsedCount, 0);
+
+      for (let rowIdx = 0; rowIdx < rowsCount; rowIdx += 1) {
+        correctedCellsInfo[rowIdx] = [];
+
+        for (let colIdx = 0; colIdx < collapsedColumnCount; colIdx += 1) {
+          correctedCellsInfo[rowIdx][colIdx] = this._getEmptyCell();
+        }
+      }
+    }
+
     const sourceItems = columnsInfo.concat(correctedCellsInfo);
 
     for (rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex += 1) {
