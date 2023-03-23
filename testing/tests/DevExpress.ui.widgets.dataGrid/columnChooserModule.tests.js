@@ -28,7 +28,8 @@ QUnit.module('Column chooser', {
             columnChooser: {
                 enabled: true,
                 width: 300,
-                height: 350
+                height: 350,
+                search: {}
             }
         };
 
@@ -523,8 +524,8 @@ QUnit.module('Column chooser', {
 
         this.setTestElement(testElement);
 
-        this.options.columnChooser.allowSearch = true;
-        this.options.columnChooser.searchTimeout = 300;
+        this.options.columnChooser.search.enabled = true;
+        this.options.columnChooser.search.timeout = 300;
 
         // act
         this.renderColumnChooser();
@@ -543,7 +544,7 @@ QUnit.module('Column chooser', {
 
         this.setTestElement($('#container'));
 
-        this.options.columnChooser.allowSearch = true;
+        this.options.columnChooser.search.enabled = true;
 
         // act
         this.renderColumnChooser();
@@ -1110,7 +1111,7 @@ QUnit.module('Column chooser', {
             { caption: 'Column 1', index: 0, visible: false },
             { caption: 'Column 2', index: 1, visible: false }
         ]);
-        this.options.columnChooser.allowSearch = true;
+        this.options.columnChooser.search.enabled = true;
         this.setTestElement($testElement);
         this.renderColumnChooser();
 
@@ -1129,7 +1130,7 @@ QUnit.module('Column chooser', {
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 0, 'hidden column count');
 
         // act
-        this.option('columnChooser.allowSearch', false);
+        this.option('columnChooser.search.enabled', false);
 
         // assert
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 2, 'hidden column count');

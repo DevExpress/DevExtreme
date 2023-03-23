@@ -267,8 +267,8 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
             loadingTimeout: null,
             columnChooser: { 
                 mode: 'select', 
-                allowSearch: true, 
                 search: { 
+                    enabled: true,
                     editorOptions: { placeholder: 'custom_placeholder' } 
                 } 
             },
