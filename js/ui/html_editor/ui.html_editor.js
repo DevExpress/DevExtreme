@@ -151,17 +151,24 @@ const HtmlEditor = Editor.inherit({
         return this._$submitElement;
     },
 
+    _createNoScriptFrame: function() {
+        return $('<iframe>')
+            .css('display', 'none')
+            .attr({
+                // eslint-disable-next-line spellcheck/spell-checker
+                srcdoc: '', // NOTE: srcdoc is used to prevent an excess "Blocked script execution" error in Opera. See T1150911.
+                id: 'xss-frame',
+                sandbox: 'allow-same-origin'
+            });
+    },
+
     _removeXSSVulnerableHtml: function(value) {
         // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
         // "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
         // error can be logged to the console if the html value is XSS vulnerable.
 
-        const $frame = $('<iframe>')
-            .css('display', 'none')
-            .attr({
-                id: 'xss-frame',
-                sandbox: 'allow-same-origin'
-            })
+        const $frame = this
+            ._createNoScriptFrame()
             .appendTo('body');
 
         const frame = $frame.get(0);
@@ -189,9 +196,10 @@ const HtmlEditor = Editor.inherit({
 
         removeInlineHandlers(frameDocumentBody);
 
-        $(frameDocumentBody)
-            .find('script')
-            .remove();
+        // NOTE: Do not use jQuery to prevent an excess "Blocked script execution" error in Safari.
+        frameDocumentBody
+            .querySelectorAll('script')
+            .forEach(scriptNode => { scriptNode.remove(); });
 
         const sanitizedHtml = frameDocumentBody.innerHTML;
 

@@ -379,6 +379,13 @@ export default function() {
             delete window._isInlineHandlerExecuted;
         }
     }, () => {
+        test('frame should have an empty srcdoc attribute to prevent an excess "Blocked script execution" error in Opera (T1150911)', function(assert) {
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+            const $frame = htmlEditor._createNoScriptFrame();
+
+            assert.strictEqual($frame.attr('srcdoc'), '', 'srcdoc attribute is set');
+        });
+
         test('script embedded in html value should not be executed on init', function(assert) {
             const done = assert.async();
 
