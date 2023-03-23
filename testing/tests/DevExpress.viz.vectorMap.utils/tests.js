@@ -5,10 +5,8 @@ import $ from 'jquery';
 
 const CONTROLLER_URL = ROOT_URL + 'TestVectorMapData/';
 const TEST_DATA_URL = ROOT_URL + 'testing/content/VectorMapData/';
-
-import data from '../../../TestVectorMapData/GetTestData!text';
-
-const testData = JSON.parse(data);
+const response = await fetch('/TestVectorMapData/GetTestData');
+const testData = await response.json();
 
 testData.forEach(function(testDataItem) {
     testDataItem.expected = JSON.parse(testDataItem.expected);
