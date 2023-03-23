@@ -1,11 +1,12 @@
-const $ = require('jquery');
-const commons = require('./chartParts/commons.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const legendModule = require('viz/components/legend');
-const crosshairModule = require('viz/chart_components/crosshair');
-const trackerModule = require('viz/chart_components/tracker');
-const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import * as commons from './chartParts/commons.js';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import * as legendModule from 'viz/components/legend';
+import * as crosshairModule from 'viz/chart_components/crosshair';
+import * as trackerModule from 'viz/chart_components/tracker';
+import { _test_prepareSegmentRectPoints } from 'viz/utils';
+import * as chartMocks from '../../helpers/chartMocks.js';
+
 const MockSeries = chartMocks.MockSeries;
 const MockPoint = chartMocks.MockPoint;
 const categories = chartMocks.categories;

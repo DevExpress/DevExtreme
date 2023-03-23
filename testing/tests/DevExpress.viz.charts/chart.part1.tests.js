@@ -1,16 +1,16 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const commons = require('./chartParts/commons.js');
-const DataSource = require('data/data_source/data_source').DataSource;
-const BaseChart = require('viz/chart_components/base_chart').BaseChart;
-const rendererModule = require('viz/core/renderers/renderer');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const trackerModule = require('viz/chart_components/tracker');
-const dxChart = require('viz/chart');
-const resizeCallbacks = require('core/utils/resize_callbacks');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as commons from './chartParts/commons.js';
+import { DataSource } from 'data/data_source/data_source';
+import { BaseChart } from 'viz/chart_components/base_chart';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import * as trackerModule from 'viz/chart_components/tracker';
+import dxChart from 'viz/chart';
+import * as resizeCallbacks from 'core/utils/resize_callbacks';
 const vizUtils = require('viz/core/utils');
-const chartMocks = require('../../helpers/chartMocks.js');
+import * as chartMocks from '../../helpers/chartMocks.js';
 const MockSeries = chartMocks.MockSeries;
 const categories = chartMocks.categories;
 

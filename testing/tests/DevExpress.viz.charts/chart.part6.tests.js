@@ -1,8 +1,9 @@
-const $ = require('jquery');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
-const commons = require('./chartParts/commons.js');
-const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import * as commons from './chartParts/commons.js';
+import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import * as chartMocks from '../../helpers/chartMocks.js';
+
 const MockSeries = chartMocks.MockSeries;
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');

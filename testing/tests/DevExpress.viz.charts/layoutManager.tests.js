@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const labelModule = require('viz/series/points/label');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const layoutElementModule = require('viz/core/layout_element');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as labelModule from 'viz/series/points/label';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import * as layoutElementModule from 'viz/core/layout_element';
 
 const canvasTemplate = {
     width: 1000,

@@ -1,7 +1,8 @@
-const $ = require('jquery');
-const commons = require('./chartParts/commons.js');
-const vizUtils = require('viz/core/utils');
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import * as commons from './chartParts/commons.js';
+import * as vizUtils from 'viz/core/utils';
+import * as chartMocks from '../../helpers/chartMocks.js';
+
 const MockSeries = chartMocks.MockSeries;
 const commonMethodsForTests = chartMocks.commonMethodsForTests;
 const categories = chartMocks.categories;

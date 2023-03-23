@@ -2,22 +2,22 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import vizMocks from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import commons from './chartParts/commons.js';
+import * as commons from './chartParts/commons.js';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from 'viz/chart_components/base_chart';
-import labelModule from 'viz/series/points/label';
-import dataValidatorModule from 'viz/components/data_validator';
-import translator1DModule from 'viz/translators/translator1d';
+import * as labelModule from 'viz/series/points/label';
+import * as dataValidatorModule from 'viz/components/data_validator';
+import * as translator1DModule from 'viz/translators/translator1d';
 import CustomStore from 'data/custom_store';
-import chartThemeManagerModule from 'viz/components/chart_theme_manager';
-import layoutManagerModule from 'viz/chart_components/layout_manager';
-import trackerModule from 'viz/chart_components/tracker';
+import * as chartThemeManagerModule from 'viz/components/chart_theme_manager';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import * as trackerModule from 'viz/chart_components/tracker';
 import dxPieChart from 'viz/pie_chart';
 import {
     MockSeries, MockPoint, resetMockFactory,
     insertMockFactory, restoreMockFactory, seriesMockData
 } from '../../helpers/chartMocks.js';
-import TemplateManagerModule from 'core/template_manager';
+import * as TemplateManagerModule from 'core/template_manager';
 import graphicObjects from 'common/charts';
 import eventsEngine from 'events/core/events_engine';
 import devices from 'core/devices';
@@ -237,7 +237,7 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Theme manager with no settings', function(assert) {
-        const chart = this.createPieChart({});
+        const chart = createPieChart.call(this, {});
 
         assert.equal(this.createThemeManager.callCount, 1);
         assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart.option(), themeSection: 'pie', fontFields: [

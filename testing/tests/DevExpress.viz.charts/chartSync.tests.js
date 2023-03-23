@@ -1,32 +1,33 @@
-const $ = require('jquery');
-const mock = require('../../helpers/mockModule.js').mock;
-const vizMocks = require('../../helpers/vizMocks.js');
-const { ChartTracker } = require('viz/chart_components/tracker');
-const domAdapter = require('core/dom_adapter');
+import $ from 'jquery';
+import { mock } from '../../helpers/mockModule.js';
+import vizMocks from '../../helpers/vizMocks.js';
+import { ChartTracker } from 'viz/chart_components/tracker';
+import domAdapter from 'core/dom_adapter';
+import { noop } from 'core/utils/common';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import * as vizUtils from 'viz/core/utils';
+import * as titleModule from 'viz/core/title';
+import * as exportModule from 'viz/core/export';
+import * as tooltipModule from 'viz/core/tooltip';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import { Deferred } from 'core/utils/deferred';
+import * as legendModule from 'viz/components/legend';
+import * as layoutManagerModule from 'viz/chart_components/layout_manager';
+import * as dataValidatorModule from 'viz/components/data_validator';
+import CustomStore from 'data/custom_store';
+import * as chartThemeManagerModule from 'viz/components/chart_theme_manager';
+import * as scrollBarModule from 'viz/chart_components/scroll_bar';
+import dxChart from 'viz/chart';
+import * as chartMocks from '../../helpers/chartMocks.js';
+
 const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
 const trackerModule = mock('viz/chart_components/tracker', {
     ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
 });
-const noop = require('core/utils/common').noop;
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
-const vizUtils = require('viz/core/utils');
-const titleModule = require('viz/core/title');
-const exportModule = require('viz/core/export');
-const tooltipModule = require('viz/core/tooltip');
-const rendererModule = require('viz/core/renderers/renderer');
-const { Deferred } = require('core/utils/deferred');
-const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip);
-const legendModule = require('viz/components/legend');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
 const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
 let validateData; // It lives outside of a test context because of "resetMocksInChart" which lives outside of a test context
-const dataValidatorModule = require('viz/components/data_validator');
-const CustomStore = require('data/custom_store');
-const chartThemeManagerModule = require('viz/components/chart_theme_manager');
-const scrollBarModule = require('viz/chart_components/scroll_bar');
 const ScrollBar = scrollBarModule.ScrollBar;
-const dxChart = require('viz/chart');
-const chartMocks = require('../../helpers/chartMocks.js');
+const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip);
 const MockSeries = chartMocks.MockSeries;
 const MockPoint = chartMocks.MockPoint;
 const insertMockFactory = chartMocks.insertMockFactory;

@@ -1,9 +1,10 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const commons = require('./chartParts/commons.js');
-const scrollBarClassModule = require('viz/chart_components/scroll_bar');
-const trackerModule = require('viz/chart_components/tracker');
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import * as commons from './chartParts/commons.js';
+import * as scrollBarClassModule from 'viz/chart_components/scroll_bar';
+import * as trackerModule from 'viz/chart_components/tracker';
+import * as chartMocks from '../../helpers/chartMocks.js';
+
 const MockSeries = chartMocks.MockSeries;
 const categories = chartMocks.categories;
 

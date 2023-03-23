@@ -17,7 +17,7 @@ import { ChartTracker, PieTracker } from 'viz/chart_components/tracker';
 
 import dataValidatorModule from 'viz/components/data_validator';
 import * as chartMocks from '../../../helpers/chartMocks.js';
-import exportModule from 'viz/core/export';
+import * as exportModule from 'viz/core/export';
 import { _test_prepareSegmentRectPoints } from 'viz/utils';
 
 const insertMockFactory = chartMocks.insertMockFactory;

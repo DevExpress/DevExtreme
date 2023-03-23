@@ -3,11 +3,11 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import dxChart from 'viz/chart';
-import axisModule from 'viz/axes/base_axis';
-import scrollBarModule from 'viz/chart_components/scroll_bar';
-import legendModule from 'viz/components/legend';
-import titleModule from 'viz/core/title';
-import rendererModule from 'viz/core/renderers/renderer';
+import * as axisModule from 'viz/axes/base_axis';
+import * as scrollBarModule from 'viz/chart_components/scroll_bar';
+import * as legendModule from 'viz/components/legend';
+import * as titleModule from 'viz/core/title';
+import * as rendererModule from 'viz/core/renderers/renderer';
 import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
 import { Deferred } from 'core/utils/deferred';
 const TitleOrig = titleModule.Title;

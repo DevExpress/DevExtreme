@@ -1,14 +1,15 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const translator2DModule = require('viz/translators/translator2d');
-const rangeModule = require('viz/translators/range');
-const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as translator2DModule from 'viz/translators/translator2d';
+import * as rangeModule from 'viz/translators/range';
+import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import * as chartMocks from '../../helpers/chartMocks.js';
+
 const MockAxis = chartMocks.MockAxis;
 const insertMockFactory = chartMocks.insertMockFactory;
 const restoreMockFactory = chartMocks.restoreMockFactory;
 
-require('viz/chart');
+import 'viz/chart';
 
 QUnit.testStart(function() {
     const markup =
