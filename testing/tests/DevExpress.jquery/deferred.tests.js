@@ -1,8 +1,10 @@
-const $ = require('jquery');
-const deferredUtils = require('core/utils/deferred');
-const useJQuery = require('core/config')().useJQuery;
+import $ from 'jquery';
+import * as deferredUtils from 'core/utils/deferred';
+import config from 'core/config';
 
-require('integration/jquery');
+import 'integration/jquery';
+
+const useJQuery = config().useJQuery;
 
 QUnit.module('jQuery strategy');
 

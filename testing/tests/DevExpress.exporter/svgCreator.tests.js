@@ -1,8 +1,9 @@
-const $ = require('jquery');
-const isFunction = require('core/utils/type').isFunction;
-const exporter = require('exporter').svg;
-const svgCreator = exporter.creator;
-const svgUtils = require('core/utils/svg');
+import $ from 'jquery';
+import { isFunction } from 'core/utils/type';
+import { svg as svgExporter } from 'exporter';
+import * as svgUtils from 'core/utils/svg';
+
+const svgCreator = svgExporter.creator;
 
 function setupCanvasStub() {
     // Blob
@@ -48,7 +49,7 @@ QUnit.test('getData', function(assert) {
     const done = assert.async();
     const versionXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
     const testingMarkup = '<svg xmlns="http://www.w3.org/2000/svg" class="dxc dxc-chart" style="line-height: normal; overflow: hidden; display: block; -ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" fill="none" stroke="none" stroke-width="0" width="500" height="250" version="1.1"><path stroke="#ff0000" stroke-width="2" d="M 36 181 L 184 98 L 331 280" /></svg>';
-    const deferred = exporter.getData(testingMarkup, {});
+    const deferred = svgExporter.getData(testingMarkup, {});
 
     assert.expect(3);
     $.when(deferred).done(function(blob) {
@@ -214,7 +215,7 @@ QUnit.test('Do not export elements with \'hidden-for-export\' attribute', functi
     const hiddenMarkup = '<g hidden-for-export="true"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect></g>';
     const innerMarkup = '<rect x="50" y="50" width="200" height="200" fill="#00FF00"></rect>';
     const testingMarkup = svgStart + rootAttributes + hiddenMarkup + innerMarkup + svgEnd;
-    const deferred = exporter.getData(testingMarkup, {});
+    const deferred = svgExporter.getData(testingMarkup, {});
 
     assert.expect(3);
     $.when(deferred).done(function(blob) {

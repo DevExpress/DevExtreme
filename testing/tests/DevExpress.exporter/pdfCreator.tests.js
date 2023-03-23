@@ -1,10 +1,12 @@
-const $ = require('jquery');
-const version = require('core/version').version;
-const getData = require('exporter').pdf.getData;
-const pdfCreator = require('exporter/pdf_creator').__tests;
-const isFunction = require('core/utils/type').isFunction;
-const imageCreator = require('exporter/image_creator').imageCreator;
-const getWindow = require('core/utils/window').getWindow;
+import $ from 'jquery';
+import { version } from 'core/version';
+import * as exporter from 'exporter' ;
+import { __tests as pdfCreator } from 'exporter/pdf_creator';
+import { isFunction } from 'core/utils/type';
+import { imageCreator } from 'exporter/image_creator';
+import { getWindow } from 'core/utils/window';
+
+const getData = exporter.pdf.getData;
 const window = getWindow();
 
 const contentTestEnv = {
