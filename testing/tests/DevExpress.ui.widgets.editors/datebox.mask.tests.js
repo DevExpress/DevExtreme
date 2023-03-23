@@ -1505,7 +1505,7 @@ module('Caret moving', setupModule, () => {
     });
 
     [0, 1, 2].forEach((hour) => {
-        test(`Caret should not be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+        test(`Caret should not be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
             this.instance.option({
                 value: new Date(2021, 9, 17, 16, 6),
                 displayFormat: 'HH:mm a'
@@ -1518,7 +1518,7 @@ module('Caret moving', setupModule, () => {
     });
 
     [3, 4, 5, 6, 7, 8, 9].forEach((hour) => {
-        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
             this.instance.option({
                 value: new Date(2021, 9, 17, 16, 6),
                 displayFormat: 'HH:mm a'
@@ -1531,7 +1531,7 @@ module('Caret moving', setupModule, () => {
     });
 
     [10, 11].forEach((hour) => {
-        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
             this.instance.option({
                 value: new Date(2021, 9, 17, 16, 6),
                 displayFormat: 'HH:mm a'
@@ -1544,7 +1544,7 @@ module('Caret moving', setupModule, () => {
     });
 
     [12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23].forEach((hour) => {
-        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
             this.instance.option({
                 value: new Date(2021, 9, 17, 16, 6),
                 displayFormat: 'HH:mm a'
