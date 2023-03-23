@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import ajaxMock from '../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../helpers/ajaxMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import Store from 'data/abstract_store';
 import ArrayStore from 'data/array_store';
