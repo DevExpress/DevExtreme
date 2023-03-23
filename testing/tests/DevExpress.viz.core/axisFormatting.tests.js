@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import translator2DModule from 'viz/translators/translator2d';
+import * as translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
-import tickGeneratorModule from 'viz/axes/tick_generator';
+import * as tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis } from 'viz/axes/base_axis';
 import vizMocks from '../../helpers/vizMocks.js';
 

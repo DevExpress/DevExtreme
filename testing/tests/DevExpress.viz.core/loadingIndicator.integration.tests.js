@@ -1,9 +1,9 @@
-require('viz/tree_map/tree_map');
+import 'viz/tree_map/tree_map';
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const DataSource = require('data/data_source/data_source').DataSource;
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as loadingIndicatorModule from 'viz/core/loading_indicator';
+import { DataSource } from 'data/data_source/data_source';
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 

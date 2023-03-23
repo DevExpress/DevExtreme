@@ -1,4 +1,4 @@
-const utils = require('viz/core/utils');
+import * as utils from 'viz/core/utils';
 
 QUnit.module('decreaseGaps', {
     beforeEach: function() {

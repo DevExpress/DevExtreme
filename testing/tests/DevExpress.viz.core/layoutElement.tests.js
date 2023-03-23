@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const layoutElementModule = require('viz/core/layout_element');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as layoutElementModule from 'viz/core/layout_element';
 
 const LayoutElement = layoutElementModule.LayoutElement;
 const WrapperLayoutElement = layoutElementModule.WrapperLayoutElement;

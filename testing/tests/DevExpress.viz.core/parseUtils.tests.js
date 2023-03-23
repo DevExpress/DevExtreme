@@ -1,6 +1,6 @@
-const noop = require('core/utils/common').noop;
-const config = require('core/config');
-const parseUtils = require('viz/components/parse_utils');
+import { noop } from 'core/utils/common';
+import config from 'core/config';
+import * as parseUtils from 'viz/components/parse_utils';
 
 QUnit.module('valueType');
 

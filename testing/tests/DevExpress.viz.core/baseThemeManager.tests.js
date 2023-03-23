@@ -1,8 +1,9 @@
-const $ = require('jquery');
-const themeModule = require('viz/themes');
-const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
+import $ from 'jquery';
+import * as themeModule from 'viz/themes';
+import { BaseThemeManager } from 'viz/core/base_theme_manager';
+import * as paletteModule from 'viz/palette';
+
 const currentTheme = themeModule.currentTheme();
-const paletteModule = require('viz/palette');
 
 themeModule.registerTheme({
     name: 'custom',

@@ -1,14 +1,14 @@
 /* global currentTest */
 
-const $ = require('jquery');
-const { version } = require('core/version');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const registerComponent = require('core/component_registrator');
-const logger = require('core/utils/console').logger;
-const mock = require('../../helpers/mockModule.js').mock;
-const errorsModule = require('viz/core/errors_warnings');
-const resizeObserverSingleton = require('core/resize_observer');
-const isFunction = require('core/utils/type').isFunction;
+import $ from 'jquery';
+import { version } from 'core/version';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import registerComponent from 'core/component_registrator';
+import { logger } from 'core/utils/console';
+import { mock } from '../../helpers/mockModule.js';
+import errorsModule from 'viz/core/errors_warnings';
+import resizeObserverSingleton from 'core/resize_observer';
+import { isFunction } from 'core/utils/type';
 errorsModule.ERROR_MESSAGES = {
     W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
     E100: 'Templated text 1: {0}, Templated text 2: {1}',
@@ -16,20 +16,18 @@ errorsModule.ERROR_MESSAGES = {
 };
 mock('viz/core/errors_warnings', errorsModule);
 // const errors = require('viz/core/errors_warnings');
-const BaseWidget = require('viz/core/base_widget');
-const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
-const DEBUG_createResizeHandler = require('viz/core/base_widget.utils').DEBUG_createResizeHandler;
-const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
-const rendererModule = require('viz/core/renderers/renderer');
+import BaseWidget from 'viz/core/base_widget';
+import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from 'viz/core/base_widget.utils';
+import { BaseThemeManager } from 'viz/core/base_theme_manager';
+import * as rendererModule from 'viz/core/renderers/renderer';
 let dxBaseWidgetTester;
 let StubThemeManager;
 let StubTitle;
-const vizMocks = require('../../helpers/vizMocks.js');
-const { implementationsMap } = require('core/utils/size');
-require('viz/core/base_widget');
+import vizMocks from '../../helpers/vizMocks.js';
+import { implementationsMap } from 'core/utils/size';
 
 // TODO: Move export tests to a separate file
-require('viz/core/export');
+import 'viz/core/export';
 
 QUnit.testStart(function() {
     const markup =

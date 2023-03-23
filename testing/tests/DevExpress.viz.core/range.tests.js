@@ -1,4 +1,4 @@
-const rangeModule = require('viz/translators/range');
+import * as rangeModule from 'viz/translators/range';
 
 QUnit.module('Life cycle');
 

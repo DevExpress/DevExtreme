@@ -1,8 +1,8 @@
-require('viz/tree_map/tree_map');
+import 'viz/tree_map/tree_map';
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as tooltipModule from 'viz/core/tooltip';
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 

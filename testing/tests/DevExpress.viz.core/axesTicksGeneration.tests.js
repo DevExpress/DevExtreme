@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
-import vizUtilsModule from 'viz/core/utils';
+import * as vizUtilsModule from 'viz/core/utils';
 import { Axis } from 'viz/axes/base_axis';
-import translator2DModule from 'viz/translators/translator2d';
+import * as translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 
 const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {

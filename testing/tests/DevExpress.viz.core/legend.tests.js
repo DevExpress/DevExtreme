@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
 import vizMocks from '../../helpers/vizMocks.js';
-import legendModule from 'viz/components/legend';
+import * as legendModule from 'viz/components/legend';
 import module from 'viz/core/title';
 
 const Legend = legendModule.Legend;

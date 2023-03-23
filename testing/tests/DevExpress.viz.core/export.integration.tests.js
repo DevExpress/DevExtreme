@@ -1,14 +1,14 @@
-require('viz/tree_map/tree_map');
+import 'viz/tree_map/tree_map';
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const clientExporter = require('exporter');
-const exportModule = require('viz/core/export');
-const Deferred = require('core/utils/deferred').Deferred;
-const logger = require('core/utils/console').logger;
-const { isFunction } = require('core/utils/type');
-const getWindow = require('core/utils/window').getWindow;
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import clientExporter from 'exporter';
+import * as exportModule from 'viz/core/export';
+import { Deferred } from 'core/utils/deferred';
+import { logger } from 'core/utils/console';
+import { isFunction } from 'core/utils/type';
+import { getWindow } from 'core/utils/window';
 
 const window = getWindow();
 

@@ -1,4 +1,4 @@
-const vizUtils = require('viz/core/utils');
+import * as vizUtils from 'viz/core/utils';
 
 const EPSILON = 1E-8;
 const PI = Math.PI;

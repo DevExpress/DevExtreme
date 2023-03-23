@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
-import tickGeneratorModule from 'viz/axes/tick_generator';
+import * as tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis as originalAxis } from 'viz/axes/base_axis';
-import translator2DModule from 'viz/translators/translator2d';
+import * as translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import xyMethods from 'viz/axes/xy_axes';
 import { isFunction, isDeferred } from 'core/utils/type';

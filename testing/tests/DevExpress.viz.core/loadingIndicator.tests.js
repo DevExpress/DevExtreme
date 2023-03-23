@@ -1,6 +1,6 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as loadingIndicatorModule from 'viz/core/loading_indicator';
 
 QUnit.module('Common', {
     beforeEach: function() {

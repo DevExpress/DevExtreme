@@ -1,7 +1,7 @@
-const vizMocks = require('../../helpers/vizMocks.js');
-const exportModule = require('viz/core/export');
-const themeModule = require('viz/themes');
-const clientExporter = require('exporter');
+import vizMocks from '../../helpers/vizMocks.js';
+import * as exportModule from 'viz/core/export';
+import * as themeModule from 'viz/themes';
+import clientExporter from 'exporter';
 const combineMarkupsOrig = exportModule.combineMarkups;
 
 themeModule.registerTheme({

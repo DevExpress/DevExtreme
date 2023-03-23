@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
-import tickGeneratorModule from 'viz/axes/tick_generator';
-import translator2DModule from 'viz/translators/translator2d';
-import rangeModule from 'viz/translators/range';
+import * as tickGeneratorModule from 'viz/axes/tick_generator';
+import * as translator2DModule from 'viz/translators/translator2d';
+import * as rangeModule from 'viz/translators/range';
 import { Axis } from 'viz/axes/base_axis';
 import { MockSeries } from '../../helpers/chartMocks.js';
 import { patchFontOptions } from 'viz/core/utils';
