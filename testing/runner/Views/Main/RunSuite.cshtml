@@ -139,6 +139,7 @@
         {
             "imports": {
                 "globalize": "@Url.Content("~/artifacts/js/globalize")",
+                "globalize/": "@Url.Content("~/artifacts/js/globalize/")",
                 "intl": "@Url.Content("~/node_modules/intl/index.js")",
                 "cldr": "@Url.Content("~/artifacts/js/cldr")",
                 "jquery": "@GetJQueryUrl()",
@@ -181,7 +182,7 @@
                 "systemjs-babel-build": "@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")",
 
                 "animation/": "./animation/",
-                "bundles/": "./bundles/",
+                "bundles/": "@Url.Content("~/js/bundles/")",
                 "color": "./color.js",
                 "common/": "./common/",
                 "core/": "./core/",
@@ -193,7 +194,13 @@
                 "integration/": "./integration/",
                 "ui/": "./ui/",
                 "viz/": "./viz/",
-                "aspnet.js": "./aspnet.js"
+                "aspnet.js": "./aspnet.js",
+                "mobile/": "./mobile/",
+                "exporter": "./exporter",
+                "exporter/": "./exporter/",
+                "renovation/": "./renovation/",
+                "excel_exporter": "./excel_exporter.js",
+                "pdf_exporter": "./pdf_exporter.js"
             }
         }
     </script>
@@ -214,7 +221,7 @@
                     return originalFetch(url.replace('!', ''), options);
                 }
 
-                if (url.includes('renovation/ui')) {
+                if (url.includes('renovation/ui') && !/\.js$/.test(url)) {
                     return originalFetch(url + '.js', options);
                 }
 

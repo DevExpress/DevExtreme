@@ -1,23 +1,22 @@
-/* eslint-disable import/no-commonjs */
-const data = require('./data');
-const ui = require('./widgets-base');
+import data from './data';
+import ui from './widgets-base';
 
 /// BUNDLER_PARTS
 /* Web widgets (dx.module-widgets-web.js) */
 
-ui.dxAccordion = require('../../../ui/accordion');
-ui.dxContextMenu = require('../../../ui/context_menu');
-ui.dxDataGrid = require('../../../ui/data_grid');
-ui.dxTreeList = require('../../../ui/tree_list');
-ui.dxMenu = require('../../../ui/menu');
-ui.dxPivotGrid = require('../../../ui/pivot_grid');
-ui.dxPivotGridFieldChooser = require('../../../ui/pivot_grid_field_chooser');
-data.PivotGridDataSource = require('../../../ui/pivot_grid/data_source');
-data.XmlaStore = require('../../../ui/pivot_grid/xmla_store');
-ui.dxScheduler = require('../../../ui/scheduler');
-ui.dxTreeView = require('../../../ui/tree_view');
-ui.dxFilterBuilder = require('../../../ui/filter_builder');
-ui.dxFileManager = require('../../../ui/file_manager');
-ui.dxDiagram = require('../../../ui/diagram');
-ui.dxGantt = require('../../../ui/gantt');
+ui.dxAccordion = import('../../../ui/accordion');
+ui.dxContextMenu = import('../../../ui/context_menu');
+ui.dxDataGrid = import('../../../ui/data_grid');
+ui.dxTreeList = import('../../../ui/tree_list');
+ui.dxMenu = import('../../../ui/menu');
+ui.dxPivotGrid = import('../../../ui/pivot_grid');
+ui.dxPivotGridFieldChooser = import('../../../ui/pivot_grid_field_chooser');
+data.PivotGridDataSource = import('../../../ui/pivot_grid/data_source');
+data.XmlaStore = import('../../../ui/pivot_grid/xmla_store');
+ui.dxScheduler = import('../../../ui/scheduler');
+ui.dxTreeView = import('../../../ui/tree_view');
+ui.dxFilterBuilder = import('../../../ui/filter_builder');
+ui.dxFileManager = import('../../../ui/file_manager');
+ui.dxDiagram = import('../../../ui/diagram');
+ui.dxGantt = import('../../../ui/gantt');
 /// BUNDLER_PARTS_END

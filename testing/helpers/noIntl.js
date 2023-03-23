@@ -1,1 +1,3 @@
-window.Intl = module.exports = undefined;
+window.Intl = undefined;
+
+export default window.Intl;
