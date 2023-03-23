@@ -147,6 +147,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
         // act
         position = { my: 'right top', at: 'right top', of: '#dataGrid' };
+        dataGrid.option('columnChooser.position', position);
         dataGrid.showColumnChooser();
         
         // asert
@@ -260,11 +261,17 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleColumns()[0].dataField, 'field2', 'check dataField');
     });
 
-    QUnit.test('Column chooser editorOptions option should work', function(assert) {
+    QUnit.test('Column chooser search.editorOptions option should work', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { mode: 'select', search: { editorOptions: { placeholder: 'custom_placeholder' } } },
+            columnChooser: { 
+                mode: 'select', 
+                allowSearch: true, 
+                search: { 
+                    editorOptions: { placeholder: 'custom_placeholder' } 
+                } 
+            },
             columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -272,7 +279,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
         
-        const textBox = () => $('.dx-textbox').dxTextBox('instance');
+        const textBox = $('.dx-textbox').dxTextBox('instance');
     
         // assert
         assert.strictEqual(textBox.option('placeholder'), 'custom_placeholder', 'Placeholder should be custom');
