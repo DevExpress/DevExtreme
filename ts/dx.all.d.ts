@@ -25774,6 +25774,10 @@ declare module DevExpress.viz {
      */
     getBoundingRect(): any;
     /**
+     * [descr:baseLabelObject.shift(x, y)]
+     */
+    shift(x: number, y: number): this;
+    /**
      * [descr:baseLabelObject.hide()]
      */
     hide(): void;
