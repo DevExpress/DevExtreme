@@ -612,6 +612,8 @@ export default {
         const hasLookupOptimization = column.displayField && isString(column.displayField);
 
         let cachedUniqueRelevantItems;
+        let previousTake;
+        let previousSkip;
 
         const sliceItems = (items, loadOptions) => {
             const start = loadOptions.skip ?? 0;
@@ -626,9 +628,16 @@ export default {
             // @ts-expect-error
             const d = new Deferred();
 
-            if(!hasGroupPaging && cachedUniqueRelevantItems) {
+            const canUseCache = cachedUniqueRelevantItems && (
+                !hasGroupPaging ||
+                (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
+            );
+
+            if(canUseCache) {
                 d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
             } else {
+                previousSkip = loadOptions.skip;
+                previousTake = loadOptions.take;
                 dataSource.load({
                     filter,
                     group,
