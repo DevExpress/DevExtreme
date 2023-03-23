@@ -95,8 +95,9 @@ const columnChooserControllerMembers = {
 
     getPosition: function() {
         const rowsView = this.getView('rowsView');
+        const position = this.option('columnChooser.position');
 
-        return {
+        return isDefined(position) ? position : {
             my: 'right bottom',
             at: 'right bottom',
             of: rowsView && rowsView.element(),
@@ -230,8 +231,9 @@ const columnChooserMembers = {
             itemTemplate: 'item',
             showCheckBoxesMode: 'none',
             rootValue: null,
-            searchEnabled: columnChooser.allowSearch,
-            searchTimeout: columnChooser.searchTimeout,
+            searchEnabled: columnChooser.search?.enabled,
+            searchTimeout: columnChooser.search?.timeout,
+            searchEditorOptions: columnChooser.search?.editorOptions,
             onItemRendered: function(e) {
                 // @ts-expect-error
                 if(e.itemData.disableCheckBox) {
@@ -468,8 +470,17 @@ export const columnChooserModule = {
         return {
             columnChooser: {
                 enabled: false,
-                allowSearch: false,
-                searchTimeout: 500,
+                search: {
+                    enabled: false,
+                    timeout: 500,
+                    editorOptions: {},
+                },
+                selection: {
+                    allowSelectAll: false,
+                    selectByClick: false,
+                    recursive: false,
+                },
+                position: undefined,
                 mode: 'dragAndDrop',
                 width: 250,
                 height: 260,
