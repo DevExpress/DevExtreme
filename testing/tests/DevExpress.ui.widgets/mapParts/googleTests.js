@@ -30,11 +30,6 @@ const prepareTestingGoogleProvider = function() {
 
 const INFO_BOX_CLASS = 'gm-style-iw';
 
-// TODO: remove this wrapper after fix blinking tests
-const timeoutDoneWrapper = (done) => {
-    setTimeout(done, 200)
-};
-
 QUnit.module('google provider', {
     beforeEach: function() {
         const fakeURL = '/fakeGoogleUrl';
@@ -112,7 +107,7 @@ QUnit.test('map initialize without loaded map', function(assert) {
     });
 
     $.when(d1, d2).done(function() {
-        timeoutDoneWrapper(done);
+        done();
     });
 });
 

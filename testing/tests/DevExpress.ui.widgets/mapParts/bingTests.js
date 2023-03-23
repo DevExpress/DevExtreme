@@ -31,11 +31,6 @@ const prepareTestingBingProvider = function(abortDirectionsUpdate) {
     window.Microsoft.abortDirectionsUpdate = !!abortDirectionsUpdate;
 };
 
-// TODO: remove this wrapper after fix blinking tests
-const timeoutDoneWrapper = (done) => {
-    setTimeout(done, 200)
-};
-
 QUnit.module('bing provider', {
     beforeEach: function() {
         const fakeURL = 'fakeBingUrl';
@@ -97,7 +92,7 @@ QUnit.test('map initialize without loaded map', function(assert) {
     });
 
     $.when(d1, d2).done(function() {
-        timeoutDoneWrapper(done);
+        done();
     });
 });
 
