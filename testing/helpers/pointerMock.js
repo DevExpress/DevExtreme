@@ -30,7 +30,7 @@ export default function($element) {
                 cancelable: _cancelable,
                 target: $element.get(0),
                 pointerType: _pointerType,
-                pointers: [],
+                pointers: []
             }, args));
 
         $(event.delegatedTarget || event.target).trigger(event);
@@ -69,7 +69,7 @@ export default function($element) {
             _y = y || _y;
 
             triggerEvent('dxpointerdown', {
-                pointers: [{ pointerId: 1 }],
+                pointers: [{ pointerId: 1 }]
             });
 
             return this;
@@ -83,7 +83,7 @@ export default function($element) {
                 _y += y || 0;
 
                 triggerEvent('dxpointermove', {
-                    pointers: [{ pointerId: 1 }],
+                    pointers: [{ pointerId: 1 }]
                 });
             }
 
@@ -93,12 +93,9 @@ export default function($element) {
         },
 
         up: function() {
-            let requestAnimationFrameCallback = function() {
-            };
+            let requestAnimationFrameCallback = function() {};
             if(clickEvent.misc) {
-                clickEvent.misc.requestAnimationFrame = function(callback) {
-                    requestAnimationFrameCallback = callback;
-                };
+                clickEvent.misc.requestAnimationFrame = function(callback) { requestAnimationFrameCallback = callback; };
             }
 
             triggerEvent('dxpointerup');
@@ -133,7 +130,7 @@ export default function($element) {
 
         wheel: function(d, args) {
             triggerEvent('dxmousewheel', $.extend({
-                delta: d,
+                delta: d
             }, args));
             triggerEvent('scroll');
 
@@ -165,7 +162,7 @@ export default function($element) {
 
         swipe: function(offset) {
             triggerEvent('dxswipe', {
-                offset: offset,
+                offset: offset
             });
 
             return this;
@@ -174,7 +171,7 @@ export default function($element) {
         swipeEnd: function(targetOffset, offset) {
             triggerEvent('dxswipeend', {
                 offset: offset,
-                targetOffset: targetOffset,
+                targetOffset: targetOffset
             });
 
             return this;
@@ -193,8 +190,8 @@ export default function($element) {
             triggerEvent('dxdrag', {
                 offset: {
                     x: _x,
-                    y: _y,
-                },
+                    y: _y
+                }
             });
 
             return this;
@@ -204,8 +201,8 @@ export default function($element) {
             triggerEvent('dxdragend', {
                 offset: {
                     x: _x,
-                    y: _y,
-                },
+                    y: _y
+                }
             });
 
             return this;
@@ -225,6 +222,6 @@ export default function($element) {
             triggerEvent('dxinactive', { delegatedTarget: $(target).get(0) });
 
             return this;
-        },
+        }
     };
 }

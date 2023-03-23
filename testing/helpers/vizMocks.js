@@ -8,11 +8,11 @@ import * as pointModule from 'viz/series/points/base_point';
 import { Series } from 'viz/series/base_series';
 import * as loadingIndicatorModule from 'viz/core/loading_indicator';
 import * as exportMenuModule from 'viz/core/export';
-import { SvgElement, Renderer as OriginalRenderer } from 'viz/core/renderers/renderer';
+import * as rendererModule from 'viz/core/renderers/renderer';
 import errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from 'viz/core/base_widget.utils';
 
-const Element = stubClass(SvgElement, {
+const Element = stubClass(rendererModule.SvgElement, {
     attr: function(attrs) {
         if(typeof attrs === 'string') {
             if(attrs.indexOf('scale') !== -1) {
@@ -88,28 +88,17 @@ const Element = stubClass(SvgElement, {
         $(this.element).trigger.apply($(this.element), arguments);
         return this;
     },
-    restoreText: function() {
-    },
+    restoreText: function() { }
 }, {
     $constructor: function() {
         this.children = [];
         this._stored_settings = {};
         this._stored_styles = {};
         this.element = document.createElement('svg');
-        this.element.getScreenCTM = function() {
-            return [0, 1, 1, 0, 210, 240];
-        };
-        this.element.createSVGPoint = function() {
-            return {
-                matrixTransform: function() {
-                    return { x: 3, y: 5 };
-                },
-            };
-        };
-        this.element.addEventListener = function() {
-        };
-        this.element.removeEventListener = function() {
-        };
+        this.element.getScreenCTM = function() { return [0, 1, 1, 0, 210, 240]; };
+        this.element.createSVGPoint = function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; };
+        this.element.addEventListener = function() {};
+        this.element.removeEventListener = function() {};
     },
     $thisReturnFunctions: [
         'toBackground',
@@ -122,8 +111,8 @@ const Element = stubClass(SvgElement, {
         'linkAppend',
         'linkRemove',
         'data',
-        'animate',
-    ],
+        'animate'
+    ]
 });
 
 let patternCounter = 0;
@@ -150,87 +139,30 @@ const createMockElement = function(renderer, nodeType, params) {
     return elem;
 };
 
-const Renderer = stubClass(OriginalRenderer, {
-    animationEnabled: function() {
-        return true;
-    },
-    arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) {
-        return createMockElement(this, 'arc', {
-            x: x,
-            y: y,
-            innerRadius: innerRadius,
-            outerRadius: outerRadius,
-            startAngle: startAngle,
-            endAngle: endAngle,
-        });
-    },
-    g: function() {
-        return createMockElement(this, 'group');
-    },
-    text: function(text, x, y) {
-        return createMockElement(this, 'text', { text: text, x: x, y: y });
-    },
-    rect: function(x, y, width, height) {
-        return createMockElement(this, 'rect', { x: x, y: y, width: width, height: height });
-    },
-    simpleRect: function() {
-        return createMockElement(this, 'rect');
-    },
-    path: function(points, type) {
-        return createMockElement(this, 'path', { points: points, type: type });
-    },
-    circle: function(x, y, r) {
-        return createMockElement(this, 'circle', { cx: x, cy: y, r: r });
-    },
-    image: function(x, y, w, h, href, location) {
-        return createMockElement(this, 'image', { x: x, y: y, width: w, height: h, location: location });
-    },
-    pattern: function(color, hatching) {
-        return createMockElement(this, 'pattern', { color: color, hatching: hatching });
-    },
-    shadowFilter: function(x, y, width, height, dx, dy, blur, color, opacity) {
-        return createMockElement(this, 'shadowFilter', {
-            x: x,
-            y: y,
-            width: width,
-            height: height,
-            dx: dx,
-            dy: dy,
-            blur: blur,
-            color: color,
-            opacity: opacity,
-        });
-    },
-    clipRect: function(x, y, width, height) {
-        return createMockElement(this, 'clipRect', { x: x, y: y, width: width, height: height });
-    },
+const Renderer = stubClass(rendererModule.Renderer, {
+    animationEnabled: function() { return true; },
+    arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) { return createMockElement(this, 'arc', { x: x, y: y, innerRadius: innerRadius, outerRadius: outerRadius, startAngle: startAngle, endAngle: endAngle }); },
+    g: function() { return createMockElement(this, 'group'); },
+    text: function(text, x, y) { return createMockElement(this, 'text', { text: text, x: x, y: y }); },
+    rect: function(x, y, width, height) { return createMockElement(this, 'rect', { x: x, y: y, width: width, height: height }); },
+    simpleRect: function() { return createMockElement(this, 'rect'); },
+    path: function(points, type) { return createMockElement(this, 'path', { points: points, type: type }); },
+    circle: function(x, y, r) { return createMockElement(this, 'circle', { cx: x, cy: y, r: r }); },
+    image: function(x, y, w, h, href, location) { return createMockElement(this, 'image', { x: x, y: y, width: w, height: h, location: location }); },
+    pattern: function(color, hatching) { return createMockElement(this, 'pattern', { color: color, hatching: hatching }); },
+    shadowFilter: function(x, y, width, height, dx, dy, blur, color, opacity) { return createMockElement(this, 'shadowFilter', { x: x, y: y, width: width, height: height, dx: dx, dy: dy, blur: blur, color: color, opacity: opacity }); },
+    clipRect: function(x, y, width, height) { return createMockElement(this, 'clipRect', { x: x, y: y, width: width, height: height }); },
     dispose: function() {
         this.root.dispose();
     },
-    svg: function() {
-        return '';
-    },
-    getRootOffset: function() {
-        return this.offsetTemplate || { left: 3, top: 5 };
-    },
-    brightFilter: function() {
-        return createMockElement(this, 'brightFilter');
-    },
-    linearGradient: function(colors, id, rotationAngle) {
-        return createMockElement(this, 'linearGradient', { color: colors, rotationAngle: rotationAngle, id: id });
-    },
-    radialGradient: function(colors, id) {
-        return createMockElement(this, 'linearGradient', { color: colors, id: id });
-    },
-    customPattern: function(id, template, width, height) {
-        return createMockElement(this, 'pattern', { id: id, template: template, width: width, height: height });
-    },
+    svg: function() { return ''; },
+    getRootOffset: function() { return this.offsetTemplate || { left: 3, top: 5 }; },
+    brightFilter: function() { return createMockElement(this, 'brightFilter'); },
+    linearGradient: function(colors, id, rotationAngle) { return createMockElement(this, 'linearGradient', { color: colors, rotationAngle: rotationAngle, id: id }); },
+    radialGradient: function(colors, id) { return createMockElement(this, 'linearGradient', { color: colors, id: id }); },
+    customPattern: function(id, template, width, height) { return createMockElement(this, 'pattern', { id: id, template: template, width: width, height: height }); },
 }, {
-    $constructor: function(options) {
-        this._options = options;
-        this.root = createMockElement(this, 'root');
-        this.bBoxTemplate = { x: 1, y: 2, height: 10, width: 20 };
-    },
+    $constructor: function(options) { this._options = options; this.root = createMockElement(this, 'root'); this.bBoxTemplate = { x: 1, y: 2, height: 10, width: 20 }; },
     $thisReturnFunctions: ['resize', 'draw', 'clear'],
 });
 
@@ -334,13 +266,10 @@ function stubClass(target, members, settings) {
         }
     });
     settings.$extraFunctions && $.each(settings.$extraFunctions, function(_, name) {
-        _members[name] = 'name' in _members ? _members[name] : function() {
-        };
+        _members[name] = 'name' in _members ? _members[name] : function() { };
     });
     settings.$thisReturnFunctions && $.each(settings.$thisReturnFunctions, function(_, name) {
-        _members[name] = 'name' in _members ? _members[name] : function() {
-            return this;
-        };
+        _members[name] = 'name' in _members ? _members[name] : function() { return this; };
     });
     settings.$forceStubs && (function() {
         const $constructor = settings.$constructor;

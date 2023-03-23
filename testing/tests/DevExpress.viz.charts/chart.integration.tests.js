@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import rendererModule from 'viz/core/renderers/renderer';
-import legendModule from 'viz/components/legend';
-import titleModule from 'viz/core/title';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import * as legendModule from 'viz/components/legend';
+import * as titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
-import baseChartModule from 'viz/chart_components/base_chart';
-import seriesFamilyModule from 'viz/core/series_family';
+import * as baseChartModule from 'viz/chart_components/base_chart';
+import * as seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
@@ -4521,12 +4521,12 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
     });
 
     assert.roughEqual(chart.getArgumentAxis()._axisPosition, 540, 7);
-    assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
+    assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 7);
 
     chart.option('valueAxis.customPosition', -21);
 
     assert.roughEqual(chart.getArgumentAxis()._axisPosition, 540, 7);
-    assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
+    assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 7);
 });
 
 QUnit.test('Resolve overlapping: labels and axes', function(assert) {

@@ -49,9 +49,9 @@ const nativeCaretMock = {
             try {
                 start = input.selectionStart;
                 end = input.selectionEnd;
-            } catch(e) {
-                // empty
             }
+            // eslint-disable-next-line no-empty
+            catch(e) {}
         }
         return { start: start, end: end };
     },
@@ -86,9 +86,9 @@ const nativeCaretMock = {
             } else {
                 input.setSelectionRange(start, end);
             }
-        } catch(e) {
-            // empty
         }
+        // eslint-disable-next-line no-empty
+        catch(e) { }
     }
 };
 
