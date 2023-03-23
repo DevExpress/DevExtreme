@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import domUtils from 'core/utils/dom';
-import support from 'core/utils/support';
-import styleUtils from 'core/utils/style';
+import * as domUtils from 'core/utils/dom';
+import * as support from 'core/utils/support';
+import * as styleUtils from 'core/utils/style';
 import devices from 'core/devices';
 import initMobileViewport from 'mobile/init_mobile_viewport';
 import keyboardMock from '../../helpers/keyboardMock.js';

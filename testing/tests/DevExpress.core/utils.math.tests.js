@@ -1,4 +1,5 @@
-const mathUtils = require('core/utils/math');
+import * as mathUtils from 'core/utils/math';
+
 const adjust = mathUtils.adjust;
 
 QUnit.test('fitIntoRange', function(assert) {

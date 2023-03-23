@@ -4,13 +4,14 @@ import $ from 'jquery';
 import domAdapter from 'core/dom_adapter';
 import themes from 'ui/themes';
 import devices from 'core/devices';
-const fromUA = $.proxy(devices._fromUA, devices);
 import viewPort from 'core/utils/view_port';
-const viewPortChanged = viewPort.changeCallback;
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';
 import config from 'core/config';
 import { implementationsMap } from 'core/utils/size';
+
+const fromUA = $.proxy(devices._fromUA, devices);
+const viewPortChanged = viewPort.changeCallback;
 
 const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',

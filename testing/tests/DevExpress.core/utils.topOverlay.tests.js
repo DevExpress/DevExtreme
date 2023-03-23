@@ -1,5 +1,5 @@
-const hideTopOverlay = require('mobile/hide_top_overlay');
-const hideTopOverlayCallback = require('mobile/hide_callback').hideCallback;
+import hideTopOverlay from 'mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 
 QUnit.module('top overlay util');
 

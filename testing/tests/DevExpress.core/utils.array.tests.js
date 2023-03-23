@@ -1,4 +1,4 @@
-import arrayUtils from 'core/utils/array';
+import * as arrayUtils from 'core/utils/array';
 
 QUnit.module('array utils');
 

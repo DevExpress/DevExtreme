@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const queueUtils = require('core/utils/queue');
+import $ from 'jquery';
+import * as queueUtils from 'core/utils/queue';
 
 QUnit.module('enqueue');
 

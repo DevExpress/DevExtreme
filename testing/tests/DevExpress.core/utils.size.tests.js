@@ -1,5 +1,17 @@
 import $ from 'jquery';
-import sizeUtils, { getHeight, getWidth, getInnerHeight, getInnerWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
+import {
+    getHeight,
+    getWidth,
+    getInnerHeight,
+    getInnerWidth,
+    getOuterHeight,
+    getOuterWidth,
+    getElementBoxParams,
+    addOffsetToMaxHeight,
+    addOffsetToMinHeight,
+    getVerticalOffsets,
+    getVisibleHeight
+} from 'core/utils/size';
 import browser from 'core/utils/browser';
 
 const testStyles = [
@@ -257,13 +269,13 @@ QUnit.test('element in parent with fixed size', function(assert) {
 
     const computedStyles = window.getComputedStyle(element);
 
-    assert.deepEqual(sizeUtils.getElementBoxParams('width', computedStyles), {
+    assert.deepEqual(getElementBoxParams('width', computedStyles), {
         border: 2,
         margin: 12,
         padding: 8
     }, 'element borders, paddings and margins were computed correctly');
 
-    assert.deepEqual(sizeUtils.getElementBoxParams('height', computedStyles), {
+    assert.deepEqual(getElementBoxParams('height', computedStyles), {
         border: 2,
         margin: 10,
         padding: 6
@@ -281,7 +293,7 @@ QUnit.module('calculate height', {
 
 QUnit.test('check addOffsetToMaxHeight', function(assert) {
     const checkFunc = ({ value, offset, container }, expected) => {
-        assert.strictEqual(sizeUtils.addOffsetToMaxHeight(value, offset, container), expected);
+        assert.strictEqual(addOffsetToMaxHeight(value, offset, container), expected);
     };
 
     checkFunc({ value: 300, offset: 0, container: null }, 300);
@@ -294,13 +306,13 @@ QUnit.test('check addOffsetToMaxHeight', function(assert) {
     checkFunc({ value: 'auto', offset: 0, container: null }, 'auto');
     checkFunc({ value: null, offset: -50, container: null }, 'none');
 
-    assert.roughEqual(sizeUtils.addOffsetToMaxHeight('50%', -20, window), windowHeight / 2 - 20, 1, 'string value in percent');
-    assert.roughEqual(sizeUtils.addOffsetToMaxHeight('50%', -20, this.container), 30, 1, 'string value in percent with specific container');
+    assert.roughEqual(addOffsetToMaxHeight('50%', -20, window), windowHeight / 2 - 20, 1, 'string value in percent');
+    assert.roughEqual(addOffsetToMaxHeight('50%', -20, this.container), 30, 1, 'string value in percent with specific container');
 });
 
 QUnit.test('check addOffsetToMinHeight', function(assert) {
     const checkFunc = ({ value, offset, container }, expected) => {
-        assert.strictEqual(sizeUtils.addOffsetToMinHeight(value, offset, container), expected);
+        assert.strictEqual(addOffsetToMinHeight(value, offset, container), expected);
     };
 
     checkFunc({ value: 300, offset: 0, container: null }, 300);
@@ -313,21 +325,21 @@ QUnit.test('check addOffsetToMinHeight', function(assert) {
     checkFunc({ value: 'auto', offset: 0, container: null }, 'auto');
     checkFunc({ value: null, offset: -50, container: null }, 0);
 
-    assert.roughEqual(sizeUtils.addOffsetToMinHeight('50%', -20, window), windowHeight / 2 - 20, 1, 'string value in percent');
-    assert.roughEqual(sizeUtils.addOffsetToMaxHeight('50%', -20, this.container), 30, 1, 'string value in percent with specific container');
+    assert.roughEqual(addOffsetToMinHeight('50%', -20, window), windowHeight / 2 - 20, 1, 'string value in percent');
+    assert.roughEqual(addOffsetToMaxHeight('50%', -20, this.container), 30, 1, 'string value in percent with specific container');
 });
 
 QUnit.test('check getVerticalOffsets', function(assert) {
-    assert.strictEqual(sizeUtils.getVerticalOffsets(null), 0, 'no element');
-    assert.strictEqual(sizeUtils.getVerticalOffsets(this.container), 20, 'container paddings');
-    assert.strictEqual(sizeUtils.getVerticalOffsets(this.container, true), 30, 'include margins');
-    assert.strictEqual(sizeUtils.getVerticalOffsets(this.invisibleElement), 10, 'invisible element paddings');
+    assert.strictEqual(getVerticalOffsets(null), 0, 'no element');
+    assert.strictEqual(getVerticalOffsets(this.container), 20, 'container paddings');
+    assert.strictEqual(getVerticalOffsets(this.container, true), 30, 'include margins');
+    assert.strictEqual(getVerticalOffsets(this.invisibleElement), 10, 'invisible element paddings');
 });
 
 QUnit.test('check getVisibleHeight', function(assert) {
-    assert.strictEqual(sizeUtils.getVerticalOffsets(null), 0, 'no element');
-    assert.strictEqual(sizeUtils.getVisibleHeight(this.container), 100, 'container height');
-    assert.strictEqual(sizeUtils.getVisibleHeight(this.invisibleElement), 0, 'invisible element height');
+    assert.strictEqual(getVerticalOffsets(null), 0, 'no element');
+    assert.strictEqual(getVisibleHeight(this.container), 100, 'container height');
+    assert.strictEqual(getVisibleHeight(this.invisibleElement), 0, 'invisible element height');
 });
 
 QUnit.test('height for element with transform', function(assert) {

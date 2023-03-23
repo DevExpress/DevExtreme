@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const ajax = require('core/utils/ajax');
-const compareVersion = require('core/utils/version').compare;
+import $ from 'jquery';
+import ajax from 'core/utils/ajax';
+import { compare as compareVersion } from 'core/utils/version';
 
 QUnit.module('sendRequest', {
     beforeEach: function() {

@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const animationFrame = require('animation/frame');
+import $ from 'jquery';
+import * as animationFrame from 'animation/frame';
 
 QUnit.module('animation frame');
 

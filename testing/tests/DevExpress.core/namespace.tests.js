@@ -1,7 +1,7 @@
-const testGlobalExports = require('../../helpers/publicModulesHelper.js');
-const { version } = require('core/version');
+import testGlobalExports from '../../helpers/publicModulesHelper.js';
+import { version } from 'core/version';
 
-require('bundles/modules/core');
+import 'bundles/modules/core';
 
 testGlobalExports({
     'DevExpress': DevExpress
