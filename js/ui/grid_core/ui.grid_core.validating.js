@@ -440,8 +440,9 @@ const ValidatingController = modules.Controller.inherit((function() {
                     if(adapter) {
                         adapter.getValue = getValue;
                         adapter.validationRequestsCallbacks = [];
+                        const oldBypass = adapter.bypass.bind(adapter);
                         adapter.bypass = () => {
-                            return parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+                            return oldBypass() || parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
                         };
                     }
                 }
