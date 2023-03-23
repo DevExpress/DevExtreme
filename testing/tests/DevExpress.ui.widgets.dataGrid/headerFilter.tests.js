@@ -4470,6 +4470,76 @@ QUnit.module('Header Filter with real columnsController', {
         });
     });
 
+    QUnit.test('There is no additional request to grid datasource after searching in filter row editor with groupPaging: true', function(assert) {
+        // arrange
+        const loadSpy = sinon.spy((loadOptions) => {
+            const d = $.Deferred();
+            new ArrayStore([
+                { column1: 1 },
+                { column1: 2 },
+            ]).load(loadOptions).done(items => d.resolve({
+                data: items,
+                totalCount: 2,
+            }));
+
+            return d;
+        });
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        
+        this.options.dataSource = { load: loadSpy };
+        this.options.syncLookupFilterValues = true;
+        this.options.remoteOperations = { groupPaging: true }
+        this.options.headerFilter.allowSearch = true;
+
+        const $testElement = $('#container');
+
+        this.setupDataGrid();
+        this.columnHeadersView.render($testElement);
+        this.headerFilterView.render($testElement);
+        
+        // assert
+        assert.strictEqual(loadSpy.callCount, 1);
+        loadSpy.reset();
+
+        // act
+        this.headerFilterController.showHeaderFilterMenu(0);
+
+        // assert
+        const $popupContent = this.headerFilterView.getPopupContainer().$content();
+        let $listItemElements = $popupContent.find('.dx-list-item-content');
+        assert.equal($listItemElements.length, 3, 'count list item');
+        assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+        assert.strictEqual($listItemElements.eq(1).text(), 'value1');
+        assert.strictEqual($listItemElements.eq(2).text(), 'value2');
+
+        // assert
+        assert.strictEqual(loadSpy.callCount, 1);
+        loadSpy.reset();
+                
+        // act
+        const list = $popupContent.find('.dx-list').dxList('instance');
+        list.option('searchValue', 'value1');
+        
+        // assert
+        $listItemElements = $popupContent.find('.dx-list-item-content');
+        assert.equal($listItemElements.length, 1, 'count list item');
+        assert.strictEqual($listItemElements.eq(0).text(), 'value1');
+
+        // assert
+        assert.strictEqual(loadSpy.callCount, 0);
+        loadSpy.reset();
+    });
+
+
     // T938460
     QUnit.test('The selection should work correctly after searching when calculateDisplayValue is used and when a lookup\'s key is specified', function(assert) {
         // arrange
