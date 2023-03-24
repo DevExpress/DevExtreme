@@ -16,7 +16,7 @@ test('Header filter popup', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'headerFilter - before scroll.png');
 
-  await t.scroll(pivotGrid.getColumnHeaderArea().getHeaderFilterScrollable(), 0, 20);
+  await t.scroll(pivotGrid.getColumnHeaderArea().getHeaderFilterScrollable(), 0, 10);
 
   await testScreenshot(t, takeScreenshot, 'headerFilter - after scroll.png');
 
