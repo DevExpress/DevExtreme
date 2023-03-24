@@ -6,19 +6,21 @@ const isFunction = require('core/utils/type').isFunction;
 const imageCreator = require('exporter/image_creator').imageCreator;
 const getWindow = require('core/utils/window').getWindow;
 const window = getWindow();
+const ASN_DATE_REGEX = /CreationDate\s\(D:([0-9]+)Z([0-9]+)'([0-9]+)'/;
 
 const contentTestEnv = {
     beforeEach: function() {
         pdfCreator.set_getBlob(function(data) { return data; });
         pdfCreator.set_getBase64(function(data) { return data; });
-        pdfCreator.set_getCurDate(function() { return '_test_date_'; });
-        const that = this;
-        sinon.stub(imageCreator, 'getImageData', function(markup) { const def = $.Deferred(); def.resolve(that.imageDataSample || '_test_' + markup + '_string_'); return def; });
+        sinon.stub(imageCreator, 'getImageData', (markup) => {
+            const def = $.Deferred();
+            def.resolve(this.imageDataSample || '_test_' + markup + '_string_');
+            return def; 
+        });
     },
     afterEach: function() {
         pdfCreator.restore_getBlob();
         pdfCreator.restore_getBase64();
-        pdfCreator.restore_getCurDate();
         imageCreator.getImageData.restore();
     }
 };
@@ -42,11 +44,11 @@ QUnit.test('PDF \'content stream\' populated with correct size in pt', function(
     });
 });
 
-QUnit.test('PDF \'info\' has correct date and dx version', function(assert) {
+QUnit.test('PDF \'info\' has correct dx version', function(assert) {
     const done = assert.async();
 
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
-        assert.notStrictEqual(data.indexOf('/CreationDate _test_date_/Producer(DevExtreme ' + version + ')'), -1);
+        assert.notStrictEqual(data.indexOf('/Producer(DevExtreme ' + version + ')'), -1, 'version is valid');
         done();
     });
 });
@@ -54,7 +56,7 @@ QUnit.test('PDF \'info\' has correct date and dx version', function(assert) {
 QUnit.test('PDF \'image\' populated with correct size in px, length and image string', function(assert) {
     const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        assert.notStrictEqual(data.indexOf('/Image/Width 620.1/Height 420.2/'), -1);
+        assert.notStrictEqual(data.indexOf('/Image/Width 620/Height 420/'), -1);
         assert.notStrictEqual(data.indexOf('/Length 26>>stream\r\n_test_image_markup_string_\r\n'), -1);
         done();
     });
@@ -75,7 +77,7 @@ QUnit.test('PDF \'startxref\' populated with correct offset', function(assert) {
         const match = data.match(/startxref\r\n(\d+)\r\n/);
         assert.ok(match);
         assert.strictEqual(match.length, 2);
-        assert.strictEqual(parseInt(match[1]), 707 + version.length);
+        assert.strictEqual(parseInt(match[1]), 717 + version.length);
         done();
     });
 });
@@ -92,7 +94,7 @@ QUnit.test('PDF \'xref\' populated with correct blocks offset', function(assert)
         assert.strictEqual(parseInt(match[2]), 10, '2');
         assert.strictEqual(parseInt(match[3]), 346, '3');
         assert.strictEqual(parseInt(match[4]), 89, '4');
-        assert.strictEqual(parseInt(match[5]), 520 + version.length, '5');
+        assert.strictEqual(parseInt(match[5]), 534 + version.length, '5');
         assert.strictEqual(parseInt(match[6]), 450, '6');
         assert.strictEqual(parseInt(match[7]), 143, '7');
 
@@ -192,5 +194,50 @@ QUnit.test('getData returns Base64 when Blob is not supported by Browser', funct
         assert.deepEqual(window.btoa.lastCall.args, ['_composed_string_']);
         assert.equal(data, 'base64Data');
         done();
+    });
+});
+
+QUnit.module('PDF CreationDate', {
+    beforeEach() {
+        contentTestEnv.beforeEach.apply(this, arguments);
+        pdfCreator.set_getCurDate(() => this.currentDate);
+
+    },
+    afterEach() {
+        contentTestEnv.afterEach.apply(this, arguments);
+        pdfCreator.restore_getCurDate();
+    }
+}, () => {
+
+    QUnit.test('PDF \'info\' has correct date. Date units less 10', function(assert) {
+        const done = assert.async();
+        this.currentDate = new Date('Tue Feb 02 2021 06:04:01 GMT+0400');
+
+        getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
+            const matches = data.match(ASN_DATE_REGEX);
+
+            assert.strictEqual(matches.length, 4, 'matches count is valid');
+            assert.strictEqual(matches[1], '20210102020401', 'date is valid');
+            assert.strictEqual(matches[2], '00', 'time should be in UTC format');
+            assert.strictEqual(matches[3], '00', 'time should be in UTC format');
+
+            done();
+        });
+    });
+
+    QUnit.test('PDF \'info\' has correct date. Date units great 10', function(assert) {
+        const done = assert.async();
+        this.currentDate = new Date('Tue Dec 11 2021 21:12:13 GMT+0400');
+
+        getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
+            const matches = data.match(ASN_DATE_REGEX);
+
+            assert.strictEqual(matches.length, 4, 'matches count is valid');
+            assert.strictEqual(matches[1], '20211111171213', 'date is valid');
+            assert.strictEqual(matches[2], '00', 'time should be in UTC format');
+            assert.strictEqual(matches[3], '00', 'time should be in UTC format');
+
+            done();
+        });
     });
 });
