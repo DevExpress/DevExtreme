@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
-import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
+import { Series } from 'viz/series/base_series';
 
 function getOriginalData(data) {
     return $.map(data, function(item) {

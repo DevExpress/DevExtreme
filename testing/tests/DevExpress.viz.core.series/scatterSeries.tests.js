@@ -1,10 +1,9 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
-import pointModule from 'viz/series/points/base_point';
-import labelModule from 'viz/series/points/label';
-import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
+import * as pointModule from 'viz/series/points/base_point';
+import * as labelModule from 'viz/series/points/label';
+import { Series } from 'viz/series/base_series';
 import { insertMockFactory, MockAxis, restoreMockFactory } from '../../helpers/chartMocks.js';
 
 const createSeries = function(options, renderSettings) {

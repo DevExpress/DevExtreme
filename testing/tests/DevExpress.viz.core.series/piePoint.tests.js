@@ -1,7 +1,7 @@
-import * as vizMocks from '../../helpers/vizMocks.js';
+import vizMocks from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
-import pointModule from 'viz/series/points/base_point';
-import labelModule from 'viz/series/points/label';
+import * as pointModule from 'viz/series/points/base_point';
+import * as labelModule from 'viz/series/points/label';
 import { MockAngularTranslator } from '../../helpers/chartMocks.js';
 import { states as statesConsts } from 'viz/components/consts';
 import tooltipModule from 'viz/core/tooltip';

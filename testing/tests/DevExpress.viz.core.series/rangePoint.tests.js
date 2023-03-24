@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
-import pointModule from 'viz/series/points/base_point';
-import labelModule from 'viz/series/points/label';
+import vizMocks from '../../helpers/vizMocks.js';
+import * as pointModule from 'viz/series/points/base_point';
+import * as labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
 import tooltipModule from 'viz/core/tooltip';
 

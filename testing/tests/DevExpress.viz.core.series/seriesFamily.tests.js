@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
-import pointModule from 'viz/series/points/base_point';
+import * as pointModule from 'viz/series/points/base_point';
 import { MockTranslator, MockSeries, MockPoint } from '../../helpers/chartMocks.js';
 import { SeriesFamily } from 'viz/core/series_family';
 

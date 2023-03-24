@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import vizMocks from '../../helpers/vizMocks.js';
 
 import { Series } from 'viz/series/base_series';
 

@@ -1,11 +1,12 @@
 import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
-import pointModule from 'viz/series/points/base_point';
-import labelModule from 'viz/series/points/label';
+import * as pointModule from 'viz/series/points/base_point';
+import * as labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
-import tooltipModule from 'viz/core/tooltip';
-import { states as statesConsts } from 'viz/components/consts';
+import * as tooltipModule from 'viz/core/tooltip';
+import consts from 'viz/components/consts';
 
+const statesConsts = consts.state;
 const originalLabel = labelModule.Label;
 
 const createPoint = function(series, data, options) {
