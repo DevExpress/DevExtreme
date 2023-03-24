@@ -2218,7 +2218,7 @@ QUnit.module('Options', {
         });
     });
 
-    QUnit.module('ViewsCount', {
+    QUnit.module('ViewsCount = 2', {
         beforeEach: function() {
             this.options = {
                 focusStateEnabled: true,
