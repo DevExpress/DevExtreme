@@ -138,8 +138,8 @@ export const custom = function(options) {
         onHiding: function() {
             deferred.reject();
         },
-        onHidden: function() {
-            popupInstance.$element().remove();
+        onHidden: function({ element }) {
+            $(element).remove();
         },
         toolbarItems: popupToolbarItems,
         animation: {
