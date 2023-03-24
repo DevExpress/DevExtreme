@@ -55,6 +55,7 @@ QUnit.testStart(function() {
 
 const device = devices.real();
 const dataGridWrapper = new DataGridWrapper('#container');
+const DIALOG_ANIMATION_TIMEOUT = 500;
 
 function getInputElements($container) {
     return $container.find('input:not([type=\'hidden\'])');
@@ -1284,6 +1285,7 @@ QUnit.module('Editing', {
             // act
             // this.clock.tick(5000);
             body.find('.dx-dialog').first().find('.dx-dialog-button').first().trigger('dxclick'); // delete
+            this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
             // assert
             assert.ok(!body.find('.dx-dialog').length, 'not has dialog');
@@ -1338,6 +1340,7 @@ QUnit.module('Editing', {
 
             // act
             body.find('.dx-dialog').first().find('.dx-dialog-button').first().trigger('dxclick'); // delete
+            this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
             // assert
             assert.ok(!body.find('.dx-dialog').length, 'not has dialog');
@@ -1390,6 +1393,7 @@ QUnit.module('Editing', {
 
             // act
             body.find('.dx-dialog').first().find('.dx-dialog-button').last().trigger('dxclick'); // delete
+            this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
             // assert
             assert.ok(!body.find('.dx-dialog').length, 'not has dialog');
@@ -4911,6 +4915,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.deleteRow(0);
         $('.dx-dialog-button').first().trigger('dxclick');
+        this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
         // assert
         assert.equal(testElement.find('.dx-data-row').length, 7, 'count rows');
@@ -4924,6 +4929,7 @@ QUnit.module('Editing with real dataController', {
         that.deleteRow(0);
         that.clock.tick();
         $('.dx-dialog-button').first().trigger('dxclick');
+        this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
         // assert
         assert.equal(testElement.find('.dx-data-row').length, 6, 'count rows');
@@ -4999,6 +5005,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.deleteRow(0);
         $('.dx-dialog-button').first().trigger('dxclick');
+        this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
         // assert
         assert.equal(testElement.find('.dx-data-row').length, 6, 'count rows');
@@ -15230,6 +15237,7 @@ QUnit.module('Editing with validation', {
 
                 // act
                 dialog.find('.dx-dialog-button').first().trigger('dxclick');
+                this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
             }
 
             // assert
