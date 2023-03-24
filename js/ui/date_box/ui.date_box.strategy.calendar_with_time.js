@@ -163,14 +163,25 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
     _attachTabHandler: function() {
         const dateBox = this.dateBox;
-        const handler = function(e) {
+        const hourBox = this._timeView._hourBox;
+        const lastElement = this._timeView._format12 ?? this._timeView._minuteBox;
+
+        const hourBoxHandler = function(e) {
             if(e.shiftKey) {
                 e.preventDefault();
                 dateBox.focus();
             }
         };
 
-        this._timeView._hourBox.registerKeyHandler('tab', handler);
+        const lastElementHandler = function(e) {
+            if(!e.shiftKey) {
+                e.preventDefault();
+                dateBox.focus();
+            }
+        };
+
+        hourBox.registerKeyHandler('tab', hourBoxHandler);
+        lastElement.registerKeyHandler('tab', lastElementHandler);
     },
 
     _preventFocusOnPopup: function(e) {
