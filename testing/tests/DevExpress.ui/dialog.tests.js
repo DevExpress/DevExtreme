@@ -62,7 +62,7 @@ module('dialog', {
 
         const dialogButton = this
             .dialog()
-            .find(`.${DIALOG_BUTTON_CLASS}`)
+            .find(`.${DIALOG_BUTTON_CLASS}`);
 
         const keyboard = keyboardMock(dialogButton);
         keyboard.keyDown('esc');
@@ -105,7 +105,7 @@ module('dialog', {
     
             const dialogButton = this
                 .dialog()
-                .find(`.${DIALOG_BUTTON_CLASS}`)
+                .find(`.${DIALOG_BUTTON_CLASS}`);
             const keyboard = keyboardMock(dialogButton);
 
             keyboard.keyDown('esc');
