@@ -966,14 +966,12 @@ const Calendar = Editor.inherit({
     },
 
     _swipeEndHandler: function(e) {
-        const { viewsCount, currentDate, rtlEnabled } = this.option();
+        const { currentDate, rtlEnabled } = this.option();
         const targetOffset = e.event.targetOffset;
         const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
         const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
-        const shouldDoubleOffset = viewsCount > 1 && rtlEnabled
-            ? isAdditionalViewActive && moveOffset === -1
-            : isAdditionalViewActive && moveOffset === 1;
+        const shouldDoubleOffset = isAdditionalViewActive && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
 
         if(moveOffset === 0) {
             this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);

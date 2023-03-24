@@ -2357,6 +2357,25 @@ QUnit.module('Options', {
                 assert.strictEqual(spy.calledOnce, shouldRefresh);
             });
         });
+
+        [false, true].forEach((rtlEnabled) => {
+            QUnit.test(`Should double currentDate change on ${rtlEnabled ? 'right' : 'left'} swipe if additionalView is active (rtlEnabled=${rtlEnabled})`, function(assert) {
+                const calendar = this.calendar;
+                calendar.option('rtlEnabled', rtlEnabled);
+                const $cell = $(getAdditionalViewInstance(calendar).$element().find('*[data-value="2023/02/16"]'));
+
+                $cell.trigger('dxclick');
+                const currentDate = calendar.option('currentDate');
+                const pointer = pointerMock(this.$element).start();
+
+                pointer.swipeStart().swipeEnd(0.5 * rtlEnabled ? -1 : 1);
+
+                const expectedCurrentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, currentDate.getDate());
+                const newCurrentDate = calendar.option('currentDate');
+
+                assert.deepEqual(newCurrentDate, expectedCurrentDate);
+            });
+        });
     });
 });
 
