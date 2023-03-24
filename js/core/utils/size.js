@@ -126,7 +126,7 @@ const getContainerHeight = function(container) {
     return isWindow(container) ? container.innerHeight : container.offsetHeight;
 };
 
-export const parseHeight = function(value, container) {
+export const parseHeight = function(value, container, element) {
     if(value.indexOf('px') > 0) {
         value = parseInt(value.replace('px', ''));
     } else if(value.indexOf('%') > 0) {
@@ -135,6 +135,8 @@ export const parseHeight = function(value, container) {
         value = parseInt(value);
     } else if(value.indexOf('vh') > 0) {
         value = window.innerHeight / 100 * parseInt(value.replace('vh', ''));
+    } else if(element && value.indexOf('em') > 0) {
+        value = parseFloat(value.replace('em', '')) * parseFloat(window.getComputedStyle(element).fontSize);
     }
 
     return value;
