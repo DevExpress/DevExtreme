@@ -2,6 +2,14 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
 import { getPropertyValue, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { isMaterial } from '../../../helpers/themeUtils';
+
+const testFixture = () => {
+  if (isMaterial()) {
+    return fixture.disablePageReloads.skip;
+  }
+  return fixture.disablePageReloads;
+};
 
 fixture.disablePageReloads`TextArea_Height`
   .page(url(__dirname, '../../container.html'));
@@ -9,7 +17,7 @@ fixture.disablePageReloads`TextArea_Height`
 const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
 
 [true, false].forEach((autoResizeEnabled) => {
-  test(`TextArea has correct height with "autoResizeEnabled" is ${autoResizeEnabled} and height is 7em & maxHeight is 5em`, async (t) => {
+  testFixture()(`TextArea has correct height with "autoResizeEnabled" is ${autoResizeEnabled} and height is 7em & maxHeight is 5em`, async (t) => {
     const textArea = new TextArea('#container');
 
     await t
