@@ -162,26 +162,38 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _attachTabHandler: function() {
-        const dateBox = this.dateBox;
-        const hourBox = this._timeView._hourBox;
-        const lastElement = this._timeView._format12 ?? this._timeView._minuteBox;
+        this._attachHourBoxHandler();
 
-        const hourBoxHandler = function(e) {
+        if(this.dateBox.option('applyValueMode') === 'instantly') {
+            this._attachLastElementHandler();
+        }
+    },
+
+    _attachHourBoxHandler() {
+        const dateBox = this.dateBox;
+
+        const handler = function(e) {
             if(e.shiftKey) {
                 e.preventDefault();
                 dateBox.focus();
             }
         };
 
-        const lastElementHandler = function(e) {
+        this._timeView._hourBox.registerKeyHandler('tab', handler);
+    },
+
+    _attachLastElementHandler() {
+        const dateBox = this.dateBox;
+        const lastElement = this._timeView._format12 ?? this._timeView._minuteBox;
+
+        const handler = function(e) {
             if(!e.shiftKey) {
                 e.preventDefault();
                 dateBox.focus();
             }
         };
 
-        hourBox.registerKeyHandler('tab', hourBoxHandler);
-        lastElement.registerKeyHandler('tab', lastElementHandler);
+        lastElement.registerKeyHandler('tab', handler);
     },
 
     _preventFocusOnPopup: function(e) {
