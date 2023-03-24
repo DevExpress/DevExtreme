@@ -44,7 +44,7 @@ const DropDownEditor = TextBox.inherit({
                     return;
                 }
 
-                if(this.option('applyValueMode') === 'instantly') {
+                if(this._shouldBeClosed()) {
                     this.close();
                     return;
                 }
@@ -97,6 +97,10 @@ const DropDownEditor = TextBox.inherit({
                 return true;
             }
         });
+    },
+
+    _shouldBeClosed() {
+        return this.option('applyValueMode') === 'instantly';
     },
 
     _getDefaultButtons: function() {
@@ -746,6 +750,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getLastPopupElement: function() {
+        // debugger
         return this._popup.$wrapper().find('.dx-popup-cancel.dx-button');
     },
 

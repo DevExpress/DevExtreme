@@ -95,6 +95,12 @@ const DateBoxMask = DateBoxBase.inherit({
         });
     },
 
+    _shouldBeClosed() {
+        const { applyValueMode, type } = this.option();
+
+        return applyValueMode === 'instantly' && !type === 'datetime';
+    },
+
     _shouldUseOriginalHandler(e) {
         const keysToHandleByMask = ['backspace', 'del'];
         const isNotDeletingInCalendar = this.option('opened') && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
