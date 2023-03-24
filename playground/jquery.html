@@ -51,8 +51,8 @@
             const instance = $('#date').dxDateBox({
                 type: 'datetime',
                 value: now,
-                // dropDownOptions: { toolbarItems: [] },
-                applyValueMode: 'instantly',
+                dropDownOptions: { toolbarItems: [] },
+                // applyValueMode: 'instantly',
             }).dxDateBox('instance');
 
             console.log(instance.option('applyValueMode'))

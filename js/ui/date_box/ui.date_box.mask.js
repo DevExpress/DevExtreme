@@ -120,14 +120,10 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _popupFocusableBoundarySelectors() {
-        if(this.option('applyValueMode') === 'instantly') {
-            return {
-                first: '.dx-item:first-child .dx-texteditor-input-container input',
-                last: '.dx-timeview-format12 .dx-texteditor-input-container input',
-            };
-        }
-
-        return this.callBase();
+        return {
+            first: '.dx-item:first-child .dx-texteditor-input-container input',
+            last: '.dx-timeview-format12 .dx-texteditor-input-container input',
+        };
     },
 
     _getDefaultOptions() {
