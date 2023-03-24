@@ -11,11 +11,14 @@ import domAdapter from 'core/dom_adapter';
 
 const { module, test, testInActiveWindow } = QUnit;
 
+const ANIMATION_TIMEOUT = 500;
+
 const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
 const DIALOG_CLASS = 'dx-dialog';
 const POPUP_CLASS = 'dx-popup';
+const DIALOG_BUTTON_CLASS = 'dx-dialog-button';
 
-module('dialog tests', {
+module('dialog', {
     beforeEach: function() {
         viewPort('#qunit-fixture');
 
@@ -23,6 +26,7 @@ module('dialog tests', {
 
         this.title = 'Title here';
         this.messageHtml = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
+        this.getDialogElement = () => $(`.${DIALOG_CLASS}`);
         this.dialog = () => {
             return $(`.${DIALOG_WRAPPER_CLASS}`);
         };
@@ -35,7 +39,7 @@ module('dialog tests', {
         this.clickButton = (index) => {
             index = index || 0;
             this.dialog()
-                .find('.dx-dialog-button')
+                .find(`.${DIALOG_BUTTON_CLASS}`)
                 .eq(index)
                 .trigger('dxclick');
         };
@@ -45,6 +49,88 @@ module('dialog tests', {
         fx.off = false;
     }
 }, () => {
+    test('should remove its markup after hiding by escape (T1154325)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        custom({ 
+            messageHtml: 'text', 
+            buttons: [{ type: 'default', text: 'Ok' }] 
+        }).show();
+
+        const dialogButton = this
+            .dialog()
+            .find(`.${DIALOG_BUTTON_CLASS}`);
+
+        const keyboard = keyboardMock(dialogButton);
+        keyboard.keyDown('esc');
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.length, 0, 'dialog markup is removed');
+    });
+
+    test('should remove its markup after hide method call', function(assert) {
+        const { show, hide } = custom({
+            messageHtml: 'text'
+        });
+
+        show();
+        hide();
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.length, 0, 'dialog markup is removed');
+    });
+
+    module('with animation', {
+        beforeEach: function() {
+            fx.off = false;
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        test('should remove its markup after hiding by escape only after hiding animation is finished', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+    
+            custom({ 
+                messageHtml: 'text', 
+                buttons: [{ type: 'default', text: 'Ok' }],
+            }).show();
+    
+            const dialogButton = this
+                .dialog()
+                .find(`.${DIALOG_BUTTON_CLASS}`);
+            const keyboard = keyboardMock(dialogButton);
+
+            keyboard.keyDown('esc');
+    
+            assert.strictEqual(this.getDialogElement().length, 1, 'dialog markup is not removed immediately');
+
+            this.clock.tick(ANIMATION_TIMEOUT);
+            assert.strictEqual(this.getDialogElement().length, 0, 'dialog markup is removed after animation is finished');
+        });
+    
+        test('should remove its markup after hide method call only after hiding animation is finished', function(assert) {
+            const { show, hide } = custom({
+                messageHtml: 'text',
+            });
+    
+            show();
+            hide();
+
+            assert.strictEqual(this.getDialogElement().length, 1, 'dialog markup is not removed immediately');
+
+            this.clock.tick(ANIMATION_TIMEOUT);
+            assert.strictEqual(this.getDialogElement().length, 0, 'dialog markup is removed after animation is finished');
+        });
+    })
+
     test('dialog show/hide by Escape (T686065)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
@@ -53,7 +139,7 @@ module('dialog tests', {
 
         alert();
         assert.ok(this.thereIsDialog());
-        keyboardMock(this.dialog().find('.dx-overlay-content .dx-dialog-button').get(0)).keyDown('esc');
+        keyboardMock(this.dialog().find(`.${DIALOG_BUTTON_CLASS}`).get(0)).keyDown('esc');
         assert.ok(this.thereIsNoDialog());
     });
 
@@ -198,7 +284,7 @@ module('dialog tests', {
         instance.show().done((value) => actual = value);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
-        assert.equal(this.dialog().find('.dx-dialog-button').length, 2, 'There are two custom buttons.');
+        assert.equal(this.dialog().find(`.${DIALOG_BUTTON_CLASS}`).length, 2, 'There are two custom buttons.');
 
         this.clickButton(1);
 
