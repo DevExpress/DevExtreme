@@ -1,12 +1,9 @@
-const $ = require('jquery');
-const RenovatedPager = require('renovation/ui/pager/pager.j.js');
-const resizeCallbacks = require('core/utils/resize_callbacks');
+import $ from 'jquery';
+import RenovatedPager from 'renovation/ui/pager/pager.j.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { rerender as reRender } from 'inferno';
 
-// eslint-disable-next-line spellcheck/spell-checker
-const reRender = require('inferno').rerender;
-
-// default export not supported
-exports.WrappedWidget = class WrappedWidget extends RenovatedPager {
+export class WrappedWidget extends RenovatedPager {
 
     get _$pagesSizeChooser() {
         return this._$element.find('.dx-page-sizes');
@@ -42,5 +39,5 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedPager {
         const currentIndex = pages.indexOf(page);
         pages[currentIndex]._$page.trigger('dxclick');
     }
-};
+}
 

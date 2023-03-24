@@ -1,25 +1,21 @@
-define(function(require) {
-    if(QUnit.urlParams['nojquery']) {
-        return;
-    }
+if(QUnit.urlParams['nojquery']) {
+    return;
+}
 
-    const $ = require('jquery');
+import $ from 'jquery';
+import '/artifacts/js/dx.all.debug.js';
 
-    require('/artifacts/js/dx.all.debug.js');
+QUnit.module('jquery integration');
 
+QUnit.test('renderer uses correct strategy', function(assert) {
+    const node = document.createElement('div');
+    const element = new DevExpress.ui.dxButton(node).element();
 
-    QUnit.module('jquery integration');
+    assert.ok(element instanceof window.jQuery);
+});
 
-    QUnit.test('renderer uses correct strategy', function(assert) {
-        const node = document.createElement('div');
-        const element = new DevExpress.ui.dxButton(node).element();
+QUnit.test('$.fn plugins works with both strategies', function(assert) {
+    const $element = $('<div>');
 
-        assert.ok(element instanceof window.jQuery);
-    });
-
-    QUnit.test('$.fn plugins works with both strategies', function(assert) {
-        const $element = $('<div>');
-
-        assert.equal(typeof $element.dxButton, 'function');
-    });
+    assert.equal(typeof $element.dxButton, 'function');
 });

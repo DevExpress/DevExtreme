@@ -1,5 +1,5 @@
-const variableWrapper = require('core/utils/variable_wrapper');
-const { logger } = require('core/utils/console')
+import variableWrapper from 'core/utils/variable_wrapper';
+import { logger } from 'core/utils/console';
 
 QUnit.test('Base wrapper methods', function(assert) {
     assert.strictEqual(variableWrapper.isWrapped(3), false, 'isWrapped method');

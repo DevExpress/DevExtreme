@@ -1,5 +1,5 @@
-import domUtils from 'core/utils/dom';
-import type from 'core/utils/type';
+import * as domUtils from 'core/utils/dom';
+import * as type from 'core/utils/type';
 import renderer from 'core/renderer';
 import {
     findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,
@@ -42,7 +42,7 @@ QUnit.test('#templateKey', function(assert) {
     assert.strictEqual(templateKey(templateSource), 'template', 'should return value if it is not a renderer function');
 
     isRenderer.returns(false);
-    assert.strictEqual(templateKey(templateSource), templateSource, 'should return a first array item if if is a renderer function');
+    assert.strictEqual(templateKey(templateSource), templateSource, 'should return a first array item if it is a renderer function');
 
     isRenderer.restore();
 });

@@ -5,7 +5,9 @@ import ODataContext from 'data/odata/context';
 import Guid from 'core/guid';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
-import ajaxMock from '../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../helpers/ajaxMock.js';
+
+console.log(ErrorHandlingHelper)
 
 const MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
 

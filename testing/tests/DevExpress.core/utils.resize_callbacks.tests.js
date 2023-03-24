@@ -1,6 +1,6 @@
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import domAdapter from 'core/dom_adapter';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {

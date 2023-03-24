@@ -1,1 +1,3 @@
-window.jQuery = module.exports = undefined;
+window.jQuery = undefined;
+
+export default window.jQuery;

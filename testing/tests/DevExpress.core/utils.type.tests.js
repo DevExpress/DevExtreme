@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const typeUtils = require('core/utils/type');
-const Deferred = require('core/utils/deferred').Deferred;
-const renderer = require('core/renderer');
-const eventsEngine = require('events/core/events_engine');
+import $ from 'jquery';
+import * as typeUtils from 'core/utils/type';
+import { Deferred } from 'core/utils/deferred';
+import renderer from 'core/renderer';
+import eventsEngine from 'events/core/events_engine';
 
 QUnit.module('Type checking');
 

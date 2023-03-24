@@ -1,7 +1,8 @@
-const $ = require('jquery');
-const converters = require('data/odata/utils').keyConverters;
-const interpretJsonFormat = require('data/odata/utils').OData__internals.interpretJsonFormat;
-const Guid = require('core/guid');
+import $ from 'jquery';
+import { keyConverters as converters , OData__internals } from 'data/odata/utils';
+import Guid from 'core/guid';
+
+const interpretJsonFormat = OData__internals.interpretJsonFormat;
 
 QUnit.module('OData 2');
 QUnit.test('key converters', function(assert) {

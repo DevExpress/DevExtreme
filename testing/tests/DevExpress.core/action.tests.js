@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import Action from 'core/action';
 
-
 QUnit.testStart(function() {
     const markup =
         '<div class="dx-state-disabled">\

@@ -1,4 +1,4 @@
-const dataUtils = require('core/element_data');
+import * as dataUtils from 'core/element_data';
 
 QUnit.module('Data');
 

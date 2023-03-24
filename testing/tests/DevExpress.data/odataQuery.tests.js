@@ -3,7 +3,7 @@ import { EdmLiteral } from 'data/odata/utils';
 import query from 'data/query';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
-import ajaxMock from '../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'data/odata/query_adapter';
 

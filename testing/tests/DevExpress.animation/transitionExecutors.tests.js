@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const devices = require('core/devices');
-const fx = require('animation/fx');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
-const animationPresets = require('animation/presets/presets').presets;
-const TransitionExecutorModule = require('animation/transition_executor/transition_executor');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import devices from 'core/devices';
+import fx from 'animation/fx';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import { presets as animationPresets } from 'animation/presets/presets';
+import * as TransitionExecutorModule from 'animation/transition_executor/transition_executor';
 
 QUnit.module('transition executor', {
     beforeEach: function() {

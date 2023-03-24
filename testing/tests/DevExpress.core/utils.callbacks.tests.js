@@ -1,4 +1,4 @@
-const Callbacks = require('core/utils/callbacks');
+import Callbacks from 'core/utils/callbacks';
 
 QUnit.module('Methods', {
     beforeEach: function() {

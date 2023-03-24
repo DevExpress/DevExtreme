@@ -1,6 +1,7 @@
-const $ = require('jquery');
-const translator = require('animation/translator');
-const styleUtils = require('core/utils/style');
+import $ from 'jquery';
+import * as translator from 'animation/translator';
+import * as styleUtils from 'core/utils/style';
+
 const transformStyle = styleUtils.styleProp('transform');
 
 QUnit.module('translator', {
