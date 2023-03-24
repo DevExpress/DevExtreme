@@ -122,7 +122,7 @@ const getLimits = (pattern, date, forcedPattern) => {
         },
         E: { min: 0, max: 6 },
         H: { min: 0, max: 23 },
-        h: { min: 0, max: 23 },
+        h: { min: 0, max: 12 },
         m: { min: 0, max: 59 },
         s: { min: 0, max: 59 },
         S: { min: 0, max: 999 },
