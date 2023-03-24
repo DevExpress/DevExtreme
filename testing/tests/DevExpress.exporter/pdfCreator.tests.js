@@ -54,7 +54,7 @@ QUnit.test('PDF \'info\' has correct date and dx version', function(assert) {
 QUnit.test('PDF \'image\' populated with correct size in px, length and image string', function(assert) {
     const done = assert.async();
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        assert.notStrictEqual(data.indexOf('/Image/Width 620.1/Height 420.2/'), -1);
+        assert.notStrictEqual(data.indexOf('/Image/Width 620/Height 420/'), -1);
         assert.notStrictEqual(data.indexOf('/Length 26>>stream\r\n_test_image_markup_string_\r\n'), -1);
         done();
     });
@@ -75,7 +75,7 @@ QUnit.test('PDF \'startxref\' populated with correct offset', function(assert) {
         const match = data.match(/startxref\r\n(\d+)\r\n/);
         assert.ok(match);
         assert.strictEqual(match.length, 2);
-        assert.strictEqual(parseInt(match[1]), 707 + version.length);
+        assert.strictEqual(parseInt(match[1]), 703 + version.length);
         done();
     });
 });

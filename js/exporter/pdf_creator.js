@@ -26,11 +26,13 @@ let composePdfString = function(imageString, options, curDate) {
 
     const widthPt = (width * 0.75).toFixed(2);
     const heightPt = (height * 0.75).toFixed(2);
+    const flooredWidth = Math.floor(width);
+    const flooredHeight = Math.floor(height);
 
     const mainPage = mainPageTemplate.replace('_width_', widthPt).replace('_height_', heightPt);
     const content = contentTemplate.replace('_width_', widthPt).replace('_height_', heightPt);
     const info = infoTemplate.replace('_date_', curDate).replace('_version_', version);
-    const image = imageStartTemplate.replace('_width_', width).replace('_height_', height).replace('_length_', imageString.length) + imageString + imageEndTemplate;
+    const image = imageStartTemplate.replace('_width_', flooredWidth).replace('_height_', flooredHeight).replace('_length_', imageString.length) + imageString + imageEndTemplate;
     const xref = getXref(mainPage.length, content.length, info.length);
 
     const mainContent = mainPage + content + info + image;
