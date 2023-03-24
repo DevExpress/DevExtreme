@@ -1454,6 +1454,108 @@ module('Caret moving', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, 'caret was moved to month');
     });
 
+    test(`Caret should not be moved to next group after type hour "1" when "hh" time format is used`, function(assert) {
+        this.instance.option({
+            value: new Date(2021, 9, 17, 16, 6),
+            displayFormat: 'hh:mm a'
+        });
+
+        this.keyboard.type('1');
+        assert.strictEqual(this.instance.option('text'), `01:06 PM`, 'text is correct');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'caret position is correct');
+    });
+
+    [2, 3, 4, 5, 6, 7, 8, 9].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'hh:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [10, 11, 12].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'hh:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `${hour}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved to month');
+        });
+    });
+
+    [13, 14, 15, 16, 17, 18, 19].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'hh:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour.toString()[1]}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [0, 1, 2].forEach((hour) => {
+        test(`Caret should not be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour}:06 AM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'caret position is correct');
+        });
+    });
+
+    [3, 4, 5, 6, 7, 8, 9].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour}:06 AM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [10, 11].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `${hour}:06 AM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+    
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `${hour}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
     test('Typed year and value should be in the same century when short year format is used', function(assert) {
         this.instance.option({
             displayFormat: 'yy MM',
