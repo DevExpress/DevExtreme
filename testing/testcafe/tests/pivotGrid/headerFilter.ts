@@ -8,21 +8,17 @@ import { sales } from './data';
 fixture.disablePageReloads`pivotGrid_headerFilter`
   .page(url(__dirname, '../container.html'));
 
-test.only('Header filter popup', async (t) => {
+test('Header filter popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
 
   await t.click(pivotGrid.getColumnHeaderArea().getHeaderFilterIcon());
 
-  await testScreenshot(t, takeScreenshot, 'headerFilter - before scroll.png', {
-    element: pivotGrid.getColumnHeaderArea().getHeaderFilterMenu(),
-  });
+  await testScreenshot(t, takeScreenshot, 'headerFilter - before scroll.png');
 
   await t.scroll(pivotGrid.getColumnHeaderArea().getHeaderFilterScrollable(), 0, 20);
 
-  await testScreenshot(t, takeScreenshot, 'headerFilter - after scroll.png', {
-    element: pivotGrid.getColumnHeaderArea().getHeaderFilterMenu(),
-  });
+  await testScreenshot(t, takeScreenshot, 'headerFilter - after scroll.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
