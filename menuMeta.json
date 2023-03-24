@@ -2725,6 +2725,17 @@
               "/Models/SampleData/MedalAnnotations.cs"
             ],
             "DemoType": "Viz"
+          },
+          {
+            "Title": "Pie With Custom Styles",
+            "Name": "PieWithCustomStyles",
+            "DocUrl": "",
+            "Widget": "Charts",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       },
@@ -5560,7 +5571,7 @@
             "Name": "Overview",
             "Widget": "Popover"
           }
-        ] 
+        ]
       },
       {
         "Name": "Popup",

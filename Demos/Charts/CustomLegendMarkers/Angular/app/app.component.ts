@@ -17,8 +17,6 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 
-// const markerPath =
-
 export class AppComponent {
   dataSource: Data[];
 
