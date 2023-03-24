@@ -119,6 +119,17 @@ const DateBoxMask = DateBoxBase.inherit({
         this._partIncrease(delta + step, true);
     },
 
+    _popupFocusableBoundarySelectors() {
+        if(this.option('applyValueMode') === 'instantly') {
+            return {
+                first: '.dx-item:first-child .dx-texteditor-input-container input',
+                last: '.dx-timeview-format12 .dx-texteditor-input-container input',
+            };
+        }
+
+        return this.callBase();
+    },
+
     _getDefaultOptions() {
         return extend(this.callBase(), {
 
