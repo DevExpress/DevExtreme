@@ -1857,9 +1857,6 @@ class Scheduler extends Widget {
                 { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
             ],
             popupOptions: {
-                onHidden: (e) => {
-                    e.component.$element().remove();
-                },
                 copyRootClassesToWrapper: true,
                 _ignoreCopyRootClassesToWrapperDeprecation: true
             },
