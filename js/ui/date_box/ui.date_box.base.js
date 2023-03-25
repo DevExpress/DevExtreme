@@ -62,6 +62,10 @@ const DateBox = DropDownEditor.inherit({
         return extend(this.callBase(), this._strategy.supportedKeys());
     },
 
+    _shouldBeClosed() {
+        return this._isInstantlyMode() && !this.option('type') === 'datetime';
+    },
+
     _renderButtonContainers: function() {
         this.callBase.apply(this, arguments);
         this._strategy.customizeButtons();
@@ -343,6 +347,12 @@ const DateBox = DropDownEditor.inherit({
         this.callBase();
         this._popup.$wrapper().addClass(DATEBOX_WRAPPER_CLASS);
         this._renderPopupWrapper();
+    },
+
+    _popupFocusableBoundarySelectors() {
+        const selectors = this._strategy._popupFocusableBoundarySelectors?.() ?? this.callBase();
+
+        return selectors;
     },
 
     _getPopupToolbarItems() {

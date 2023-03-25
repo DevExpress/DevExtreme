@@ -161,10 +161,23 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return this._timeView._hourBox.$element().find('input');
     },
 
-    _attachTabHandler: function() {
+    _toolbarItemCount() {
+        return this.dateBox.option('dropDownOptions.toolbarItems').length;
+    },
+
+    _popupFocusableBoundarySelectors() {
+        if(this._toolbarItemCount() === 0) {
+            return {
+                first: '.dx-item:first-child .dx-texteditor-input',
+                last: '.dx-timeview-format12 .dx-texteditor-input',
+            };
+        }
+    },
+
+    _attachTabHandler() {
         this._attachHourBoxHandler();
 
-        if(this.dateBox.option('applyValueMode') === 'instantly') {
+        if(this._toolbarItemCount() === 0) {
             this._attachLastElementHandler();
         }
     },

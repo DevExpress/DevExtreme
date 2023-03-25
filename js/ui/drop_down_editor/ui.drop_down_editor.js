@@ -99,8 +99,12 @@ const DropDownEditor = TextBox.inherit({
         });
     },
 
-    _shouldBeClosed() {
+    _isInstantlyMode() {
         return this.option('applyValueMode') === 'instantly';
+    },
+
+    _shouldBeClosed() {
+        return this._isInstantlyMode();
     },
 
     _getDefaultButtons: function() {

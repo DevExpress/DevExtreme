@@ -95,12 +95,6 @@ const DateBoxMask = DateBoxBase.inherit({
         });
     },
 
-    _shouldBeClosed() {
-        const { applyValueMode, type } = this.option();
-
-        return applyValueMode === 'instantly' && !type === 'datetime';
-    },
-
     _shouldUseOriginalHandler(e) {
         const keysToHandleByMask = ['backspace', 'del'];
         const isNotDeletingInCalendar = this.option('opened') && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
@@ -117,17 +111,6 @@ const DateBoxMask = DateBoxBase.inherit({
 
         this._loadMaskValue(this._initialMaskValue);
         this._partIncrease(delta + step, true);
-    },
-
-    _popupFocusableBoundarySelectors() {
-        if(this.option('applyValueMode') === 'instantly') {
-            return {
-                first: '.dx-item:first-child .dx-texteditor-input-container input',
-                last: '.dx-timeview-format12 .dx-texteditor-input-container input',
-            };
-        }
-
-        return this.callBase();
     },
 
     _getDefaultOptions() {
