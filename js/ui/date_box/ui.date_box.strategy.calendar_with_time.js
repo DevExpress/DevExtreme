@@ -175,14 +175,14 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _attachTabHandler() {
-        this._attachHourBoxHandler();
+        this._attachHoursBoxHandler();
 
         if(this._toolbarItemCount() === 0) {
             this._attachLastElementHandler();
         }
     },
 
-    _attachHourBoxHandler() {
+    _attachHoursBoxHandler() {
         const dateBox = this.dateBox;
 
         const handler = function(e) {
