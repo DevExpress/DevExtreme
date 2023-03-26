@@ -1,4 +1,4 @@
-import gridCore from './ui.data_grid.core';
-import { editingFormBasedModule } from '../grid_core/ui.grid_core.editing_form_based';
+import { editingFormBasedModule } from '@js/ui/grid_core/ui.grid_core.editing_form_based';
+import gridCore from '../module_core';
 
 gridCore.registerModule('editingFormBased', editingFormBasedModule);

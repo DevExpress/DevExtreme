@@ -24,6 +24,7 @@ module.exports = {
         {
             files: [
                 '**/module*.ts',
+                '**/module*/**.ts',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -35,13 +36,16 @@ module.exports = {
                 'no-self-compare': 'warn',
                 'no-multi-assign': 'warn',
                 'no-param-reassign': 'warn',
-                'no-underscore-dangle': 'warn',
+                'no-underscore-dangle': 'off',
                 'no-mixed-operators': 'warn',
                 'no-nested-ternary': 'warn',
                 'no-bitwise': 'warn',
+                'no-plusplus': 'warn',
                 'no-continue': 'warn',
                 'prefer-spread': 'warn',
                 'prefer-rest-params': 'warn',
+                'max-len': 'warn',
+                'consistent-return': 'warn',
                 '@typescript-eslint/explicit-function-return-type': 'warn',
                 '@typescript-eslint/init-declarations': 'warn',
                 '@typescript-eslint/no-unsafe-return': 'warn',
@@ -59,6 +63,7 @@ module.exports = {
                 '@typescript-eslint/no-implied-eval': 'warn',
                 '@typescript-eslint/ban-ts-comment': 'warn',
                 '@typescript-eslint/prefer-for-of': 'warn',
+                '@typescript-eslint/no-restricted-imports': 'warn',
             }
         },
     ],

@@ -1,14 +1,15 @@
-import gridCore from './ui.data_grid.core';
-import { columnsControllerModule } from '../grid_core/ui.grid_core.columns_controller';
-import { extend } from '../../core/utils/extend';
+// @ts-expect-error
+import { columnsControllerModule } from '@js/ui/grid_core/ui.grid_core.columns_controller';
+import { extend } from '@js/core/utils/extend';
+import gridCore from './module_core';
 
 gridCore.registerModule('columns', {
-    defaultOptions: function() {
-        return extend(true, {}, columnsControllerModule.defaultOptions(), {
-            commonColumnSettings: {
-                allowExporting: true
-            }
-        });
-    },
-    controllers: columnsControllerModule.controllers
+  defaultOptions() {
+    return extend(true, {}, columnsControllerModule.defaultOptions(), {
+      commonColumnSettings: {
+        allowExporting: true,
+      },
+    });
+  },
+  controllers: columnsControllerModule.controllers,
 });
