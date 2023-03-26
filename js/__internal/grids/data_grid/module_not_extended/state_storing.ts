@@ -1,4 +1,4 @@
-import gridCore from './ui.data_grid.core';
-import { stateStoringModule } from '../grid_core/ui.grid_core.state_storing';
+import { stateStoringModule } from '@js/ui/grid_core/ui.grid_core.state_storing';
+import gridCore from '../module_core';
 
 gridCore.registerModule('stateStoring', stateStoringModule);

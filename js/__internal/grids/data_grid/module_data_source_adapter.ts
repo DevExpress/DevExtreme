@@ -1,12 +1,13 @@
-import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
+import DataSourceAdapter from '@js/ui/grid_core/ui.grid_core.data_source_adapter';
 
-let dataSourceAdapterType = DataSourceAdapter;
+let dataSourceAdapterType: any = DataSourceAdapter;
 
 export default {
-    extend: function(extender) {
-        dataSourceAdapterType = dataSourceAdapterType.inherit(extender);
-    },
-    create: function(component) {
-        return new dataSourceAdapterType(component);
-    }
+  extend(extender) {
+    dataSourceAdapterType = dataSourceAdapterType.inherit(extender);
+  },
+  create(component) {
+    // eslint-disable-next-line new-cap
+    return new dataSourceAdapterType(component);
+  },
 };

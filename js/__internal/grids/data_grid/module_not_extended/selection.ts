@@ -1,4 +1,4 @@
-import gridCore from './ui.data_grid.core';
-import { selectionModule } from '../grid_core/ui.grid_core.selection';
+import { selectionModule } from '@js/ui/grid_core/ui.grid_core.selection';
+import gridCore from '../module_core';
 
 gridCore.registerModule('selection', selectionModule);
