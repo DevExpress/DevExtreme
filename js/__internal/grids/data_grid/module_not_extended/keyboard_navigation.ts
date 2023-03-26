@@ -1,4 +1,4 @@
-import gridCore from './ui.data_grid.core';
-import { keyboardNavigationModule } from '../grid_core/keyboard_navigation/module';
+import { keyboardNavigationModule } from '@js/ui/grid_core/keyboard_navigation/module';
+import gridCore from '../module_core';
 
 gridCore.registerModule('keyboardNavigation', keyboardNavigationModule);
