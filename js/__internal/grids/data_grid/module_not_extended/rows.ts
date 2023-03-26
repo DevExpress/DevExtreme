@@ -1,5 +1,6 @@
-import gridCore from './ui.data_grid.core';
-import { rowsModule } from '../grid_core/ui.grid_core.rows';
+// @ts-expect-error
+import { rowsModule } from '@js/ui/grid_core/ui.grid_core.rows';
+import gridCore from '../module_core';
 
 export const RowsView = rowsModule.views.rowsView;
 

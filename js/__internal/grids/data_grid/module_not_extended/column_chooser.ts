@@ -1,5 +1,6 @@
-import gridCore from './ui.data_grid.core';
-import { columnChooserModule } from '../grid_core/ui.grid_core.column_chooser';
+// @ts-expect-error
+import { columnChooserModule } from '@js/ui/grid_core/ui.grid_core.column_chooser';
+import gridCore from '../module_core';
 
 export const ColumnChooserController = columnChooserModule.controllers.columnChooser;
 export const ColumnChooserView = columnChooserModule.views.columnChooserView;

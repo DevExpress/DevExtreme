@@ -1,4 +1,4 @@
-import core from './ui.data_grid.core';
-import { filterSyncModule } from '../grid_core/ui.grid_core.filter_sync';
+import { filterSyncModule } from '@js/ui/grid_core/ui.grid_core.filter_sync';
+import core from '../module_core';
 
 core.registerModule('filterSync', filterSyncModule);

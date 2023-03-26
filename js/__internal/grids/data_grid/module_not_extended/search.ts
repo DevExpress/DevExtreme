@@ -1,4 +1,4 @@
-import gridCore from './ui.data_grid.core';
-import { searchModule } from '../grid_core/ui.grid_core.search';
+import { searchModule } from '@js/ui/grid_core/ui.grid_core.search';
+import gridCore from '../module_core';
 
 gridCore.registerModule('search', searchModule);
