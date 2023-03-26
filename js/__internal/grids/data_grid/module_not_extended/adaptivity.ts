@@ -1,4 +1,5 @@
-import gridCore from './ui.data_grid.core';
-import { adaptivityModule } from '../grid_core/ui.grid_core.adaptivity';
+// @ts-expect-error
+import { adaptivityModule } from '@js/ui/grid_core/ui.grid_core.adaptivity';
+import gridCore from '../module_core';
 
 gridCore.registerModule('adaptivity', adaptivityModule);

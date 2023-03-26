@@ -1,29 +1,30 @@
-import gridCore from './ui.data_grid.core';
-import errors from '../widget/ui.errors';
-import dataSourceAdapterProvider from './ui.data_grid.data_source_adapter';
-import { dataControllerModule } from '../grid_core/ui.grid_core.data_controller';
+import errors from '@js/ui/widget/ui.errors';
+// @ts-expect-error
+import { dataControllerModule } from '@js/ui/grid_core/ui.grid_core.data_controller';
+import gridCore from './module_core';
+import dataSourceAdapterProvider from './module_data_source_adapter';
 
-export const DataController = dataControllerModule.controllers.data.inherit((function() {
-    return {
-        _getDataSourceAdapter: function() {
-            return dataSourceAdapterProvider;
-        },
+export const DataController = dataControllerModule.controllers.data.inherit((function () {
+  return {
+    _getDataSourceAdapter() {
+      return dataSourceAdapterProvider;
+    },
 
-        _getSpecificDataSourceOption: function() {
-            const dataSource = this.option('dataSource');
+    _getSpecificDataSourceOption() {
+      const dataSource = this.option('dataSource');
 
-            if(dataSource && !Array.isArray(dataSource) && this.option('keyExpr')) {
-                errors.log('W1011');
-            }
+      if (dataSource && !Array.isArray(dataSource) && this.option('keyExpr')) {
+        errors.log('W1011');
+      }
 
-            return this.callBase();
-        }
-    };
+      return this.callBase();
+    },
+  };
 })());
 
 gridCore.registerModule('data', {
-    defaultOptions: dataControllerModule.defaultOptions,
-    controllers: {
-        data: DataController
-    }
+  defaultOptions: dataControllerModule.defaultOptions,
+  controllers: {
+    data: DataController,
+  },
 });

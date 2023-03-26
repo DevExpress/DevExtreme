@@ -1,4 +1,4 @@
-import gridCore from './ui.data_grid.core';
-import { virtualColumnsModule } from '../grid_core/ui.grid_core.virtual_columns';
+import { virtualColumnsModule } from '@js/ui/grid_core/ui.grid_core.virtual_columns';
+import gridCore from '../module_core';
 
 gridCore.registerModule('virtualColumns', virtualColumnsModule);
