@@ -7,7 +7,7 @@ import holdEvent from 'events/hold';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import * as contextMenuEvent from 'events/contextmenu';
-import * as dblclickEvent from 'events/dblclick';
+import dblclickEvent from 'events/dblclick';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 const createInstance = (options) => new TreeViewTestWrapper(options);
