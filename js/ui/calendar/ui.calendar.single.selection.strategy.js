@@ -15,6 +15,7 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
     }
 
     selectValue(selectedValue, e) {
+        this.skipNavigate();
         this.dateValue(selectedValue, e);
     }
 
