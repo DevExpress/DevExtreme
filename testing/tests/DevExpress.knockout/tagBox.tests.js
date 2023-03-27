@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const TagBox = require('ui/tag_box');
-const fx = require('animation/fx');
-const ko = require('knockout');
+import $ from 'jquery';
+import TagBox from 'ui/tag_box';
+import fx from 'animation/fx';
+import ko from 'knockout';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

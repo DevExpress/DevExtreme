@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/accordion');
-require('integration/knockout');
+import 'ui/accordion';
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

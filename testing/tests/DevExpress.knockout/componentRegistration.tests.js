@@ -1,17 +1,17 @@
-const $ = require('jquery');
+import $ from 'jquery';
 const noop = require('core/utils/common').noop;
-const ko = require('knockout');
-const registerComponent = require('core/component_registrator');
-const DOMComponent = require('core/dom_component');
-const Widget = require('ui/widget/ui.widget');
+import ko from 'knockout';
+import registerComponent from 'core/component_registrator';
+import DOMComponent from 'core/dom_component';
+import Widget from 'ui/widget/ui.widget';
 const KoTemplate = require('integration/knockout/template').KoTemplate;
-const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
-const config = require('core/config');
-const dataUtils = require('core/element_data');
+import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import config from 'core/config';
+import dataUtils from 'core/element_data';
 
-require('ui/select_box');
-require('ui/lookup');
-require('integration/knockout');
+import 'ui/select_box';
+import 'ui/lookup';
+import 'integration/knockout';
 
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 

@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
-const ko = require('knockout');
+import $ from 'jquery';
+import fx from 'animation/fx';
+import ko from 'knockout';
 
-require('ui/overlay/ui.overlay');
-require('ui/slider');
-require('integration/knockout');
+import 'ui/overlay/ui.overlay';
+import 'ui/slider';
+import 'integration/knockout';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

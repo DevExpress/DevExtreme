@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/context_menu/ui.context_menu');
-require('integration/knockout');
+import 'ui/context_menu/ui.context_menu';
+import 'integration/knockout';
 
 QUnit.test('context menu should change it\'s position if it\'s part was changed by viewmodel', function(assert) {
     const vm = {

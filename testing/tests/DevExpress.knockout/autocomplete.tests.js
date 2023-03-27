@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const keyboardMock = require('../../helpers/keyboardMock.js');
-const ko = require('knockout');
-const Autocomplete = require('ui/autocomplete');
+import $ from 'jquery';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import ko from 'knockout';
+import Autocomplete from 'ui/autocomplete';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

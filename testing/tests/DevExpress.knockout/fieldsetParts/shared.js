@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const browser = require('core/utils/browser');
-const devices = require('core/devices');
+import $ from 'jquery';
+import ko from 'knockout';
+import browser from 'core/utils/browser';
+import devices from 'core/devices';
 
-require('../../../helpers/executeAsyncMock.js');
-require('integration/knockout');
-require('bundles/modules/parts/widgets-web');
+import '../../../helpers/executeAsyncMock.js';
+import 'integration/knockout';
+import 'bundles/modules/parts/widgets-web';
 
 const LABEL = '.dx-field-label';
 const VALUE = '.dx-field-value';

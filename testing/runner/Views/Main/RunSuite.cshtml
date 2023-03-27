@@ -223,12 +223,16 @@
                     return originalFetch(url.replace('!', ''), options);
                 }
 
+                if (/\!json$/.test(url)) {
+                   return originalFetch(url.replace('!json', ''), options);
+                }
+
                 if (url.includes('renovation/ui') && !/\.js$/.test(url)) {
                     return originalFetch(url + '.js', options);
                 }
 
                 if (!/\.(js|json|css)$/.test(url)) {
-                    return originalFetch(url + '.js', options);
+                   return originalFetch(url + '.js', options);
                 }
 
                 return originalFetch(url, options);

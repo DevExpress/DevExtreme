@@ -1,13 +1,13 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const registerEvent = require('events/core/event_registrator');
-const dragEvents = require('events/drag');
-const clickEvent = require('events/click');
-const holdEvent = require('events/hold');
-const pointerEvents = require('events/pointer');
-const swipeEvents = require('events/swipe');
+import $ from 'jquery';
+import ko from 'knockout';
+import registerEvent from 'events/core/event_registrator';
+import dragEvents from 'events/drag';
+import clickEvent from 'events/click';
+import holdEvent from 'events/hold';
+import pointerEvents from 'events/pointer';
+import swipeEvents from 'events/swipe';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

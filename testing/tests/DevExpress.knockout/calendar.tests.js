@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('integration/knockout');
-require('ui/calendar');
+import 'integration/knockout';
+import 'ui/calendar';
 
 QUnit.testStart(function() {
     const markup =

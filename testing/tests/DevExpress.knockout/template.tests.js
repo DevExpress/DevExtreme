@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 const noop = require('core/utils/common').noop;
-const ko = require('knockout');
+import ko from 'knockout';
 const KoTemplate = require('integration/knockout/template').KoTemplate;
 
 QUnit.module('rendering', {

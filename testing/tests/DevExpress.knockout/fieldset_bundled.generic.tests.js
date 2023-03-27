@@ -1,4 +1,4 @@
-require('generic_light.css!');
+import 'generic_light.css!';
 
-const testFieldsetsOnPlatform = require('./fieldsetParts/shared.js');
+import testFieldsetsOnPlatform from './fieldsetParts/shared.js';
 testFieldsetsOnPlatform('generic.light', { testSwitchBaseline: false });

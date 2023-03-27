@@ -1,9 +1,9 @@
-const $ = require('jquery');
+import $ from 'jquery';
 const noop = require('core/utils/common').noop;
-const ko = require('knockout');
+import ko from 'knockout';
 
-require('ui/action_sheet');
-require('integration/knockout');
+import 'ui/action_sheet';
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

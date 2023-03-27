@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/toolbar');
-require('integration/knockout');
+import 'ui/toolbar';
+import 'integration/knockout';
 
 $('#qunit-fixture').html('<div id="toolbar" data-bind="dxToolbar: { items: items }"></div>');
 

@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/tabs');
-require('integration/knockout');
+import 'ui/tabs';
+import 'integration/knockout';
 
 QUnit.test('regression: B250529', function(assert) {
     let itemClickFired = false;

@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const ValidationEngine = require('ui/validation_engine');
+import $ from 'jquery';
+import ko from 'knockout';
+import ValidationEngine from 'ui/validation_engine';
 
-require('ui/text_box');
-require('ui/validation_group');
-require('ui/validator');
-require('integration/knockout');
+import 'ui/text_box';
+import 'ui/validation_group';
+import 'ui/validator';
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

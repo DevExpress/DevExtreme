@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const registerComponent = require('core/component_registrator');
-const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
-const CollectionWidgetItem = require('ui/collection/item');
+import $ from 'jquery';
+import ko from 'knockout';
+import registerComponent from 'core/component_registrator';
+import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import CollectionWidgetItem from 'ui/collection/item';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 

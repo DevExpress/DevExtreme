@@ -1,10 +1,10 @@
-const $ = require('jquery');
+import $ from 'jquery';
 const noop = require('core/utils/common').noop;
-const ko = require('knockout');
+import ko from 'knockout';
 
-require('ui/button');
-require('ui/tree_view');
-require('integration/knockout');
+import 'ui/button';
+import 'ui/tree_view';
+import 'integration/knockout';
 
 QUnit.test('T198402: Binding to properties of the view model not working from within a dxTreeView itemTemplate', function(assert) {
     const $element = $('<div data-bind=\'dxTreeView: { dataSource: dataSource, itemTemplate: itemTemplate } \'></div>').appendTo('#qunit-fixture');

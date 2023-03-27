@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/pivot_grid/ui.pivot_grid');
-require('integration/knockout');
+import 'ui/pivot_grid/ui.pivot_grid';
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =
