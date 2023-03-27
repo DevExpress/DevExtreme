@@ -1,13 +1,13 @@
-const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
-const numberingSystems = require('../../../node_modules/cldr-core/supplemental/numberingSystems.json!');
-const Globalize = require('globalize');
+import likelySubtags from '../../../node_modules/cldr-core/supplemental/likelySubtags.json!';
+import numberingSystems from '../../../node_modules/cldr-core/supplemental/numberingSystems.json!';
+import Globalize from 'globalize';
 
-const cldrData = [
-    require('../../../node_modules/devextreme-cldr-data/fa.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/de.json!json'),
-];
+import fa from '../../../node_modules/devextreme-cldr-data/fa.json!json';
+import mr from '../../../node_modules/devextreme-cldr-data/mr.json!json';
+import ar from '../../../node_modules/devextreme-cldr-data/ar.json!json';
+import de from '../../../node_modules/devextreme-cldr-data/de.json!json';
+
+const cldrData = [ fa, mr, ar, de ];
 
 Globalize.load(likelySubtags);
 Globalize.load(numberingSystems);
@@ -16,19 +16,19 @@ cldrData.forEach(localeCldrData => {
     Globalize.load(localeCldrData);
 });
 
-require('localization/globalize/core');
-require('localization/globalize/number');
-require('localization/globalize/currency');
-require('localization/globalize/date');
-require('localization/globalize/message');
+import 'localization/globalize/core';
+import 'localization/globalize/number';
+import 'localization/globalize/currency';
+import 'localization/globalize/date';
+import 'localization/globalize/message';
 
-const $ = require('jquery');
-const dateLocalization = require('localization/date');
+import $ from 'jquery';
+import dateLocalization from 'localization/date';
 
-require('ui/date_box');
-require('viz/chart');
+import 'ui/date_box';
+import 'viz/chart';
 
-const ExcelExport = require('exporter/exceljs/export_format');
+import ExcelExport from 'exporter/exceljs/export_format';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const DATEVIEW_ITEM_SELECTOR = '.dx-dateview-item';

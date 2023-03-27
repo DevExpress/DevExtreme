@@ -1,16 +1,16 @@
-require('localization/globalize/core');
-require('localization/globalize/number');
-require('localization/globalize/currency');
-require('localization/globalize/date');
-require('localization/globalize/message');
-const cldrData = [
-    require('../../../node_modules/devextreme-cldr-data/ru.json!json')
-];
+import 'localization/globalize/core';
+import 'localization/globalize/number';
+import 'localization/globalize/currency';
+import 'localization/globalize/date';
+import 'localization/globalize/message';
 
-const ValidationEngine = require('ui/validation_engine');
-const Globalize = require('globalize');
-const localization = require('localization');
-const ru = require('localization/messages/ru.json!');
+import cldrRu from '../../../node_modules/devextreme-cldr-data/ru.json!json';
+const cldrData = [ cldrRu ];
+
+import ValidationEngine from 'ui/validation_engine';
+import Globalize from 'globalize';
+import localization from 'localization';
+import ru from 'localization/messages/ru.json!';
 
 cldrData.forEach(localeCldrData => {
     Globalize.load(localeCldrData);

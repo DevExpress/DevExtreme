@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const messageLocalization = require('localization/message');
-const localization = require('localization');
-const de = require('localization/messages/de.json!');
-const ja = require('localization/messages/ja.json!');
-const ru = require('localization/messages/ru.json!');
+import $ from 'jquery';
+import messageLocalization from 'localization/message';
+import * as localization from 'localization';
+import de from 'localization/messages/de.json!';
+import ja from 'localization/messages/ja.json!';
+import ru from 'localization/messages/ru.json!';
 
 localization.loadMessages(de);
 localization.loadMessages(ja);
