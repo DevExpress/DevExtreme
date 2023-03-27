@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import support from 'core/utils/support';
+import * as support from 'core/utils/support';
 import { getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
-import contextMenuEvent from 'events/contextmenu';
+import * as contextMenuEvent from 'events/contextmenu';
 import holdEvent from 'events/hold';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';

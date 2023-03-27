@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TransitionExecutorModule from 'animation/transition_executor/transition_executor';
+import * as TransitionExecutorModule from 'animation/transition_executor/transition_executor';
 
 import 'ui/defer_rendering';
 
@@ -87,7 +87,7 @@ QUnit.module('dxDeferRendering', {
         options.renderWhen.resolve();
     });
 
-    QUnit.test('staggering animation options', function(assert) {
+    QUnit('staggering animation options', function(assert) {
         assert.expect(7);
 
         const done = assert.async();

@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import TransitionExecutorModule from 'animation/transition_executor/transition_executor';
-import dataUtils from 'core/element_data';
+import * as TransitionExecutorModule from 'animation/transition_executor/transition_executor';
+import * as dataUtils from 'core/element_data';
 
 import 'ui/defer_rendering';
 
