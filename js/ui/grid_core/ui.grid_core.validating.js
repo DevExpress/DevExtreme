@@ -438,10 +438,13 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(useDefaultValidator) {
                     const adapter = validator.option('adapter');
                     if(adapter) {
+                        const originBypass = adapter.bypass;
+                        const defaultAdapterBypass = () => parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+
                         adapter.getValue = getValue;
                         adapter.validationRequestsCallbacks = [];
                         adapter.bypass = () => {
-                            return parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+                            return originBypass.call(adapter) || defaultAdapterBypass();
                         };
                     }
                 }
