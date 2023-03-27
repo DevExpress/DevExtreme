@@ -1,15 +1,15 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
-import translator from 'animation/translator';
+import * as translator from 'animation/translator';
 import holdEvent from 'events/hold';
 import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
-import contextMenuEvent from 'events/contextmenu';
+import * as contextMenuEvent from 'events/contextmenu';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import decoratorRegistry from 'ui/list/ui.list.edit.decorator_registry';
+import * as decoratorRegistry from 'ui/list/ui.list.edit.decorator_registry';
 import SwitchableEditDecorator from 'ui/list/ui.list.edit.decorator.switchable';
 import SwitchableButtonEditDecorator from 'ui/list/ui.list.edit.decorator.switchable.button';
 import themes from 'ui/themes';

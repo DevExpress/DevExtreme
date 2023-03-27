@@ -12,7 +12,7 @@ import holdEvent from 'events/hold';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 import registerComponent from 'core/component_registrator';
-import swipeEvents from 'events/swipe';
+import * as swipeEvents from 'events/swipe';
 import themes from 'ui/themes';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';

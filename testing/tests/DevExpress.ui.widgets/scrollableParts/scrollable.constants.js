@@ -1,4 +1,4 @@
-import simulatedStrategy from 'ui/scroll_view/ui.scrollable.simulated';
+import * as simulatedStrategy from 'ui/scroll_view/ui.scrollable.simulated';
 
 export const SCROLLABLE_CLASS = 'dx-scrollable';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';

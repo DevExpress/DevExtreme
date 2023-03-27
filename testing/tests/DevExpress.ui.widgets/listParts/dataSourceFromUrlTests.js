@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import List from 'ui/list';
-import ajaxMock from '../../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../../helpers/ajaxMock.js';
 
 QUnit.module(
     'data source from url',

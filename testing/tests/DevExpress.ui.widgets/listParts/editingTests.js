@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import typeUtils from 'core/utils/type';
+import * as typeUtils from 'core/utils/type';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
