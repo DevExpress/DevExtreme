@@ -19,11 +19,11 @@ import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import visibilityChangeUtils from 'events/visibility_change';
+import * as visibilityChangeUtils from 'events/visibility_change';
 import domAdapter from 'core/dom_adapter';
 
 import 'generic_light.css!';

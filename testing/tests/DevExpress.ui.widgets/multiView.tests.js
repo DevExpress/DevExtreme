@@ -1,5 +1,5 @@
 import fx from 'animation/fx';
-import translator from 'animation/translator';
+import * as translator from 'animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';
@@ -19,13 +19,13 @@ QUnit.testStart(() => {
             #animated {
                 position: absolute;
             }
-            
+
             #multiView {
                 width: 800px;
                 height: 1000px;
             }
         </style>
-        
+
         <div id="animated"></div>
         <div id="container">
             <div id="multiView"></div>
