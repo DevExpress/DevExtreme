@@ -713,7 +713,7 @@ const PivotGrid = (Widget as any).inherit({
         icon: 'xlsxfile',
         text: texts.exportToExcel,
         onItemClick() {
-          that.exportToExcel();
+          that.exportTo();
         },
       });
     }
@@ -894,7 +894,7 @@ const PivotGrid = (Widget as any).inherit({
         icon: 'xlsxfile',
         hint: this.option('texts.exportToExcel'),
         onClick: () => {
-          this.exportToExcel();
+          this.exportTo();
         },
       };
 
@@ -1066,6 +1066,7 @@ const PivotGrid = (Widget as any).inherit({
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
       headerFilter: that.option('headerFilter'),
       visible: that.option('visible'),
+      remoteSort: that.option('scrolling.mode') === 'virtual',
     });
 
     const dataArea = that._renderDataArea(dataAreaElement);

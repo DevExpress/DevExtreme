@@ -13,15 +13,10 @@ import { getCompareFunction, foreachDataLevel } from '../module_widget_utils';
 import { FieldChooserBase } from './module_base';
 
 import '../data_source/module';
-import { SortableConst } from '../sortable/index';
+import { ATTRIBUTES, CLASSES, ICONS } from './const';
 
 const DIV = '<div>';
 const hasWindow = hasWindowFn();
-
-const FIELDCHOOSER_CLASS = 'dx-pivotgridfieldchooser';
-const FIELDCHOOSER_CONTAINER_CLASS = 'dx-pivotgridfieldchooser-container';
-const FIELDS_CONTAINER_CLASS = 'dx-pivotgrid-fields-container';
-const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
 
 function getDimensionFields(item, fields) {
   const result: any = [];
@@ -90,7 +85,7 @@ function compareItems(a, b) {
 }
 
 function getScrollable(container) {
-  return container.find('.dx-scrollable').dxScrollable('instance');
+  return container.find(`.${CLASSES.scrollable.self}`).dxScrollable('instance');
 }
 
 const FieldChooser = FieldChooserBase.inherit({
@@ -197,22 +192,22 @@ const FieldChooser = FieldChooserBase.inherit({
 
   _clean(skipStateSetting) {
     !skipStateSetting && this._dataSource && this.option('state', this._dataSource.state());
-    this.$element().children(`.${FIELDCHOOSER_CONTAINER_CLASS}`).remove();
+    this.$element().children(`.${CLASSES.fieldChooser.container}`).remove();
   },
 
   _renderLayout0($container) {
     const that = this;
 
-    $container.addClass('dx-layout-0');
+    $container.addClass(CLASSES.layout.zero);
 
-    const $row1 = $(DIV).addClass('dx-row').appendTo($container);
-    const $row2 = $(DIV).addClass('dx-row').appendTo($container);
+    const $row1 = $(DIV).addClass(CLASSES.row).appendTo($container);
+    const $row2 = $(DIV).addClass(CLASSES.row).appendTo($container);
 
-    const $col1 = $(DIV).addClass('dx-col').appendTo($row1);
-    const $col2 = $(DIV).addClass('dx-col').appendTo($row1);
+    const $col1 = $(DIV).addClass(CLASSES.col).appendTo($row1);
+    const $col2 = $(DIV).addClass(CLASSES.col).appendTo($row1);
 
-    const $col3 = $(DIV).addClass('dx-col').appendTo($row2);
-    const $col4 = $(DIV).addClass('dx-col').appendTo($row2);
+    const $col3 = $(DIV).addClass(CLASSES.col).appendTo($row2);
+    const $col4 = $(DIV).addClass(CLASSES.col).appendTo($row2);
 
     that._renderArea($col1, 'all');
     that._renderArea($col2, 'row');
@@ -224,8 +219,8 @@ const FieldChooser = FieldChooserBase.inherit({
   _renderLayout1($container) {
     const that = this;
 
-    const $col1 = $(DIV).addClass('dx-col').appendTo($container);
-    const $col2 = $(DIV).addClass('dx-col').appendTo($container);
+    const $col1 = $(DIV).addClass(CLASSES.col).appendTo($container);
+    const $col2 = $(DIV).addClass(CLASSES.col).appendTo($container);
 
     that._renderArea($col1, 'all');
     that._renderArea($col2, 'filter');
@@ -237,14 +232,14 @@ const FieldChooser = FieldChooserBase.inherit({
   _renderLayout2($container) {
     const that = this;
 
-    $container.addClass('dx-layout-2');
+    $container.addClass(CLASSES.layout.second);
 
-    const $row1 = $(DIV).addClass('dx-row').appendTo($container);
+    const $row1 = $(DIV).addClass(CLASSES.row).appendTo($container);
     that._renderArea($row1, 'all');
 
-    const $row2 = $(DIV).addClass('dx-row').appendTo($container);
-    const $col1 = $(DIV).addClass('dx-col').appendTo($row2);
-    const $col2 = $(DIV).addClass('dx-col').appendTo($row2);
+    const $row2 = $(DIV).addClass(CLASSES.row).appendTo($container);
+    const $col1 = $(DIV).addClass(CLASSES.col).appendTo($row2);
+    const $col2 = $(DIV).addClass(CLASSES.col).appendTo($row2);
 
     that._renderArea($col1, 'filter');
     that._renderArea($col1, 'row');
@@ -255,14 +250,14 @@ const FieldChooser = FieldChooserBase.inherit({
   _initMarkup() {
     const that = this;
     const $element = this.$element();
-    const $container = $(DIV).addClass(FIELDCHOOSER_CONTAINER_CLASS).appendTo($element);
+    const $container = $(DIV).addClass(CLASSES.fieldChooser.container).appendTo($element);
     const layout = that.option('layout');
 
     that.callBase();
 
     $element
-      .addClass(FIELDCHOOSER_CLASS)
-      .addClass(FIELDS_CONTAINER_CLASS);
+      .addClass(CLASSES.fieldChooser.self)
+      .addClass(CLASSES.pivotGrid.fieldsContainer);
 
     that._dataChangedHandlers = [];
 
@@ -297,8 +292,8 @@ const FieldChooser = FieldChooserBase.inherit({
   },
 
   _getContextMenuArgs(dxEvent) {
-    const targetFieldElement = $(dxEvent.target).closest('.dx-area-field');
-    const targetGroupElement = $(dxEvent.target).closest('.dx-area-fields');
+    const targetFieldElement = $(dxEvent.target).closest(`.${CLASSES.area.field}`);
+    const targetGroupElement = $(dxEvent.target).closest(`.${CLASSES.area.fieldList}`);
     let field;
     let area;
 
@@ -351,7 +346,7 @@ const FieldChooser = FieldChooserBase.inherit({
       onItemClick(params) {
         params.itemData.onItemClick && params.itemData.onItemClick(params);
       },
-      cssClass: 'dx-pivotgridfieldchooser-context-menu',
+      cssClass: CLASSES.fieldChooser.contextMenu,
     });
   },
 
@@ -368,11 +363,11 @@ const FieldChooser = FieldChooserBase.inherit({
         let icon;
 
         if (field.isMeasure === true) {
-          icon = 'measure';
+          icon = ICONS.measure;
         }
 
         if (field.isMeasure === false) {
-          icon = field.groupName ? 'hierarchy' : 'dimension';
+          icon = field.groupName ? ICONS.hierarchy : ICONS.dimension;
         }
 
         resultItems.push({
@@ -448,8 +443,8 @@ const FieldChooser = FieldChooserBase.inherit({
       useNativeScrolling: false,
       itemTemplate(itemData, itemIndex, itemElement) {
         const $item = ($('<div>') as any)
-          .toggleClass('dx-area-field', !itemData.items)
-          .attr(SortableConst.attrs.treeViewItem, true)
+          .toggleClass(CLASSES.area.field, !itemData.items)
+          .attr(ATTRIBUTES.treeViewItem, true)
           .data('field', itemData.field)
           .appendTo(itemElement);
 
@@ -552,13 +547,15 @@ const FieldChooser = FieldChooserBase.inherit({
 
   _renderArea(container, area) {
     const that = this;
-    const $areaContainer = $(DIV).addClass('dx-area').appendTo(container);
-    const $fieldsHeaderContainer = $(DIV).addClass('dx-area-fields-header').appendTo($areaContainer);
+    const $areaContainer = $(DIV).addClass(CLASSES.area.self).appendTo(container);
+    const $fieldsHeaderContainer = $(DIV)
+      .addClass(CLASSES.area.fieldListHeader)
+      .appendTo($areaContainer);
     const caption = that.option(`texts.${area}Fields`);
     let $fieldsContent;
     let render;
 
-    $('<span>').addClass('dx-area-icon')
+    $('<span>').addClass(CLASSES.area.icon)
       .addClass(`dx-area-icon-${area}`)
       .appendTo($fieldsHeaderContainer);
 
@@ -566,17 +563,17 @@ const FieldChooser = FieldChooserBase.inherit({
       .html('&nbsp;')
       .appendTo($fieldsHeaderContainer);
 
-    $('<span>').addClass('dx-area-caption')
+    $('<span>').addClass(CLASSES.area.caption)
       .text(caption)
       .appendTo($fieldsHeaderContainer);
 
-    const $fieldsContainer: any = $(DIV).addClass('dx-area-fields')
-      .addClass(AREA_DRAG_CLASS)
+    const $fieldsContainer: any = $(DIV).addClass(CLASSES.area.fieldList)
+      .addClass(CLASSES.pivotGrid.dragAction)
       .appendTo($areaContainer);
 
     if (area !== 'all') {
-      $fieldsContainer.attr('group', area).attr('allow-scrolling', true);
-      $fieldsContent = $(DIV).addClass('dx-area-field-container').appendTo($fieldsContainer);
+      $fieldsContainer.attr('group', area).attr(ATTRIBUTES.allowScrolling, true);
+      $fieldsContent = $(DIV).addClass(CLASSES.area.fieldContainer).appendTo($fieldsContainer);
       render = function () {
         that._renderAreaFields($fieldsContent, area);
       };
@@ -586,8 +583,8 @@ const FieldChooser = FieldChooserBase.inherit({
         useNative: false,
       });
     } else {
-      $areaContainer.addClass('dx-all-fields');
-      $fieldsContainer.addClass('dx-treeview-border-visible');
+      $areaContainer.addClass(CLASSES.allFields);
+      $fieldsContainer.addClass(CLASSES.treeView.borderVisible);
       that._renderFieldsTreeView($fieldsContainer);
     }
   },
@@ -603,7 +600,7 @@ const FieldChooser = FieldChooserBase.inherit({
   },
 
   resetTreeView() {
-    const treeView = this.$element().find('.dx-treeview').dxTreeView('instance');
+    const treeView = this.$element().find(`.${CLASSES.treeView.self}`).dxTreeView('instance');
 
     if (treeView) {
       treeView.option('searchValue', '');
@@ -634,7 +631,7 @@ const FieldChooser = FieldChooserBase.inherit({
   },
 
   updateDimensions() {
-    const $scrollableElements = this.$element().find('.dx-area .dx-scrollable');
+    const $scrollableElements = this.$element().find(`.${CLASSES.area.self} .${CLASSES.scrollable.self}`);
     $scrollableElements.dxScrollable('update');
   },
 

@@ -999,7 +999,7 @@ QUnit.module('dxPivotGrid', {
             }
         });
 
-        pivotGrid.exportToExcel = sinon.spy();
+        pivotGrid.exportTo = sinon.spy();
 
         this.clock.tick();
 
@@ -1014,7 +1014,7 @@ QUnit.module('dxPivotGrid', {
 
         $($exportButton).trigger('dxclick');
 
-        assert.equal(pivotGrid.exportToExcel.callCount, 1, 'exportToExcel method called one');
+        assert.equal(pivotGrid.exportTo.callCount, 1, 'exportToExcel method called one');
         assert.strictEqual($exportButton.dxButton('option', 'hint'), 'Export to Excel file');
 
     });

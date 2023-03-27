@@ -55,6 +55,7 @@ QUnit.testStart(function() {
 
 const device = devices.real();
 const dataGridWrapper = new DataGridWrapper('#container');
+const DIALOG_ANIMATION_TIMEOUT = 500;
 
 function getInputElements($container) {
     return $container.find('input:not([type=\'hidden\'])');
@@ -1284,6 +1285,7 @@ QUnit.module('Editing', {
             // act
             // this.clock.tick(5000);
             body.find('.dx-dialog').first().find('.dx-dialog-button').first().trigger('dxclick'); // delete
+            this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
             // assert
             assert.ok(!body.find('.dx-dialog').length, 'not has dialog');
@@ -1338,6 +1340,7 @@ QUnit.module('Editing', {
 
             // act
             body.find('.dx-dialog').first().find('.dx-dialog-button').first().trigger('dxclick'); // delete
+            this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
             // assert
             assert.ok(!body.find('.dx-dialog').length, 'not has dialog');
@@ -1390,6 +1393,7 @@ QUnit.module('Editing', {
 
             // act
             body.find('.dx-dialog').first().find('.dx-dialog-button').last().trigger('dxclick'); // delete
+            this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
             // assert
             assert.ok(!body.find('.dx-dialog').length, 'not has dialog');
@@ -4911,6 +4915,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.deleteRow(0);
         $('.dx-dialog-button').first().trigger('dxclick');
+        this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
         // assert
         assert.equal(testElement.find('.dx-data-row').length, 7, 'count rows');
@@ -4924,6 +4929,7 @@ QUnit.module('Editing with real dataController', {
         that.deleteRow(0);
         that.clock.tick();
         $('.dx-dialog-button').first().trigger('dxclick');
+        this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
         // assert
         assert.equal(testElement.find('.dx-data-row').length, 6, 'count rows');
@@ -4999,6 +5005,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.deleteRow(0);
         $('.dx-dialog-button').first().trigger('dxclick');
+        this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
         // assert
         assert.equal(testElement.find('.dx-data-row').length, 6, 'count rows');
@@ -10622,7 +10629,7 @@ QUnit.module('Refresh modes', {
             allowUpdating: true,
             allowDeleting: true
         });
-        
+
         this.options.columns = [
             {
                 type: 'buttons',
@@ -10643,16 +10650,16 @@ QUnit.module('Refresh modes', {
         this.setupModules();
         this.cellValue(0, 'state', 'active');
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
-        
+
         // assert
         assert.equal($linkElements.length, 2);
         assert.ok($linkElements.eq(0).hasClass('dx-icon-active-icon'), 'the edit link');
         assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
         assert.notOk($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is enabled');
-        
+
         // act
         this.cellValue(0, 'state', 'disabled');
-        
+
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
         assert.equal($linkElements.length, 2);
@@ -10665,7 +10672,7 @@ QUnit.module('Refresh modes', {
     QUnit.test('Changing command column if repaintChangesOnly is true and push API is used', function(assert) {
         // arrange
         let $linkElements;
-        
+
         this.options.columns = [
             {
                 type: 'buttons',
@@ -10691,14 +10698,14 @@ QUnit.module('Refresh modes', {
 
         // act
         this.setupModules();
-        
+
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
         assert.equal($linkElements.length, 2);
         assert.ok($linkElements.eq(0).hasClass('dx-icon-active-icon'), 'the edit link');
         assert.ok($linkElements.eq(1).hasClass('dx-icon-custom'), 'the custom link');
         assert.notOk($linkElements.eq(1).hasClass('dx-state-disabled'), 'the custom link is enabled');
-        
+
         // act
         this.options.dataSource.store().push([
             {
@@ -10708,7 +10715,7 @@ QUnit.module('Refresh modes', {
             }
         ]);
         this.clock.tick();
-        
+
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
         assert.equal($linkElements.length, 2);
@@ -10847,6 +10854,44 @@ QUnit.module('Editing with validation', {
         this.clock.restore();
     }
 }, () => {
+
+    QUnit.test('Disabled editors in the editing form should bypass validation', function(assert) {
+        // arrange
+        const disabledEditorValidationCallback = sinon.spy(() => {
+            return Promise.resolve(true);
+        });
+        const enabledEditorValidationCallback = sinon.spy(() => {
+            return Promise.resolve(true);
+        });
+        this.applyOptions({
+            editing: {
+                mode: 'popup'
+            },
+            columns: [{
+                dataField: 'name',
+                editorOptions: { disabled: true },
+                validationRules: [{
+                    type: "async",
+                    validationCallback: disabledEditorValidationCallback
+                }]
+            }, {
+                dataField: 'age',
+                validationRules: [{
+                    type: "async",
+                    validationCallback: enabledEditorValidationCallback
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        this.cellValue(0, 1, 1);
+        this.saveEditData();
+
+        // assert
+        assert.equal(disabledEditorValidationCallback.callCount, 0, 'validationCallback of disabled editor was not called');
+        assert.equal(enabledEditorValidationCallback.callCount, 1, 'validationCallback of enabled editor was called');
+    });
 
     QUnit.test('CheckBox should save intermediate state after validation when editing mode is batch', function(assert) {
         // arrange
@@ -14827,6 +14872,83 @@ QUnit.module('Editing with validation', {
             done();
         });
     });
+    // T1152491 - DataGrid - Cell values are not re-validated when changed via the 'editing.changes' option
+    QUnit.test('validatingController.validateCell should call the validate method of the current validator if cell value chenged (first modify using editing API)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: '' },
+            type: 'update'
+        }]);
+
+        // act
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: 'val' },
+            type: 'update'
+        }]);
+
+        const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+        this.validatingController.validateCell(validator).done(result => {
+            // assert
+            assert.strictEqual(result.status, 'valid', 'status === "valid"');
+
+            done();
+        });
+    });
+    QUnit.test('validatingController.validateCell should call the validate method of the current validator if cell value chenged', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        this.editCell(0, 0);
+        this.cellValue(0, 0, '');
+
+        // act
+        this.option('editing.changes', [{
+            key: this.getKeyByRowIndex(0),
+            data: { name: 'val' },
+            type: 'update'
+        }]);
+
+        const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+        this.validatingController.validateCell(validator).done(result => {
+            // assert
+            assert.strictEqual(result.status, 'valid', 'status === "valid"');
+
+            done();
+        });
+    });
+
 
     QUnit.test('validatingController - validation result should be cached', function(assert) {
         // arrange
@@ -15153,6 +15275,7 @@ QUnit.module('Editing with validation', {
 
                 // act
                 dialog.find('.dx-dialog-button').first().trigger('dxclick');
+                this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
             }
 
             // assert

@@ -50,6 +50,10 @@
   .dx-popup-content {
     overflow: hidden;
   }
+
+  .dx-popup-content-scrollable {
+    overflow: auto;
+  }
 }
 
 .dx-device-ios {

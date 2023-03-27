@@ -48,6 +48,7 @@ const createMockDataSource = function(options) {
             return false;
         },
         load: sinon.stub(),
+        sortLocal: sinon.stub(),
         on: sinon.stub(),
         off: sinon.stub(),
         isLoading: sinon.stub().returns(false)

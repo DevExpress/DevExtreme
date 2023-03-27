@@ -2042,7 +2042,7 @@ declare module DevExpress.common.charts {
   export function registerPattern(options: {
     width: number | string;
     height: number | string;
-    template: DevExpress.core.template;
+    template: (container: SVGGElement) => void;
   }): string;
   export type RelativePosition = 'inside' | 'outside';
   /**
@@ -25773,6 +25773,10 @@ declare module DevExpress.viz {
      * [descr:baseLabelObject.getBoundingRect()]
      */
     getBoundingRect(): any;
+    /**
+     * [descr:baseLabelObject.shift(x, y)]
+     */
+    shift(x: number, y: number): this;
     /**
      * [descr:baseLabelObject.hide()]
      */

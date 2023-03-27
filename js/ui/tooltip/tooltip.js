@@ -55,6 +55,7 @@ const Tooltip = Popover.inherit({
             */
             onTitleRendered: null,
             bottomTemplate: null,
+            preventScrollEvents: false,
             propagateOutsideClick: true
         });
     },

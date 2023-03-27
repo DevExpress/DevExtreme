@@ -1,13 +1,17 @@
 import { ClientFunction } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
+import ColumnHeaderArea from './columnHeaderArea';
+import DataHeaderArea from './dataHeaderArea';
 import FieldChooser from './fieldChooser';
 import Popup from '../popup';
+import RowHeaderArea from './rowHeaderArea';
 
 const CLASS = {
   fieldChooser: 'dx-pivotgridfieldchooser',
   fieldChooserButton: 'dx-pivotgrid-field-chooser-button',
   fieldChooserPopup: 'dx-fieldchooser-popup',
+  exportBtn: 'dx-pivotgrid-export-button',
 };
 
 export default class PivotGrid extends Widget {
@@ -48,5 +52,21 @@ export default class PivotGrid extends Widget {
 
   getFieldChooser(): FieldChooser {
     return new FieldChooser(this.getFieldChooserPopup().getWrapper().find(`.${CLASS.fieldChooser}`));
+  }
+
+  getExportButton(): Selector {
+    return this.element.find(`.${CLASS.exportBtn}`);
+  }
+
+  getColumnHeaderArea(): ColumnHeaderArea {
+    return new ColumnHeaderArea(this.element);
+  }
+
+  getRowHeaderArea(): RowHeaderArea {
+    return new RowHeaderArea(this.element);
+  }
+
+  getDataHeaderArea(): DataHeaderArea {
+    return new DataHeaderArea(this.element);
   }
 }

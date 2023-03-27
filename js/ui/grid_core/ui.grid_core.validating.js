@@ -438,10 +438,13 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(useDefaultValidator) {
                     const adapter = validator.option('adapter');
                     if(adapter) {
+                        const originBypass = adapter.bypass;
+                        const defaultAdapterBypass = () => parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+
                         adapter.getValue = getValue;
                         adapter.validationRequestsCallbacks = [];
                         adapter.bypass = () => {
-                            return parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+                            return originBypass.call(adapter) || defaultAdapterBypass();
                         };
                     }
                 }
@@ -470,11 +473,16 @@ const ValidatingController = modules.Controller.inherit((function() {
             };
             let validationResult = this.getCellValidationResult(cellParams);
             const stateRestored = validationResultIsValid(validationResult);
+            const adapter = validator.option('adapter');
             if(!stateRestored) {
                 validationResult = validator.validate();
+            } else {
+                const currentCellValue = adapter.getValue();
+                if(!equalByValue(currentCellValue, validationResult.value)) {
+                    validationResult = validator.validate();
+                }
             }
             const deferred = new Deferred();
-            const adapter = validator.option('adapter');
             if(stateRestored && validationResult.status === VALIDATION_STATUS.pending) {
                 this.updateCellValidationResult(cellParams);
                 adapter.applyValidationResults(validationResult);

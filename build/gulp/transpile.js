@@ -63,7 +63,6 @@ const tsAliasBaseDir = path.resolve(__dirname, '../../js');
 const aliasTranspileConfig = {
     configFile: internalTsConfig,
     outDir: tsAliasBaseDir,
-    resolveFullPaths: true,
 }
 const createAliasTranspileAsync = async (config) => {
     // eslint-disable-next-line spellcheck/spell-checker

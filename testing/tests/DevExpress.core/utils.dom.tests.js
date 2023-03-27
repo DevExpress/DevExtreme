@@ -118,3 +118,39 @@ QUnit.test('it correctly works with svg elements', function(assert) {
 
     assert.ok(domUtils.contains(svgContainer, childElement));
 });
+
+QUnit.test('element in shadow dom should be detected if container is window', function(assert) {
+    const $div = $('<div>').appendTo('#qunit-fixture');
+    const divContent = $div.get(0);
+
+    divContent.attachShadow({ mode: 'open' });
+    divContent.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+    const textElement = divContent.shadowRoot.querySelector('p');
+
+    assert.ok(domUtils.contains(window, textElement));
+});
+
+QUnit.test('element in shadow dom should be detected if container is div element', function(assert) {
+    const $div = $('<div>').appendTo('#qunit-fixture');
+    const divContent = $div.get(0);
+
+    divContent.attachShadow({ mode: 'open' });
+    divContent.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+    const textElement = divContent.shadowRoot.querySelector('p');
+
+    assert.ok(domUtils.contains(divContent, textElement));
+});
+
+QUnit.test('element in shadow dom should be detected if container is document', function(assert) {
+    const $div = $('<div>').appendTo('#qunit-fixture');
+    const divContent = $div.get(0);
+
+    divContent.attachShadow({ mode: 'open' });
+    divContent.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+    const textElement = divContent.shadowRoot.querySelector('p');
+
+    assert.ok(domUtils.contains(document, textElement));
+});

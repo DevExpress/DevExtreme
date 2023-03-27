@@ -229,6 +229,13 @@ export interface baseLabelObject {
     getBoundingRect(): any;
     /**
      * @docid
+     * @publicName shift(x, y)
+     * @return object
+     * @public
+     */
+    shift(x: number, y: number): this;
+    /**
+     * @docid
      * @publicName hide()
      * @public
      */

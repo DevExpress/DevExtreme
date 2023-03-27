@@ -856,6 +856,27 @@ testModule('visibility', moduleConfig, () => {
         }
     });
 
+    test('overlay should not close after click on content element in shadow dom (T1146455)', function(assert) {
+        const content = $('<div>').get(0);
+
+        const overlay = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            contentTemplate: () => content,
+            visible: true
+        }).dxOverlay('instance');
+
+        overlay.show();
+
+        content.attachShadow({ mode: 'open' });
+        content.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+        const textElement = content.shadowRoot.querySelector('p');
+
+        $(overlay.$content()).trigger($.Event('dxpointerdown', { target: textElement }));
+
+        assert.strictEqual(overlay.option('visible'), true, 'Overlay should stay visible');
+    });
+
     testModule('e.cancel', {
         beforeEach: function(assert) {
             this.onShown = sinon.stub();

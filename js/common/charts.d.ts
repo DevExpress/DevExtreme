@@ -1,7 +1,3 @@
-import {
-    template,
-} from '../core/templates/template';
-
 /**
  * @public
  * @namespace DevExpress.common.charts
@@ -318,7 +314,7 @@ export function registerGradient(type: string, options: { rotationAngle?: number
  * @static
  * @public
  */
-export function registerPattern(options: { width: number | string; height: number | string; template: template }): string;
+export function registerPattern(options: { width: number | string; height: number | string; template: (container: SVGGElement) => void }): string;
 /**
  * @namespace DevExpress.common.charts
  * @public

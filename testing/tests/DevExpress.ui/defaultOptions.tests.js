@@ -640,7 +640,7 @@ testComponentDefaults(Popover,
 testComponentDefaults(Tooltip,
     {},
     {
-        preventScrollEvents: true,
+        preventScrollEvents: false,
         enableBodyScroll: true,
     }
 );

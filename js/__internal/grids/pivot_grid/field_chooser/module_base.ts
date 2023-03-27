@@ -18,9 +18,12 @@ import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
 import { Deferred } from '@js/core/utils/deferred';
 
+import { reverseSortOrder } from './utils';
 import { foreachTree, createPath } from '../module_widget_utils';
 import { Sortable } from '../sortable/module';
-import { sortableItemRender } from '../sortable/index';
+
+import { ATTRIBUTES, CLASSES } from './const';
+import { dragAndDropItemRender } from './dom';
 
 const DIV = '<div>';
 
@@ -99,6 +102,8 @@ const FieldChooserBase = (Widget as any)
             cancel: localizationMessage.format('dxDataGrid-headerFilterCancel'),
           },
         },
+        // NOTE: private option added in fix of the T1150523 ticket.
+        remoteSort: false,
       });
     },
 
@@ -124,6 +129,7 @@ const FieldChooserBase = (Widget as any)
           this._refreshDataSource();
           break;
         case 'applyChangesMode':
+        case 'remoteSort':
           break;
         case 'state':
           if (this._skipStateChange || !this._dataSource) {
@@ -149,11 +155,11 @@ const FieldChooserBase = (Widget as any)
 
     renderField(field, showColumnLines) {
       const that = this;
-      const $fieldContent = $(DIV).addClass('dx-area-field-content')
+      const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
         .text(field.caption || field.dataField);
       const $fieldElement = $(DIV)
-        .addClass('dx-area-field')
-        .addClass('dx-area-box')
+        .addClass(CLASSES.area.field)
+        .addClass(CLASSES.area.box)
         .data('field', field)
         .append($fieldContent);
       const mainGroupField = getMainGroupField(that._dataSource, field);
@@ -186,7 +192,7 @@ const FieldChooserBase = (Widget as any)
       }
 
       if (field.groupName) {
-        $fieldElement.attr('item-group', field.groupName);
+        $fieldElement.attr(ATTRIBUTES.itemGroup, field.groupName);
       }
 
       return $fieldElement;
@@ -205,9 +211,9 @@ const FieldChooserBase = (Widget as any)
 
       that._createComponent(that.$element(), Sortable, extend({
         allowDragging: that.option('allowFieldDragging'),
-        itemSelector: '.dx-area-field',
-        itemContainerSelector: '.dx-area-field-container',
-        groupSelector: '.dx-area-fields',
+        itemSelector: `.${CLASSES.area.field}`,
+        itemContainerSelector: `.${CLASSES.area.fieldContainer}`,
+        groupSelector: `.${CLASSES.area.fieldList}`,
         groupFilter() {
           const dataSource = that._dataSource;
           const $sortable = $(this).closest('.dx-sortable-old');
@@ -222,7 +228,7 @@ const FieldChooserBase = (Widget as any)
           }
           return false;
         },
-        itemRender: sortableItemRender,
+        itemRender: dragAndDropItemRender,
         onDragging(e) {
           const field = e.sourceElement.data('field');
           const { targetGroup } = e;
@@ -310,6 +316,13 @@ const FieldChooserBase = (Widget as any)
       });
     },
 
+    _applyLocalSortChanges(fieldIdx, sortOrder): void {
+      this._processDemandState((dataSource) => {
+        dataSource.field(fieldIdx, { sortOrder });
+        dataSource.sortLocal();
+      });
+    },
+
     _adjustSortableOnChangedArgs(e) {
       e.removeSourceElement = false;
       e.removeTargetElement = true;
@@ -327,7 +340,7 @@ const FieldChooserBase = (Widget as any)
       const func = function (e) {
         const field: any = $(e.currentTarget).data('field');
         const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
-        const isHeaderFilter = $(e.target).hasClass('dx-header-filter');
+        const isHeaderFilter = $(e.target).hasClass(CLASSES.headerFilter);
         const dataSource = that._dataSource;
         const type = mainGroupField.groupName ? 'tree' : 'list';
         const paginate = dataSource.paginate() && type === 'list';
@@ -384,17 +397,22 @@ const FieldChooserBase = (Widget as any)
             },
           }));
         } else if (field.allowSorting && field.area !== 'data') {
-          that._applyChanges([field], {
-            sortOrder: field.sortOrder === 'desc' ? 'asc' : 'desc',
-          });
+          const isRemoteSort = that.option('remoteSort');
+          const sortOrder = reverseSortOrder(field.sortOrder);
+
+          if (isRemoteSort) {
+            that._applyChanges([field], { sortOrder });
+          } else {
+            that._applyLocalSortChanges(field.index, sortOrder);
+          }
         }
       };
 
       if (element) {
-        eventsEngine.on(element, clickEventName, '.dx-area-field.dx-area-box', func);
+        eventsEngine.on(element, clickEventName, `.${CLASSES.area.field}.${CLASSES.area.box}`, func);
         return;
       }
-      eventsEngine.on(that.$element(), clickEventName, '.dx-area-field.dx-area-box', func);
+      eventsEngine.on(that.$element(), clickEventName, `.${CLASSES.area.field}.${CLASSES.area.box}`, func);
     },
 
     _initTemplates: noop,
