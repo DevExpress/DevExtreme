@@ -1,4 +1,4 @@
-const themes = require('ui/themes');
+import themes from 'ui/themes';
 
 QUnit.module('themes');
 

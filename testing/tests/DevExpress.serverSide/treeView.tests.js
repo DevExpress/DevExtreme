@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/treeView.markup.tests.js');
+import '../DevExpress.ui.widgets/treeView.markup.tests.js';

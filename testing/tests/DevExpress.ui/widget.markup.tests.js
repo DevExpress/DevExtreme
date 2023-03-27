@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const Widget = require('ui/widget/ui.widget');
-const registerComponent = require('core/component_registrator');
+import $ from 'jquery';
+import Widget from 'ui/widget/ui.widget';
+import registerComponent from 'core/component_registrator';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
 (function() {
 

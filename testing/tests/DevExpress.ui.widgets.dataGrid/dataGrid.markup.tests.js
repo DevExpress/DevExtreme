@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 
 import 'ui/data_grid';
 

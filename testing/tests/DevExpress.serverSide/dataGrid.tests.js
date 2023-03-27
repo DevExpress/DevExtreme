@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.dataGrid/dataGrid.markup.tests.js');
+import '../DevExpress.ui.widgets.dataGrid/dataGrid.markup.tests.js';

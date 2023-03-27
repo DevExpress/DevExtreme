@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import support from 'core/utils/support';
+import * as support from 'core/utils/support';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import DateBox from 'ui/date_box';
 import dateLocalization from 'localization/date';

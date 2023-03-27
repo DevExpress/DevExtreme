@@ -1,8 +1,8 @@
-require('../DevExpress.ui.widgets.editors/trackBar.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/trackBar.markup.tests.js';
 
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/track_bar');
+import 'ui/track_bar';
 
 QUnit.testStart(function() {
     const markup =

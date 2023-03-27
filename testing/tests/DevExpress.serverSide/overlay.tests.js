@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/overlay/ui.overlay');
+import 'ui/overlay/ui.overlay';
 
 QUnit.testStart(function() {
     const markup = '<div id="overlay"></div>';
