@@ -1,10 +1,11 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const dragEvents = require('events/drag');
-const support = require('core/utils/support');
-const GestureEmitter = require('events/gesture/emitter.gesture');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import * as dragEvents from 'events/drag';
+import * as support from 'core/utils/support';
+import GestureEmitter from 'events/gesture/emitter.gesture';
+import pointerMock from '../../helpers/pointerMock.js';
+
 const dropTargets = dragEvents.dropTargets;
-const pointerMock = require('../../helpers/pointerMock.js');
 
 $('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {

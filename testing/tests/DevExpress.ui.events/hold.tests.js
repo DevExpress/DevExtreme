@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const holdEvent = require('events/hold');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import holdEvent from 'events/hold';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =

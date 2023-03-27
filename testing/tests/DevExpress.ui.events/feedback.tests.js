@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const devices = require('core/devices');
-const feedbackEvents = require('events/core/emitter.feedback');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import devices from 'core/devices';
+import * as feedbackEvents from 'events/core/emitter.feedback';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =

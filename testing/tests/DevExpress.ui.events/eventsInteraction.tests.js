@@ -1,19 +1,19 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const domUtils = require('core/utils/dom');
-const devices = require('core/devices');
-const eventUtils = require('events/utils/index');
-const Emitter = require('events/core/emitter');
-const GestureEmitter = require('events/gesture/emitter.gesture');
-const registerEmitter = require('events/core/emitter_registrator');
-const feedbackEvents = require('events/core/emitter.feedback');
-const scrollEvents = require('events/gesture/emitter.gesture.scroll');
-const holdEvent = require('events/hold');
-const swipeEvents = require('events/swipe');
-const transformEvent = require('events/transform');
-const dragEvents = require('events/drag');
-const dblclickEvent = require('events/dblclick');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import * as domUtils from 'core/utils/dom';
+import devices from 'core/devices';
+import * as eventUtils from 'events/utils/index';
+import Emitter from 'events/core/emitter';
+import GestureEmitter from 'events/gesture/emitter.gesture';
+import registerEmitter from 'events/core/emitter_registrator';
+import * as feedbackEvents from 'events/core/emitter.feedback';
+import scrollEvents from 'events/gesture/emitter.gesture.scroll';
+import holdEvent from 'events/hold';
+import * as swipeEvents from 'events/swipe';
+import * as transformEvent from 'events/transform';
+import * as dragEvents from 'events/drag';
+import dblclickEvent from 'events/dblclick';
+import pointerMock from '../../helpers/pointerMock.js';
 
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 

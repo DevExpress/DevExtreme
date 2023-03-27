@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import swipeEvents from 'events/swipe';
-import mathUtils from 'core/utils/math';
-import domUtils from 'core/utils/dom';
+import * as swipeEvents from 'events/swipe';
+import * as mathUtils from 'core/utils/math';
+import * as domUtils from 'core/utils/dom';
 import Action from 'core/action';
 import devices from 'core/devices';
 import GestureEmitter from 'events/gesture/emitter.gesture';

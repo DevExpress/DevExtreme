@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import clickEvent from 'events/click';
-import domUtils from 'core/utils/dom';
-import support from 'core/utils/support';
+import * as clickEvent from 'events/click';
+import * as domUtils from 'core/utils/dom';
+import * as support from 'core/utils/support';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';

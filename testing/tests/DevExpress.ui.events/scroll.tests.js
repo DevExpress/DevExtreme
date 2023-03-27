@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const scrollEvents = require('events/gesture/emitter.gesture.scroll');
-const GestureEmitter = require('events/gesture/emitter.gesture');
-const eventUtils = require('events/utils/index');
-const devices = require('core/devices');
-const compareVersions = require('core/utils/version').compare;
-const animationFrame = require('animation/frame');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import scrollEvents from 'events/gesture/emitter.gesture.scroll';
+import GestureEmitter from 'events/gesture/emitter.gesture';
+import * as eventUtils from 'events/utils/index';
+import devices from 'core/devices';
+import { compare as compareVersions } from 'core/utils/version';
+import animationFrame from 'animation/frame';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =

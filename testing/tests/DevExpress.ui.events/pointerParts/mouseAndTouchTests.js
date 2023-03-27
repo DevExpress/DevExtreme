@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const MouseAndTouchStrategy = require('events/pointer/mouse_and_touch');
-const registerEvent = require('events/core/event_registrator');
-const nativePointerMock = require('../../../helpers/nativePointerMock.js');
+import $ from 'jquery';
+import MouseAndTouchStrategy from 'events/pointer/mouse_and_touch';
+import registerEvent from 'events/core/event_registrator';
+import nativePointerMock from '../../../helpers/nativePointerMock.js';
 const special = require('../../../helpers/eventHelper.js').special;
 
 QUnit.module('mouse and touch events', {
