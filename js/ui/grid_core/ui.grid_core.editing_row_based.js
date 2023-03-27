@@ -2,7 +2,8 @@ import {
     EDIT_MODE_ROW,
     MODES_WITH_DELAYED_FOCUS,
     ROW_SELECTED_CLASS,
-    EDIT_FORM_CLASS
+    EDIT_FORM_CLASS,
+    EDITING_EDITROWKEY_OPTION_NAME
 
 } from './ui.grid_core.editing_constants';
 
@@ -31,7 +32,7 @@ export const editingRowBasedModule = {
 
                 _isDefaultButtonVisible: function(button, options) {
                     const isRowMode = this.isRowBasedEditMode();
-                    const isEditRow = options.row && options.row.rowIndex === this._getVisibleEditRowIndex();
+                    const isEditRow = options.row && options.row.key === this.option(EDITING_EDITROWKEY_OPTION_NAME);
 
                     if(isRowMode) {
                         switch(button.name) {
