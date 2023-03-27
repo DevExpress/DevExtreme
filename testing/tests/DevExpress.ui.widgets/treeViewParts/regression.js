@@ -1,6 +1,4 @@
-/* global internals */
-
-const $ = require('jquery');
+import $ from 'jquery';
 
 QUnit.module('Regression');
 
@@ -49,5 +47,5 @@ QUnit.test('T217916: dxTreeView does not render a node if ID is less than Parent
 
     }).dxTreeView('instance');
 
-    assert.equal(treeView.$element().find('.' + internals.ITEM_CLASS).length, 4);
+    assert.equal(treeView.$element().find('.' + window.internals.ITEM_CLASS).length, 4);
 });

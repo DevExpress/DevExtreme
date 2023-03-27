@@ -1,5 +1,3 @@
-/* global internals */
-
 import $ from 'jquery';
 import fx from 'animation/fx';
 import keyboardMock from '../../../helpers/keyboardMock.js';
@@ -21,18 +19,18 @@ QUnit.test('expand item should be animated if option animationEnabled is true', 
 
     try {
         fx.stop = sinon.spy(function($element) {
-            const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
+            const $nodeContainer = $node.find('.' + window.internals.NODE_CONTAINER_CLASS).eq(0);
             assert.equal($element.get(0), $nodeContainer.get(0), 'correct element was animated');
         });
         fx.animate = sinon.spy(function($element, config) {
-            const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
+            const $nodeContainer = $node.find('.' + window.internals.NODE_CONTAINER_CLASS).eq(0);
 
             config.duration = 0;
 
             assert.equal($element.get(0), $nodeContainer.get(0), 'correct element was animated');
             assert.equal(config.from['maxHeight'], 0, 'starting from zero height');
             assert.equal(config.to['maxHeight'], $nodeContainer.height(), 'starting from zero height');
-            assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
+            assert.ok($nodeContainer.hasClass(window.internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
 
             config.complete = (function() {
                 const orig = config.complete;
@@ -40,7 +38,7 @@ QUnit.test('expand item should be animated if option animationEnabled is true', 
                     orig();
 
                     assert.equal($nodeContainer.css('maxHeight'), 'none', 'max-height was reset');
-                    assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
+                    assert.ok($nodeContainer.hasClass(window.internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
                 };
             })();
 
@@ -55,8 +53,8 @@ QUnit.test('expand item should be animated if option animationEnabled is true', 
             animationEnabled: true
         });
 
-        const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
-        const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + window.internals.NODE_CLASS).eq(0);
+        const $item = $node.find('.' + window.internals.ITEM_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').expandItem($item.get(0));
     } finally {
@@ -83,7 +81,7 @@ QUnit.test('collapse item should be animated if option animationEnabled is true'
 
             assert.equal(config.from['maxHeight'], $nodeContainer.height(), 'starting from real height');
             assert.equal(config.to['maxHeight'], 0, 'starting to zero height');
-            assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
+            assert.ok($nodeContainer.hasClass(window.internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
 
             config.complete = (function() {
                 const orig = config.complete;
@@ -91,7 +89,7 @@ QUnit.test('collapse item should be animated if option animationEnabled is true'
                     orig();
 
                     assert.equal($nodeContainer.css('maxHeight'), 'none', 'max-height was reset');
-                    assert.ok(!$nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
+                    assert.ok(!$nodeContainer.hasClass(window.internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
                 };
             })();
 
@@ -106,9 +104,9 @@ QUnit.test('collapse item should be animated if option animationEnabled is true'
             animationEnabled: true
         });
 
-        const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
-        const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
-        const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
+        const $node = $treeView.find('.' + window.internals.NODE_CLASS).eq(0);
+        const $item = $node.find('.' + window.internals.ITEM_CLASS).eq(0);
+        const $nodeContainer = $node.find('.' + window.internals.NODE_CONTAINER_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').collapseItem($item.get(0));
     } finally {
@@ -134,8 +132,8 @@ QUnit.test('collapse item should not be animated if option animationEnabled is f
             animationEnabled: false
         });
 
-        const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
-        const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + window.internals.NODE_CLASS).eq(0);
+        const $item = $node.find('.' + window.internals.ITEM_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').collapseItem($item.get(0));
     } finally {
@@ -160,8 +158,8 @@ QUnit.test('collapse item should not be animated if item is already collapsed', 
             }]
         });
 
-        const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
-        const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + window.internals.NODE_CLASS).eq(0);
+        const $item = $node.find('.' + window.internals.ITEM_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').collapseItem($item.get(0));
     } finally {
@@ -181,15 +179,15 @@ QUnit.test('keyboard navigation should stop animation', function(assert) {
             focusStateEnabled: true
         });
 
-        const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
-        const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + window.internals.NODE_CLASS).eq(0);
+        const $item = $node.find('.' + window.internals.ITEM_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').expandItem($item.get(0));
 
         fx.stop = sinon.spy();
         $item.trigger('dxpointerdown');
 
-        const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
+        const $nodeContainer = $node.find('.' + window.internals.NODE_CONTAINER_CLASS).eq(0);
 
         keyboardMock($treeView).keyDown('right');
         assert.ok(fx.stop.calledWith($nodeContainer.get(0)), 'animation stopped');

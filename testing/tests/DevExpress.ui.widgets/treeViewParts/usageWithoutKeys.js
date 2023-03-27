@@ -1,6 +1,6 @@
-/* global internals, initTree, $ */
-
-import commonUtils from 'core/utils/common';
+/* global internals, initTree */
+import $ from 'jquery';
+import * as commonUtils from 'core/utils/common';
 
 QUnit.module('Usage without keys');
 

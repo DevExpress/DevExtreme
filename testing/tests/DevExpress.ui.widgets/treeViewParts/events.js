@@ -1,13 +1,13 @@
 /* global DATA, internals, initTree, makeSlowDataSource, stripFunctions */
 
 import $ from 'jquery';
-import commonUtils from 'core/utils/common';
-import typeUtils from 'core/utils/type';
+import * as commonUtils from 'core/utils/common';
+import * as typeUtils from 'core/utils/type';
 import holdEvent from 'events/hold';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import contextMenuEvent from 'events/contextmenu';
-import dblclickEvent from 'events/dblclick';
+import * as contextMenuEvent from 'events/contextmenu';
+import * as dblclickEvent from 'events/dblclick';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 const createInstance = (options) => new TreeViewTestWrapper(options);

@@ -1,7 +1,7 @@
 /* global DATA, internals, initTree */
 
 import $ from 'jquery';
-import commonUtils from 'core/utils/common';
+import * as commonUtils from 'core/utils/common';
 import { isFunction } from 'core/utils/type';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';

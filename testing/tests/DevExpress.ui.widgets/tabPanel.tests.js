@@ -2,7 +2,7 @@ import fx from 'animation/fx';
 import config from 'core/config';
 import devices from 'core/devices';
 import { deferUpdate } from 'core/utils/common';
-import support from 'core/utils/support';
+import * as support from 'core/utils/support';
 import { isRenderer } from 'core/utils/type';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';

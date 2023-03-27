@@ -6,9 +6,7 @@ import ArrayStore from 'data/array_store';
 
 import 'ui/tree_view';
 
-const { testStart } = QUnit;
-
-testStart(function() {
+QUnit.testStart(function() {
     const markup = '<div id="treeView"></div>';
 
     $('#qunit-fixture').html(markup);
