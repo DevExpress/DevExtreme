@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
-const ko = require('knockout');
+import $ from 'jquery';
+import fx from 'animation/fx';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import ko from 'knockout';
 
-require('ui/lookup');
-require('integration/knockout');
+import 'ui/lookup';
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

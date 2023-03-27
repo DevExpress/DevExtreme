@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const SelectBox = require('ui/select_box');
-const fx = require('animation/fx');
-const ko = require('knockout');
+import $ from 'jquery';
+import SelectBox from 'ui/select_box';
+import fx from 'animation/fx';
+import ko from 'knockout';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

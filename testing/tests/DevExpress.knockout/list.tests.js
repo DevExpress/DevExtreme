@@ -1,13 +1,13 @@
 // eslint-disable-next-line spellcheck/spell-checker
-const { rerender } = require('inferno');
-const $ = require('jquery');
-const ko = require('knockout');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+import { rerender } from 'inferno';
+import $ from 'jquery';
+import ko from 'knockout';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-require('ui/list');
-require('integration/knockout');
+import 'ui/list';
+import 'integration/knockout';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

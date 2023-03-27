@@ -26,7 +26,7 @@ const DATE_PARTS = [
     }
 ];
 
-exports.generateDate = function(config) {
+export const generateDate = function(config) {
     let hasFixedValue;
     const now = new Date();
     const parts = DATE_PARTS.map(function(part) {

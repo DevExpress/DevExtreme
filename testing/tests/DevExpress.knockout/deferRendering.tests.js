@@ -1,10 +1,10 @@
-require('integration/knockout');
+import 'integration/knockout';
 
-const $ = require('jquery');
-const ko = require('knockout');
-const dataUtils = require('core/element_data');
+import $ from 'jquery';
+import ko from 'knockout';
+import dataUtils from 'core/element_data';
 
-require('ui/defer_rendering');
+import 'ui/defer_rendering';
 
 QUnit.testStart(function() {
     const markup =

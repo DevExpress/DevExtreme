@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';

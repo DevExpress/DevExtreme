@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.editors/switch.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/switch.markup.tests.js';

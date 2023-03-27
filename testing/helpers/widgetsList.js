@@ -1,86 +1,163 @@
-const widgetsList = {
-    Accordion: require('ui/accordion'),
-    ActionSheet: require('ui/action_sheet'),
-    Autocomplete: require('ui/autocomplete'),
-    BarGauge: require('viz/bar_gauge'),
-    Box: require('ui/box'),
-    Bullet: require('viz/bullet'),
-    Button: require('ui/button'),
-    Calendar: require('ui/calendar'),
-    Chart: require('viz/chart'),
-    CheckBox: require('ui/check_box'),
-    CircularGauge: require('viz/circular_gauge'),
-    ColorBox: require('ui/color_box'),
-    ContextMenu: require('ui/context_menu'),
-    DataGrid: require('ui/data_grid'),
-    DateBox: require('ui/date_box'),
-    DeferRendering: require('ui/defer_rendering'),
-    Drawer: require('ui/drawer'),
-    DropDownBox: require('ui/drop_down_box'),
-    FileManager: require('ui/file_manager'),
-    FileUploader: require('ui/file_uploader'),
-    FilterBuilder: require('ui/filter_builder'),
-    Form: require('ui/form'),
-    Funnel: require('viz/funnel'),
-    Gallery: require('ui/gallery'),
-    Gantt: require('ui/gantt'),
-    HtmlEditor: require('ui/html_editor'),
-    LinearGauge: require('viz/linear_gauge'),
-    List: require('ui/list'),
-    LoadIndicator: require('ui/load_indicator'),
-    LoadPanel: require('ui/load_panel'),
-    Lookup: require('ui/lookup'),
-    Map: require('ui/map'),
-    Menu: require('ui/menu'),
-    MultiView: require('ui/multi_view'),
-    NumberBox: require('ui/number_box'),
-    PieChart: require('viz/pie_chart'),
-    PivotGrid: require('ui/pivot_grid'),
-    PivotGridFieldChooser: require('ui/pivot_grid_field_chooser'),
-    PolarChart: require('viz/polar_chart'),
-    Popover: require('ui/popover'),
-    Popup: require('ui/popup'),
-    ProgressBar: require('ui/progress_bar'),
-    RangeSelector: require('viz/range_selector'),
-    RangeSlider: require('ui/range_slider'),
-    RadioGroup: require('ui/radio_group'),
-    Resizable: require('ui/resizable'),
-    ResponsiveBox: require('ui/responsive_box'),
-    Sankey: require('viz/sankey'),
-    Scheduler: require('ui/scheduler'),
-    ScrollView: require('ui/scroll_view'),
-    SelectBox: require('ui/select_box'),
-    Slider: require('ui/slider'),
-    Sparkline: require('viz/sparkline'),
-    Switch: require('ui/switch'),
-    TabPanel: require('ui/tab_panel'),
-    Tabs: require('ui/tabs'),
-    TagBox: require('ui/tag_box'),
-    TextArea: require('ui/text_area'),
-    TextBox: require('ui/text_box'),
-    TileView: require('ui/tile_view'),
-    Toast: require('ui/toast'),
-    Toolbar: require('ui/toolbar'),
-    Tooltip: require('ui/tooltip'),
-    TreeList: require('ui/tree_list'),
-    TreeMap: require('viz/tree_map'),
-    TreeView: require('ui/tree_view'),
-    ValidationGroup: require('ui/validation_group'),
-    ValidationSummary: require('ui/validation_summary'),
-    VectorMap: require('viz/vector_map')
+import Accordion from 'ui/accordion';
+import ActionSheet from 'ui/action_sheet';
+import Autocomplete from 'ui/autocomplete';
+import BarGauge from 'viz/bar_gauge';
+import Box from 'ui/box';
+import Bullet from 'viz/bullet';
+import Button from 'ui/button';
+import Calendar from 'ui/calendar';
+import Chart from 'viz/chart';
+import CheckBox from 'ui/check_box';
+import CircularGauge from 'viz/circular_gauge';
+import ColorBox from 'ui/color_box';
+import ContextMenu from 'ui/context_menu';
+import DataGrid from 'ui/data_grid';
+import DateBox from 'ui/date_box';
+import DeferRendering from 'ui/defer_rendering';
+import Drawer from 'ui/drawer';
+import DropDownBox from 'ui/drop_down_box';
+import FileManager from 'ui/file_manager';
+import FileUploader from 'ui/file_uploader';
+import FilterBuilder from 'ui/filter_builder';
+import Form from 'ui/form';
+import Funnel from 'viz/funnel';
+import Gallery from 'ui/gallery';
+import Gantt from 'ui/gantt';
+import HtmlEditor from 'ui/html_editor';
+import LinearGauge from 'viz/linear_gauge';
+import List from 'ui/list';
+import LoadIndicator from 'ui/load_indicator';
+import LoadPanel from 'ui/load_panel';
+import Lookup from 'ui/lookup';
+import Map from 'ui/map';
+import Menu from 'ui/menu';
+import MultiView from 'ui/multi_view';
+import NumberBox from 'ui/number_box';
+import PieChart from 'viz/pie_chart';
+import PivotGrid from 'ui/pivot_grid';
+import PivotGridFieldChooser from 'ui/pivot_grid_field_chooser';
+import PolarChart from 'viz/polar_chart';
+import Popover from 'ui/popover';
+import Popup from 'ui/popup';
+import ProgressBar from 'ui/progress_bar';
+import RangeSelector from 'viz/range_selector';
+import RangeSlider from 'ui/range_slider';
+import RadioGroup from 'ui/radio_group';
+import Resizable from 'ui/resizable';
+import ResponsiveBox from 'ui/responsive_box';
+import Sankey from 'viz/sankey';
+import Scheduler from 'ui/scheduler';
+import ScrollView from 'ui/scroll_view';
+import SelectBox from 'ui/select_box';
+import Slider from 'ui/slider';
+import Sparkline from 'viz/sparkline';
+import Switch from 'ui/switch';
+import TabPanel from 'ui/tab_panel';
+import Tabs from 'ui/tabs';
+import TagBox from 'ui/tag_box';
+import TextArea from 'ui/text_area';
+import TextBox from 'ui/text_box';
+import TileView from 'ui/tile_view';
+import Toast from 'ui/toast';
+import Toolbar from 'ui/toolbar';
+import Tooltip from 'ui/tooltip';
+import TreeList from 'ui/tree_list';
+import TreeMap from 'viz/tree_map';
+import TreeView from 'ui/tree_view';
+import ValidationGroup from 'ui/validation_group';
+import ValidationSummary from 'ui/validation_summary';
+import VectorMap from 'viz/vector_map';
+
+import dxAutocomplete from 'ui/autocomplete';
+import dxColorBox from 'ui/color_box';
+import dxDateBox from 'ui/date_box';
+import dxDropDownBox from 'ui/drop_down_box';
+import dxDropDownButton from 'ui/drop_down_button';
+import dxSelectBox from 'ui/select_box';
+import dxTagBox from 'ui/tag_box';
+import dxDropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor.js';
+import dxDropDownList from 'ui/drop_down_editor/ui.drop_down_list.js';
+
+export const widgetsList = {
+    Accordion,
+    ActionSheet,
+    Autocomplete,
+    BarGauge,
+    Box,
+    Bullet,
+    Button,
+    Calendar,
+    Chart,
+    CheckBox,
+    CircularGauge,
+    ColorBox,
+    ContextMenu,
+    DataGrid,
+    DateBox,
+    DeferRendering,
+    Drawer,
+    DropDownBox,
+    FileManager,
+    FileUploader,
+    FilterBuilder,
+    Form,
+    Funnel,
+    Gallery,
+    Gantt,
+    HtmlEditor,
+    LinearGauge,
+    List,
+    LoadIndicator,
+    LoadPanel,
+    Lookup,
+    Map,
+    Menu,
+    MultiView,
+    NumberBox,
+    PieChart,
+    PivotGrid,
+    PivotGridFieldChooser,
+    PolarChart,
+    Popover,
+    Popup,
+    ProgressBar,
+    RangeSelector,
+    RangeSlider,
+    RadioGroup,
+    Resizable,
+    ResponsiveBox,
+    Sankey,
+    Scheduler,
+    ScrollView,
+    SelectBox,
+    Slider,
+    Sparkline,
+    Switch,
+    TabPanel,
+    Tabs,
+    TagBox,
+    TextArea,
+    TextBox,
+    TileView,
+    Toast,
+    Toolbar,
+    Tooltip,
+    TreeList,
+    TreeMap,
+    TreeView,
+    ValidationGroup,
+    ValidationSummary,
+    VectorMap,
 };
 
-const dropDownEditorsList = {
-    dxAutocomplete: require('ui/autocomplete'),
-    dxColorBox: require('ui/color_box'),
-    dxDateBox: require('ui/date_box'),
-    dxDropDownBox: require('ui/drop_down_box'),
-    dxDropDownButton: require('ui/drop_down_button'),
-    dxSelectBox: require('ui/select_box'),
-    dxTagBox: require('ui/tag_box'),
-    dxDropDownEditor: require('ui/drop_down_editor/ui.drop_down_editor.js'),
-    dxDropDownList: require('ui/drop_down_editor/ui.drop_down_list.js'),
+export const dropDownEditorsList = {
+    dxAutocomplete,
+    dxColorBox,
+    dxDateBox,
+    dxDropDownBox,
+    dxDropDownButton,
+    dxSelectBox,
+    dxTagBox,
+    dxDropDownEditor,
+    dxDropDownList,
 };
-
-exports.widgetsList = widgetsList;
-exports.dropDownEditorsList = dropDownEditorsList;

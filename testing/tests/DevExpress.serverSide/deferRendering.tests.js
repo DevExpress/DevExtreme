@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/deferRendering.tests.js');
+import '../DevExpress.ui.widgets/deferRendering.tests.js';

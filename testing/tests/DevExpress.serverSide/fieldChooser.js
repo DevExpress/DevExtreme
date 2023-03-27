@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.pivotGrid/fieldChooser.markup.tests.js');
+import '../DevExpress.ui.widgets.pivotGrid/fieldChooser.markup.tests.js';

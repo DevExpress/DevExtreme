@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/tileView.markup.tests.js');
+import '../DevExpress.ui.widgets/tileView.markup.tests.js';

@@ -1,8 +1,8 @@
-const ko = require('knockout');
-const variableWrapper = require('core/utils/variable_wrapper');
+import ko from 'knockout';
+import variableWrapper from 'core/utils/variable_wrapper';
 const { logger } = require('core/utils/console')
 
-require('integration/knockout');
+import 'integration/knockout';
 
 QUnit.test('wrapped value', function(assert) {
     const observableValue = ko.observable(3);

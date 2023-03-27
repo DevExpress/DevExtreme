@@ -1,11 +1,11 @@
-require('../../helpers/qunitPerformanceExtension.js');
-require('ui/overlay/ui.overlay');
-require('ui/popup');
+import '../../helpers/qunitPerformanceExtension.js';
+import 'ui/overlay/ui.overlay';
+import 'ui/popup';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
-const $ = require('jquery');
-const positionUtils = require('animation/position');
+import $ from 'jquery';
+import positionUtils from 'animation/position';
 
 positionUtils.calculateScrollbarWidth();
 

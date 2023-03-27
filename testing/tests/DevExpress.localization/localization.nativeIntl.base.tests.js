@@ -1,8 +1,8 @@
 import dateLocalization from 'localization/date';
 import numberLocalization from 'localization/number';
-import { locale } from 'localization/core';
+import core from 'localization/core';
 
-locale('en');
+core.locale('en');
 
 const NARROW_NO_BREAK_SPACE = ' ';
 
@@ -37,7 +37,7 @@ QUnit.module('Localization date', () => {
             ];
 
             try {
-                locale(localeId);
+                core.locale(localeId);
 
                 testData.forEach(config => {
                     const { format } = config;
@@ -49,7 +49,7 @@ QUnit.module('Localization date', () => {
                     assert.strictEqual(hasNarrowNoBreakSpaces, false, `formatted date with ${format} locale has no any narrow no-break spaces`);
                 });
             } finally {
-                locale('en');
+                core.locale('en');
             }
         });
     });

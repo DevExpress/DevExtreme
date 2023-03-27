@@ -3,7 +3,7 @@ import dateLocalization from 'localization/date';
 import numberLocalization from 'localization/number';
 import messageLocalization from 'localization/message';
 import errors from 'core/errors';
-import localization from 'localization';
+import * as localization from 'localization';
 import config from 'core/config';
 import { logger } from 'core/utils/console';
 

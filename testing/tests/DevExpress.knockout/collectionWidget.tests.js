@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const registerComponent = require('core/component_registrator');
-const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+import $ from 'jquery';
+import ko from 'knockout';
+import registerComponent from 'core/component_registrator';
+import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/load_panel');
-require('integration/knockout');
+import 'ui/load_panel';
+import 'integration/knockout';
 
 QUnit.testStart(function() {
     const markup =

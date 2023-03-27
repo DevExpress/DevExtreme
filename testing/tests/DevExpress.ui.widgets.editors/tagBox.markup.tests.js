@@ -3,7 +3,7 @@ import TagBox from 'ui/tag_box';
 import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import windowModule from 'core/utils/window';
+import * as windowModule from 'core/utils/window';
 
 QUnit.testStart(function() {
     const markup =

@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('integration/knockout');
-require('ui/drop_down_editor/ui.drop_down_editor');
+import 'integration/knockout';
+import 'ui/drop_down_editor/ui.drop_down_editor';
 
 QUnit.testStart(function() {
     const markup =

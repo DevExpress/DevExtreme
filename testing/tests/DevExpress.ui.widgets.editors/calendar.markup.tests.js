@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
 import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 
 import 'generic_light.css!';
 import 'ui/calendar';

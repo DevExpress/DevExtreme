@@ -1,6 +1,6 @@
-require('../../helpers/qunitPerformanceExtension.js');
-const $ = require('jquery');
-const translator = require('animation/translator');
+import '../../helpers/qunitPerformanceExtension.js';
+import $ from 'jquery';
+import translator from 'animation/translator';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="element1"></div><div id="element2"></div>');

@@ -1,4 +1,4 @@
-const BaseVizWidget = require('viz/core/base_widget');
+import BaseVizWidget from 'viz/core/base_widget';
 
 QUnit.module('Viz', {
     beforeEach: function() {

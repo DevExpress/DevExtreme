@@ -1,6 +1,6 @@
-require('../DevExpress.core/domComponent.markup.tests.js');
+import '../DevExpress.core/domComponent.markup.tests.js';
 
-const DOMComponent = require('core/dom_component');
+import DOMComponent from 'core/dom_component';
 const Proxy = window.Proxy;
 
 QUnit.module('SSR specific for DOM Component', {

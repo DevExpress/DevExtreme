@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 const TOOLTIP_CLASS = 'dx-tooltip';
@@ -23,5 +23,5 @@ QUnit.test('there is no tooltip in markup on server', function(assert) {
     assert.notOk($tooltip.length);
 });
 
-require('../DevExpress.ui.widgets.editors/slider.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/slider.markup.tests.js';
 

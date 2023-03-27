@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('integration/knockout');
-const Scheduler = require('ui/scheduler');
+import 'integration/knockout';
+import Scheduler from 'ui/scheduler';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
 const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import consoleUtils from 'core/utils/console';
+import * as consoleUtils from 'core/utils/console';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import {
     FORM_LAYOUT_MANAGER_CLASS,
@@ -32,7 +32,7 @@ import {
 
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 
 import 'ui/switch';
 import 'ui/autocomplete';
