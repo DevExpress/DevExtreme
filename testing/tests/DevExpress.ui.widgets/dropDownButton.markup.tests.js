@@ -1,7 +1,7 @@
 import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 import eventsEngine from 'events/core/events_engine';
 
 import 'generic_light.css!';

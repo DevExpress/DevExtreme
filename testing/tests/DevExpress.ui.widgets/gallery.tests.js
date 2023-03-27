@@ -1,10 +1,10 @@
 import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
-import visibilityChange from 'events/visibility_change';
+import * as visibilityChange from 'events/visibility_change';
 import ArrayStore from 'data/array_store';
 import fx from 'animation/fx';
-import animationFrame from 'animation/frame';
+import * as animationFrame from 'animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';

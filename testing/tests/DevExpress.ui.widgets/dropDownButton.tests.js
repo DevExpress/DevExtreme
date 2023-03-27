@@ -1,7 +1,7 @@
 import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
-import typeUtils from 'core/utils/type';
+import * as typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ArrayStore from 'data/array_store';

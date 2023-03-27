@@ -1,5 +1,5 @@
-import utils from 'ui/filter_builder/utils';
-import between from 'ui/filter_builder/between';
+import * as utils from 'ui/filter_builder/utils';
+import * as between from 'ui/filter_builder/between';
 import CustomStore from 'data/custom_store';
 import messageLocalization from 'localization/message';
 import fields from '../../../helpers/filterBuilderTestData.js';

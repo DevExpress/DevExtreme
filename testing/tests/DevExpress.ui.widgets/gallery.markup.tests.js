@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Gallery from 'ui/gallery';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 
 
 QUnit.testStart(() => {

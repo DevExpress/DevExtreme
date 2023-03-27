@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
-import viewPort from 'core/utils/view_port';
+import * as viewPort from 'core/utils/view_port';
 import GestureEmitter from 'events/gesture/emitter.gesture.js';
-import animationFrame from 'animation/frame';
-import translator from 'animation/translator';
+import * as animationFrame from 'animation/frame';
+import * as translator from 'animation/translator';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import 'generic_light.css!';

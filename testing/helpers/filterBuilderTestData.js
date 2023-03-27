@@ -1,4 +1,4 @@
-module.exports = [{
+export default [{
     caption: 'Company Name',
     dataField: 'CompanyName',
     dataType: 'string',

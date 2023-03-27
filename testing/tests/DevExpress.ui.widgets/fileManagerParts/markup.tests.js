@@ -2,7 +2,7 @@ const { test } = QUnit;
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import windowUtils from 'core/utils/window';
+import * as windowUtils from 'core/utils/window';
 import { FileManagerWrapper, createTestFileSystem, Consts, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import 'generic_light.css!';
 

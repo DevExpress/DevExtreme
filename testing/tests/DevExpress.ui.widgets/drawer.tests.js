@@ -7,7 +7,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import eventsEngine from 'events/core/events_engine';
-import visibilityChange from 'events/visibility_change';
+import * as visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';

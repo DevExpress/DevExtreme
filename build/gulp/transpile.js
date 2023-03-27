@@ -158,7 +158,7 @@ function babelEsm() {
 
 const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, [
     babelEsm()
-]);
+], true);
 
 const touch = () => through2.obj(function(file, enc, cb) {
     if(file.stat) {
@@ -227,7 +227,7 @@ gulp.task('transpile-esm', transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH));
 gulp.task('transpile', gulp.series(
     'bundler-config',
     transpileDefault(),
-    transpileRenovation(),
+    transpileRenovation(true),
     transpileRenovationProd(),
     ifEsmPackage('transpile-esm'),
 ));
