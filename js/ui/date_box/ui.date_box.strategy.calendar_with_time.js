@@ -178,7 +178,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         this._attachHoursBoxHandler();
 
         if(this._toolbarItemCount() === 0) {
-            this._attachLastElementHandler();
+            this._attachLastInputHandler();
         }
     },
 
@@ -195,9 +195,9 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         this._timeView._hourBox.registerKeyHandler('tab', handler);
     },
 
-    _attachLastElementHandler() {
+    _attachLastInputHandler() {
         const dateBox = this.dateBox;
-        const lastElement = this._timeView._format12 ?? this._timeView._minuteBox;
+        const lastInput = this._timeView._format12 ?? this._timeView._minuteBox;
 
         const handler = function(e) {
             if(!e.shiftKey) {
@@ -206,7 +206,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
             }
         };
 
-        lastElement.registerKeyHandler('tab', handler);
+        lastInput.registerKeyHandler('tab', handler);
     },
 
     _preventFocusOnPopup: function(e) {

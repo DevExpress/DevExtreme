@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,28 +31,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-    <div id="date"></div>
-
-    <button style="margin-top: 500px;">simple</button>
-
+    <div id="button"></div>
     <script>
-        $(() => {
-            const now = new Date();
-
-            const instance = $('#date').dxDateBox({
-                type: 'datetime',
-                // value: now,
-                opened: true,
-                focusStateEnabled: true,
-                dropDownOptions: { toolbarItems: [] },
-                // applyValueMode: 'instantly',
-            }).dxDateBox('instance');
-
-            console.log(instance.option('dropDownOptions.toolbarItems'))
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
-
 </html>
