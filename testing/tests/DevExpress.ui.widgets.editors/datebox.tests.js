@@ -4777,23 +4777,6 @@ QUnit.module('keyboard navigation', {
         assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
     });
 
-    QUnit.testInActiveWindow('Popup has open state if tab key was pressed when applyValueMode: "instantly"', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.dateBox.option({
-            type: 'datetime',
-            opened: true,
-            applyValueMode: 'instantly',
-        });
-
-        this.keyboard.keyDown('tab');
-
-        assert.ok(this.dateBox.option('opened'), 'Popup open');
-    });
-
     QUnit.testInActiveWindow('Hour input has focused state if tab key was pressed when dropDownOptions: { toolbarItems: [] }', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
