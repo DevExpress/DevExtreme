@@ -177,12 +177,28 @@ class MenuBase extends HierarchicalCollectionWidget {
         this._initActions();
     }
 
+    _isValidURL(url) {
+        return url.match(/^(http|https):\/\//);
+    }
+
     _getTextContainer(itemData) {
         const itemText = itemData.text;
+        const url = itemData.url;
         const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
         const itemContent = isPlainObject(itemData) ? itemText : String(itemData);
-
+        if(url && this._isValidURL(url) && itemText) {
+            const $urlContainer = $('<a>');
+            $urlContainer.attr('href', url);
+            $urlContainer.attr(itemData.linkAttr || {});
+            $urlContainer.text(itemContent);
+            $urlContainer.appendTo($itemContainer);
+            return $itemContainer;
+        }
         return itemText && $itemContainer.text(itemContent);
+    }
+
+    _getExtraFields() {
+        return ['url', 'linkAttr'];
     }
 
     _getPopoutContainer(itemData) {

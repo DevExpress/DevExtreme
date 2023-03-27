@@ -333,6 +333,50 @@ QUnit.module('Menu rendering', () => {
 
         assert.equal($element.find('.dx-menu-item-content').first().text(), 'Test item');
     });
+
+    QUnit.test('Render item as link if url start with https', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'https://some_url' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'https://some_url');
+        assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('Render item as link if url start with http', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('Render item as simple text if url option is incorrect', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: '/some_url' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`);
+
+        assert.ok(!content.children()[0]);
+        assert.strictEqual(content.text(), 'Item text');
+    });
+
+    QUnit.test('Provide extra attributes for link if linkAttr option set with url', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_blank');
+        assert.strictEqual(content.text, 'Item text');
+    });
 });
 
 QUnit.module('Menu tests', {

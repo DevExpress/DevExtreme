@@ -74,8 +74,12 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _getDataAdapterOptions: noop,
 
+    _getExtraFields: noop,
+
     _initDynamicTemplates: function() {
         const that = this;
+
+        const fields = ['text', 'html', 'items', 'icon'].concat(this._getExtraFields());
 
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, itemData) {
@@ -85,7 +89,7 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
                     .append(this._getTextContainer(itemData))
                     .append(this._getPopoutContainer(itemData));
                 that._addContentClasses(itemData, $container.parent());
-            }.bind(this), ['text', 'html', 'items', 'icon'], this.option('integrationOptions.watchMethod'), {
+            }.bind(this), fields, this.option('integrationOptions.watchMethod'), {
                 'text': this._displayGetter,
                 'items': this._itemsGetter
             })
