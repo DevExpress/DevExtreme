@@ -10855,6 +10855,44 @@ QUnit.module('Editing with validation', {
     }
 }, () => {
 
+    QUnit.test('Disabled editors in the editing form should bypass validation', function(assert) {
+        // arrange
+        const disabledEditorValidationCallback = sinon.spy(() => {
+            return Promise.resolve(true);
+        });
+        const enabledEditorValidationCallback = sinon.spy(() => {
+            return Promise.resolve(true);
+        });
+        this.applyOptions({
+            editing: {
+                mode: 'popup'
+            },
+            columns: [{
+                dataField: 'name',
+                editorOptions: { disabled: true },
+                validationRules: [{
+                    type: "async",
+                    validationCallback: disabledEditorValidationCallback
+                }]
+            }, {
+                dataField: 'age',
+                validationRules: [{
+                    type: "async",
+                    validationCallback: enabledEditorValidationCallback
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        this.cellValue(0, 1, 1);
+        this.saveEditData();
+
+        // assert
+        assert.equal(disabledEditorValidationCallback.callCount, 0, 'validationCallback of disabled editor was not called');
+        assert.equal(enabledEditorValidationCallback.callCount, 1, 'validationCallback of enabled editor was called');
+    });
+
     QUnit.test('CheckBox should save intermediate state after validation when editing mode is batch', function(assert) {
         // arrange
         const that = this;
