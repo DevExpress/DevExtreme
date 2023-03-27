@@ -161,30 +161,8 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return this._timeView._hourBox.$element().find('input');
     },
 
-    _toolbarItemCount() {
-        return this.dateBox.option('dropDownOptions.toolbarItems').length;
-    },
-
-    _popupFocusableBoundarySelectors() {
-        if(this._toolbarItemCount() === 0) {
-            return {
-                first: '.dx-item:first-child .dx-texteditor-input',
-                last: '.dx-timeview-format12 .dx-texteditor-input',
-            };
-        }
-    },
-
-    _attachTabHandler() {
-        this._attachHoursBoxHandler();
-
-        if(this._toolbarItemCount() === 0) {
-            this._attachLastInputHandler();
-        }
-    },
-
-    _attachHoursBoxHandler() {
+    _attachTabHandler: function() {
         const dateBox = this.dateBox;
-
         const handler = function(e) {
             if(e.shiftKey) {
                 e.preventDefault();
@@ -193,20 +171,6 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         };
 
         this._timeView._hourBox.registerKeyHandler('tab', handler);
-    },
-
-    _attachLastInputHandler() {
-        const dateBox = this.dateBox;
-        const lastInput = this._timeView._format12 ?? this._timeView._minuteBox;
-
-        const handler = function(e) {
-            if(!e.shiftKey) {
-                e.preventDefault();
-                dateBox.focus();
-            }
-        };
-
-        lastInput.registerKeyHandler('tab', handler);
     },
 
     _preventFocusOnPopup: function(e) {

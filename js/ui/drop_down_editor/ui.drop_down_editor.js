@@ -749,23 +749,12 @@ const DropDownEditor = TextBox.inherit({
             : [];
     },
 
-    _popupFocusableBoundarySelectors() {
-        return {
-            first: '.dx-popup-done.dx-button',
-            last: '.dx-popup-cancel.dx-button',
-        };
-    },
-
     _getFirstPopupElement: function() {
-        const selector = this._popupFocusableBoundarySelectors().first;
-
-        return this._popup.$wrapper().find(selector);
+        return this._popup.$wrapper().find('.dx-popup-done.dx-button');
     },
 
     _getLastPopupElement: function() {
-        const selector = this._popupFocusableBoundarySelectors().last;
-
-        return this._popup.$wrapper().find(selector);
+        return this._popup.$wrapper().find('.dx-popup-cancel.dx-button');
     },
 
     _popupElementTabHandler: function(e) {

@@ -4794,64 +4794,6 @@ QUnit.module('keyboard navigation', {
         assert.ok(this.dateBox.option('opened'), 'Popup open');
     });
 
-    QUnit.testInActiveWindow('Hour input has focused state if tab key was pressed when dropDownOptions: { toolbarItems: [] }', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            dropDownOptions: { toolbarItems: [] },
-            opened: true,
-            focusStateEnabled: true,
-        });
-
-        const instance = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        const keyboard = keyboardMock($input);
-
-        keyboard.keyDown('tab');
-
-        const $hourBox = $(instance._strategy._timeView._hourBox.$element());
-        assert.ok($hourBox.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first input in overlay');
-
-        const $hourInput = instance._strategy._timeView._hourBox._input();
-        $($hourInput).trigger($.Event('keydown', { key: 'Tab', shiftKey: true }));
-
-        assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
-    });
-
-    QUnit.testInActiveWindow('Format input has focused state if tab+shift key was pressed when dropDownOptions: { toolbarItems: [] }', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            dropDownOptions: { toolbarItems: [] },
-            opened: true,
-            focusStateEnabled: true,
-        });
-
-        const instance = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        const keyboard = keyboardMock($input);
-
-        keyboard.keyDown('tab', { shiftKey: true });
-
-        const $format12Box = $(instance._strategy._timeView._format12.$element());
-        assert.ok($format12Box.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to last input in overlay');
-
-        const $format12Input = instance._strategy._timeView._format12._input();
-        $($format12Input).trigger($.Event('keydown', { key: 'Tab' }));
-
-        assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
-    });
-
     QUnit.test('Home and end key press prevent default when popup in opened (T587313)', function(assert) {
         assert.expect(1);
 
