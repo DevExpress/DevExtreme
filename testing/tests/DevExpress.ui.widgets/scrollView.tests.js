@@ -2,7 +2,7 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'animation/frame';
+import * as animationFrame from 'animation/frame';
 import devices from 'core/devices';
 import messageLocalization from 'localization/message';
 import themes from 'ui/themes';

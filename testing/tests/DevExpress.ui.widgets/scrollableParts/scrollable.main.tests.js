@@ -1,4 +1,4 @@
-import animationFrame from 'animation/frame';
+import * as animationFrame from 'animation/frame';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
 import devices from 'core/devices';

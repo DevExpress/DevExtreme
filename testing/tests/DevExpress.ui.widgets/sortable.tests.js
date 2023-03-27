@@ -3,10 +3,10 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/sortable';
 import 'ui/scroll_view';
 import fx from 'animation/fx';
-import animationFrame from 'animation/frame';
+import * as animationFrame from 'animation/frame';
 import browser from 'core/utils/browser';
-import translator from 'animation/translator';
-import viewPort from 'core/utils/view_port';
+import * as translator from 'animation/translator';
+import * as viewPort from 'core/utils/view_port';
 import devices from 'core/devices';
 
 import 'generic_light.css!';
