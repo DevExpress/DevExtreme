@@ -1,7 +1,7 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('../../helpers/qunitPerformanceExtension.js');
-require('../../helpers/widgetsIterator.js');
+import '../../helpers/qunitPerformanceExtension.js';
+import '../../helpers/widgetsIterator.js';
 
 
 QUnit.testStart(function() {

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
-require('../../helpers/qunitPerformanceExtension.js');
+import '../../helpers/qunitPerformanceExtension.js';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
-const $ = require('jquery');
-const resizeCallbacks = require('core/utils/resize_callbacks');
+import $ from 'jquery';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 const data = [
     { startDate: new Date(2016, 2, 9, 1), endDate: new Date(2016, 2, 9, 2), text: 'Meeting' },
     { startDate: new Date(2016, 2, 9, 3), endDate: new Date(2016, 2, 9, 4), text: 'Go to a shop' },
@@ -14,8 +14,8 @@ const data = [
     { startDate: new Date(2016, 2, 9, 9), endDate: new Date(2016, 2, 9, 10), text: 'Play a guitar' }
 ];
 
-require('ui/scheduler');
-require('ui/drop_down_button');
+import 'ui/scheduler';
+import 'ui/drop_down_button';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="element"></div>');

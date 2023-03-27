@@ -1,15 +1,15 @@
-require('../../helpers/qunitPerformanceExtension.js');
+import '../../helpers/qunitPerformanceExtension.js';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
-const $ = require('jquery');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const themes = require('ui/themes');
+import $ from 'jquery';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import themes from 'ui/themes';
 
 themes.setDefaultTimeout(0);
 
-require('ui/accordion');
-require('ui/tabs');
+import 'ui/accordion';
+import 'ui/tabs';
 
 QUnit.testStart(function() {
     return new Promise(function(resolve) {

@@ -1,12 +1,12 @@
-require('../../helpers/qunitPerformanceExtension.js');
-require('../../helpers/widgetsIterator.js');
+import '../../helpers/qunitPerformanceExtension.js';
+import '../../helpers/widgetsIterator.js';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
-const $ = require('jquery');
+import $ from 'jquery';
 const componentName = 'dxSwitch';
 
-require('ui/switch');
+import 'ui/switch';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').addClass('qunit-fixture-visible');

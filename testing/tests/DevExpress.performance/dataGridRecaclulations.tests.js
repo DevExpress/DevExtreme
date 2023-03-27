@@ -1,12 +1,12 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('../../helpers/qunitPerformanceExtension.js');
-require('../../content/orders.js');
+import '../../helpers/qunitPerformanceExtension.js';
+import '../../content/orders.js';
 
-require('generic_light.css!');
-const DataGrid = require('ui/data_grid');
-const Pager = require('ui/pager');
-const Scrollable = require('ui/scroll_view/ui.scrollable');
+import 'generic_light.css!';
+import DataGrid from 'ui/data_grid';
+import Pager from 'ui/pager';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const createDataGridMeasureFunction = function(options) {
     return function() {
