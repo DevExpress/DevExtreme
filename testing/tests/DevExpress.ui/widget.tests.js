@@ -10,7 +10,7 @@ import { DataSource } from 'data/data_source/data_source';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import config from 'core/config';
-import dataUtils from 'core/element_data';
+import * as dataUtils from 'core/element_data';
 import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 

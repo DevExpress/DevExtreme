@@ -2,7 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import devices from 'core/devices';
 import { alert, confirm, custom } from 'ui/dialog';
-import domUtils from 'core/utils/dom';
+import * as domUtils from 'core/utils/dom';
 import errors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -55,9 +55,9 @@ module('dialog', {
             return;
         }
 
-        custom({ 
-            messageHtml: 'text', 
-            buttons: [{ type: 'default', text: 'Ok' }] 
+        custom({
+            messageHtml: 'text',
+            buttons: [{ type: 'default', text: 'Ok' }]
         }).show();
 
         const dialogButton = this
@@ -97,30 +97,30 @@ module('dialog', {
                 assert.ok(true, 'desktop specific test');
                 return;
             }
-    
-            custom({ 
-                messageHtml: 'text', 
+
+            custom({
+                messageHtml: 'text',
                 buttons: [{ type: 'default', text: 'Ok' }],
             }).show();
-    
+
             const dialogButton = this
                 .dialog()
                 .find(`.${DIALOG_BUTTON_CLASS}`);
             const keyboard = keyboardMock(dialogButton);
 
             keyboard.keyDown('esc');
-    
+
             assert.strictEqual(this.getDialogElement().length, 1, 'dialog markup is not removed immediately');
 
             this.clock.tick(ANIMATION_TIMEOUT);
             assert.strictEqual(this.getDialogElement().length, 0, 'dialog markup is removed after animation is finished');
         });
-    
+
         test('should remove its markup after hide method call only after hiding animation is finished', function(assert) {
             const { show, hide } = custom({
                 messageHtml: 'text',
             });
-    
+
             show();
             hide();
 

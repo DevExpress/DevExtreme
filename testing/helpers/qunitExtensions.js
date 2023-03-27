@@ -141,7 +141,8 @@
             const link = document.createElement('link');
             link.setAttribute('rel', 'dx-theme');
             link.setAttribute('data-theme', theme);
-            link.setAttribute('href', System.normalizeSync(theme.replace(/\./g, '_') + '.css'));
+            // TODO: update themes path (on base url)
+            link.setAttribute('href', `http://localhost:20090/artifacts/transpiled-renovation-npm/viz/core/themes/${theme.replace(/\./g, '_') + '.css'}`);
             head.appendChild(link);
         });
     };

@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const Tooltip = require('ui/tooltip');
-const tooltip = require('ui/tooltip/ui.tooltip');
-const viewPort = require('core/utils/view_port').value;
-const fx = require('animation/fx');
+import $ from 'jquery';
+import Tooltip from 'ui/tooltip';
+import * as tooltip from 'ui/tooltip/ui.tooltip';
+import * as viewPort from 'core/utils/view_port';
+import fx from 'animation/fx';
 
 function checkTooltip(assert) {
     const $testContent = $('.dx-popup-content').find('.test-content');
@@ -22,7 +22,7 @@ QUnit.testStart(function() {
 QUnit.module('tooltip tests', {
     beforeEach: function() {
         fx.off = true;
-        viewPort('#qunit-fixture');
+        viewPort.value('#qunit-fixture');
     },
 
     afterEach: function() {

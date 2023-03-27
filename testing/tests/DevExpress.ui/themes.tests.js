@@ -1,8 +1,8 @@
 /* global ROOT_URL */
 
 import $ from 'jquery';
-import themes from 'ui/themes';
-import viewPortUtils from 'core/utils/view_port';
+import * as themes from 'ui/themes';
+import * as viewPortUtils from 'core/utils/view_port';
 
 const viewPortChanged = viewPortUtils.changeCallback;
 import knownCssFiles from '/themes-test/get-css-files-list/!json';

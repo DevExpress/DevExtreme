@@ -1259,7 +1259,7 @@ module('selecting of items in multiple mode', {
 }, () => {
     test('selectedItems should have precedence over selectedIndex if initialized with empty collection', function(assert) {
         const $element = $('#cmp');
-        const instance = new this.TestComponent($element, {
+        const instance = this.TestComponent($element, {
             selectionMode: 'multiple',
             items: [1, 2, 3],
             selectedItems: []
@@ -1270,7 +1270,7 @@ module('selecting of items in multiple mode', {
 
     test('selectedItemKeys should have precedence over selectedIndex if initialized with empty collection', function(assert) {
         const $element = $('#cmp');
-        const instance = new this.TestComponent($element, {
+        const instance = this.TestComponent($element, {
             selectionMode: 'multiple',
             items: [1, 2, 3],
             selectedItemKeys: []
