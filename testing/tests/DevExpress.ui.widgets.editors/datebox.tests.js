@@ -4802,9 +4802,9 @@ QUnit.module('keyboard navigation', {
 
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
+            dropDownOptions: { toolbarItems: [] },
             opened: true,
             focusStateEnabled: true,
-            dropDownOptions: { toolbarItems: [] },
         });
 
         const instance = $dateBox.dxDateBox('instance');
@@ -4831,9 +4831,9 @@ QUnit.module('keyboard navigation', {
 
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
+            dropDownOptions: { toolbarItems: [] },
             opened: true,
             focusStateEnabled: true,
-            dropDownOptions: { toolbarItems: [] },
         });
 
         const instance = $dateBox.dxDateBox('instance');
@@ -4846,7 +4846,7 @@ QUnit.module('keyboard navigation', {
         const $format12Box = $(instance._strategy._timeView._format12.$element());
         assert.ok($format12Box.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to last input in overlay');
 
-        const $format12Input = instance._strategy._timeView._format12._input();        
+        const $format12Input = instance._strategy._timeView._format12._input();
         $($format12Input).trigger($.Event('keydown', { key: 'Tab' }));
 
         assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');

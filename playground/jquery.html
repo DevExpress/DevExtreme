@@ -31,12 +31,6 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-
-    <!-- <style>
-        .dx-item:first-child .dx-numberbox {
-            background-color: red;
-        }
-    </style> -->
 </head>
 
 <body>
@@ -50,13 +44,14 @@
 
             const instance = $('#date').dxDateBox({
                 type: 'datetime',
-                value: now,
+                // value: now,
+                opened: true,
                 focusStateEnabled: true,
                 dropDownOptions: { toolbarItems: [] },
                 // applyValueMode: 'instantly',
             }).dxDateBox('instance');
 
-            console.log(instance.option('applyValueMode'))
+            console.log(instance.option('dropDownOptions.toolbarItems'))
         });
     </script>
 </body>
