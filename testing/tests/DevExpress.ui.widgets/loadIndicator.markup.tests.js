@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import support from 'core/utils/support';
+import * as support from 'core/utils/support';
 
 import 'ui/load_indicator';
 

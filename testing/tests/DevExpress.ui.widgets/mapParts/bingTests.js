@@ -1,9 +1,9 @@
 /* global Microsoft */
 
 import $ from 'jquery';
-import testing from './utils.js';
+import * as testing from './utils.js';
 import BingProvider from 'ui/map/provider.dynamic.bing';
-import ajaxMock from '../../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../../helpers/ajaxMock.js';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
