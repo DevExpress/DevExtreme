@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 
 const BUTTON_CLASS = 'dx-dropdowneditor-button';
 
-fixture.disablePageReloads`Drop Down Box's Popup`
+fixture`Drop Down Box's Popup`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Popup should have correct height when DropDownBox is opened first time (T1130045)', async (t) => {

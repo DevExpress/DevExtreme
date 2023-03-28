@@ -2,7 +2,7 @@ import SelectBox from '../../model/selectBox';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 
-fixture.disablePageReloads`HtmlEditor - formats`
+fixture`HtmlEditor - formats`
   .page(url(__dirname, '../containerQuill.html'));
 
 test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {

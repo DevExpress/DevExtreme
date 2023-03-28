@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import TagBox from '../../../model/tagBox';
 
-fixture.disablePageReloads`Appointment resources`
+fixture`Appointment resources`
   .page(url(__dirname, '../../container.html'));
 
 const dataSource = [{

@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Outlook dragging base tests`
+fixture`Outlook dragging base tests`
   .page(url(__dirname, '../../../container.html'));
 
 test('Basic drag-n-drop movements in groups', async (t) => {
@@ -62,6 +62,7 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
     .click(scheduler.collectors.find('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-week.png', scheduler.workSpace))
     .ok();
 
@@ -69,6 +70,7 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
     .click(scheduler.collectors.find('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 350, 150)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-week.png', scheduler.workSpace))
     .ok()
 
@@ -109,6 +111,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
     .click(scheduler.collectors.find('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, -180, -30)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', scheduler.workSpace))
     .ok();
 
@@ -116,6 +119,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
     .click(scheduler.collectors.find('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 320, 150)
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-month.png', scheduler.workSpace))
     .ok()
 

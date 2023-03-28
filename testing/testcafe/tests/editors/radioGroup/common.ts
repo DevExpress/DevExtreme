@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import RadioGroup from '../../../model/radioGroup';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`Radio Group`
+fixture`Radio Group`
   .page(url(__dirname, '../../container.html'));
 
 test('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async (t) => {

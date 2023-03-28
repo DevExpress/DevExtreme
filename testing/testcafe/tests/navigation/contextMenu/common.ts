@@ -10,7 +10,7 @@ import {
   insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`ContextMenu_common`
+fixture`ContextMenu_common`
   .page(url(__dirname, '../../container.html'));
 
 test('ContextMenu items render', async (t) => {

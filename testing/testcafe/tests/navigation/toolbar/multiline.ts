@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Toolbar_multiline`
+fixture`Toolbar_multiline`
   .page(url(__dirname, '../../container.html'));
 
 const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
@@ -14,6 +14,10 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 
 [true, false].forEach((rtlEnabled) => {
   test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
+    // NOTE: for some reason of the toolbar buttons was hovered on the screenshot
+    // try to force mouse to the (0, 0) position to prevent hovering
+    // await t.hover('body', { offsetX: 0, offsetY: 0 });
+
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, {
@@ -57,6 +61,10 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 });
 
 test('Buttons render in toolbar', async (t) => {
+  // NOTE: for some reason of the toolbar buttons was hovered on the screenshot
+  // try to force mouse to the (0, 0) position to prevent hovering
+  // await t.hover('body', { offsetX: 0, offsetY: 0 });
+
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Toolbar buttons render.png', {

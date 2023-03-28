@@ -2,8 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
 
-fixture
-  .disablePageReloads`Keyboard Navigation - focus on click`
+fixture`Keyboard Navigation - focus on click`
   .page(url(__dirname, '../../container.html'));
 
 // T861048

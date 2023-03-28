@@ -7,7 +7,7 @@ import { ClassNames } from '../../../model/dataGrid/classNames';
 
 const CLASS = ClassNames;
 
-fixture.disablePageReloads`Keyboard Navigation - common`
+fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {

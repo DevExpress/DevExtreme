@@ -8,10 +8,14 @@ import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
 import TreeView from '../../../model/treeView';
 
-fixture.disablePageReloads`TreeView`
+fixture`TreeView`
   .page(url(__dirname, '../../container.html'));
 
 test('TreeView: height should be calculated correctly when searchEnabled is true (T1138605)', async (t) => {
+  // NOTE: for some reason of the toolbar buttons was hovered on the screenshot
+  // try to force mouse to the (0, 0) position to prevent hovering
+  // await t.hover('body', { offsetX: 0, offsetY: 0 });
+
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const treeView = new TreeView('#container');
@@ -43,6 +47,10 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
 [true, false].forEach((rtlEnabled) => {
   ['selectAll', 'normal', 'none'].forEach((showCheckBoxesMode) => {
     test(`TreeView-selectAll,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
+      // NOTE: for some reason of the toolbar buttons was hovered on the screenshot
+      // try to force mouse to the (0, 0) position to prevent hovering
+      // await t.hover('body', { offsetX: 0, offsetY: 0 });
+
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const screenshotName = `TreeView selection cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;

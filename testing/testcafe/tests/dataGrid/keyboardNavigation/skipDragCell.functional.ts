@@ -3,8 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 
 // T1147695
-fixture
-  .disablePageReloads`Keyboard Navigation - skip drag cell`
+fixture`Keyboard Navigation - skip drag cell`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

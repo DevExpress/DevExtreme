@@ -58,7 +58,7 @@ createTestCafe({
             }
         });
 
-        runner.concurrency(args.concurrency || 3);
+        runner.concurrency(1);
 
         const filters = [];
         if(indices) {
@@ -89,7 +89,6 @@ createTestCafe({
         }
 
         const runOptions = {
-            quarantineMode: { successThreshold: 1, attemptLimit: 3 },
         };
 
         if(args.componentFolder.trim() !== 'renovation') {

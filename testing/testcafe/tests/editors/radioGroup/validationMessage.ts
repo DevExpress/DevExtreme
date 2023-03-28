@@ -7,7 +7,7 @@ import RadioGroup from '../../../model/radioGroup';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
-fixture.disablePageReloads`Radio Group Validation Message`
+fixture`Radio Group Validation Message`
   .page(url(__dirname, '../../container.html'));
 
 test('message position is right (T1020449)', async (t) => {

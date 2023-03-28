@@ -2,8 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 
-fixture
-  .disablePageReloads`Keyboard Navigation - custom buttons`
+fixture`Keyboard Navigation - custom buttons`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

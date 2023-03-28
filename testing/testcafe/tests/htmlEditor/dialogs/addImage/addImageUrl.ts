@@ -5,7 +5,7 @@ import createWidget from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
 import { isMaterial, testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture.disablePageReloads`HtmlEditor - add image url`
+fixture`HtmlEditor - add image url`
   .page(url(__dirname, '../../../containerQuill.html'));
 
 test('Image url should be validate before wil be inserted by add button click', async (t) => {
@@ -21,9 +21,7 @@ test('Image url should be validate before wil be inserted by add button click', 
     .eql(true);
 
   await t
-    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
-      paste: true,
-    })
+    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1)
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await testScreenshot(t, takeScreenshot, 'add-validated-url-image-by-click.png', { element: htmlEditor.content });
@@ -54,9 +52,7 @@ test('Image url should be validate before wil be inserted by add enter press', a
     .eql(true);
 
   await t
-    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
-      paste: true,
-    })
+    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1)
     .pressKey('enter');
 
   await testScreenshot(t, takeScreenshot, 'editor-add-validated-url-image-by-enter.png', { element: htmlEditor.content });
@@ -85,9 +81,7 @@ test('Image url should be updated', async (t) => {
     .eql(isMaterial() ? 'ADD' : 'Add');
 
   await t
-    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
-      paste: true,
-    })
+    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1)
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await testScreenshot(t, takeScreenshot, 'editor-add-url-image-before-updated.png', { element: htmlEditor.content });
@@ -100,7 +94,6 @@ test('Image url should be updated', async (t) => {
 
   await t
     .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_2, {
-      paste: true,
       replace: true,
     })
     .click(htmlEditor.dialog.footerToolbar.addButton.element);

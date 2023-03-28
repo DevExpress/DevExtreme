@@ -51,7 +51,7 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   return items;
 };
 
-fixture.disablePageReloads`Row dragging`
+fixture`Row dragging`
   .page(url(__dirname, '../container.html'));
 
 // T903351

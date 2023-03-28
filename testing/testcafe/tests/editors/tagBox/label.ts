@@ -13,7 +13,7 @@ import TagBox from '../../../model/tagBox';
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
 
-fixture.disablePageReloads`TagBox_Label`
+fixture`TagBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {

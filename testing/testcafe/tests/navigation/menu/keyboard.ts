@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Menu from '../../../model/menu';
 
-fixture.disablePageReloads`Menu_keyboard`
+fixture`Menu_keyboard`
   .page(url(__dirname, '../../container.html'));
 
 test('keyboard navigation should work after click on a root item if showFirstSubmenuMode is "onClick"', async (t) => {

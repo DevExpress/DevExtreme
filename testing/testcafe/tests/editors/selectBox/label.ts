@@ -12,7 +12,7 @@ import SelectBox from '../../../model/selectBox';
 const labelMods = ['floating', 'static'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture.disablePageReloads`Label`
+fixture`Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {

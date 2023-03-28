@@ -7,9 +7,9 @@ import { isMaterial } from '../../../helpers/themeUtils';
 
 const testFixture = () => {
   if (isMaterial()) {
-    return fixture.disablePageReloads.skip;
+    return fixture.skip;
   }
-  return fixture.disablePageReloads;
+  return fixture;
 };
 
 testFixture()`Drawer`

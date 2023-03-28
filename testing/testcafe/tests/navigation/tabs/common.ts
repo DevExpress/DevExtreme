@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Tabs_common`
+fixture`Tabs_common`
   .page(url(__dirname, '../../container.html'));
 
 test('Tabs icon alignment', async (t) => {

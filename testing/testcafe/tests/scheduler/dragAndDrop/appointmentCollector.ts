@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
+fixture`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
@@ -56,6 +56,7 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
       scheduler.getDateTableCell(2, 2),
       { speed: 0.5 },
     )
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-left-cell-in-week.png', scheduler.workSpace))
     .ok()
     .expect(compareResults.isValid())
@@ -118,7 +119,7 @@ test('Drag-n-drop to the cell below should work in month view (T1005115)', async
       scheduler.getDateTableCell(1, 3),
       { speed: 0.5 },
     )
-
+    .hover('body', { offsetX: 0, offsetY: 0 })
     .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-cell-below-in-month.png', scheduler.workSpace))
     .ok()
 

@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-fixture.disablePageReloads`Header Panel`
+fixture`Header Panel`
   .page(url(__dirname, '../container.html'));
 
 test('Drop-down window should be positioned correctly after resizing the toolbar (T1037975)', async (t) => {

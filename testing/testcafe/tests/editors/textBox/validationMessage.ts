@@ -8,7 +8,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-fixture.disablePageReloads`ValidationMessage`
+fixture`ValidationMessage`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {

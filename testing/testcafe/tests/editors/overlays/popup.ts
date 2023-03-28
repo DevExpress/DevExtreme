@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import Popup from '../../../model/popup';
 
-fixture.disablePageReloads`Popup`
+fixture`Popup`
   .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if container is animated (T920408)', async (t) => {
