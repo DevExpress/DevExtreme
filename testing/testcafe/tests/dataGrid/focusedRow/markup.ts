@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { testScreenshot } from '../../../helpers/themeUtils';
 import DataGrid from '../../../model/dataGrid';
 import { Themes } from '../helpers/themes';
 
@@ -29,7 +28,7 @@ fixture.disablePageReloads`Focused row - markup`
 
     await t.click(thirdCell.element);
 
-    await testScreenshot(t, takeScreenshot, `focused-row_markup ${theme}.png`, { element: dataGrid.element });
+    await takeScreenshot(`focused-row_markup (${theme}).png`, dataGrid.element);
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
