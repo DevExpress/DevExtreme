@@ -2285,6 +2285,19 @@ QUnit.module('target option', {
 });
 
 QUnit.module('aria accessibility', () => {
+    QUnit.test('role="tooltip" attribute should be added to popover', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            new Popover($popover);
+            const $overlay = $('.dx-overlay-content');
+
+            assert.equal($overlay.attr('role'), 'tooltip');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
     QUnit.test('aria-describedby attribute should be set on target', function(assert) {
         fixtures.simple.create();
         try {
