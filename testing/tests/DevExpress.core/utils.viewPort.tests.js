@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import viewPortUtils from 'core/utils/view_port';
+import * as viewPortUtils from 'core/utils/view_port';
 const viewPort = viewPortUtils.value;
 const viewPortChanged = viewPortUtils.changeCallback;
 
