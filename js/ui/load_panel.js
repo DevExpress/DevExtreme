@@ -108,6 +108,11 @@ const LoadPanel = Overlay.inherit({
         this.callBase.apply(this, arguments);
     },
 
+    _initMarkup: function() {
+        this.setAria('role', 'status');
+        this.callBase();
+    },
+
     _render: function() {
         this.callBase();
 

@@ -421,3 +421,13 @@ QUnit.module('default options', {
     });
 });
 
+QUnit.module('aria accessibility', {
+    beforeEach: function() {
+        this.element = $('#loadPanel').dxLoadPanel({});
+        this.instance = this.element.dxLoadPanel('instance');
+    }
+}, () => {
+    QUnit.test('should have aria role=status', function(assert) {
+        assert.equal(this.instance.$content().attr('role'), 'status', 'aria role is correct');
+    });
+});
