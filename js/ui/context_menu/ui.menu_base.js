@@ -177,7 +177,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         this._initActions();
     }
 
-    _isValidURL(url) {
+    _isValidHttpURL(url) {
         return url.match(/^(http|https):\/\//);
     }
 
@@ -186,18 +186,19 @@ class MenuBase extends HierarchicalCollectionWidget {
         const url = itemData.url;
         const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
         const itemContent = isPlainObject(itemData) ? itemText : String(itemData);
-        if(url && this._isValidURL(url) && itemText) {
+        if(url && this._isValidHttpURL(url) && itemText) {
+            const linkAttr = isObject(itemData.linkAttr) ? itemData.linkAttr : {};
             const $urlContainer = $('<a>');
-            $urlContainer.attr('href', url);
-            $urlContainer.attr(itemData.linkAttr || {});
-            $urlContainer.text(itemContent);
-            $urlContainer.appendTo($itemContainer);
+            $urlContainer
+                .attr({ 'href': url, ...linkAttr })
+                .text(itemContent)
+                .appendTo($itemContainer);
             return $itemContainer;
         }
         return itemText && $itemContainer.text(itemContent);
     }
 
-    _getExtraFields() {
+    _getItemExtraPropNames() {
         return ['url', 'linkAttr'];
     }
 

@@ -74,12 +74,12 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _getDataAdapterOptions: noop,
 
-    _getExtraFields: noop,
+    _getItemExtraPropNames: noop,
 
     _initDynamicTemplates: function() {
         const that = this;
 
-        const fields = ['text', 'html', 'items', 'icon'].concat(this._getExtraFields());
+        const fields = ['text', 'html', 'items', 'icon'].concat(this._getItemExtraPropNames());
 
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, itemData) {

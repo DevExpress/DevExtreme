@@ -285,6 +285,7 @@ export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @default {}
      */
     linkAttr?: { [key: string]: any };
 }
