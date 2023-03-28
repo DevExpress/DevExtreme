@@ -45,7 +45,7 @@ function createForeachTreeFunc(isAsync) {
 
     index = index || 0;
 
-    function createForeachTreeAsyncHandler(deferred, i, isChildrenProcessing) {
+    function createForeachTreeAsyncHandler(deferred, i, isChildrenProcessing): void {
       when(foreachTreeFunc(items, callback, parentAtFirst, members, i, isChildrenProcessing))
         .done(deferred.resolve);
     }
@@ -59,7 +59,7 @@ function createForeachTreeFunc(isAsync) {
         foreachTreeAsyncDate = new Date();
         // @ts-expect-error
         deferred = new Deferred();
-        setTimeout(createForeachTreeAsyncHandler(deferred, i, false) as any, 0);
+        createForeachTreeAsyncHandler(deferred, i, false);
 
         return deferred;
       }
