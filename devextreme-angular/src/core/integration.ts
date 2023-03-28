@@ -1,8 +1,7 @@
 /* tslint:disable:max-line-length */
 import { NgModule, Inject, NgZone, Optional, VERSION } from '@angular/core';
-import { XhrFactory } from '@angular/common/http';
+import { DOCUMENT, XhrFactory } from '@angular/common';
 import httpRequest from 'devextreme/core/http_request';
-import { DOCUMENT } from '@angular/common';
 
 import domAdapter from 'devextreme/core/dom_adapter';
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
