@@ -1612,9 +1612,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                     this._saving = true;
 
-                    const options = {};
-
-                    this._saveEditDataInner(options)
+                    this._saveEditDataInner()
                         .always(() => {
                             this._saving = false;
                             if(this._refocusEditCell) {

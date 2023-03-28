@@ -258,7 +258,7 @@ export interface EditingController extends ViewController, State {
 
   _resolveAfterSave: (this: this, deferred, options?) => any;
 
-  _saveEditDataInner: (this: this, options) => any;
+  _saveEditDataInner: (this: this) => any;
 
   _beforeEndSaving: (this: this, changes) => any;
 
