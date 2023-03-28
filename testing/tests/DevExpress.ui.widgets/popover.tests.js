@@ -2284,3 +2284,24 @@ QUnit.module('target option', {
     });
 });
 
+QUnit.module('aria accessibility', () => {
+    QUnit.test('aria-describedby attribute should be set on target', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            const $target = $('#where');
+
+            new Popover($popover, {
+                target: $target
+            });
+
+            const $overlay = $('.dx-overlay-content');
+
+            assert.notEqual($target.attr('aria-describedby'), undefined, 'aria-describedby exists on target');
+            assert.equal($target.attr('aria-describedby'), $overlay.attr('id'), 'aria-describedby and overlay\'s id are equal');
+
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+});

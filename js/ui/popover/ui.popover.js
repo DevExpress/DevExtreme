@@ -8,13 +8,14 @@ import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { move } from '../../animation/translator';
 import positionUtils from '../../animation/position';
-import { isObject, isString } from '../../core/utils/type';
+import { isObject, isString, isWindow } from '../../core/utils/type';
 import { fitIntoRange } from '../../core/utils/math';
 import { addNamespace } from '../../events/utils/index';
 import errors from '../widget/ui.errors';
 import Popup from '../popup/ui.popup';
 import { getBoundingRect } from '../../core/utils/position';
 import { PopoverPositionController, POPOVER_POSITION_ALIASES } from './popover_position_controller';
+import Guid from '../../core/guid';
 
 // STYLE popover
 
@@ -264,6 +265,29 @@ const Popover = Popup.inherit({
         this.callBase.apply(this, arguments);
         this._detachEvents(this.option('target'));
         this._attachEvents();
+    },
+
+    _renderContent: function() {
+        this.callBase();
+
+        this._contentId = 'dx-' + new Guid();
+
+        this.$overlayContent().attr({
+            'id': this._contentId,
+            'role': 'tooltip'
+        });
+
+        this._toggleAriaDescription(true);
+    },
+
+
+    _toggleAriaDescription: function(showing) {
+        const $target = $(this.option('target'));
+        const label = showing ? this._contentId : undefined;
+
+        if(!isWindow($target.get(0))) {
+            this.setAria('describedby', label, $target);
+        }
     },
 
     _detachEvents: function(target) {
