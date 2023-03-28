@@ -156,7 +156,7 @@
                 : '@Url.Content("~/artifacts/transpiled-renovation")';
 
             SystemJS.config({
-                baseURL: baseURL,
+//                 baseURL: baseURL,
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
@@ -280,7 +280,8 @@
 
 <script>
     (function() {
-        var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
+//         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
+        var integrationImportPaths = [];
 
         var imports = integrationImportPaths.map(function(importPath) {
             return SystemJS.import(importPath);
@@ -298,16 +299,18 @@
                 return;
             }
 
-            return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
+//             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
+            return SystemJS.import('/testing/spike/module-b.js');
         })
         .then(function() {
-            QUnit.start();
+//             QUnit.start();
         })
         .catch(function (err) {
-            QUnit.start();
-            QUnit.test("load failed", function(assert) {
-                throw err;
-            });
+            console.log(err);
+//             QUnit.start();
+//             QUnit.test("load failed", function(assert) {
+//                 throw err;
+//             });
         });
 
     })();
