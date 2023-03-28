@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import typeUtils from 'core/utils/type';
+import * as typeUtils from 'core/utils/type';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import * as ajaxMock from '../../helpers/ajaxMock.js';
 import { DataSource } from 'data/data_source/data_source';
