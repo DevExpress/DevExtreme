@@ -427,7 +427,7 @@ QUnit.module('aria accessibility', {
         this.instance = this.element.dxLoadPanel('instance');
     }
 }, () => {
-    QUnit.test('should have aria role=status', function(assert) {
+    QUnit.test('should have aria role=status attribute', function(assert) {
         assert.equal(this.instance.$content().attr('role'), 'status', 'aria role is correct');
     });
 });
