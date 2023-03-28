@@ -1,14 +1,12 @@
-import DevExpress from './core';
+/* eslint-disable import/no-commonjs */
+const DevExpress = require('./core');
 
 /// BUNDLER_PARTS
 /* Data (dx.module-core.js) */
 
-import data from '../../../bundles/modules/data';
-import odata from '../../../bundles/modules/data.odata';
+const data = DevExpress.data = require('../../../bundles/modules/data');
 
-DevExpress.data = data;
-
-data.odata = odata;
+data.odata = require('../../../bundles/modules/data.odata');
 /// BUNDLER_PARTS_END
 
-export default data;
+module.exports = data;
