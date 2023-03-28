@@ -1152,7 +1152,7 @@ export const virtualScrollingModule = {
                                 const take = this._loadViewportParams.take;
 
                                 result = items.filter(it => {
-                                    const isNewRowOnStart = it.isNewRow && it.loadIndex >= skip - 1;
+                                    const isNewRowOnStart = it.isNewRow && it.loadIndex > skip - 1;
                                     const isNewRowInEmptyData = it.isNewRow && it.loadIndex === skip && take === 0;
                                     const isLoadIndexGreaterStart = it.loadIndex >= skip || isNewRowOnStart;
                                     const isLoadIndexLessEnd = it.loadIndex < skip + take || isNewRowInEmptyData;
