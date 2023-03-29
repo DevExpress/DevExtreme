@@ -4792,10 +4792,10 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('tab');
         
-        const $hourBox = $(TIMEVIEW_ITEM_SELECTOR).eq(0).find(`.${TEXTEDITOR_CLASS}`)
+        const $hourBox = $(TIMEVIEW_ITEM_SELECTOR).eq(0).find(`.${TEXTEDITOR_CLASS}`);
         assert.ok($hourBox.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first input in overlay');
 
-        const $hourInput = $hourBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)
+        const $hourInput = $hourBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $($hourInput).trigger($.Event('keydown', { key: 'Tab', shiftKey: true }));
 
         assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
@@ -4814,13 +4814,13 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('tab', { shiftKey: true });
 
-        const $timeViewItems = $(TIMEVIEW_ITEM_SELECTOR)
-        const lastIndex = $timeViewItems.length - 1
+        const $timeViewItems = $(TIMEVIEW_ITEM_SELECTOR);
+        const lastIndex = $timeViewItems.length - 1;
 
-        const $lastInputBox = $timeViewItems.eq(lastIndex).find(`.${TEXTEDITOR_CLASS}`)
+        const $lastInputBox = $timeViewItems.eq(lastIndex).find(`.${TEXTEDITOR_CLASS}`);
         assert.ok($lastInputBox.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to last input in overlay');
 
-        const $lastInput = $lastInputBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)
+        const $lastInput = $lastInputBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $($lastInput).trigger($.Event('keydown', { key: 'Tab' }));
 
         assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
