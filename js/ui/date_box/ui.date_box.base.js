@@ -345,10 +345,6 @@ const DateBox = DropDownEditor.inherit({
         this._renderPopupWrapper();
     },
 
-    _popupFocusableBoundarySelectors() {
-        return this._strategy._popupFocusableBoundarySelectors?.() ?? this.callBase();
-    },
-
     _getPopupToolbarItems() {
         const defaultItems = this.callBase();
 

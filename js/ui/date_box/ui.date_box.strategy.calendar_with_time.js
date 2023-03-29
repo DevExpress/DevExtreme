@@ -157,28 +157,27 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return extend(calendarPopupConfig, { width: 'auto' });
     },
 
+    _toolbarHasItems() {
+        return this.dateBox.option('dropDownOptions.toolbarItems').length > 0;
+    },
+
     getFirstPopupElement: function() {
         return this._timeView._hourBox.$element().find('input');
     },
 
-    _toolbarItemCount() {
-        return this.dateBox.option('dropDownOptions.toolbarItems').length;
-    },
+    getLastPopupElement() {
+        if(!this._toolbarHasItems()) {
+            const lastInputBox = this._timeView._format12 ?? this._timeView._minuteBox;
 
-    _popupFocusableBoundarySelectors() {
-        if(this._toolbarItemCount() === 0) {
-            return {
-                first: '.dx-item:first-child .dx-texteditor-input',
-                last: '.dx-timeview-format12 .dx-texteditor-input',
-            };
+            return lastInputBox.$element().find('input');
         }
     },
 
     _attachTabHandler() {
         this._attachHoursBoxHandler();
 
-        if(this._toolbarItemCount() === 0) {
-            this._attachLastInputHandler();
+        if(!this._toolbarHasItems()) {
+            this._attachLastInputBoxHandler();
         }
     },
 
@@ -195,9 +194,9 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         this._timeView._hourBox.registerKeyHandler('tab', handler);
     },
 
-    _attachLastInputHandler() {
+    _attachLastInputBoxHandler() {
         const dateBox = this.dateBox;
-        const lastInput = this._timeView._format12 ?? this._timeView._minuteBox;
+        const lastInputBox = this._timeView._format12 ?? this._timeView._minuteBox;
 
         const handler = function(e) {
             if(!e.shiftKey) {
@@ -206,7 +205,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
             }
         };
 
-        lastInput.registerKeyHandler('tab', handler);
+        lastInputBox.registerKeyHandler('tab', handler);
     },
 
     _preventFocusOnPopup: function(e) {
