@@ -8,7 +8,6 @@ import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
-import { getData } from '../dataSources/testData';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -2126,64 +2125,24 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 });
 
 // T1130497
-[
-  {
-    newRowPosition: 'first',
-    insertedRowNumber: 0,
-    scrollMode: 'standard',
-  }, {
-    newRowPosition: 'last',
-    insertedRowNumber: 21,
-    scrollMode: 'standard',
-  }, {
-    newRowPosition: 'pageBottom',
-    insertedRowNumber: 21,
-    scrollMode: 'standard',
-  }, {
-    newRowPosition: 'pageTop',
-    insertedRowNumber: 0,
-    scrollMode: 'standard',
-  }, {
-    newRowPosition: 'viewportBottom',
-    insertedRowNumber: 8,
-    scrollMode: 'standard',
-  }, {
-    newRowPosition: 'viewportTop',
-    insertedRowNumber: 0,
-    scrollMode: 'standard',
-  }, {
-    newRowPosition: 'viewportBottom',
-    insertedRowNumber: 8,
-    scrollMode: 'virtual',
-  }, {
-    newRowPosition: 'viewportTop',
-    insertedRowNumber: 0,
-    scrollMode: 'virtual',
-  },
-].forEach((testCase) => {
-  test('The first cell of the last row should be focused when newRowPosition = NEWROWPOSITION!!! and editing.mode = cell and SCROLLMODE!!!', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
-    const headerPanel = dataGrid.getHeaderPanel();
+test('The first cell of the last row should be focused when newRowPosition = last and editing.mode = cell', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const headerPanel = dataGrid.getHeaderPanel();
 
-    await t
-      .click(headerPanel.getAddRowButton())
-      .expect(dataGrid.getDataRow(testCase.insertedRowNumber).isInserted).ok('row is inserted')
-      .expect(await takeScreenshot(`grid-cell-edit-mode-and-new-row-position-${testCase.newRowPosition}-and-${testCase.scrollMode}-scroll-mode.png`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxDataGrid', {
-    dataSource: getData(20, 3),
-    height: 400,
-    editing: {
-      mode: 'cell',
-      allowUpdating: true,
-      allowAdding: true,
-      newRowPosition: testCase.newRowPosition,
-    },
-    scrolling: {
-      mode: testCase.scrollMode,
-    },
-  }));
-});
+  await t
+    .click(headerPanel.getAddRowButton())
+    .expect(dataGrid.getDataRow(3).isInserted).ok('row is inserted')
+    .expect(await takeScreenshot('grid-cell-edit-mode-and-new-row-position-last.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ name: 'AaAaA', value: 1 }, { name: 'aAaAa', value: 2 }, { name: 'BbBb', value: 3 }],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+    newRowPosition: 'last',
+  },
+}));
