@@ -13,6 +13,9 @@ import uiDateUtils from './ui.date_utils';
 const SHRINK_VIEW_SCREEN_WIDTH = 573;
 const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
 const DATEBOX_TIMEVIEW_SIDE_CLASS = 'dx-datebox-datetime-time-side';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+const TIMEVIEW_ITEM_SELECTOR = '.dx-timeview-field .dx-item';
 
 const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
@@ -162,14 +165,15 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     getFirstPopupElement: function() {
-        return this._timeView._hourBox.$element().find('input');
+        return $(TIMEVIEW_ITEM_SELECTOR).eq(0).find(`.${TEXTEDITOR_INPUT_CLASS}`);
     },
 
     getLastPopupElement() {
         if(!this._toolbarHasItems()) {
-            const lastInputBox = this._timeView._format12 ?? this._timeView._minuteBox;
+            const $timeViewItems = $(TIMEVIEW_ITEM_SELECTOR);
+            const lastIndex = $timeViewItems.length - 1;
 
-            return lastInputBox.$element().find('input');
+            return $timeViewItems.eq(lastIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
         }
     },
 
