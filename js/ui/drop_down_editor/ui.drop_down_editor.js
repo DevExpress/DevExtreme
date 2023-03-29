@@ -32,6 +32,7 @@ const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const BUTTON_CLASS = 'dx-button';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -552,7 +553,17 @@ const DropDownEditor = TextBox.inherit({
 
     _renderPopupContent: noop,
 
-    _renderPopup: function() {
+    _renderPopup() {
+        const { toolbarItems } = this._options.cache('dropDownOptions');
+
+        if(toolbarItems) {
+            toolbarItems.forEach(item => {
+                extend(item.options, {
+                    onInitialized: this._popupButtonInitializedHandler.bind(this),
+                });
+            });
+        }
+
         const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
         delete popupConfig.closeOnOutsideClick;
@@ -741,12 +752,15 @@ const DropDownEditor = TextBox.inherit({
             : [];
     },
 
-    _getFirstPopupElement: function() {
-        return this._popup.$wrapper().find('.dx-popup-done.dx-button');
+    _getFirstPopupElement() {
+        return this._popup.$wrapper().find(`.${BUTTON_CLASS}`).eq(0);
     },
 
     _getLastPopupElement: function() {
-        return this._popup.$wrapper().find('.dx-popup-cancel.dx-button');
+        const $items = this._popup.$wrapper().find(`.${BUTTON_CLASS}`);
+        const lastIndex = $items.length - 1;
+
+        return $items.eq(lastIndex);
     },
 
     _popupElementTabHandler: function(e) {
