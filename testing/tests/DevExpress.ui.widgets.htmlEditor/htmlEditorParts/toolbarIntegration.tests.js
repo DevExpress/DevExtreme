@@ -674,6 +674,56 @@ export default function() {
             assert.strictEqual(linkText, $textInput.val());
         });
 
+        test('Text input should be visible in dialog if selected text has whitespaces on sides (T1134089)', function(assert) {
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: '<p>text with whitespaces</p>',
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(4, 6);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+
+            assert.strictEqual($textInput.val(), ' with ');
+        });
+
+        test('Selected text with whitespaces on sides should be replaced by link', function(assert) {
+            const done = assert.async();
+            const link = 'http://test.com';
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: '<p>text with whitespaces</p>',
+                onValueChanged: ({ value }) => {
+                    checkLink(assert, {
+                        href: link,
+                        content: ' with '
+                    }, value);
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(4, 6);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+            const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+            $urlInput
+                .val(link)
+                .change();
+
+            $okDialogButton.trigger('dxclick');
+        });
+
         test('Update whole link by dialog (zero-length selection)', function(assert) {
             const done = assert.async();
             const initialUrl = 'http://test.test';
