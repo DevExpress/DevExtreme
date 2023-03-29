@@ -89,6 +89,7 @@ createTestCafe({
         }
 
         const runOptions = {
+            assertionTimeout: 1000,
         };
 
         if(args.componentFolder.trim() !== 'renovation') {
@@ -107,9 +108,7 @@ createTestCafe({
             }
         }
 
-        if(args.browsers === 'chrome:docker') {
-            runOptions.disableScreenshots = true;
-        }
+        runOptions.disableScreenshots = true;
 
         return runner.run(runOptions);
     })
