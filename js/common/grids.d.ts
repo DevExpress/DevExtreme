@@ -574,39 +574,6 @@ export type ColumnFixingTexts = {
  * @public
  * @namespace DevExpress.common.grids
  */
-export type ColumnHeaderFilterSearch = {
-  /**
-   * @docid GridBaseColumn.headerFilter.search.editorOptions
-   * @default {}
-   */
-  editorOptions?: any;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.enabled
-   * @default false
-   */
-  enabled?: boolean;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.mode
-   * @default 'contains'
-   */
-  mode?: SearchMode;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.searchExpr
-   * @type getter|Array<getter>
-   * @default undefined
-   */
-  searchExpr?: string | Function | Array<string | Function>;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.timeout
-   * @default 500
-   */
-  timeout?: number;
-};
-
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ColumnHeaderFilter = {
   /**
    * @docid GridBaseColumn.headerFilter.allowSearch
@@ -652,6 +619,39 @@ export type ColumnHeaderFilter = {
    * @default undefined
    */
   width?: number;
+};
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type ColumnHeaderFilterSearch = {
+  /**
+   * @docid GridBaseColumn.headerFilter.search.editorOptions
+   * @default {}
+   */
+  editorOptions?: any;
+  /**
+   * @docid GridBaseColumn.headerFilter.search.enabled
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid GridBaseColumn.headerFilter.search.mode
+   * @default 'contains'
+   */
+  mode?: SearchMode;
+  /**
+   * @docid GridBaseColumn.headerFilter.search.searchExpr
+   * @type getter|Array<getter>
+   * @default undefined
+   */
+  searchExpr?: string | Function | Array<string | Function>;
+  /**
+   * @docid GridBaseColumn.headerFilter.search.timeout
+   * @default 500
+   */
+  timeout?: number;
 };
 
 /**
@@ -1135,39 +1135,7 @@ export type FilterType = 'exclude' | 'include';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type HeaderFilterSearch = {
-  /**
-   * @docid GridBaseOptions.headerFilter.search.editorOptions
-   * @default {}
-   */
-  editorOptions?: any;
-  /**
-   * @docid GridBaseOptions.headerFilter.search.enabled
-   * @default false
-   */
-  enabled?: boolean;
-  /**
-   * @docid GridBaseOptions.headerFilter.search.mode
-   * @default 'contains'
-   */
-  mode?: SearchMode;
-  /**
-   * @docid GridBaseOptions.headerFilter.search.timeout
-   * @default 500
-   */
-  timeout?: number;
-};
-
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type HeaderFilter = {
-  /**
-   * @docid GridBaseOptions.headerFilter.allowSelectAll
-   * @default true
-   */
-    allowSelectAll?: boolean;
   /**
    * @docid GridBaseOptions.headerFilter.allowSearch
    * @default false
@@ -1175,22 +1143,27 @@ export type HeaderFilter = {
    */
   allowSearch?: boolean;
   /**
+   * @docid GridBaseOptions.headerFilter.allowSelectAll
+   * @default true
+   */
+  allowSelectAll?: boolean;
+  /**
    * @docid GridBaseOptions.headerFilter.height
    * @default 315 &for(Material)
    * @default 325
    */
   height?: number;
   /**
+   * @docid GridBaseOptions.headerFilter.search
+   * @type object
+   */
+  search?: HeaderFilterSearch;
+  /**
    * @docid GridBaseOptions.headerFilter.searchTimeout
    * @default 500
    * @deprecated
    */
   searchTimeout?: number;
-  /**
-   * @docid GridBaseOptions.headerFilter.search
-   * @type object
-   */
-  search?: HeaderFilterSearch;
   /**
    * @docid GridBaseOptions.headerFilter.texts
    * @type object
@@ -1213,6 +1186,33 @@ export type HeaderFilter = {
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type HeaderFilterSearch = {
+  /**
+   * @docid GridBaseOptions.headerFilter.search.editorOptions
+   * @default {}
+   */
+  editorOptions?: any;
+  /**
+   * @docid GridBaseOptions.headerFilter.search.enabled
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid GridBaseOptions.headerFilter.search.mode
+   * @default 'contains'
+   */
+  mode?: SearchMode;
+  /**
+   * @docid GridBaseOptions.headerFilter.search.timeout
+   * @default 500
+   */
+  timeout?: number;
+};
 
 /**
  * @public

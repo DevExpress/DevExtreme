@@ -395,8 +395,8 @@ export interface PivotGridDataSourceField {
             editorOptions?: any;
             mode?: SearchMode;
             timeout?: number;
-        } 
-        width?: number 
+        };
+        width?: number;
     };
     /**
      * @docid PivotGridDataSourceOptions.fields.isMeasure

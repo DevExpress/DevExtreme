@@ -83,7 +83,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     headerFilter?: {
       /**
        * @docid
-       * @default undefined
+       * @default false
        * @deprecated
        */
       allowSearch?: boolean;
@@ -103,14 +103,14 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
       search?: {
         /**
          * @docid
-         * @default false
-         */
-        enabled?: boolean;
-        /**
-         * @docid
          * @default {}
          */
         editorOptions?: any;
+        /**
+         * @docid
+         * @default false
+         */
+        enabled?: boolean;
         /**
          * @docid
          * @default 'contains'

@@ -323,14 +323,14 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       search?: {
         /**
          * @docid
-         * @default false
-         */
-        enabled?: boolean;
-        /**
-         * @docid
          * @default {}
          */
         editorOptions?: any;
+        /**
+         * @docid
+         * @default false
+         */
+        enabled?: boolean;
         /**
          * @docid
          * @default 'contains'

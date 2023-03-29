@@ -375,11 +375,11 @@ export const HeaderFilterView = modules.View.inherit({
             }
         };
 
-        if(isDefined(generalDeprecated.allowSearch)) {
+        if(isDefined(generalHeaderFilter.allowSearch)) {
             this.component._logDeprecatedOptionWarning('headerFilter.allowSearch', { alias: 'headerFilter.search.enabled', since: '23.1' });
         }
 
-        if(isDefined(generalDeprecated.searchTimeout)) {
+        if(isDefined(generalHeaderFilter.searchTimeout)) {
             this.component._logDeprecatedOptionWarning('headerFilter.searchTimeout', { alias: 'headerFilter.search.timeout', since: '23.1' });
         }
 
