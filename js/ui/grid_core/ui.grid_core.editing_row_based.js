@@ -7,6 +7,8 @@ import {
 
 } from './ui.grid_core.editing_constants';
 
+import { equalByValue } from '../../core/utils/common';
+
 const EDIT_ROW = 'dx-edit-row';
 
 export const editingRowBasedModule = {
@@ -32,7 +34,7 @@ export const editingRowBasedModule = {
 
                 _isDefaultButtonVisible: function(button, options) {
                     const isRowMode = this.isRowBasedEditMode();
-                    const isEditRow = options.row && options.row.key === this.option(EDITING_EDITROWKEY_OPTION_NAME);
+                    const isEditRow = options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
                     if(isRowMode) {
                         switch(button.name) {
