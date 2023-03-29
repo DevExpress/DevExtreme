@@ -160,8 +160,6 @@ export const editingFormBasedModule = {
                         {
                             showTitle: false,
                             fullScreen: isMobileDevice,
-                            copyRootClassesToWrapper: true,
-                            _ignoreCopyRootClassesToWrapperDeprecation: true,
                             toolbarItems: [
                                 { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getSaveButtonConfig() },
                                 { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getCancelButtonConfig() }
@@ -176,7 +174,7 @@ export const editingFormBasedModule = {
                             .appendTo(this.component.$element())
                             .addClass(this.addWidgetPrefix(EDIT_POPUP_CLASS));
 
-                        this._editPopup = this._createComponent($popupContainer, Popup, { copyRootClassesToWrapper: true, _ignoreCopyRootClassesToWrapperDeprecation: true });
+                        this._editPopup = this._createComponent($popupContainer, Popup);
                         this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
                         this._editPopup.on('shown', (e) => {
                             eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not(`.${FOCUSABLE_ELEMENT_CLASS}`).first(), 'focus');
