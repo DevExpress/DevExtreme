@@ -62,7 +62,7 @@ const DateBox = DropDownEditor.inherit({
         return extend(this.callBase(), this._strategy.supportedKeys());
     },
 
-    _shouldBeClosed() {
+    _shouldCloseOnTab() {
         return this._isInstantlyMode() && !this.option('type') === 'datetime';
     },
 

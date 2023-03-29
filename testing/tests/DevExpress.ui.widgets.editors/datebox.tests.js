@@ -4777,12 +4777,7 @@ QUnit.module('keyboard navigation', {
         assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
     });
 
-    QUnit.testInActiveWindow('Popup has open state if tab key was pressed when applyValueMode: "instantly"', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
+    QUnit.test('Popup should not be closed if tab key was pressed when applyValueMode is "instantly"', function(assert) {
         this.dateBox.option({
             type: 'datetime',
             opened: true,
@@ -4791,7 +4786,7 @@ QUnit.module('keyboard navigation', {
 
         this.keyboard.keyDown('tab');
 
-        assert.ok(this.dateBox.option('opened'), 'Popup open');
+        assert.strictEqual(this.dateBox.option('opened'), true, 'popup is still opened');
     });
 
     QUnit.test('Home and end key press prevent default when popup in opened (T587313)', function(assert) {

@@ -44,7 +44,7 @@ const DropDownEditor = TextBox.inherit({
                     return;
                 }
 
-                if(this._shouldBeClosed()) {
+                if(this._shouldCloseOnTab()) {
                     this.close();
                     return;
                 }
@@ -103,7 +103,7 @@ const DropDownEditor = TextBox.inherit({
         return this.option('applyValueMode') === 'instantly';
     },
 
-    _shouldBeClosed() {
+    _shouldCloseOnTab() {
         return this._isInstantlyMode();
     },
 
