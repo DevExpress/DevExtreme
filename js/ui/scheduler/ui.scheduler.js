@@ -1856,10 +1856,6 @@ class Scheduler extends Widget {
                 { text: seriesText, onClick: function() { return RECURRENCE_EDITING_MODE.SERIES; } },
                 { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
             ],
-            popupOptions: {
-                copyRootClassesToWrapper: true,
-                _ignoreCopyRootClassesToWrapperDeprecation: true
-            },
         });
 
         return this._recurrenceDialog.show();
