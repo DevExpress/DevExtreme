@@ -3595,27 +3595,27 @@ declare module DevExpress.common.grids {
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
   export type HeaderFilter = {
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
-     */
-    allowSelectAll?: boolean;
-    /**
      * [descr:GridBaseOptions.headerFilter.allowSearch]
      * @deprecated [depNote:GridBaseOptions.headerFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
+     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
+    /**
      * [descr:GridBaseOptions.headerFilter.height]
      */
     height?: number;
+    /**
+     * [descr:GridBaseOptions.headerFilter.search]
+     */
+    search?: HeaderFilterSearch;
     /**
      * [descr:GridBaseOptions.headerFilter.searchTimeout]
      * @deprecated [depNote:GridBaseOptions.headerFilter.searchTimeout]
      */
     searchTimeout?: number;
-    /**
-     * [descr:GridBaseOptions.headerFilter.search]
-     */
-    search?: HeaderFilterSearch;
     /**
      * [descr:GridBaseOptions.headerFilter.texts]
      */
@@ -18419,13 +18419,13 @@ declare module DevExpress.ui {
        */
       search?: {
         /**
-         * [descr:dxPivotGridFieldChooserOptions.headerFilter.search.enabled]
-         */
-        enabled?: boolean;
-        /**
          * [descr:dxPivotGridFieldChooserOptions.headerFilter.search.editorOptions]
          */
         editorOptions?: any;
+        /**
+         * [descr:dxPivotGridFieldChooserOptions.headerFilter.search.enabled]
+         */
+        enabled?: boolean;
         /**
          * [descr:dxPivotGridFieldChooserOptions.headerFilter.search.mode]
          */
@@ -18694,13 +18694,13 @@ declare module DevExpress.ui {
        */
       search?: {
         /**
-         * [descr:dxPivotGridOptions.headerFilter.search.enabled]
-         */
-        enabled?: boolean;
-        /**
          * [descr:dxPivotGridOptions.headerFilter.search.editorOptions]
          */
         editorOptions?: any;
+        /**
+         * [descr:dxPivotGridOptions.headerFilter.search.enabled]
+         */
+        enabled?: boolean;
         /**
          * [descr:dxPivotGridOptions.headerFilter.search.mode]
          */
