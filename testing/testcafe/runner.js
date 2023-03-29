@@ -18,6 +18,8 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 { dependencies: { themeName } })();
 
 let testCafe;
+let stopwatch = null;
+
 createTestCafe({
     hostname: 'localhost',
     port1: 1437,
@@ -110,9 +112,14 @@ createTestCafe({
 
         runOptions.disableScreenshots = true;
 
+        stopwatch = Date.now();
+
         return runner.run(runOptions);
     })
     .then(failedCount => {
+        console.log('--------execution time-------------');
+        console.log(Date.now() - stopwatch);
+
         testCafe.close();
         process.exit(failedCount);
     });
