@@ -339,13 +339,11 @@ const baseFixedColumns = {
 
     getColumnWidths: function() {
         const that = this;
-        let fixedWidths;
         const result = that.callBase();
         const fixedColumns = that.getFixedColumns();
-
-        if(that._fixedTableElement && result.length) {
-            fixedWidths = that.callBase(that._fixedTableElement);
-        }
+        const fixedWidths = that._fixedTableElement && result.length
+            ? that.callBase(that._fixedTableElement)
+            : undefined;
 
         return normalizeColumnWidths(fixedColumns, result, fixedWidths);
     },
