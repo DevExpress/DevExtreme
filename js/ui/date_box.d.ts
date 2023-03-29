@@ -96,7 +96,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
+export interface dxDateBoxOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
     /**
      * @docid
      * @default false
@@ -229,7 +229,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateBox extends dxDropDownEditor<dxDateBoxOptions> {
+export default class dxDateBox<TProperties = Properties> extends dxDropDownEditor<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -244,8 +244,10 @@ export default class dxDateBox extends dxDropDownEditor<dxDateBoxOptions> {
     open(): void;
 }
 
+interface DateBoxInstance extends dxDateBox<Properties> { }
+
 /** @public */
-export type Properties = dxDateBoxOptions;
+export type Properties = dxDateBoxOptions<DateBoxInstance>;
 
 /** @deprecated use Properties instead */
-export type Options = dxDateBoxOptions;
+export type Options = Properties;

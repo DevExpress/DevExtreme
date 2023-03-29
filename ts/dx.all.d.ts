@@ -97,6 +97,12 @@ declare global {
     dxDateBox(options: string): any;
     dxDateBox(options: string, ...params: any[]): any;
 
+    dxDateRangeBox(): JQuery;
+    dxDateRangeBox(options: 'instance'): dxDateRangeBox;
+    dxDateRangeBox(options: DateRangeBoxProperties): JQuery;
+    dxDateRangeBox(options: string): any;
+    dxDateRangeBox(options: string, ...params: any[]): any;
+
     dxDeferRendering(): JQuery;
     dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
     dxDeferRendering(
@@ -10304,7 +10310,9 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateBox]
    */
-  export class dxDateBox extends dxDropDownEditor<dxDateBoxOptions> {
+  export class dxDateBox<
+    TProperties = DevExpress.ui.dxDateBox.Properties
+  > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:dxDateBox.close()]
      */
@@ -10329,6 +10337,10 @@ declare module DevExpress.ui {
       dxDateBox,
       ClipboardEvent
     >;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    interface DateBoxInstance extends dxDateBox<Properties> {}
     export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
     export type DateType = 'date' | 'datetime' | 'time';
     export type DisabledDate =
@@ -10373,7 +10385,7 @@ declare module DevExpress.ui {
       dxDateBox,
       ClipboardEvent
     >;
-    export type Properties = dxDateBoxOptions;
+    export type Properties = dxDateBoxOptions<DateBoxInstance>;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxDateBox,
       KeyboardEvent | MouseEvent | PointerEvent | Event
@@ -10384,7 +10396,8 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
+  export interface dxDateBoxOptions<TComponent>
+    extends dxDropDownEditorOptions<TComponent> {
     /**
      * [descr:dxDateBoxOptions.adaptivityEnabled]
      */
