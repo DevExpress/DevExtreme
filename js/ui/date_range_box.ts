@@ -16,9 +16,6 @@ import {
 } from './editor/editor';
 
 /** @public */
-export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
-
-/** @public */
 export type ChangeEvent = NativeEventInfo<dxDateRangeBox>;
 
 /** @public */
@@ -95,7 +92,7 @@ export interface dxDateRangeBoxOptions extends Omit<dxDateBoxOptions<dxDateRange
      * @default 'native' &for(Android)
      * @public
      */
-  pickerType?: DatePickerType;
+  pickerType?: 'calendar' | 'native';
   /**
      * @docid
      * @default false
