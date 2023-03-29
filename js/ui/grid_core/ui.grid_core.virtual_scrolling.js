@@ -1110,7 +1110,7 @@ export const virtualScrollingModule = {
                             let prevRowType;
                             let isPrevRowNew;
                             let wasCountableItem = false;
-
+                            let newRows = [];
                             newItems.forEach(item => {
                                 const rowType = item.rowType;
                                 const itemCountable = isItemCountableByDataSource(item, dataSource);
@@ -1128,17 +1128,24 @@ export const virtualScrollingModule = {
                                 if(isNextGroupItem || isNextDataItem) {
                                     wasCountableItem = true;
                                 }
-
+                                if(item.isNewRow) {
+                                    newRows.push(item);
+                                } else {
+                                    newRows.forEach(it => it.loadIndex = currentIndex);
+                                    newRows = [];
+                                    item.loadIndex = currentIndex;
+                                }
                                 item.loadIndex = currentIndex;
                                 prevCountable = itemCountable;
                                 prevRowType = rowType;
                                 isPrevRowNew = item.isNewRow;
                             });
+                            newRows.forEach(it => it.loadIndex = currentIndex);
                         }
 
                         return newItems;
                     },
-                    _afterProcessItems: function(items) {
+                    _afterProcessItems: function(items, change) {
                         this._itemCount = items.filter(item => isItemCountableByDataSource(item, this._dataSource)).length;
                         if(isDefined(this._loadViewportParams)) {
                             this._updateLoadViewportParams();
@@ -1150,13 +1157,10 @@ export const virtualScrollingModule = {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
                                 const skip = items[0].loadIndex + skipForCurrentPage;
                                 const take = this._loadViewportParams.take;
-
-                                result = items.filter(it => {
-                                    const isNewRowOnStart = it.isNewRow && it.loadIndex > skip - 1;
+                                result = items.filter((it) => {
                                     const isNewRowInEmptyData = it.isNewRow && it.loadIndex === skip && take === 0;
-                                    const isLoadIndexGreaterStart = it.loadIndex >= skip || isNewRowOnStart;
+                                    const isLoadIndexGreaterStart = it.loadIndex >= skip;
                                     const isLoadIndexLessEnd = it.loadIndex < skip + take || isNewRowInEmptyData;
-
                                     return isLoadIndexGreaterStart && isLoadIndexLessEnd;
                                 });
                             }
