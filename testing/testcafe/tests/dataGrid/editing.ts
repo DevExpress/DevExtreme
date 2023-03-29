@@ -2161,7 +2161,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     scrollMode: 'virtual',
   },
 ].forEach((testCase) => {
-  test('The first cell of the last row should be focused when newRowPosition = NEWROWPOSITION!!! and editing.mode = cell and SCROLLMODE!!!', async (t) => {
+  test(`The first cell of the last row should be focused when newRowPosition = ${testCase.newRowPosition} and editing.mode = cell and ${testCase.scrollMode} scroll mode`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
     const headerPanel = dataGrid.getHeaderPanel();
