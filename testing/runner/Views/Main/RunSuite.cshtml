@@ -135,6 +135,7 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/testing/spike/result.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script>
@@ -157,7 +158,7 @@
 
             SystemJS.config({
 //                 baseURL: baseURL,
-                transpiler: 'plugin-babel',
+//                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/artifacts/js/globalize")',
@@ -300,7 +301,7 @@
             }
 
 //             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
-            return SystemJS.import('/testing/spike/module-b.js');
+//             return SystemJS.import('/testing/spike/result.js');
         })
         .then(function() {
 //             QUnit.start();

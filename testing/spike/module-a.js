@@ -1,13 +1,4 @@
-window.require = System.amdRequire;
+const moduleB = require('module-b.js').exec;
 
-System.register([], function() {
-    return {
-        setters: [],
-        execute: function() {
-            const moduleB = require('module-b').exec;
-
-            console.log('Hello, module A!');
-            moduleB();
-        }
-    };
-});
+console.log('Hello, module A!');
+moduleB();
