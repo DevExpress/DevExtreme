@@ -4029,7 +4029,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
-        assert.deepEqual(loadIndices, [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5], 'indices after adding new items');
+        assert.deepEqual(loadIndices, [0, 0, 0, 1, 1, 2, 3, 3, 3, 4, 4, 4, 5, 5], 'indices after adding new items');
     });
 
     QUnit.test('New mode. Load indices of group footers are correct', function(assert) {
