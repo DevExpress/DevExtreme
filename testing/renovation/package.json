@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^11.2.14",
     "@angular/platform-browser-dynamic": "^11.2.14",
     "angular2-template-loader": "^0.6.2",
-    "core-js": "^3.19.1",
+    "core-js": "^3.29.0",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
     "inferno-create-element": "^7.4.6",
