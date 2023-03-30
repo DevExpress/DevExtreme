@@ -4,8 +4,7 @@ const fs = require('fs');
 
 const builder = new Builder();
 
-const root = path.join(__dirname, '../../');
-const testFolder = path.join(__dirname, '../tests/DevExpress.ui.widgets');
+const root = path.join(__dirname, '..');
 const transpilePath = path.join(root, '/artifacts/transpiled-renovation');
 
 builder.config({
@@ -161,7 +160,7 @@ const transpileModules = () => {
     )));
 };
 
-const transpileTests = async () => {
+const transpileTests = () => {
     const testingFolders = [
         'DevExpress.ui.widgets',
         'DevExpress.ui.widgets.dataGrid',
@@ -188,11 +187,12 @@ const transpileTests = async () => {
     return Promise.all(promises);
 };
 
-
+console.time('modules');
 transpileModules().then(() => {
-    console.log('done');
-}); // 24.99s
+    console.timeEnd('modules');
+});
 
+console.time('tests')
 transpileTests().then(() => {
-    console.log('done');
-}); // 73.24s
+    console.timeEnd('tests');
+});
