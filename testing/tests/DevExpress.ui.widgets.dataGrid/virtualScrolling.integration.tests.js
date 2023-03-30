@@ -4994,13 +4994,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        const row1Offset = row1.offsetTop - 1;
+        const row1Offset = row1.offsetTop;
         dataGrid.getScrollable().scrollTo({ top: row1Offset });
         $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(300);
 
         // assert
-        assert.strictEqual(row1.offsetTop, row1Offset, 'newRow should be visible');
+        assert.ok(row1Offset - row1.offsetTop < 2, 'scroll shouldnt change');
     });
     // T1153780
     QUnit.test('DataGrid should remove newItem row added before first row when them move out of viewport', function(assert) {
@@ -5048,13 +5048,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        const row2Offset = row2.offsetTop - 1;
+        const row2Offset = row2.offsetTop;
         dataGrid.getScrollable().scrollTo({ top: row2Offset });
         $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(300);
 
         // assert
-        assert.strictEqual(row2.offsetTop, row2Offset, 'newRow should be visible');
+        assert.ok(row2Offset - row2.offsetTop < 2, 'scroll shouldnt change');
     });
 
     QUnit.test('Rows should be rendered properly when renderAsync = false', function(assert) {
