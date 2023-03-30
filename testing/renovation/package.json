@@ -31,7 +31,7 @@
     "react-dom": "^16.13.1",
     "rxjs": "^6.5.4",
     "vue": "^2.6.11",
-    "zone.js": "^0.11.5"
+    "zone.js": "^0.13.0"
   },
   "devDependencies": {
     "babel-preset-react-app": "10.0.1",
