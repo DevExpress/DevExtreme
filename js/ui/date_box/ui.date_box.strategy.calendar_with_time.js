@@ -160,16 +160,26 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return extend(calendarPopupConfig, { width: 'auto' });
     },
 
-    _toolbarHasItems() {
-        return this.dateBox.option('dropDownOptions.toolbarItems').length > 0;
+    _topToolbarHasItems() {
+        const { toolbarItems } = this.dateBox.option('dropDownOptions');
+
+        return !!toolbarItems.find(item => item.toolbar === 'top');
+    },
+
+    _bottomToolbarHasItems() {
+        const { toolbarItems } = this.dateBox.option('dropDownOptions');
+
+        return !!toolbarItems.find(item => item.toolbar === 'bottom');
     },
 
     getFirstPopupElement: function() {
-        return $(TIMEVIEW_ITEM_SELECTOR).eq(0).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        if(!this._topToolbarHasItems()) {
+            return $(TIMEVIEW_ITEM_SELECTOR).eq(0).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        }
     },
 
     getLastPopupElement() {
-        if(!this._toolbarHasItems()) {
+        if(!this._bottomToolbarHasItems()) {
             const $timeViewItems = $(TIMEVIEW_ITEM_SELECTOR);
             const lastIndex = $timeViewItems.length - 1;
 
@@ -178,9 +188,11 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _attachTabHandler() {
-        this._attachHoursBoxHandler();
+        if(!this._topToolbarHasItems()) {
+            this._attachHoursBoxHandler();
+        }
 
-        if(!this._toolbarHasItems()) {
+        if(!this._bottomToolbarHasItems()) {
             this._attachLastInputBoxHandler();
         }
     },

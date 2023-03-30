@@ -74,6 +74,8 @@ const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
+const BUTTON_CLASS = 'dx-button';
+const TOOLBAR_CLASS = 'dx-toolbar';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
@@ -4829,6 +4831,60 @@ QUnit.module('keyboard navigation', {
         const $lastInput = $lastInputBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $($lastInput).trigger($.Event('keydown', { key: 'Tab' }));
 
+        assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
+    });
+
+    QUnit.testInActiveWindow('First top toolbar item has focus if tab key was pressed when toolbarItems was customised', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            focusStateEnabled: true,
+        });
+
+        const instance = $dateBox.dxDateBox('instance');
+
+        instance.option('dropDownOptions.toolbarItems', [{
+                widget: 'dxButton',
+                toolbar: 'top',
+                options: { text: 'First' },
+            }
+        ]);
+        instance.open();
+
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $firstItem = $(`.${TOOLBAR_CLASS} .${BUTTON_CLASS}`).eq(0);
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('tab');
+        assert.ok($firstItem.hasClass('dx-state-focused'), 'First popup element is focused');
+
+        $($firstItem).trigger($.Event('keydown', { key: 'Tab', shiftKey: true }));
+        assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
+    });
+
+    QUnit.testInActiveWindow('Last bottom toolbar item has focus if tab key was pressed when toolbarItems was customised', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            focusStateEnabled: true,
+        });
+
+        const instance = $dateBox.dxDateBox('instance');
+
+        instance.option('dropDownOptions.toolbarItems', [{
+                widget: 'dxButton',
+                toolbar: 'bottom',
+                options: { text: 'Last' },
+            },
+        ]);
+        instance.open();
+
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $lastItem = $(`.${TOOLBAR_CLASS} .${BUTTON_CLASS}`).eq(0);
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('tab', { shiftKey: true });
+        assert.ok($lastItem.hasClass('dx-state-focused'), 'Last popup element is focused');
+
+        $($lastItem).trigger($.Event('keydown', { key: 'Tab' }));
         assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
     });
 
