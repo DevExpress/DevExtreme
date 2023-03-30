@@ -156,10 +156,12 @@ export const editingFormBasedModule = {
 
                 _showEditPopup: function(rowIndex, repaintForm) {
                     const isMobileDevice = devices.current().deviceType !== 'desktop';
+                    const editPopupClass = this.addWidgetPrefix(EDIT_POPUP_CLASS);
                     const popupOptions = extend(
                         {
                             showTitle: false,
                             fullScreen: isMobileDevice,
+                            wrapperAttr: { class: editPopupClass },
                             toolbarItems: [
                                 { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getSaveButtonConfig() },
                                 { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getCancelButtonConfig() }
@@ -172,7 +174,7 @@ export const editingFormBasedModule = {
                     if(!this._editPopup) {
                         const $popupContainer = $('<div>')
                             .appendTo(this.component.$element())
-                            .addClass(this.addWidgetPrefix(EDIT_POPUP_CLASS));
+                            .addClass(editPopupClass);
 
                         this._editPopup = this._createComponent($popupContainer, Popup);
                         this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
