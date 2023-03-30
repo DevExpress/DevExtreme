@@ -693,6 +693,12 @@ const DateBox = DropDownEditor.inherit({
             case 'todayButtonText':
                 this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
                 break;
+            case 'dropDownOptions':
+                this.callBase.apply(this, arguments);
+                if(this._popup) {
+                    this._strategy._attachTabHandler?.();
+                }
+                break;
             case 'invalidDateMessage':
             case 'dateOutOfRangeMessage':
             case 'adaptivityEnabled':
