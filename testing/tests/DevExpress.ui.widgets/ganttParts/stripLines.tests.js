@@ -29,7 +29,7 @@ QUnit.module('Strip Lines', moduleConfig, () => {
             stripLines: stripLines
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $stripLines = this.$element.find(Consts.TIME_MARKER_SELECTOR);
         assert.equal($stripLines.length, 2, 'all strip lines are rendered');
@@ -40,7 +40,7 @@ QUnit.module('Strip Lines', moduleConfig, () => {
     });
     test('changing', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $stripLines = this.$element.find(Consts.TIME_MARKER_SELECTOR);
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');

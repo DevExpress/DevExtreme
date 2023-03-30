@@ -23,7 +23,7 @@ const moduleConfig = {
     },
 
     afterEach: function() {
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.clock.restore();
         fx.off = false;

@@ -46,7 +46,7 @@ QUnit.module('Filtering', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $filterRow = this.$element.find(Consts.TREELIST_FILTER_ROW_SELECTOR);
         assert.equal($filterRow.length, 1);
@@ -91,7 +91,7 @@ QUnit.module('Filtering', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_SELECTOR).length, 2);
         this.instance._treeList.clearFilter();
         this.clock.tick(300);
@@ -128,7 +128,7 @@ QUnit.module('Filtering', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         const treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -257,11 +257,11 @@ QUnit.module('Filtering', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
         assert.equal(this.instance._treeList.getVisibleRows().length, 1);
 
@@ -277,7 +277,7 @@ QUnit.module('Filtering', moduleConfig, () => {
 
         expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
         assert.equal(this.instance._treeList.getVisibleRows().length, 1);
 

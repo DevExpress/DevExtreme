@@ -196,7 +196,7 @@ QUnit.test('stop inertia on click', function(assert) {
         .down()
         .up();
 
-    this.clock.tick();
+    this.clock.tick(10);
 
     const location = getScrollOffset($scrollable);
     assert.notEqual(Math.round(location.top), Math.round(distance), 'scroll was stopped');
@@ -221,7 +221,7 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
         .move(0, -10)
         .up();
 
-    this.clock.tick();
+    this.clock.tick(10);
 
     const $scroll = $scrollable.find('.dx-scrollable-scroll');
     assert.ok($scroll.hasClass('dx-state-invisible'), 'scroll was hidden');
@@ -303,7 +303,7 @@ QUnit.test('bounce up', function(assert) {
         .move(0, 100)
         .up();
 
-    this.clock.tick();
+    this.clock.tick(10);
 });
 
 QUnit.test('stop bounce on click', function(assert) {
@@ -333,7 +333,7 @@ QUnit.test('stop bounce on click', function(assert) {
         .up()
         .down();
 
-    this.clock.tick();
+    this.clock.tick(10);
 
     const location = getScrollOffset($scrollable);
     assert.notEqual(location.top, 0, 'bounced stopped');
@@ -368,7 +368,7 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     mouse
         .down();
 
-    this.clock.tick();
+    this.clock.tick(10);
 
     const location = getScrollOffset($scrollable);
     assert.notEqual(location.top, 0, 'bounced stopped');
@@ -492,7 +492,7 @@ QUnit.test('inertia stopped on the bound when bounce is disabled', function(asse
         .move(0, moveDistance)
         .up();
 
-    this.clock.tick();
+    this.clock.tick(10);
 });
 
 QUnit.test('inertia is stopped when bound is reached', function(assert) {

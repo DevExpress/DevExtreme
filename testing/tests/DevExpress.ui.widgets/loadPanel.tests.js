@@ -58,7 +58,7 @@ QUnit.module('init', {
 
             assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
             assert.strictEqual(onShowingSpy.called, false);
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual(onShowingSpy.called, true);
         } finally {
             clock.restore();

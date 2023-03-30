@@ -1364,7 +1364,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         const $item2 = $('.dx-list-item').eq(1);
 
         $($item2).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!$item2.hasClass('dx-state-focused'), 'only item2 is focused');
         assert.ok(!$item1.hasClass('dx-state-focused'), 'only item2 is focused');
@@ -1771,7 +1771,7 @@ QUnit.module('Waiting fonts for material theme', moduleConfig, () => {
             height: 50
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         themes.isMaterial = origIsMaterial;
     });
 
