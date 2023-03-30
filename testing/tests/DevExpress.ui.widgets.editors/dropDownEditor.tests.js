@@ -649,11 +649,9 @@ QUnit.module('Focus order', {
 
         this.instance.open();
 
-        const $toolbarItems = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`);
-        const lastIndex = $toolbarItems.length - 1;
-        const $lastItem = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`).eq(lastIndex);
+        const $lastItem = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`).eq(1);
 
-        $(this.$input).trigger($.Event('keydown', { key: TAB_KEY_CODE, shiftKey: true  }));
+        $(this.$input).trigger($.Event('keydown', { key: TAB_KEY_CODE, shiftKey: true }));
         assert.ok($lastItem.hasClass('dx-state-focused'), 'Last popup element is focused');
 
         $($lastItem).trigger($.Event('keydown', { key: TAB_KEY_CODE }));
