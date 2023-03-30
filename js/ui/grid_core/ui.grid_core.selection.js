@@ -115,7 +115,17 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _handleDataPushed: function(changes) {
-            const removedKeys = changes.filter(change => change.type === 'remove').map(change => change.key);
+            let removedKeys = changes
+                .filter(change => change.type === 'remove')
+                .map(change => change.key);
+
+            if(this.option('selection.deferred')) {
+                removedKeys = removedKeys
+                    .map(key => this._dataController.items().find(item => item.key === key))
+                    .filter(item => item.isSelected)
+                    .map(item => item.key);
+            }
+
             removedKeys.length && this.deselectRows(removedKeys);
         },
 
