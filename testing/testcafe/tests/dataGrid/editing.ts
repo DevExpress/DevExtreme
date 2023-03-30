@@ -2133,11 +2133,11 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     scrollMode: 'standard',
   }, {
     newRowPosition: 'last',
-    insertedRowNumber: 21,
+    insertedRowNumber: 20,
     scrollMode: 'standard',
   }, {
     newRowPosition: 'pageBottom',
-    insertedRowNumber: 21,
+    insertedRowNumber: 20,
     scrollMode: 'standard',
   }, {
     newRowPosition: 'pageTop',
