@@ -10348,93 +10348,6 @@ declare module DevExpress.ui {
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface dxDateBoxOptions<TComponent>
-      extends dxDropDownEditorOptions<TComponent> {
-      /**
-       * [descr:dxDateBoxOptions.adaptivityEnabled]
-       */
-      adaptivityEnabled?: boolean;
-      /**
-       * [descr:dxDateBoxOptions.applyButtonText]
-       */
-      applyButtonText?: string;
-      /**
-       * [descr:dxDateBoxOptions.calendarOptions]
-       */
-      calendarOptions?: dxCalendarOptions;
-      /**
-       * [descr:dxDateBoxOptions.cancelButtonText]
-       */
-      cancelButtonText?: string;
-      /**
-       * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
-       */
-      dateOutOfRangeMessage?: string;
-      /**
-       * [descr:dxDateBoxOptions.dateSerializationFormat]
-       */
-      dateSerializationFormat?: string;
-      /**
-       * [descr:dxDateBoxOptions.disabledDates]
-       */
-      disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
-      /**
-       * [descr:dxDateBoxOptions.displayFormat]
-       */
-      displayFormat?: Format;
-      /**
-       * [descr:dxDateBoxOptions.interval]
-       */
-      interval?: number;
-      /**
-       * [descr:dxDateBoxOptions.invalidDateMessage]
-       */
-      invalidDateMessage?: string;
-      /**
-       * [descr:dxDateBoxOptions.max]
-       */
-      max?: Date | number | string;
-      /**
-       * [descr:dxDateBoxOptions.min]
-       */
-      min?: Date | number | string;
-      /**
-       * [descr:dxDateBoxOptions.pickerType]
-       */
-      pickerType?: DatePickerType;
-      /**
-       * [descr:dxDateBoxOptions.placeholder]
-       */
-      placeholder?: string;
-      /**
-       * [descr:dxDateBoxOptions.showAnalogClock]
-       */
-      showAnalogClock?: boolean;
-      /**
-       * [descr:dxDateBoxOptions.todayButtonText]
-       */
-      todayButtonText?: string;
-      /**
-       * [descr:dxDateBoxOptions.type]
-       */
-      type?: DateType;
-      /**
-       * [descr:dxDateBoxOptions.useMaskBehavior]
-       */
-      useMaskBehavior?: boolean;
-      /**
-       * [descr:dxDateBoxOptions.value]
-       */
-      value?: Date | number | string;
-
-      /**
-       * [descr:dxDateBoxOptions.dropDownOptions]
-       */
-      dropDownOptions?: DevExpress.ui.dxPopup.Properties;
-    }
     export type EnterKeyEvent = DevExpress.events.NativeEventInfo<
       dxDateBox,
       KeyboardEvent
@@ -10478,6 +10391,96 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
+  }
+  /**
+   * @deprecated use Properties instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface dxDateBoxOptions<TComponent>
+    extends dxDropDownEditorOptions<TComponent> {
+    /**
+     * [descr:dxDateBoxOptions.adaptivityEnabled]
+     */
+    adaptivityEnabled?: boolean;
+    /**
+     * [descr:dxDateBoxOptions.applyButtonText]
+     */
+    applyButtonText?: string;
+    /**
+     * [descr:dxDateBoxOptions.calendarOptions]
+     */
+    calendarOptions?: dxCalendarOptions;
+    /**
+     * [descr:dxDateBoxOptions.cancelButtonText]
+     */
+    cancelButtonText?: string;
+    /**
+     * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
+     */
+    dateOutOfRangeMessage?: string;
+    /**
+     * [descr:dxDateBoxOptions.dateSerializationFormat]
+     */
+    dateSerializationFormat?: string;
+    /**
+     * [descr:dxDateBoxOptions.disabledDates]
+     */
+    disabledDates?:
+      | Array<Date>
+      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
+    /**
+     * [descr:dxDateBoxOptions.displayFormat]
+     */
+    displayFormat?: Format;
+    /**
+     * [descr:dxDateBoxOptions.interval]
+     */
+    interval?: number;
+    /**
+     * [descr:dxDateBoxOptions.invalidDateMessage]
+     */
+    invalidDateMessage?: string;
+    /**
+     * [descr:dxDateBoxOptions.max]
+     */
+    max?: Date | number | string;
+    /**
+     * [descr:dxDateBoxOptions.min]
+     */
+    min?: Date | number | string;
+    /**
+     * [descr:dxDateBoxOptions.pickerType]
+     */
+    pickerType?: DevExpress.ui.dxDateBox.DatePickerType;
+    /**
+     * [descr:dxDateBoxOptions.placeholder]
+     */
+    placeholder?: string;
+    /**
+     * [descr:dxDateBoxOptions.showAnalogClock]
+     */
+    showAnalogClock?: boolean;
+    /**
+     * [descr:dxDateBoxOptions.todayButtonText]
+     */
+    todayButtonText?: string;
+    /**
+     * [descr:dxDateBoxOptions.type]
+     */
+    type?: DevExpress.ui.dxDateBox.DateType;
+    /**
+     * [descr:dxDateBoxOptions.useMaskBehavior]
+     */
+    useMaskBehavior?: boolean;
+    /**
+     * [descr:dxDateBoxOptions.value]
+     */
+    value?: Date | number | string;
+
+    /**
+     * [descr:dxDateBoxOptions.dropDownOptions]
+     */
+    dropDownOptions?: DevExpress.ui.dxPopup.Properties;
   }
   /**
    * [descr:dxDateRangeBox]
@@ -10548,10 +10551,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDateRangeBoxOptions
-    extends Omit<
-      DevExpress.ui.dxDateBox.dxDateBoxOptions<dxDateRangeBox>,
-      'value'
-    > {
+    extends Omit<dxDateBoxOptions<dxDateRangeBox>, 'value'> {
     /**
      * [descr:dxDateRangeBoxOptions.endDate]
      */
