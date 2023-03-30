@@ -37,6 +37,7 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const CUSTOM_CLASS = 'custom-class';
+const BUTTON_CLASS = 'dx-button';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -755,6 +756,91 @@ QUnit.module('keyboard navigation', {
         const $button = this.$rootElement.find('.dx-dropdowneditor-button');
 
         assert.equal($button.text(), 'Template', 'Template was rendered');
+    });
+});
+
+
+QUnit.module('Focus order', {
+    beforeEach() {
+        fx.off = true;
+        this.$element = $('<div>');
+        $('#qunit-fixture').append(this.$element);
+
+        this.instance = this.$element.dxDropDownEditor({
+            focusStateEnabled: true,
+            applyValueMode: 'useButtons',
+        }).dxDropDownEditor('instance');
+
+        this.$input = this.$element.find('.dx-texteditor-input');
+    },
+    afterEach() {
+        this.$element.remove();
+        this.instance = null;
+        fx.off = false;
+    }
+}, () => {
+    QUnit.testInActiveWindow('Focus should be set to first item then set to input if toolbarItems was customised', function(assert) {
+        this.instance.option('dropDownOptions.toolbarItems', [
+            {
+                widget: 'dxButton',
+                toolbar: 'bottom',
+                location: 'before',
+                options: {
+                    text: 'Start',
+                },
+            },
+            {
+                widget: 'dxButton',
+                toolbar: 'bottom',
+                location: 'after',
+                options: {
+                    text: 'End',
+                },
+            }
+        ]);
+
+        this.instance.open();
+
+        const $firstItem = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`).eq(0);
+
+        $(this.$input).trigger($.Event('keydown', { key: TAB_KEY_CODE }));
+        assert.ok($firstItem.hasClass('dx-state-focused'), 'First popup element is focused');
+
+        $($firstItem).trigger($.Event('keydown', { key: TAB_KEY_CODE, shiftKey: true }));
+        assert.ok(this.$element.hasClass('dx-state-focused'), 'Input is focused');
+    });
+
+    QUnit.testInActiveWindow('Focus should be set to last item then set to input if toolbarItems was customised', function(assert) {
+        this.instance.option('dropDownOptions.toolbarItems', [
+            {
+                widget: 'dxButton',
+                toolbar: 'bottom',
+                location: 'before',
+                options: {
+                    text: 'Start',
+                },
+            },
+            {
+                widget: 'dxButton',
+                toolbar: 'bottom',
+                location: 'after',
+                options: {
+                    text: 'End',
+                },
+            }
+        ]);
+
+        this.instance.open();
+
+        const $toolbarItems = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`);
+        const lastIndex = $toolbarItems.length - 1;
+        const $lastItem = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`).eq(lastIndex);
+
+        $(this.$input).trigger($.Event('keydown', { key: TAB_KEY_CODE, shiftKey: true  }));
+        assert.ok($lastItem.hasClass('dx-state-focused'), 'Last popup element is focused');
+
+        $($lastItem).trigger($.Event('keydown', { key: TAB_KEY_CODE }));
+        assert.ok(this.$element.hasClass('dx-state-focused'), 'Input is focused');
     });
 });
 

@@ -554,15 +554,7 @@ const DropDownEditor = TextBox.inherit({
     _renderPopupContent: noop,
 
     _renderPopup() {
-        const { toolbarItems } = this._options.cache('dropDownOptions');
-
-        if(toolbarItems) {
-            toolbarItems.forEach(item => {
-                extend(item.options, {
-                    onInitialized: this._popupButtonInitializedHandler.bind(this),
-                });
-            });
-        }
+        this._attachPopupButtonInitializedHandler();
 
         const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
@@ -779,6 +771,18 @@ const DropDownEditor = TextBox.inherit({
         this.close();
     },
 
+    _attachPopupButtonInitializedHandler() {
+        const { toolbarItems } = this._options.cache('dropDownOptions');
+
+        if(toolbarItems) {
+            toolbarItems.forEach(item => {
+                extend(item.options, {
+                    onInitialized: this._popupButtonInitializedHandler.bind(this),
+                });
+            });
+        }
+    },
+
     _popupButtonInitializedHandler: function(e) {
         e.component.registerKeyHandler('tab', this._popupElementTabHandler.bind(this));
         e.component.registerKeyHandler('escape', this._popupElementEscHandler.bind(this));
@@ -906,6 +910,7 @@ const DropDownEditor = TextBox.inherit({
             case 'dropDownOptions':
                 this._popupOptionChanged(args);
                 this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+                this._attachPopupButtonInitializedHandler();
                 break;
             case 'popupPosition':
                 break;
