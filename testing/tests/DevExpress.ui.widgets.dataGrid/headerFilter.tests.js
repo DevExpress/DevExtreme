@@ -461,8 +461,8 @@ QUnit.module('Header Filter', {
         assert.ok($popupContent.is(':visible'), 'visible popup');
         assert.ok($popupContent.find('.dx-list').length, 'has list in header filter menu');
         assert.ok($popupContent.find('.dx-empty-message').length, 'no data');
-        // T291384
-        assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.collision'), 'flip fit');
+        // T1156848
+        assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.collision'), 'fit fit');
         // T756320
         assert.strictEqual(that.headerFilterView.getPopupContainer().option('hideOnParentScroll'), false, 'hideOnParentScroll should be false');
     });
