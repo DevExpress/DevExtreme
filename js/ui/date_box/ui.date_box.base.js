@@ -695,8 +695,8 @@ const DateBox = DropDownEditor.inherit({
                 break;
             case 'dropDownOptions':
                 this.callBase.apply(this, arguments);
-                if(this._popup) {
-                    this._strategy._attachTabHandler?.();
+                if(this._strategy._timeView) {
+                    this._strategy._attachTabHandler();
                 }
                 break;
             case 'invalidDateMessage':
