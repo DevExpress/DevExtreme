@@ -8,7 +8,7 @@ import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
-import { getData } from '../dataSources/testData';
+import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -2176,9 +2176,10 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 
     await t
       .click(headerPanel.getAddRowButton())
-      .expect(dataGrid.getDataRow(testCase.insertedRowNumber).isInserted).ok('row is inserted')
-      .expect(await takeScreenshot(`grid-cell-edit-mode-and-new-row-position-${testCase.newRowPosition}-and-${testCase.scrollMode}-scroll-mode.png`, dataGrid.element))
+      .expect(await takeScreenshot(`grid-cell-edit-mode-and-new-row_position-${testCase.newRowPosition}-and-${testCase.scrollMode}_scroll-mode.png`, dataGrid.element))
       .ok()
+      .expect(dataGrid.getDataRow(testCase.insertedRowNumber).isInserted)
+      .ok('row is inserted')
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDataGrid', {
