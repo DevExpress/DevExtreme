@@ -4974,12 +4974,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        // act
         const row1 = dataGrid.getRowElement(1)[0];
-        console.log(row1.offsetTop);
         dataGrid.getScrollable().scrollTo({ top: row1.offsetTop });
         $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(300);
+
         dataGrid.addRow();
         this.clock.tick(300);
         dataGrid.addRow();
@@ -4990,12 +4989,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
         dataGrid.addRow();
         this.clock.tick(300);
+
         dataGrid.getScrollable().scrollTo({ top: 0 });
         this.clock.tick(300);
 
-        // act;
-        const row1Offset = row1.offsetTop;
-        dataGrid.getScrollable().scrollTo({ top: row1.offsetTop });
+        // act
+        const row1Offset = row1.offsetTop - 1;
+        dataGrid.getScrollable().scrollTo({ top: row1Offset });
         $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(300);
 
@@ -5029,9 +5029,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        // act
         const row1 = dataGrid.getRowElement(0)[0];
         const row2 = dataGrid.getRowElement(1)[0];
+
         dataGrid.addRow();
         this.clock.tick(300);
         dataGrid.addRow();
@@ -5042,14 +5042,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
         dataGrid.addRow();
         this.clock.tick(300);
-        // [area-rowindex = 1]
-        console.log(row1.offsetTop);
+
         dataGrid.getScrollable().scrollTo({ top: row1.offsetTop });
         $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(300);
 
-        const row2Offset = row2.offsetTop;
-        dataGrid.getScrollable().scrollTo({ top: row2.offsetTop + 1 });
+        // act
+        const row2Offset = row2.offsetTop - 1;
+        dataGrid.getScrollable().scrollTo({ top: row2Offset });
         $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(300);
 
