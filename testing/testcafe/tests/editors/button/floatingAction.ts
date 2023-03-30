@@ -1,20 +1,36 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const FA_MAIN_BUTTON_CLASS = 'dx-fa-button-main';
 
 fixture.disablePageReloads`FloatingAction`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .beforeEach(async () => {
+    await ClientFunction(() => {
+      (window as any).DevExpress.config({
+        floatingActionButtonConfig: {
+          icon: 'edit',
+          shading: false,
+          position: {
+            of: '#container',
+            my: 'right bottom',
+            at: 'right bottom',
+            offset: '-16 -16',
+          },
+        },
+      });
+    })();
+  });
 
 for (const label of ['Add Row', undefined]) {
   for (const icon of ['home', undefined]) {
-    safeSizeTest(`FAB with dne speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
+    test(`FAB with dne speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await testScreenshot(t, takeScreenshot, `FAB with one speed dial action button,label=${label},icon=${icon}.png`, {
@@ -29,15 +45,18 @@ for (const label of ['Add Row', undefined]) {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 300]).before(async () => {
+    }).before(async () => {
+      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+      await appendElementTo('#container', 'div', 'speed-dial-action');
+
       await createWidget('dxSpeedDialAction', {
         label,
         icon,
         visible: true,
-      });
+      }, '#speed-dial-action');
     });
 
-    safeSizeTest(`FAB with two speed dial action buttons, label: ${label}, icon: ${icon}`, async (t) => {
+    test(`FAB with two speed dial action buttons, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await testScreenshot(t, takeScreenshot, `FAB with speed dial action buttons,label=${label},icon=${icon}.png`, {
@@ -52,23 +71,27 @@ for (const label of ['Add Row', undefined]) {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 300]).before(async () => {
+    }).before(async () => {
+      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+      await appendElementTo('#container', 'div', 'speed-dial-action');
+      await appendElementTo('#container', 'div', 'speed-dial-action-trash');
+
       await createWidget('dxSpeedDialAction', {
         label,
         icon,
         index: 1,
         visible: true,
-      });
+      }, '#speed-dial-action');
 
       await createWidget('dxSpeedDialAction', {
         label: 'Remove Row',
         icon: 'trash',
         index: 2,
         visible: true,
-      }, '#otherContainer');
+      }, '#speed-dial-action-trash');
     });
 
-    safeSizeTest(`FAB with two speed dial action buttons after opening, label: ${label}, icon: ${icon}`, async (t) => {
+    test(`FAB with two speed dial action buttons after opening, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
@@ -89,20 +112,24 @@ for (const label of ['Add Row', undefined]) {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 300]).before(async () => {
+    }).before(async () => {
+      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+      await appendElementTo('#container', 'div', 'speed-dial-action');
+      await appendElementTo('#container', 'div', 'speed-dial-action-trash');
+
       await createWidget('dxSpeedDialAction', {
         label,
         icon,
         index: 1,
         visible: true,
-      });
+      }, '#speed-dial-action');
 
       await createWidget('dxSpeedDialAction', {
         label: 'Remove Row',
         icon: 'trash',
         index: 2,
         visible: true,
-      }, '#otherContainer');
+      }, '#speed-dial-action-trash');
     });
   }
 }
