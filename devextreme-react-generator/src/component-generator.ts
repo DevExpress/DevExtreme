@@ -1,5 +1,5 @@
 import {
-  createTempate, L1, L2, L3,
+  createTemplate, L1, L2, L3,
 } from './template';
 
 import {
@@ -106,7 +106,7 @@ function getIndent(indent: number) {
 const renderObjectEntry: (model: {
   key: string;
   value: string;
-}) => string = createTempate(`
+}) => string = createTemplate(`
     <#= it.key #>: "<#= it.value #>"
 `.trimRight());
 
@@ -136,7 +136,7 @@ const renderTemplateOption: (model: {
   actualOptionName: string;
   render: string;
   component: string;
-}) => string = createTempate(`
+}) => string = createTemplate(`
   {
     tmplOption: "<#= it.actualOptionName #>",
     render: "<#= it.render #>",
@@ -145,9 +145,9 @@ const renderTemplateOption: (model: {
   }
 `.trim());
 
-const renderStringEntry: (value: string) => string = createTempate('"<#= it #>"');
+const renderStringEntry: (value: string) => string = createTemplate('"<#= it #>"');
 
-const renderPropTyping: (model: IRenderedPropTyping) => string = createTempate(
+const renderPropTyping: (model: IRenderedPropTyping) => string = createTemplate(
   '  <#= it.propName #>: '
 
 + '<#? it.renderedTypes.length === 1 #>'
@@ -169,7 +169,7 @@ const renderModule: (model: {
   defaultExport: string;
   renderedExports: string;
   renderedReExports?: string;
-}) => string = createTempate(
+}) => string = createTemplate(
   '<#= it.renderedImports #>\n'
 
 + '<#? it.renderedOptionsInterface #>'
@@ -204,7 +204,10 @@ const renderImports: (model: {
   hasPropTypings: boolean;
   hasExplicitTypes: boolean;
   configComponentPath?: string;
-}) => string = createTempate(
+  customTypeImports?: Record<string, Array<string>>;
+  defaultTypeImports?: Record<string, string>;
+  wildcardTypeImports?: Record<string, string>;
+}) => string = createTemplate(
   '<#? it.hasExplicitTypes #>'
     + 'export { ExplicitTypes } from "<#= it.dxExportPath #>";\n'
 + '<#?#>'
@@ -225,6 +228,26 @@ const renderImports: (model: {
 
 + '<#? it.configComponentPath #>'
     + 'import NestedOption from "<#= it.configComponentPath #>";\n'
++ '<#?#>'
+
++ '<#? it.customTypeImports && Object.keys(it.customTypeImports).length #>\n'
+  + '<#~ Object.keys(it.customTypeImports) : module #>'
+  + 'import type { <#= it.customTypeImports[module].join(", ")#> } from "<#= module #>";\n'
+  + '<#~#>'
++ '<#?#>'
+
++ '<#? it.defaultTypeImports && Object.keys(it.defaultTypeImports).length #>\n'
+  + '<#~ Object.keys(it.defaultTypeImports) : defaultImport #>'
+    + '<#? defaultImport !== it.widgetName #>'
+      + 'import type <#= defaultImport #> from "<#= it.defaultTypeImports[defaultImport] #>";\n'
+    + '<#?#>'
+  + '<#~#>'
++ '<#?#>'
+
++ '<#? it.wildcardTypeImports && Object.keys(it.wildcardTypeImports).length #>\n'
+  + '<#~ Object.keys(it.wildcardTypeImports) : wildcardImportModule #>'
+    + 'import type * as <#= it.wildcardTypeImports[wildcardImportModule] #> from "<#= wildcardImportModule #>";\n'
+  + '<#~#>'
 + '<#?#>',
 );
 
@@ -242,7 +265,7 @@ const renderNestedComponent: (model: {
   renderedSubscribableOptions?: string[];
   renderedTemplateProps?: string[];
   owners: string[];
-}) => string = createTempate(
+}) => string = createTemplate(
   `${'// owners:\n'
 + '<#~ it.owners : owner #>'
     + '// <#= owner #>\n'
@@ -312,7 +335,7 @@ const renderOptionsInterface: (model: {
     name: string;
     type: string;
   }>;
-}) => string = createTempate(
+}) => string = createTemplate(
   `type <#= it.optionsName #>${TYPE_PARAMS_WITH_DEFAULTS} = React.PropsWithChildren<Properties${TYPE_PARAMS} & IHtmlOptions & {\n`
 
 + '<#? it.typeParams #>'
@@ -349,7 +372,7 @@ const renderComponent: (model: {
   isPortalComponent?: boolean;
   useRequestAnimationFrameFlag?: boolean;
   typeParams: string[] | undefined;
-}) => string = createTempate(
+}) => string = createTemplate(
   `class <#= it.className #>${TYPE_PARAMS_WITH_DEFAULTS} extends BaseComponent<React.PropsWithChildren<<#= it.optionsName #>${TYPE_PARAMS}>> {
 
   public get instance(): <#= it.widgetName #>${TYPE_PARAMS} {
@@ -451,7 +474,13 @@ function createPropTypingModel(typing: IPropTyping): IRenderedPropTyping {
   };
 }
 
-function generate(component: IComponent, generateReexports = false): string {
+function generate(
+  component: IComponent,
+  generateReexports = false,
+  customTypeImports?: Record<string, Array<string>>,
+  defaultTypeImports?: Record<string, string>,
+  wildcardTypeImports?: Record<string, string>,
+): string {
   const nestedComponents = component.nestedComponents
     ? component.nestedComponents
       .sort(createKeyComparator<INestedComponent>((o) => o.className))
@@ -577,6 +606,9 @@ function generate(component: IComponent, generateReexports = false): string {
       configComponentPath: isNotEmptyArray(nestedComponents)
         ? component.configComponentPath
         : undefined,
+      customTypeImports,
+      defaultTypeImports,
+      wildcardTypeImports,
     }),
 
     renderedOptionsInterface: !hasExtraOptions ? undefined : renderOptionsInterface({

@@ -41,7 +41,10 @@ gulp.task(GEN_RUN, (done) => {
       indexFileName: config.indexFileName
     },
     widgetsPackage: 'devextreme',
-    generateReexports: true,
+    typeGenerationOptions: {
+      generateReexports: true,
+      generateCustomTypes: true,
+    },
   });
 
   done();

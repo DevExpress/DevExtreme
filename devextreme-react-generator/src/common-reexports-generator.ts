@@ -1,6 +1,6 @@
-import { createTempate } from './template';
+import { createTemplate } from './template';
 
-const render: (model: { module: string, reexports: string[] }) => string = createTempate(`
+const render: (model: { module: string, reexports: string[] }) => string = createTemplate(`
 export {<#~ it.reexports :reExport #>
     <#= reExport #>,<#~#>
 } from "devextreme/<#= it.module #>";
