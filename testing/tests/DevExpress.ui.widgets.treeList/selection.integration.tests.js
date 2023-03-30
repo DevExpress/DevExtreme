@@ -77,10 +77,10 @@ QUnit.module('Selection', baseModuleConfig, () => {
             treeList.editCell(1, 'text');
             treeList.cellValue(1, 'text', '123');
             treeList.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             treeList.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             const loadCallsBeforeSelection = loadCalls;
 

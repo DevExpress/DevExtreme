@@ -631,12 +631,12 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         });
 
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columnsChangedSpy = sinon.spy();
         this.columnsController.columnsChanged.add(columnsChangedSpy);
         this.gridView.update();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.columnHeadersView.element().find('tr td').length, 11);

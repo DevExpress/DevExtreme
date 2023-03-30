@@ -116,7 +116,7 @@ QUnit.module('Editing', {
             const isLink = $targetElement.hasClass('dx-link');
             const event = $.Event(isLink ? 'click' : 'dxclick');
             $($targetElement).trigger(event);
-            this.clock.tick();
+            this.clock.tick(10);
             return event;
         };
         this.keyboardNavigationController._focusedView = this.rowsView;
@@ -530,7 +530,7 @@ QUnit.module('Editing', {
         assert.equal(cancelEditDataCallCount, 0, 'cancelEditData is not called'); // T630875
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(cancelEditDataCallCount, 1, 'cancelEditData is called');
@@ -563,7 +563,7 @@ QUnit.module('Editing', {
 
         // act
         const event = this.click(testElement.find('tbody > tr').first(), '.dx-link:contains(Edit)');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(editRowCallCount, 1);
@@ -597,7 +597,7 @@ QUnit.module('Editing', {
 
         // act
         this.click(testElement.find('tbody > tr').first(), '.dx-link:contains(Edit)');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(getInputElements(testElement.find('tbody > tr').first()).length);
@@ -794,9 +794,9 @@ QUnit.module('Editing', {
         assert.equal(testElement.find('td').first().find('input').length, 1);
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         testElement.find('td').first().find('input').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement).length, 1, 'editor is not closed');
@@ -832,7 +832,7 @@ QUnit.module('Editing', {
 
         // act
         $($boolCell).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
         $boolCell = testElement.find('td').eq(3);
         // assert
         assert.ok(!$boolCell.hasClass('dx-datagrid-readonly'));
@@ -1384,7 +1384,7 @@ QUnit.module('Editing', {
 
             // act
             testElement.find('tbody > tr').first().find('a').trigger('click'); // show confirm
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(body.find('.dx-dialog').length, 'has dialog');
@@ -1610,7 +1610,7 @@ QUnit.module('Editing', {
 
         rowsView.render(testElement);
         testElement.find('td').first().trigger('dxclick'); // Edit
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
@@ -1620,7 +1620,7 @@ QUnit.module('Editing', {
         // act
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -1644,7 +1644,7 @@ QUnit.module('Editing', {
 
         // act
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is rendered');
@@ -1672,7 +1672,7 @@ QUnit.module('Editing', {
 
         // act
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is rendered');
@@ -1714,7 +1714,7 @@ QUnit.module('Editing', {
 
         rowsView.render(testElement);
         testElement.find('td').first().trigger('dxclick'); // Edit
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
 
@@ -1723,7 +1723,7 @@ QUnit.module('Editing', {
         $(document).trigger('dxpointerdown');
         testElement.find('input').first().trigger('change');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -1753,10 +1753,10 @@ QUnit.module('Editing', {
         assert.equal($calendar.length, 1, 'popup calendar count');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         $($calendar).trigger('dxpointerdown');
         $($calendar).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
@@ -1781,13 +1781,13 @@ QUnit.module('Editing', {
 
         rowsView.render($('#container'));
         rowsViewWrapper.getCellElement(0, 2).trigger('dxclick'); // Edit
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         let editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
         editor.getInputElement().trigger('dxpointerdown');
         rowsViewWrapper.getElement().find('tbody').first().trigger('dxclick'); // chrome 73+
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
@@ -1832,14 +1832,14 @@ QUnit.module('Editing', {
         assert.equal($addButton.length, 1, 'add button is rendered');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         $addButton.trigger('dxpointerdown');
         $addButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $('.dx-popup-wrapper .dx-datagrid .dx-data-row > td').eq(1);
         $secondCell.trigger('dxpointerdown');
         $secondCell.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // assert
@@ -1866,7 +1866,7 @@ QUnit.module('Editing', {
         popupInstance.show();
         const $popupContent = popupInstance.$overlayContent();
         $($popupContent.find('td').first()).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements($popupContent).length, 1, 'has input');
@@ -1874,7 +1874,7 @@ QUnit.module('Editing', {
         // act
         $($popupContent).trigger('dxpointerdown');
         $($popupContent).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements($popupContent).length, 0, 'not has input');
@@ -1906,10 +1906,10 @@ QUnit.module('Editing', {
         assert.equal($otherMonthDay.length, 1, 'over month day element');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         $($otherMonthDay).trigger('dxpointerdown');
         $($otherMonthDay).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
@@ -1931,14 +1931,14 @@ QUnit.module('Editing', {
         rowsView.render(that.gridContainer);
         that.gridContainer.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
 
-        this.clock.tick();
+        this.clock.tick(10);
         const $focusOverlay = that.gridContainer.find('.dx-datagrid-focus-overlay');
         assert.equal($focusOverlay.length, 1, 'focus overlay count');
 
         // act
         $($focusOverlay).trigger('dxpointerdown');
         $($focusOverlay).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(that.gridContainer.find('tbody > tr').first()).length, 1, 'editor count');
@@ -2041,7 +2041,7 @@ QUnit.module('Editing', {
         getInputElements(testElement).eq(0).trigger('change');
         mouse.up();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(updateArgs, [['test1', { 'name': 'Test1' }], ['test2', { 'name': 'Test2' }]], 'changed rows are saved');
@@ -2073,7 +2073,7 @@ QUnit.module('Editing', {
 
         // act
         mouse.down();
-        this.clock.tick();
+        this.clock.tick(10);
         mouse.up();
 
         // assert
@@ -2184,7 +2184,7 @@ QUnit.module('Editing', {
 
         // act
         this.editingController.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(updateArgs, [['test1', { 'name': 'Test1' }]]);
@@ -2215,7 +2215,7 @@ QUnit.module('Editing', {
 
         rowsView.render(testElement);
         testElement.find('td').first().trigger('dxclick'); // Edit
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'has input');
@@ -2228,7 +2228,7 @@ QUnit.module('Editing', {
         testElement.find('.dx-freespace-row').first().trigger('dxpointerdown');
         testElement.find('.dx-freespace-row').first().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'not has input');
         assert.ok(!updateArgs, 'no update');
@@ -2500,7 +2500,7 @@ QUnit.module('Editing', {
         });
 
         that.deleteRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editCell(0, 0);
@@ -2604,7 +2604,7 @@ QUnit.module('Editing', {
         const $firstCell = $testElement.find('tbody > tr > td').first();
         $firstCell.focus();
         $firstCell.trigger(pointerEvents.up);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.notOk($testElement.find('.dx-datagrid-focus-overlay').is(':visible'), 'not visible focus overlay');
@@ -2708,7 +2708,7 @@ QUnit.module('Editing', {
 
         // act
         $testElement.find('td').eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(that.editingController.closeEditCell.callCount, 1, 'count call closeEditCell');
@@ -2736,7 +2736,7 @@ QUnit.module('Editing', {
 
         // act
         $testElement.find('td').first().trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(getInputElements($testElement).length, 1, 'has input');
@@ -2896,7 +2896,7 @@ QUnit.module('Editing with real dataController', {
             const $targetElement = this.find($element, selector);
             const isLink = $targetElement.hasClass('dx-link');
             $($targetElement).trigger(isLink ? 'click' : 'dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
         };
     },
     afterEach: function() {
@@ -3140,7 +3140,7 @@ QUnit.module('Editing with real dataController', {
 
         this.editingController.closeEditCell();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($testElement.find('td').eq(1).text(), '16', 'we will keep value that we increment by arrow up key');
@@ -3171,7 +3171,7 @@ QUnit.module('Editing with real dataController', {
 
         this.editingController.closeEditCell();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($testElement.find('td').eq(1).text(), '14', 'we will keep value that we decrement by arrow down key');
@@ -3205,7 +3205,7 @@ QUnit.module('Editing with real dataController', {
         $input.change();
         $($input).trigger($.Event('keydown', { key: TAB_KEY }));
         this.editingController.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!testElement.find('td').eq(1).hasClass('dx-cell-modified'), 'cell is not modified');
@@ -3220,7 +3220,7 @@ QUnit.module('Editing with real dataController', {
         $($input).trigger($.Event('keydown', { key: TAB_KEY }));
 
         this.editingController.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(testElement.find('td').eq(1).hasClass('dx-cell-modified'), 'cell is modified');
@@ -3357,7 +3357,7 @@ QUnit.module('Editing with real dataController', {
         this.addRow().done(() => {
             doneExecuteCount++;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(doneExecuteCount, 1, 'done was executed');
@@ -3866,7 +3866,7 @@ QUnit.module('Editing with real dataController', {
         testElement.find('input').first().trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.addRow();
 
@@ -4037,7 +4037,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1, 'When insert row and cell editing - focus first cell');
@@ -4098,7 +4098,7 @@ QUnit.module('Editing with real dataController', {
             .trigger('change');
 
         that.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(testElement.find('td:contains(modifiedValue)').length);
@@ -4215,7 +4215,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4226,7 +4226,7 @@ QUnit.module('Editing with real dataController', {
 
         $(document).trigger('dxpointerdown'); // Save
         $(document).trigger('dxclick'); // Save
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 0, 'count input');
@@ -4249,7 +4249,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4260,7 +4260,7 @@ QUnit.module('Editing with real dataController', {
 
         $(document).trigger('dxpointerdown'); // Save
         $(document).trigger('dxclick'); // Save
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 0, 'count input');
@@ -4307,7 +4307,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4317,7 +4317,7 @@ QUnit.module('Editing with real dataController', {
         testElement.find('input').first().trigger('change');
 
         // $(document).trigger("dxclick"); // Save
-        // that.clock.tick();
+        // that.clock.tick(10);
         that.saveEditData();
 
         // assert
@@ -4365,7 +4365,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4375,7 +4375,7 @@ QUnit.module('Editing with real dataController', {
         testElement.find('input').first().trigger('change');
 
         // $(document).trigger("dxclick"); // Save
-        // that.clock.tick();
+        // that.clock.tick(10);
         that.saveEditData();
 
         // assert
@@ -4429,7 +4429,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4489,7 +4489,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4540,7 +4540,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'count input');
@@ -4551,7 +4551,7 @@ QUnit.module('Editing with real dataController', {
 
         $(document).trigger('dxpointerdown'); // Save
         $(document).trigger('dxclick'); // Save
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 0, 'count input');
@@ -4589,7 +4589,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, booleanColumnIndex);
-        that.clock.tick();
+        that.clock.tick(10);
 
         let $checkbox = testElement.find('.dx-row').first().find('.dx-checkbox');
 
@@ -4601,7 +4601,7 @@ QUnit.module('Editing with real dataController', {
 
         $(document).trigger('dxpointerdown'); // Save
         $(document).trigger('dxclick'); // Save
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $checkbox = testElement.find('.dx-row').first().find('.dx-checkbox');
@@ -4632,7 +4632,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.cellValue(0, 0, 'test');
-        that.clock.tick();
+        that.clock.tick(10);
 
         assert.equal(testElement.find('.dx-row').first().find('.dx-cell-modified').length, 1, 'one modified value');
         assert.ok(testElement.find('.dx-row').first().children().eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
@@ -4770,7 +4770,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.deepEqual(editingStartKeys, [undefined, undefined], 'onEditingStart called twice with undefined key');
@@ -4799,7 +4799,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.cellValue(0, 0, 'Test');
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(onRowUpdatingArgs.length, 1, 'onRowUpdating called once');
@@ -4927,7 +4927,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.deleteRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         $('.dx-dialog-button').first().trigger('dxclick');
         this.clock.tick(DIALOG_ANIMATION_TIMEOUT);
 
@@ -5069,7 +5069,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.deleteRow(1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
@@ -5094,7 +5094,7 @@ QUnit.module('Editing with real dataController', {
 
         that.cellValue(0, 0, 'test');
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
@@ -5102,7 +5102,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.deleteRow(1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
@@ -5131,7 +5131,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.deleteRow(1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
@@ -5270,7 +5270,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('.dx-select-checkbox').closest('td').first().trigger('dxpointerdown');
         $('.dx-select-checkbox').closest('td').first().trigger('dxclick');
@@ -5300,7 +5300,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         testElement.find('td').first().next().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'has input');
@@ -5312,7 +5312,7 @@ QUnit.module('Editing with real dataController', {
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!getInputElements(testElement.find('tbody > tr').first()).length, 'not has input');
@@ -5399,7 +5399,7 @@ QUnit.module('Editing with real dataController', {
         testElement.find('.dx-texteditor-input').first().trigger('change');
 
         that.editingController.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $modifiedCell = testElement.find('td.dx-cell-modified');
@@ -5478,7 +5478,7 @@ QUnit.module('Editing with real dataController', {
         });
 
         testElement.find('td').first().trigger('dxclick'); // Edit
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
@@ -5488,7 +5488,7 @@ QUnit.module('Editing with real dataController', {
         // act
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -5510,7 +5510,7 @@ QUnit.module('Editing with real dataController', {
 
         rowsView.render(testElement);
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
@@ -5518,7 +5518,7 @@ QUnit.module('Editing with real dataController', {
         testElement.find('input').first().trigger('change');
 
         this.editCell(0, 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
@@ -5528,7 +5528,7 @@ QUnit.module('Editing with real dataController', {
         // act
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -5713,7 +5713,7 @@ QUnit.module('Editing with real dataController', {
         that.editCell(0, 0);
 
         selectBoxInstance.option('value', 2);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(saveEditDataCallCount, 1, 'save edit data called once');
@@ -5844,7 +5844,7 @@ QUnit.module('Editing with real dataController', {
         $checkBox.focus().trigger('dxclick');
 
         updateDeferred.resolve();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(updateCallCount, 1, 'update called once');
@@ -5920,7 +5920,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         this.editingController.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // assert
@@ -6134,7 +6134,7 @@ QUnit.module('Editing with real dataController', {
         rowsView.render(that.gridContainer);
 
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.ok(that.gridContainer.find('.dx-datagrid-focus-overlay').is(':visible'), 'visible focus overlay');
@@ -6144,7 +6144,7 @@ QUnit.module('Editing with real dataController', {
 
         // assert
         assert.ok(!that.gridContainer.find('.dx-datagrid-focus-overlay').is(':visible'), 'not visible focus overlay');
-        that.clock.tick();
+        that.clock.tick(10);
         assert.ok(that.gridContainer.find('.dx-datagrid-focus-overlay').is(':visible'), 'visible focus overlay');
     });
 
@@ -6412,7 +6412,7 @@ QUnit.module('Editing with real dataController', {
         that.columnsController.init();
 
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cellElement = $(rowsView.element().find('tbody > tr').first().children().first());
@@ -6423,7 +6423,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         lookupInstance.option('value', 'test1');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cellElement = $(rowsView.element().find('tbody > tr').first().children().first());
@@ -6450,7 +6450,7 @@ QUnit.module('Editing with real dataController', {
         that.columnsController.init();
 
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $input1 = $(rowsView.getCellElement(0, 0)).find('.dx-texteditor-input');
         let $input2 = $(rowsView.getCellElement(0, 1)).find('.dx-texteditor-input');
@@ -6462,7 +6462,7 @@ QUnit.module('Editing with real dataController', {
             $input2.get(0).setSelectionRange(1, 2);
         }
         $input1.trigger('change');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $cellElement = $(rowsView.getCellElement(0, 1));
@@ -6494,7 +6494,7 @@ QUnit.module('Editing with real dataController', {
         that.columnsController.init();
 
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $input = $(rowsView.getCellElement(0, 0)).find('.dx-texteditor-input');
 
@@ -6506,7 +6506,7 @@ QUnit.module('Editing with real dataController', {
         mouse.down();
         $input.trigger('change');
         mouse.up();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $secondCell = $(rowsView.getCellElement(0, 1));
@@ -6562,7 +6562,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.items().length, 8, 'item was added');
@@ -6596,7 +6596,7 @@ QUnit.module('Editing with real dataController', {
 
         this.gridView.render(testElement);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const rowsViewHeight = $('.dx-datagrid-rowsview').height();
 
@@ -6624,7 +6624,7 @@ QUnit.module('Editing with real dataController', {
 
         this.gridView.render(testElement);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.addRow();
@@ -6650,7 +6650,7 @@ QUnit.module('Editing with real dataController', {
         this.columnsController.init();
 
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.rowsView.render(testElement);
 
@@ -6669,7 +6669,7 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(changeCount, 0, 'data is not changed');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(changeCount, 1, 'data is changed once');
@@ -6736,7 +6736,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         this.rowsView.render($testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(editorPreparingHandler.getCall(0).args[0].command, 'select', 'The editorPreparing event argument - select column');
@@ -6836,7 +6836,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         items = that.dataController.items();
@@ -6866,7 +6866,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.gridContainer.find('tbody > tr').first().find('td').first().trigger('dxclick'); // Edit
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $focusOverlay = that.gridContainer.find('.dx-datagrid-focus-overlay');
@@ -6901,7 +6901,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.gridContainer.find('.dx-datagrid-content-fixed tbody > tr').first().find('td').first().trigger('dxclick'); // Edit
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $focusOverlay = that.gridContainer.find('.dx-datagrid-focus-overlay');
@@ -6937,7 +6937,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.gridContainer.find('tbody > tr').first().find('td').last().trigger('dxclick'); // Edit
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $focusOverlay = that.gridContainer.find('.dx-datagrid-focus-overlay');
@@ -6970,11 +6970,11 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 5);
-        that.clock.tick();
+        that.clock.tick(10);
         const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
         $selectBox.dxSelectBox('instance').option('value', 2);
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $cell = testElement.find('.dx-row').first().children('td').eq(5);
@@ -7010,11 +7010,11 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 5);
-        that.clock.tick();
+        that.clock.tick(10);
         const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
         $selectBox.dxSelectBox('instance').reset();
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $cell = testElement.find('.dx-row').first().children('td').eq(5);
@@ -7049,11 +7049,11 @@ QUnit.module('Editing with real dataController', {
 
             // act
             that.editCell(0, 5);
-            that.clock.tick();
+            that.clock.tick(10);
             const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
             $selectBox.dxSelectBox('instance').option('value', 1);
             that.closeEditCell();
-            that.clock.tick();
+            that.clock.tick(10);
 
             // assert
             const $cell = testElement.find('.dx-row').first().children('td').eq(5);
@@ -7087,11 +7087,11 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 5);
-        that.clock.tick();
+        that.clock.tick(10);
         const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
         const $cellBeforeChange = testElement.find('.dx-row').first().children('td').eq(5);
         $selectBox.dxSelectBox('instance').option('value', 2);
-        that.clock.tick();
+        that.clock.tick(10);
         const $cellAfterChange = testElement.find('.dx-row').first().children('td').eq(5);
 
         // assert
@@ -7175,7 +7175,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         that.editCell(0, 5);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
@@ -7223,7 +7223,7 @@ QUnit.module('Editing with real dataController', {
         // act
         testElement.find('tbody > tr').first().find('input').eq(0).val('Test name');
         testElement.find('tbody > tr').first().find('input').eq(0).trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('tbody > tr').first().find('input').eq(0).val(), 'Test name');
@@ -7298,7 +7298,7 @@ QUnit.module('Editing with real dataController', {
         // act
         $targetInput.val('Test name');
         $targetInput.trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($testElement.find('tbody > tr').first().find('.dx-texteditor').first().hasClass('dx-invalid'));
@@ -7339,7 +7339,7 @@ QUnit.module('Editing with real dataController', {
         // act
         $targetInput.val('Test name');
         $targetInput.trigger('change');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(validationCallback.callCount, 0, 'validation is not occurs');
@@ -7523,7 +7523,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         $(that.gridContainer.find('tbody > tr').first().find('td').first().find('.dx-selectbox-container')).trigger('dxclick'); // Edit
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $focusOverlay = that.gridContainer.find('.dx-datagrid-focus-overlay');
@@ -7567,7 +7567,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.cancelEditData();
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($testElement.find('.dx-edit-row').length, 1, 'one edit row');
@@ -8033,7 +8033,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         $linkElement.trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!clicked, 'not clicked when disabled');
@@ -8044,7 +8044,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         $linkElement.trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(clicked, 'clicked when isn\'t disabled');
@@ -8114,7 +8114,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         $linkElements.first().trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.notOk($testElement.find('.dx-datagrid-rowsview tbody > tr').first().hasClass('dx-edit-row'), 'row not editable');
@@ -8218,7 +8218,7 @@ QUnit.module('Editing with real dataController', {
 
         // act
         $(rowsView.getCellElement(0, 0)).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
         $inputElement.val('test');
@@ -8229,7 +8229,7 @@ QUnit.module('Editing with real dataController', {
         // act
         eventsEngine.trigger($inputElement[0], 'change');
         $(rowsView.getCellElement(0, 1)).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(editCellTemplate.callCount, 1);
@@ -8458,7 +8458,7 @@ QUnit.module('Editing with real dataController', {
 
         template.reset();
         that.editingController.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(template.callCount, 1, 'template is called');
@@ -8556,10 +8556,10 @@ QUnit.module('Editing with real dataController', {
                     // act
                     if(doubleChange) {
                         getEditor('lookup1').option('value', 3);
-                        this.clock.tick();
+                        this.clock.tick(10);
                     }
                     getEditor('lookup1').option('value', 2);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     checkEditorRecreating('id', !repaintChangesOnly);
@@ -8572,7 +8572,7 @@ QUnit.module('Editing with real dataController', {
                     dataSourceCallCount = 0;
                     getEditor('lookup2').option('opened', true);
                     getEditor('lookup2').option('value', 21);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.equal(getEditor('lookup2').option('text'), 'value21', 'lookup2 text is updated');
@@ -8581,7 +8581,7 @@ QUnit.module('Editing with real dataController', {
 
                     // act
                     getEditor('lookup1').option('value', 3);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     checkEditorRecreating('id', !repaintChangesOnly);
@@ -8631,7 +8631,7 @@ QUnit.module('Editing with real dataController', {
             // act
             $targetInput.val('').trigger('change');
             this.closeEditCell();
-            this.clock.tick();
+            this.clock.tick(10);
 
             let $secondCell = $(this.getCellElement(0, 1));
 
@@ -8640,7 +8640,7 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.cancelEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             $secondCell = $(this.getCellElement(0, 1));
 
@@ -8723,7 +8723,7 @@ QUnit.module('Editing with real dataController', {
 
             this.editorFactoryController.init();
             rowsView.render($testElement);
-            this.clock.tick();
+            this.clock.tick(10);
 
             if(editMode === 'Row') {
                 this.editRow(0);
@@ -8731,7 +8731,7 @@ QUnit.module('Editing with real dataController', {
                 this.editCell(0, 0);
             }
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.ok(isEditorCell, 'cell is rendered for an editor');
         });
@@ -8954,7 +8954,7 @@ QUnit.module('Editing with real dataController', {
 
                 // act
                 this.option('editing.editRowKey', null);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 this.checkRowIsNotEdited(assert, $(rowsView.getRowElement(0)), editMode);
@@ -9267,7 +9267,7 @@ QUnit.module('Editing with real dataController', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
                 const newRowKey = this.option('editing.editRowKey');
 
                 // assert
@@ -9312,7 +9312,7 @@ QUnit.module('Editing with real dataController', {
             // act
             const oldChanges = this.option('editing.changes');
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const newChanges = this.option('editing.changes');
@@ -9341,7 +9341,7 @@ QUnit.module('Editing with real dataController', {
             // act
             previousChanges = this.option('editing.changes');
             this.cellValue(0, 0, 'test');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             newChanges = this.option('editing.changes');
@@ -9357,7 +9357,7 @@ QUnit.module('Editing with real dataController', {
             // act
             previousChanges = newChanges;
             this.cellValue(0, 1, 'test2');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             newChanges = this.option('editing.changes');
@@ -9392,7 +9392,7 @@ QUnit.module('Editing with real dataController', {
             // act
             const oldChanges = this.option('editing.changes');
             this.deleteRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const newChanges = this.option('editing.changes');
@@ -9423,7 +9423,7 @@ QUnit.module('Editing with real dataController', {
             // act
             const oldChanges = this.option('editing.changes');
             this.deleteRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const newChanges = this.option('editing.changes');
@@ -9550,7 +9550,7 @@ QUnit.module('Editing with real dataController', {
                         key,
                         type: 'insert'
                     }]);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     visibleRows = this.getVisibleRows();
@@ -9596,7 +9596,7 @@ QUnit.module('Editing with real dataController', {
                     key: 1,
                     type: 'remove'
                 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let visibleRows = this.getVisibleRows();
@@ -9648,7 +9648,7 @@ QUnit.module('Editing with real dataController', {
                     type: 'update',
                     data: { name: 'test' }
                 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 visibleRows = this.getVisibleRows();
@@ -9678,7 +9678,7 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.deepEqual(this.option('editing.changes'), [], 'no changes');
@@ -9709,7 +9709,7 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             this.option('editing.changes', [{
                 data: { name: 'asd' },
@@ -9735,7 +9735,7 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editCell(0, 0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.deepEqual(this.option('editing.changes'), [], 'no changes');
@@ -10714,7 +10714,7 @@ QUnit.module('Refresh modes', {
               data: { state: 'disabled'}
             }
         ]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $linkElements = $(this.getCellElement(0, 0)).find('.dx-link');
@@ -10775,11 +10775,11 @@ QUnit.module('Refresh modes', {
             };
             this.options.selectedRowKeys = [1, 2];
             this.setupModules();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             this.deleteRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.getVisibleRows().length, 2);
@@ -10917,7 +10917,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $checkbox = $(rowsView.element().find('tbody > tr').first().find('td .dx-checkbox').first());
 
@@ -10960,7 +10960,7 @@ QUnit.module('Editing with validation', {
         inputElement.trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('tbody > tr').first().find('td');
 
@@ -10976,7 +10976,7 @@ QUnit.module('Editing with validation', {
         inputElement.trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('tbody > tr').first().find('td');
 
@@ -11167,7 +11167,7 @@ QUnit.module('Editing with validation', {
         testElement.find('.dx-texteditor-input').first().trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
 
         cells = rowsView.element().find('td');
@@ -11363,7 +11363,7 @@ QUnit.module('Editing with validation', {
         testElement.find('input').first().trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'not has input');
@@ -11404,7 +11404,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
         const selectBoxButton = $(rowsView.getCellElement(0, 0)).find('.dx-selectbox .dx-dropdowneditor-button').dxButton('instance');
         $(selectBoxButton.$element()).trigger('dxclick');
 
@@ -11569,11 +11569,11 @@ QUnit.module('Editing with validation', {
         testElement.find('.dx-texteditor-input').trigger('change');
 
         that.closeEditCell(); // close edit cell
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.editCell(0, 1); // edit cell
         that.editorFactoryController.focus(testElement.find('td').eq(1).children()); // focus cell
-        that.clock.tick();
+        that.clock.tick(10);
     });
 
     // T629168
@@ -11608,13 +11608,13 @@ QUnit.module('Editing with validation', {
         that.editCell(0, 0);
         testElement.find('input').val('').trigger('change');
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.editorFactoryController.focus(this.rowsView.element().find('td').eq(0));
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.resize();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('.dx-invalid-message.dx-widget').length, 1, 'validation tooltip count = 1');
@@ -11814,7 +11814,7 @@ QUnit.module('Editing with validation', {
         $($inputElement).trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         $cells = $(rowsView.element().find('tbody > tr').first().find('td'));
 
@@ -11824,7 +11824,7 @@ QUnit.module('Editing with validation', {
 
         // act
         $($cells.eq(1)).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         $cells = $(rowsView.element().find('tbody > tr').first().find('td'));
 
@@ -11845,7 +11845,7 @@ QUnit.module('Editing with validation', {
         $($inputElement).trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         $cells = $(rowsView.element().find('tbody > tr').first().find('td'));
 
@@ -11854,7 +11854,7 @@ QUnit.module('Editing with validation', {
 
         // act
         $($cells.eq(1)).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements($testElement).length, 1, 'has input');
@@ -11894,14 +11894,14 @@ QUnit.module('Editing with validation', {
         const editor = $cell.find('.dx-switch').dxSwitch('instance');
 
         eventsEngine.trigger(editor.$element(), 'focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($cell.find('.dx-overlay').length, 0, 'no tooltip');
 
         // act
         editor.option('value', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($cell.find('.dx-overlay').length, 1, 'tooltip is rendered');
@@ -11934,7 +11934,7 @@ QUnit.module('Editing with validation', {
 
         // act
         $(this.getCellElement(0, 0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(this.getCellElement(0, 0)).find('.dx-overlay').length, 2, 'validation and revert tooltips are rendered');
@@ -11977,7 +11977,7 @@ QUnit.module('Editing with validation', {
 
         // act
         cells.eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement).length, 1, 'has input');
@@ -11988,7 +11988,7 @@ QUnit.module('Editing with validation', {
         eventsEngine.trigger(inputElement[0], 'change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
@@ -11998,7 +11998,7 @@ QUnit.module('Editing with validation', {
 
         // act
         cells.eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
@@ -12051,7 +12051,7 @@ QUnit.module('Editing with validation', {
 
         // act
         cells.eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(getInputElements(testElement).length, 1, 'has input');
@@ -12062,7 +12062,7 @@ QUnit.module('Editing with validation', {
         eventsEngine.trigger(inputElement[0], 'change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
@@ -12072,7 +12072,7 @@ QUnit.module('Editing with validation', {
 
         // act
         cells.eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
@@ -12116,7 +12116,7 @@ QUnit.module('Editing with validation', {
 
         that.cellValue(0, 2, '');
         that.editCell(0, 2);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         tooltipInstance = $testElement.find('tbody td').eq(2).find('.dx-overlay.dx-invalid-message').dxOverlay('instance');
@@ -12127,7 +12127,7 @@ QUnit.module('Editing with validation', {
 
         // act
         eventsEngine.trigger(getInputElements($testElement.find('tbody td').eq(2))[0], 'dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const selectBoxInstance = $testElement.find('tbody td').eq(2).find('.dx-selectbox').dxSelectBox('instance');
@@ -12139,7 +12139,7 @@ QUnit.module('Editing with validation', {
 
         // act
         eventsEngine.trigger($testElement.find('tbody td').eq(2).find('.dx-dropdowneditor-button')[0], 'dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         // T724201
@@ -12177,7 +12177,7 @@ QUnit.module('Editing with validation', {
 
         that.cellValue(0, 0, '');
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const tooltipInstance = $testElement.find('tbody td').eq(0).find('.dx-overlay.dx-invalid-message').dxOverlay('instance');
@@ -12220,11 +12220,11 @@ QUnit.module('Editing with validation', {
 
         that.cellValue(0, 0, '');
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         eventsEngine.trigger(getInputElements($testElement.find('tbody td').eq(0))[0], 'dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const selectBoxInstance = $testElement.find('tbody td').eq(0).find('.dx-selectbox').dxSelectBox('instance');
@@ -12273,11 +12273,11 @@ QUnit.module('Editing with validation', {
 
         that.cellValue(0, 2, '');
         that.editCell(0, 2);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         eventsEngine.trigger(getInputElements($testElement.find('tbody td').eq(2))[0], 'dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const selectBoxInstance = $testElement.find('tbody td').eq(2).find('.dx-selectbox').dxSelectBox('instance');
@@ -12409,7 +12409,7 @@ QUnit.module('Editing with validation', {
 
         try {
             this.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(true, 'no errors');
@@ -12441,10 +12441,10 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         let $input = $(rowsView.element().find('.dx-data-row').first().find('td').eq(2).find('.dx-texteditor-input'));
         $input.get(0).focus();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $input = $(rowsView.element().find('.dx-data-row').first().find('td').eq(2).find('.dx-texteditor-input'));
@@ -12459,7 +12459,7 @@ QUnit.module('Editing with validation', {
         $input.get(0).focus();
 
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.ok($input.is(':focus'), 'Text editor is focused after call saveEditData');
@@ -12496,11 +12496,11 @@ QUnit.module('Editing with validation', {
 
         // assert
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         $input.focus();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.ok($input.is(':focus'), 'Text editor is focused after call saveEditData');
@@ -12510,7 +12510,7 @@ QUnit.module('Editing with validation', {
         // act
         $input.val('123');
         $($input).trigger('change');
-        that.clock.tick();
+        that.clock.tick(10);
         $input = $(rowsView.element().find('.dx-data-row').first().find('td').eq(2).find('.dx-texteditor-input'));
 
         // assert
@@ -12748,7 +12748,7 @@ QUnit.module('Editing with validation', {
         };
 
         this.editCell(0, 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($cellWithRevertButton.index(), 1, 'cell index where the revert button is located');
@@ -12797,7 +12797,7 @@ QUnit.module('Editing with validation', {
         };
 
         this.editCell(0, 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($cellWithRevertButton.index(), 1, 'cell index where the revert button is located');
@@ -12826,23 +12826,23 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
         const inputElement = getInputElements($cells).first();
         this.focus(this.getCellElement(0, 0));
         inputElement.val('');
         inputElement.trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-revert-button').length, 1, 'revert button was shown');
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.focus(this.getCellElement(0, 1));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-revert-button').length, 0, 'revert button was hidden');
@@ -12873,7 +12873,7 @@ QUnit.module('Editing with validation', {
         const $input = getInputElements($cells).first();
         $input.val(101);
         $($input).trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-revert-button').attr('title'), 'Cancel test bla', 'hint for revert button');
@@ -12904,17 +12904,17 @@ QUnit.module('Editing with validation', {
         $($cells.find('input').first()).trigger('change');
 
         this.editCell(0, 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
         $cells.find('input').first().val(16);
         $($cells.find('input').first()).trigger('change');
 
         this.editCell(0, 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $revertButton = $('.dx-revert-button');
@@ -12947,7 +12947,7 @@ QUnit.module('Editing with validation', {
         const $input = getInputElements($cells).first();
         $input.val(101);
         $($input).trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $revertButton = $('.dx-revert-button');
 
@@ -12956,7 +12956,7 @@ QUnit.module('Editing with validation', {
 
         // act
         $($revertButton).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
@@ -12990,7 +12990,7 @@ QUnit.module('Editing with validation', {
         $($input).trigger('change');
         this.closeEditCell();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($input[0].value, 'Ben', 'new value');
@@ -13054,7 +13054,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
         const $input = getInputElements($cells).first();
@@ -13062,10 +13062,10 @@ QUnit.module('Editing with validation', {
         $($input).trigger('change');
 
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
@@ -13083,7 +13083,7 @@ QUnit.module('Editing with validation', {
         this.editCell(0, 1);
 
         getInputElements($cells).first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
@@ -13116,16 +13116,16 @@ QUnit.module('Editing with validation', {
 
         // act
         that.editCell(0, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         const inputElement = getInputElements(testElement).first();
         inputElement.val(101);
         inputElement.trigger('change');
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.editCell(0, 2);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(editingController._getVisibleEditRowIndex(), 0, 'Correct editRowIndex');
@@ -13184,7 +13184,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.editCell(1, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('td');
 
@@ -13223,7 +13223,7 @@ QUnit.module('Editing with validation', {
 
         // act
         $($addRowButton).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(that.gridContainer.find('.dx-row-inserted').length, 1, 'inserted row is rendered');
@@ -13269,7 +13269,7 @@ QUnit.module('Editing with validation', {
         inputElement.trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('tbody > tr').first().find('td');
 
@@ -13318,21 +13318,21 @@ QUnit.module('Editing with validation', {
                 validationRules: [{ type: 'range', min: 1, max: 100 }]
             }, 'lastName']
         });
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.dataController.pageSize(2);
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.cellValue(0, 1, 101);
-        that.clock.tick();
+        that.clock.tick(10);
         that.dataController.pageIndex(1);
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editCell(0, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $cell = $(that.getCellElement(0, 1));
@@ -13359,22 +13359,22 @@ QUnit.module('Editing with validation', {
                 validationRules: [{ type: 'range', min: 1, max: 100 }]
             }, 'lastName']
         });
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.dataController.pageSize(2);
-        that.clock.tick();
+        that.clock.tick(10);
         that.cellValue(0, 1, 101);
-        that.clock.tick();
+        that.clock.tick(10);
         that.dataController.pageIndex(1);
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.refresh();
-        that.clock.tick();
+        that.clock.tick(10);
         that.refresh();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $cell = $(that.getCellElement(0, 1));
@@ -13403,17 +13403,17 @@ QUnit.module('Editing with validation', {
                 validationRules: [{ type: 'range', min: 1, max: 100 }]
             }, 'lastName']
         });
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.pageSize(2);
-        that.clock.tick();
+        that.clock.tick(10);
         that.cellValue(0, 1, 101);
-        that.clock.tick();
+        that.clock.tick(10);
         that.pageIndex(1);
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(that.getVisibleRows().length, 2, 'visible row count');
@@ -13421,9 +13421,9 @@ QUnit.module('Editing with validation', {
 
         // act
         that.pageIndex(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.pageIndex(1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(that.getVisibleRows().length, 1, 'visible row count');
@@ -13473,7 +13473,7 @@ QUnit.module('Editing with validation', {
         inputElement.trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('tbody > tr').first().find('td');
 
@@ -13544,7 +13544,7 @@ QUnit.module('Editing with validation', {
         inputElement.val(50);
         inputElement.trigger('change');
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
 
         // assert
@@ -13598,7 +13598,7 @@ QUnit.module('Editing with validation', {
         inputElement.trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('tbody > tr').first().find('td');
 
@@ -13662,7 +13662,7 @@ QUnit.module('Editing with validation', {
         inputElement.trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         cells = rowsView.element().find('tbody > tr').first().find('td');
 
@@ -13998,7 +13998,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editorElements = $testElement.find('tbody > tr').first().find('td').first().find('.dx-texteditor');
@@ -14036,7 +14036,7 @@ QUnit.module('Editing with validation', {
         inputElement.val('');
         inputElement.trigger('change');
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $invalid = $formRow.find('.dx-invalid');
@@ -14110,17 +14110,17 @@ QUnit.module('Editing with validation', {
         rowsView.render(this.gridContainer);
         const $cell = this.gridContainer.find('td').first();
         $($cell).trigger('dxclick'); // Edit
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $input = getInputElements(this.gridContainer).first();
         $input.val(101);
         $($input).trigger('change');
 
         this.editingController.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         $input.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(this.gridContainer.find('.dx-revert-button').length, 'the revert button is shown');
     });
@@ -14196,7 +14196,7 @@ QUnit.module('Editing with validation', {
         $($inputElement).trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         $cellElements = $(rowsView.element().find('tbody > tr').first().find('td'));
 
@@ -14211,7 +14211,7 @@ QUnit.module('Editing with validation', {
         $($inputElement).trigger('change');
 
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         $cellElements = $(rowsView.element().find('tbody > tr').eq(1).find('td'));
 
@@ -14286,7 +14286,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $cellElement = $(rowsView.element().find('tbody > tr.dx-row-inserted').first().children().first());
@@ -14321,7 +14321,7 @@ QUnit.module('Editing with validation', {
             .val('')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const cells = rowsView.element().find('tbody > tr').first().find('td');
@@ -14357,7 +14357,7 @@ QUnit.module('Editing with validation', {
         // act
         this.editingController.editRow(0);
         this.gridContainer.find('.dx-checkbox').first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.gridContainer.find('.dx-invalid-message.dx-overlay').length, 1, 'validation message should be shown');
@@ -14394,7 +14394,7 @@ QUnit.module('Editing with validation', {
             .val('')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-invalid-message.dx-invalid-message-always.dx-overlay').length, 0, 'Validation message is not shown');
@@ -14431,15 +14431,15 @@ QUnit.module('Editing with validation', {
             rowsView.render(that.gridContainer);
 
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             this.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             $cellElements = that.gridContainer.find('.dx-row-inserted').children();
             $selectBoxInput = $cellElements.find('.dx-texteditor-input').first();
             $selectBoxInput.trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual($cellElements.first().find('.dx-overlay.dx-datagrid-invalid-message').length, 1, 'has invalid message');
@@ -14447,9 +14447,9 @@ QUnit.module('Editing with validation', {
 
             // act
             $cellElements.find('.dx-texteditor-input').last().trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             $cellElements.find('.dx-texteditor-input').last().focus();
-            this.clock.tick();
+            this.clock.tick(10);
             $cellElements.find('.dx-texteditor-input').last().trigger('dxclick');
 
             // assert
@@ -14519,7 +14519,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.editCell(1, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual($(rowsView.getCellElement(1, 1)).find('.dx-overlay.dx-datagrid-invalid-message').length, 1, 'has invalid message');
@@ -14527,7 +14527,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.closeEditCell();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual($(rowsView.getCellElement(1, 2)).find('.dx-overlay.dx-datagrid-invalid-message').length, 0, 'hasn\'t invalid message');
@@ -14565,7 +14565,7 @@ QUnit.module('Editing with validation', {
 
         // act
         that.editCell(0, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const overlayInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-invalid-message').dxOverlay('instance');
@@ -14609,11 +14609,11 @@ QUnit.module('Editing with validation', {
         });
 
         rowsView.scrollTo({ x: 100 });
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editCell(0, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const overlayInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-invalid-message').dxOverlay('instance');
@@ -14665,11 +14665,11 @@ QUnit.module('Editing with validation', {
             ]
         });
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editCell(0, 1);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const overlayInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-invalid-message').dxOverlay('instance');
@@ -14722,12 +14722,12 @@ QUnit.module('Editing with validation', {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         for(let i = 0; i < 4; i++) {
             this.editCell(0, i);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $cell = $(rowsView.getCellElement(0, i));
             const inputElement = getInputElements($cell).first();
@@ -14736,7 +14736,7 @@ QUnit.module('Editing with validation', {
             inputElement.val('');
             inputElement.trigger('change');
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($cell.find('.dx-datagrid-revert-tooltip').length, `revert button is rendered in the [0, ${i}] cell`);
@@ -14744,7 +14744,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.cancelEditData();
-            this.clock.tick();
+            this.clock.tick(10);
         }
     });
 
@@ -14968,7 +14968,7 @@ QUnit.module('Editing with validation', {
         });
 
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
 
         let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
@@ -15008,7 +15008,7 @@ QUnit.module('Editing with validation', {
         });
 
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
         this.validatingController.setDisableApplyValidationResults(true);
         const deferred = new Deferred();
@@ -15060,7 +15060,7 @@ QUnit.module('Editing with validation', {
         });
 
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
 
         const $firstCell = $(this.getCellElement(0, 0));
@@ -15070,7 +15070,7 @@ QUnit.module('Editing with validation', {
             data: {},
             type: 'update'
         }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
@@ -15103,7 +15103,7 @@ QUnit.module('Editing with validation', {
         });
 
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
 
         const $firstCell = $(this.getCellElement(0, 0));
@@ -15113,7 +15113,7 @@ QUnit.module('Editing with validation', {
             data: {},
             type: 'update'
         }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
@@ -15152,11 +15152,11 @@ QUnit.module('Editing with validation', {
         });
 
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
         this.cellValue(0, 0, '');
         this.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
         let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
@@ -15205,7 +15205,7 @@ QUnit.module('Editing with validation', {
         });
 
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
 
         const $secondCell = $(this.getCellElement(0, 1));
@@ -15253,7 +15253,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             visibleRows = this.getVisibleRows();
@@ -15264,7 +15264,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.deleteRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             if(withConfirm) {
                 // assert
@@ -15318,7 +15318,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             visibleRows = this.getVisibleRows();
@@ -15329,7 +15329,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.deleteRow(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             if(withConfirm) {
@@ -15379,7 +15379,7 @@ QUnit.module('Editing with validation', {
                 assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
 
                 this.focus($secondCell);
-                this.clock.tick();
+                this.clock.tick(10);
                 $secondCell = $(this.getCellElement(0, 1));
 
                 // assert
@@ -15422,7 +15422,7 @@ QUnit.module('Editing with validation', {
                 assert.notOk($secondCell.hasClass('dx-validator'), 'cell should not have validator');
 
                 this.focus($secondCell);
-                this.clock.tick();
+                this.clock.tick(10);
                 $secondCell = $(this.getCellElement(0, 1));
 
                 // assert
@@ -15498,14 +15498,14 @@ QUnit.module('Editing with validation', {
         rowsView.render(testElement);
         this.applyOptions(gridConfig);
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $inputElement = getInputElements(testElement).first();
         $inputElement
             .val('testa')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
@@ -15553,14 +15553,14 @@ QUnit.module('Editing with validation', {
         rowsView.render(testElement);
         this.applyOptions(gridConfig);
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $inputElement = getInputElements(testElement).first();
         $inputElement
             .val('testa')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
@@ -15604,14 +15604,14 @@ QUnit.module('Editing with validation', {
         rowsView.render(testElement);
         this.applyOptions(gridConfig);
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $inputElement = getInputElements(testElement).first();
         $inputElement
             .val('testa')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
@@ -15658,14 +15658,14 @@ QUnit.module('Editing with validation', {
         rowsView.render(testElement);
         this.applyOptions(gridConfig);
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $inputElement = getInputElements(testElement).first();
         $inputElement
             .val('testa')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
@@ -15711,7 +15711,7 @@ QUnit.module('Editing with validation', {
         const $checkboxElement = $(rowsView.getCellElement(0, 0)).find('.dx-checkbox').first();
         $($checkboxElement).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
@@ -15753,7 +15753,7 @@ QUnit.module('Editing with validation', {
         const $checkboxElement = $(rowsView.getCellElement(0, 0)).find('.dx-checkbox').first();
         $($checkboxElement).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
@@ -15789,7 +15789,7 @@ QUnit.module('Editing with validation', {
         this.editCell(0, 0);
         $testElement.find('input').val('new value').trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(validationCallback.callCount, 1, 'validation callback was called');
@@ -15869,7 +15869,7 @@ QUnit.module('Editing with validation', {
             });
 
             this.editCell(0, 0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.deepEqual(this.editingController._getOldData(1), { id: 1, name: 'test', description: 'test2' }, 'correct data');
@@ -15906,7 +15906,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             let newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
 
             // assert
@@ -15914,7 +15914,7 @@ QUnit.module('Editing with validation', {
 
             // act
             this.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
             newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
 
             // assert
@@ -15980,7 +15980,7 @@ QUnit.module('Editing with validation', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 const newRow = this.getVisibleRows()[0];
@@ -15988,7 +15988,7 @@ QUnit.module('Editing with validation', {
 
                 // act
                 this.cellValue(0, 0, '');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.strictEqual(getCellText(0, 0), '', 'text of the first cell');
@@ -15997,7 +15997,7 @@ QUnit.module('Editing with validation', {
 
                 // act
                 this.cellValue(0, 1, '123');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.strictEqual(getCellText(0, 0), '', 'text of the first cell');
@@ -16041,7 +16041,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
@@ -16050,7 +16050,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.cellValue(0, 'age', 123);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell isn\'t repainted');
@@ -16087,7 +16087,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
@@ -16096,7 +16096,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.cellValue(0, 'age', '');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notDeepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell is repainted');
@@ -16167,7 +16167,7 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
             const $targetElement = this.find($element, selector);
             const isLink = $targetElement.hasClass('dx-link');
             $($targetElement).trigger(isLink ? 'click' : 'dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
         };
 
     },
@@ -16192,7 +16192,7 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         this.rowsView.render(testElement);
         this.dataController.expandRow(this.dataController.getKeyByRowIndex(2));
         this.editingController.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         this.selectAll();
 
         // assert
@@ -16589,7 +16589,7 @@ QUnit.module('Editing with scrolling', {
 
         // arrange
         this.rowsView.scrollTo({ y: 3500 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         items = this.dataController.items();
@@ -16598,7 +16598,7 @@ QUnit.module('Editing with scrolling', {
 
         // act
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         items = this.dataController.items();
@@ -16607,7 +16607,7 @@ QUnit.module('Editing with scrolling', {
 
         // act
         this.rowsView.scrollTo({ y: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         items = this.dataController.items();
@@ -17010,7 +17010,7 @@ QUnit.module('Editing with scrolling', {
 
         // arrange
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(that.dataController.items().length, 9, 'count items');
@@ -17165,7 +17165,7 @@ QUnit.module('Editing with scrolling', {
             this.rowsView.height(200);
             this.rowsView.resize();
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             this.pageIndex(5);
@@ -17211,7 +17211,7 @@ QUnit.module('Editing with scrolling', {
             this.rowsView.height(200);
             this.rowsView.resize();
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             this.pageIndex(5);
@@ -17384,7 +17384,7 @@ QUnit.module('Edit Form', {
         // this.click = function($element, selector) {
         //     var $targetElement = thatfind($element, selector);
         //     $targetElement.trigger('dxclick');
-        //     this.clock.tick();
+        //     this.clock.tick(10);
         // };
     },
     afterEach: function() {
@@ -17414,7 +17414,7 @@ QUnit.module('Edit Form', {
         const $links = testElement.find('.dx-row').eq(rowIndex).find('.dx-link-edit');
         assert.equal($links.length, 1, 'edit links count');
         $($links.eq(0)).trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(that.editingController.editRow.callCount, 1, 'editRow called');
@@ -17940,7 +17940,7 @@ QUnit.module('Edit Form', {
 
         testElement.find('input').eq(0).focus();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(testElement.find('.dx-row').eq(0).hasClass('dx-master-detail-row'), 'first row is master detail');
@@ -18356,10 +18356,10 @@ QUnit.module('Edit Form', {
         this.rowsView.render($('#container'));
 
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.keyboardNavigationController.focus(this.getCellElement(0, 1));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $selectBoxElement = $(this.getCellElement(0, 1)).find('.dx-selectbox').first();
@@ -18368,7 +18368,7 @@ QUnit.module('Edit Form', {
         // act
         $selectBoxElement.trigger('dxpointerdown');
         $selectBoxElement.dxSelectBox('instance').option('value', 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(0, 1)).find('.dx-selectbox').hasClass('dx-state-focused'), 'second cell is focused');
@@ -18397,10 +18397,10 @@ QUnit.module('Edit Form', {
         this.rowsView.render($('#container'));
 
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.keyboardNavigationController.focus(this.getCellElement(0, 0));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editorElement = $(this.getCellElement(0, 0)).find('.dx-numberbox').first();
@@ -18409,7 +18409,7 @@ QUnit.module('Edit Form', {
         // act
         $editorElement.trigger('dxpointerdown');
         $editorElement.dxNumberBox('instance').option('value', 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(0, 0)).find('.dx-numberbox').hasClass('dx-state-focused'), 'first editor is focused');
@@ -18491,14 +18491,14 @@ QUnit.module('Edit Form', {
 
             // act
             that.editRow(0);
-            that.clock.tick();
+            that.clock.tick(10);
 
             // assert
             assert.equal(testElement.find('.dx-datagrid-edit-form').length, 1, 'form is rendered');
 
             // act
             that.addRow();
-            that.clock.tick();
+            that.clock.tick(10);
 
             const $editPopup = testElement.find('.dx-datagrid-edit-popup');
             const editPopupInstance = $editPopup.dxPopup('instance');
@@ -18909,9 +18909,9 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $editingForm = that.getEditPopupContent().find('.dx-form');
 
@@ -18937,9 +18937,9 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
-        that.clock.tick();
+        that.clock.tick(10);
 
 
         // assert
@@ -18960,7 +18960,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
         that.clock.tick(700);
 
@@ -18978,7 +18978,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         const $editingForm = that.getEditPopupContent().find('.dx-form');
@@ -18999,9 +18999,9 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.cancelEditData();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         // assert
@@ -19021,9 +19021,9 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         const $invalidValidators = that.getEditPopupContent().find('.dx-invalid');
@@ -19043,9 +19043,9 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         const $textBoxes = that.getEditPopupContent().find('.dx-textbox');
@@ -19069,13 +19069,13 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         const $textBoxes = that.getEditPopupContent().find('.dx-textbox');
 
         $textBoxes.eq(0).dxTextBox('instance').option('value', 'John');
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $invalidValidators = that.getEditPopupContent().find('.dx-invalid');
 
@@ -19091,7 +19091,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         const $textBoxes = that.getEditPopupContent().find('.dx-textbox');
@@ -19155,7 +19155,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         // assert
@@ -19187,7 +19187,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(button.option('visible'), false, 'Toolbar button is not visible');
@@ -19212,7 +19212,7 @@ QUnit.module('Editing - "popup" mode', {
         that.renderRowsView();
 
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         // act
@@ -19227,13 +19227,13 @@ QUnit.module('Editing - "popup" mode', {
 
         that.setupModules(that);
         that.renderRowsView();
-        that.clock.tick();
+        that.clock.tick(10);
 
         const cancelEditDataSpy = sinon.spy(that.editingController, 'cancelEditData');
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.preparePopupHelpers();
         that.editPopupInstance.hide();
@@ -19251,11 +19251,11 @@ QUnit.module('Editing - "popup" mode', {
         that.options.onEditorPreparing = spyHandler;
         that.setupModules(that);
         that.renderRowsView();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         const spyArgs = spyHandler.getCall(0).args;
 
@@ -19273,7 +19273,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
         that.preparePopupHelpers();
 
         // assert
@@ -19543,7 +19543,7 @@ QUnit.module('Editing - "popup" mode', {
         this.renderRowsView();
 
         this.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(template.getCall(0).args[1].data, { name: 'Alex', age: 15, lastName: 'John', phone: '555555', room: 1 }, 'row data');
@@ -19610,11 +19610,11 @@ QUnit.module('Editing - "popup" mode', {
         that.setupModules(that);
         that.renderRowsView();
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editRow(0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // arrange
         that.preparePopupHelpers();
@@ -19649,11 +19649,11 @@ QUnit.module('Editing - "popup" mode', {
         that.renderRowsView();
 
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         that.preparePopupHelpers();
         const $popupContent = that.editPopupInstance.$content();
@@ -19736,9 +19736,9 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
         this.preparePopupHelpers();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange
         assert.strictEqual(editCellTemplate.callCount, 1, 'editCellTemplate call count');
@@ -19754,7 +19754,7 @@ QUnit.module('Editing - "popup" mode', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange
         this.editingController._editForm.repaint = spy;
@@ -19828,7 +19828,7 @@ QUnit.module('Promises in callbacks and events', {
             const $targetElement = this.find($element, selector);
             const isLink = $targetElement.hasClass('dx-link');
             $($targetElement).trigger(isLink ? 'click' : 'dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
         };
         this.editCell = function(rowIndex, columnIndex, text) {
             const testElement = $('#container');
@@ -19856,7 +19856,7 @@ QUnit.module('Promises in callbacks and events', {
 
         // act
         this.editCell(0, 0, 'Test');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $input = getInputElements(testElement).first();
@@ -19909,7 +19909,7 @@ QUnit.module('Promises in callbacks and events', {
         // act
         this.editCell(0, 0, 'Test');
         this.editingController.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
         this.cancelEditData();
 
         // assert
@@ -19963,7 +19963,7 @@ QUnit.module('Promises in callbacks and events', {
         // act
         this.editCell(0, 0, 'Test');
         this.editingController.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('input').length, 1, 'Editor is not closed');
@@ -19993,7 +19993,7 @@ QUnit.module('Promises in callbacks and events', {
         this.deferred.reject('TestError');
         this.clock.tick(100);
         this.editingController.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(this.hasEditData(), 'No edit data');
@@ -20037,7 +20037,7 @@ QUnit.module('Promises in callbacks and events', {
         that.clock.tick(500);
 
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20153,7 +20153,7 @@ QUnit.module('Promises in callbacks and events', {
         that.clock.tick(500);
 
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20208,7 +20208,7 @@ QUnit.module('Promises in callbacks and events', {
         that.clock.tick(500);
 
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20261,7 +20261,7 @@ QUnit.module('Promises in callbacks and events', {
         that.clock.tick(500);
 
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20329,7 +20329,7 @@ QUnit.module('Promises in callbacks and events', {
 
         // act
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20393,7 +20393,7 @@ QUnit.module('Promises in callbacks and events', {
 
         // act
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20456,7 +20456,7 @@ QUnit.module('Promises in callbacks and events', {
 
         // act
         that.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         visibleRows = that.getVisibleRows();
 
@@ -20846,10 +20846,10 @@ QUnit.module('Editing - new row position', {
 
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.rowsView.render($testElement);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -20858,7 +20858,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -20881,14 +20881,14 @@ QUnit.module('Editing - new row position', {
                 this.options.paging.pageIndex = 2;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -20897,11 +20897,11 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
                 this.contentReadyCallbacks.fire();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -20922,9 +20922,9 @@ QUnit.module('Editing - new row position', {
 
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -20933,7 +20933,7 @@ QUnit.module('Editing - new row position', {
                 // act
                 config.name === 'virtual scrolling' && this.dataController._rowsScrollController.viewportSize(rows.length);
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -20950,13 +20950,13 @@ QUnit.module('Editing - new row position', {
                 this.options.paging.pageIndex = 9;
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -20965,9 +20965,9 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -20984,13 +20984,13 @@ QUnit.module('Editing - new row position', {
                 this.options.editing.newRowPosition = 'pageBottom';
                 this.options.paging.pageIndex = 2;
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 const rowCount = config.name === 'virtual scrolling' ? 7 : 10;
@@ -21000,7 +21000,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21022,13 +21022,13 @@ QUnit.module('Editing - new row position', {
                 this.options.editing.newRowPosition = 'pageTop';
                 this.options.paging.pageIndex = 2;
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 const rowCount = config.name === 'virtual scrolling' ? 7 : 10;
@@ -21038,7 +21038,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21054,11 +21054,11 @@ QUnit.module('Editing - new row position', {
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'viewportBottom';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21066,7 +21066,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21083,11 +21083,11 @@ QUnit.module('Editing - new row position', {
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'viewportTop';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21097,14 +21097,14 @@ QUnit.module('Editing - new row position', {
                 const scrollable = this.rowsView.getScrollable();
                 scrollable.scrollTo({ y: 40 });
                 $(scrollable.container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.strictEqual(this.rowsView.getTopVisibleItemIndex(), isVirtualScrolling ? 0 : 1, 'top visible item index');
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21121,11 +21121,11 @@ QUnit.module('Editing - new row position', {
                 this.options.dataSource.store.data = [];
                 this.options.editing.newRowPosition = 'pageBottom';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21134,7 +21134,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21151,11 +21151,11 @@ QUnit.module('Editing - new row position', {
                 this.options.dataSource.store.data = [];
                 this.options.editing.newRowPosition = 'pageTop';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21164,7 +21164,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 this.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21261,10 +21261,10 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 const $testElement = $('#container');
 
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.rowsView.render($testElement);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21272,7 +21272,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertAfterKey: 5 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21290,10 +21290,10 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 const $testElement = $('#container');
 
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.rowsView.render($testElement);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21301,7 +21301,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 5 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21320,12 +21320,12 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 this.options.height = 200;
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21334,7 +21334,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertAfterKey: 13 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21343,7 +21343,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.pageIndex(1);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21362,12 +21362,12 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 this.options.height = 200;
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21376,7 +21376,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 13 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21384,7 +21384,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
                 // act
                 this.pageIndex(1);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21404,11 +21404,11 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21416,7 +21416,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertAfterKey: 5 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21438,13 +21438,13 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 this.options.paging.pageIndex = 1;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21453,7 +21453,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertAfterKey: 15 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21474,11 +21474,11 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21486,7 +21486,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 5 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21508,13 +21508,13 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 this.options.paging.pageIndex = 1;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
-                this.clock.tick();
+                this.clock.tick(10);
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.rowsView.getScrollable().container()).trigger('scroll');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 let rows = this.getVisibleRows();
@@ -21523,7 +21523,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 15 }]);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 rows = this.getVisibleRows();
@@ -21612,7 +21612,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
             } else {
                 this.editRow(0);
             }
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const args = editCellTemplateSpy.getCall(0).args[1];
@@ -21660,7 +21660,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
 
             this.setupModules();
             this.renderRowsView();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
@@ -21671,7 +21671,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
                 data: { id: 123, name: 'new' },
             }]);
             this.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.getVisibleRows().length, 5, 'count rows');
@@ -21708,7 +21708,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
 
             this.setupModules();
             this.renderRowsView();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
@@ -21720,7 +21720,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
                 data: { name: 'update' }
             }]);
             this.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
@@ -21761,7 +21761,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
 
             this.setupModules();
             this.renderRowsView();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
@@ -21772,7 +21772,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
                 key: 1,
             }]);
             this.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.getVisibleRows().length, 3, 'count rows');
@@ -21805,7 +21805,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
                 } else {
                     this.editRow(0);
                 }
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 const args = editCellTemplateSpy.getCall(0).args[1];
@@ -21817,7 +21817,7 @@ QUnit.module('Editing - public arguments of the events/templates', {
                     if(editMode !== 'batch' && editMode !== 'cell') {
                         // act
                         $(this.getCellElement(0, 1)).find('.dx-numberbox').dxNumberBox('instance').option('value', 123);
-                        this.clock.tick();
+                        this.clock.tick(10);
 
                         // assert
                         assert.strictEqual(watchSpy.callCount, 1, 'watch update is called');
