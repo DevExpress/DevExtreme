@@ -16,6 +16,9 @@ const setGlobalConfig = ClientFunction(() => {
       shading: false,
       position: {
         of: '#container',
+        my: 'right bottom',
+        at: 'right bottom',
+        offset: '-16 -16',
       },
     },
   });
