@@ -1,10 +1,25 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
 import { each } from './iterator';
-import { isDefined, isRenderer, isWindow } from './type';
+import { isDefined, isRenderer, isWindow, isString } from './type';
 import { getWindow } from './window';
 
 const window = getWindow();
+
+const getRootNodeHost = (element) => {
+    if(!element.getRootNode) {
+        return undefined;
+    }
+
+    const host = element.getRootNode().host;
+
+    // NOTE: getRootNode().host can return a string if element is detached "a" element
+    if(isString(host)) {
+        return undefined;
+    }
+
+    return host;
+};
 
 export const resetActiveElement = () => {
     const activeElement = domAdapter.getActiveElement();
@@ -96,7 +111,7 @@ export const contains = (container, element) => {
     if(isWindow(container)) {
         return contains(container.document, element);
     }
-    return container.contains(element) || element.getRootNode && contains(container, element.getRootNode().host);
+    return container.contains(element) || contains(container, getRootNodeHost(element));
 };
 
 export const createTextElementHiddenCopy = (element, text, options) => {
