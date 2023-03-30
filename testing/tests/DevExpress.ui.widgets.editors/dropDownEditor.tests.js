@@ -602,22 +602,14 @@ QUnit.module('Focus order', {
             return;
         }
 
-        this.instance.option('dropDownOptions.toolbarItems', [
-            {
+        this.instance.option('dropDownOptions.toolbarItems', [{
+                widget: 'dxButton',
+                toolbar: 'top',
+                options: { text: 'First' },
+            }, {
                 widget: 'dxButton',
                 toolbar: 'bottom',
-                location: 'before',
-                options: {
-                    text: 'Start',
-                },
-            },
-            {
-                widget: 'dxButton',
-                toolbar: 'bottom',
-                location: 'after',
-                options: {
-                    text: 'End',
-                },
+                options: { text: 'Last' },
             }
         ]);
 
@@ -638,24 +630,16 @@ QUnit.module('Focus order', {
             return;
         }
 
-        this.instance.option('dropDownOptions.toolbarItems', [
-            {
-                widget: 'dxButton',
-                toolbar: 'bottom',
-                location: 'before',
-                options: {
-                    text: 'Start',
-                },
-            },
-            {
-                widget: 'dxButton',
-                toolbar: 'bottom',
-                location: 'after',
-                options: {
-                    text: 'End',
-                },
-            }
-        ]);
+        this.instance.option('dropDownOptions.toolbarItems', [{
+            widget: 'dxButton',
+            toolbar: 'top',
+            options: { text: 'First' },
+        }, {
+            widget: 'dxButton',
+            toolbar: 'bottom',
+            options: { text: 'Last' },
+        }
+    ]);
 
         this.instance.open();
 

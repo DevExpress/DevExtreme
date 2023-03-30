@@ -33,6 +33,7 @@ const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const BUTTON_CLASS = 'dx-button';
+const TOOLBAR_CLASS = 'dx-toolbar';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -745,11 +746,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement() {
-        return this._popup.$wrapper().find(`.${BUTTON_CLASS}`).eq(0);
+        return this._popup.$wrapper().find(`.${TOOLBAR_CLASS} .${BUTTON_CLASS}`).eq(0);
     },
 
     _getLastPopupElement: function() {
-        const $items = this._popup.$wrapper().find(`.${BUTTON_CLASS}`);
+        const $items = this._popup.$wrapper().find(`.${TOOLBAR_CLASS} .${BUTTON_CLASS}`);
         const lastIndex = $items.length - 1;
 
         return $items.eq(lastIndex);
