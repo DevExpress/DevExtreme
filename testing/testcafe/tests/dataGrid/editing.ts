@@ -2144,6 +2144,14 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     insertedRowNumber: 0,
     scrollMode: 'standard',
   }, {
+    newRowPosition: 'pageBottom',
+    insertedRowNumber: 8,
+    scrollMode: 'virtual',
+  }, {
+    newRowPosition: 'pageTop',
+    insertedRowNumber: 0,
+    scrollMode: 'virtual',
+  }, {
     newRowPosition: 'viewportBottom',
     insertedRowNumber: 8,
     scrollMode: 'standard',
