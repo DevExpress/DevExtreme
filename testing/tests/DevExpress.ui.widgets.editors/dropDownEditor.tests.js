@@ -597,6 +597,11 @@ QUnit.module('Focus order', {
     }
 }, () => {
     QUnit.testInActiveWindow('Focus should be set to first item then set to input if toolbarItems was customised', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
         this.instance.option('dropDownOptions.toolbarItems', [
             {
                 widget: 'dxButton',
@@ -628,6 +633,11 @@ QUnit.module('Focus order', {
     });
 
     QUnit.testInActiveWindow('Focus should be set to last item then set to input if toolbarItems was customised', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
         this.instance.option('dropDownOptions.toolbarItems', [
             {
                 widget: 'dxButton',
