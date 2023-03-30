@@ -289,8 +289,6 @@ declare module DevExpress.ui.dxDataGrid {
     export type ColumnFixingTexts = DevExpress.common.grids.ColumnFixingTexts;
     /** @deprecated Use DevExpress.common.grids.ColumnHeaderFilter instead */
     export type ColumnHeaderFilter = DevExpress.common.grids.ColumnHeaderFilter;
-    /** @deprecated Use DevExpress.common.grids.ColumnHeaderFilterSearch instead */
-    export type ColumnHeaderFilterSearch = DevExpress.common.grids.ColumnHeaderFilterSearch;
     /** @deprecated Use DevExpress.common.grids.ColumnLookup instead */
     export type ColumnLookup = DevExpress.common.grids.ColumnLookup;
     /** @deprecated Use DevExpress.common.grids.DataChange instead */
@@ -303,8 +301,6 @@ declare module DevExpress.ui.dxDataGrid {
     export type FilterRowOperationDescriptions = DevExpress.common.grids.FilterRowOperationDescriptions;
     /** @deprecated Use DevExpress.common.grids.HeaderFilter instead */
     export type HeaderFilter = DevExpress.common.grids.HeaderFilter;
-    /** @deprecated Use DevExpress.common.grids.HeaderFilterSearch instead */
-    export type HeaderFilterSearch = DevExpress.common.grids.HeaderFilterSearch;
     /** @deprecated Use DevExpress.common.grids.HeaderFilterGroupInterval instead */
     export type HeaderFilterGroupInterval = DevExpress.common.grids.HeaderFilterGroupInterval;
     /** @deprecated Use DevExpress.common.grids.HeaderFilterTexts instead */
