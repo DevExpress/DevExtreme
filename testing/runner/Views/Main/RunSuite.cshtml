@@ -135,7 +135,7 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
-    <script src="@Url.ContentWithCacheBuster("~/testing/spike/result.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/testing/spike/animator.tests.systemjs.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script>
@@ -301,10 +301,10 @@
             }
 
 //             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
-//             return SystemJS.import('/testing/spike/result.js');
+//             return SystemJS.import('/testing/spike/animator.tests.systemjs.js');
         })
         .then(function() {
-//             QUnit.start();
+            QUnit.start();
         })
         .catch(function (err) {
             console.log(err);
