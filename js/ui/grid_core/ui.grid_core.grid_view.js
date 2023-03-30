@@ -18,6 +18,7 @@ const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
 const IMPORTANT_MARGIN_CLASS = 'important-margin';
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
+const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
 
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 
@@ -177,6 +178,12 @@ const resizingControllerMembers = {
 
         $rowsTable.css('tableLayout', isBestFit ? 'auto' : 'fixed');
         $rowsTable.children('colgroup').css('display', isBestFit ? 'none' : '');
+
+        // NOTE T1156153: Hide group row column to get correct fixed column widths.
+        each($rowsFixedTable.find(GROUP_ROW_SELECTOR), (idx, item) => {
+            $(item).css('display', isBestFit ? 'none' : '');
+        });
+
         $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
         this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);
@@ -208,6 +215,7 @@ const resizingControllerMembers = {
         let resultWidths = [];
         let focusedElement;
         let selectionRange;
+
         const normalizeWidthsByExpandColumns = function() {
             let expandColumnWidth;
 
