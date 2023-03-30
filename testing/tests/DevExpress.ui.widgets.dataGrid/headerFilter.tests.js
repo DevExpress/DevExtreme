@@ -1759,7 +1759,7 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
         const list = that.getListOrTreeView();
-        
+
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
         assert.ok($.isFunction(list.option('searchExpr')), 'expr is correct');
@@ -1798,7 +1798,7 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
         const list = that.getListOrTreeView();
-        
+
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
         assert.ok($.isFunction(list.option('searchExpr')), 'expr is correct');
@@ -1846,7 +1846,7 @@ QUnit.module('Header Filter', {
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
         const list = that.getListOrTreeView();
-        
+
         // assert
         assert.notOk(list.option('searchEnabled'), 'list without search bar');
     });
@@ -1865,7 +1865,7 @@ QUnit.module('Header Filter', {
             that.columnHeadersView.render(testElement);
             that.headerFilterView.render(testElement);
             that.headerFilterController.showHeaderFilterMenu(0);
-            
+
             const list = that.getListOrTreeView();
             const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
@@ -1996,7 +1996,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render($testElement);
         that.headerFilterView.render($testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
-        
+
         const treeView = that.getListOrTreeView();
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
         const $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
@@ -2033,7 +2033,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render($testElement);
         that.headerFilterView.render($testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
-        
+
         const treeView = that.getListOrTreeView();
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
@@ -2196,7 +2196,7 @@ QUnit.module('Header Filter', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
         that.headerFilterController.showHeaderFilterMenu(0);
-        
+
         const list = that.getListOrTreeView();
 
         // act
@@ -2343,7 +2343,7 @@ QUnit.module('Header Filter', {
         assert.notOk(this.columns[0].filterValues, 'filterValues not defined');
     });
 
-    QUnit.test("allowSelectAll option should work", function(assert) {
+    QUnit.test('allowSelectAll option should work', function(assert) {
         // arrange
         const $testElement = $('#container');
 
@@ -2363,7 +2363,7 @@ QUnit.module('Header Filter', {
             const $selectAll = $popupContent.find('.dx-list-select-all-checkbox, .dx-treeview-select-all-item');
 
             return !!$selectAll.length;
-        }
+        };
 
         // act
         this.option('headerFilter.allowSelectAll', false);
@@ -2377,7 +2377,7 @@ QUnit.module('Header Filter', {
 
         // assert
         assert.ok(isAllowSelectAllShown(0), 'select all checkbox should be shown at column 0');
-        assert.ok(isAllowSelectAllShown(1), 'select all checkbox should be shown at column 1');  
+        assert.ok(isAllowSelectAllShown(1), 'select all checkbox should be shown at column 1');
     });
 
     QUnit.test('headerFilter.search.editorOptions option should work', function(assert) {
@@ -2412,14 +2412,14 @@ QUnit.module('Header Filter', {
 
         // act
         this.headerFilterController.showHeaderFilterMenu(0);
-        
+
         // assert
         assert.strictEqual(getTextBoxOptions().name, 'headerFilter.name', 'value should be from generic headerFilter');
         assert.strictEqual(getTextBoxOptions().placeholder, 'column.headerFilter.placeholder', 'value should be from column headerFilter');
 
         // act
         this.headerFilterController.showHeaderFilterMenu(1);
-        
+
         // assert
         assert.strictEqual(getTextBoxOptions().name, 'headerFilter.name', 'value should be from generic headerFilter');
         assert.strictEqual(getTextBoxOptions().placeholder, 'column.headerFilter.placeholder', 'value should be from column headerFilter');
@@ -4588,7 +4588,7 @@ QUnit.module('Header Filter with real columnsController', {
         this.options.dataSource = { load: loadSpy };
         this.options.syncLookupFilterValues = true;
         this.options.remoteOperations = { groupPaging: true };
-        this.options.headerFilter.allowSearch = true;
+        this.options.headerFilter.search.enabled = true;
 
         const $testElement = $('#container');
 
@@ -4616,7 +4616,7 @@ QUnit.module('Header Filter with real columnsController', {
         loadSpy.reset();
 
         // act
-        const list = $popupContent.find('.dx-list').dxList('instance');
+        const list = this.getListOrTreeView();
         list.option('searchValue', 'value1');
 
         // assert
@@ -4709,15 +4709,15 @@ QUnit.module('Header Filter with real columnsController', {
         const $testElement = $('#container');
 
         this.options.columns = [
-            { 
-                dataField: 'city', 
+            {
+                dataField: 'city',
                 dataType: 'string',
                 headerFilter: {
                     search: {
                         enabled: true,
                         searchExpr: ['city', 'country']
                     }
-                } 
+                }
             }
         ];
 
@@ -4725,8 +4725,8 @@ QUnit.module('Header Filter with real columnsController', {
             { city: 'New York', country: 'USA' },
             { city: 'Munich', country: 'Germany' },
             { city: 'Berlin', country: 'Germany' },
-        ]
-    
+        ];
+
         this.setupDataGrid();
         this.columnHeadersView.render($testElement);
         this.headerFilterView.render($testElement);
@@ -4746,9 +4746,9 @@ QUnit.module('Header Filter with real columnsController', {
         const $testElement = $('#container');
 
         this.options.columns = [
-            { 
-                dataField: 'city', 
-                dataType: 'string', 
+            {
+                dataField: 'city',
+                dataType: 'string',
                 headerFilter: {
                     dataSource: [
                         { text: 'New York', value: 'new_york', country: 'USA' },
@@ -4763,7 +4763,7 @@ QUnit.module('Header Filter with real columnsController', {
             }
         ];
         this.options.dataSource = [{ city: 'New York' }, { city: 'Munich' }, { city: 'Berlin' }];
-    
+
         this.setupDataGrid();
         this.columnHeadersView.render($testElement);
         this.headerFilterView.render($testElement);
@@ -4773,7 +4773,7 @@ QUnit.module('Header Filter with real columnsController', {
         const list = this.getListOrTreeView();
 
         list.option('searchValue', 'Germany');
-        
+
         // assert
         assert.strictEqual(list.option('items').length, 2);
     });
@@ -4805,7 +4805,7 @@ QUnit.module('Header Filter with real columnsController', {
             { LookupColumn: 'new_york' },
             { LookupColumn: 'munich' },
             { LookupColumn: 'berlin' },
-        ]
+        ];
 
         this.setupDataGrid();
         this.columnHeadersView.render($testElement);
