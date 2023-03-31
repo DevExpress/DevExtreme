@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pivotgrid</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+</head>
+<body>
+    
+  <div class="demo-container">
+    <div id="sales"></div>
+    <div class="options">
+      <div class="caption">Options</div>
+      <div class="options-container">
+        <div class="option">
+          <div id="allow-search"></div>
+        </div>
+        <div class="option">
+          <div id="show-relevant-values"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+      
+
+  <script>
+    $(() => {
+  const salesPivotGrid = $('#sales').dxPivotGrid({
+    allowFiltering: true,
+    allowSorting: true,
+    allowSortingBySummary: true,
+    height: 570,
+    showBorders: true,
+    headerFilter: {
+      allowSearch: true,
+      showRelevantValues: true,
+      width: 300,
+      height: 400,
+      search: {
+        // enabled: false,
+        mode: 'equals'
+      }
+    },
+    fieldChooser: {
+      allowSearch: true,
+    },
+    fieldPanel: {
+      visible: true,
+    },
+    dataSource: {
+      fields: [
+        { dataField: '[Product].[Category]', area: 'column', headerFilter: { allowSearch: false } },
+        { dataField: '[Product].[Subcategory]', area: 'column' },
+        { dataField: '[Customer].[City]', area: 'row' },
+        { dataField: '[Measures].[Internet Total Product Cost]', area: 'data', format: 'currency' },
+        {
+          dataField: '[Customer].[Country]',
+          area: 'filter',
+          filterValues: ['[Customer].[Country].&[United Kingdom]'],
+        },
+        {
+          dataField: '[Ship Date].[Calendar Year]',
+          area: 'filter',
+          filterValues: ['[Ship Date].[Calendar Year].&[2004]'],
+        },
+      ],
+      store: {
+        type: 'xmla',
+        url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
+        catalog: 'Adventure Works DW Standard Edition',
+        cube: 'Adventure Works',
+      },
+    },
+  }).dxPivotGrid('instance');
+
+  $('#allow-search').dxCheckBox({
+    text: 'Allow Search',
+    value: true,
+    onValueChanged(data) {
+      salesPivotGrid.option('headerFilter.allowSearch', data.value);
+    },
+  });
+
+  $('#show-relevant-values').dxCheckBox({
+    text: 'Show Relevant Values',
+    value: true,
+    onValueChanged(data) {
+      salesPivotGrid.option('headerFilter.showRelevantValues', data.value);
+    },
+  });
+});
+
+  </script>
+</body>
+</html>
