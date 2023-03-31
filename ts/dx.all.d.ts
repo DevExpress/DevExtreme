@@ -5540,15 +5540,12 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSourceOptions.fields.headerFilter]
      */
     headerFilter?: {
-      /**
-       * @deprecated 
-       */
       allowSearch?: boolean;
       allowSelectAll?: boolean;
       height?: number;
       search?: {
-        enabled?: boolean;
         editorOptions?: any;
+        enabled?: boolean;
         mode?: DevExpress.common.SearchMode;
         timeout?: number;
       };

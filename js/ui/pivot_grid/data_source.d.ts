@@ -384,15 +384,12 @@ export interface PivotGridDataSourceField {
      * @public
      */
     headerFilter?: {
-        /**
-         * @deprecated
-         */
         allowSearch?: boolean;
         allowSelectAll?: boolean;
         height?: number;
         search?: {
-            enabled?: boolean;
             editorOptions?: any;
+            enabled?: boolean;
             mode?: SearchMode;
             timeout?: number;
         };
