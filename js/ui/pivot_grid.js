@@ -57,4 +57,32 @@ export default PivotGrid;
  * @name PivotGridDataSourceOptions.fields.headerFilter.allowSearch
  * @type boolean
  * @default undefined
+ * @deprecated
+ */
+/**
+ * @name PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll
+ * @type boolean
+ * @default true
+ */
+/**
+ * @name PivotGridDataSourceOptions.fields.headerFilter.search
+ * @type object
+ */
+/**
+ * @name PivotGridDataSourceOptions.fields.headerFilter.search.editorOptions
+ * @default {}
+ */
+/**
+ * @name PivotGridDataSourceOptions.fields.headerFilter.search.enabled
+ * @type boolean
+ * @default false
+ */
+/**
+ * @name PivotGridDataSourceOptions.fields.headerFilter.search.mode
+ * @default 'contains'
+ */
+/**
+ * @name PivotGridDataSourceOptions.fields.headerFilter.search.timeout
+ * @type number
+ * @default 500
  */
