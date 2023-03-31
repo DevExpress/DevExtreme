@@ -2128,7 +2128,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 // T1130497
 ([
   ['first', 0, 'standard', 0],
-  ['last', 20, 'standard', 20],
+  ['last', 20, 'standard', 0],
   ['pageBottom', 20, 'standard', 0],
   ['pageTop', 0, 'standard', 0],
   ['pageBottom', 8, 'virtual', 0],
