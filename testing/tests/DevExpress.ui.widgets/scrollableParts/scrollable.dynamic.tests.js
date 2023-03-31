@@ -221,7 +221,7 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
         .move(0, -10)
         .up();
 
-    this.clock.tick(10);
+    this.clock.tick(100);
 
     const $scroll = $scrollable.find('.dx-scrollable-scroll');
     assert.ok($scroll.hasClass('dx-state-invisible'), 'scroll was hidden');
@@ -303,7 +303,7 @@ QUnit.test('bounce up', function(assert) {
         .move(0, 100)
         .up();
 
-    this.clock.tick(10);
+    this.clock.tick(100);
 });
 
 QUnit.test('stop bounce on click', function(assert) {

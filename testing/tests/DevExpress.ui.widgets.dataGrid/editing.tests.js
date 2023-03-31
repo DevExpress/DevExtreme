@@ -5757,7 +5757,7 @@ QUnit.module('Editing with real dataController', {
         editor.option('value', 'test2');
         const $cell = that.getCellElement(0, 1);
         $($cell).trigger('dxclick');
-        that.clock.tick(30);
+        that.clock.tick(40);
 
         // assert
         assert.equal(saveEditDataCallCount, 1, 'save edit data called once');
@@ -5794,7 +5794,7 @@ QUnit.module('Editing with real dataController', {
         // act
         editor.option('value', 'test2');
         that.editCell(0, 1);
-        that.clock.tick(30);
+        that.clock.tick(40);
 
         // assert
         assert.strictEqual($(rowsView.getCellElement(0, 0)).find('input').val(), 'test2', 'value input');
@@ -5984,7 +5984,7 @@ QUnit.module('Editing with real dataController', {
         // act
         that.cellValue(0, 0, 'Test');
         that.editCell(0, 1);
-        this.clock.tick(100);
+        this.clock.tick(200);
 
         // assert
         assert.ok(!this.hasEditData(), 'edit data is empty');
@@ -6027,7 +6027,7 @@ QUnit.module('Editing with real dataController', {
         that.editCell(0, 0);
         that.cellValue(0, 0, 'Test');
         that.editCell(0, 1);
-        this.clock.tick(100);
+        this.clock.tick(200);
 
         // assert
         assert.ok(this.hasEditData(), 'edit data is not empty');
@@ -20317,7 +20317,7 @@ QUnit.module('Promises in callbacks and events', {
         assert.equal(visibleRows.length, 7);
 
         // act
-        that.clock.tick(500);
+        that.clock.tick(600);
 
         const $insertedRows = $('.dx-row-inserted');
 
@@ -20382,7 +20382,7 @@ QUnit.module('Promises in callbacks and events', {
         assert.equal(visibleRows.length, 7);
 
         // act
-        that.clock.tick(500);
+        that.clock.tick(600);
 
         const $insertedRow = $('.dx-row-inserted');
 

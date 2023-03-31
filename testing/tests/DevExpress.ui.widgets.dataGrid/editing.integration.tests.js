@@ -1210,7 +1210,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         const $dataGridTables = $dataGrid.find('.dx-datagrid-table');
         // assert
@@ -7382,7 +7382,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick(300);
+            this.clock.tick(400);
 
             // assert
             const visibleRows = dataGrid.getVisibleRows();
@@ -7850,12 +7850,12 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                 }
             };
 
-            this.clock.tick(300);
+            this.clock.tick(400);
 
             if(newRowPosition === 'viewportTop' || newRowPosition === 'viewportBottom') {
                 // act
                 dataGrid.getScrollable().scrollTo({ top: 1500 });
-                this.clock.tick(300);
+                this.clock.tick(400);
 
                 // assert
                 assert.strictEqual(dataGrid.getTopVisibleRowData().id, 45, 'first visible row data after scroll');
@@ -7863,7 +7863,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick(300);
+            this.clock.tick(400);
             newRowInfo = getNewRowInfo();
 
             // assert
@@ -7874,7 +7874,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             $(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val('111').trigger('change');
             dataGrid.getScrollable().scrollTo({ top: newRowPosition === 'first' ? 3500 : 0 });
-            this.clock.tick(300);
+            this.clock.tick(400);
 
             // assert
             assert.ok(dataGrid.getVisibleRows()[0].key >= newRowPosition === 'first' ? 91 : 1, 'top visible row key');

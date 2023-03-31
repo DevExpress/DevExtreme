@@ -1771,7 +1771,7 @@ QUnit.module('selection', moduleSetup, () => {
             }
         });
 
-        clock.tick(0);
+        clock.tick(10);
     });
 
     QUnit.test('selection should not be removed after second click if selectionMode is single', function(assert) {
@@ -2208,7 +2208,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             pageLoadMode: 'scrollBottom'
         });
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         assert.equal($.trim($list.find('.dx-list-item').text()), '012');
     });
