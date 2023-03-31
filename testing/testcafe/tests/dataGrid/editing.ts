@@ -2126,114 +2126,58 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 });
 
 // T1130497
-[
-  {
-    newRowPosition: 'first',
-    insertedRowNumber: 0,
-    scrollMode: 'standard',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'last',
-    insertedRowNumber: 20,
-    scrollMode: 'standard',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'pageBottom',
-    insertedRowNumber: 20,
-    scrollMode: 'standard',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'pageTop',
-    insertedRowNumber: 0,
-    scrollMode: 'standard',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'pageBottom',
-    insertedRowNumber: 8,
-    scrollMode: 'virtual',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'pageTop',
-    insertedRowNumber: 0,
-    scrollMode: 'virtual',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'viewportBottom',
-    insertedRowNumber: 8,
-    scrollMode: 'standard',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'viewportBottom',
-    insertedRowNumber: 13,
-    scrollMode: 'standard',
-    scrollTop: 162,
-  }, {
-    newRowPosition: 'viewportTop',
-    insertedRowNumber: 0,
-    scrollMode: 'standard',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'viewportTop',
-    insertedRowNumber: 5,
-    scrollMode: 'standard',
-    scrollTop: 162,
-  }, {
-    newRowPosition: 'viewportBottom',
-    insertedRowNumber: 8,
-    scrollMode: 'virtual',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'viewportBottom',
-    insertedRowNumber: 13,
-    scrollMode: 'virtual',
-    scrollTop: 162,
-  }, {
-    newRowPosition: 'viewportTop',
-    insertedRowNumber: 0,
-    scrollMode: 'virtual',
-    scrollTop: 0,
-  }, {
-    newRowPosition: 'viewportTop',
-    insertedRowNumber: 5,
-    scrollMode: 'virtual',
-    scrollTop: 162,
-  },
-].forEach((testCase) => {
-  test(`The first cell of the new row should be focused when
-      newRowPosition = ${testCase.newRowPosition}
+([
+  ['first', 0, 'standard', 0],
+  ['last', 20, 'standard', 20],
+  ['pageBottom', 20, 'standard', 0],
+  ['pageTop', 0, 'standard', 0],
+  ['pageBottom', 8, 'virtual', 0],
+  ['pageTop', 0, 'virtual', 0],
+  ['viewportBottom', 8, 'standard', 0],
+  ['viewportBottom', 13, 'standard', 162],
+  ['viewportTop', 0, 'standard', 0],
+  ['viewportTop', 5, 'standard', 162],
+  ['viewportBottom', 8, 'virtual', 0],
+  ['viewportBottom', 13, 'virtual', 162],
+  ['viewportTop', 0, 'virtual', 0],
+  ['viewportTop', 5, 'virtual', 162],
+] as [string, number, string, number][])
+  .forEach(([newRowPosition, insertedRowNumber, scrollMode, scrollTop]) => {
+    test(`The first cell of the new row should be focused when
+      newRowPosition = ${newRowPosition}
       and editing.mode = cell
-      and ${testCase.scrollMode} scroll mode
-      and scrollTop is ${testCase.scrollTop}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
-    const headerPanel = dataGrid.getHeaderPanel();
+      and ${scrollMode} scroll mode
+      and scrollTop is ${scrollTop}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const dataGrid = new DataGrid('#container');
+      const headerPanel = dataGrid.getHeaderPanel();
 
-    const scrollTo = async (y) => {
-      await dataGrid.scrollTo({ y });
-      await t.expect(dataGrid.isReady()).ok();
-    };
+      const scrollTo = async (y) => {
+        await dataGrid.scrollTo({ y });
+        return dataGrid.isReady();
+      };
 
-    if (testCase.scrollTop > 0) { await scrollTo(testCase.scrollTop); }
-    await t.click(headerPanel.getAddRowButton());
-
-    await takeScreenshot(`grid-cell-edit-mode-and-new-row_position-${testCase.newRowPosition}-and-${testCase.scrollMode}_scroll-mode-and-scroll_top-is-${testCase.scrollTop}.png`, dataGrid.element);
-
-    await t
-      .expect(dataGrid.getDataRow(testCase.insertedRowNumber).isInserted)
-      .ok('row is inserted')
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxDataGrid', {
-    dataSource: getData(20, 3),
-    height: 400,
-    editing: {
-      mode: 'cell',
-      allowUpdating: true,
-      allowAdding: true,
-      newRowPosition: testCase.newRowPosition,
-    },
-    scrolling: {
-      mode: testCase.scrollMode,
-    },
-  }));
-});
+      await t
+        .expect(await scrollTo(scrollTop))
+        .ok(`scrollTo ${scrollTop}`)
+        .click(headerPanel.getAddRowButton())
+        .expect(await takeScreenshot(`grid-cell-edit-mode-and-new-row_position-${newRowPosition}-and-${scrollMode}_scroll-mode-and-scroll_top-is-${scrollTop}.png`, dataGrid.element))
+        .ok()
+        .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
+        .ok('row is inserted')
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: getData(20, 3),
+      height: 400,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true,
+        newRowPosition,
+      },
+      scrolling: {
+        mode: scrollMode,
+      },
+    }));
+  });
