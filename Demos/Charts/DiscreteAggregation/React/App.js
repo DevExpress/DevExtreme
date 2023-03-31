@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Chart, {
-  ArgumentAxis,
   Title,
   Subtitle,
   CommonSeriesSettings,
@@ -31,7 +30,6 @@ export default function App() {
         >
         </Aggregation>
       </CommonSeriesSettings>
-      <ArgumentAxis aggregateByCategory={true}></ArgumentAxis>
       <SeriesTemplate nameField="year"></SeriesTemplate>
     </Chart>
   );

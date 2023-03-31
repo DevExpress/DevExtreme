@@ -17,8 +17,5 @@ $(() => {
     seriesTemplate: {
       nameField: 'year',
     },
-    argumentAxis: {
-      aggregateByCategory: true,
-    },
   });
 });

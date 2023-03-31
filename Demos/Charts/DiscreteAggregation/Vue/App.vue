@@ -16,14 +16,12 @@
         method="sum"
       />
     </DxCommonSeriesSettings>
-    <DxArgumentAxis :aggregate-by-category="true"/>
     <DxSeriesTemplate name-field="year"/>
   </DxChart>
 </template>
 <script>
 
 import DxChart, {
-  DxArgumentAxis,
   DxTitle,
   DxSubtitle,
   DxCommonSeriesSettings,
@@ -36,7 +34,6 @@ import { oilProductionData } from './data.js';
 export default {
   components: {
     DxChart,
-    DxArgumentAxis,
     DxTitle,
     DxSubtitle,
     DxCommonSeriesSettings,
