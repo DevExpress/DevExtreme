@@ -1960,7 +1960,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         // act
         dataGrid.getScrollable().scrollTo(2500);
@@ -1969,7 +1969,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first visible row is correct');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row is correct');
@@ -3393,7 +3393,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.option('dataSource', generateDataSource(40));
-        this.clock.tick(500);
+        this.clock.tick(600);
 
 
         // assert
@@ -4856,7 +4856,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered inside viewport after scrolling to bottom');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(400);
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert
@@ -4874,7 +4874,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after scrolling to top');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(400);
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert

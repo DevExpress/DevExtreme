@@ -387,7 +387,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             // act
             this.addRow(2);
             this.dataController.optionChanged({ name: 'expandedRowKeys', value: [1, 2], previousValue: [1, 2] }); // simulate the call from ngDoCheck hook
-            this.clock.tick(30);
+            this.clock.tick(100);
 
             // assert
             const rows = this.getVisibleRows();
