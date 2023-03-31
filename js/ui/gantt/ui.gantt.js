@@ -22,7 +22,7 @@ import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import { GanttTreeList } from './ui.gantt.treelist';
 import { GanttView } from './ui.gantt.view';
 import { GanttDataChangesProcessingHelper } from './ui.gantt.data_changes_processing_helper';
-
+import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 
 const window = getWindow();
 
@@ -43,6 +43,9 @@ const GANTT_NEW_TASK_CACHE_KEY = 'gantt_new_task_key';
 class Gantt extends Widget {
     _init() {
         super._init();
+
+        gridCoreUtils.logColumnsDeprecatedWarningIfNeed(this.NAME, this.option('columns'));
+
         this._initGantt();
         this._isGanttRendered = false;
         this._initHelpers();
@@ -701,6 +704,15 @@ class Gantt extends Widget {
     }
     zoomOut() {
         this._ganttView._ganttViewCore.zoomOut();
+    }
+
+    _setDeprecatedOptions() {
+        super._setDeprecatedOptions();
+
+        extend(this._deprecatedOptions, {
+            'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
+            'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
+        });
     }
 
     _getDefaultOptions() {

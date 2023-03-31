@@ -114,6 +114,15 @@ const FieldChooserBase = (Widget as any)
       });
     },
 
+    _setDeprecatedOptions() {
+      this.callBase();
+
+      extend(this._deprecatedOptions, {
+        'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
+        'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
+      });
+    },
+
     _init() {
       this.callBase();
       this._headerFilterView = new HeaderFilterView(this);

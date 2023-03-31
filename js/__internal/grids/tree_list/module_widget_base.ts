@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { isMaterial } from '@js/ui/themes';
 import treeListCore from './module_core';
+import gridCoreUtils from '../grid_core/module_utils';
 
 import './module_not_extended/column_headers';
 import './module_columns_controller';
@@ -70,6 +71,17 @@ const TreeList = (Widget as any).inherit({
     return result;
   },
 
+  _setDeprecatedOptions() {
+    this.callBase();
+
+    if (this.disableDeprecationWarnings) { return; }
+
+    extend(this._deprecatedOptions, {
+      'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
+      'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
+    });
+  },
+
   _defaultOptionsRules() {
     return this.callBase().concat([
       {
@@ -95,6 +107,10 @@ const TreeList = (Widget as any).inherit({
     const that = this;
 
     that.callBase();
+
+    if (!this.disableDeprecationWarnings) {
+      gridCoreUtils.logColumnsDeprecatedWarningIfNeed(this.NAME, this.option('columns'));
+    }
 
     treeListCore.processModules(that, treeListCore);
 

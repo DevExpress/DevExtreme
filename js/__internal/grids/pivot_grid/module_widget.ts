@@ -226,6 +226,15 @@ const PivotGrid = (Widget as any).inherit({
     });
   },
 
+  _setDeprecatedOptions() {
+    this.callBase();
+
+    extend(this._deprecatedOptions, {
+      'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
+      'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
+    });
+  },
+
   _updateCalculatedOptions(fields) {
     const that = this;
     each(fields, (_, field) => {
@@ -304,6 +313,8 @@ const PivotGrid = (Widget as any).inherit({
 
     that.callBase();
     that._initDataController();
+
+    gridCoreUtils.logColumnsDeprecatedWarningIfNeed(this.NAME, this.option('dataSource.fields'));
 
     that._scrollLeft = that._scrollTop = null;
     that._initActions();

@@ -8,6 +8,7 @@ import { logger } from '@js/core/utils/console';
 import browser from '@js/core/utils/browser';
 import Widget from '@js/ui/widget/ui.widget';
 import { isMaterial } from '@js/ui/themes';
+import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import gridCore from './module_core';
 
 import './module_not_extended/column_headers';
@@ -77,6 +78,8 @@ const DataGrid = (Widget as any).inherit({
     extend(this._deprecatedOptions, {
       useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
       rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
+      'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
+      'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
     });
   },
 
@@ -142,6 +145,8 @@ const DataGrid = (Widget as any).inherit({
     const that = this;
 
     that.callBase();
+
+    gridCoreUtils.logColumnsDeprecatedWarningIfNeed(this.NAME, this.option('columns'));
 
     gridCore.processModules(that, gridCore);
 
