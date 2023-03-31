@@ -3628,7 +3628,7 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Title And Center Label Customized",
+            "Title": "Title and Center Label Customization",
             "Name": "GaugeTitleCustomized",
             "Widget": "Gauges",
             "DemoType": "Viz",

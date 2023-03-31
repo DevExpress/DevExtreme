@@ -17,7 +17,7 @@ $(() => {
     },
     value: 7.78,
     title: {
-      text: 'Amount of Produced Gold',
+      text: 'Gold Production (in Kilograms)',
       verticalAlignment: 'bottom',
       font: {
         size: 25,
@@ -33,8 +33,8 @@ $(() => {
       const baseRect = createRect(200, 200, 'transparent', 0);
       const topRect = createRect(100, 70, '#f2f2f2', 8);
       const bottomRect = createRect(114, 56, '#fff', 8);
-      const valueText = createText(50, 27, 20, 'middle', 30, gauge.value(), 'Kilos');
-      const bottomText = createText(15, 23, 12, 'start', 20, 'Capacity: 10kg', 'Graduation: 10g');
+      const valueText = createText(50, 27, 20, 'middle', 30, gauge.value(), 'kg');
+      const bottomText = createText(15, 23, 12, 'start', 20, 'Capacity: 10 kg', 'Graduation: 10 g');
 
       bottomRect.setAttribute('class', 'description');
 

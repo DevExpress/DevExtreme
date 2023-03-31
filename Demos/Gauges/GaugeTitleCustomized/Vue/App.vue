@@ -16,7 +16,7 @@
       <DxRangeContainer background-color="#03a9f4"/>
       <DxValueIndicator color="#03a9f4"/>
       <DxTitle
-        text="Amount of Produced Gold"
+        text="Gold Production (in Kilograms)"
         vertical-alignment="bottom"
       >
         <DxFont
@@ -55,7 +55,7 @@
               <tspan
                 x="50"
                 dy="30"
-              >Kilos</tspan>
+              >kg</tspan>
             </text>
           </g>
           <g transform="translate(43 140)">
@@ -75,11 +75,11 @@
               x="15"
               fill="#000"
             >
-              <tspan x="15">Capacity: 10kg</tspan>
+              <tspan x="15">Capacity: 10 kg</tspan>
               <tspan
                 x="15"
                 dy="20"
-              >Graduation: 10g</tspan>
+              >Graduation: 10 g</tspan>
             </text>
           </g>
         </svg>
