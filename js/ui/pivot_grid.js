@@ -70,6 +70,7 @@ export default PivotGrid;
  */
 /**
  * @name PivotGridDataSourceOptions.fields.headerFilter.search.editorOptions
+ * @type any
  * @default {}
  */
 /**
@@ -79,6 +80,7 @@ export default PivotGrid;
  */
 /**
  * @name PivotGridDataSourceOptions.fields.headerFilter.search.mode
+ * @type Enums.SearchMode
  * @default 'contains'
  */
 /**
