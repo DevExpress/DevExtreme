@@ -287,7 +287,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         });
 
         const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
-        this.clock.tick();
+        this.clock.tick(10);
 
         scheduler.appointments.click(1);
 

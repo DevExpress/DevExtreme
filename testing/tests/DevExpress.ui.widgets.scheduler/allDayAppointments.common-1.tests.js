@@ -208,7 +208,7 @@ module('All day appointments common', config, () => {
                     width: 600
                 });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const spy = sinon.spy(scheduler.instance, 'showAppointmentPopup');
 

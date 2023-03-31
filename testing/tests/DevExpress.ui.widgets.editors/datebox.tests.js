@@ -1128,7 +1128,6 @@ QUnit.module('dateView integration', {
         };
 
         this.instance.open();
-        this.clock.tick(10);
 
         this.dateView = function() {
             return getInstanceWidget(this.instance);
