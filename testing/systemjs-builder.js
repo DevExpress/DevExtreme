@@ -155,7 +155,8 @@ const transpileModules = () => {
         filePath.replace('transpiled', 'transpiled-systemjs'),
         {
             minify: false,
-            sourceMaps: true
+            sourceMaps: true,
+            encodeNames: false
         }
     )));
 };
@@ -178,7 +179,8 @@ const transpileTests = () => {
                 filePath.replace('testing/tests', 'artifacts/transpiled-tests'),
                 {
                     minify: false,
-                    sourceMaps: true
+                    sourceMaps: true,
+                    encodeNames: false
                 }
             ));
         }
