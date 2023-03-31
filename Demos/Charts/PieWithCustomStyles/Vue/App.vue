@@ -50,10 +50,10 @@ export default {
       const color = point.series.getPointsByArg(point.argument)[0].getColor();
       let fillId;
       switch (point.argument) {
-        case 'Stroke Pattern':
+        case 'Stripes':
           fillId = this.getStrokePattern(color);
           break;
-        case 'Square Pattern':
+        case 'Grid':
           fillId = this.getSquarePattern(color);
           break;
         case 'Linear Gradient':
@@ -62,7 +62,7 @@ export default {
         case 'Radial Gradient':
           fillId = this.getRadialGradient(color);
           break;
-        case 'Pattern with image':
+        case 'Image':
           fillId = this.getPatternImage(color);
           break;
         default:

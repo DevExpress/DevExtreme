@@ -7,10 +7,10 @@ export class Data {
 }
 
 const data: Data[] = [{
-  type: 'Stroke Pattern',
+  type: 'Stripes',
   value: 1,
 }, {
-  type: 'Square Pattern',
+  type: 'Grid',
   value: 1,
 }, {
   type: 'Linear Gradient',
@@ -19,7 +19,7 @@ const data: Data[] = [{
   type: 'Radial Gradient',
   value: 1,
 }, {
-  type: 'Pattern with image',
+  type: 'Image',
   value: 1,
 }];
 

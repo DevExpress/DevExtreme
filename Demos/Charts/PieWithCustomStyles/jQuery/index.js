@@ -5,10 +5,10 @@ $(() => {
       const color = point.series.getPointsByArg(point.argument)[0].getColor();
       let fillId;
       switch (point.argument) {
-        case 'Stroke Pattern':
+        case 'Stripes':
           fillId = getStrokePattern(color);
           break;
-        case 'Square Pattern':
+        case 'Grid':
           fillId = getSquarePattern(color);
           break;
         case 'Linear Gradient':
@@ -17,7 +17,7 @@ $(() => {
         case 'Radial Gradient':
           fillId = getRadialGradient(color);
           break;
-        case 'Pattern with image':
+        case 'Image':
           fillId = getPatternImage(color);
           break;
         default:

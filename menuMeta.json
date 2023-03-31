@@ -2727,7 +2727,7 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Pie With Custom Styles",
+            "Title": "Pie with Custom Fill Styles",
             "Name": "PieWithCustomStyles",
             "DocUrl": "",
             "Widget": "Charts",
