@@ -26,14 +26,12 @@ const COLUMN_CHOOSER_SELECT_CLASS = 'column-chooser-mode-select';
 const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
-const TREEVIEW_NODE_SELECTOR = '.dx-treeview-node';
-const CHECKBOX_SELECTOR = '.dx-checkbox';
-
 const CLICK_TIMEOUT = 300;
 
 const processItems = function(that, chooserColumns) {
     const items = [];
     const isSelectMode = that.option('columnChooser.mode') === 'select';
+    const isRecursive = that.option('columnChooser.selection.recursive');
 
     if(chooserColumns.length) {
         each(chooserColumns, function(index, column) {
@@ -43,12 +41,11 @@ const processItems = function(that, chooserColumns) {
                 allowHiding: column.allowHiding,
                 expanded: true,
                 id: column.index,
-                disabled: false,
-                disableCheckBox: column.allowHiding === false,
+                disabled: column.allowHiding === false,
                 parentId: isDefined(column.ownerBand) ? column.ownerBand : null
             };
 
-            if(isSelectMode) {
+            if(isSelectMode && !(isRecursive && column.hasColumns)) {
                 item.selected = column.visible;
             }
 
@@ -234,29 +231,6 @@ const columnChooserMembers = {
             searchEnabled: columnChooser.search?.enabled,
             searchTimeout: columnChooser.search?.timeout,
             searchEditorOptions: columnChooser.search?.editorOptions,
-            onItemRendered: function(e) {
-                // @ts-expect-error
-                if(e.itemData.disableCheckBox) {
-                    // @ts-expect-error
-                    const $treeViewNode = $(e.itemElement).closest(TREEVIEW_NODE_SELECTOR);
-                    let $checkBox;
-
-                    if($treeViewNode.length) {
-
-                        $checkBox = $treeViewNode.find(CHECKBOX_SELECTOR);
-
-                        if($checkBox.length) {
-                            /**
-                             * @type {import('../check_box').default}
-                             */
-                            // @ts-expect-error
-                            const checkBoxInstance = $checkBox.data('dxCheckBox');
-
-                            checkBoxInstance && checkBoxInstance.option('disabled', true);
-                        }
-                    }
-                }
-            }
         };
 
         const scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
@@ -320,23 +294,61 @@ const columnChooserMembers = {
 
     _prepareSelectModeConfig: function() {
         const that = this;
-        const selectionChangedHandler = function(e) {
-            const visibleColumns = that._columnsController.getVisibleColumns().filter(function(item) { return !item.command; });
-            const isLastColumnUnselected = visibleColumns.length === 1 && !e.itemData.selected;
+        const selectionOptions = this.option('columnChooser.selection') || {};
 
-            if(isLastColumnUnselected) {
-                e.component.selectItem(e.itemElement);
-            } else {
-                setTimeout(function() {
-                    that._columnsController.columnOption(e.itemData.id, 'visible', e.itemData.selected);
-                }, CLICK_TIMEOUT);
-            }
+        const forEachNode = (nodes, func) => {
+            nodes.forEach(node => {
+                if(node.children.length) {
+                    forEachNode(node.children, func);
+                }
+
+                func(node);
+            });
         };
 
+        const updateSelection = (e) => {
+            forEachNode(e.component.getNodes(), node => {
+                if(node.itemData.allowHiding === false) {
+                    e.component.selectItem(node.key);
+                }
+            });
+        };
+
+        const updateColumnVisibility = (e) => {
+            forEachNode(e.component.getNodes(), node => {
+                const columnIndex = node.itemData.id;
+                const isVisible = node.selected !== false;
+                that._columnsController.columnOption(columnIndex, 'visible', isVisible);
+            });
+        };
+
+        let _timeout;
+        let isUpdatingSelection = false;
+
         return {
-            selectNodesRecursive: false,
-            showCheckBoxesMode: 'normal',
-            onItemSelectionChanged: selectionChangedHandler
+            selectByClick: selectionOptions.selectByClick,
+            selectNodesRecursive: selectionOptions.recursive,
+            showCheckBoxesMode: selectionOptions.allowSelectAll ? 'selectAll' : 'normal',
+            onSelectionChanged: (e) => {
+                if(!isUpdatingSelection) {
+                    isUpdatingSelection = true;
+                    e.component.beginUpdate();
+
+                    updateSelection(e);
+
+                    isUpdatingSelection = false;
+                    e.component.endUpdate();
+
+                    clearTimeout(_timeout);
+                    _timeout = setTimeout(() => {
+                        that.component.beginUpdate();
+
+                        updateColumnVisibility(e);
+
+                        that.component.endUpdate();
+                    }, CLICK_TIMEOUT);
+                }
+            }
         };
     },
 
