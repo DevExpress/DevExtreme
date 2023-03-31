@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevExtreme jQuery Example</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script src="https://unpkg.com/devextreme-aspnet-data@2.8.6/js/dx.aspnet.data.js"></script>
+</head>
+<body>
+    
+
+  <div class="dx-viewport demo-container">
+    <div id="tree-list"></div>
+  </div>
+
+    <script>
+      $(() => {
+  const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+  const treelist = $('#tree-list').dxTreeList({
+    dataSource: DevExpress.data.AspNet.createStore({
+      key: 'Task_ID',
+      loadUrl: `${url}/Tasks`,
+      insertUrl: `${url}/InsertTask`,
+      updateUrl: `${url}/UpdateTask`,
+      deleteUrl: `${url}/DeleteTask`,
+      onBeforeSend(method, ajaxOptions) {
+        ajaxOptions.xhrFields = { withCredentials: true };
+      },
+    }),
+    height: 800,
+    scrolling: {
+      mode: 'standard',
+    },
+    expandedRowKeys: [1],
+    selectedRowKeys: [4, 36, 30, 37, 35],
+    selection: {
+      mode: 'multiple',
+      recursive: true
+    },
+    filterMode: 'fullBranch',
+    remoteOperations: {
+      filtering: true,
+    },
+    parentIdExpr: 'Task_Parent_ID',
+    searchPanel: {
+      visible: true,
+    },
+    filterRow: {
+      visible: true
+    },
+    headerFilter: {
+      visible: true,
+    },
+    editing: {
+      mode: 'row',
+      allowAdding: true,
+      allowUpdating: true,
+      allowDeleting: true,
+    },
+    showRowLines: true,
+    showBorders: true,
+    columnAutoWidth: true,
+    wordWrapEnabled: true,
+    columns: [{
+      dataField: 'Task_Subject',
+      minWidth: 250,
+      validationRules: [{ type: 'required' }],
+    }, 
+    {
+      dataField: 'Task_Assigned_Employee_ID',
+      caption: 'Assigned',
+      minWidth: 120,
+      lookup: {
+        dataSource: DevExpress.data.AspNet.createStore({
+          key: 'ID',
+          loadUrl: `${url}/TaskEmployees`,
+        }),
+        valueExpr: 'ID',
+        displayExpr: 'Name',
+      },
+      validationRules: [{ type: 'required' }],
+    }, 
+    {
+      dataField: 'Task_Status',
+      caption: 'Status',
+      minWidth: 120,
+      lookup: {
+        dataSource: [
+          'Not Started',
+          'Need Assistance',
+          'In Progress',
+          'Deferred',
+          'Completed',
+        ],
+      },
+    }, {
+      dataField: 'Task_Start_Date',
+      caption: 'Start Date',
+      dataType: 'date',
+    }, {
+      dataField: 'Task_Due_Date',
+      caption: 'Due Date',
+      dataType: 'date',
+    },
+    ],
+    onInitNewRow(e) {
+      e.data.Task_Status = 'Not Started';
+      e.data.Task_Start_Date = new Date();
+      e.data.Task_Due_Date = new Date();
+    },
+  });
+
+  window.list = treelist.dxTreeList('instance');
+});
+
+    </script>
+</body>
+</html>
