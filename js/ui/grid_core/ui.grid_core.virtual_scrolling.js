@@ -1133,7 +1133,6 @@ export const virtualScrollingModule = {
                                 } else {
                                     newRows.forEach(it => it.loadIndex = currentIndex);
                                     newRows = [];
-                                    item.loadIndex = currentIndex;
                                 }
                                 item.loadIndex = currentIndex;
                                 prevCountable = itemCountable;
