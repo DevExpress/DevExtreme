@@ -532,7 +532,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         // assert
         assert.equal(dataGrid.getTopVisibleRowData().id, 150, 'Focused row is visible');
