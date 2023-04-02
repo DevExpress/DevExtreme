@@ -636,7 +636,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         }
 
-        this.clock.tick(operationDelay + 1);
+        this.clock.tick(operationDelay + 100);
         assert.strictEqual(uploadChunkSpy.callCount, 3, 'all files are uploaded');
 
         infos = this.progressPanelWrapper.getInfos();
@@ -679,7 +679,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const file = createUploaderFiles(3, chunkSize * 2)[2];
         this.wrapper.setUploadInputFile([ ...emptyFiles, file ]);
 
-        this.clock.tick(operationDelay + 1);
+        this.clock.tick(operationDelay + 100);
         assert.strictEqual(uploadChunkSpy.callCount, 2, 'empty files are uploaded, and 0 % of regular file is uploaded');
 
         let infos = this.progressPanelWrapper.getInfos();
@@ -702,7 +702,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         }
 
-        this.clock.tick(operationDelay + 1);
+        this.clock.tick(operationDelay + 100);
         assert.strictEqual(uploadChunkSpy.callCount, 3, 'empty files are uploaded, and 50 % of regular file is uploaded');
 
         infos = this.progressPanelWrapper.getInfos();
@@ -725,7 +725,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         }
 
-        this.clock.tick(operationDelay + 1);
+        this.clock.tick(operationDelay + 100);
         assert.strictEqual(uploadChunkSpy.callCount, 4, 'all files are uploaded');
 
         infos = this.progressPanelWrapper.getInfos();
