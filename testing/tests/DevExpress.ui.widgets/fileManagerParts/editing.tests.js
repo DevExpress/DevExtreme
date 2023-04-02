@@ -613,7 +613,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const emptyFiles = createUploaderFiles(3, 0);
         this.wrapper.setUploadInputFile(emptyFiles);
 
-        this.clock.tick(operationDelay + 1);
+        this.clock.tick(operationDelay + 100);
         assert.strictEqual(uploadChunkSpy.callCount, 2, '2 empty files are uploaded, and 1 isn\'t started');
 
         let infos = this.progressPanelWrapper.getInfos();
