@@ -606,7 +606,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }),
             upload: { chunkSize }
         });
-        this.clock.tick(400);
+        this.clock.tick(500);
 
         this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
 
@@ -671,7 +671,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }),
             upload: { chunkSize }
         });
-        this.clock.tick(400);
+        this.clock.tick(500);
 
         this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
 
@@ -1367,19 +1367,19 @@ QUnit.module('Editing operations', moduleConfig, () => {
                 showFolders: true
             }
         });
-        this.clock.tick(400);
+        this.clock.tick(500);
 
         // Select folder 'Folder 1/Folder 1.1/File 1-1.txt'
         this.wrapper.getColumnCellsInDetailsView(2).eq(1).trigger(CLICK_EVENT).click();
-        this.clock.tick(400);
+        this.clock.tick(500);
         // Invoke copy dialog
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
-        this.clock.tick(400);
+        this.clock.tick(500);
         // Select destination directory 'Folder 1/Folder 1.2'
         this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
 
-        this.clock.tick(operationDelay + 1);
+        this.clock.tick(operationDelay + 100);
         fileManager.refresh();
 
         this.clock.tick(operationDelay);

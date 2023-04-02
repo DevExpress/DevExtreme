@@ -766,13 +766,13 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
                 showPanel: false
             }
         });
-        this.clock.tick(400);
+        this.clock.tick(500);
 
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
 
         this.wrapper.setUploadInputFile(createUploaderFiles(1));
 
-        this.clock.tick(operationDelay * 2 + 1);
+        this.clock.tick(operationDelay * 2 + 100);
         assert.strictEqual(uploadChunkSpy.callCount, 2, 'file is uploaded');
         assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
 

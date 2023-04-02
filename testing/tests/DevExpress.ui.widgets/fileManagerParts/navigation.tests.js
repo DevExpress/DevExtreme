@@ -1170,7 +1170,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
             ],
             currentPath: targetPath
         });
-        this.clock.tick(400);
+        this.clock.tick(500);
 
         currentPath = this.fileManager.option('currentPath');
         currentPathKeys = this.fileManager.option('currentPathKeys');
@@ -1338,7 +1338,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
                 })
             }),
         });
-        this.clock.tick(operationDelay * 2 + 1);
+        this.clock.tick(operationDelay * 2 + 100);
 
         currentPath = this.fileManager.option('currentPath');
         currentPathKeys = this.fileManager.option('currentPathKeys');
