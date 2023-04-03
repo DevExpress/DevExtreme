@@ -2157,12 +2157,16 @@ test('Cells should be focused correctly on click when cell editing mode is used 
         return dataGrid.isReady();
       };
 
+      const screenshotName = `grid-new-row_position-${newRowPosition}_scroll-mode-${scrollMode}_top-${scrollTop}.png`;
+
       await t
         .expect(await scrollTo(scrollTop))
         .ok(`scrollTo ${scrollTop}`)
         .click(headerPanel.getAddRowButton())
-        .expect(await takeScreenshot(`grid-cell-edit-mode-and-new-row_position-${newRowPosition}-and-${scrollMode}_scroll-mode-and-scroll_top-is-${scrollTop}.png`, dataGrid.element))
+        // act
+        .expect(await takeScreenshot(screenshotName, dataGrid.element))
         .ok()
+        // assert
         .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
         .ok('row is inserted')
         .expect(compareResults.isValid())
