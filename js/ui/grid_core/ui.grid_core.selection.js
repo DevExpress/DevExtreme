@@ -13,6 +13,7 @@ import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';
 import errors from '../widget/ui.errors';
+import { equalByValue } from '../../core/utils/common';
 
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = 'dx-row';
@@ -120,10 +121,12 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 .map(change => change.key);
 
             if(this.option('selection.deferred')) {
-                removedKeys = removedKeys
-                    .map(key => this._dataController.items().find(item => item.key === key))
+                const selectedKeys = this._dataController.items()
                     .filter(item => item.isSelected)
                     .map(item => item.key);
+
+                removedKeys = removedKeys
+                    .filter(key => selectedKeys.find(selectedKey => equalByValue(selectedKey, key)));
             }
 
             removedKeys.length && this.deselectRows(removedKeys);
