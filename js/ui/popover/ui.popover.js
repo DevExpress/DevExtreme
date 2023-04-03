@@ -260,6 +260,11 @@ const Popover = Popup.inherit({
         this.$wrapper().addClass(POPOVER_WRAPPER_CLASS);
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this.setAria('role', 'tooltip');
+    },
+
     _render: function() {
         this.callBase.apply(this, arguments);
         this._detachEvents(this.option('target'));

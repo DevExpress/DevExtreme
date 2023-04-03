@@ -2284,3 +2284,19 @@ QUnit.module('target option', {
     });
 });
 
+QUnit.module('aria accessibility', {
+    beforeEach: function() {
+        fixtures.simple.create();
+    },
+    afterEach: function() {
+        fixtures.simple.drop();
+    }
+}, () => {
+    QUnit.test('role="tooltip" attribute should be added to popover by default', function(assert) {
+        const $popover = $('#what');
+            new Popover($popover);
+            const $overlay = $('.dx-overlay-content');
+
+            assert.equal($overlay.attr('role'), 'tooltip');
+    });
+});

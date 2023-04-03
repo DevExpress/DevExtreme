@@ -167,7 +167,7 @@ QUnit.module('base z-index', () => {
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
+    QUnit.test('role="tooltip" attribute should be added to tooltip', function(assert) {
         const $tooltip = $('#tooltip');
         new Tooltip($tooltip);
         const $overlayContent = $tooltip.find('.dx-overlay-content');
@@ -186,4 +186,3 @@ QUnit.module('aria accessibility', () => {
 
     });
 });
-
