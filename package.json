@@ -235,7 +235,7 @@
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
     "discover-declarations": "dx-tools discover --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
-    "update-ts-reexports": "npm run internal-tool -- generate-reexports --js-scripts ./js --exclude '((dialog|export|list_light|notify|overlay|pager|palette|set_template_engine|splitter|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)' --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
+    "update-ts-reexports": "dx-tools generate-reexports --js-scripts ./js --exclude \"((dialog|export|list_light|notify|overlay|pager|palette|set_template_engine|splitter|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "update-ts-bundle": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "update-ts": "npm run update-ts-bundle && npm run update-ts-reexports",
     "validate-ts": "gulp validate-ts",
