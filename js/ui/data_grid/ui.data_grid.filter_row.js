@@ -1,4 +1,2 @@
-import core from './ui.data_grid.core';
-import { filterRowModule } from '../grid_core/ui.grid_core.filter_row';
-
-core.registerModule('filterRow', filterRowModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/filter_row';

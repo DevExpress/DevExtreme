@@ -163,7 +163,7 @@ export const HeaderFilterView = modules.View.inherit({
                 my: alignment + ' top',
                 at: alignment + ' bottom',
                 of: $element,
-                collision: 'flip fit' // T291384
+                collision: 'fit fit' // T1156848
             });
         }
     },

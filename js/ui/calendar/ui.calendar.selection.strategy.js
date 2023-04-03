@@ -11,6 +11,10 @@ class CalendarSelectionStrategy {
         this.calendar._dateValue(value, e);
     }
 
+    skipNavigate() {
+        this.calendar._skipNavigate = true;
+    }
+
     updateAriaSelected(value, previousValue) {
         this.calendar._updateAriaSelected(value, previousValue);
 

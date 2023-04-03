@@ -509,7 +509,7 @@ export const columnChooserModule = {
                         };
                         const hintText = that.option('columnChooser.title');
                         /**
-                         * @type {import('../data_grid').ToolbarItem}
+                         * @type {any}
                          */
                         const toolbarItem = {
                             widget: 'dxButton',
@@ -525,7 +525,6 @@ export const columnChooserModule = {
                             location: 'after',
                             name: 'columnChooserButton',
                             locateInMenu: 'auto',
-                            // @ts-expect-error
                             sortIndex: 40
                         };
 

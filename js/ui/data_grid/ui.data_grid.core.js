@@ -1,8 +1,3 @@
-import gridCoreUtils from '../grid_core/ui.grid_core.utils';
-import modules from '../grid_core/ui.grid_core.modules';
-
-export default {
-    ...modules,
-    ...gridCoreUtils,
-    modules: [],
-};
+import ModuleCore from '../../__internal/grids/data_grid/module_core';
+// deprecated
+export default ModuleCore;

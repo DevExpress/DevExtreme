@@ -1,5 +1,5 @@
 
-import DataGrid from './data_grid/ui.data_grid';
+import DataGrid from '../__internal/grids/data_grid/module_widget';
 
 /**
  * @name dxDataGridColumn

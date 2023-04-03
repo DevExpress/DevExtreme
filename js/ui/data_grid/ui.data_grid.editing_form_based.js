@@ -1,4 +1,2 @@
-import gridCore from './ui.data_grid.core';
-import { editingFormBasedModule } from '../grid_core/ui.grid_core.editing_form_based';
-
-gridCore.registerModule('editingFormBased', editingFormBasedModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/editing_form_based';
