@@ -237,12 +237,11 @@ QUnit.test('setPosition by arguments. Discrete axis. stick false', function(asse
 
     scrollTranslator.translate.withArgs('40', -1).returns(40);
     scrollTranslator.translate.withArgs('40', +1).returns(50);
-    // sinon ignores more specific range of arguments
     scrollTranslator.translate.withArgs('40').returns(45);
+
 
     scrollTranslator.translate.withArgs('70', -1).returns(70);
     scrollTranslator.translate.withArgs('70', +1).returns(80);
-    // sinon ignores more specific range of arguments
     scrollTranslator.translate.withArgs('70').returns(75);
 
     scrollTranslator.getCanvasVisibleArea.returns({
