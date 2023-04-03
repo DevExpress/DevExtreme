@@ -40,7 +40,6 @@ const DropDownEditor = TextBox.inherit({
     _supportedKeys: function() {
         return extend({}, this.callBase(), {
             tab: function(e) {
-                // debugger;
                 if(!this.option('opened')) {
                     return;
                 }
