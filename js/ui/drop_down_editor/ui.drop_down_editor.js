@@ -775,13 +775,11 @@ const DropDownEditor = TextBox.inherit({
     _attachPopupButtonInitializedHandler() {
         const { toolbarItems } = this._options.cache('dropDownOptions');
 
-        if(toolbarItems) {
-            toolbarItems.forEach(item => {
-                extend(item.options, {
-                    onInitialized: this._popupButtonInitializedHandler.bind(this),
-                });
+        toolbarItems?.forEach(item => {
+            extend(item.options, {
+                onInitialized: (e) => this._popupButtonInitializedHandler(e),
             });
-        }
+        });
     },
 
     _popupButtonInitializedHandler: function(e) {
