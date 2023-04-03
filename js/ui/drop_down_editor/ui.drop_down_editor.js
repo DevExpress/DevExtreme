@@ -776,8 +776,14 @@ const DropDownEditor = TextBox.inherit({
         const { toolbarItems } = this._options.cache('dropDownOptions');
 
         toolbarItems?.forEach(item => {
+            const onInitialized = item.options?.onInitialized;
+
             extend(item.options, {
-                onInitialized: (e) => this._popupButtonInitializedHandler(e),
+                onInitialized: (e) => {
+                    this._popupButtonInitializedHandler(e);
+
+                    onInitialized?.(e);
+                },
             });
         });
     },

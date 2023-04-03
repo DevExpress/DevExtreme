@@ -41,11 +41,14 @@
                     toolbarItems: [
                         {
                             widget: 'dxButton',
-                            toolbar: 'bottom',
+                            toolbar: 'top',
                             location: 'before',
                             options: {
                                 icon: 'email',
                                 text: 'Send',
+                                onInitialized: (e) => {
+                                    console.log(e)
+                                },
                             },
                         },
                         {
