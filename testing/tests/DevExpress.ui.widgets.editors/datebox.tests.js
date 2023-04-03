@@ -4927,39 +4927,47 @@ QUnit.module('keyboard navigation', {
         keyboard.press('enter');
         assert.ok(getValue(), 'DateBox got selected value after the second press of the "Enter" key');
     });
+});
 
+QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
         ['calendar', 'list', 'native'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be closed if tab key was pressed when applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                this.dateBox.option({
+                const $dateBox = $('#dateBox').dxDateBox({
+                    focusStateEnabled: true,
                     applyValueMode: 'instantly',
                     type,
                     pickerType,
                 });
+                const dateBox = $dateBox.dxDateBox('instance');
+                const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const keyboard = keyboardMock($input);
 
-                this.$input.click();
+                dateBox.open();
+                keyboard.keyDown('tab');
         
-                this.keyboard.keyDown('tab');
-        
-                assert.strictEqual(this.dateBox.option('opened'), false, 'popup is closed');
+                assert.strictEqual(dateBox.option('opened'), false, 'popup is closed');
             });
         })
     });
 
     ['date', 'time', 'datetime'].forEach(type => {
         ['calendar', 'list', 'rollers', 'native'].forEach(pickerType => {
-            QUnit.testInActiveWindow(`Popup should not be closed if tab key was pressed when applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                this.dateBox.option({
+            QUnit.testInActiveWindow(`Popup should be opened if tab key was pressed when applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    focusStateEnabled: true,
                     applyValueMode: 'useButtons',
                     type,
                     pickerType,
                 });
+                const dateBox = $dateBox.dxDateBox('instance');
+                const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const keyboard = keyboardMock($input);
 
-                this.$input.click();
+                dateBox.open();
+                keyboard.keyDown('tab');
         
-                this.keyboard.keyDown('tab');
-        
-                assert.strictEqual(this.dateBox.option('opened'), false, 'popup is still opened');
+                assert.strictEqual(dateBox.option('opened'), true, 'popup is still opened');
             });
         })
     });
