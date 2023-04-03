@@ -62,10 +62,6 @@ const DateBox = DropDownEditor.inherit({
         return extend(this.callBase(), this._strategy.supportedKeys());
     },
 
-    _shouldCloseOnTab() {
-        return this._isInstantlyMode() && this.option('type') !== 'datetime';
-    },
-
     _renderButtonContainers: function() {
         this.callBase.apply(this, arguments);
         this._strategy.customizeButtons();

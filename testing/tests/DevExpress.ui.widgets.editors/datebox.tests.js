@@ -4777,18 +4777,6 @@ QUnit.module('keyboard navigation', {
         assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
     });
 
-    QUnit.test('Popup should not be closed if tab key was pressed when applyValueMode is "instantly"', function(assert) {
-        this.dateBox.option({
-            type: 'datetime',
-            opened: true,
-            applyValueMode: 'instantly',
-        });
-
-        this.keyboard.keyDown('tab');
-
-        assert.strictEqual(this.dateBox.option('opened'), true, 'popup is still opened');
-    });
-
     QUnit.test('Home and end key press prevent default when popup in opened (T587313)', function(assert) {
         assert.expect(1);
 
@@ -4938,6 +4926,42 @@ QUnit.module('keyboard navigation', {
 
         keyboard.press('enter');
         assert.ok(getValue(), 'DateBox got selected value after the second press of the "Enter" key');
+    });
+
+    ['date', 'time'].forEach(type => {
+        ['calendar', 'list', 'native'].forEach(pickerType => {
+            QUnit.testInActiveWindow(`Popup should be closed if tab key was pressed when applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                this.dateBox.option({
+                    applyValueMode: 'instantly',
+                    type,
+                    pickerType,
+                });
+
+                this.$input.click();
+        
+                this.keyboard.keyDown('tab');
+        
+                assert.strictEqual(this.dateBox.option('opened'), false, 'popup is closed');
+            });
+        })
+    });
+
+    ['date', 'time', 'datetime'].forEach(type => {
+        ['calendar', 'list', 'rollers', 'native'].forEach(pickerType => {
+            QUnit.testInActiveWindow(`Popup should not be closed if tab key was pressed when applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                this.dateBox.option({
+                    applyValueMode: 'useButtons',
+                    type,
+                    pickerType,
+                });
+
+                this.$input.click();
+        
+                this.keyboard.keyDown('tab');
+        
+                assert.strictEqual(this.dateBox.option('opened'), false, 'popup is still opened');
+            });
+        })
     });
 });
 

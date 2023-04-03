@@ -40,11 +40,12 @@ const DropDownEditor = TextBox.inherit({
     _supportedKeys: function() {
         return extend({}, this.callBase(), {
             tab: function(e) {
+                // debugger;
                 if(!this.option('opened')) {
                     return;
                 }
 
-                if(this._shouldCloseOnTab()) {
+                if(this.option('applyValueMode') === 'instantly') {
                     this.close();
                     return;
                 }
@@ -97,14 +98,6 @@ const DropDownEditor = TextBox.inherit({
                 return true;
             }
         });
-    },
-
-    _isInstantlyMode() {
-        return this.option('applyValueMode') === 'instantly';
-    },
-
-    _shouldCloseOnTab() {
-        return this._isInstantlyMode();
     },
 
     _getDefaultButtons: function() {
