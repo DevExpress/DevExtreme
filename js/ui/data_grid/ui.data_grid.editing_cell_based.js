@@ -1,4 +1,2 @@
-import gridCore from './ui.data_grid.core';
-import editingCellBasedModule from '../grid_core/ui.grid_core.editing_cell_based';
-
-gridCore.registerModule('editingCellBased', editingCellBasedModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/editing_cell_based';
