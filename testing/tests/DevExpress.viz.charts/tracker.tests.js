@@ -2058,7 +2058,7 @@ QUnit.test('repairTooltip', function(assert) {
 
     $(this.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), point);
     this.options.tooltip.show.resetHistory();
-    point.getTooltipParams.resetHistory().returns({ x: 200, y: 100 });
+    point.getTooltipParams.resetHistory();
 
     // act
     this.tracker.repairTooltip();
