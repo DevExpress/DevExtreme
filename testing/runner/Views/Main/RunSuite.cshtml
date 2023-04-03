@@ -6,9 +6,10 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var npmModule = Model.NoRenovation
-        ? "transpiled"
-        : "transpiled-renovation";
+
+    var renovationPart = Model.NoRenovation ? "" : "-renovation";
+    var cspPart = Model.NoCsp ? "" : "-systemjs";
+    var npmModule = "transpiled" + renovationPart + cspPart;
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -17,13 +18,19 @@
         return Url.Content("~/artifacts/js/jquery.js");
     }
 
+    string GetTestUrl() {
+        return Model.NoCsp
+            ? Url.Content(Model.ScriptVirtualPath)
+            : Url.Content(Model.ScriptVirtualPath.Replace("/testing/", "/artifacts/transpiled-testing/"));
+    }
+
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
-
-                yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
-                yield return Url.Content("~/testing/helpers/argumentsValidator.js");
-                yield return Url.Content("~/testing/helpers/dataPatch.js");
+                var testingBasePath = Model.NoCsp ? "~/testing/" : "~/artifacts/transpiled-testing/";
+                yield return Url.Content(testingBasePath + "helpers/jQueryEventsPatch.js");
+                yield return Url.Content(testingBasePath + "helpers/argumentsValidator.js");
+                yield return Url.Content(testingBasePath + "helpers/dataPatch.js");
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
@@ -120,6 +127,12 @@
                 tooltip: "Use norenovation components with old tests",
             });
 
+            QUnit.config.urlConfig.push({
+                id: "nocsp",
+                label: "No CSP",
+                tooltip: "Use noscp components without CSP checks",
+            });
+
             function notifyExtraDoneCall() {
                 var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
 
@@ -135,9 +148,13 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
-    <script src="@Url.ContentWithCacheBuster("~/testing/spike/animator.tests.systemjs.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+    @if (Model.NoCsp) {
+        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+    } else {
+        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system-csp-production.js")"></script>
+    }
+
     <script>
         (function() {
             jQuery.noConflict();
@@ -152,13 +169,9 @@
                 }
             }
 
-            var baseURL = QUnit.urlParams.norenovation
-                ? '@Url.Content("~/artifacts/transpiled")'
-                : '@Url.Content("~/artifacts/transpiled-renovation")';
-
             SystemJS.config({
-//                 baseURL: baseURL,
-//                 transpiler: 'plugin-babel',
+                baseURL: "@Url.Content("~/artifacts/" + npmModule)",
+                transpiler: 'plugin-babel',
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/artifacts/js/globalize")',
@@ -281,8 +294,7 @@
 
 <script>
     (function() {
-//         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
-        var integrationImportPaths = [];
+        var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
         var imports = integrationImportPaths.map(function(importPath) {
             return SystemJS.import(importPath);
@@ -300,19 +312,16 @@
                 return;
             }
 
-//             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
-//             return SystemJS.import('/testing/spike/animator.tests.systemjs.js');
+            return SystemJS.import("@GetTestUrl()");
         })
         .then(function() {
             QUnit.start();
         })
         .catch(function (err) {
-            console.log(err);
-//             QUnit.start();
-//             QUnit.test("load failed", function(assert) {
-//                 throw err;
-//             });
+            QUnit.start();
+            QUnit.test("load failed", function(assert) {
+                throw err;
+            });
         });
-
     })();
 </script>
