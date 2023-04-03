@@ -44,7 +44,9 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             maxHeight: MAX_TOOLTIP_HEIGHT,
             rtlEnabled: this._extraOptions.rtlEnabled,
             onShown: this._onShown.bind(this),
-            contentTemplate: this._getContentTemplate(dataList)
+            contentTemplate: this._getContentTemplate(dataList),
+            copyRootClassesToWrapper: true,
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         });
     }
 

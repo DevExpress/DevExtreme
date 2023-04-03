@@ -32,7 +32,8 @@ const environment = {
         createFormattedDateText: stubCreateFormattedDateText,
         getAppointmentDisabled: stubGetAppointmentDisabled,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
-        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
+        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
+        copyRootClassesToWrapper: true
     },
     extraOptions: {
         rtlEnabled: true,
