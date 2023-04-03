@@ -259,7 +259,7 @@ const Popover = Popup.inherit({
         this.$element().addClass(POPOVER_CLASS);
         this.$wrapper().addClass(POPOVER_WRAPPER_CLASS);
 
-        this.setAria('role', 'tooltip');
+        this.setAria('role', this.option('toolbarItems')?.length ? 'dialog' : 'tooltip');
     },
 
     _render: function() {

@@ -2299,4 +2299,12 @@ QUnit.module('aria accessibility', {
 
             assert.equal($overlay.attr('role'), 'tooltip');
     });
+   
+    QUnit.test('role="dialog" attribute should be set if popover has toolbarItems', function(assert) {
+        const $popover = $('#what');
+            new Popover($popover, { toolbarItems: [{ text: "Title", location: "before" }]});
+            const $overlay = $('.dx-overlay-content');
+
+            assert.equal($overlay.attr('role'), 'dialog');
+    });
 });
