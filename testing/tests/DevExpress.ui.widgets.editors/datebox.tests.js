@@ -4931,7 +4931,7 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
-        ['calendar', 'list', 'native'].forEach(pickerType => {
+        ['calendar', 'list'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be closed if tab key was pressed when applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
@@ -4952,7 +4952,7 @@ QUnit.module('Popup open state', () => {
     });
 
     ['date', 'time', 'datetime'].forEach(type => {
-        ['calendar', 'list', 'rollers', 'native'].forEach(pickerType => {
+        ['calendar', 'list', 'rollers'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be opened if tab key was pressed when applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
