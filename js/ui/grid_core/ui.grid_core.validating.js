@@ -1042,10 +1042,11 @@ export const validatingModule = {
                         }
 
                         const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+                        const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
 
                         $tooltipElement?.remove();
                         $tooltipElement = $('<div>')
-                            .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
+                            .addClass(revertTooltipClass)
                             .appendTo($container);
 
                         const tooltipOptions = {
@@ -1057,6 +1058,7 @@ export const validatingModule = {
                             container: $overlayContainer,
                             propagateOutsideClick: true,
                             hideOnOutsideClick: false,
+                            wrapperAttr: { class: revertTooltipClass },
                             contentTemplate: () => {
                                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
                                 const buttonOptions = {
@@ -1155,6 +1157,7 @@ export const validatingModule = {
                             animation: false,
                             propagateOutsideClick: true,
                             hideOnOutsideClick: false,
+                            wrapperAttr: { class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}` },
                             position: {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),
