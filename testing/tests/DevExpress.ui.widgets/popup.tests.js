@@ -161,6 +161,14 @@ QUnit.module('basic', () => {
         assert.equal(instance.$content().get(0), viewport().find(`.${POPUP_WRAPPER_CLASS}`).find(`.${POPUP_CONTENT_CLASS}`).get(0));
     });
 
+    QUnit.test('role="dialog" attribute should be set', function(assert) {
+        const instance = $('#popup').dxPopup().dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.equal($overlayContent.attr('role'), 'dialog');
+    });
+
     QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {
         $('#popup').dxPopup({ fullScreen: true, visible: true });
 

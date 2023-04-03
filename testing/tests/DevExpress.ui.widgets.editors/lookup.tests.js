@@ -1114,6 +1114,39 @@ QUnit.module('Lookup', {
         assert.equal(this.popup.option('height'), popupHeight, 'popupHeight applied to popover');
     });
 
+    [true, false].forEach((usePopover) => {
+        QUnit.test(`overlay should contain role="dialog" when usePopover: ${usePopover}`, function(assert) {
+            const instance = $('#lookup').dxLookup({
+                usePopover: usePopover
+            }).dxLookup('instance');
+
+            this.togglePopup();
+
+            const $overlayContent = instance._popup.$overlayContent();
+
+            assert.equal($overlayContent.attr('role'), 'dialog');
+        });
+    });
+
+    [true, false].forEach((usePopover) => {
+        QUnit.test(`user should be able to set custom role for overlay when usePopover: ${usePopover}`, function(assert) {
+            const instance = $('#lookup').dxLookup({
+                usePopover: usePopover,
+                dropDownOptions: {
+                    onShowing: (e) => {
+                        var $overlayContent = e.component.$content().parent();
+                        $overlayContent.attr("role", "custom-role");
+                  }
+            }}).dxLookup('instance');
+
+            this.togglePopup();
+
+            const $overlayContent = instance._popup.$overlayContent();
+
+            assert.equal($overlayContent.attr('role'), 'custom-role');
+        });
+    });
+
     QUnit.test('showEvent/hideEvent is null when usePopover is true', function(assert) {
         this.instance.option({
             usePopover: true
