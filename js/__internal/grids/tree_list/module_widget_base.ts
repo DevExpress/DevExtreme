@@ -70,6 +70,15 @@ const TreeList = (Widget as any).inherit({
     return result;
   },
 
+  _setDeprecatedOptions() {
+    this.callBase();
+
+    extend(this._deprecatedOptions, {
+      'columnChooser.allowSearch': { since: '23.1', alias: 'columnChooser.search.enabled' },
+      'columnChooser.searchTimeout': { since: '23.1', alias: 'columnChooser.search.timeout' },
+    });
+  },
+
   _defaultOptionsRules() {
     return this.callBase().concat([
       {

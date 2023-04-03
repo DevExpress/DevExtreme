@@ -105,6 +105,8 @@ export {
     ApplyFilterMode,
     ColumnChooser,
     ColumnChooserMode,
+    ColumnChooserSearch,
+    ColumnChooserSelection,
     ColumnCustomizeTextArg,
     ColumnFixing,
     ColumnFixingTexts,

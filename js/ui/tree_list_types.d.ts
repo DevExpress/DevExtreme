@@ -3,6 +3,7 @@ export {
   ApplyFilterMode,
   ColumnChooser,
   ColumnChooserMode,
+  ColumnChooserSearch,
   ColumnCustomizeTextArg,
   ColumnFixing,
   ColumnFixingTexts,
