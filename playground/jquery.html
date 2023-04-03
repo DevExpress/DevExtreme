@@ -32,46 +32,13 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="ddeditor"></div>
+    <div id="button"></div>
     <script>
         $(function() {
-            const dropDownEditor = $('#ddeditor').dxDropDownEditor({
-                applyValueMode: 'useButtons',
-                dropDownOptions: {
-                    toolbarItems: [
-                        {
-                            widget: 'dxButton',
-                            toolbar: 'top',
-                            location: 'before',
-                            options: {
-                                icon: 'email',
-                                text: 'Send',
-                                onInitialized: (e) => {
-                                    console.log(e)
-                                },
-                            },
-                        },
-                        {
-                            widget: 'dxButton',
-                            toolbar: 'bottom',
-                            location: 'before',
-                            options: {
-                                icon: 'email',
-                                text: 'Send',
-                            },
-                        },
-                        {
-                            widget: 'dxButton',
-                            toolbar: 'bottom',
-                            location: 'before',
-                            options: {
-                                icon: 'email',
-                                text: 'Send',
-                            },
-                        },
-                    ],
-                },
-            }).dxDropDownEditor('instance');
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
