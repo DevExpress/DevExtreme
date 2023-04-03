@@ -22,8 +22,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
         }
 
-        if(!options.key) {
-            options.items?.forEach(item => {
+        if(!options.key && options.items) {
+            options.items.forEach(item => {
                 if(item.key === null || item.key === undefined) {
                     item.key = item;
                 }
@@ -334,11 +334,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             columns[key].index = parseInt(key);
         }
 
-        columns?.forEach(column => {
-            if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
-                column.name = column.dataField;
-            }
-        });
+        if (columns) {
+            columns.forEach(column => {
+                if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
+                    column.name = column.dataField;
+                }
+            });
+        }
 
         return {
             updateOptions: [],
@@ -977,7 +979,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
 
-        if(that.options.editing?.changes === undefined) {
+        if(that.options.editing && that.options.editing.changes === undefined) {
             if(that.options.editing) {
                 that.options.editing.changes = [];
             } else {
@@ -1004,9 +1006,16 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                             result[path[i]] = value;
 
                             if(that.needFireOptionChange && that._initialized && !that.preventOptionChanged) {
-                                const controllersAndViews = { ...that._controllers, ...that._views };
+                                const controllersAndViews = Object.assign({}, that._controllers, that._views);
                                 Object.keys(controllersAndViews).forEach((key) => {
-                                    controllersAndViews[key].optionChanged?.({ name: path[0], fullName: options, value, previousValue });
+                                    if (controllersAndViews[key].optionChanged) {
+                                        controllersAndViews[key].optionChanged({
+                                            name: path[0],
+                                            fullName: options,
+                                            value,
+                                            previousValue
+                                        });
+                                    }
                                 });
                             }
 

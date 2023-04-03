@@ -43,11 +43,14 @@
 }
 <!DOCTYPE html>
 <head>
+    @if(!Model.NoCsp) {
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-M5H5tE' 'nonce-TEiwcJ' 'nonce-IpCks6' 'nonce-Z27qXj'; style-src 'self' 'nonce-tYGMxb'; img-src 'self' data:; connect-src 'self' https://js.devexpress.com/" />
+    }
     <title>@Model.Title - QUnit test page</title>
     <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.css")" />
     <script src="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.js")"></script>
 
-    <script>
+    <script nonce="M5H5tE">
         window.ROOT_URL = "@Url.Content("~/")";
         window.farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration));
         window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
@@ -57,7 +60,7 @@
     </script>
     <script src="@Url.ContentWithCacheBuster("~/testing/helpers/qunitExtensions.js")"></script>
 
-    <style>
+    <style nonce="tYGMxb">
         #qunit-fixture.qunit-fixture-visible {
             position: fixed !important;
             left: 0 !important;
@@ -82,7 +85,7 @@
         }
     </style>
 
-    <script>
+    <script nonce="TEiwcJ">
         (function() {
             var doneCount = 0,
                 parentWindow = window.opener || window.parent;
@@ -155,7 +158,7 @@
         <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system-csp-production.js")"></script>
     }
 
-    <script>
+    <script nonce="IpCks6">
         (function() {
             jQuery.noConflict();
 
@@ -169,17 +172,8 @@
                 }
             }
 
-            SystemJS.config({
-                baseURL: "@Url.Content("~/artifacts/" + npmModule)",
-                transpiler: 'plugin-babel',
-                map: {
-                    // Deps
-                    'globalize': '@Url.Content("~/artifacts/js/globalize")',
-                    'intl': '@Url.Content("~/node_modules/intl/index.js")',
-                    'cldr': '@Url.Content("~/artifacts/js/cldr")',
-                    'jquery': '@GetJQueryUrl()',
-                    'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
-                    'angular': '@Url.Content("~/artifacts/js/angular.js")',
+            const infernoMap = '@Model.NoCsp' === 'True'
+                ? {
                     'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
                     'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
                     'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
@@ -187,6 +181,29 @@
                     'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
                     'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
+                }
+                : {
+                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
+                };
+
+            SystemJS.config({
+                baseURL: "@Url.Content("~/artifacts/" + npmModule)",
+                transpiler: 'plugin-babel',
+                map: {
+                    // Deps
+                    ...infernoMap,
+                    'globalize': '@Url.Content("~/artifacts/js/globalize")',
+                    'intl': '@Url.Content("~/node_modules/intl/index.js")',
+                    'cldr': '@Url.Content("~/artifacts/js/cldr")',
+                    'jquery': '@GetJQueryUrl()',
+                    'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
+                    'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
                     '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
@@ -292,7 +309,7 @@
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
 
-<script>
+<script nonce="Z27qXj">
     (function() {
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
