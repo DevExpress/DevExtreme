@@ -150,7 +150,7 @@ const environment = {
         that.$container = $('#chartContainer');
 
         this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
-            // resetStub(stubThemeManager);
+            resetStub(stubThemeManager);
             that.themeManager = stubThemeManager;
             return stubThemeManager;
         });
