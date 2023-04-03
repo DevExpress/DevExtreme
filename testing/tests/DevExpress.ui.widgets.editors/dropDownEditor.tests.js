@@ -2066,6 +2066,35 @@ QUnit.module('actions', {
         dropDownEditor.close();
         assert.ok(onClosedActionStub.called, 'onClosed action was fired');
     });
+
+    QUnit.test('User onInitialized function expands the basic functionality', function(assert) {
+        const onInitializedStub = sinon.stub();
+
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            applyValueMode: 'useButtons',
+            dropDownOptions: {
+                toolbarItems: [{
+                        widget: 'dxButton',
+                        options: {
+                            onInitialized: onInitializedStub,
+                        },
+                    },
+                ]
+            },
+            opened: true,
+        });
+
+        assert.strictEqual(onInitializedStub.called, true, 'Initialized handler was fired');
+
+        const $firstItem = $(`.${DROP_DOWN_EDITOR_OVERLAY} .${BUTTON_CLASS}`).eq(0);
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        $($input).trigger($.Event('keydown', { key: TAB_KEY_CODE }));
+        assert.ok($firstItem.hasClass('dx-state-focused'), 'First popup element is focused');
+
+        $($firstItem).trigger($.Event('keydown', { key: TAB_KEY_CODE, shiftKey: true }));
+        assert.ok($dropDownEditor.hasClass('dx-state-focused'), 'Input is focused');
+    });
 });
 
 QUnit.module('aria accessibility', () => {
