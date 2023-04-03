@@ -2067,7 +2067,7 @@ QUnit.module('actions', {
         assert.ok(onClosedActionStub.called, 'onClosed action was fired');
     });
 
-    QUnit.test('User onInitialized function expands the basic functionality', function(assert) {
+    QUnit.test('User onInitialized function extends the basic functionality', function(assert) {
         const onInitializedStub = sinon.stub();
 
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
