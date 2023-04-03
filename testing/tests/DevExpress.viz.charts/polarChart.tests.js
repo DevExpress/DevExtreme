@@ -309,7 +309,7 @@ QUnit.test('create series with correct theme and renderer', function(assert) {
     assert.ok(this.createSeries.args[0][0].renderer instanceof vizMocks.Renderer);
 
     assert.strictEqual(this.createSeries.args[0][1].rotated, undefined);
-    assert.deepEqual(this.createSeries.args[0][1], this.themeManager.getOptions.withArgs('series').lastCall.args[1]);
+    assert.deepEqual(this.createSeries.args[0][1], this.themeManager.getOptions.withArgs('series').returnValues[0]);
 });
 
 QUnit.test('create spider series', function(assert) {
