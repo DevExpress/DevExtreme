@@ -2068,6 +2068,11 @@ QUnit.module('actions', {
     });
 
     QUnit.test('User onInitialized function extends the basic functionality', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
         const onInitializedStub = sinon.stub();
 
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
