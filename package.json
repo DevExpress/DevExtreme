@@ -47,6 +47,7 @@
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^24.0.24",
     "@types/jquery": "^2.0.34",
+    "@types/node": "ts3.8",
     "@types/react": "16.9.16",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "angular": "^1.6.10",
