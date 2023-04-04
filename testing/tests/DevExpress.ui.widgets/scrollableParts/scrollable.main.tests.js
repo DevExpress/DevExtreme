@@ -725,9 +725,9 @@ QUnit.test('useNative false in simulator', function(assert) {
         if(forceDevice) {
             window.top['dx-force-device'] = forceDevice;
         } else {
-            try { delete window.top['dx-force-device']; }
-            // eslint-disable-next-line no-empty
-            catch(e) { }
+            try {
+                delete window.top['dx-force-device'];
+            } catch(e) { }
         }
     }
 });
