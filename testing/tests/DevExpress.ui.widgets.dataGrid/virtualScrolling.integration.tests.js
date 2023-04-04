@@ -4029,7 +4029,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
-        assert.deepEqual(loadIndices, [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5], 'indices after adding new items');
+        assert.deepEqual(loadIndices, [0, 0, 0, 1, 1, 2, 3, 3, 3, 4, 4, 4, 5, 5], 'indices after adding new items');
     });
 
     QUnit.test('New mode. Load indices of group footers are correct', function(assert) {
@@ -4946,6 +4946,115 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.ok(true, 'no errors');
+    });
+    // T1153780
+    QUnit.test('DataGrid should remove newItem row added after first row when them move out of viewport', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            editing: {mode: 'batch', allowAdding: true},
+        });
+
+        this.clock.tick(300);
+
+        const row1 = dataGrid.getRowElement(1)[0];
+        dataGrid.getScrollable().scrollTo({ top: row1.offsetTop });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+
+        dataGrid.getScrollable().scrollTo({ top: 0 });
+        this.clock.tick(300);
+
+        // act
+        const row1Offset = row1.offsetTop;
+        dataGrid.getScrollable().scrollTo({ top: row1Offset });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+
+        // assert
+        assert.ok(row1Offset - row1.offsetTop < 2, 'scroll shouldnt change');
+    });
+    // T1153780
+    QUnit.test('DataGrid should remove newItem row added before first row when them move out of viewport', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            editing: {mode: 'batch', allowAdding: true},
+        });
+
+        this.clock.tick(300);
+
+        const row1 = dataGrid.getRowElement(0)[0];
+        const row2 = dataGrid.getRowElement(1)[0];
+
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+
+        dataGrid.getScrollable().scrollTo({ top: row1.offsetTop });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+
+        // act
+        const row2Offset = row2.offsetTop;
+        dataGrid.getScrollable().scrollTo({ top: row2Offset });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+
+        // assert
+        assert.ok(row2Offset - row2.offsetTop < 2, 'scroll shouldnt change');
     });
 
     QUnit.test('Rows should be rendered properly when renderAsync = false', function(assert) {
