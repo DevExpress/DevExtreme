@@ -104,7 +104,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             const adaptiveColumnsController = instance.getController('adaptiveColumns');
             let $visibleColumns;
 
-            this.clock.tick();
+            this.clock.tick(10);
             $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-hidden-column)'));
 
             // act
@@ -118,7 +118,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
             $('#container').width(450);
             instance.updateDimensions();
-            this.clock.tick();
+            this.clock.tick(10);
 
             $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-hidden-column)'));
 
@@ -149,7 +149,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $visibleColumns;
 
-        this.clock.tick();
+        this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
         const $hiddenColumn = $('.dx-datagrid-hidden-column').eq(0);
 
@@ -168,7 +168,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         $('#container').width(450);
         instance.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
 
         // assert
@@ -194,7 +194,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $visibleColumns;
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
 
@@ -214,7 +214,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         $('#container').width(900);
         instance.updateDimensions();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
 
@@ -276,7 +276,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // act
         instance.expandAdaptiveDetailRow(dataSource[0]);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.find('.dx-field-item-content').first().trigger('mouseover');
         dataGrid.find('.dx-field-item-content').first().trigger('mouseout');
 
@@ -310,7 +310,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // act
         instance.expandAdaptiveDetailRow(dataSource[0]);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.find('.dx-field-item-content').trigger('dxclick');
 
         // assert
@@ -354,7 +354,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const instance = dataGrid.dxDataGrid('instance');
 
         instance.expandAdaptiveDetailRow(items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const detailRowItems = $(instance.element()).find('.dx-adaptive-item-text')
@@ -383,7 +383,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             e.shiftKey = shift;
             target.trigger(e);
         };
-        this.clock.tick();
+        this.clock.tick(10);
         let $lastDataCell = $(dataGrid.getCellElement(0, 5));
         const $commandCell = $(dataGrid.getCellElement(0, 6));
         const $firstNextRow = $(dataGrid.getCellElement(1, 0));
@@ -391,7 +391,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // act
         dataGrid.focus($lastDataCell);
         fireKeyDown($lastDataCell, 'Tab');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         // tab
@@ -401,7 +401,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // act
         dataGrid.focus($firstNextRow);
         fireKeyDown($firstNextRow, 'Tab', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         // shift tab
@@ -411,7 +411,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // act
         dataGrid.focus($lastDataCell);
         fireKeyDown($lastDataCell, 'ArrowRight');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         // right arrow
@@ -422,7 +422,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         $lastDataCell = $(dataGrid.getCellElement(0, 4));
         dataGrid.focus($lastDataCell);
         fireKeyDown($lastDataCell, 'Tab');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         // tab to visible
@@ -431,7 +431,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // act
         dataGrid.option('width', 600);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is hidden after subsequent width increase');
@@ -447,7 +447,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
                 { id: 1, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' }
             ],
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
         const $commandCell = $(dataGrid.getCellElement(0, 6));
         // assert
         assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is hidden');
@@ -456,7 +456,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // act
         dataGrid.option('width', 400);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is not hidden');

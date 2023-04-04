@@ -319,7 +319,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
             min: new Date(2015, 3, 20, 15, 0, 0),
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const dateBox = $dateBox.dxDateBox('instance');
         const $done = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
         const $hourDown = $(dateBox.content()).parent().find(`.${NUMBERBOX_SPIN_DOWN_CLASS}`).eq(0);
@@ -392,12 +392,12 @@ QUnit.module('datebox tests', moduleConfig, () => {
 
             $input.val('');
             instance.open();
-            this.clock.tick();
+            this.clock.tick(10);
             kb.type(typedDate).press('enter');
             assert.deepEqual(instance.option('text'), typedDate, `typed value is set when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
 
             instance.open();
-            this.clock.tick();
+            this.clock.tick(10);
             kb
                 .keyDown('left', { ctrlKey: true })
                 .press('right')
@@ -936,7 +936,7 @@ QUnit.module('options changed callbacks', moduleConfig, () => {
         dateBox.option('value', secondValue);
         assert.deepEqual(firstValue, calendar.option('value'), 'value in calendar isn\'t changed');
         dateBox.open();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(secondValue, calendar.option('value'), 'value in calendar is changed');
     });
 
@@ -1128,7 +1128,6 @@ QUnit.module('dateView integration', {
         };
 
         this.instance.open();
-        this.clock.tick();
 
         this.dateView = function() {
             return getInstanceWidget(this.instance);
@@ -2664,7 +2663,7 @@ QUnit.module('datebox w/ calendar', {
         const popup = dateBox.$element().find('.dx-popup').dxPopup('instance');
         const repaintSpy = sinon.spy(popup, 'repaint');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(repaintSpy.called, 'repaint was fired on opened');
     });
@@ -3129,7 +3128,7 @@ QUnit.module('datebox with time component', {
             }).dxDateBox('instance');
 
             dateBox.option('opened', true);
-            clock.tick();
+            clock.tick(10);
 
             const $content = $(dateBox._popup.$content());
             const $timeView = $content.find('.dx-timeview-clock');
@@ -5128,7 +5127,7 @@ QUnit.module('datebox validation', {}, () => {
                     type: 'required'
                 }]
             });
-            clock.tick();
+            clock.tick(10);
             const dateBox = $dateBox.dxDateBox('instance');
             const $done = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
 

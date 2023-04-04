@@ -172,7 +172,7 @@ QUnit.module('behavior', {
         const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
         $galleryItems.eq(1).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0);
     });

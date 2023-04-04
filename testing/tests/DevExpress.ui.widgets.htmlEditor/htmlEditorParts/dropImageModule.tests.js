@@ -73,7 +73,7 @@ QUnit.module('DropImage module', moduleConfig, () => {
             }
         }));
         this.$element.trigger(event);
-        clock.tick();
+        clock.tick(10);
 
         const { mozilla, chrome, version } = browser;
         if(mozilla || chrome && version > 82) {

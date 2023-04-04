@@ -297,7 +297,7 @@ QUnit.test('items reordering by keyboard', function(assert) {
     let $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
 
     $lastItem.trigger('dxpointerdown');
-    this.clock.tick();
+    this.clock.tick(10);
     $lastItem.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
 
     assert.deepEqual(list.option('items'), items, 'reordering by keyboard is impossible if \'itemDragging.allowReordering\' = false ');
@@ -306,7 +306,7 @@ QUnit.test('items reordering by keyboard', function(assert) {
 
     $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
     $lastItem.trigger('dxpointerdown');
-    this.clock.tick();
+    this.clock.tick(10);
     $list.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
 
     assert.deepEqual(list.option('items'), ['1', '3', '2'], 'items were reordered');

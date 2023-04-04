@@ -34,7 +34,7 @@ QUnit.module('Local storage', {
 
         // act
         this.stateStoringController.save();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(parseInt(JSON.parse(localStorage.getItem('TestNameSpace')).testSetting), 107);
@@ -149,7 +149,7 @@ QUnit.module('Local storage', {
 
         // act
         this.stateStoringController.save();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(localStorage.getItem('TestNameSpace'), '{"testSetting1":100,"testSetting2":"test"}');
@@ -256,7 +256,7 @@ QUnit.module('Local storage', {
 
         // act
         this.stateStoringController.save();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(userState, 'TestNameSpace');
@@ -278,7 +278,7 @@ QUnit.module('Local storage', {
         this.stateStoringController.save();
         this.stateStoringController.save();
         this.stateStoringController.save();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(customSaveHandler.calledOnce, 'customSave call count');
@@ -310,7 +310,7 @@ QUnit.module('Local storage', {
         localStorage.setItem('TestNameSpace', JSON.stringify({ selectedRowKeys: testKeys }));
 
         that.stateStoringController.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(that.option('selectedRowKeys'), testKeys, 'keys rows');
     });
@@ -325,7 +325,7 @@ QUnit.module('Local storage', {
         localStorage.setItem('TestNameSpace', JSON.stringify({ selectionFilter: filter }));
 
         that.stateStoringController.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(that.option('selectionFilter'), filter, 'selectionFilter is applied');
     });
@@ -357,7 +357,7 @@ QUnit.module('Session storage', {
 
         // act
         this.stateStoringController.save();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(parseInt(JSON.parse(sessionStorage.getItem('TestNameSpace')).testSetting), 107);
@@ -402,7 +402,7 @@ QUnit.module('Session storage', {
 
         // act
         this.stateStoringController.save();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(sessionStorage.getItem('TestNameSpace'), '{"testSetting1":100,"testSetting2":"test"}');
@@ -442,7 +442,7 @@ QUnit.module('Session storage', {
         assert.ok(stateStoringController.isLoading());
         assert.deepEqual(stateStoringController.state(), {});
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changeCallCount, 1);
@@ -462,7 +462,7 @@ QUnit.module('State Storing with real controllers', {
             });
 
             if(!ignoreClockTick) {
-                this.clock.tick();
+                this.clock.tick(10);
             }
         };
     },
@@ -531,7 +531,7 @@ QUnit.module('State Storing with real controllers', {
         // act
         this.dataController.optionChanged({ name: 'dataSource' });
         this.stateStoringController.optionChanged({ name: 'stateStoring' });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(countCallCustomLoad, 1, 'count call customLoad');
@@ -557,7 +557,7 @@ QUnit.module('State Storing with real controllers', {
         });
 
         this.stateStoringController.optionChanged({ name: 'stateStoring' });
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // assert
@@ -586,7 +586,7 @@ QUnit.module('State Storing with real controllers', {
 
         // act
         this.state({ columns: [{ dataField: 'id', filterValues: ['2'], visible: true }] });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -614,7 +614,7 @@ QUnit.module('State Storing with real controllers', {
 
         // act
         this.state({ columns: [{ dataField: 'id', visible: true }, { dataField: 'name', filterValue: 'test2', visible: false }] });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -670,7 +670,7 @@ QUnit.module('State Storing with real controllers', {
         assert.strictEqual(this.dataController.pageSize(), 0, 'state store values will apply after');
         assert.strictEqual(this.dataController.items().length, 0, 'state store values will apply after');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(this.dataController.pageIndex(), 1);
         assert.strictEqual(this.dataController.pageSize(), 2);
@@ -922,7 +922,7 @@ QUnit.module('State Storing with real controllers', {
             pageSize: 2,
             selectedRowKeys: [1, 3]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.optionChanged({ name: 'paging' });
 
         // assert
@@ -1149,7 +1149,7 @@ QUnit.module('State Storing with real controllers', {
 
         // act
         this.columnsController.columnOption(0, 'visibleWidth', 50);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
@@ -1165,7 +1165,7 @@ QUnit.module('State Storing with real controllers', {
 
         // act
         this.columnsController.columnOption(0, 'width', 100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(customSaveCallCount, 2, 'customSave call count');
@@ -1243,7 +1243,7 @@ QUnit.module('State Storing with real controllers', {
 
         // act
         this.columnOption('id', 'filterValues', [3]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(userState.columns, [{
@@ -1480,7 +1480,7 @@ QUnit.module('State Storing with real controllers', {
             });
 
             this.gridView.render(this.$element());
-            this.clock.tick();
+            this.clock.tick(10);
 
             const filterMenu = this.$element().find('.dx-menu .dx-menu-item').first();
             $(filterMenu).trigger('dxclick'); // open filter menu
@@ -1488,7 +1488,7 @@ QUnit.module('State Storing with real controllers', {
 
             // act
             filterMenuItem.trigger('dxclick'); // Reset filter
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(this.columnOption('id', 'filterValue'), null, 'filterValue');
@@ -1785,7 +1785,7 @@ QUnit.module('State Storing for filterPanel', {
                 }, options)
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
         };
     },
     afterEach: function() {
@@ -1942,7 +1942,7 @@ QUnit.module('State Storing for filterPanel', {
         });
 
         this.state({});
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -1970,7 +1970,7 @@ QUnit.module('State Storing for filterPanel', {
         });
 
         this.state({});
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -1991,7 +1991,7 @@ QUnit.module('State Storing for filterPanel', {
 
         // act
         this.state({ filterValue: ['id', '=', 2] });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();

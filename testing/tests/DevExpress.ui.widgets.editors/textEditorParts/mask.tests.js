@@ -423,7 +423,7 @@ QUnit.module('typing', moduleConfig, () => {
         keyboard.caret(0);
 
         $input.triggerHandler('focus');
-        clock.tick();
+        clock.tick(10);
 
         keyboard.type('123').press('enter');
         assert.equal(handler.callCount, 1, '\'change\' event is fired on enter after value change');
@@ -470,7 +470,7 @@ QUnit.module('typing', moduleConfig, () => {
                 .beforeInput(testText)
                 .input();
 
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
             assert.equal(textEditor.option('isValid'), true, 'isValid is true');
         } finally {
@@ -511,7 +511,7 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         keyboard.type('x').press('backspace');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(keyboard.caret().start, 0, 'caret moved backward');
         assert.equal($input.val(), '_', 'char was removed');
     });
@@ -535,7 +535,7 @@ QUnit.module('backspace key', moduleConfig, () => {
         assert.equal(keyboard.caret().start, 1, 'caret moved to fixed char');
 
         keyboard.press('backspace');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($input.val(), '_-_', 'char was removed');
         assert.equal(keyboard.caret().start, 0, 'caret moved to start position');
     });
@@ -599,7 +599,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             .press('backspace')
             .press('backspace');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), '_-_x', 'chars removed correctly');
     });
@@ -624,7 +624,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             .beforeInput(null, BACKSPACE_INPUT_TYPE)
             .input(null, BACKSPACE_INPUT_TYPE);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), 'x-x_', 'char removed');
     });
@@ -668,7 +668,7 @@ QUnit.module('delete key', moduleConfig, () => {
             .caret({ start: 0, end: 3 })
             .press('del');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), '_- x', 'letter deleted');
     });
@@ -722,7 +722,7 @@ QUnit.module('selection', moduleConfig, () => {
         keyboard.press('backspace');
 
         if(instance._maskStrategy.NAME === 'default') {
-            this.clock.tick();
+            this.clock.tick(10);
         }
 
         assert.equal($input.val(), 'x__', 'printed only one char');
@@ -810,14 +810,14 @@ QUnit.module('showMaskMode', moduleConfig, () => {
         assert.equal($input.val(), '', 'input is empty');
 
         $input.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(textEditor.option('text'), '__', 'editor is not empty');
         assert.equal($input.val(), '__', 'input is not empty');
         assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, 'caret position is on the start');
 
         $input.blur();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(textEditor.option('text'), '', 'editor is empty');
         assert.equal($input.val(), '', 'input is empty');
@@ -838,7 +838,7 @@ QUnit.module('showMaskMode', moduleConfig, () => {
         assert.equal($input.val(), '', 'input is empty');
 
         $input.focus();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(textEditor.option('text'), '_-_', 'editor is not empty');
         assert.equal($input.val(), '_-_', 'input is not empty');
         assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, 'caret position is on the start');
@@ -884,7 +884,7 @@ QUnit.module('focusing', moduleConfig, () => {
 
         keyboard.caret(0);
         $input.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(keyboard.caret().start, 1, 'caret position set before first rule');
     });
@@ -902,7 +902,7 @@ QUnit.module('focusing', moduleConfig, () => {
 
         keyboard.caret(3);
         $input.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(keyboard.caret().start, 1, 'caret position set before last fixed mask letter');
         assert.equal(keyboard.caret().end, 1, 'caret position set before last fixed mask letter');
@@ -927,7 +927,7 @@ QUnit.module('focusing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(keyboard.caret().start, 0, 'caret is at the start');
         assert.equal(keyboard.caret().end, 0, 'caret is at the start');
@@ -943,12 +943,12 @@ QUnit.module('focusing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         $input.focus();
-        this.clock.tick();
+        this.clock.tick(10);
         keyboard.type('1');
 
         $input.blur();
         $input.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(keyboard.caret().start, 1, 'caret is at the last symbol');
         assert.equal(keyboard.caret().end, 1, 'caret is at the last symbol');
@@ -1410,7 +1410,7 @@ QUnit.module('clear button', () => {
             caretWorkaround($input);
 
             $input.trigger('focus');
-            clock.tick();
+            clock.tick(10);
 
             $clearButton.trigger('dxclick');
 
@@ -1434,7 +1434,7 @@ QUnit.module('clear button', () => {
                 .find('.dx-clear-button-area')
                 .trigger('dxclick');
 
-            clock.tick();
+            clock.tick(10);
 
             assert.expect(0);
         } finally {
@@ -1572,11 +1572,11 @@ QUnit.module('paste', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0);
-        this.clock.tick();
+        this.clock.tick(10);
         keyboard.paste('xx');
 
         // NOTE: wait for textEditor async paste handler
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(keyboard.caret(), { start: 2, end: 2 }, 'caret has correct position');
     });
@@ -1672,7 +1672,7 @@ QUnit.module('drag text', moduleConfig, () => {
 
         $input.val('(x)_').trigger('drop');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), '(x_)', 'mask is correct');
     });
@@ -1690,7 +1690,7 @@ QUnit.module('drag text', moduleConfig, () => {
 
         $input.val('(x__y)').trigger('drop');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), '(xy__)', 'mask is corrected');
     });
@@ -1957,7 +1957,7 @@ QUnit.module('T9', moduleConfig, () => {
             .caret({ start: 0, end: 1 })
             .input('x');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), '(x)', 'mask works correctly');
     });
@@ -1983,10 +1983,10 @@ QUnit.module('T9', moduleConfig, () => {
             .caret({ start: 0, end: 1 })
             .input('x');
 
-        this.clock.tick();
+        this.clock.tick(10);
         keyboard.keyPress('x');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($input.val(), '(x_)', 'mask works correctly');
     });
@@ -2004,16 +2004,16 @@ QUnit.module('T9', moduleConfig, () => {
 
         this.focusAndTick($input);
         keyboard.type('xx');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.press('backspace');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.press('backspace');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.press('backspace');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(keyboard.caret().start, 0, 'caret moved backward');
         assert.equal($input.val(), '_-_', 'chars was removed');

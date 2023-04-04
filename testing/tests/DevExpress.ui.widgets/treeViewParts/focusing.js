@@ -206,7 +206,7 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $items.first().trigger('dxpointerdown');
-        clock.tick();
+        clock.tick(10);
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
     } finally {
         clock.restore();
@@ -230,7 +230,7 @@ QUnit.test('First node should not has been focused when focusing on SelectAll it
 
     try {
         $selectAllItem.trigger('focusin');
-        clock.tick();
+        clock.tick(10);
 
         assert.notOk($firstItem.hasClass(FOCUSED_STATE_CLASS), 'first item has not focus state class');
     } finally {
@@ -261,7 +261,7 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $treeView.find('.' + SELECT_ALL_ITEM_CLASS).first().trigger('dxpointerdown');
-        clock.tick();
+        clock.tick(10);
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
     } finally {
         clock.restore();

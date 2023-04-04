@@ -8,6 +8,7 @@ import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
+import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -2125,24 +2126,62 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 });
 
 // T1130497
-test('The first cell of the last row should be focused when newRowPosition = last and editing.mode = cell', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
-  const headerPanel = dataGrid.getHeaderPanel();
+([
+  ['first', 0, 'standard', 0],
+  ['last', 20, 'standard', 0],
+  ['pageBottom', 20, 'standard', 0],
+  ['pageTop', 0, 'standard', 0],
+  ['pageBottom', 8, 'virtual', 0],
+  ['pageTop', 0, 'virtual', 0],
+  ['viewportBottom', 8, 'standard', 0],
+  ['viewportBottom', 13, 'standard', 162],
+  ['viewportTop', 0, 'standard', 0],
+  ['viewportTop', 5, 'standard', 162],
+  ['viewportBottom', 8, 'virtual', 0],
+  ['viewportBottom', 13, 'virtual', 162],
+  ['viewportTop', 0, 'virtual', 0],
+  ['viewportTop', 5, 'virtual', 162],
+] as [string, number, string, number][])
+  .forEach(([newRowPosition, insertedRowNumber, scrollMode, scrollTop]) => {
+    test(`The first cell of the new row should be focused when
+      newRowPosition = ${newRowPosition}
+      and editing.mode = cell
+      and ${scrollMode} scroll mode
+      and scrollTop is ${scrollTop}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const dataGrid = new DataGrid('#container');
+      const headerPanel = dataGrid.getHeaderPanel();
 
-  await t
-    .click(headerPanel.getAddRowButton())
-    .expect(dataGrid.getDataRow(3).isInserted).ok('row is inserted')
-    .expect(await takeScreenshot('grid-cell-edit-mode-and-new-row-position-last.png', dataGrid.element))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [{ name: 'AaAaA', value: 1 }, { name: 'aAaAa', value: 2 }, { name: 'BbBb', value: 3 }],
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowAdding: true,
-    newRowPosition: 'last',
-  },
-}));
+      const scrollTo = async (y) => {
+        await dataGrid.scrollTo({ y });
+        return dataGrid.isReady();
+      };
+
+      const screenshotName = `grid-new-row_position-${newRowPosition}_scroll-mode-${scrollMode}_top-${scrollTop}.png`;
+
+      await t
+        .expect(await scrollTo(scrollTop))
+        .ok(`scrollTo ${scrollTop}`)
+        .click(headerPanel.getAddRowButton())
+        // act
+        .expect(await takeScreenshot(screenshotName, dataGrid.element))
+        .ok()
+        // assert
+        .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
+        .ok('row is inserted')
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: getData(20, 3),
+      height: 400,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true,
+        newRowPosition,
+      },
+      scrolling: {
+        mode: scrollMode,
+      },
+    }));
+  });

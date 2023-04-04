@@ -21,7 +21,7 @@ const moduleConfig = {
 QUnit.module('Context Menu', moduleConfig, () => {
     test('showing', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
@@ -32,7 +32,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
     });
     test('tree list context menu', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
@@ -44,7 +44,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
     });
     test('shown at correct position', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const oldTop = $('#qunit-fixture').css('top');
         const oldLeft = $('#qunit-fixture').css('left');
         $('#qunit-fixture').css('top', '0');
@@ -60,14 +60,14 @@ QUnit.module('Context Menu', moduleConfig, () => {
         const contextMenuElement = getContextMenuElement();
         assert.equal(contextMenuElement.length, 1, 'menu is visible after right click');
         assert.roughEqual(contextMenuElement.position().top, boundsMax - contextMenuElement.height(), 0.9, 'menu has been shown at correct position');
-        this.clock.tick();
+        this.clock.tick(10);
         $('#qunit-fixture').css('top', oldTop);
         $('#qunit-fixture').css('left', oldLeft);
 
     });
     test('enabled', function(assert) {
         this.createInstance(extend(options.tasksOnlyOptions, { contextMenu: { enabled: false } }));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
@@ -92,7 +92,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
             }
         };
         this.createInstance(extend(options.tasksOnlyOptions, contextMenuOptions));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
@@ -110,7 +110,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
     });
     test('cancel ContextMenuPreparing', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
@@ -118,13 +118,13 @@ QUnit.module('Context Menu', moduleConfig, () => {
         this.instance.option('onContextMenuPreparing', (e) => {
             e.cancel = true;
         });
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
         assert.equal(getContextMenuElement().length, 0, 'menu is hidden after right click');
     });
     test('add item in ContextMenuPreparing', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
@@ -141,7 +141,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
             contextMenu: { items: [ 'addSubTask' ] }
         };
         this.createInstance(extend(options.tasksOnlyOptions, contextMenuOptions));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const getContextMenuElement = () => {
             return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);

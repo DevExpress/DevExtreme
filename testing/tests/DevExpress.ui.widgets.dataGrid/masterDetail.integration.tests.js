@@ -48,17 +48,17 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow({ id: 1 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.collapseRow({ id: 1 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.expandAdaptiveDetailRow({ id: 1 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.collapseAdaptiveDetailRow({ id: 1 });
         this.clock.tick(1000);
@@ -88,7 +88,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const visibleColumns = dataGrid.getVisibleColumns();
@@ -124,7 +124,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // act
         dataGrid.expandRow('1');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('[id*=\'dx-col\']').each((_, element) => {
             id = $(element).attr('id');
@@ -198,7 +198,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         });
         const gridInstance = $dataGrid.dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
         const key1 = gridInstance.getKeyByRowIndex(0);
         const key2 = gridInstance.getKeyByRowIndex(1);
 
@@ -264,9 +264,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         });
         const $dataGrid = $($(dataGrid.$element()));
 
-        this.clock.tick();
+        this.clock.tick(10);
         $($dataGrid.find('.dx-datagrid-rowsview .dx-command-expand').first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $masterDetail = $dataGrid.find('.dx-master-detail-row');
@@ -275,7 +275,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // act
         $($masterDetail.find('.dx-datagrid-rowsview .dx-command-expand').first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($dataGrid.find('.dx-datagrid-rowsview .dx-command-expand').first().find('.dx-datagrid-group-opened').length, 1, 'master detail row opened');
@@ -444,7 +444,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $($(dataGrid.$element()).find('td').eq(14)).trigger(pointerEvents.up); // check that error is not raised
 
@@ -472,11 +472,11 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow({ id: 1 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $rows = $(dataGrid.getRowElement(1));
@@ -528,11 +528,11 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $rows = $(dataGrid.getRowElement(1));
@@ -584,17 +584,17 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         nestedDataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         secondNestedDataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $rows = $(dataGrid.getRowElement(1));
@@ -608,7 +608,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // act
         secondNestedDataGrid.collapseRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), 'nested row heights are synchronized after collapse');
@@ -648,17 +648,17 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             ...dataGridConfig
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         nestedDataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         nestedDataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $firstHeaderCells = $('.dx-header-row > .first-column');
@@ -685,11 +685,11 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ x: 0, y: 1000 });
 
         // assert
@@ -745,11 +745,11 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const expandColumn = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand').first();
         assert.ok(expandColumn.length);
         expandColumn.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(dataGrid.getCellElement(0, 0)).hasClass(CELL_UPDATED_CLASS));
@@ -778,7 +778,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 assert.step(`rowExpanded rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1).done(() => {
@@ -786,7 +786,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
             assert.step(`done rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.verifySteps([
             'rowExpanded rowCount: 2, masterRow: true, detailRow: true',
@@ -904,11 +904,11 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             },
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $rows = $(dataGrid.element()).find('tbody.dx-row');
         assert.equal($rows.length, 4, 'row count');
@@ -947,19 +947,19 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         });
 
         dataGrid.expandRow('Grid Item');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dateBoxInput = $('.inside-grid').find('.dx-datagrid-filter-row .dx-texteditor-input');
         $dateBoxInput.val('abc');
         $dateBoxInput.trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($('.inside-grid').find('.dx-datagrid-filter-row > td').find('.dx-overlay.dx-invalid-message').length, 1, 'has invalid message');
 
         // act
         $dateBoxInput.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($('.inside-grid').find('.dx-datagrid-filter-row > td').find('.dx-overlay.dx-invalid-message').length, 1, 'has invalid message');
@@ -1088,13 +1088,13 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(2);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 400 });
 
 
@@ -1105,7 +1105,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // act
         const nestedGrid = $(dataGrid.getRowElement(3)).eq(1).find('.nested').dxDataGrid('instance');
         nestedGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(nestedGrid.getRowElement(1)).hasClass('dx-master-detail-row'), 'detail row of the nested grid');
@@ -1119,14 +1119,14 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // act
         dataGrid.expandRow(10);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2011, 7.5, 'scroll height2');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1728 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1644, 5, 'scroll top3');
@@ -1172,7 +1172,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.expandRow(1);
         templateDeferred.resolve();
 
