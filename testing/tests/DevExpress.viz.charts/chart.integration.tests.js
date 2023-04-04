@@ -3097,7 +3097,7 @@ QUnit.module('Option changing in onDrawn after zooming', {
     beforeEach: function() {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
-        sinon.spy(rendererModule, 'Renderer', function() {
+        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
             return new vizMocks.Renderer();
         });
     },

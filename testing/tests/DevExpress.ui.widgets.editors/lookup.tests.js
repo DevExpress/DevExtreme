@@ -2244,7 +2244,7 @@ QUnit.module('popup options', {
 
         const defaultHeight = $('.dx-overlay-content').outerHeight();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($('.dx-overlay-content').outerHeight() > defaultHeight, 'popup height is changed when data is loaded');
     });
@@ -2343,7 +2343,7 @@ QUnit.module('popup options', {
             assert.ok(lookup.option('dropDownOptions.hideOnParentScroll'), 'is true by default');
 
             lookup.open();
-            this.clock.tick();
+            this.clock.tick(10);
             assert.ok(lookup.option('dropDownOptions.hideOnParentScroll'), 'still true after opening');
 
         } finally {
@@ -3064,7 +3064,7 @@ QUnit.module('dataSource integration', {
 
         const $input = $(toSelector(POPUP_CONTENT_CLASS) + ' ' + toSelector(TEXTEDITOR_INPUT_CLASS));
         $($input.val('o')).trigger('input');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($('.dx-list-item').length, 2, 'filters execute on input event');
     });
 
@@ -3167,7 +3167,7 @@ QUnit.module('dataSource integration', {
         keyboard.type('1');
         this.clock.tick(loadDelay * 2);
         keyboard.type('2');
-        this.clock.tick(loadDelay / 2);
+        this.clock.tick(loadDelay / 2 + 10);
         const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
 
         assert.ok($loadPanel.is(':visible'), 'load panel is visible');

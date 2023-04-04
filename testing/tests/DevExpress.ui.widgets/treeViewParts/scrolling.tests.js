@@ -109,7 +109,7 @@ QUnit.module('scrollToItem', {
                         done();
                     });
                 }
-                this.clock.tick();
+                this.clock.tick(10);
             });
         });
 
@@ -130,7 +130,7 @@ QUnit.module('scrollToItem', {
                             done();
                         });
                     }
-                    this.clock.tick();
+                    this.clock.tick(10);
                 });
             });
         });
@@ -152,7 +152,7 @@ QUnit.module('scrollToItem', {
             wrapper.checkNodeIsInVisibleArea(key);
             done();
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         const node = wrapper.getElement().find('[data-item-id="item1_1_1"]').get(0);
@@ -160,7 +160,7 @@ QUnit.module('scrollToItem', {
             wrapper.checkNodeIsInVisibleArea(node.getAttribute('data-item-id'));
             done();
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         const itemData = wrapper.instance.option('items')[0].items[0].items[0];
@@ -168,7 +168,7 @@ QUnit.module('scrollToItem', {
             wrapper.checkNodeIsInVisibleArea(itemData.id);
             done();
         });
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('scrollToItem(not exists key)', function(assert) {
@@ -177,11 +177,11 @@ QUnit.module('scrollToItem', {
 
         const done = assert.async(3);
         wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });
-        this.clock.tick();
+        this.clock.tick(10);
         wrapper.instance.scrollToItem($('<div/>').get(0)).fail(() => { assert.ok('scroll must fail, node not found for this itemElement'); done(); });
-        this.clock.tick();
+        this.clock.tick(10);
         wrapper.instance.scrollToItem({}).fail(() => { assert.ok('scroll must fail, node not found for this itemData'); done(); });
-        this.clock.tick();
+        this.clock.tick(10);
     });
 });
 

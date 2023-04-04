@@ -211,7 +211,7 @@ testModule('render', moduleConfig, () => {
             });
 
             assert.strictEqual(onShowingSpy.called, false);
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual(onShowingSpy.called, true);
         } finally {
             clock.restore();
@@ -261,7 +261,7 @@ testModule('render', moduleConfig, () => {
                 visible: true
             });
             overlay.hide();
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual(overlay.$content().is(':visible'), false);
         } finally {
             clock.restore();

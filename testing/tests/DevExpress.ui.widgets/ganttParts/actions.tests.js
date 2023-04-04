@@ -20,38 +20,38 @@ const moduleConfig = {
 QUnit.module('Actions', moduleConfig, () => {
     test('expand', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
         const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
     });
     test('collapse', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
         const collapsedElement = this.$element.find(Consts.TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
     });
     test('expand/collapse All', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance._collapseAll();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance._expandAll();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
     });
     test('collapse and expand after inserting', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tasksCount = data.tasks.length;
         const newStart = new Date('2019-02-21');
@@ -65,7 +65,7 @@ QUnit.module('Actions', moduleConfig, () => {
             parentId: '2'
         };
         getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(taskData);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = data.tasks[data.tasks.length - 1];
@@ -75,12 +75,12 @@ QUnit.module('Actions', moduleConfig, () => {
 
         const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).eq(1);
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
 
         const collapsedElement = this.$element.find(Consts.TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
     });
 
@@ -88,7 +88,7 @@ QUnit.module('Actions', moduleConfig, () => {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('validation.autoUpdateParentTasks', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tasksCount = data.tasks.length;
         const newStart = new Date('2019-02-21');
@@ -102,7 +102,7 @@ QUnit.module('Actions', moduleConfig, () => {
             parentId: '2'
         };
         getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(taskData);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = data.tasks[data.tasks.length - 1];
@@ -112,23 +112,23 @@ QUnit.module('Actions', moduleConfig, () => {
 
         const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).eq(1);
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
 
         const collapsedElement = this.$element.find(Consts.TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
     });
 
     test('collapse and check state after validation option changed (T997932)', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).eq(1);
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
 
         this.instance.option('validation.autoUpdateParentTasks', true);
@@ -144,7 +144,7 @@ QUnit.module('Actions', moduleConfig, () => {
 
     test('move splitter', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const splitterWrapper = this.$element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
         const splitter = this.$element.find(Consts.SPLITTER_SELECTOR);
@@ -206,7 +206,7 @@ QUnit.module('Actions', moduleConfig, () => {
         this.createInstance(options.allSourcesOptions);
         const $element2 = $('<div>').attr('id', 'gantt2').appendTo('#qunit-fixture');
         const instance2 = $element2.dxGantt().dxGantt('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         [this.$element, $element2].forEach(($element, index) => {
             const splitterWrapper = $element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
@@ -271,41 +271,41 @@ QUnit.module('Actions', moduleConfig, () => {
     });
     test('expand api', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.collapseAll();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.expandAll();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
 
         this.instance.expandAllToLevel(1);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
 
         this.instance.expandToTask(7);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
 
         this.instance.expandToTask(2);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
 
         this.instance.expandTask(2);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
 
         this.instance.collapseTask(2);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
     });
     test('showResources()', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
         this.instance.showResources(false);
         assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, 0);
@@ -314,7 +314,7 @@ QUnit.module('Actions', moduleConfig, () => {
     });
     test('showDependencies()', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
         this.instance.showDependencies(false);
         assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, 0);
@@ -340,10 +340,10 @@ QUnit.module('Actions', moduleConfig, () => {
         };
 
         this.createInstance(taskOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
         this.instance._collapseAll();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
 
         const customText = 'new';
@@ -374,10 +374,10 @@ QUnit.module('Actions', moduleConfig, () => {
         };
 
         this.createInstance(taskOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
         this.instance._collapseAll();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
 
         const customText = 'new';

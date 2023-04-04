@@ -382,7 +382,7 @@ QUnit.module('Small size', {
             triggerShownEvent($('#scheduler'));
             const schedulerInstance = $('#scheduler').dxScheduler('instance');
             schedulerInstance.option('width', 600);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $appointment = $(schedulerInstance.$element().find('.dx-scheduler-appointment'));
             assert.roughEqual($appointment.position().left, 0, 1.001, 'Appointment is rendered correctly');

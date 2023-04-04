@@ -70,9 +70,9 @@ const moduleConfig = {
 QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     test('FS, critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('3', { start: new Date(2019, 0, 14) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -81,9 +81,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('FS, no critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('3', { start: new Date(2019, 0, 16) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -92,9 +92,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('SS, critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('6', { start: new Date(2019, 0, 12) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -103,9 +103,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('SS, no critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('6', { start: new Date(2019, 0, 14) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -114,9 +114,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('FF, critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('9', { end: new Date(2019, 0, 19) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -125,9 +125,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('FF, no critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('9', { end: new Date(2019, 0, 22) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -136,9 +136,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('SF, critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('12', { end: new Date(2019, 0, 13) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -147,9 +147,9 @@ QUnit.module('ConstraintViolationDialog', moduleConfig, () => {
     });
     test('SF, no critical errors', function(assert) {
         this.createInstance(dependency_options);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask('12', { end: new Date(2019, 0, 15) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
