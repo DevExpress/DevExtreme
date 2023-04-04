@@ -58,7 +58,7 @@ const SelectBox = DropDownList.inherit({
                 this._cancelSearchIfNeed();
             },
             upArrow: function(e) {
-                if(parent.upArrow && parent.upArrow.apply(this, arguments)) {
+                if(parent.upArrow.apply(this, arguments)) {
                     if(!this.option('opened')) {
                         this._setNextValue(e);
                     }
@@ -66,7 +66,7 @@ const SelectBox = DropDownList.inherit({
                 }
             },
             downArrow: function(e) {
-                if(parent.downArrow && parent.downArrow.apply(this, arguments)) {
+                if(parent.downArrow.apply(this, arguments)) {
                     if(!this.option('opened')) {
                         this._setNextValue(e);
                     }
