@@ -3949,7 +3949,7 @@ QUnit.module('Selection with views', {
 QUnit.module('Deferred selection', {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow'], { initDefaultOptions: true, options: options });
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'editing'], { initDefaultOptions: true, options: options });
         };
 
         this.data = [
@@ -4450,6 +4450,31 @@ QUnit.module('Deferred selection', {
         spy.restore();
     });
 
+    QUnit.test('Deleting unselected row with refreshMode=repaint should not select all other rows (T1153564)', function(assert) {
+        const data = generateItems(100);
+        this.setupDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            height: 400,
+            selection: {
+                deferred: true,
+                mode: 'multiple'
+            },
+            editing: {
+                refreshMode: 'repaint',
+                allowDeleting: true,
+                confirmDelete: false,
+            }
+        });
+        this.clock.tick();
+        
+        // act
+        this.deleteRow(0);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), []);
+    });
 });
 
 QUnit.module('Selection with virtual scrolling', {
