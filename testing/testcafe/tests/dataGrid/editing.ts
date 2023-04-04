@@ -2185,3 +2185,28 @@ test('Cells should be focused correctly on click when cell editing mode is used 
       },
     }));
   });
+
+test('Popup EditForm screenshot', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const commandCellRow0 = dataGrid.getDataCell(0, 2);
+
+  await t
+    .click(commandCellRow0.getLinkEdit())
+    .expect(dataGrid.getPopupEditForm().element.exists)
+    .ok()
+    // act
+    .expect(await takeScreenshot('popup-edit-form', dataGrid.element))
+    .ok()
+    // assert
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 2),
+  height: 400,
+  showBorders: true,
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
+  },
+}));

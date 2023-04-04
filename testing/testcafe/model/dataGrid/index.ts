@@ -43,7 +43,7 @@ export const CLASS = {
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
-  columnChooserButton: 'dx-datagrid-column-chooser-button',
+  columnChooserButton: 'column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
@@ -265,7 +265,7 @@ export default class DataGrid extends Widget {
   }
 
   getColumnChooserButton(): Selector {
-    return this.element.find(`.${CLASS.columnChooserButton}`);
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
