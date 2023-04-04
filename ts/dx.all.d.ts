@@ -10498,6 +10498,7 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
+    export type DateRangePickerType = 'calendar' | 'native';
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
@@ -10559,7 +10560,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBoxOptions.pickerType]
      */
-    pickerType?: 'calendar' | 'native';
+    pickerType?: DevExpress.ui.dxDateRangeBox.DateRangePickerType;
     /**
      * [descr:dxDateRangeBoxOptions.showAnalogClock]
      */

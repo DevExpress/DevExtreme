@@ -16,10 +16,9 @@ const DateRangeBox = DateBox.inherit({
             */
 
             /**
-             * @name dxPopoverOptions.showAnalogClock
+             * @name dxDateRangeBoxOptions.showAnalogClock
              * @hidden
              */
-            showAnalogClock: false,
 
             /**
             * @name dxDateRangeBoxOptions.type
