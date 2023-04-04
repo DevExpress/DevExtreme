@@ -1,6 +1,7 @@
 const Builder = require('systemjs-builder');
 const path = require('path');
 const fs = require('fs');
+const babel = require('@babel/core');
 
 const root = path.join(__dirname, '..');
 const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
@@ -181,7 +182,7 @@ const transpileCss = async () => {
     }
 };
 
-const transpileTests = () => {
+const transpileTests = async () => {
     const builder = new Builder(root, config);
     const testingFolders = [
         'DevExpress.ui.widgets',
@@ -195,15 +196,24 @@ const transpileTests = () => {
         const listFiles = getFileList(path.join(root, 'testing', 'tests', folder));
 
         for (const filePath of listFiles) {
-            promises.push(builder.buildStatic(
-                `[${filePath}]`,
-                filePath.replace('testing', 'artifacts/transpiled-testing'),
-                {
-                    minify: false,
-                    sourceMaps: true,
-                    encodeNames: false
-                }
-            ));
+            try {
+                await builder.buildStatic(
+                    `[${filePath}]`,
+                    filePath.replace('testing', 'artifacts/transpiled-testing'),
+                    {
+                        minify: false,
+                        sourceMaps: true,
+                        encodeNames: false
+                    }
+                );
+            } catch (error) {
+                const file = fs.readFileSync(filePath)
+                const { code } = await babel.transform(file.toString(), {
+                    plugins: ['@babel/plugin-transform-modules-systemjs']
+                });
+
+                fs.writeFileSync(filePath.replace('testing', 'artifacts/transpiled-testing'), code);
+            }
         }
     }
 
