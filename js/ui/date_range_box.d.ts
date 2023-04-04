@@ -98,12 +98,6 @@ export interface dxDateRangeBoxOptions extends Omit<dxDateBoxOptions<dxDateRange
   pickerType?: DateRangePickerType;
   /**
      * @docid
-     * @default false
-     * @public
-     */
-  showAnalogClock?: boolean;
-  /**
-     * @docid
      * @default null
      * @public
      */

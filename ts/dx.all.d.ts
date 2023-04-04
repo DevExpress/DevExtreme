@@ -10562,10 +10562,6 @@ declare module DevExpress.ui {
      */
     pickerType?: DevExpress.ui.dxDateRangeBox.DateRangePickerType;
     /**
-     * [descr:dxDateRangeBoxOptions.showAnalogClock]
-     */
-    showAnalogClock?: boolean;
-    /**
      * [descr:dxDateRangeBoxOptions.startDate]
      */
     startDate?: Date | number | string;
