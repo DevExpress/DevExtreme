@@ -97,7 +97,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         this.focusCell(2, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.getColumns()[2].type, 'buttons', 'Column type');
@@ -120,14 +120,14 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('ArrowRight');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.getColumns()[2].type, 'buttons', 'Column type');
         assert.ok($(this.getCellElement(1, 2)).hasClass('dx-focused'), 'cell focused');
 
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)));
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     testInDesktop('Focus command elements if row editing', function(assert) {
@@ -135,7 +135,7 @@ QUnit.module('Keyboard navigation accessibility', {
         let counter = 0;
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const _editingCellTabHandler = this.keyboardNavigationController._editingCellTabHandler;
         this.keyboardNavigationController._editingCellTabHandler = (eventArgs, direction) => {
@@ -150,10 +150,10 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         $(this.getCellElement(1, 1)).focus().trigger('dxclick');
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-link'), 'focused element');
@@ -209,14 +209,14 @@ QUnit.module('Keyboard navigation accessibility', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.focusCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(0, 0)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-editor-cell'), 'editor cell is focused');
@@ -235,18 +235,18 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(1, 3)).hasClass('dx-focused'), 'cell focused');
 
         // act
         this.editCell(1, 4);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(2, 0)).hasClass('dx-focused'), 'cell focused');
@@ -265,18 +265,18 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(1, 3)).hasClass('dx-focused'), 'cell focused');
 
         // act
         this.editCell(1, 4);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(2, 0)).hasClass('dx-focused'), 'cell focused');
@@ -304,15 +304,15 @@ QUnit.module('Keyboard navigation accessibility', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         $(this.getCellElement(1, 1)).focus().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.getController('editing').isEditing(), 'Is editing');
@@ -348,13 +348,13 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         fireKeyDown(headerPanelWrapper.getGroupPanelItem(0), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(keyDownFiresCount, 1, 'keyDownFiresCount');
 
         // act
         fireKeyDown(headerPanelWrapper.getGroupPanelItem(0), ' ');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(keyDownFiresCount, 2, 'keyDownFiresCount');
     });
@@ -377,7 +377,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         fireKeyDown(headersWrapper.getHeaderItem(0, 0), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.getController('data').getDataSource().sort(), [{ selector: 'name', desc: false }], 'Sorting');
@@ -385,7 +385,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         fireKeyDown(headersWrapper.getHeaderItem(0, 0), ' ');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.getController('data').getDataSource().sort(), [{ selector: 'name', desc: true }], 'Sorting');
@@ -415,7 +415,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         fireKeyDown(headersWrapper.getHeaderFilterItem(0, 0), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(headerFilterShownCount, 1, 'headerFilterShownCount');
@@ -423,7 +423,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         fireKeyDown(headersWrapper.getHeaderFilterItem(0, 0), ' ');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(headerFilterShownCount, 2, 'headerFilterShownCount');
@@ -453,19 +453,19 @@ QUnit.module('Keyboard navigation accessibility', {
         };
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         pagerWrapper.getPagerPageElement(0).focus();
 
         // act
         fireKeyDown(pagerWrapper.getPagerPageElement(0), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(keyDownFiresCount, 1, 'keyDownFiresCount');
 
         // act
         fireKeyDown(pagerWrapper.getPagerPageElement(0), ' ');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(keyDownFiresCount, 2, 'keyDownFiresCount');
     });
@@ -489,9 +489,9 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         headersWrapper.getHeaderFilterItem(0, 0).focus();
         fireKeyDown(headersWrapper.getHeaderFilterItem(0, 0), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.headerFilterView.hideHeaderFilterMenu();
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(headersWrapper.getHeaderFilterItem(0, 0).is(':focus'), 'Header filter icon focus state');
     });
@@ -517,14 +517,14 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         filterPanelWrapper.getIconFilter().focus();
         fireKeyDown(filterPanelWrapper.getIconFilter(), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(filterBuilderShownCount, 1, 'filterBuilderShownCount');
 
         // act
         filterPanelWrapper.getPanelText().focus();
         fireKeyDown(filterPanelWrapper.getPanelText(), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(filterBuilderShownCount, 2, 'filterBuilderShownCount');
 
@@ -534,7 +534,7 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.deepEqual(this.options.filterValue, ['name', '=', 'Alex'], 'filterValue');
         // act
         fireKeyDown(filterPanelWrapper.getClearFilterButton(), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.options.filterValue, null, 'filterValue');
@@ -562,7 +562,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         pagerWrapper.getPagerPageSizeElement(2).trigger('focus');
         fireKeyDown($('#qunit-fixture').find(':focus'), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
         assert.ok(pagerWrapper.getPagerPageSizeElement(2).is(':focus'), 'Page size item focus state');
@@ -570,7 +570,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         pagerWrapper.getPagerPageElement(1).trigger('focus');
         fireKeyDown($('#qunit-fixture').find(':focus'), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
         assert.ok(pagerWrapper.getPagerPageElement(1).is(':focus'), 'Page choozer item focus state');
@@ -580,7 +580,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         pagerWrapper.getPrevButtonsElement().trigger('focus');
         fireKeyDown($('#qunit-fixture').find(':focus'), 'Space');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
         assert.ok(pagerWrapper.getPrevButtonsElement().is(':focus'), 'Page prev button focus state');
@@ -590,7 +590,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         pagerWrapper.getNextButtonsElement().trigger('focus');
         fireKeyDown($('#qunit-fixture').find(':focus'), 'Space');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
         assert.ok(pagerWrapper.getNextButtonsElement().is(':focus'), 'Page next button focus state');
@@ -632,7 +632,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         headerPanelWrapper.getGroupPanelItem(1).focus();
         fireKeyDown(headerPanelWrapper.getGroupPanelItem(1), 'enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(headerPanelWrapper.getElement().hasClass('dx-state-focused'), 'Group panel focus state');
@@ -783,7 +783,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // arrange
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGridWrapper.headerPanel.getGroupPanelItem(0).focus();
@@ -849,7 +849,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGridWrapper.headers.getHeaderItem(0, 0).focus();
@@ -893,7 +893,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(document).trigger(createEvent('visibilitychange', { visibilityState: 'visible' }));

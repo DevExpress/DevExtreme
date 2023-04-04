@@ -116,7 +116,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const scrollTop = dataGrid.getScrollable().scrollTop();
@@ -149,14 +149,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource,
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = dataGrid.getScrollable();
 
         // act
         dataGrid.navigateToRow(100);
-        this.clock.tick();
+        this.clock.tick(10);
         $(scrollable.container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [100], 'selectedRowKeys is actual');
@@ -281,7 +281,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             const scrollable = dataGrid.getScrollable();
             scrollable.scrollTo({ x: 900 });
             $(scrollable.container()).trigger('scroll');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(columnController.getColumnIndexOffset(), 9, 'Column index offset');
@@ -299,7 +299,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: [{}, {}, {}, {}]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-bottom-load-panel').length, 1);
         // act
         dataGrid.option('scrolling.mode', 'virtual');
@@ -307,7 +307,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.ok(getHeight($(dataGrid.$element()).find('.dx-datagrid-rowsview')) > 0);
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(getHeight($(dataGrid.$element()).find('.dx-datagrid-rowsview')) > 0);
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-bottom-load-panel').length, 0);
@@ -470,7 +470,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.navigateToRow('Zeb');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 2, 'Page index');
@@ -498,11 +498,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 1000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 1000, 'scrollTop');
@@ -525,7 +525,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: { mode: 'virtual' }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(getHeight($dataGrid.find('.dx-datagrid-rowsview')) > 300, 'rowsView has height');
@@ -565,7 +565,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         }
 
         dataGrid.getScrollable().scrollTo({ x: 1000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cell = $(dataGrid.getCellElement(0, 0));
@@ -616,7 +616,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const fixedColumnCount = 2;
 
         dataGrid.getScrollable().scrollTo({ x: 1000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
@@ -664,7 +664,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $fixedCell = $(dataGrid.getCellElement(0, 0));
 
         dataGrid.getScrollable().scrollTo({ x: 1000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is rerendered');
@@ -700,7 +700,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         rowsView.scrollTo({ y: 3000 });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         row = rowsView.element().find('.dx-data-row').eq(0);
         assert.equal(row.attr('aria-rowindex'), 89, 'aria-index is correct after scrolling');
@@ -725,7 +725,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: { mode: 'virtual' }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.find('.dx-gridbase-container').attr('aria-rowcount'), 200, 'aria-rowcount is correct');
@@ -792,7 +792,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 groupIndex: 0
             }, 'name']
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(rowsView.getDataRows().getElement().length, 2, 'row is expanded');
@@ -956,7 +956,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $footerView = $dataGrid.find('.dx-datagrid-total-footer');
         assert.ok($footerView.is(':visible'), 'footer view is visible');
@@ -983,7 +983,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageSize(), 20, 'pageSize from stateStoring is not applied');
@@ -1012,12 +1012,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.getDataSource().store().push([{ type: 'update', key: 1, data: { id: 1, field: 125 } }]);
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal($(dataGrid.getRowElement(0)).position().top, 0, 'first row position');
     });
@@ -1272,7 +1272,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         };
 
         createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(freeSpaceRowHeightStatuses.length);
@@ -1487,9 +1487,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const $checkBox = $(dataGrid.getRowElement(4)).find('.dx-checkbox');
         $checkBox.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         $checkBox.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.cellValue(4, 'field'), 'new value', 'cell\'s value was changed');
@@ -1538,7 +1538,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.option('dataSource', [{ test: 3 }, { test: 4 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(dataGrid.getController('data').viewportSize() > 0, 'viewportSize is assigned');
@@ -1605,7 +1605,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.refresh();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(loadingCount, 1, 'virtual scrolling load 1 page');
@@ -1631,7 +1631,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataGrid.$element().find('.dx-header-row').length, 1, 'header row is rendered');
     });
@@ -1701,7 +1701,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const resizingController = dataGrid.getController('resizing');
 
@@ -1946,7 +1946,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         $(dataGrid.getCellElement(rowIndex, 'id')).find('.dx-texteditor-input').val('100');
         $(dataGrid.getCellElement(rowIndex, 'id')).find('.dx-texteditor-input').trigger($.Event('keydown', { key: 'Enter' }));
         $(dataGrid.getScrollable().container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.roughEqual(dataGrid.getScrollable().scrollTop(), 55, 2, 'scrollTop');
@@ -2003,7 +2003,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         // act
         dataGrid.getScrollable().scrollTo(2500);
@@ -2012,7 +2012,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first visible row is correct');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row is correct');
@@ -2101,7 +2101,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $dataRows = $(dataGrid.$element()).find('.dx-data-row');
@@ -2129,11 +2129,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.state({ pageIndex: 0, pageSize: 2 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 0, 'pageIndex');
@@ -2219,11 +2219,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             columns: ['id', 'name']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataSource.store().push([{ type: 'insert', data: { id: 6, name: 'test 6' } }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 6, 'one row is added');
@@ -2260,7 +2260,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             columns: [{ dataField: 'id', sortOrder: 'desc' }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         for(let id = 6; id <= 10; id++) {
@@ -2537,12 +2537,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ x: 300 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(scrollable.scrollOffset().left, 300, 'Content was scrolled');
@@ -2665,7 +2665,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const columnController = instance.getController('columns');
         columnController.moveColumn(0, 3);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const colGroups = $('.dx-datagrid colgroup');
@@ -2755,7 +2755,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.navigateToRow(navigateRowKey);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, 'navigated row is visible');
@@ -2790,7 +2790,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         rowsView.scrollTo({ y: 3000 });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $row = rowsView.element().find('.dx-data-row').first();
         assert.notEqual($row.attr('aria-rowindex'), 1, 'first row is changed');
@@ -2862,14 +2862,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 500 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.columnOption('group', 'groupIndex', 0);
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
@@ -3137,10 +3137,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         };
         const dataGrid = createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().on('scroll', onScrollHandler);
         dataGrid.refresh();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(onScrollHandler.called, 'onScroll handler is not called');
@@ -3288,7 +3288,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.option({ scrolling: { mode: 'virtual' } });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getController('data').pageCount(), 2, 'pages count');
@@ -3359,11 +3359,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 const scrollTopPosition = 330; // top position of the 5-th data row
 
                 // act
-                this.clock.tick();
+                this.clock.tick(10);
                 dataGrid.getScrollable().scrollTo({ top: scrollTopPosition });
-                this.clock.tick();
+                this.clock.tick(10);
                 dataGrid.getScrollable().scrollTo({ top: scrollTopPosition });
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.deepEqual(dataGrid.getScrollable().scrollTop(), scrollTopPosition, 'correct scroll position');
@@ -3386,11 +3386,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         const dataSource2 = generateDataSource(18);
         dataGrid.option('dataSource', dataSource2);
         this.clock.tick(300);
@@ -3419,7 +3419,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             columns: [{ dataField: 'name', fixed: true }, 'id']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const scrollable = dataGrid.getScrollable();
 
@@ -3436,7 +3436,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.option('dataSource', generateDataSource(40));
-        this.clock.tick(500);
+        this.clock.tick(600);
 
 
         // assert
@@ -3467,7 +3467,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -3494,7 +3494,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -3530,7 +3530,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('dataSource', generateDataSource(500));
@@ -3607,17 +3607,17 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 1, 'edit row is rendered');
 
         dataGrid.getScrollable().scrollTo({ top: 250 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 0, 'edit row is not rendered on scroll');
@@ -3663,7 +3663,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $newRow = $(dataGrid.element()).find('.dx-row-inserted');
 
@@ -3673,7 +3673,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1650 });
-        this.clock.tick();
+        this.clock.tick(10);
         $newRow = $(dataGrid.element()).find('.dx-row-inserted');
 
         // assert
@@ -3682,7 +3682,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 3300 });
-        this.clock.tick();
+        this.clock.tick(10);
         $newRow = $(dataGrid.element()).find('.dx-row-inserted');
 
         // assert
@@ -3716,11 +3716,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         let $detailRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -3729,9 +3729,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1650 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.expandRow(50);
-        this.clock.tick();
+        this.clock.tick(10);
         $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
 
         // assert
@@ -3740,9 +3740,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 3300 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.expandRow(100);
-        this.clock.tick();
+        this.clock.tick(10);
         $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
 
         // assert
@@ -3772,11 +3772,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         let $adaptiveRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -3784,9 +3784,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1650 });
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
 
         // assert
@@ -3794,9 +3794,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 3300 });
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
 
         // assert
@@ -3825,11 +3825,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         let $adaptiveRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -3837,14 +3837,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1080 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(dataGrid.element()).find('.dx-adaptive-detail-row').length, 'adaptive row is not rendered');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
         $adaptiveRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -3919,9 +3919,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act (scroll down middle)
         dataGrid.getScrollable().scrollTo({ top: 1899 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 1900 }); // this call for simulating the second async scroll
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -3936,9 +3936,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act (scroll down bottom)
         dataGrid.getScrollable().scrollTo({ top: 3499 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 3500 }); // this call for simulating the second async scroll
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -3954,7 +3954,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act (scroll up middle)
         dataGrid.getScrollable().scrollTo({ top: 1900 });
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -3972,7 +3972,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act (scroll up top)
         dataGrid.getScrollable().scrollTo({ top: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -4032,7 +4032,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         let loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
@@ -4040,7 +4040,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.expandRow(2);
-        this.clock.tick();
+        this.clock.tick(10);
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
@@ -4048,7 +4048,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getRowElement(7)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
@@ -4056,7 +4056,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.expandRow(5);
-        this.clock.tick();
+        this.clock.tick(10);
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
@@ -4068,7 +4068,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             { type: 'insert', insertBeforeKey: ['Category 2'] },
             { type: 'insert' }
         ]);
-        this.clock.tick();
+        this.clock.tick(10);
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
@@ -4120,7 +4120,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
 
         // assert
@@ -4157,14 +4157,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getDataSource().on('customizeLoadResult', customizeLoadResultSpy);
         dataGrid.getScrollable().scrollTo({ top: 600 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 1300 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 3200 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(customizeLoadResultSpy.callCount, 'called');
@@ -4202,7 +4202,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 15, 'rendered row count');
@@ -4261,7 +4261,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.element()).find('.dx-loadpanel-content').first().is(':visible'), 'load panel is shown');
@@ -4406,11 +4406,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ top: 407 });
-        this.clock.tick();
+        this.clock.tick(10);
         scrollable.scrollTo({ top: 415 });
-        this.clock.tick();
+        this.clock.tick(10);
         scrollable.scrollTo({ top: 425 });
-        this.clock.tick();
+        this.clock.tick(10);
         scrollable.scrollTo({ top: 430 });
         this.clock.tick(500);
 
@@ -4517,7 +4517,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 2, 'only first page items are visible');
@@ -4668,7 +4668,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo({ left: 500 });
         $(scrollable.container()).trigger('scroll');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const footerScrollLeft = dataGrid.getView('footerView').element().children().scrollLeft();
@@ -4677,7 +4677,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         scrollable.scrollTo({ top: 1000 });
         $(scrollable.container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getView('footerView').element().children().scrollLeft(), footerScrollLeft, 'scrollLeft restored');
@@ -4710,14 +4710,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const rowHeight = parseFloat(getComputedStyle($(dataGrid.getRowElement(1)).get(0)).height);
 
         // navigate forward
         for(let i = 0; i < dataGrid.pageCount(); i++) {
             if(i > 0) {
                 $(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
             }
 
             const scrollPosition = rowHeight * dataGrid.pageSize() * dataGrid.pageIndex();
@@ -4733,7 +4733,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // navigate backward
         for(let i = dataGrid.pageCount() - 2; i > 0; i--) {
             $(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const scrollPosition = rowHeight * dataGrid.pageSize() * dataGrid.pageIndex();
             const topId = dataGrid.pageIndex() * dataGrid.pageSize() + 1;
@@ -4772,13 +4772,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // navigate forward
         [0, 750, 1500, 2250, 3000].forEach(position => {
             if(position > 0) {
                 dataGrid.getScrollable().scrollTo({ top: position });
-                this.clock.tick();
+                this.clock.tick(10);
             }
             const pageIndex = position / 750;
 
@@ -4791,7 +4791,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // navigate backward
         [2250, 1500, 750, 0].forEach(position => {
             dataGrid.getScrollable().scrollTo({ top: position });
-            this.clock.tick();
+            this.clock.tick(10);
             const pageIndex = position / 750;
 
             // assert
@@ -4899,7 +4899,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered inside viewport after scrolling to bottom');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(400);
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert
@@ -4917,7 +4917,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after scrolling to top');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(400);
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert
@@ -5345,10 +5345,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').val('').trigger('change');
         dataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-error-row').length, 1, 'error row is rendered');
@@ -5379,11 +5379,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid-addrow-button').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const dataRows = $('.dx-data-row');
@@ -6088,12 +6088,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         const lastRowKey = 30;
         dataGrid.navigateToRow(lastRowKey);
-        this.clock.tick();
+        this.clock.tick(10);
         $(scrollable.container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.deleteRow(dataGrid.getRowIndexByKey(lastRowKey));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'before scroll');
@@ -6102,7 +6102,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // scroll is triggered cause content's height is changed
         // totalCount should be correct both before scroll (before data loading) and after
         $(scrollable.container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'after scroll');
@@ -6185,7 +6185,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ x: 10000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
@@ -6248,7 +6248,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ x: 10000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
@@ -6304,7 +6304,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.expandRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let $detailRow = $(dataGrid.getRowElement(1)).eq(1);
@@ -6316,7 +6316,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ x: 10000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $detailRow = $(dataGrid.getRowElement(1)).eq(1);
@@ -6409,17 +6409,17 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 allowUpdating: true,
                 allowDeleting: true,
             },
-            repaintChangesOnly: true,          
+            repaintChangesOnly: true,
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('editing.editRowKey', 14);
 
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getScrollable().container()).triggerHandler('scroll');
         $(dataGrid.getScrollable().container()).triggerHandler('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         const $rows = $('.dx-data-row');
@@ -6432,7 +6432,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 assert.strictEqual($row.find('a:eq(0)').text(), 'Save')
                 assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel')
                 return;
-            }   
+            }
 
             // other rows
             assert.strictEqual($row.find('a').length, 2);
@@ -6498,7 +6498,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // act
         $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
         dataGrid.getScrollable().scrollTo({ y: 10000 });
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(dataGrid.getScrollable().scrollTop() > 0, 'scrollTop is not reseted');
     });
@@ -6819,7 +6819,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             dataSource: dataSource
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const viewportSize = dataGrid.getController('data').viewportSize();
         const itemCount = dataGrid.getController('data').items().length;
@@ -6827,7 +6827,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // act
         $('#dataGrid').height(1000);
         dataGrid.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(dataGrid.getController('data').viewportSize() > 0, 'viewport size more 0');
@@ -6884,12 +6884,12 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             dataSource: [{ a: 1111, b: 222 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         // act
         dataGrid.option('scrolling', {
             mode: 'infinite'
         });
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(dataGrid.getController('data').viewportSize() > 0);
         assert.ok(!dataGrid.getController('data').dataSource().requireTotalCount());
@@ -6912,12 +6912,12 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         [930, 1100, 1400, 1600].forEach((top) => {
             dataGrid.getScrollable().scrollTo({ top });
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         // assert
@@ -6944,17 +6944,17 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 1, 'edit row is rendered');
 
         dataGrid.getScrollable().scrollTo({ top: 250 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 0, 'edit row is not rendered on scroll');
@@ -7002,12 +7002,12 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const scrollTo = (positions) => {
             positions.forEach(top => {
                 dataGrid.getScrollable().scrollTo({ top });
-                this.clock.tick();
+                this.clock.tick(10);
             });
         };
 
@@ -7061,18 +7061,18 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const scrollTo = (positions) => {
             positions.forEach(top => {
                 dataGrid.getScrollable().scrollTo({ top });
-                this.clock.tick();
+                this.clock.tick(10);
             });
         };
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         let $detailRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -7082,7 +7082,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // act
         scrollTo([1080, 1250, 1650]);
         dataGrid.expandRow(50);
-        this.clock.tick();
+        this.clock.tick(10);
         $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
 
         // assert
@@ -7092,7 +7092,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // act
         scrollTo([1960, 2600, 3300, 3500]);
         dataGrid.expandRow(100);
-        this.clock.tick();
+        this.clock.tick(10);
         $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
 
         // assert
@@ -7123,18 +7123,18 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const scrollTo = (positions) => {
             positions.forEach(top => {
                 dataGrid.getScrollable().scrollTo({ top });
-                this.clock.tick();
+                this.clock.tick(10);
             });
         };
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         let $adaptiveRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -7143,7 +7143,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // act
         scrollTo([1080, 1250, 1650]);
         $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
 
         // assert
@@ -7152,7 +7152,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // act
         scrollTo([1960, 2600, 2700, 3400, 3500]);
         $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
 
         // assert
@@ -7181,11 +7181,11 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         let $adaptiveRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -7193,14 +7193,14 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1080 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(dataGrid.element()).find('.dx-adaptive-detail-row').length, 'adaptive row is not rendered');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
         $adaptiveRow = $(dataGrid.getRowElement(1));
 
         // assert
@@ -7257,11 +7257,11 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollTo = (positions) => {
             positions.forEach(top => {
                 dataGrid.getScrollable().scrollTo({ top });
-                this.clock.tick();
+                this.clock.tick(10);
             });
         };
         let visibleRows = dataGrid.getVisibleRows();
@@ -7384,14 +7384,14 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getDataSource().on('customizeLoadResult', customizeLoadResultSpy);
         dataGrid.getScrollable().scrollTo({ top: 600 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 1150 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 1800 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(customizeLoadResultSpy.callCount, 'called');
@@ -7589,14 +7589,14 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         dataGrid.option('searchPanel.text', '12345');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(store.load.lastCall.args[0].take, 10, 'only a single page is requested');
 
         // act
         dataGrid.option('searchPanel.text', '');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(store.load.lastCall.args[0].take, 10, 'only a single page is requested');
@@ -7820,17 +7820,17 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         });
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = dataGrid.getScrollable();
 
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         scrollable.scrollBy(100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         scrollable.scrollBy(100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // const scrollableBottom
         // assert

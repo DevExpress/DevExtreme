@@ -1132,7 +1132,7 @@ QUnit.module('Overlay integration', {
         const updateDimensionsSpy = sinon.spy(list, 'updateDimensions');
 
         popup.show();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(updateDimensionsSpy.callCount, 3, 'initial render + 2x dimension changed handler');
     });
 
@@ -1147,7 +1147,7 @@ QUnit.module('Overlay integration', {
         const $scrollableContainer = $popup.find('.dx-scrollable-container');
 
         popup.show();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(getOuterHeight($scrollableContainer), getHeight($popupContent));
     });
@@ -1158,7 +1158,7 @@ QUnit.module('Overlay integration', {
         fx.off = true;
         this.instance.option('value', '');
         this.keyboard.type('i');
-        this.clock.tick();
+        this.clock.tick(10);
         this.popup.dxPopup('option', 'onHidden', () => {
             assert.ok(true, 'popup is hidden');
         });
@@ -1592,13 +1592,13 @@ QUnit.module('widget sizing render', {
         const keyboard = keyboardMock($input);
 
         keyboard.type('C');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $($input.val('')).trigger('keyup');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.type('Z');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $overlayContent = $('.dx-overlay-content');
         assert.ok($overlayContent.height() > 0, 'overlay height is correct');

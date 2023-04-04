@@ -123,7 +123,7 @@ QUnit.module('Rows view', {
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
         this.keyboardNavigationController._focus(this.gridView.element().find('td').eq(4));
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
         this.keyboardNavigationController._focus = function() {
@@ -131,7 +131,7 @@ QUnit.module('Rows view', {
         };
         this.rowsView.renderCompleted.fire();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!isCellFocused);
@@ -158,12 +158,12 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
 
         rowsView.render(testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $focusable = testElement.find('[tabIndex]').first();
         $focusable.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($focusable.is('td'), 'focusable is cell');

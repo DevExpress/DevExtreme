@@ -130,7 +130,7 @@ QUnit.module('Pager', {
         // });
         $(testElement.find('.dx-page')[5]).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(that.dataControllerOptions.pageIndex, '19', 'page index');
     });
@@ -158,7 +158,7 @@ QUnit.module('Pager', {
         pagerView.render(testElement);
         this.dataController.pageIndex(13);
         this.dataController.pageIndex(14);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index');
@@ -173,7 +173,7 @@ QUnit.module('Pager', {
         // act
         pagerView.render(testElement);
         this.dataController.pageIndex('14');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index changed');

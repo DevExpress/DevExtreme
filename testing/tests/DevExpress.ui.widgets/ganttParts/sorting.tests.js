@@ -42,7 +42,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         let treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -192,7 +192,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.instance.insertTask(task1);
         this.clock.tick(500);
@@ -324,7 +324,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.instance.insertTask(task1);
         this.clock.tick(500);
@@ -444,7 +444,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         let treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -509,7 +509,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 3);
         assert.equal(this.instance._treeList.getVisibleRows().length, 3);

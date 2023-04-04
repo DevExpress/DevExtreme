@@ -40,7 +40,7 @@ QUnit.module('State Storing', {
                     }
                 }, options)
             });
-            this.clock.tick();
+            this.clock.tick(10);
         };
     },
     afterEach: function() {
@@ -176,12 +176,12 @@ QUnit.module('State Storing', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(customSaveCallCount, 0, 'customSave is not called');
 
         // act
         this.expandRow(2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
@@ -209,7 +209,7 @@ QUnit.module('State Storing', {
 
         // act
         this.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let expandedRowKeys = this.option('expandedRowKeys');
@@ -219,7 +219,7 @@ QUnit.module('State Storing', {
 
         // act
         this.collapseRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         expandedRowKeys = this.option('expandedRowKeys');

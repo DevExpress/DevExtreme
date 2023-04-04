@@ -680,7 +680,7 @@ QUnit.module('tags', moduleSetup, () => {
                 value: [1]
             });
             const tagBox = $tagBox.dxTagBox('instance');
-            this.clock.tick();
+            this.clock.tick(10);
             items = [{ name: 'updated', value: 1 }];
             dataSource.reload();
             tagBox.repaint();
@@ -1514,7 +1514,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
             .type('123')
             .press('enter');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
@@ -1550,7 +1550,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
             .type('123')
             .press('enter');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
@@ -3317,7 +3317,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             value: ['Moscow']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('Lon');
 
@@ -6344,7 +6344,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $tagBox.dxTagBox('option', 'value', [1]);
     });
@@ -7031,7 +7031,7 @@ QUnit.module('regression', {
         tagBox.option('value', [1]);
 
         assert.notOk(tagBox.option('selectedItems').length);
-        clock.tick();
+        clock.tick(10);
         assert.ok(tagBox.option('selectedItems').length);
         clock.restore();
     });
@@ -7205,7 +7205,7 @@ QUnit.module('regression', {
             value: [1, 2]
         }).dxTagBox('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(tagBox.option('selectedItems').length, 2, 'selectedItems contains all selected values');
 
         const $container = tagBox.$element().find('.' + TAGBOX_TAG_CONTAINER_CLASS);
@@ -7218,7 +7218,7 @@ QUnit.module('regression', {
 
         $($tagRemoveButtons.eq(1)).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(tagBox.option('selectedItems').length, 1, 'selectedItems was changed correctly');
     });

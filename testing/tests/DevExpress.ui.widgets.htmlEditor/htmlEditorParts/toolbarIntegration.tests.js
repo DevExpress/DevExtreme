@@ -436,8 +436,8 @@ export default function() {
                 .change();
 
             $okDialogButton.trigger('dxclick');
-            this.clock.tick();
-            this.clock.tick();
+            this.clock.tick(10);
+            this.clock.tick(10);
         });
 
         test('Add a link with empty text', function(assert) {
@@ -670,7 +670,7 @@ export default function() {
             $linkFormatButton.trigger('dxclick');
 
             const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
-            
+
             assert.strictEqual(linkText, $textInput.val());
         });
 
@@ -838,7 +838,7 @@ export default function() {
                 }
             }).dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('history buttons are inactive when editor has initial value', function(assert) {
@@ -890,9 +890,9 @@ export default function() {
                 }
             }).dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
             instance.option('width', 100);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const toolbarWidth = $container.find(`.${TOOLBAR_CLASS}`).width();
             const beforeContainerWidth = $container.find('.dx-toolbar-before').width();
@@ -976,7 +976,7 @@ export default function() {
                 .trigger('dxclick');
 
             $('.dx-suggestion-list .dx-list-item').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
         });
     });
 }

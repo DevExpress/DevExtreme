@@ -20,7 +20,7 @@ const test = (description, callback) => {
         ? QUnit.skip
         : QUnit.test;
 
-    return testFunc(description, sinon.test(callback));
+    return testFunc(description, callback);
 };
 const printOffset = offset => [
     offset.x >= 0 ? `offset.x: ${offset.x}` : '',
