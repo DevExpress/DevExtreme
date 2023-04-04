@@ -2294,17 +2294,17 @@ QUnit.module('aria accessibility', {
 }, () => {
     QUnit.test('role="tooltip" attribute should be added to popover by default', function(assert) {
         const $popover = $('#what');
-            new Popover($popover);
-            const $overlay = $('.dx-overlay-content');
+        new Popover($popover);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
 
-            assert.equal($overlay.attr('role'), 'tooltip');
+        assert.equal($overlay.attr('role'), 'tooltip');
     });
-   
+
     QUnit.test('role="dialog" attribute should be set if popover has toolbarItems', function(assert) {
         const $popover = $('#what');
-            new Popover($popover, { toolbarItems: [{ text: "Title", location: "before" }]});
-            const $overlay = $('.dx-overlay-content');
+        new Popover($popover, { toolbarItems: [{ text: "Title", location: "before" }]});
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
 
-            assert.equal($overlay.attr('role'), 'dialog');
+        assert.equal($overlay.attr('role'), 'dialog');
     });
 });

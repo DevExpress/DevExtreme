@@ -166,7 +166,7 @@ QUnit.module('basic', () => {
 
         const $overlayContent = instance.$content().parent();
 
-        assert.equal($overlayContent.attr('role'), 'dialog');
+        assert.strictEqual($overlayContent.attr('role'), 'dialog');
     });
 
     QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {

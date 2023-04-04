@@ -1122,9 +1122,9 @@ QUnit.module('Lookup', {
 
             this.togglePopup();
 
-            const $overlayContent = instance._popup.$overlayContent();
+            const $overlayContent = $(instance.content()).parent();
 
-            assert.equal($overlayContent.attr('role'), 'dialog');
+            assert.strictEqual($overlayContent.attr('role'), 'dialog');
         });
     });
 
@@ -1134,16 +1134,16 @@ QUnit.module('Lookup', {
                 usePopover: usePopover,
                 dropDownOptions: {
                     onShowing: (e) => {
-                        var $overlayContent = e.component.$content().parent();
+                        const $overlayContent = e.component.$content().parent();
                         $overlayContent.attr("role", "custom-role");
-                  }
+                    }
             }}).dxLookup('instance');
 
             this.togglePopup();
 
-            const $overlayContent = instance._popup.$overlayContent();
+            const $overlayContent = $(instance.content()).parent();
 
-            assert.equal($overlayContent.attr('role'), 'custom-role');
+            assert.strictEqual($overlayContent.attr('role'), 'custom-role');
         });
     });
 
