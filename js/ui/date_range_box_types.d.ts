@@ -1,4 +1,5 @@
 export {
+  DateRangePickerType,
   ChangeEvent,
   ClosedEvent,
   ContentReadyEvent,
