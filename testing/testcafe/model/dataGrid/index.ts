@@ -34,6 +34,8 @@ export const CLASS = {
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
 
+  columnChooser: 'dx-datagrid-column-chooser',
+
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
 
@@ -41,6 +43,7 @@ export const CLASS = {
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
+  columnChooserButton: 'dx-datagrid-column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
@@ -259,6 +262,10 @@ export default class DataGrid extends Widget {
 
   getRevertButton(): Selector {
     return this.element.find(`.${CLASS.revertButton}`);
+  }
+
+  getColumnChooserButton(): Selector {
+    return this.element.find(`.${CLASS.columnChooserButton}`);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
