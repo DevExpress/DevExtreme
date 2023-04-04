@@ -2297,7 +2297,7 @@ QUnit.module('aria accessibility', {
         new Popover($popover);
         const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
 
-        assert.equal($overlay.attr('role'), 'tooltip');
+        assert.strictEqual($overlay.attr('role'), 'tooltip');
     });
 
     QUnit.test('role="dialog" attribute should be set if popover has toolbarItems', function(assert) {
@@ -2305,6 +2305,6 @@ QUnit.module('aria accessibility', {
         new Popover($popover, { toolbarItems: [{ text: "Title", location: "before" }]});
         const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
 
-        assert.equal($overlay.attr('role'), 'dialog');
+        assert.strictEqual($overlay.attr('role'), 'dialog');
     });
 });
