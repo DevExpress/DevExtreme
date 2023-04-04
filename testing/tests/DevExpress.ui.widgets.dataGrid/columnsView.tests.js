@@ -524,4 +524,56 @@ QUnit.module('API methods', {
         // assert
         assert.strictEqual($('#content').attr('title'), undefined, 'not has attribute title');
     });
+
+    QUnit.test('waitAsyncTemplates with async templates', function(assert) {
+        // arrange
+        let deferred = $.Deferred();
+
+        this.options.renderAsync = false;
+        this.options.templatesRenderAsynchronously = true;
+        this.columnsView._templateDeferreds.add(deferred);
+
+        // assert
+        assert.strictEqual(this.columnsView.waitAsyncTemplates().state(), 'pending', 'promise state');
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferred);
+        deferred.resolve();
+
+        // assert
+        assert.strictEqual(this.columnsView.waitAsyncTemplates().state(), 'resolved', 'promise state');
+    });
+
+    QUnit.test('waitAsyncTemplates with dynamic addition of async templates', function(assert) {
+        // arrange
+        let deferreds = [$.Deferred(), $.Deferred()];
+
+        this.options.renderAsync = false;
+        this.options.templatesRenderAsynchronously = true;
+        this.columnsView._templateDeferreds.add(deferreds[0]);
+
+        // assert
+        const promise1 = this.columnsView.waitAsyncTemplates();
+        assert.strictEqual(promise1.state(), 'pending', 'promise1 is pending');
+
+        // arrange
+        this.columnsView._templateDeferreds.add(deferreds[1]);
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferreds[0]);
+        deferreds[0].resolve();
+
+        // assert
+        const promise2 = this.columnsView.waitAsyncTemplates();
+        assert.strictEqual(promise1.state(), 'pending', 'promise1 is pending');
+        assert.strictEqual(promise2.state(), 'pending', 'promise2 is pending');
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferreds[1]);
+        deferreds[1].resolve();
+
+        // assert
+        assert.strictEqual(promise1.state(), 'resolved', 'promise1 is resolved');
+        assert.strictEqual(promise2.state(), 'resolved', 'promise2 is resolved');
+    });
 });

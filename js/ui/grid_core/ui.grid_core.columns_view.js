@@ -917,17 +917,30 @@ const columnsViewMembers = {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    waitAsyncTemplates: function(forceWaiting = false) {
-        const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && Array.from(this._templateDeferreds) || [];
+    waitAsyncTemplates: function(forceWaiting = false, deferred) {
+        // @ts-expect-error
+        const result = deferred || new Deferred();
+        const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
-        return when.apply(this, templateDeferreds);
+        if(!needWaitAsyncTemplates) {
+            return result.resolve();
+        }
+
+        when.apply(this, Array.from(this._templateDeferreds)).done(() => {
+            if(this._templateDeferreds.size > 0) {
+                this.waitAsyncTemplates(forceWaiting, result);
+            } else {
+                result.resolve();
+            }
+        }).fail(result.reject);
+
+        return result.promise();
     },
 
-    _updateContent: function($newTableElement) {
+    _updateContent: function($newTableElement, change, isFixedTableRendering) {
         return this.waitAsyncTemplates().done(() => {
-            this.setTableElement($newTableElement);
-            this._wrapTableInScrollContainer($newTableElement);
+            this.setTableElement($newTableElement, isFixedTableRendering);
+            this._wrapTableInScrollContainer($newTableElement, isFixedTableRendering);
         });
     },
 
