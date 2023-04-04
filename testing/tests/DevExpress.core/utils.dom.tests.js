@@ -108,11 +108,11 @@ QUnit.test('it correctly detect the body element', function(assert) {
 
 QUnit.test('it does not raise error if element is a href', function(assert) {
     const hrefElement = $('<a>')
-            .attr({ href: 'text' })
-            .get(0);
+        .attr({ href: 'text' })
+        .get(0);
 
     try {
-        domUtils.contains(document, hrefElement)
+        domUtils.contains(document, hrefElement);
     } catch(e) {
         assert.ok(false, `error is raised: ${e.message}`);
     } finally {

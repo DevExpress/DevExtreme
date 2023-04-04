@@ -8810,14 +8810,14 @@ QUnit.module('Editing with real dataController', {
         };
 
         class Data {
-            prop1
+            prop1;
         }
         class Prop1 {
-            prop2
+            prop2;
         }
 
         class Prop2 {
-            name
+            name;
         }
 
         const dataSource = [{
@@ -10634,9 +10634,9 @@ QUnit.module('Refresh modes', {
             {
                 type: 'buttons',
                 buttons: [
-                    { name: 'edit',   icon: 'active-icon', visible: e => e.row.data.state === 'active' },
-                    { name: 'delete', icon: 'remove',      visible: e => e.row.data.state !== 'active' },
-                    { name: 'custom', icon: 'custom',     disabled: e => e.row.data.state !== 'active' },
+                    { name: 'edit', icon: 'active-icon', visible: e => e.row.data.state === 'active' },
+                    { name: 'delete', icon: 'remove', visible: e => e.row.data.state !== 'active' },
+                    { name: 'custom', icon: 'custom', disabled: e => e.row.data.state !== 'active' },
                 ]
             },
             'state'
@@ -10677,9 +10677,9 @@ QUnit.module('Refresh modes', {
             {
                 type: 'buttons',
                 buttons: [
-                    { name: 'edit',   icon: 'active-icon', visible: e => e.row.data.state === 'active' },
-                    { name: 'delete', icon: 'remove',      visible: e => e.row.data.state !== 'active' },
-                    { name: 'custom', icon: 'custom',     disabled: e => e.row.data.state !== 'active' },
+                    { name: 'edit', icon: 'active-icon', visible: e => e.row.data.state === 'active' },
+                    { name: 'delete', icon: 'remove', visible: e => e.row.data.state !== 'active' },
+                    { name: 'custom', icon: 'custom', disabled: e => e.row.data.state !== 'active' },
                 ]
             },
             'state'
@@ -10709,9 +10709,9 @@ QUnit.module('Refresh modes', {
         // act
         this.options.dataSource.store().push([
             {
-              type: 'update',
-              key: 1,
-              data: { state: 'disabled'}
+                type: 'update',
+                key: 1,
+                data: { state: 'disabled' }
             }
         ]);
         this.clock.tick(10);
@@ -10871,13 +10871,13 @@ QUnit.module('Editing with validation', {
                 dataField: 'name',
                 editorOptions: { disabled: true },
                 validationRules: [{
-                    type: "async",
+                    type: 'async',
                     validationCallback: disabledEditorValidationCallback
                 }]
             }, {
                 dataField: 'age',
                 validationRules: [{
-                    type: "async",
+                    type: 'async',
                     validationCallback: enabledEditorValidationCallback
                 }]
             }]

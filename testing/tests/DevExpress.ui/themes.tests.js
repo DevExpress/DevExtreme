@@ -37,7 +37,7 @@ function loadCss(frame, cssFileName) {
 
 // TODO: remove this wrapper after fix blinking tests
 const timeoutDoneWrapper = (done) => {
-    setTimeout(done, 200)
+    setTimeout(done, 200);
 };
 
 const defaultTimeout = 2000;
