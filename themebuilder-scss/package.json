@@ -39,6 +39,7 @@
     "@types/fs-extra": "^9.0.1",
     "@types/jest": "^26.0.15",
     "@types/less": "^3.0.1",
+    "@types/node": "ts3.8",
     "@types/node-sass": "^4.11.0",
     "@types/prettier": "2.6.0",
     "@types/sass": "ts3.8",
