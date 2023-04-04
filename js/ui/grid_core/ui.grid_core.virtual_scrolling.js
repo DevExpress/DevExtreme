@@ -1101,7 +1101,7 @@ export const virtualScrollingModule = {
                         this._loadViewportParams = viewportParams;
                     },
                     _processItems: function(items) {
-                        const newItems = this.callBase.apply(this, arguments);
+                        const resultItems = this.callBase.apply(this, arguments);
 
                         if(this.option(LEGACY_SCROLLING_MODE) === false) {
                             const dataSource = this._dataSource;
@@ -1111,7 +1111,7 @@ export const virtualScrollingModule = {
                             let isPrevRowNew;
                             let wasCountableItem = false;
                             let newRows = [];
-                            newItems.forEach(item => {
+                            resultItems.forEach(item => {
                                 const rowType = item.rowType;
                                 const itemCountable = isItemCountableByDataSource(item, dataSource);
 
@@ -1142,7 +1142,7 @@ export const virtualScrollingModule = {
                             newRows.forEach(it => it.loadIndex = currentIndex);
                         }
 
-                        return newItems;
+                        return resultItems;
                     },
                     _afterProcessItems: function(items, change) {
                         this._itemCount = items.filter(item => isItemCountableByDataSource(item, this._dataSource)).length;
