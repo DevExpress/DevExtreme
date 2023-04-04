@@ -730,3 +730,35 @@ QUnit.test('two stub axis', function(assert) {
     assert.equal(verticalAxes[1].getOptions().grid.visible, false, 'second axis grid isn\'t visible');
     assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, 'second axis grid isn\'t visible');
 });
+
+QUnit.module('Resizing. T1156890', {
+    beforeEach() {
+        this.$container = $('#chart');
+    },
+    createChart(options) {
+        return this.$container.dxChart(options).dxChart('instance');
+    }
+}, () => {
+    [-1, 1].forEach(sign => {
+        ['height', 'width'].forEach(dimension => {
+            QUnit.test(`Widget should not re-rendered when ${dimension} ${sign > 0 ? 'increased' : 'decreased'} on value less threshold`, function(assert) {
+                const initialSize = {
+                    height: 200,
+                    width: 200
+                };
+                const drawnHandler = sinon.spy();
+        
+                const chart = this.createChart({
+                    size: initialSize,
+                    onDrawn: drawnHandler
+                });
+        
+                drawnHandler.reset();
+            
+                chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.098);
+            
+                assert.strictEqual(drawnHandler.callCount, 0);
+            });        
+        });
+    });
+});

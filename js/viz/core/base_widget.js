@@ -23,6 +23,7 @@ import {
     createIncidentOccurred } from './base_widget.utils';
 const _floor = Math.floor;
 const _log = warnings.log;
+const SIZE_CHANGING_THRESHOLD = 0.3;
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
 
@@ -39,7 +40,7 @@ function getFalse() {
 }
 
 function areCanvasesDifferent(canvas1, canvas2) {
-    return !(canvas1.width === canvas2.width && canvas1.height === canvas2.height &&
+    return !(Math.abs(canvas1.width - canvas2.width) < SIZE_CHANGING_THRESHOLD && Math.abs(canvas1.height - canvas2.height) < SIZE_CHANGING_THRESHOLD &&
         canvas1.left === canvas2.left && canvas1.top === canvas2.top && canvas1.right === canvas2.right && canvas1.bottom === canvas2.bottom);
 }
 
@@ -110,6 +111,14 @@ const getEmptyComponent = function() {
 
 function callForEach(functions) {
     functions.forEach(c => c());
+}
+
+function floorDimensionsValuesInCanvas(canvas) {
+    return {
+        ...canvas,
+        height: _floor(canvas.height),
+        width: _floor(canvas.width)
+    };
 }
 
 const isServerSide = !hasWindow();
@@ -388,7 +397,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _initRenderer: function() {
         const that = this;
         // Canvas is calculated before the renderer is created in order to capture actual size of the container
-        that._canvas = that._calculateCanvas();
+        const rawCanvas = that._calculateRawCanvas();
+        that._canvas = floorDimensionsValuesInCanvas(rawCanvas);
         that._renderer = new Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
         that._renderer.resize(that._canvas.width, that._canvas.height);
     },
@@ -466,7 +476,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         });
     },
 
-    _calculateCanvas: function() {
+    _calculateRawCanvas: function() {
         const that = this;
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
@@ -481,8 +491,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const elementWidth = getSizeOfSide(size, 'width', (x) => getWidth(x));
         const elementHeight = getSizeOfSide(size, 'height', (x) => getHeight(x));
         let canvas = {
-            width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
-            height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
+            width: size.width <= 0 ? 0 : pickPositiveValue([size.width, elementWidth, defaultCanvas.width]),
+            height: size.height <= 0 ? 0 : pickPositiveValue([size.height, elementHeight, defaultCanvas.height]),
             left: pickPositiveValue([margin.left, defaultCanvas.left]),
             top: pickPositiveValue([margin.top, defaultCanvas.top]),
             right: pickPositiveValue([margin.right, defaultCanvas.right]),
@@ -498,12 +508,12 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _updateSize: function() {
         const that = this;
-        const canvas = that._calculateCanvas();
+        const rawCanvas = that._calculateRawCanvas();
 
-        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
-            that._canvas = canvas;
+        if(areCanvasesDifferent(that._canvas, rawCanvas) || that.__forceRender /* for charts */) {
+            that._canvas = floorDimensionsValuesInCanvas(rawCanvas);
             that._recreateSizeDependentObjects(true);
-            that._renderer.resize(canvas.width, canvas.height);
+            that._renderer.resize(this._canvas.width, this._canvas.height);
             that._change(['LAYOUT']);
         }
     },
