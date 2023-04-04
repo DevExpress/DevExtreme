@@ -41,7 +41,6 @@ const DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text';
 const DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon';
 const DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
 
-
 const TestComponent = MenuBase.inherit({
     NAME: 'TestComponent',
     _itemDataKey: function() {
@@ -332,6 +331,114 @@ QUnit.module('Menu rendering', () => {
         const $element = menuBase.element;
 
         assert.equal($element.find('.dx-menu-item-content').first().text(), 'Test item');
+    });
+
+    ['http', 'https'].forEach((protocol) => {
+        QUnit.test(`item should be rendered as link if item.url starts with ${protocol}`, function(assert) {
+            const url = `${protocol}://some_url`;
+            const menuBase = createMenu({
+                items: [{ text: 'Item text', url }]
+            });
+            const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+    
+            assert.strictEqual(content.tagName, 'A');
+            assert.strictEqual(content.getAttribute('href'), url);
+            assert.strictEqual(content.text, 'Item text');
+        });
+    });
+
+    QUnit.test('item should be rendered as simple text if item.url is incorrect', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: '/some_url' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`);
+
+        assert.ok(!content.children()[0]);
+        assert.strictEqual(content.text(), 'Item text');
+    });
+    
+    QUnit.test('should update item link after update item option with new url', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }]
+        });
+
+        menuBase.instance.option('items', [{ text: 'Item text', url: 'http://some_new_url' }]);
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_new_url');
+    });
+
+    QUnit.test('should update item link after update url option of specific item', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }]
+        });
+
+        menuBase.instance.option('items[0].url', 'http://some_new_url');
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_new_url');
+    });
+
+    QUnit.test('item should be rendered with extra attributes for link if item.linkAttr and item.url are set', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_blank');
+        assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('should not raise error if linkAttr option is not object', function(assert) {
+        try {
+            createMenu({
+                items: [{ text: 'Item text', url: 'http://some_url', linkAttr: 'string' }]
+            });
+        } catch(e) {
+            assert.ok(false, `error ${e.message}`);
+        } finally {
+            assert.ok(true, 'no error');
+        }
+    });
+
+    QUnit.test('should update item link after update item option with new linkAttr', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+
+        menuBase.instance.option('items', [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_self' } }]);
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_self');
+    });
+
+    QUnit.test('should update item link after update item.linkAttr option of specific item', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+
+        menuBase.instance.option('items[0].linkAttr', { target: '_self' });
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_self');
+    });
+
+    QUnit.test('item.url option should not applied if template option is set', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'https://some_url', template: '<div>Custom Item</div>' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`);
+
+        assert.notOk(content.children()[0].getAttribute('href'));
+        assert.strictEqual(content.text(), 'Custom Item');
     });
 });
 
