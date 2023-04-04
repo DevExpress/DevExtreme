@@ -2,22 +2,18 @@ const Builder = require('systemjs-builder');
 const path = require('path');
 const fs = require('fs');
 
-const builder = new Builder();
-
 const root = path.join(__dirname, '..');
-const transpilePath = path.join(root, '/artifacts/transpiled-renovation');
+const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
+const transpilePath = path.join(root, '/artifacts/transpiled');
 
-builder.config({
-    baseURL: root,
-    transpiler: 'plugin-babel',
+const config = {
     map: {
         'animation': path.join(transpilePath, 'animation'),
         'core': path.join(transpilePath, 'core'),
         'data': path.join(transpilePath, 'data'),
         'events': path.join(transpilePath, 'events'),
-        'renovation': path.join(transpilePath, 'renovation'),
+        'renovation': path.join(transpileRenovationPath, 'renovation'),
         'ui': path.join(transpilePath, 'ui'),
-        '/testing/helpers/wrapRenovatedWidget.js': path.join(root, 'testing/helpers/wrapRenovatedWidget.js'),
 
         // Deps
         'globalize': path.join(root, '/artifacts/js/globalize'),
@@ -130,7 +126,7 @@ builder.config({
             exports: 'angular'
         }
     }
-});
+};
 
 const getFileList = (dirName) => {
     let files = [];
@@ -148,6 +144,7 @@ const getFileList = (dirName) => {
 };
 
 const transpileModules = () => {
+    const builder = new Builder(root, config);
     const listFiles = getFileList(path.join(root, 'artifacts', 'transpiled'));
 
     return Promise.all(listFiles.map(filePath => builder.buildStatic(
@@ -161,7 +158,30 @@ const transpileModules = () => {
     )));
 };
 
+const transpileCss = async () => {
+    const builder = new Builder(root, config);
+    const listFiles = [
+        {
+            filePath: path.join(root, 'artifacts', 'css', 'dx.material.blue.light.css!'),
+            destPath: path.join(root, 'artifacts', 'css-systemjs', 'dx.material.blue.light.css'),
+        },
+        {
+            filePath: path.join(root, 'artifacts', 'css', 'dx.light.css!'),
+            destPath: path.join(root, 'artifacts', 'css-systemjs', 'dx.light.css'),
+        },
+        {
+            filePath: path.join(root, 'node_modules', 'systemjs-plugin-css', 'css.js'),
+            destPath: path.join(root, 'artifacts', 'css-systemjs', 'css.js'),
+        }
+    ];
+
+    for (const { filePath, destPath } of listFiles) {
+        await builder.bundle(filePath, destPath);
+    }
+};
+
 const transpileTests = () => {
+    const builder = new Builder(root, config);
     const testingFolders = [
         'DevExpress.ui.widgets',
         'DevExpress.ui.widgets.dataGrid',
@@ -176,7 +196,7 @@ const transpileTests = () => {
         for (const filePath of listFiles) {
             promises.push(builder.buildStatic(
                 `[${filePath}]`,
-                filePath.replace('testing/tests', 'artifacts/transpiled-tests'),
+                filePath.replace('testing', 'artifacts/transpiled-testing'),
                 {
                     minify: false,
                     sourceMaps: true,
@@ -189,12 +209,41 @@ const transpileTests = () => {
     return Promise.all(promises);
 };
 
-console.time('modules');
-transpileModules().then(() => {
-    console.timeEnd('modules');
-});
+const transpileHelpers = async () => {
+    const builder = new Builder(root, { ...config, transpiler: 'plugin-babel', });
+    const helpers = getFileList(path.join(root, 'testing', 'helpers'));
 
-console.time('tests')
-transpileTests().then(() => {
+    for (const filePath of helpers) {
+        try {
+            await builder.buildStatic(
+                `[${filePath}]`,
+                filePath.replace('testing', 'artifacts/transpiled-testing'),
+                {
+                    minify: false,
+                    sourceMaps: true,
+                    encodeNames: false
+                }
+            );
+        } catch (error) {
+            console.log(filePath, error)
+        }
+    }
+};
+
+(async () => {
+    console.time('modules')
+    await transpileModules();
+    console.timeEnd('modules');
+
+    console.time('tests')
+    await transpileTests();
     console.timeEnd('tests');
-});
+
+    console.time('css')
+    await transpileCss();
+    console.timeEnd('css');
+
+    console.time('helpers')
+    await transpileHelpers();
+    console.timeEnd('helpers');
+})();

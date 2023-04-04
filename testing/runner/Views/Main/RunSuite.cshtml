@@ -172,32 +172,18 @@
                 }
             }
 
-            const infernoMap = '@Model.NoCsp' === 'True'
-                ? {
-                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
-                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
-                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
-                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
-                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
-                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
-                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
-                }
-                : {
-                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
-                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
-                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
-                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
-                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
-                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
-                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
-                };
+            const cspMap = '@Model.NoCsp' !== 'True' ? {
+                'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+
+                'css': '@Url.Content("~/artifacts/css-systemjs/css.js")',
+                'generic_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.light.css")',
+            } : {};
 
             SystemJS.config({
                 baseURL: "@Url.Content("~/artifacts/" + npmModule)",
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
-                    ...infernoMap,
                     'globalize': '@Url.Content("~/artifacts/js/globalize")',
                     'intl': '@Url.Content("~/node_modules/intl/index.js")',
                     'cldr': '@Url.Content("~/artifacts/js/cldr")',
@@ -223,6 +209,15 @@
                     'devextreme-showdown': '@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")',
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
+                    // Inferno
+                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
+                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
+
                     // Global CSS
                     'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/artifacts/css/dx.material.blue.light.css")',
@@ -232,7 +227,8 @@
                     'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
                     'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
                     'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
-                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
+                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")',
+                    ...cspMap,
                 },
                 packages: {
                     '@@devextreme/runtime/common': {
