@@ -29,6 +29,14 @@ export default class ContextMenu extends Widget {
     return Selector(id);
   }
 
+  getItemByText(text: string): Selector {
+    return this.findItemByTextInContainer(text);
+  }
+
+  getItemByIndex(index: number): Selector {
+    return this.items.nth(index);
+  }
+
   getItemCount(): Promise<number> {
     return this.items.count;
   }
@@ -40,5 +48,10 @@ export default class ContextMenu extends Widget {
       () => { (getInstance() as any).show(); },
       { dependencies: { getInstance } },
     )();
+  }
+
+  findItemByTextInContainer(text: string): Selector {
+    const span = this.element.find('.dx-menu-item-text');
+    return span.withExactText(text).parent();
   }
 }

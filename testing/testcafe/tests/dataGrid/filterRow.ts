@@ -2,7 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+import FilterTextBox from '../../model/dataGrid/editors/filterTextBox';
 import { changeTheme } from '../../helpers/changeTheme';
+import { getNumberData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`FilterRow`
   .page(url(__dirname, '../container.html'));
@@ -34,3 +36,28 @@ test('Filter row\'s height should be adjusted by content (T1072609)', async (t) 
 }).after(async () => {
   await changeTheme('generic.light');
 });
+
+test('FilterRow renge overlay screenshot', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
+
+  await t
+    .click(filterEditor.menuButton);
+  await t
+    .click(filterEditor.menu.getItemByText('Between'))
+    // act
+    .expect(await takeScreenshot('filter-row-overlay', dataGrid.element))
+    .ok()
+    // assert
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getNumberData(20, 2),
+  height: 400,
+  showBorders: true,
+  filterRow: {
+    visible: true,
+    applyFilter: 'auto',
+  },
+}));

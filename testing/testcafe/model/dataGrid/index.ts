@@ -23,6 +23,7 @@ export const CLASS = {
   groupRow: 'dx-group-row',
   focusedRow: 'dx-row-focused',
   filterPanel: 'filter-panel',
+  filterRow: 'filter-row',
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -40,12 +41,14 @@ export const CLASS = {
   overlayWrapper: 'dx-overlay-wrapper',
 
   toolbar: 'dx-toolbar',
+  contextMenu: 'dx-context-menu',
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
   columnChooserButton: 'column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
+  filterEditor: 'dx-editor-with-menu',
   commandDrag: 'dx-command-drag',
 };
 
@@ -142,6 +145,21 @@ export default class DataGrid extends Widget {
 
   getFilterPanel(): FilterPanel {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
+  }
+
+  getFilterRow(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
+  }
+
+  getFilterCell(columnIndex: number): Selector {
+    return this.getFilterRow().find(`[aria-colindex='${columnIndex + 1}']`);
+  }
+
+  getFilterEditor<T>(
+    columnIndex: number,
+    EditorType: new(mainElement: Selector) => T,
+  ): T {
+    return new EditorType(this.getFilterCell(columnIndex).find(`.${CLASS.filterEditor}`));
   }
 
   getOverlay(): Overlay {
