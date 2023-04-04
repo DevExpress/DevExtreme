@@ -51,6 +51,25 @@ QUnit.module('action sheet', {
         assert.equal(popup.option('height'), 'auto');
     });
 
+    QUnit.test('Overlay should have role="dialog" attribute when using popover', function(assert) {
+        $('#actionSheet').dxActionSheet({
+            usePopover: true,
+            target: $('#container')
+        });
+
+        const $popoverInstance = $('.dx-popover').dxPopover('instance');
+
+        assert.strictEqual($popoverInstance.$overlayContent().attr('role'), 'dialog');
+    });
+
+    QUnit.test('Overlay should have role="dialog" attribute when using popup', function(assert) {
+        $('#actionSheet').dxActionSheet({ usePopover: false });
+
+        const $popupInstance = $('.dx-popup').dxPopup('instance');
+
+        assert.strictEqual($popupInstance.$overlayContent().attr('role'), 'dialog');
+    });
+
     QUnit.test('popup is not draggable', function(assert) {
         const $overlayContent = $('.dx-overlay-content');
 
