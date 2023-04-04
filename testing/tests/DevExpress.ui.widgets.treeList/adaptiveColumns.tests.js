@@ -66,11 +66,11 @@ QUnit.module('API', {
         setupTreeList(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const rows = this.getVisibleRows();

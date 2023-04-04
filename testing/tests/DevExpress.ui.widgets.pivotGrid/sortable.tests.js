@@ -1905,7 +1905,7 @@ QUnit.module('Scroll group content', {
             .down()
             .move(offset.left + $item.width() / 2 + 10, offset.top);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!this.onScroll.called);
     });

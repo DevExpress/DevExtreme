@@ -1134,7 +1134,7 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render($testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $cells = $testElement.find('.dx-group-row').find('td');
@@ -2898,7 +2898,7 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('tbody > tr').length, 7, 'rows count: 2 main data rows + 1 main freespace row + 1 detail header row + 2 detail data rows + 1 detail freespace row');
@@ -4149,7 +4149,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         nativePointerMock($targetTouchCell).start().touchStart().touchEnd();
         nativePointerMock($targetClickCell).start().click(true);
 
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.equal(rowClickCount, 1);
@@ -5544,7 +5544,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         this.setupDataGridModules();
         this.rowsView.render($testElement);
-        clock.tick();
+        clock.tick(10);
 
         let firstItem = this.dataController.items()[0];
 
@@ -5555,7 +5555,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok(firstItem.cells[1].groupContinuesMessage, 'continues text is defined');
 
         this.pageIndex(1);
-        clock.tick();
+        clock.tick(10);
 
         // act
         firstItem = this.dataController.items()[0];
@@ -5590,7 +5590,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
             this.rowsView.render($testElement);
-            clock.tick();
+            clock.tick(10);
 
             this.$element = () => {
                 return $testElement;
@@ -5598,7 +5598,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             // act
             this.editRow(0);
-            clock.tick();
+            clock.tick(10);
 
             // assert
             const $form = $('.dx-form');

@@ -1271,7 +1271,7 @@ QUnit.module('CloseOnOutsideClick', {
         const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
 
         $($content).trigger('dxclick');
-        clock.tick();
+        clock.tick(10);
 
         assert.equal(drawer.option('opened'), false, 'drawer is hidden');
         assert.ok($shader.is(':hidden'), 'shader is hidden');

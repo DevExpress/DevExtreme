@@ -664,7 +664,7 @@ QUnit.module('Filter Panel', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(this.option('filterPanel.filterEnabled'));
@@ -685,10 +685,10 @@ QUnit.module('Filter Panel', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.option('filterPanel.filterEnabled', false);
         this.dataController.changed.fire();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.notOk(customSaveSpy.lastCall.args[0].filterPanel.filterEnabled);
     });

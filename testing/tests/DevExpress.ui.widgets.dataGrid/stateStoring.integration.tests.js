@@ -38,7 +38,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
         assert.equal(dataGrid.getController('columns').getVisibleColumns().length, 0, 'visible column count');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const visibleColumns = dataGrid.getController('columns').getVisibleColumns();
@@ -68,7 +68,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
             onDataErrorOccurred: dataErrorOccurred
         };
         const dataGrid = createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $headerRow = $(dataGrid.element()).find('.dx-header-row');
         const $errorRow = $(dataGrid.element()).find('.dx-error-row');
@@ -98,7 +98,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
             }
         };
         const dataGrid = createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $errorRow = $(dataGrid.element()).find('.dx-error-row');
 
@@ -124,7 +124,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
             onDataErrorOccurred: dataErrorOccurred
         };
         const dataGrid = createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $errorRow = $(dataGrid.element()).find('.dx-error-row');
 
@@ -152,7 +152,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
                 contentReadyCallCount++;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(contentReadyCallCount, 1);
@@ -180,7 +180,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let visibleColumns = dataGrid.getController('columns').getVisibleColumns();
@@ -190,7 +190,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
 
         // act
         dataGrid.state(null);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         visibleColumns = dataGrid.getController('columns').getVisibleColumns();
@@ -230,11 +230,11 @@ QUnit.module('State storing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.state({});
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         const $firstCell = $($(dataGrid.$element()).find('.dx-data-row').eq(0).children().eq(0));
@@ -264,7 +264,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let visibleColumns = dataGrid.getController('columns').getVisibleColumns();
@@ -275,7 +275,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
 
         // act
         dataGrid.state(null);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         visibleColumns = dataGrid.getController('columns').getVisibleColumns();
@@ -295,7 +295,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.pageIndex(1);
 
         // assert
@@ -303,7 +303,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
 
         // act
         dataGrid.state(null);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 0, 'pageIndex');
@@ -331,7 +331,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
             columns: ['id', 'field1']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const newItems = [
@@ -359,11 +359,11 @@ QUnit.module('State storing', baseModuleConfig, () => {
             columns: ['field1', 'field2', { caption: 'Band Column', columns: ['field3', 'field4'] }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.state(null);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         columns = dataGrid.getVisibleColumns(0).map(function(column) { return column.caption; });
@@ -406,7 +406,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
 
         // act
         $('.dx-datagrid-addrow-button').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const rows = dataGrid.getVisibleRows();
@@ -433,7 +433,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
                 },
                 loadingTimeout: null
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.strictEqual(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
             assert.strictEqual(dataGrid.option('focusedRowKey'), null, 'focusedRowKey');
@@ -462,7 +462,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
             }]
         };
         const dataGrid = createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const visibleColumns = dataGrid.getVisibleColumns();

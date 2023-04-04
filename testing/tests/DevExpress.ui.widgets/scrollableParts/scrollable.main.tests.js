@@ -130,7 +130,7 @@ QUnit.test('horizontal inertia calc distance', function(assert) {
         .move(moveDistance, 0)
         .up();
 
-    this.clock.tick();
+    this.clock.tick(10);
 });
 
 QUnit.test('reset unused position after change direction', function(assert) {

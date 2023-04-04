@@ -22,12 +22,12 @@ QUnit.module('Dialogs', moduleConfig, () => {
     test('common', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
         showTaskEditDialog(this.instance);
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 1, 'dialog is shown');
         this.instance.repaint();
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 0, 'dialog is missed after widget repainting');
-        this.clock.tick();
+        this.clock.tick(10);
 
         showTaskEditDialog(this.instance);
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 1, 'dialog is shown');
@@ -38,9 +38,9 @@ QUnit.module('Dialogs', moduleConfig, () => {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
         showTaskEditDialog(this.instance);
-        this.clock.tick();
+        this.clock.tick(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -84,9 +84,9 @@ QUnit.module('Dialogs', moduleConfig, () => {
     test('showTaskDetailsDialog', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.showTaskDetailsDialog(1);
-        this.clock.tick();
+        this.clock.tick(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -116,7 +116,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.ok(isValidStartTextBox, 'not empty start validation');
         assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         const firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
 
@@ -131,9 +131,9 @@ QUnit.module('Dialogs', moduleConfig, () => {
     test('resources editing', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
         getGanttViewCore(this.instance).commandManager.showResourcesDialog.execute();
-        this.clock.tick();
+        this.clock.tick(10);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -158,12 +158,12 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $confirmDialog = $('body').find(Consts.POPUP_SELECTOR);
         const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $yesButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.resources[0].text, secondResourceText, 'first resource removed from ds');
         assert.equal(data.resources[1].text, thirdResourceText, 'second resource ds');
@@ -173,9 +173,9 @@ QUnit.module('Dialogs', moduleConfig, () => {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
         showTaskEditDialog(this.instance);
-        this.clock.tick();
+        this.clock.tick(10);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -188,14 +188,14 @@ QUnit.module('Dialogs', moduleConfig, () => {
         titleTextBox.option('value', testTitle);
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks[0].progress, 31, 'progress reset');
     });
     test('showing taskEditDialog after resources dialog is closed', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
@@ -206,7 +206,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $showResourcesButton = $dialog.find('.dx-texteditor-buttons-container').find('.dx-button').eq(0);
         $showResourcesButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const expectedResourceTitleText = messageLocalization.format('dxGantt-dialogResourceManagerTitle');
         popupTitleText = $dialog.find('.dx-popup-title').text();
@@ -214,7 +214,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         popupTitleText = $dialog.find('.dx-popup-title').text();
         assert.equal(expectedTaskEditTitleText, popupTitleText, 'taskEditPopup title shown again');
@@ -225,7 +225,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         this.instance.option('editing.allowTaskResourceUpdating', false);
 
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
@@ -239,7 +239,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         this.instance.option('editing.allowResourceDeleting', false);
 
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
@@ -264,7 +264,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);

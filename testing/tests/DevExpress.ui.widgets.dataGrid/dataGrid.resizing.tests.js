@@ -84,7 +84,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGrid = $(dataGrid.element());
 
-        clock.tick();
+        clock.tick(10);
         const container = $dataGrid.find('.dx-toolbar-label');
 
         assert.equal(container.length, 1);
@@ -590,7 +590,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $('#dataGrid').parent().width(300);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('#dataGrid').width(), 300, 'width 100% is applied');
@@ -635,7 +635,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         const dataGrid = $dataGrid.dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const firstRenderHeight = $dataGrid.height();
 

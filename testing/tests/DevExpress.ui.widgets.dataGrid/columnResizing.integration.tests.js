@@ -812,7 +812,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const $cols = $dataGrid.find('colgroup').first().find('col');
 
         // assert
@@ -839,7 +839,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
         // act
         dataGrid.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $headerRowsCells = dataGrid.$element().find('.dx-header-row').children();

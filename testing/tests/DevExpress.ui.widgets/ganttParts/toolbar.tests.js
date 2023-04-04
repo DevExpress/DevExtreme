@@ -42,7 +42,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
             toolbar: { items: items }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         assert.equal($items.length, items.length, 'All items were rendered');
@@ -60,7 +60,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
             toolbar: { items: items }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         assert.equal($items.length, items.length, 'All items were rendered');
@@ -98,7 +98,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
             toolbar: { items: items }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         assert.equal($items.length, items.length, 'All items were rendered');
@@ -114,7 +114,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         assert.equal($items.length, items.length, 'All items were rendered');

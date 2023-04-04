@@ -383,7 +383,7 @@ QUnit.module('Validator specific tests', {
         });
 
         validator.validate();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(validator.option('isValid'));
     });
