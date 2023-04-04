@@ -158,7 +158,7 @@ function prepareShowFormProperties(module, type) {
 }
 
 function applyFormat(module, formatArgs, event) {
-    module.editorInstance._saveValueChangeEvent(event);
+    module.saveValueChangeEvent(event);
     module.quill.format(...formatArgs);
 }
 
@@ -193,7 +193,6 @@ function prepareLinkHandler(module) {
         module.quill.focus();
 
         let selection = module.quill.getSelection();
-        const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
         const isCursorAtLink = formats.link !== undefined && selection?.length === 0;
         let href = formats.link || '';
@@ -207,6 +206,7 @@ function prepareLinkHandler(module) {
             }
         }
 
+        const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formData = {
             href,
             text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
@@ -216,7 +216,7 @@ function prepareLinkHandler(module) {
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
-            items: getLinkFormItems(module, selection)
+            items: getLinkFormItems(selectionHasEmbedContent)
         });
 
         promise.done((formData, event) => {
@@ -249,13 +249,13 @@ function prepareImageHandler(module, imageUploadOption) {
     };
 }
 
-function getLinkFormItems(module, selection) {
+function getLinkFormItems(selectionHasEmbedContent) {
     return [
         { dataField: 'href', label: { text: localizationMessage.format(DIALOG_LINK_FIELD_URL) } },
         {
             dataField: 'text',
             label: { text: localizationMessage.format(DIALOG_LINK_FIELD_TEXT) },
-            visible: !hasEmbedContent(module, selection)
+            visible: !selectionHasEmbedContent
         },
         {
             dataField: 'target',

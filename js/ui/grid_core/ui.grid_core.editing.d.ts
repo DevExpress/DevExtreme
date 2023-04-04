@@ -23,6 +23,12 @@ interface State {
   _saving: any;
   _editForm: any;
   _isForceRowAdaptiveExpand: any;
+
+  // private flag for refocus edit cell after data source reload
+  // for details see these issues:
+  // remote DataSource: https://supportcenter.devexpress.com/internal/ticket/details/T1037019
+  // local DataSource: https://supportcenter.devexpress.com/internal/ticket/details/T1154721
+  _refocusEditCell: boolean;
 }
 
 export interface EditingController extends ViewController, State {
@@ -252,7 +258,7 @@ export interface EditingController extends ViewController, State {
 
   _resolveAfterSave: (this: this, deferred, options?) => any;
 
-  _saveEditDataInner: (this: this, options) => any;
+  _saveEditDataInner: (this: this) => any;
 
   _beforeEndSaving: (this: this, changes) => any;
 

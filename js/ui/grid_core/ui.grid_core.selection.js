@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import gridCore from '../data_grid/ui.data_grid.core';
+import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
@@ -50,7 +50,7 @@ const processLongTap = function(that, dxEvent) {
     }
 };
 
-const SelectionController = gridCore.Controller.inherit((function() {
+const SelectionController = modules.Controller.inherit((function() {
     const isSeveralRowsSelected = function(that, selectionFilter) {
         let keyIndex = 0;
         const store = that._dataController.store();
