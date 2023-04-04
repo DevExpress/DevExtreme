@@ -30,9 +30,7 @@ QUnit.module('repaintChangesOnly', {
         this.containsElement = (id) => {
             try {
                 return this.$tabPanel.find('#id_' + id)[0].textContent;
-            }
-            // eslint-disable-next-line no-empty
-            catch(e) {}
+            } catch(e) {}
         };
         this.checkNotContainsElements = (assert, idList) => {
             idList.forEach((id) => { assert.notOk(this.containsElement(id), `doesn't contain '${id}'`); });

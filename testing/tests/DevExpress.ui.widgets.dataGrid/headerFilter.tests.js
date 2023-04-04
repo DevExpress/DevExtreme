@@ -4495,7 +4495,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         this.options.dataSource = { load: loadSpy };
         this.options.syncLookupFilterValues = true;
-        this.options.remoteOperations = { groupPaging: true }
+        this.options.remoteOperations = { groupPaging: true };
         this.options.headerFilter.allowSearch = true;
 
         const $testElement = $('#container');

@@ -340,7 +340,7 @@ QUnit.module('Menu rendering', () => {
                 items: [{ text: 'Item text', url }]
             });
             const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
-    
+
             assert.strictEqual(content.tagName, 'A');
             assert.strictEqual(content.getAttribute('href'), url);
             assert.strictEqual(content.text, 'Item text');
@@ -356,7 +356,7 @@ QUnit.module('Menu rendering', () => {
         assert.ok(!content.children()[0]);
         assert.strictEqual(content.text(), 'Item text');
     });
-    
+
     QUnit.test('should update item link after update item option with new url', function(assert) {
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url' }]

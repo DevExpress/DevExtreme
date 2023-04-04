@@ -2726,10 +2726,7 @@ QUnit.module('editing', moduleSetup, () => {
 
         try {
             keyboard.change();
-        }
-        // eslint-disable-next-line no-empty
-        catch(e) {
-        }
+        } catch(e) { }
 
         assert.equal($input.val(), '1', 'input value is correct');
         assert.equal($selectBox.dxSelectBox('option', 'value'), '1', 'widget value is correct');
