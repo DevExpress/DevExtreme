@@ -1137,7 +1137,8 @@ QUnit.module('Lookup', {
                         const $overlayContent = e.component.$content().parent();
                         $overlayContent.attr("role", "custom-role");
                     }
-            }}).dxLookup('instance');
+                }
+            }).dxLookup('instance');
 
             this.togglePopup();
 
