@@ -4928,6 +4928,50 @@ QUnit.module('keyboard navigation', {
     });
 });
 
+QUnit.module('Popup open state', () => {
+    ['date', 'time'].forEach(type => {
+        ['calendar', 'list'].forEach(pickerType => {
+            QUnit.testInActiveWindow(`Popup should be closed if tab key was pressed when applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    focusStateEnabled: true,
+                    applyValueMode: 'instantly',
+                    type,
+                    pickerType,
+                });
+                const dateBox = $dateBox.dxDateBox('instance');
+                const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const keyboard = keyboardMock($input);
+
+                dateBox.open();
+                keyboard.keyDown('tab');
+        
+                assert.strictEqual(dateBox.option('opened'), false, 'popup is closed');
+            });
+        })
+    });
+
+    ['date', 'time', 'datetime'].forEach(type => {
+        ['calendar', 'list', 'rollers'].forEach(pickerType => {
+            QUnit.testInActiveWindow(`Popup should be opened if tab key was pressed when applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    focusStateEnabled: true,
+                    applyValueMode: 'useButtons',
+                    type,
+                    pickerType,
+                });
+                const dateBox = $dateBox.dxDateBox('instance');
+                const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const keyboard = keyboardMock($input);
+
+                dateBox.open();
+                keyboard.keyDown('tab');
+        
+                assert.strictEqual(dateBox.option('opened'), true, 'popup is still opened');
+            });
+        })
+    });
+});
+
 QUnit.module('aria accessibility', {}, () => {
     QUnit.test('aria-activedescendant on combobox should point to the active list item (date view)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
