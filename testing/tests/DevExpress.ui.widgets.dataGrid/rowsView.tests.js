@@ -5465,6 +5465,36 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok($groupCellElements.eq(2).hasClass('dx-group-cell'), 'third cell is group');
     });
 
+    // T1145973
+    QUnit.test('Group row with the custom position of the group cell using custom template', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.grouping = { allowCollapsing: true };
+        this.options.columns[0] = {
+            dataField: 'name',
+            groupIndex: 0,
+            groupCellTemplate(element, options) {
+                element.innerText = options.value;
+            }
+        };
+        this.options.columns.push({
+            type: 'groupExpand'
+        }, 'age');
+
+        this.setupDataGridModules();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        const $groupCellElements = $(this.getRowElement(0)).children();
+        assert.strictEqual($groupCellElements.length, 3, 'group cell count');
+        assert.ok($groupCellElements.eq(0).hasClass('dx-datagrid-group-space'), 'first cell is empty');
+        assert.ok($groupCellElements.eq(1).hasClass('dx-datagrid-expand'), 'second cell is expandable');
+        assert.ok($groupCellElements.eq(2).hasClass('dx-group-cell'), 'third cell is group');
+    });
+
     // T712541
     QUnit.test('Rows should be rendered properly on scrolling when virtual scrolling is enabled and a row template is used', function(assert) {
         // arrange
