@@ -109,10 +109,22 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
   }
 
   &.dx-state-disabled {
-    color: color.change($tabs-tab-color, $alpha: 0.13);
+    color: $tabs-tab-disabled-color;
 
     .dx-icon {
-      color: color.change($tabs-tab-icon-color, $alpha: 0.13);
+      color: $tabs-tab-icon-disabled-color;
+    }
+  }
+
+  &.dx-state-disabled.dx-tab-selected {
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      left: 0;
+      right: 0;
+      background-color: $tabs-disabled-tab-bottom-border-color;
     }
   }
 
@@ -147,10 +159,4 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
   text-transform: uppercase;
   line-height: $material-tab-text-line-height;
   font-weight: 500;
-}
-
-.dx-state-disabled {
-  &.dx-tabs {
-    opacity: 1;
-  }
 }

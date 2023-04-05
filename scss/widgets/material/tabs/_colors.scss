@@ -18,59 +18,65 @@ $tabs-tab-color: color.change($base-text-color, $alpha: 0.54) !default;
 $tabs-tab-selected-color: $base-accent !default;
 
 /**
-* $name 30. Selected tab bottom border color
+* $name 30. Disabled tab color
+* $type color
+*/
+$tabs-tab-disabled-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
+
+/**
+* $name 40. Selected tab bottom border color
 * $type color
 */
 $tabs-selected-tab-bottom-border-color: $base-accent !default;
 
 /**
-* $name 40. Tab background color
+* $name 50. Disabled tab bottom border color
+* $type color
+*/
+$tabs-disabled-tab-bottom-border-color: null !default;
+
+/**
+* $name 60. Tab background color
 * $type color
 */
 $tabs-tab-bg: $base-bg !default;
 $tabs-tab-icon-color: $tabs-tab-color !default;
+
+/**
+* $name 70. Selected tab icon color
+* $type color
+*/
 $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
+
+/**
+* $name 80. Disabled tab icon color
+* $type color
+*/
+$tabs-tab-icon-disabled-color: color.change($tabs-tab-icon-color, $alpha: 0.13) !default;
 $tabs-tab-button-disabled-opacity: 0 !default;
 
 /**
-* $name 50. Hovered tab background color
+* $name 90. Hovered tab background color
 * $type color
 */
-$tabs-hovered-tab-bg-color: null !default;
-
-@if $mode == "light" {
-  $tabs-hovered-tab-bg-color: color.change($base-accent, $alpha: 0.08) !default;
-}
-
-@if $mode == "dark" {
-  $tabs-hovered-tab-bg-color: color.change($base-accent, $alpha: 0.08) !default;
-}
+$tabs-hovered-tab-bg-color: color.change($base-accent, $alpha: 0.08) !default;
 
 /**
-* $name 50. Focused tab background color
+* $name 100. Focused tab background color
 * $type color
 */
-$tabs-focused-tab-bg-color: null !default;
-
-@if $mode == "light" {
-  $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.12) !default;
-}
-
-@if $mode == "dark" {
-  $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.12) !default;
-}
+$tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.12) !default;
 
 /**
-* $name 50. Focused tab background color
+* $name 110. Active tab background color
 * $type color
 */
-$tabs-active-tab-bg-color: null !default;
+$tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
 
 @if $mode == "light" {
-  $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
+  $tabs-disabled-tab-bottom-border-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
 }
 
 @if $mode == "dark" {
-  $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
+  $tabs-disabled-tab-bottom-border-color: color.change($tabs-tab-color, $alpha: 0.4) !default;
 }
-
