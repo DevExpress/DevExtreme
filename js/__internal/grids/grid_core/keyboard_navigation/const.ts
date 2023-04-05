@@ -1,4 +1,4 @@
 export const ATTRIBUTES = {
-    ariaColIndex: 'aria-colindex',
-    dragCell: 'dx-drag-cell',
+  ariaColIndex: 'aria-colindex',
+  dragCell: 'dx-drag-cell',
 };
