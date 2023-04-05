@@ -1,8 +1,10 @@
-import DataGrid, { Properties } from '@js/ui/data_grid';
-import { PropertyType } from '@js/core/index';
+import DataGrid, { Properties } from '../data_grid';
+import { PropertyType } from '../../core/index';
 
 export interface InternalGrid extends Omit<DataGrid<unknown, unknown>, 'option'> {
-  option: (<TPropertyName extends string>(optionName: TPropertyName) => PropertyType<Properties, TPropertyName>) & (<TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<Properties, TPropertyName>) => void);
+  option<TPropertyName extends string>(optionName: TPropertyName): PropertyType<Properties, TPropertyName>;
+
+  option<TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<Properties, TPropertyName>): void;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
@@ -11,23 +13,22 @@ export interface InternalGrid extends Omit<DataGrid<unknown, unknown>, 'option'>
   _requireResize: boolean;
 }
 
-export interface OptionChangedArgs {
+export type OptionChangedArgs = {
   name: any;
   fullName: any;
   previousValue: any;
   value: any;
   handled: any;
-}
+};
 
-export interface Controllers {
-  data: any;
-  columns: any;
-}
+export type Controllers = {
+  data: import('../grid_core/ui.grid_core.data_controller').DataController;
+  columns: import('../grid_core/ui.grid_core.columns_controller').ColumnsController;
+};
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Views {
+export type Views = {
 
-}
+};
 
 interface ModuleItem {
   component: InternalGrid;
