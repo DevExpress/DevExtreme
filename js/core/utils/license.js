@@ -14,3 +14,13 @@ export const checkLicense = function() {
     }
     checked = true;
 };
+
+///#DEBUG
+export function resetLicenseCheckSkipCondition() {
+    checked = false;
+}
+
+export function getLicenseCheckSkipCondition() {
+    return checked;
+}
+///#ENDDEBUG

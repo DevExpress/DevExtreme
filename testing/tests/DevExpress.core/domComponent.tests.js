@@ -1,6 +1,5 @@
-import * as license from 'core/utils/license';
-
-const licenseStub = sinon.stub(license, 'checkLicense').callsFake(() => console.log('%%%$$%%$@#$!'));
+import license from 'core/utils/license';
+import { logger } from 'core/utils/console';
 
 import registerComponent from 'core/component_registrator';
 import config from 'core/config';
@@ -26,10 +25,6 @@ QUnit.testStart(() => {
 const RTL_CLASS = 'dx-rtl';
 
 QUnit.module('default', {
-    // before: function() {
-    //
-    // },
-
     beforeEach: function() {
         this.TestComponentWithTemplate = DOMComponent.inherit({
             _initTemplates() {
@@ -1179,6 +1174,47 @@ QUnit.module('default', {
     });
 
     // QUnit.test('license check mechanism', function(assert) {
+    //     const licenseStub = sinon.stub(license, 'checkLicense');
     //
+    //     try {
+    //         $('#component').TestComponent();
+    //         assert.equal(licenseStub.callCount, 1, 'the checkLicense method is called');
+    //     } finally {
+    //         licenseStub.restore();
+    //     }
     // });
+
+    QUnit.test('license check mechanism - log once', function(assert) {
+        config({ license: '' });
+        license.resetLicenseCheckSkipCondition();
+
+        const loggerStub = sinon.stub(logger, 'warn');
+
+        try {
+            $('#component').TestComponent();
+            assert.equal(loggerStub.callCount, 1, 'the warn method is called once');
+            assert.ok(license.getLicenseCheckSkipCondition());
+            $('#anotherComponent').TestComponent();
+            assert.equal(loggerStub.callCount, 1, 'the warn method is called once');
+        } finally {
+            loggerStub.restore();
+        }
+    });
+
+    QUnit.test('license check mechanism - no log on correct license', function(assert) {
+        config({ license: '1234567890' });
+        license.resetLicenseCheckSkipCondition();
+
+        const loggerStub = sinon.stub(logger, 'warn');
+
+        try {
+            $('#component').TestComponent();
+            assert.equal(loggerStub.callCount, 0, 'no warn method is called');
+            assert.ok(license.getLicenseCheckSkipCondition());
+            $('#anotherComponent').TestComponent();
+            assert.equal(loggerStub.callCount, 0, 'no warn method is called');
+        } finally {
+            loggerStub.restore();
+        }
+    });
 });
