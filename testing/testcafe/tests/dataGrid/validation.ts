@@ -13,6 +13,7 @@ test('Validation popup screenshot', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
+    .maximizeWindow()
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+a backspace enter')
     // act
