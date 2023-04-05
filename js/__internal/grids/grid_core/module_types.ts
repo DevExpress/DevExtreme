@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import DataGrid, { Properties } from '../data_grid';
-import { PropertyType as _PropertyType, DeepPartial, OmitInternal } from '../../core/index';
-import { Component } from '../../core/component';
-import { dxElementWrapper } from '../../core/renderer';
+import { PropertyType as _PropertyType, DeepPartial, OmitInternal } from '@js/core/index';
+import { Component } from '@js/core/component';
+import { dxElementWrapper } from '@js/core/renderer';
+import DataGrid, { Properties } from '@js/ui/data_grid';
 
 type PropertyType<O, K extends string> = _PropertyType<O, K> extends never ? any : _PropertyType<O, K>;
 
@@ -47,15 +47,16 @@ export interface OptionChangedArgs<T extends string = string> {
 }
 
 export interface ControllersPrivate {
-  data: import('./ui.grid_core.data_controller').DataController;
-  columns: import('./ui.grid_core.columns_controller').ColumnsController;
-  resizing: import('./ui.grid_core.grid_view').ResizingController;
-  adaptiveColumns: import('./ui.grid_core.adaptivity').AdaptiveColumnsController;
-  columnChooser: import('./ui.grid_core.column_chooser').ColumnChooserController;
-  editorFactory: import('./ui.grid_core.editor_factory').EditorFactory;
-  editing: import('./ui.grid_core.editing').EditingController;
-  keyboardNavigation: import('./keyboard_navigation/types').KeyboardNavigationController;
-  focus: import('./ui.grid_core.focus').FocusController;
+  // @ts-expect-error
+  data: import('@js/ui/grid_core/ui.grid_core.data_controller').DataController;
+  columns: any;
+  resizing: any;
+  adaptiveColumns: import('./adaptivity/module_types').AdaptiveColumnsController;
+  columnChooser: any;
+  editorFactory: import('./editor_factory/module_types').EditorFactory;
+  editing: any;
+  keyboardNavigation: import('./keyboard_navigation/module_types').KeyboardNavigationController;
+  focus: any;
   columnsResizer: any;
   validating: any;
   export: any;
@@ -64,9 +65,9 @@ export interface ControllersPrivate {
 }
 
 export interface ViewsPrivate {
-  headerPanel: import('./ui.grid_core.header_panel').HeaderPanel;
-  rowsView: import('./ui.grid_core.rows').RowsView;
-  columnChooserView: import('./ui.grid_core.column_chooser').ColumnChooserView;
+  headerPanel: any;
+  rowsView: any;
+  columnChooserView: any;
 }
 
 type MapOmitThis<T> = {
@@ -139,16 +140,16 @@ declare class ModuleItem {
   static inherit: (obj: any) => any;
 }
 
-export class Controller extends ModuleItem {
+export declare class Controller extends ModuleItem {
 }
 
-export class ViewController extends Controller {
+export declare class ViewController extends Controller {
   getView: InternalGrid['getView'];
 
   getViews: (this: this) => View[];
 }
 
-export class View extends ModuleItem {
+export declare class View extends ModuleItem {
   _endUpdateCore: (this: this) => void;
 
   _invalidate: (this: this, requireResize?: any, requireReady?: any) => void;
