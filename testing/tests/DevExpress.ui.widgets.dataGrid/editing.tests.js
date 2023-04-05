@@ -8691,14 +8691,14 @@ QUnit.module('Editing with real dataController', {
         };
 
         class Data {
-            prop1
+            prop1;
         }
         class Prop1 {
-            prop2
+            prop2;
         }
 
         class Prop2 {
-            name
+            name;
         }
 
         const dataSource = [{
@@ -10685,13 +10685,13 @@ QUnit.module('Editing with validation', {
                 dataField: 'name',
                 editorOptions: { disabled: true },
                 validationRules: [{
-                    type: "async",
+                    type: 'async',
                     validationCallback: disabledEditorValidationCallback
                 }]
             }, {
                 dataField: 'age',
                 validationRules: [{
-                    type: "async",
+                    type: 'async',
                     validationCallback: enabledEditorValidationCallback
                 }]
             }]

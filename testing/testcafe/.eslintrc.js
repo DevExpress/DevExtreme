@@ -5,4 +5,4 @@ module.exports = {
         files: ['*.ts'],
         extends: ['devextreme/testcafe'],
     }],
-}
+};
