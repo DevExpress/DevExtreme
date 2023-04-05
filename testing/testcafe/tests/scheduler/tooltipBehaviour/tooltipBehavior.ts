@@ -1,3 +1,5 @@
+import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
@@ -85,3 +87,31 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   currentView: 'week',
   dataSource,
 }));
+
+([
+  [false, '.dx-scheduler-appointment-tooltip-wrapper'],
+  [true, '.dx-scheduler-overlay-panel'],
+] as [boolean, string][])
+  .forEach(([adaptivityEnabled, expectedSelector]) => {
+    safeSizeTest('The tooltip screenshot', async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const scheduler = new Scheduler('#container');
+      const appointment = scheduler.getAppointment('Brochure Design Review');
+
+      await t
+        .click(appointment.element)
+        // act
+        .expect(await takeScreenshot(`appointment-${adaptivityEnabled ? 'mobile' : 'desktop'}-tooltip-screenshot`, scheduler.element))
+        .ok()
+        // assert
+        .expect(Selector(expectedSelector).exists)
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }, [600, 400]).before(async () => createScheduler({
+      views: ['week'],
+      currentView: 'week',
+      dataSource,
+      adaptivityEnabled,
+    }));
+  });
