@@ -255,6 +255,13 @@ const transpileHelpers = async() => {
     // eslint-disable-next-line no-undef
     const { transpile } = parseArguments(process.argv);
 
+    const traceFilePath = path.join(root, 'node_modules/systemjs-builder/lib/trace.js');
+    const traceFile = fs.readFileSync(traceFilePath).toString();
+    fs.writeFileSync(traceFilePath, traceFile.replace(
+        'load.depMap[dep] = getCanonicalName(loader, normalized);',
+        'load.depMap[dep] = dep;'
+    ));
+
     switch(transpile) {
         case 'modules': return await transpileModules();
         case 'tests': return await transpileTests();
