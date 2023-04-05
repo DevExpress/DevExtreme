@@ -11,8 +11,7 @@
 .dx-tabpanel {
   .dx-tabs {
     display: block;
-    border-bottom: none;
-    background-color: $tabs-tab-bg;
+    border-bottom: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
       border-top: none;
@@ -21,10 +20,6 @@
 
   .dx-tab {
     min-width: 72px;
-
-    &:not(.dx-tab-selected):not(.dx-state-hover) {
-      background: none;
-    }
   }
 
   .dx-tabs-wrapper {
