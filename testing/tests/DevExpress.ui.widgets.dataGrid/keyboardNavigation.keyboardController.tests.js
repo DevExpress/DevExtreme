@@ -389,32 +389,32 @@ QUnit.module('Keyboard controller', {
         // act, assert
         navigationController.setFocusedCellPosition(0, 1);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('input'), 'Interactive element is input');
 
         // act, assert
         navigationController.setFocusedCellPosition(0, 2);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('textarea'), 'Interactive element is textarea');
 
         // act, assert
         navigationController.setFocusedCellPosition(0, 3);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('a'), 'Interactive element is link');
 
         // act, assert
         navigationController.setFocusedCellPosition(0, 4);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('select'), 'Interactive element is select');
 
         // T1034050
         // act, assert
         navigationController.setFocusedCellPosition(0, 5);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('.dx-checkbox'), 'Interactive element is select');
     });
 
@@ -691,7 +691,7 @@ QUnit.module('Keyboard controller', {
 
         callViewsRenderCompleted(this.component._views);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!isFocused, 'cell is not focused');
         assert.ok(!$cell.attr('tabindex'), 'tabindex');

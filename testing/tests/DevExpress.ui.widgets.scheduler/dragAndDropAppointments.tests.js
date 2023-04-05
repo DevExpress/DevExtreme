@@ -2535,7 +2535,7 @@ module('Appointment dragging', {
                     }]
                 });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const updatedItem = {
                     'text': 'Google AdWords Strategy',
@@ -2549,7 +2549,7 @@ module('Appointment dragging', {
 
                 const dataSourceItem = this.instance.option('dataSource').items()[0];
 
-                this.clock.tick();
+                this.clock.tick(10);
                 assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
                 assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
             });
@@ -2574,7 +2574,7 @@ module('Appointment dragging', {
 
                 this.scheduler.appointmentList[0].drag.toCell(8);
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
@@ -2603,7 +2603,7 @@ module('Appointment dragging', {
 
                 this.scheduler.appointmentList[0].drag.toCell(9);
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 10, 8, 0), 'Start date is correct');
@@ -2633,7 +2633,7 @@ module('Appointment dragging', {
 
                 this.scheduler.appointmentList[0].drag.toCell(16);
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 10), 'Start date is correct');
@@ -2663,7 +2663,7 @@ module('Appointment dragging', {
 
                 this.scheduler.appointmentList[0].drag.toCell(16);
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 8), 'Start date is correct');
@@ -2678,7 +2678,7 @@ module('Appointment dragging', {
 
                 this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const updatedItem = {
                     text: 'Task 1',
@@ -2691,7 +2691,7 @@ module('Appointment dragging', {
 
                 const dataSourceItem = this.instance.option('dataSource').items()[0];
 
-                this.clock.tick();
+                this.clock.tick(10);
                 assert.equal(dataSourceItem.text, updatedItem.text, 'New data is correct');
                 assert.equal(dataSourceItem.allDay, updatedItem.allDay, 'New data is correct');
                 assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
@@ -2722,7 +2722,7 @@ module('Appointment dragging', {
                             allDayExpr: 'AllDay'
                         });
 
-                        this.clock.tick();
+                        this.clock.tick(10);
 
                         const updatedItem = {
                             text: 'Task 1',
@@ -2733,7 +2733,7 @@ module('Appointment dragging', {
 
                         this.scheduler.appointmentList[0].drag.toCell(5);
 
-                        this.clock.tick();
+                        this.clock.tick(10);
 
                         const dataSourceItem = this.instance.option('dataSource').items()[0];
 
@@ -2775,7 +2775,7 @@ module('Appointment dragging', {
 
                 this.scheduler.appointmentList[0].drag.toCell(7);
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 0), 'Start date is correct');
@@ -2838,7 +2838,7 @@ module('Appointment dragging', {
                 $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
                 pointer.up();
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 9, 30), 'Start date is correct');
@@ -2891,7 +2891,7 @@ module('Appointment dragging', {
                 $(this.instance.$element().find('.dx-scheduler-all-day-table-cell')).eq(11).trigger(dragEvents.enter);
                 pointer.up();
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 9, 0), 'Start date is correct');
@@ -2941,7 +2941,7 @@ module('Appointment dragging', {
 
                 assert.deepEqual(oldAppointmentCoords, newAppointmentCoords, 'Appointment has correct coords');
 
-                this.clock.tick();
+                this.clock.tick(10);
             });
 
             test('Appointment should push correct data to the onAppointmentUpdating event on changing group by dragging', function(assert) {
@@ -2982,7 +2982,7 @@ module('Appointment dragging', {
                 assert.equal(result.oldData.priorityId, 1, 'Appointment was located in the first group');
                 assert.equal(result.newData.priorityId, 2, 'Appointment located in the second group now');
 
-                this.clock.tick();
+                this.clock.tick(10);
             });
 
             test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
@@ -2999,7 +2999,7 @@ module('Appointment dragging', {
 
                 this.scheduler.appointmentList[0].drag.toCell(1);
 
-                this.clock.tick();
+                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 0, 7), 'Start date is correct');

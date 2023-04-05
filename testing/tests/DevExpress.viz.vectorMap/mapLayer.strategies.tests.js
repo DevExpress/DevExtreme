@@ -287,7 +287,7 @@ QUnit.test('Perform grouping', function(assert) {
     assert.deepEqual(callback({ attribute: stub }, 'test-arg'), 'test-data', 'value callback');
     assert.deepEqual(stub.lastCall.args, ['test-arg'], 'attribute');
 
-    valuesCallback.reset();
+    valuesCallback.resetHistory();
     set.reset();
     callback = sinon.spy();
     performGrouping(context, [1, 2, 3], 'test-field-2', callback, valuesCallback);
@@ -305,7 +305,7 @@ QUnit.test('Perform grouping', function(assert) {
         defaultColor: 'default color'
     }], 'data is set 2');
 
-    valuesCallback.reset();
+    valuesCallback.resetHistory();
     set.reset();
     performGrouping(context, { tag: 'test' }, 'test-field-3', 'data-field', valuesCallback);
 

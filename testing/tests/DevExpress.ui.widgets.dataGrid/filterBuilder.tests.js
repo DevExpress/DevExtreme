@@ -322,7 +322,7 @@ QUnit.module('Real dataGrid', {
         });
 
         $('.dx-popup-content .dx-filterbuilder-item-value-text').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-header-filter-menu.dx-popup').dxPopup('instance').hide();
 
         // assert
@@ -340,7 +340,7 @@ QUnit.module('Real dataGrid', {
             filterValue: ['field', 'anyof', ['text']],
         });
         $('.dx-popup-content .dx-filterbuilder-item-value-text').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-header-filter-menu.dx-popup').dxPopup('instance').hide();
 
         // assert

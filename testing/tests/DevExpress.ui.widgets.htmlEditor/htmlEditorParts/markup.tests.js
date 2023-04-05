@@ -128,7 +128,7 @@ export default function() {
             config({
                 editorStylingMode: 'filled',
             });
-        }, 
+        },
         afterEach() {
             config({
                 editorStylingMode: 'outlined',

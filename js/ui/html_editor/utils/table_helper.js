@@ -27,7 +27,7 @@ function getTableFormats(quill) {
 }
 
 function hasEmbedContent(module, selection) {
-    return !!selection && module.quill.getText(selection).trim().length < selection.length;
+    return !!selection && module.quill.getText(selection).length < selection.length;
 }
 
 function unfixTableWidth($table, { tableBlot, quill }) {

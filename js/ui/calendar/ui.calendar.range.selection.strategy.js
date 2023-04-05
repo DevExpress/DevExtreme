@@ -25,6 +25,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     selectValue(selectedValue, e) {
         const [startDate, endDate] = this._getValues();
 
+        this.skipNavigate();
         this._updateCurrentDate(selectedValue);
         this._currentDateChanged = true;
         if(!startDate || endDate) {

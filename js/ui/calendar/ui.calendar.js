@@ -35,6 +35,7 @@ const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
+const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
@@ -97,6 +98,8 @@ const Calendar = Editor.inherit({
             max: new Date(3000, 0),
 
             firstDayOfWeek: undefined,
+
+            viewsCount: 1,
 
             zoomLevel: ZOOM_LEVEL.MONTH,
 
@@ -333,6 +336,7 @@ const Calendar = Editor.inherit({
         if(this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
             this._waitRenderView(offset > 0 ? 1 : -1);
         } else {
+            this._skipNavigate = true;
             this.option('currentDate', currentDate);
         }
     },
@@ -517,17 +521,44 @@ const Calendar = Editor.inherit({
         if(offset !== 0 && !this._isMaxZoomLevel() && this._isOtherViewCellClicked) { offset = 0; }
 
         if(this._view && offset !== 0 && !this._suppressNavigation) {
-            this._navigate(offset, normalizedDate);
+            if(this._additionalView) {
+                if(offset > 2 || offset < -1) {
+                    this._refreshViews();
+                    this._renderNavigator();
+                } else if(offset === 1 && this._skipNavigate) {
+                    this._setViewContoured(normalizedDate);
+                    this._updateAriaId(normalizedDate);
+                } else {
+                    this._navigate(offset, normalizedDate);
+                }
+            } else {
+                this._navigate(offset, normalizedDate);
+            }
         } else {
             this._renderNavigator();
             this._setViewContoured(normalizedDate);
             this._updateAriaId(normalizedDate);
         }
+        this._skipNavigate = false;
+    },
+
+    _isAdditionalViewDate(date) {
+        const view = this._additionalView;
+        return view && dateUtils.sameMonthAndYear(date, view.option('date'));
+    },
+
+    _getActiveView: function(date) {
+        return this._isAdditionalViewDate(date) ? this._additionalView : this._view;
     },
 
     _setViewContoured: function(date) {
         if(this.option('skipFocusCheck') || elementHasFocus(this._focusTarget())) {
-            this._view.option('contouredDate', date);
+            this._view.option('contouredDate', null);
+            this._additionalView?.option('contouredDate', null);
+
+            const view = this._isAdditionalViewDate(date) ? this._additionalView : this._view;
+
+            view.option('contouredDate', date);
         }
     },
 
@@ -665,29 +696,41 @@ const Calendar = Editor.inherit({
     _renderViews: function() {
         this.$element().addClass(CALENDAR_VIEW_CLASS + '-' + this.option('zoomLevel'));
 
-        const currentDate = this.option('currentDate');
-
+        const { currentDate, viewsCount } = this.option();
         this._view = this._renderSpecificView(currentDate);
 
         if(hasWindow()) {
             const beforeDate = this._getDateByOffset(-1, currentDate);
             this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
-            const afterDate = this._getDateByOffset(1, currentDate);
+            const afterDate = this._getDateByOffset(viewsCount, currentDate);
             afterDate.setDate(1);
 
             this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
+        }
+
+        if(viewsCount > 1) {
+            this._additionalView = this._renderSpecificView(this._getDateByOffset(1, currentDate));
+
+            const viewWidth = this._viewWidth();
+            const elementWidth = viewWidth * viewsCount;
+
+            this.$element().css('width', elementWidth);
         }
 
         this._translateViews();
     },
 
     _renderSpecificView: function(date) {
-        const specificView = Views[this.option('zoomLevel')];
+        const { viewsCount, zoomLevel } = this.option();
+        const specificView = Views[zoomLevel];
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
-        return this._createComponent($view, specificView, config);
+        const view = this._createComponent($view, specificView, config);
+        $view.toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
+
+        return view;
     },
 
     _viewConfig: function(date) {
@@ -732,15 +775,17 @@ const Calendar = Editor.inherit({
     },
 
     _translateViews: function() {
+        const { viewsCount } = this.option();
+
         move(this._view.$element(), { left: 0, top: 0 });
+        this._moveViewElement(this._beforeView, -1);
+        this._moveViewElement(this._afterView, viewsCount);
+        this._moveViewElement(this._additionalView, 1);
+    },
 
-        this._beforeView && move(this._beforeView.$element(), {
-            left: this._getViewPosition(-1),
-            top: 0
-        });
-
-        this._afterView && move(this._afterView.$element(), {
-            left: this._getViewPosition(1),
+    _moveViewElement(view, coefficient) {
+        view && move(view.$element(), {
+            left: this._getViewPosition(coefficient),
             top: 0
         });
     },
@@ -821,7 +866,7 @@ const Calendar = Editor.inherit({
             this._navigator = new Navigator($('<div>'), this._navigatorConfig());
         }
 
-        this._navigator.option('text', this._view.getNavigatorCaption());
+        this._navigator.option('text', this._getViewsCaption(this._view, this._additionalView));
         this._updateButtonsVisibility();
     },
 
@@ -835,9 +880,20 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorClickHandler: function(e) {
-        const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
+        const { currentDate, viewsCount } = this.option();
+        let offset = e.direction;
 
-        this._moveToClosestAvailableDate(currentDate);
+        if(viewsCount > 1) {
+            const additionalViewActive = this._isAdditionalViewDate(currentDate);
+            const shouldDoubleOffset = additionalViewActive && offset < 0 || !additionalViewActive && offset > 0;
+
+            if(shouldDoubleOffset) {
+                offset *= 2;
+            }
+        }
+
+        const newCurrentDate = this._getDateByOffset(offset, currentDate);
+        this._moveToClosestAvailableDate(newCurrentDate);
     },
 
     _navigateUp: function() {
@@ -883,9 +939,10 @@ const Calendar = Editor.inherit({
 
     _swipeStartHandler: function(e) {
         fx.stop(this._$viewsWrapper, true);
+        const { viewsCount } = this.option();
 
-        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 : 0;
-        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 : 0;
+        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
+        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
     },
 
     _getRequiredView: function(name) {
@@ -909,15 +966,20 @@ const Calendar = Editor.inherit({
     },
 
     _swipeEndHandler: function(e) {
+        const { currentDate, rtlEnabled } = this.option();
         const targetOffset = e.event.targetOffset;
         const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
+
+        const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
+        const shouldDoubleOffset = isAdditionalViewActive && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
 
         if(moveOffset === 0) {
             this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
             return;
         }
 
-        let date = this._getDateByOffset(-moveOffset * this._getRtlCorrection());
+        const offset = -moveOffset * this._getRtlCorrection() * (shouldDoubleOffset ? 2 : 1);
+        let date = this._getDateByOffset(offset);
 
         if(this._isDateInInvalidRange(date)) {
             if(moveOffset >= 0) {
@@ -926,7 +988,6 @@ const Calendar = Editor.inherit({
                 date = new Date(this._getMaxDate());
             }
         }
-
         this.option('currentDate', date);
     },
 
@@ -940,16 +1001,37 @@ const Calendar = Editor.inherit({
 
     _updateNavigatorCaption: function(offset) {
         offset *= this._getRtlCorrection();
+        const isMultiView = this.option('viewsCount') > 1;
 
-        let view = this._view;
+        let view;
+        let additionalView;
 
         if(offset > 0.5 && this._beforeView) {
             view = this._beforeView;
+            additionalView = isMultiView && this._view;
         } else if(offset < -0.5 && this._afterView) {
-            view = this._afterView;
+            view = isMultiView ? this._additionalView : this._afterView;
+            additionalView = isMultiView ? this._afterView : null;
+        } else {
+            view = this._view;
+            additionalView = isMultiView ? this._additionalView : null;
         }
 
-        this._navigator.option('text', view.getNavigatorCaption());
+        this._navigator.option('text', this._getViewsCaption(view, additionalView));
+    },
+
+    _getViewsCaption: function(view, additionalView) {
+        let caption = view.getNavigatorCaption();
+        const { viewsCount, rtlEnabled } = this.option();
+
+        if(viewsCount > 1 && additionalView) {
+            const additionalViewCaption = additionalView.getNavigatorCaption();
+            caption = rtlEnabled
+                ? `${additionalViewCaption} - ${caption}`
+                : `${caption} - ${additionalViewCaption}`;
+        }
+
+        return caption;
     },
 
     _isDateInInvalidRange: function(date) {
@@ -1007,7 +1089,12 @@ const Calendar = Editor.inherit({
 
     _animateShowView: function() {
         fx.stop(this._view.$element(), true);
-        return this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW).promise();
+        this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+
+        if(this.option('viewsCount') > 1) {
+            fx.stop(this._additionalView.$element(), true);
+            this._popAnimationView(this._additionalView, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+        }
     },
 
     _popAnimationView: function(view, from, to, duration) {
@@ -1102,18 +1189,25 @@ const Calendar = Editor.inherit({
             return;
         }
 
+        const { viewsCount } = this.option();
         let viewOffset;
         let viewToCreateKey;
         let viewToRemoveKey;
+        let viewBeforeCreateKey;
+        let viewAfterRemoveKey;
 
         if(offset < 0) {
             viewOffset = 1;
             viewToCreateKey = '_beforeView';
             viewToRemoveKey = '_afterView';
+            viewBeforeCreateKey = '_view';
+            viewAfterRemoveKey = viewsCount === 1 ? '_view' : '_additionalView';
         } else {
             viewOffset = -1;
             viewToCreateKey = '_afterView';
             viewToRemoveKey = '_beforeView';
+            viewBeforeCreateKey = viewsCount === 1 ? '_view' : '_additionalView';
+            viewAfterRemoveKey = '_view';
         }
 
         if(!this[viewToCreateKey]) {
@@ -1122,18 +1216,16 @@ const Calendar = Editor.inherit({
 
         const destinationDate = this[viewToCreateKey].option('date');
 
-        if(this[viewToRemoveKey]) {
-            this[viewToRemoveKey].$element().remove();
-        }
+        this[viewToRemoveKey]?.$element().remove();
+        this[viewToRemoveKey] = this._renderSpecificView(this._getDateByOffset(viewOffset * viewsCount, destinationDate));
+        this[viewAfterRemoveKey].$element().remove();
 
-        if(offset === viewOffset) {
-            this[viewToRemoveKey] = this._view;
+        if(viewsCount === 1) {
+            this[viewAfterRemoveKey] = this[viewToCreateKey];
         } else {
-            this[viewToRemoveKey] = this._renderSpecificView(this._getDateByOffset(viewOffset, destinationDate));
-            this._view.$element().remove();
+            this[viewAfterRemoveKey] = this[viewBeforeCreateKey];
+            this[viewBeforeCreateKey] = this[viewToCreateKey];
         }
-
-        this._view = this[viewToCreateKey];
 
         const dateByOffset = this._getDateByOffset(-viewOffset, destinationDate);
         this[viewToCreateKey] = this._isViewAvailable(dateByOffset) ? this._renderSpecificView(dateByOffset) : null;
@@ -1145,6 +1237,7 @@ const Calendar = Editor.inherit({
 
     _clean: function() {
         this.callBase();
+        this._clearInlineWidth();
         this._clearViewWidthCache();
 
         delete this._$viewsWrapper;
@@ -1156,13 +1249,20 @@ const Calendar = Editor.inherit({
         delete this._viewWidthValue;
     },
 
+    _clearInlineWidth: function() {
+        this.$element().css('width', '');
+    },
+
     _disposeViews: function() {
         this._view.$element().remove();
         this._beforeView && this._beforeView.$element().remove();
+        this._additionalView && this._additionalView.$element().remove();
         this._afterView && this._afterView.$element().remove();
         delete this._view;
+        delete this._additionalView;
         delete this._beforeView;
         delete this._afterView;
+        delete this._skipNavigate;
     },
 
     _dispose: function() {
@@ -1171,6 +1271,7 @@ const Calendar = Editor.inherit({
     },
 
     _refreshViews: function() {
+        this._clearInlineWidth();
         this._disposeViews();
         this._renderViews();
     },
@@ -1181,16 +1282,18 @@ const Calendar = Editor.inherit({
 
     _focusInHandler: function() {
         this.callBase.apply(this, arguments);
-        this._view.option('contouredDate', this.option('currentDate'));
+        this._setViewContoured(this.option('currentDate'));
     },
 
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
         this._view.option('contouredDate', null);
+        this._additionalView?.option('contouredDate', null);
     },
 
     _updateViewsOption: function(optionName, newValue) {
         this._view.option(optionName, newValue);
+        this._additionalView?.option(optionName, newValue);
         this._beforeView?.option(optionName, newValue);
         this._afterView?.option(optionName, newValue);
     },
@@ -1198,13 +1301,19 @@ const Calendar = Editor.inherit({
     _updateAriaSelected: function(value, previousValue) {
         previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
         value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
+
+        if(this.option('viewsCount') > 1) {
+            previousValue.forEach((item) => { this.setAria('selected', undefined, this._additionalView._getCellByDate(item)); });
+            value.forEach((item) => { this.setAria('selected', true, this._additionalView._getCellByDate(item)); });
+        }
     },
 
     _updateAriaId: function(value) {
         value = value ?? this.option('currentDate');
 
         const ariaId = 'dx-' + new Guid();
-        const $newCell = this._view._getCellByDate(value);
+        const view = this._getActiveView(value);
+        const $newCell = view._getCellByDate(value);
 
         this.setAria('id', ariaId, $newCell);
         this.setAria('activedescendant', ariaId);
@@ -1271,6 +1380,10 @@ const Calendar = Editor.inherit({
                 }
                 this._raiseValueChangeAction(value, previousValue);
                 this._saveValueChangeEvent(undefined);
+                break;
+            case 'viewsCount':
+                this._refreshViews();
+                this._renderNavigator();
                 break;
             case 'onCellClick':
                 this._view.option('onCellClick', value);

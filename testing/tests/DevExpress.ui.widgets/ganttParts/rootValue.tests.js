@@ -28,7 +28,7 @@ QUnit.module('Root Value', moduleConfig, () => {
             tasks: { dataSource: customTasks }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 3);
     });
@@ -42,7 +42,7 @@ QUnit.module('Root Value', moduleConfig, () => {
             tasks: { dataSource: customTasks }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 3);
     });
@@ -57,7 +57,7 @@ QUnit.module('Root Value', moduleConfig, () => {
             rootValue: 0
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 3);
     });
@@ -72,7 +72,7 @@ QUnit.module('Root Value', moduleConfig, () => {
             rootValue: undefined
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 3);
     });
@@ -87,7 +87,7 @@ QUnit.module('Root Value', moduleConfig, () => {
             rootValue: null
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 3);
     });

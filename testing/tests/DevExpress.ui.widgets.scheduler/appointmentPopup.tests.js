@@ -543,7 +543,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
             });
 
             scheduler.instance.deleteAppointment(data[0]);
-            clock.tick();
+            clock.tick(10);
 
             assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
 

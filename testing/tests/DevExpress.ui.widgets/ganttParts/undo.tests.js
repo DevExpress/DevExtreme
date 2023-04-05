@@ -71,7 +71,7 @@ const moduleConfig = {
 QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
     test('task insert', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const taskData = {
             title: 'My text',
@@ -82,7 +82,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
 
         const tasksCount = data.tasks.length;
         this.instance.insertTask(taskData);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.tasks.length, tasksCount + 1, 'new task was created in ds');
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
@@ -91,107 +91,107 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
 
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount, 'new task removed');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount + 1, 'new task restored');
     });
     test('task delete', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tasksCount = data.tasks.length;
         const taskToDelete = data.tasks[tasksCount - 1];
         this.instance.deleteTask(taskToDelete.id);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.tasks.length, tasksCount - 1, 'new task was deleted');
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount, 'task restored');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount - 1, 'task restored');
     });
     test('insertDependency', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const count = data.dependencies.length;
         const dependencyData = { 'predecessorId': 2, 'successorId': 4, 'type': 0 };
         this.instance.insertDependency(dependencyData);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.dependencies.length, count + 1, 'new dependency was  created');
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.dependencies.length, count, 'dependency removed');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.dependencies.length, count + 1, 'dependency restored');
     });
     test('deleteDependency', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const count = data.dependencies.length;
         const dependencyToDelete = data.dependencies[count - 1];
         this.instance.deleteDependency(dependencyToDelete.id);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $confirmDialog = $('body').find(Consts.POPUP_SELECTOR);
         const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $yesButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.dependencies.length, count - 1, 'new dependency was deleted');
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.dependencies.length, count, 'dependency restored');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.dependencies.length, count - 1, 'dependency removed');
     });
     test('deleteResource + unassign', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const count = data.resources.length;
         const resourceToDelete = data.resources[1];
         const assignmentCount = data.resourceAssignments.length;
         const assignmentToDelete = data.resourceAssignments.filter(a => a.resourceId === resourceToDelete.id).length;
         this.instance.deleteResource(resourceToDelete.id);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.resources.length, count - 1, 'resources was deleted');
         assert.equal(data.resourceAssignments.length, assignmentCount - assignmentToDelete, 'resources was unassigned');
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.resources.length, count, 'resource restored');
         assert.equal(data.resourceAssignments.length, assignmentCount, 'assignments restored');
         assert.equal(data.resources[data.resources.length - 1].id, data.resourceAssignments[data.resourceAssignments.length - 1].resourceId, 'checl restored key');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.resources.length, count - 1, 'resources was deleted');
         assert.equal(data.resourceAssignments.length, assignmentCount - assignmentToDelete, 'resources was unassigned');
     });
     test('task delete with relations', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tasksCount = data.tasks.length;
         const taskToDelete = data.tasks[5];
@@ -201,7 +201,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         const dependenciesToDelete = data.dependencies.filter(d => d.predecessorId === taskToDelete.id || d.successorId === taskToDelete.id).length;
 
         this.instance.deleteTask(taskToDelete.id);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.tasks.length, tasksCount - 1, 'new task was deleted');
         assert.equal(data.resourceAssignments.length, assignmentCount - assignmentToDelete, 'tasks was unassigned');
@@ -209,7 +209,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount, 'task restored');
         assert.equal(data.resourceAssignments.length, assignmentCount, 'assignments restored');
         assert.equal(data.dependencies.length, dependencyCount, 'dependency restored');
@@ -217,7 +217,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         assert.equal(data.tasks[data.tasks.length - 1].id, data.dependencies[data.dependencies.length - 1].successorId, 'check dependency restored task key');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount - 1, 'new task was deleted');
         assert.equal(data.resourceAssignments.length, assignmentCount - assignmentToDelete, 'tasks was unassigned');
         assert.equal(data.dependencies.length, dependencyCount - dependenciesToDelete, 'dependency deleted');
@@ -225,7 +225,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
 
     test('task delete with relations and children', function(assert) {
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tasksCount = data.tasks.length;
         const taskToDelete = data.tasks[1];
@@ -234,7 +234,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         const assignmentCount = data.resourceAssignments.length;
 
         this.instance.deleteTask(taskToDelete.id);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(data.tasks.length, 1, 'task deleted with children');
         assert.ok(data.resourceAssignments.length < assignmentCount, 'tasks was unassigned');
@@ -243,7 +243,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
         const $undo = $items.first();
         $undo.children().first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount, 'tasks restored');
         assert.equal(data.resourceAssignments.length, assignmentCount, 'assignments restored');
         assert.equal(data.dependencies.length, dependencyCount, 'dependency restored');
@@ -253,7 +253,7 @@ QUnit.module('Undo tests (T1099868)', moduleConfig, () => {
         assert.notEqual(data.tasks[1].id, oldTasks[1].id, 'check key');
 
         this.fireRedo();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, 1, 'task deleted with children');
         assert.ok(data.resourceAssignments.length < assignmentCount, 'tasks was unassigned');
         assert.ok(data.dependencies.length < dependencyCount, 'dependency deleted');

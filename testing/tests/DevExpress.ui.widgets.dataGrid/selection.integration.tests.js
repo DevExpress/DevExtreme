@@ -130,11 +130,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ],
             onSelectionChanged: selectionChanged
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $commandCell = $(dataGrid.getCellElement(0, 0));
         $commandCell.find('.my-class').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $firstRow = $(dataGrid.getRowElement(0));
 
@@ -165,11 +165,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             onSelectionChanged: onSelectionChangedHandler
         };
         const dataGrid = createDataGrid(gridOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let selectedKeys;
         dataGrid.getSelectedRowKeys().done(keys => selectedKeys = keys);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(selectedKeys, [1]);
@@ -257,7 +257,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(dataGrid);
@@ -286,7 +286,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'selectedRowKeys');
@@ -316,7 +316,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [], 'selectedRowKeys');
@@ -352,7 +352,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cells = $(dataGrid.element()).find('.dx-editor-inline-block');
 
@@ -487,28 +487,28 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const $dataGridElement = $(dataGrid.element());
         const $selectAllElement = $dataGridElement.find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
         const $checkboxElement = $(dataGrid.getCellElement(0, 0));
 
         // act
         $checkboxElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
 
         // act
         $dataGridElement.find('.dx-page').eq(1).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($selectAllElement.hasClass('dx-checkbox-indeterminate'));
 
         // act
         $dataGridElement.find('.dx-page').eq(0).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
@@ -529,14 +529,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getRowElement(0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row is selected');
 
         // act
         $(dataGrid.getRowElement(1)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [2], 'second row is selected');
@@ -562,7 +562,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getSelectedRowKeys().done(keys => {
             selectedRowKeys = keys;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(selectedRowKeys, [1], 'first row is selected');
@@ -573,7 +573,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getSelectedRowKeys().done(keys => {
             selectedRowKeys = keys;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(selectedRowKeys, [2], 'second row is selected');
@@ -594,14 +594,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row is selected');
 
         // act
         $(dataGrid.getRowElement(1)).find('.dx-checkbox').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1, 2], 'both rows are selected');
@@ -627,7 +627,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getSelectedRowKeys().done(keys => {
             selectedRowKeys = keys;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(selectedRowKeys, [1], 'first row is selected');
@@ -638,7 +638,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getSelectedRowKeys().done(keys => {
             selectedRowKeys = keys;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(selectedRowKeys, [1, 2], 'both rows are selected');
@@ -664,14 +664,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 showCheckBoxesMode: 'always'
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $checkBox = $(dataGrid.getRowElement(0)).find('.dx-checkbox');
         // act
         $checkBox.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $checkBox.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'row is selected');
@@ -745,11 +745,11 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.selectAll();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
@@ -944,7 +944,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         });
 
         const $grid = grid.$element();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $selectCheckboxes = $grid.find('.dx-select-checkbox');
         const $inputs = $selectCheckboxes.find('input');
@@ -990,7 +990,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         });
 
         const $grid = grid.$element();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $selectCheckboxes = $grid.find('.dx-select-checkbox');
         const $inputs = $selectCheckboxes.find('input');
@@ -1023,7 +1023,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         });
 
         const $grid = grid.$element();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $selectCheckboxes = $grid.find('.dx-select-checkbox');
         const $inputs = $selectCheckboxes.find('input');
@@ -1065,14 +1065,14 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             selection: { mode: 'none' }
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.option({
             dataSource: [{ field1: 1, field2: 2, field3: 3 }],
             selection: { mode: 'none' }
         });
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnCount(), 3, 'columnCount after change dataSource');
@@ -1085,7 +1085,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             selection: { mode: 'multiple' }
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.option('selection.mode', 'single');
@@ -1102,7 +1102,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             selection: { mode: 'multiple' }
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         assert.equal($(dataGrid.$element()).find('.dx-select-checkboxes-hidden').length, 1, 'select checkboxes are hidden');
 
@@ -1214,7 +1214,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             dataSource: [{ a: 1111, b: 222 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option({
@@ -1226,7 +1226,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         dataGrid.selectRows([{ a: 1111, b: 222 }]);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ a: 1111, b: 222 }], 'selected row keys');
@@ -1273,12 +1273,12 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             },
         });
         dataGrid.selectRows([1]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let selectedKeysBefore;
         dataGrid.getSelectedRowKeys().done((keys) => selectedKeysBefore = keys);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(selectedKeysBefore, [1]);
 
         // act
@@ -1287,7 +1287,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         let selectedKeysAfter;
         dataGrid.getSelectedRowKeys().done((keys) => selectedKeysAfter = keys);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(selectedKeysAfter, [1]);
     });
 
@@ -1309,7 +1309,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
                 mode: 'multiple',
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option({
@@ -1380,7 +1380,7 @@ QUnit.module('columnWidth auto option', {
         const $selectAllElement = $(dataGrid.element()).find('.dx-header-row .dx-command-select');
         $selectAllElement.trigger('dxclick');
 
-        // this.clock.tick();
+        // this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getSelectedRowKeys().length, 1);

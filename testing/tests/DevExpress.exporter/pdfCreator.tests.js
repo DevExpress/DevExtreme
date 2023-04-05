@@ -15,7 +15,7 @@ const contentTestEnv = {
         sinon.stub(imageCreator, 'getImageData', (markup) => {
             const def = $.Deferred();
             def.resolve(this.imageDataSample || '_test_' + markup + '_string_');
-            return def; 
+            return def;
         });
     },
     afterEach: function() {

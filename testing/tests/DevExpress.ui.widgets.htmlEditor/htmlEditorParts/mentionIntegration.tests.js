@@ -82,7 +82,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('popup position', function(assert) {
@@ -91,7 +91,7 @@ export default function() {
             const fixtureLeft = $fixture.css('left');
             const valueChangeSpy = sinon.spy(() => {
                 this.instance.setSelection(0, 1);
-                this.clock.tick();
+                this.clock.tick(10);
                 const { bottom, left } = getSelection().getRangeAt(0).getBoundingClientRect();
                 const overlayRect = $(`.${SUGGESTION_LIST_CLASS}`).closest(`.${OVERLAY_CONTENT_CLASS}`).get(0).getBoundingClientRect();
 
@@ -112,7 +112,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('set up mentions for existed editor', function(assert) {
@@ -134,7 +134,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('reset mentions option for existed editor', function(assert) {
@@ -153,7 +153,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('change mentions marker', function(assert) {
@@ -177,7 +177,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('#');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('list isn\'t shown for wrong marker', function(assert) {
@@ -196,7 +196,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('several mention markers: first mention', function(assert) {
@@ -221,7 +221,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('several mention markers: second mention', function(assert) {
@@ -246,7 +246,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('#');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('reduce mention markers', function(assert) {
@@ -277,7 +277,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('*');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('old marker doesn\'t work after reduce mention markers', function(assert) {
@@ -307,7 +307,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('#');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         QUnit.skipInShadowDomMode('new mention should be selected after press \'enter\' key', function(assert) {
@@ -315,11 +315,11 @@ export default function() {
             const expectedMention = '<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>';
             const valueChangeSpy = sinon.spy(({ value }) => {
                 if(valueChangeSpy.calledOnce) {
-                    this.clock.tick();
+                    this.clock.tick(10);
                     const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
                     KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ARROW_DOWN });
                     KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ENTER });
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                     done();
@@ -330,14 +330,14 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('navigation keys don\'t change a caret position when suggestion list is visible', function(assert) {
             const done = assert.async();
             const valueChangeSpy = sinon.spy(() => {
                 if(valueChangeSpy.calledOnce) {
-                    this.clock.tick();
+                    this.clock.tick(10);
                     const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
                     const range = this.instance.getSelection();
 
@@ -354,7 +354,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('list should show relevant items on typing text', function(assert) {
@@ -363,7 +363,7 @@ export default function() {
                 if(valueChangeSpy.calledOnce) {
                     const element = this.$element.find('p').get(0);
                     element.innerText += 'F';
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     this.clock.tick(POPUP_TIMEOUT);
                     const $items = this.getItems();
@@ -379,7 +379,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('first list item should be focused on filtering', function(assert) {
@@ -389,7 +389,7 @@ export default function() {
                     const element = this.$element.find('p').get(0);
 
                     element.innerText += 'F';
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     this.clock.tick(POPUP_TIMEOUT);
                     const $items = this.getItems();
@@ -404,7 +404,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('input text should be removed after item select', function(assert) {
@@ -416,7 +416,7 @@ export default function() {
                 switch(valueChangeSpy.callCount) {
                     case 1:
                         element.innerText += 'F';
-                        this.clock.tick();
+                        this.clock.tick(10);
                         break;
                     case 2:
                         this.clock.tick(POPUP_TIMEOUT);
@@ -434,7 +434,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('search timeout', function(assert) {
@@ -446,7 +446,7 @@ export default function() {
                     const element = this.$element.find('p').get(0);
 
                     element.innerText += 'F';
-                    this.clock.tick();
+                    this.clock.tick(10);
                     assert.strictEqual(this.getItems().length, 4, 'dataSource isn\'t filtered');
                 } else {
                     this.clock.tick(TIMEOUT);
@@ -463,7 +463,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('minimal search length', function(assert) {
@@ -473,12 +473,12 @@ export default function() {
                 let $items;
                 if(valueChangeSpy.calledOnce) {
                     getParagraph().innerText += 'F';
-                    this.clock.tick();
+                    this.clock.tick(10);
                     const $items = this.getItems();
                     assert.strictEqual($items.length, 4, 'dataSource isn\'t filtered');
                 } else if(valueChangeSpy.calledTwice) {
                     getParagraph().innerText += 'r';
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     this.clock.tick(POPUP_TIMEOUT);
                     $items = this.getItems();
@@ -494,7 +494,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('search expression', function(assert) {
@@ -505,7 +505,7 @@ export default function() {
                     const element = this.$element.find('p').get(0);
 
                     element.innerText += 'A';
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     this.clock.tick(POPUP_TIMEOUT);
                     $items = this.getItems();
@@ -530,7 +530,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('template', function(assert) {
@@ -540,7 +540,7 @@ export default function() {
                 if(valueChangeSpy.calledOnce) {
                     $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                     done();
@@ -555,7 +555,7 @@ export default function() {
             this.createWidget();
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('template for existed value', function(assert) {
@@ -580,7 +580,7 @@ export default function() {
                 if(valueChangeSpy.calledOnce) {
                     $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
                 } else {
                     assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                     done();
@@ -602,7 +602,7 @@ export default function() {
 
             this.instance.focus();
             this.$element.find('p').first().text('@');
-            this.clock.tick();
+            this.clock.tick(10);
         });
     });
 }

@@ -73,7 +73,6 @@ const Tooltip = Popover.inherit({
 
         this.$overlayContent().attr({
             'id': this._contentId,
-            'role': 'tooltip'
         });
 
         this._toggleAriaDescription(true);

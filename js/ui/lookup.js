@@ -664,6 +664,8 @@ const Lookup = DropDownList.inherit({
                     : this._popupConfig().width
             }));
 
+        this._popup.$overlayContent().attr('role', 'dialog');
+
         this._popup.on({
             'showing': this._popupShowingHandler.bind(this),
             'shown': this._popupShownHandler.bind(this),
