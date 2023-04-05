@@ -747,16 +747,16 @@ QUnit.module('Resizing (T1156890)', {
                     width: 200
                 };
                 const drawnHandler = sinon.spy();
-        
+
                 const chart = this.createChart({
                     size: initialSize,
                     onDrawn: drawnHandler
                 });
-        
+
                 drawnHandler.reset();
-            
+
                 chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.098);
-            
+
                 assert.strictEqual(drawnHandler.callCount, 0);
             });
         });
