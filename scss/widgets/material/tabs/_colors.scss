@@ -43,6 +43,6 @@ $tabs-hovered-tab-bg-color: null !default;
 }
 
 @if $mode == "dark" {
-  $tabs-hovered-tab-bg-color: lighten($base-bg, 7%) !default; // TODO
+  $tabs-hovered-tab-bg-color: color.change($base-accent, $alpha: 0.08) !default;
 }
 
