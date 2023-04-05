@@ -4,6 +4,7 @@ const fs = require('fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
 
+// eslint-disable-next-line no-undef
 const root = path.join(__dirname, '..');
 const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
 const transpilePath = path.join(root, '/artifacts/transpiled');
@@ -113,7 +114,7 @@ const config = {
         },
     },
     packageConfigPaths: [
-        "@devextreme/*/package.json",
+        '@devextreme/*/package.json',
     ],
     meta: {
         '/node_modules/knockout/build/output/knockout-latest.debug.js': {
@@ -134,10 +135,11 @@ const getFileList = (dirName) => {
     let files = [];
     const items = fs.readdirSync(dirName, { withFileTypes: true });
 
-    for (const item of items) {
-        if (item.isDirectory()) {
+    // eslint-disable-next-line no-restricted-syntax
+    for(const item of items) {
+        if(item.isDirectory()) {
             files = [...files, ...getFileList(`${dirName}/${item.name}`)];
-        } else if (item.name.endsWith('.js')) {
+        } else if(item.name.endsWith('.js')) {
             files.push(`${dirName}/${item.name}`);
         }
     }
@@ -160,7 +162,7 @@ const transpileModules = () => {
     )));
 };
 
-const transpileCss = async () => {
+const transpileCss = async() => {
     const builder = new Builder(root, config);
     const listFiles = [
         {
@@ -178,12 +180,13 @@ const transpileCss = async () => {
     ];
 
     // https://github.com/systemjs/plugin-css/issues/102#issuecomment-243473887
-    for (const { filePath, destPath } of listFiles) {
+    // eslint-disable-next-line no-restricted-syntax
+    for(const { filePath, destPath } of listFiles) {
         await builder.bundle(filePath, destPath);
     }
 };
 
-const transpileTests = async () => {
+const transpileTests = async() => {
     const builder = new Builder(root, config);
     const testingFolders = [
         'DevExpress.ui.widgets',
@@ -193,10 +196,12 @@ const transpileTests = async () => {
 
     const promises = [];
 
-    for (const folder of testingFolders) {
+    // eslint-disable-next-line no-restricted-syntax
+    for(const folder of testingFolders) {
         const listFiles = getFileList(path.join(root, 'testing', 'tests', folder));
 
-        for (const filePath of listFiles) {
+        // eslint-disable-next-line no-restricted-syntax
+        for(const filePath of listFiles) {
             try {
                 await builder.buildStatic(
                     `[${filePath}]`,
@@ -207,8 +212,8 @@ const transpileTests = async () => {
                         encodeNames: false
                     }
                 );
-            } catch (error) {
-                const file = fs.readFileSync(filePath)
+            } catch(error) {
+                const file = fs.readFileSync(filePath);
                 const { code } = await babel.transform(file.toString(), {
                     plugins: ['@babel/plugin-transform-modules-systemjs']
                 });
@@ -221,31 +226,30 @@ const transpileTests = async () => {
     return Promise.all(promises);
 };
 
-const transpileHelpers = async () => {
+const transpileHelpers = async() => {
+    // eslint-disable-next-line spellcheck/spell-checker
     const builder = new Builder(root, { ...config, transpiler: 'plugin-babel', });
     const helpers = getFileList(path.join(root, 'testing', 'helpers'));
 
-    for (const filePath of helpers) {
-        try {
-            await builder.buildStatic(
-                `[${filePath}]`,
-                filePath.replace('testing', 'artifacts/transpiled-testing'),
-                {
-                    minify: false,
-                    sourceMaps: true,
-                    encodeNames: false
-                }
-            );
-        } catch (error) {
-            console.log(filePath, error)
-        }
+    // eslint-disable-next-line no-restricted-syntax
+    for(const filePath of helpers) {
+        await builder.buildStatic(
+            `[${filePath}]`,
+            filePath.replace('testing', 'artifacts/transpiled-testing'),
+            {
+                minify: false,
+                sourceMaps: true,
+                encodeNames: false
+            }
+        );
     }
 };
 
-(async () => {
+(async() => {
+    // eslint-disable-next-line no-undef
     const { transpile } = parseArguments(process.argv);
 
-    switch (transpile) {
+    switch(transpile) {
         case 'modules': return await transpileModules();
         case 'tests': return await transpileTests();
         case 'helpers': return await transpileHelpers();
