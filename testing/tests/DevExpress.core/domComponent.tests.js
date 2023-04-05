@@ -1,3 +1,7 @@
+import * as license from 'core/utils/license';
+
+const licenseStub = sinon.stub(license, 'checkLicense').callsFake(() => console.log('%%%$$%%$@#$!'));
+
 import registerComponent from 'core/component_registrator';
 import config from 'core/config';
 import devices from 'core/devices';
@@ -22,6 +26,10 @@ QUnit.testStart(() => {
 const RTL_CLASS = 'dx-rtl';
 
 QUnit.module('default', {
+    // before: function() {
+    //
+    // },
+
     beforeEach: function() {
         this.TestComponentWithTemplate = DOMComponent.inherit({
             _initTemplates() {
@@ -1169,4 +1177,8 @@ QUnit.module('default', {
         assert.equal(element.style.width, '20px', 'width is correct');
         assert.equal(element.style.height, '10px', 'height is correct');
     });
+
+    // QUnit.test('license check mechanism', function(assert) {
+    //
+    // });
 });

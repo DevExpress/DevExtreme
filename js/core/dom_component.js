@@ -9,11 +9,12 @@ import { addShadowDomStyles } from './utils/shadow_dom';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
 import { extend } from './utils/extend';
-import { getPublicElement } from '../core/element';
+import { getPublicElement } from './element';
 import { grep, noop } from './utils/common';
 import { isString, isDefined, isFunction } from './utils/type';
-import { hasWindow } from '../core/utils/window';
+import { hasWindow } from './utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
+import { checkLicense } from './utils/license';
 
 const { abstract } = Component;
 
@@ -42,6 +43,7 @@ const DOMComponent = Component.inherit({
     * @hidden
     */
     ctor(element, options) {
+        checkLicense();
         this._customClass = null;
 
         this._createElement(element);

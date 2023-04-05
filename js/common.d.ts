@@ -373,6 +373,8 @@ export type GlobalConfig = {
    * @public
    */
   useLegacyVisibleIndex?: boolean;
+
+  license?: string;
 };
 
 /**
