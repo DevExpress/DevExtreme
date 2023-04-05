@@ -917,22 +917,26 @@ const columnsViewMembers = {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    waitAsyncTemplates: function(forceWaiting = false, deferred) {
+    waitAsyncTemplates: function(forceWaiting = false) {
         // @ts-expect-error
-        const result = deferred || new Deferred();
+        const result = new Deferred();
         const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
         if(!needWaitAsyncTemplates) {
             return result.resolve();
         }
 
-        when.apply(this, Array.from(this._templateDeferreds)).done(() => {
-            if(this._templateDeferreds.size > 0) {
-                this.waitAsyncTemplates(forceWaiting, result);
-            } else {
-                result.resolve();
-            }
-        }).fail(result.reject);
+        const waitTemplatesRecursion = () =>
+            when.apply(this, Array.from(this._templateDeferreds))
+                .done(() => {
+                    if(this._templateDeferreds.size > 0) {
+                        waitTemplatesRecursion();
+                    } else {
+                        result.resolve();
+                    }
+                }).fail(result.reject);
+
+        waitTemplatesRecursion();
 
         return result.promise();
     },

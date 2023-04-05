@@ -1297,12 +1297,12 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
 
     // act
     await dataGrid.scrollTo({ y: 200 });
-    await t.wait(200);
+    await t.wait(100);
     await dataGrid.scrollTo({ y: 400 });
+    await t.wait(300);
 
     // assert
     await t
-      .wait(500)
       .expect(await takeScreenshot(`grid-${scrollingMode}-scrolling-T1152498.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
@@ -1325,7 +1325,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
       },
     });
 
-    await t.wait(200);
+    await t.wait(100);
 
     // simulating async rendering in React
     await ClientFunction(() => {
@@ -1340,13 +1340,13 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
           setTimeout(() => {
             ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
             options.deferred?.resolve();
-          }, 400);
+          }, 200);
         },
       });
 
       dataGrid.repaint();
     })();
 
-    await t.wait(500);
+    await t.wait(300);
   });
 });

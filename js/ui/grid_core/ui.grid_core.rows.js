@@ -331,7 +331,7 @@ export const rowsModule = {
                         contentChanges.forEach(({ newTableElement, change, isFixedTableRendering }) => {
                             const tableElement = this.getTableElement(isFixedTableRendering);
                             const contentElement = this._findContentElement(isFixedTableRendering);
-                            const changeType = change && change.changeType;
+                            const changeType = change?.changeType;
                             const executors = [];
                             const highlightChanges = this.option('highlightChanges');
                             const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
@@ -340,14 +340,14 @@ export const rowsModule = {
                                 case 'update':
                                     each(change.rowIndices, (index, rowIndex) => {
                                         const $newRowElement = this._getRowElements(newTableElement).eq(index);
-                                        const changeType = change.changeTypes && change.changeTypes[index];
+                                        const dataChangeType = change.changeTypes?.[index];
                                         const item = change.items && change.items[index];
 
                                         executors.push(() => {
                                             const $rowsElement = this._getRowElements(tableElement);
                                             const $rowElement = $rowsElement.eq(rowIndex);
 
-                                            switch(changeType) {
+                                            switch(dataChangeType) {
                                                 case 'update':
                                                     if(item) {
                                                         const columnIndices = change.columnIndices && change.columnIndices[index];
