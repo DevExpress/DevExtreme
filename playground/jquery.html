@@ -41,81 +41,81 @@
                 id: 0,
                 text: 'user',
                 title: 'user',
-                icon: 'user',
+                // icon: 'user',
             },
             {
                 id: 1,
                 text: 'comment',
                 title: 'comment',
-                icon: 'comment',
+                // icon: 'comment',
+                disabled: true,
             },
             {
                 id: 2,
                 text: 'find',
                 title: 'find',
-                icon: 'find',
+                // icon: 'find',
             },
             {
                 id: 3,
                 text: 'copy',
                 title: 'copy',
-                icon: 'copy',
-                disabled: true,
+                // icon: 'copy',
             },
             {
                 id: 4,
                 text: 'checklist',
                 title: 'checklist',
-                icon: 'checklist',
-                // disabled: true,
+                // icon: 'checklist',
             },
             {
                 id: 5,
                 text: 'link',
                 title: 'link',
-                icon: 'link',
+                // icon: 'link',
             },
             {
                 id: 6,
                 text: 'import',
                 title: 'import',
-                icon: 'import',
+                // icon: 'import',
             },
             {
                 id: 7,
                 text: 'header',
                 title: 'header',
-                icon: 'header',
+                // icon: 'header',
             },
             {
                 id: 8,
                 text: 'more',
                 title: 'more',
-                icon: 'more',
+                // icon: 'more',
             },
         ];
 
-        $(function() {
-            $('#scrolledtabs').dxTabs({
-                dataSource: tabs,
-                width: 700,
-                selectOnFocus: false,
-                selectedIndex: 3,
-                // selectOnFocus: true,
-                scrollByContent: true,
-                showNavButtons: true,
-            });
-        });
-
         // $(function() {
-        //     $('#scrolledtabs').dxTabPanel({
+        //     $('#scrolledtabs').dxTabs({
         //         dataSource: tabs,
         //         width: 700,
-        //         // selectOnFocus: false, // Not needed
+        //         selectOnFocus: false,
+        //         // selectedIndex: 3,
+        //         // selectOnFocus: true,
         //         scrollByContent: true,
         //         showNavButtons: true,
         //     });
         // });
+
+        $(function() {
+            $('#scrolledtabs').dxTabPanel({
+                dataSource: tabs,
+                width: 700,
+                // selectedIndex: 1,
+                // selectOnFocus: false, // Not needed
+                scrollByContent: true,
+                showNavButtons: true,
+            });
+        });
     </script>
 </body>
 </html>
