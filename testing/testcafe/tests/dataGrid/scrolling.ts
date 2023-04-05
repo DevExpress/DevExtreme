@@ -4,6 +4,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1290,7 +1291,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
 
 // T1152498
 ['infinite', 'virtual'].forEach((scrollingMode) => {
-  test(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
+  safeSizeTest(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1307,7 +1308,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }, [900, 600]).before(async (t) => {
     await createWidget('dxDataGrid', {
       dataSource: [...new Array(500)].map((_, index) => ({ id: index, text: `item ${index}` })),
       keyExpr: 'id',
