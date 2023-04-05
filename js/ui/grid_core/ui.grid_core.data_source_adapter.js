@@ -1,3 +1,4 @@
+// @ts-check
 
 import Callbacks from '../../core/utils/callbacks';
 import modules from './ui.grid_core.modules';

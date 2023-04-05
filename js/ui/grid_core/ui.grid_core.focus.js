@@ -1,3 +1,4 @@
+// @ts-check
 
 import $ from '../../core/renderer';
 import core from './ui.grid_core.modules';

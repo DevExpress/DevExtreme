@@ -8,7 +8,7 @@ import { deferUpdate } from '@js/core/utils/common';
 import { isDefined, isString } from '@js/core/utils/type';
 import { VirtualScrollController } from '@js/ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import { foreachColumnInfo, createColumnsInfo } from '@js/ui/grid_core/ui.grid_core.virtual_columns_core';
-import stateStoring from '@js/ui/grid_core/ui.grid_core.state_storing_core';
+import { StateStoringController } from '@js/ui/grid_core/ui.grid_core.state_storing_core';
 
 import { PivotGridDataSource } from '../data_source/module';
 import {
@@ -721,8 +721,7 @@ const DataController = Class.inherit((function () {
         });
       }
 
-      // @ts-expect-error
-      that._stateStoringController = new stateStoring.StateStoringController(options.component).init();
+      that._stateStoringController = new StateStoringController(options.component).init();
 
       that._columnsInfo = [];
       that._rowsInfo = [];
