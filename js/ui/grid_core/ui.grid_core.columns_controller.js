@@ -1,3 +1,4 @@
+// @ts-check
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';

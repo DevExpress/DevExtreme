@@ -1,3 +1,4 @@
+// @ts-check
 
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';

@@ -1,3 +1,4 @@
+// @ts-check
 
 import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';

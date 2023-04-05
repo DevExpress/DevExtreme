@@ -1,3 +1,4 @@
+// @ts-check
 
 import $ from '../../core/renderer';
 import Toolbar from '../toolbar';
