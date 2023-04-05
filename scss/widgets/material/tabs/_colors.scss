@@ -46,3 +46,17 @@ $tabs-hovered-tab-bg-color: null !default;
   $tabs-hovered-tab-bg-color: color.change($base-accent, $alpha: 0.08) !default;
 }
 
+/**
+* $name 50. Focused tab background color
+* $type color
+*/
+$tabs-focused-tab-bg-color: null !default;
+
+@if $mode == "light" {
+  $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
+}
+
+@if $mode == "dark" {
+  $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
+}
+

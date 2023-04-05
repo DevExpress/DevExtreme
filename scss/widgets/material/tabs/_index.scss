@@ -99,6 +99,10 @@ $material-tabs-background: $base-bg;
     }
   }
 
+  &.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
+  }
+
   &.dx-state-focused.dx-state-disabled {
     color: $tabs-tab-selected-color;
 
