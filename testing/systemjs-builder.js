@@ -2,6 +2,7 @@ const Builder = require('systemjs-builder');
 const path = require('path');
 const fs = require('fs');
 const babel = require('@babel/core');
+const parseArguments = require('minimist');
 
 const root = path.join(__dirname, '..');
 const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
@@ -242,19 +243,12 @@ const transpileHelpers = async () => {
 };
 
 (async () => {
-    console.time('modules')
-    await transpileModules();
-    console.timeEnd('modules');
+    const { transpile } = parseArguments(process.argv);
 
-    console.time('tests')
-    await transpileTests();
-    console.timeEnd('tests');
-
-    console.time('css')
-    await transpileCss();
-    console.timeEnd('css');
-
-    console.time('helpers')
-    await transpileHelpers();
-    console.timeEnd('helpers');
+    switch (transpile) {
+        case 'modules': return await transpileModules();
+        case 'tests': return await transpileTests();
+        case 'helpers': return await transpileHelpers();
+        case 'css': return await transpileCss();
+    }
 })();
