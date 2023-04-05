@@ -5,7 +5,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/> -->
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,12 +33,85 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="scrolledtabs"></div>
     <script>
+        const tabs = [
+            {
+                id: 0,
+                text: 'user',
+                title: 'user',
+                icon: 'user',
+            },
+            {
+                id: 1,
+                text: 'comment',
+                title: 'comment',
+                icon: 'comment',
+            },
+            {
+                id: 2,
+                text: 'find',
+                title: 'find',
+                icon: 'find',
+            },
+            {
+                id: 3,
+                text: 'copy',
+                title: 'copy',
+                icon: 'copy',
+                disabled: true,
+            },
+            {
+                id: 4,
+                text: 'checklist',
+                title: 'checklist',
+                icon: 'checklist',
+                // disabled: true,
+            },
+            {
+                id: 5,
+                text: 'link',
+                title: 'link',
+                icon: 'link',
+            },
+            {
+                id: 6,
+                text: 'import',
+                title: 'import',
+                icon: 'import',
+            },
+            {
+                id: 7,
+                text: 'header',
+                title: 'header',
+                icon: 'header',
+            },
+            {
+                id: 8,
+                text: 'more',
+                title: 'more',
+                icon: 'more',
+            },
+        ];
+
+        // $(function() {
+        //     $('#scrolledtabs').dxTabs({
+        //         dataSource: tabs,
+        //         width: 700,
+        //         // selectOnFocus: false, // TODO
+        //         selectOnFocus: true,
+        //         scrollByContent: true,
+        //         showNavButtons: true,
+        //     });
+        // });
+
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            $('#scrolledtabs').dxTabPanel({
+                dataSource: tabs,
+                width: 700,
+                // selectOnFocus: false, // Не играет роли
+                scrollByContent: true,
+                showNavButtons: true,
             });
         });
     </script>
