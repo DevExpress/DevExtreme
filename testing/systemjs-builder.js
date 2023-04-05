@@ -202,10 +202,11 @@ const transpileTests = async() => {
 
         // eslint-disable-next-line no-restricted-syntax
         for(const filePath of listFiles) {
+            const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
             try {
                 await builder.buildStatic(
                     `[${filePath}]`,
-                    filePath.replace('testing', 'artifacts/transpiled-testing'),
+                    destPath,
                     {
                         minify: false,
                         sourceMaps: true,
@@ -218,7 +219,12 @@ const transpileTests = async() => {
                     plugins: ['@babel/plugin-transform-modules-systemjs']
                 });
 
-                fs.writeFileSync(filePath.replace('testing', 'artifacts/transpiled-testing'), code);
+                const destDir = path.dirname(destPath);
+                if(!fs.existsSync(destDir)) {
+                    fs.mkdirSync(destDir, { recursive: true });
+                }
+
+                fs.writeFileSync(destPath, code);
             }
         }
     }
