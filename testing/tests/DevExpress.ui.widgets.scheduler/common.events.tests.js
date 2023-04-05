@@ -190,7 +190,7 @@ QUnit.module('Events', {
             endDate: new Date(2015, 1, 13, 20),
             text: 'caption2'
         });
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('All appointments should be rerendered after cellDuration changed', function(assert) {
@@ -220,7 +220,7 @@ QUnit.module('Events', {
         const initialItems = appointments.option('items');
 
         scheduler.instance.option('cellDuration', 100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const changedItems = appointments.option('items');
 

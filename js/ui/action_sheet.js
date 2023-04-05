@@ -227,6 +227,8 @@ const ActionSheet = CollectionWidget.inherit({
             target: this.option('target')
         }));
 
+        this._popup.$overlayContent().attr('role', 'dialog');
+
         this._popup.$wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
     },
 

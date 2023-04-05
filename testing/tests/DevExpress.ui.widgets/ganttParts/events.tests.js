@@ -30,18 +30,18 @@ QUnit.module('Events', moduleConfig, () => {
             }
         };
         this.createInstance(extend(options.tasksOnlyOptions, eventsOptions));
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
         const popupItem = $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR).find(Consts.CONTEXT_MENU_ITEM_SELECTOR).eq(0);
         popupItem.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(executedCommandName, eventsOptions.contextMenu.items[0].name, 'onCustomCommand was raised');
     });
     test('selection changed', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const key = 2;
         let keyFromEvent;
@@ -49,7 +49,7 @@ QUnit.module('Events', moduleConfig, () => {
             keyFromEvent = e.selectedRowKey;
         });
         this.instance.option('selectedRowKey', key);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(keyFromEvent, key);
     });
     test('onContentReady', function(assert) {
@@ -61,13 +61,13 @@ QUnit.module('Events', moduleConfig, () => {
             onContentReady: onContentReadyHandler
         };
         this.createInstance(eventsOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(onContentReadyHandler.callCount, 1, 'onContentReadyHandler was called 1 times');
     });
     test('task click', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const key = 2;
         let keyFromEvent;
@@ -76,13 +76,13 @@ QUnit.module('Events', moduleConfig, () => {
         });
         const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
         $cellElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(keyFromEvent, key);
     });
 
     test('task double click', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const key = 2;
         let keyFromEvent;
@@ -92,7 +92,7 @@ QUnit.module('Events', moduleConfig, () => {
         });
         const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
         $cellElement.trigger('dxdblclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(keyFromEvent, key);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 0, 'dialog is not shown');
@@ -114,7 +114,7 @@ QUnit.module('Events', moduleConfig, () => {
             }
         };
         this.createInstance(my_options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $top_item = $('#qunit-fixture').find('.gst_item');
         assert.ok($top_item.length > 0, 'top items customized');

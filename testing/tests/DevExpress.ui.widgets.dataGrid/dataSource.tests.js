@@ -105,7 +105,7 @@ QUnit.module('Grid DataSource', {
             source.load();
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(changeCallCount, 1);
         assert.equal(source.pageIndex(), 3);
@@ -125,7 +125,7 @@ QUnit.module('Grid DataSource', {
             changeCallCount++;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(changeCallCount, 1);
         assert.equal(source.pageSize(), 3);
@@ -143,7 +143,7 @@ QUnit.module('Grid DataSource', {
             changeCallCount++;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(changeCallCount, 1);
         assert.equal(source.pageSize(), 0);
@@ -164,7 +164,7 @@ QUnit.module('Grid DataSource', {
             });
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(changeCallCount, 1);
         assert.deepEqual(source.items(), [1, 2, 3, 4, 5]);
@@ -206,7 +206,7 @@ QUnit.module('Grid DataSource', {
             finalized = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(finalized);
     });
 
@@ -234,7 +234,7 @@ QUnit.module('Grid DataSource', {
             loaded = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // act
@@ -247,7 +247,7 @@ QUnit.module('Grid DataSource', {
         totalCountDeferred = $.Deferred();
         totalCountDeferred.resolve(3);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!loaded);
@@ -317,7 +317,7 @@ QUnit.module('Grid DataSource', {
         // act
         source.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changeCallCount, 1);
@@ -1802,18 +1802,18 @@ QUnit.module('Grouping with basic remoteOperations', {
 
         source.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         source.changeRowExpand([1]);
         source.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         source.filter(['field2', '>', 3]);
         source.reload();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(source.totalItemsCount(), 1, 'total items count');
@@ -2130,23 +2130,23 @@ QUnit.module('Grouping with basic remoteOperations. Second level', {
 
 
         source.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         source.changeRowExpand([1, 2]);
-        this.clock.tick();
+        this.clock.tick(10);
         source.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         source.changeRowExpand([1, 3]);
-        this.clock.tick();
+        this.clock.tick(10);
         source.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         source.group(['field1', { selector: 'field2', desc: true }]);
 
         source.reload();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(source.totalItemsCount(), 3);
@@ -6564,11 +6564,11 @@ QUnit.module('Cache', {
             reshapeOnPush: true
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataSource.store().push([{ type: 'remove', key: 1 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataSource.items()[0], 2, 'first item on page');
@@ -6581,11 +6581,11 @@ QUnit.module('Cache', {
             pushAggregationTimeout: 0
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataSource.store().push([{ type: 'remove', key: 1 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataSource.items()[0], 2, 'first item on page');
@@ -6613,14 +6613,14 @@ QUnit.module('Cache', {
             }]
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(stepCount, 4, 'summary is calculated');
 
         // act
         dataSource.pageIndex(1);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(stepCount, 4, 'summary is not recalculated');
@@ -6653,14 +6653,14 @@ QUnit.module('Cache', {
             }]
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(stepCount, 4, 'summary is calculated');
 
         // act
         dataSource.pageIndex(1);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(stepCount, 8, 'summary is recalculated');
@@ -6690,13 +6690,13 @@ QUnit.module('Cache', {
             }]
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(stepCount, 4, 'summary is calculated');
 
         // act
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(stepCount, 8, 'summary is recalculated');
@@ -6717,7 +6717,7 @@ QUnit.module('Cache', {
             }
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 1, 'first load');
@@ -6726,7 +6726,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(1);
         dataSource.loadPageCount(2);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 2, 'second load');
@@ -6736,7 +6736,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(2);
         dataSource.loadPageCount(1);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 2, 'data is loaded from cache');
@@ -6746,7 +6746,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(1);
         dataSource.loadPageCount(2);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 2, 'data is loaded from cache');
@@ -6845,7 +6845,7 @@ QUnit.module('Cache', {
             }
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 1, 'first load');
@@ -6855,7 +6855,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(1);
         dataSource.loadPageCount(2);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 2, 'second load');
@@ -6866,7 +6866,7 @@ QUnit.module('Cache', {
         dataSource.pageSize(2);
         dataSource.loadPageCount(1);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 2, 'data is loaded from the cache');
@@ -6887,7 +6887,7 @@ QUnit.module('Cache', {
             cacheEnabled: false,
         });
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 1, 'first load');
@@ -6896,7 +6896,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(1);
         dataSource.loadPageCount(2);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 2, 'second load');
@@ -6906,7 +6906,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(2);
         dataSource.loadPageCount(1);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 3, 'third load');
@@ -6916,7 +6916,7 @@ QUnit.module('Cache', {
         dataSource.pageIndex(1);
         dataSource.loadPageCount(2);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.loadingCount, 4, 'fourth load');

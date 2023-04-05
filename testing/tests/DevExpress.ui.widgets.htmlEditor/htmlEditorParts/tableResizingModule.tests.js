@@ -82,7 +82,7 @@ module('Table resizing module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'There is no resize frame element');
         assert.notOk(resizingInstance.enabled, 'module disabled by default');
     });
@@ -91,7 +91,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 1, 'There is resize frame element');
         assert.ok(resizingInstance.enabled, 'module disabled by default');
     });
@@ -99,12 +99,12 @@ module('Table resizing module', moduleConfig, () => {
     test('module should attach events', function(assert) {
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('enabled', true);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(this.attachEventsSpy.callCount, 1, 'Events are attached on module initialization');
         assert.strictEqual(this.detachEventsSpy.callCount, 0, 'Events are not detached on module initialization');
@@ -114,12 +114,12 @@ module('Table resizing module', moduleConfig, () => {
     test('module should detach events on clean', function(assert) {
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('enabled', true);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         resizingInstance.clean();
 
@@ -130,12 +130,12 @@ module('Table resizing module', moduleConfig, () => {
     test('module should detach events on tableResizng disabling at runtime', function(assert) {
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('enabled', true);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         resizingInstance.option('enabled', false);
 
@@ -147,18 +147,18 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         try {
             resizeCallbacks.fire();
 
             resizingInstance.option('enabled', true);
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             resizingInstance.option('enabled', false);
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             resizingInstance.option('enabled', true);
 
@@ -172,7 +172,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         resizeCallbacks.fire();
 
@@ -183,7 +183,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         resizeCallbacks.fire();
 
@@ -197,7 +197,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('minColumnWidth', 55);
@@ -210,7 +210,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('minColumnWidth', -20);
@@ -224,7 +224,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('minRowHeight', 45);
@@ -237,7 +237,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('tableResizing', { minColumnWidth: 55, minRowHeight: 45 });
@@ -251,7 +251,7 @@ module('Table resizing module', moduleConfig, () => {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('tableResizing', { enabled: false });

@@ -2057,8 +2057,8 @@ QUnit.test('repairTooltip', function(assert) {
     const point = createPoint(this.series);
 
     $(this.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), point);
-    this.options.tooltip.show.reset();
-    point.getTooltipParams.reset();
+    this.options.tooltip.show.resetHistory();
+    point.getTooltipParams.resetHistory();
 
     // act
     this.tracker.repairTooltip();
@@ -2686,8 +2686,8 @@ QUnit.test('Tooltip is disabled. Show tooltip on point, stopCurrentHandling, sho
 
 QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHidden fired, TooltipShown fired', function(assert) {
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point2);
-    this.tooltip.stub('hide').reset();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('hide').resetHistory();
+    this.tooltip.stub('show').resetHistory();
 
     // act
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);

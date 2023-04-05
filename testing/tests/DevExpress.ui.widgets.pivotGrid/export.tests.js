@@ -141,7 +141,7 @@ QUnit.module('dxPivotGrid', {
         this.dataProvider = this.pivotGrid.getDataProvider();
         this.items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
         this.dataProvider.ready();
-        this.clock.tick();
+        this.clock.tick(10);
     },
     afterEach: function() {
         this.clock.restore();
@@ -235,7 +235,7 @@ QUnit.module('dxPivotGrid', {
 
         const showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(spyBegin.callCount, 1, 'beginLoadingChanged was called once');
         assert.strictEqual(spyEnd.callCount, 1, 'endLoadingChanged was called once');
@@ -274,7 +274,7 @@ QUnit.module('dxPivotGrid', {
 
         $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($('.dx-menu-item-text').eq(1).text(), 'Export to Excel file');
 
@@ -289,7 +289,7 @@ QUnit.module('dxPivotGrid', {
 
         $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($('.dx-menu-item-text').eq(1).text(), '');
     });

@@ -296,7 +296,7 @@ QUnit.module('overlay integration', moduleConfig, () => {
             return $('<div>');
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(hideSpy.callCount, 0, 'Toast didn\'t hide');
     });
 });

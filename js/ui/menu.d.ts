@@ -277,6 +277,17 @@ export interface dxMenuItem extends dxMenuBaseItem {
      * @type Array<dxMenuItem>
      */
     items?: Array<Item>;
+    /**
+     * @docid
+     * @public
+     */
+    url?: string;
+    /**
+     * @docid
+     * @public
+     * @default {}
+     */
+    linkAttr?: { [key: string]: any };
 }
 
 /** @public */

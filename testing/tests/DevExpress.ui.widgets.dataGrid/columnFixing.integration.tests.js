@@ -140,7 +140,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $cells;
 
-        this.clock.tick();
+        this.clock.tick(10);
         $cells = $(instance.$element().find('.dx-header-row').first().find('td'));
 
         // act
@@ -153,7 +153,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
 
         $('#container').width(800);
         instance.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         $cells = $(instance.$element().find('.dx-header-row').first().find('td'));
         const $unfixedColumns = $(instance.$element().find('.dx-header-row').last().find('td'));
 
@@ -362,7 +362,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columns = dataGrid.getController('columns').getVisibleColumns();
         const adaptiveColumnWidth = columns[3].visibleWidth;
@@ -509,7 +509,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($dataGrid.find('.dx-datagrid-rowsview table').length, 2, 'two rowsview tables');
         assert.equal($dataGrid.dxDataGrid('instance').getView('rowsView').getTableElements().length, 2, 'two rowsview tables');
@@ -517,7 +517,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // act
         $dataGrid.dxDataGrid('instance').option('columnFixing.enabled', false);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($dataGrid.find('.dx-datagrid-rowsview table').length, 1, 'one main rowsview table');
@@ -588,7 +588,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 }
             ]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         for(let rowIndex = 0; rowIndex < 5; rowIndex++) {
             for(let columnIndex = 0; columnIndex < 5; columnIndex++) {
@@ -596,7 +596,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
 
                 // act
                 $cell.trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
                 $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
 
                 // assert
@@ -652,11 +652,11 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         const $detailGridContainer = $(dataGrid.element()).find('.mygrid');
 
         // assert
@@ -691,7 +691,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 e.component.columnOption(0, 'fixed', true);
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $rows = $(dataGrid.getRowElement(0));

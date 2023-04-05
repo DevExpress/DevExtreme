@@ -276,10 +276,10 @@ QUnit.module('ExportController', {
         const dataProvider = this.exportController.getDataProvider();
 
         this.exportController._columnsController.columnOption('TestField4', 'visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataProvider.ready();
-        this.clock.tick();
+        this.clock.tick(10);
         const columns = dataProvider.getColumns();
 
         assert.equal(columns.length, 4, 'columns length');
@@ -385,7 +385,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataProvider.getRowsCount(), 3, 'rows count');
 
@@ -435,7 +435,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(this.getVisibleColumns().length, 11, 'visible column count');
         assert.equal(dataProvider.getColumns().length, 99, 'column count');
@@ -479,7 +479,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
 
@@ -511,7 +511,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
 
@@ -545,7 +545,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataProvider.getRowsCount(), 4, 'rows count');
         assert.equal(dataProvider.getCellData(0, 0).value, 1, 'row 1');
@@ -593,7 +593,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataProvider.getColumns().length, 1, 'columns count');
         assert.equal(dataProvider.getRowsCount(), 10, 'rows count');
@@ -631,7 +631,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act, assert
         assert.equal(dataProvider.getRowsCount(), 9, 'rows count');
@@ -668,7 +668,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act, assert
         assert.equal(dataProvider.getRowsCount(), 10, 'rows count');
@@ -713,7 +713,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act, assert
         assert.equal(dataProvider.getRowsCount(), 9, 'rows count');
@@ -762,7 +762,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act, assert
         assert.equal(dataProvider.getRowsCount(), 11, 'rows count');
@@ -820,7 +820,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getRowsCount(), 6, 'rows count');
@@ -883,7 +883,7 @@ QUnit.module('ExportController', {
         const dataProvider = this.exportController.getDataProvider();
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getRowsCount(), 4, 'rows count');
@@ -947,7 +947,7 @@ QUnit.module('ExportController', {
         const dataProvider = this.exportController.getDataProvider();
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getRowsCount(), 4, 'rows count');
@@ -1016,7 +1016,7 @@ QUnit.module('ExportController', {
         const dataProvider = this.exportController.getDataProvider();
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getRowsCount(), 0);
@@ -1077,7 +1077,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.ok(!isPrepareItemsForGroupFooters, 'summary group footer items is not generated');
@@ -1149,7 +1149,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getRowsCount(), 10, 'rows count');
@@ -1222,7 +1222,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getCellData(0, 1).value, 'Min: 1');
@@ -1285,7 +1285,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getCellData(0, 2).value, 'Max: 93% \n Min: 1');
@@ -1340,7 +1340,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const styles = dataProvider.getStyles();
 
@@ -1388,7 +1388,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const styles = dataProvider.getStyles();
         assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
@@ -1491,7 +1491,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.strictEqual(dataProvider.getCellType(0, 0), 'string', 'header row 1 cell type');
@@ -1537,7 +1537,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getCellType(0, 0), 'number', 'col 1');
@@ -1562,7 +1562,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getCellType(0, 0), 'string', 'col 1');
@@ -1599,7 +1599,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getColumns().length, 1, 'columns count');
@@ -1626,7 +1626,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert, act
         assert.equal(dataProvider.getCellType(0, 0), 'string', 'col 1 row1');
@@ -1676,7 +1676,7 @@ QUnit.module('ExportController', {
         const dataProvider = this.exportController.getDataProvider();
         dataProvider.ready();
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         assert.deepEqual(_sourceItems[1].values, [101, [{
             alignByColumn: true,
@@ -1734,7 +1734,7 @@ QUnit.module('ExportController', {
         const dataProvider = this.exportController.getDataProvider();
         dataProvider.ready();
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         assert.deepEqual(_sourceItems[0].values, ['test 1', [
             {
@@ -1804,7 +1804,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
         assert.equal(dataProvider.getCellData(0, 0).value, 'test1', 'row 1 cell 1');
@@ -1957,7 +1957,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const styles = dataProvider.getStyles();
 
@@ -1983,7 +1983,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const styles = dataProvider.getStyles();
 
@@ -2011,7 +2011,7 @@ QUnit.module('ExportController', {
 
         dataProvider.ready();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const styles = dataProvider.getStyles();
 
@@ -2669,7 +2669,7 @@ QUnit.module('Real dataGrid ExportController tests', {
         };
         const dataGrid = createDataGrid(options);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const dataProvider = dataGrid.getController('export').getDataProvider();
 
         dataProvider.ready();
@@ -2703,7 +2703,7 @@ QUnit.module('Real dataGrid ExportController tests', {
             }]
         };
         const dataGrid = createDataGrid(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const dataProvider = dataGrid.getController('export').getDataProvider();
 
         dataProvider.ready();

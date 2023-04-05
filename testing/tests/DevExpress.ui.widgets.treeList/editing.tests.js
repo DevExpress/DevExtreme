@@ -258,7 +258,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             $testElement.find('.dx-command-edit .dx-link-add').trigger('click');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(this.editingController.addRow.calledOnce, 'addRow is called');
@@ -277,7 +277,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -297,7 +297,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             this.setupTreeList();
             this.rowsView.render($('#treeList'));
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.getVisibleRows().length, 1, 'one visible row');
@@ -307,7 +307,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             this.addRow(1).done(() => {
                 doneExecuteCount++;
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.equal(doneExecuteCount, 1, 'done was executed');
             assert.equal(this.getVisibleRows().length, 3, 'parent was expanded and one more row was added');
@@ -324,7 +324,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             this.setupTreeList();
             this.rowsView.render($('#treeList'));
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.getVisibleRows().length, 1, '1 visible row');
@@ -345,7 +345,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             addRowAfterDeferredResolve([1, 2], 0);
 
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         QUnit.test('AddRow method returns Deferred with using promise in onInitNewRow (T844118)', function(assert) {
@@ -358,17 +358,17 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             this.setupTreeList();
             this.rowsView.render($('#treeList'));
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             let isAddRowDone = false;
             this.addRow(1).done(() => isAddRowDone = true);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.notOk(isAddRowDone, 'done method has not executed yet');
             deferred.resolve();
-            this.clock.tick();
+            this.clock.tick(10);
             assert.ok(isAddRowDone, 'done method has executed');
         });
 
@@ -387,7 +387,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             // act
             this.addRow(2);
             this.dataController.optionChanged({ name: 'expandedRowKeys', value: [1, 2], previousValue: [1, 2] }); // simulate the call from ngDoCheck hook
-            this.clock.tick(30);
+            this.clock.tick(100);
 
             // assert
             const rows = this.getVisibleRows();
@@ -413,7 +413,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -439,7 +439,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -463,7 +463,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
                 // act
                 this.addRowViaMethodOrChanges(addRowWay, 1);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.collapseRow(1);
 
@@ -497,7 +497,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
                 // act
                 this.addRowViaMethodOrChanges(addRowWay, 1);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.columnOption('field2', 'sortOrder', 'desc');
 
@@ -533,7 +533,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
                 // act
                 this.addRowViaMethodOrChanges(addRowWay, 1);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 this.filter([]);
 
@@ -566,7 +566,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRowViaChanges(undefined, { insertAfterKey: 2 });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -586,11 +586,11 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             this.setupTreeList();
             this.rowsView.render($('#treeList'));
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const items = this.getVisibleRows();
@@ -960,11 +960,11 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2003, 2, 3) }
         ];
         this.setupTreeList();
-        this.clock.tick();
+        this.clock.tick(10);
         this.rowsView.render($testElement);
 
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.getCellElement(0, 0)).find('.dx-texteditor').length, 1, 'has editor');
@@ -972,7 +972,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         // act
         $(this.getCellElement(1, 0)).find('.dx-treelist-collapsed').trigger('dxpointerdown');
         $(this.getCellElement(1, 0)).find('.dx-treelist-collapsed').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.getCellElement(0, 0)).find('.dx-texteditor').length, 0, 'hasn\'t editor');
@@ -1077,7 +1077,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
         // act
         this.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let $newRowElement = $testElement.find('tbody > .dx-data-row').first();
@@ -1085,7 +1085,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
         // act
         $newRowElement.find('td').eq(1).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $newRowElement = $testElement.find('tbody > .dx-data-row').first();
@@ -1207,7 +1207,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow(2);
-            this.clock.tick();
+            this.clock.tick(10);
             this.cellValue(2, 'field1', 'added');
             this.saveEditData();
 
@@ -1229,7 +1229,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             this.cellValue(0, 'field1', 'added');
             this.saveEditData();
 
@@ -1250,7 +1250,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.deleteRow(1);
-            this.clock.tick();
+            this.clock.tick(10);
             this.saveEditData();
 
             // assert
@@ -1271,7 +1271,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.deleteRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
             this.saveEditData();
 
             // assert
@@ -1309,7 +1309,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, parentId: 1, field1: 'test3', hasItems: false }, index: 0 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -1328,7 +1328,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, parentId: 1, field1: 'test3', hasItems: false }, index: -1 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -1347,7 +1347,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, parentId: 1, field1: 'test3', hasItems: false }, index: 10 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -1367,9 +1367,9 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 2, field1: 'test2' }, index: 2 }]);
-            this.clock.tick();
+            this.clock.tick(10);
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, field1: 'test3', parentId: 2 }, index: 3 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             let rows = this.getVisibleRows();
@@ -1379,7 +1379,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.expandRow(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             rows = this.getVisibleRows();
@@ -1395,7 +1395,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 2, field1: 'test2', parentId: 1 } }]);
-            this.clock.tick();
+            this.clock.tick(10);
             // assert
             let rows = this.getVisibleRows();
             assert.strictEqual(rows.length, 1);
@@ -1404,7 +1404,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.expandRow(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             rows = this.getVisibleRows();
@@ -1412,7 +1412,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, field1: 'test3', parentId: 1 } }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             rows = this.getVisibleRows();
             assert.strictEqual(rows.length, 3);
