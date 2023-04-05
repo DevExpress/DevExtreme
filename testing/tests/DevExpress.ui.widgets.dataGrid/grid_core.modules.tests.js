@@ -1,6 +1,6 @@
-import modules from "ui/grid_core/ui.grid_core.modules";
+import modules from 'ui/grid_core/ui.grid_core.modules';
 
-QUnit.module("Modules used class", {}, () => {
+QUnit.module('Modules used class', {}, () => {
     /* const RootController = modules.Controller.inherit(
         {
             method: function(param) {
@@ -37,10 +37,10 @@ QUnit.module("Modules used class", {}, () => {
         static constructors = [];
         constructor(component) {
             super(component);
-            RootController.constructors.push("RootController");
+            RootController.constructors.push('RootController');
         }
         publicMethods() {
-            return ["method"];
+            return ['method'];
         }
         method(param) {
             RootController.calls.push({ instance: this, param });
@@ -48,7 +48,7 @@ QUnit.module("Modules used class", {}, () => {
         }
         additionalMethod(param) {
             RootController.calls.push({ instance: this, param });
-            return "additionalMethod";
+            return 'additionalMethod';
         }
     }
     class InheritedController extends RootController {
@@ -56,7 +56,7 @@ QUnit.module("Modules used class", {}, () => {
             super.method(param);
             RootController.calls.push({
                 instance: this,
-                param: param + "override",
+                param: param + 'override',
             });
             return param;
         }
@@ -70,70 +70,70 @@ QUnit.module("Modules used class", {}, () => {
     }
     class WrongInheritance {}
     QUnit.module(
-        "Controller basic functions",
+        'Controller basic functions',
         {
-            beforeEach: function () {
+            beforeEach: function() {
                 // clean all registerd modules
                 modules.modules = [];
-                modules.registerModule("root", {
+                modules.registerModule('root', {
                     controllers: {
-                        "root-controller": RootController,
+                        'root-controller': RootController,
                     },
                 });
                 RootController.calls = [];
             },
         },
         () => {
-            QUnit.test("call controller method", function (assert) {
+            QUnit.test('call controller method', function(assert) {
                 // arrange
                 const instance = {};
                 // act
                 modules.processModules(instance, modules);
                 const controllerInstance =
-                    instance._controllers["root-controller"];
+                    instance._controllers['root-controller'];
                 // assert
                 assert.equal(
-                    controllerInstance.method("val"),
-                    "val",
-                    "call method"
+                    controllerInstance.method('val'),
+                    'val',
+                    'call method'
                 );
                 assert.deepEqual(
                     RootController.calls[0],
-                    { instance: controllerInstance, param: "val" },
-                    "check calls"
+                    { instance: controllerInstance, param: 'val' },
+                    'check calls'
                 );
                 assert.equal(
                     controllerInstance.component,
                     instance,
-                    "component field is instance"
+                    'component field is instance'
                 );
             });
 
-            QUnit.test("public methods", function (assert) {
+            QUnit.test('public methods', function(assert) {
                 // arragne
                 const instance = {};
                 // act
                 modules.processModules(instance, modules);
                 const controllerInstance =
-                    instance._controllers["root-controller"];
+                    instance._controllers['root-controller'];
                 // assert
                 assert.equal(
-                    instance.method("val2"),
-                    "val2",
-                    "publicMethods added to instance"
+                    instance.method('val2'),
+                    'val2',
+                    'publicMethods added to instance'
                 );
                 assert.deepEqual(
                     RootController.calls[0],
-                    { instance: controllerInstance, param: "val2" },
-                    "check calls"
+                    { instance: controllerInstance, param: 'val2' },
+                    'check calls'
                 );
             });
 
-            QUnit.test("wrong inherited class", function (assert) {
-                //act
-                modules.registerModule("wrong-inheritance", {
+            QUnit.test('wrong inherited class', function(assert) {
+                // act
+                modules.registerModule('wrong-inheritance', {
                     controllers: {
-                        "wrong-inherited-controller": WrongInheritance,
+                        'wrong-inherited-controller': WrongInheritance,
                     },
                 });
                 const instance = {};
@@ -141,67 +141,67 @@ QUnit.module("Modules used class", {}, () => {
                 assert.throws(
                     () => modules.processModules(instance, modules),
                     (ex) => {
-                        assert.ok(ex.__id, "E1002");
+                        assert.ok(ex.__id, 'E1002');
                         return true;
                     }
                 );
             });
 
             QUnit.test(
-                "inheritance controller should not override public method",
-                function (assert) {
+                'inheritance controller should not override public method',
+                function(assert) {
                     const instance = {};
-                    modules.registerModule("inheritance", {
+                    modules.registerModule('inheritance', {
                         controllers: {
-                            "inherited-controller": InheritedController,
+                            'inherited-controller': InheritedController,
                         },
                     });
                     modules.processModules(instance, modules);
                     const rootControllerInstance =
-                        instance._controllers["root-controller"];
+                        instance._controllers['root-controller'];
 
                     assert.equal(
-                        instance.method("val3"),
-                        "val3",
-                        "publicMethods added to instance"
+                        instance.method('val3'),
+                        'val3',
+                        'publicMethods added to instance'
                     );
                     assert.deepEqual(
                         RootController.calls[0],
-                        { instance: rootControllerInstance, param: "val3" },
-                        "check ancestor calls"
+                        { instance: rootControllerInstance, param: 'val3' },
+                        'check ancestor calls'
                     );
                 }
             );
 
             QUnit.test(
-                "inheritance controller method should call base controller",
-                function (assert) {
+                'inheritance controller method should call base controller',
+                function(assert) {
                     const instance = {};
-                    modules.registerModule("inheritance", {
+                    modules.registerModule('inheritance', {
                         controllers: {
-                            "inherited-controller": InheritedController,
+                            'inherited-controller': InheritedController,
                         },
                     });
 
                     modules.processModules(instance, modules);
 
                     const controllerInstance =
-                        instance._controllers["inherited-controller"];
+                        instance._controllers['inherited-controller'];
                     assert.equal(
-                        controllerInstance.method("val4"),
-                        "val4",
-                        "newMethod check"
+                        controllerInstance.method('val4'),
+                        'val4',
+                        'newMethod check'
                     );
                     // assert.deepEqual(OldRootController.calls[0].instance, controllerInstance, 'aaaa');
                     assert.deepEqual(
                         RootController.calls[0],
-                        { instance: controllerInstance, param: "val4" },
-                        "check ancestor calls"
+                        { instance: controllerInstance, param: 'val4' },
+                        'check ancestor calls'
                     );
                     assert.deepEqual(
                         RootController.calls[1],
-                        { instance: controllerInstance, param: "val4override" },
-                        "check calls"
+                        { instance: controllerInstance, param: 'val4override' },
+                        'check calls'
                     );
                 }
             );
@@ -212,20 +212,20 @@ QUnit.module("Modules used class", {}, () => {
         return class Extender extends Base {
             constructor(component) {
                 super(component);
-                RootController.constructors.push("Extender");
+                RootController.constructors.push('Extender');
             }
             extenderMethod() {
                 RootController.calls.push({
                     instance: this,
-                    type: "extender",
-                    name: "extenderMethod",
+                    type: 'extender',
+                    name: 'extenderMethod',
                 });
             }
             method(param) {
                 RootController.calls.push({
                     instance: this,
                     param,
-                    type: "extender",
+                    type: 'extender',
                 });
                 return super.method(param);
             }
@@ -235,25 +235,25 @@ QUnit.module("Modules used class", {}, () => {
                     instance: this,
                     param,
                     val,
-                    type: "extender",
+                    type: 'extender',
                 });
                 return param;
             }
         };
     };
     QUnit.module(
-        "Controller Extender",
+        'Controller Extender',
         {
-            beforeEach: function () {
+            beforeEach: function() {
                 // clean all registerd modules
                 modules.modules = [];
-                modules.registerModule("root", {
+                modules.registerModule('root', {
                     controllers: {
-                        "root-controller": RootController,
+                        'root-controller': RootController,
                     },
                     extenders: {
                         controllers: {
-                            "root-controller": applyExtender,
+                            'root-controller': applyExtender,
                         },
                     },
                 });
@@ -262,68 +262,68 @@ QUnit.module("Modules used class", {}, () => {
             },
         },
         () => {
-            QUnit.test("call base method", function (assert) {
+            QUnit.test('call base method', function(assert) {
                 // arrange
                 const instance = {};
                 // act
                 modules.processModules(instance, modules);
                 const controllerInstance =
-                    instance._controllers["root-controller"];
+                    instance._controllers['root-controller'];
 
                 assert.equal(
-                    controllerInstance.method("val4"),
-                    "val4",
-                    "overrided by extender method check"
+                    controllerInstance.method('val4'),
+                    'val4',
+                    'overrided by extender method check'
                 );
                 assert.deepEqual(
                     RootController.calls[0],
                     {
                         instance: controllerInstance,
-                        param: "val4",
-                        type: "extender",
+                        param: 'val4',
+                        type: 'extender',
                     },
-                    "check ancestor call"
+                    'check ancestor call'
                 );
                 assert.deepEqual(
                     RootController.calls[1],
-                    { instance: controllerInstance, param: "val4" },
-                    "check ancestor call"
+                    { instance: controllerInstance, param: 'val4' },
+                    'check ancestor call'
                 );
             });
 
             QUnit.test(
-                "call useRootControllerMethod method",
-                function (assert) {
+                'call useRootControllerMethod method',
+                function(assert) {
                     const instance = {};
 
                     modules.processModules(instance, modules);
                     const controllerInstance =
-                        instance._controllers["root-controller"];
+                        instance._controllers['root-controller'];
 
                     assert.equal(
-                        controllerInstance.useRootControllerMethod("val5"),
-                        "val5",
-                        "call useRootControllerMethod"
+                        controllerInstance.useRootControllerMethod('val5'),
+                        'val5',
+                        'call useRootControllerMethod'
                     );
                     assert.deepEqual(
                         RootController.calls[0],
-                        { instance: controllerInstance, param: "val5" },
-                        "check additionalMethod call"
+                        { instance: controllerInstance, param: 'val5' },
+                        'check additionalMethod call'
                     );
                     assert.deepEqual(
                         RootController.calls[1],
                         {
                             instance: controllerInstance,
-                            param: "val5",
-                            type: "extender",
-                            val: "additionalMethod",
+                            param: 'val5',
+                            type: 'extender',
+                            val: 'additionalMethod',
                         },
-                        "check extender call"
+                        'check extender call'
                     );
                 }
             );
 
-            QUnit.test("Extend extender method", function (assert) {
+            QUnit.test('Extend extender method', function(assert) {
                 // arrange
                 /* const ExtendedExtender = {
                 extenderMethod: function() {
@@ -336,39 +336,39 @@ QUnit.module("Modules used class", {}, () => {
                         extenderMethod() {
                             RootController.calls.push({
                                 instance: this,
-                                name: "extenderMethod",
-                                type: "extenderOfExtender",
+                                name: 'extenderMethod',
+                                type: 'extenderOfExtender',
                             });
                             super.extenderMethod();
                         }
                     };
-                modules.registerModule("extenderOfExtender", {
+                modules.registerModule('extenderOfExtender', {
                     extenders: {
                         controllers: {
-                            "root-controller": applyExtendedExtender,
+                            'root-controller': applyExtendedExtender,
                         },
                     },
                 });
                 const instance = {};
                 modules.processModules(instance, modules);
                 const controllerInstance =
-                    instance._controllers["root-controller"];
+                    instance._controllers['root-controller'];
                 // act
                 controllerInstance.extenderMethod();
                 // assert
                 assert.deepEqual(
                     RootController.calls[0].type,
-                    "extenderOfExtender",
-                    "check type es6Class"
+                    'extenderOfExtender',
+                    'check type es6Class'
                 );
                 assert.deepEqual(
                     RootController.calls[1].type,
-                    "extender",
-                    "check type class.inherit"
+                    'extender',
+                    'check type class.inherit'
                 );
             });
 
-            QUnit.test("sinon.spy should work", function (assert) {
+            QUnit.test('sinon.spy should work', function(assert) {
                 // arrange
                 /* const ExtendedExtender = {
                 extenderMethod: function() {
@@ -381,44 +381,44 @@ QUnit.module("Modules used class", {}, () => {
                         extenderMethod() {
                             RootController.calls.push({
                                 instance: this,
-                                name: "extenderMethod",
-                                type: "extenderOfExtender",
+                                name: 'extenderMethod',
+                                type: 'extenderOfExtender',
                             });
                             super.extenderMethod();
                         }
                     };
-                modules.registerModule("extenderOfExtender", {
+                modules.registerModule('extenderOfExtender', {
                     extenders: {
                         controllers: {
-                            "root-controller": applyExtendedExtender,
+                            'root-controller': applyExtendedExtender,
                         },
                     },
                 });
                 const instance = {};
                 modules.processModules(instance, modules);
                 const controllerInstance =
-                    instance._controllers["root-controller"];
+                    instance._controllers['root-controller'];
 
-                sinon.spy(controllerInstance, "extenderMethod");
+                sinon.spy(controllerInstance, 'extenderMethod');
                 // act
                 controllerInstance.extenderMethod();
                 // assert
                 assert.ok(controllerInstance.extenderMethod.calledOnce);
             });
 
-            QUnit.test("Constructor override", function (assert) {
+            QUnit.test('Constructor override', function(assert) {
                 // arrange
                 const applyExtendedExtender = (Base) => {
                     return class ExtendedExtender extends Base {
                         constructor(component) {
                             super(component);
                             RootController.constructors.push(
-                                "ExtendedExtender"
+                                'ExtendedExtender'
                             );
                         }
                     };
                 };
-                /*const classInheritExtender = {
+                /* const classInheritExtender = {
                 ctor: function(component) {
                     this.callBase(component);
                     RootController.constructors.push('class.inherit');
@@ -432,10 +432,10 @@ QUnit.module("Modules used class", {}, () => {
                     }
                 }
             });*/
-                modules.registerModule("extenderOfExtender", {
+                modules.registerModule('extenderOfExtender', {
                     extenders: {
                         controllers: {
-                            "root-controller": applyExtendedExtender,
+                            'root-controller': applyExtendedExtender,
                         },
                     },
                 });
@@ -443,28 +443,28 @@ QUnit.module("Modules used class", {}, () => {
                 // act
                 modules.processModules(component, modules);
                 const controllerInstance =
-                    component._controllers["root-controller"];
+                    component._controllers['root-controller'];
                 // assert
                 assert.deepEqual(
                     RootController.constructors[0],
-                    "RootController",
-                    "RootController"
+                    'RootController',
+                    'RootController'
                 );
                 assert.deepEqual(
                     RootController.constructors[1],
-                    "Extender",
-                    "Extender"
+                    'Extender',
+                    'Extender'
                 );
                 assert.deepEqual(
                     controllerInstance.component,
                     component,
-                    "component"
+                    'component'
                 );
             });
 
             QUnit.test(
-                "Use extender method in other extender",
-                function (assert) {
+                'Use extender method in other extender',
+                function(assert) {
                     // arrange
                     /*
             const ExtendedExtender = {
@@ -479,51 +479,51 @@ QUnit.module("Modules used class", {}, () => {
                             methodUsedExtender() {
                                 RootController.calls.push({
                                     instance: this,
-                                    name: "methodUsedExtender",
-                                    type: "extenderOfExtender",
+                                    name: 'methodUsedExtender',
+                                    type: 'extenderOfExtender',
                                 });
                                 super.extenderMethod();
                             }
                         };
 
-                    modules.registerModule("extenderOfExtender", {
+                    modules.registerModule('extenderOfExtender', {
                         extenders: {
                             controllers: {
-                                "root-controller": applyExtendedExtender,
+                                'root-controller': applyExtendedExtender,
                             },
                         },
                     });
                     const instance = {};
                     modules.processModules(instance, modules);
                     const controllerInstance =
-                        instance._controllers["root-controller"];
+                        instance._controllers['root-controller'];
                     // act
                     controllerInstance.methodUsedExtender();
                     // assert
                     assert.deepEqual(
                         RootController.calls[0].name,
-                        "methodUsedExtender",
-                        "check type es6Class"
+                        'methodUsedExtender',
+                        'check type es6Class'
                     );
                     assert.deepEqual(
                         RootController.calls[0].type,
-                        "extenderOfExtender",
-                        "check type es6Class"
+                        'extenderOfExtender',
+                        'check type es6Class'
                     );
                     assert.deepEqual(
                         RootController.calls[1].name,
-                        "extenderMethod",
-                        "check type es6Class"
+                        'extenderMethod',
+                        'check type es6Class'
                     );
                     assert.deepEqual(
                         RootController.calls[1].type,
-                        "extender",
-                        "check type class.inherit"
+                        'extender',
+                        'check type class.inherit'
                     );
                 }
             );
 
-            QUnit.test("override several extender", function (assert) {
+            QUnit.test('override several extender', function(assert) {
                 // arrange
                 /*
             const Extender1 = {
@@ -546,8 +546,8 @@ QUnit.module("Modules used class", {}, () => {
                     class Extender1 extends Base {
                         extenderMethod1() {
                             RootController.calls.push({
-                                name: "extenderMethod1",
-                                type: "Extender1",
+                                name: 'extenderMethod1',
+                                type: 'Extender1',
                             });
                         }
                     };
@@ -555,64 +555,64 @@ QUnit.module("Modules used class", {}, () => {
                     class ExtendedExtender extends Base {
                         extenderMethod() {
                             RootController.calls.push({
-                                name: "extenderMethod",
-                                type: "extenderOfExtender",
+                                name: 'extenderMethod',
+                                type: 'extenderOfExtender',
                             });
                             super.extenderMethod();
                         }
                         extenderMethod1() {
                             RootController.calls.push({
-                                name: "extenderMethod1",
-                                type: "extenderOfExtender",
+                                name: 'extenderMethod1',
+                                type: 'extenderOfExtender',
                             });
                             super.extenderMethod1();
                         }
                     };
 
-                modules.registerModule("extender1", {
+                modules.registerModule('extender1', {
                     extenders: {
                         controllers: {
-                            "root-controller": applyExtender1,
+                            'root-controller': applyExtender1,
                         },
                     },
                 });
-                modules.registerModule("extenderOfExtender", {
+                modules.registerModule('extenderOfExtender', {
                     extenders: {
                         controllers: {
-                            "root-controller": applyExtendedExtender,
+                            'root-controller': applyExtendedExtender,
                         },
                     },
                 });
                 const instance = {};
                 modules.processModules(instance, modules);
                 const controllerInstance =
-                    instance._controllers["root-controller"];
-                //act
+                    instance._controllers['root-controller'];
+                // act
                 controllerInstance.extenderMethod();
                 controllerInstance.extenderMethod1();
-                //assert
+                // assert
                 assert.deepEqual(RootController.calls[0], {
-                    name: "extenderMethod",
-                    type: "extenderOfExtender",
+                    name: 'extenderMethod',
+                    type: 'extenderOfExtender',
                 });
                 assert.deepEqual(RootController.calls[1], {
                     instance: controllerInstance,
-                    name: "extenderMethod",
-                    type: "extender",
+                    name: 'extenderMethod',
+                    type: 'extender',
                 });
                 assert.deepEqual(RootController.calls[2], {
-                    name: "extenderMethod1",
-                    type: "extenderOfExtender",
+                    name: 'extenderMethod1',
+                    type: 'extenderOfExtender',
                 });
                 assert.deepEqual(RootController.calls[3], {
-                    name: "extenderMethod1",
-                    type: "Extender1",
+                    name: 'extenderMethod1',
+                    type: 'Extender1',
                 });
             });
 
             QUnit.test(
-                "chain with different type of extending (es6Class -> Class.inherit -> es6Class)",
-                function (assert) {
+                'chain with different type of extending (es6Class -> Class.inherit -> es6Class)',
+                function(assert) {
                     // arrange
                     /* const ClassInherit = {
                 method: function(param) {
@@ -627,11 +627,11 @@ QUnit.module("Modules used class", {}, () => {
                 },
             };*/
                     const ClassInherit = {
-                        method: function (param) {
+                        method: function(param) {
                             RootController.calls.push({
                                 instance: this,
                                 param,
-                                type: "class.inherit",
+                                type: 'class.inherit',
                             });
                             return this.callBase(param);
                         },
@@ -642,22 +642,22 @@ QUnit.module("Modules used class", {}, () => {
                                 RootController.calls.push({
                                     instance: this,
                                     param,
-                                    type: "es6Class",
+                                    type: 'es6Class',
                                 });
                                 return super.method(param);
                             }
                         };
-                    modules.registerModule("classInherit", {
+                    modules.registerModule('classInherit', {
                         extenders: {
                             controllers: {
-                                "root-controller": ClassInherit,
+                                'root-controller': ClassInherit,
                             },
                         },
                     });
-                    modules.registerModule("ES6Class", {
+                    modules.registerModule('ES6Class', {
                         extenders: {
                             controllers: {
-                                "root-controller": applyES6Class,
+                                'root-controller': applyES6Class,
                             },
                         },
                     });
@@ -665,36 +665,36 @@ QUnit.module("Modules used class", {}, () => {
                     // act
                     modules.processModules(instance, modules);
                     const controllerInstance =
-                        instance._controllers["root-controller"];
+                        instance._controllers['root-controller'];
                     // assert
                     assert.equal(
-                        controllerInstance.method("val6"),
-                        "val6",
-                        "call method chain"
+                        controllerInstance.method('val6'),
+                        'val6',
+                        'call method chain'
                     );
                     assert.deepEqual(
                         RootController.calls[0].type,
-                        "es6Class",
-                        "check type es6Class"
+                        'es6Class',
+                        'check type es6Class'
                     );
                     assert.deepEqual(
                         RootController.calls[1].type,
-                        "class.inherit",
-                        "check type class.inherit"
+                        'class.inherit',
+                        'check type class.inherit'
                     );
                     assert.deepEqual(
                         RootController.calls[2].type,
-                        "extender",
-                        "check type extender"
+                        'extender',
+                        'check type extender'
                     );
                 }
             );
         }
     );
-    QUnit.module("View Extender", {}, () => {
+    QUnit.module('View Extender', {}, () => {
         QUnit.test(
-            "Check view use same approach as controller",
-            function (assert) {
+            'Check view use same approach as controller',
+            function(assert) {
                 // arrange
                 /* const ExtendedExtender = {
                 extenderMethod: function() {
@@ -707,8 +707,8 @@ QUnit.module("Modules used class", {}, () => {
                     extenderMethod() {
                         RootView.calls.push({
                             instance: this,
-                            name: "extenderMethod",
-                            type: "RootView",
+                            name: 'extenderMethod',
+                            type: 'RootView',
                         });
                     }
                 }
@@ -717,8 +717,8 @@ QUnit.module("Modules used class", {}, () => {
                         extenderMethod() {
                             RootView.calls.push({
                                 instance: this,
-                                name: "extenderMethod",
-                                type: "ExtendedExtender",
+                                name: 'extenderMethod',
+                                type: 'ExtendedExtender',
                             });
                             super.extenderMethod();
                         }
@@ -726,22 +726,22 @@ QUnit.module("Modules used class", {}, () => {
                 // clean up modules
                 modules.modules = [];
 
-                modules.registerModule("root", {
+                modules.registerModule('root', {
                     views: {
-                        "root-view": RootView,
+                        'root-view': RootView,
                     },
                 });
-                modules.registerModule("extenderOfViewExtender", {
+                modules.registerModule('extenderOfViewExtender', {
                     extenders: {
                         views: {
-                            "root-view": applyExtendedExtender,
+                            'root-view': applyExtendedExtender,
                         },
                     },
                 });
                 const instance = {};
 
                 modules.processModules(instance, modules);
-                const viewInstance = instance._views["root-view"];
+                const viewInstance = instance._views['root-view'];
                 // act
                 viewInstance.extenderMethod();
                 // assert
@@ -749,19 +749,19 @@ QUnit.module("Modules used class", {}, () => {
                     RootView.calls[0],
                     {
                         instance: viewInstance,
-                        name: "extenderMethod",
-                        type: "ExtendedExtender",
+                        name: 'extenderMethod',
+                        type: 'ExtendedExtender',
                     },
-                    "check type es6Class"
+                    'check type es6Class'
                 );
                 assert.deepEqual(
                     RootView.calls[1],
                     {
                         instance: viewInstance,
-                        name: "extenderMethod",
-                        type: "RootView",
+                        name: 'extenderMethod',
+                        type: 'RootView',
                     },
-                    "check type class.inherit"
+                    'check type class.inherit'
                 );
             }
         );
