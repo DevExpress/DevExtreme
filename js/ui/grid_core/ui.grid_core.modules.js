@@ -295,6 +295,18 @@ const processModules = function(that, componentClass) {
     const controllerTypes = componentClass.controllerTypes || {};
     const viewTypes = componentClass.viewTypes || {};
 
+    function updateModuleItemTypes(types, moduleExtenders = {}) {
+        Object.entries(moduleExtenders).map(([name, extender]) => {
+            const currentType = types[name];
+            if(currentType) {
+                if(isFunction(extender)) {
+                    types[name] = extender(types[name]);
+                } else {
+                    types[name] = currentType.inherit(extender);
+                }
+            }
+        });
+    }
     if(!componentClass.controllerTypes) {
         if(modulesOrder) {
             modules.sort(function(module1, module2) {
@@ -324,7 +336,6 @@ const processModules = function(that, componentClass) {
                 } else if(type && !type.subclassOf) {
                     throw errors.Error('E1002', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(Controller))) {
-                    type.subclassOf(Controller);
                     throw errors.Error('E1002', moduleName, name);
                 }
                 controllerTypes[name] = type;
@@ -332,6 +343,8 @@ const processModules = function(that, componentClass) {
             views && each(views, function(name, type) {
                 if(viewTypes[name]) {
                     throw errors.Error('E1003', moduleName, name);
+                } else if(type && !type.subclassOf) {
+                    throw errors.Error('E1004', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(View))) {
                     throw errors.Error('E1004', moduleName, name);
                 }
@@ -343,20 +356,8 @@ const processModules = function(that, componentClass) {
             const extenders = this.extenders;
 
             if(extenders) {
-                extenders.controllers && each(extenders.controllers, function(name, extender) {
-                    if(controllerTypes[name]) {
-                        if(isFunction(extender)) {
-                            controllerTypes[name] = extender(controllerTypes[name]);
-                        } else {
-                            controllerTypes[name] = controllerTypes[name].inherit(extender);
-                        }
-                    }
-                });
-                extenders.views && each(extenders.views, function(name, extender) {
-                    if(viewTypes[name]) {
-                        viewTypes[name] = viewTypes[name].inherit(extender);
-                    }
-                });
+                updateModuleItemTypes(controllerTypes, extenders.controllers);
+                updateModuleItemTypes(viewTypes, extenders.views);
             }
         });
 
