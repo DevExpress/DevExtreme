@@ -120,8 +120,7 @@ export const HeaderFilterView = modules.View.inherit({
         const that = this;
 
         if(options) {
-            const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
-            that._initializePopupContainer(options, headerFilterOptions);
+            that._initializePopupContainer(options);
 
             const popupContainer = that.getPopupContainer();
 
@@ -162,10 +161,12 @@ export const HeaderFilterView = modules.View.inherit({
     _getSearchExpr: function(options, headerFilterOptions) {
         const lookup = options.lookup;
         const useDefaultSearchExpr = options.useDefaultSearchExpr;
-        const headerFilterDataSource = headerFilterOptions.dataSource;
 
-        if(headerFilterOptions.search.searchExpr) {
-            return headerFilterOptions.search.searchExpr;
+        const headerFilterDataSource = headerFilterOptions.dataSource;
+        const filterSearchExpr = headerFilterOptions.search.searchExpr;
+
+        if(filterSearchExpr) {
+            return filterSearchExpr;
         }
 
         if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
@@ -192,11 +193,12 @@ export const HeaderFilterView = modules.View.inherit({
         this._popupContainer && this._popupContainer.$content().empty();
     },
 
-    _initializePopupContainer: function(options, headerFilterOptions) {
+    _initializePopupContainer: function(options) {
         const that = this;
         const $element = that.element();
-        const width = headerFilterOptions.width;
-        const height = headerFilterOptions.height;
+
+        const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
+        const { height, width } = headerFilterOptions;
 
         const dxPopupOptions = {
             width: width,

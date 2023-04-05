@@ -44,7 +44,7 @@ class Gantt extends Widget {
     _init() {
         super._init();
 
-        gridCoreUtils.logColumnsDeprecatedWarningIfNeed(this.NAME, this.option('columns'));
+        gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
         this._initGantt();
         this._isGanttRendered = false;
@@ -704,15 +704,6 @@ class Gantt extends Widget {
     }
     zoomOut() {
         this._ganttView._ganttViewCore.zoomOut();
-    }
-
-    _setDeprecatedOptions() {
-        super._setDeprecatedOptions();
-
-        extend(this._deprecatedOptions, {
-            'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
-            'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
-        });
     }
 
     _getDefaultOptions() {

@@ -16,6 +16,7 @@ import {
 } from '@js/ui/grid_core/ui.grid_core.header_filter_core';
 import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
+import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import { Deferred } from '@js/core/utils/deferred';
 
 import { reverseSortOrder } from './utils';
@@ -114,20 +115,13 @@ const FieldChooserBase = (Widget as any)
       });
     },
 
-    _setDeprecatedOptions() {
-      this.callBase();
-
-      extend(this._deprecatedOptions, {
-        'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
-        'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
-      });
-    },
-
     _init() {
       this.callBase();
       this._headerFilterView = new HeaderFilterView(this);
       this._refreshDataSource();
       this.subscribeToEvents();
+
+      gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
     },
 
     _refreshDataSource() {

@@ -21,7 +21,6 @@ export class GanttTreeList {
 
     getTreeList() {
         const { keyExpr, parentIdExpr } = this._gantt.option(GANTT_TASKS);
-        dxTreeList.prototype.disableDeprecationWarnings = true;
         this._treeList = this._gantt._createComponent(this._$treeList, dxTreeList, {
             dataSource: this.createDataSource(this._gantt._tasksRaw, keyExpr),
             keyExpr: keyExpr,
@@ -50,8 +49,8 @@ export class GanttTreeList {
             onRowClick: (e) => { this.onRowClick(e); },
             onRowDblClick: (e) => { this.onRowDblClick(e); },
             onNodesInitialized: (e) => { this._onNodesInitialized(e); },
+            _disableDeprecationWarnings: true
         });
-        dxTreeList.prototype.disableDeprecationWarnings = false;
 
         return this._treeList;
     }

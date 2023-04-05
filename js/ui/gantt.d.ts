@@ -1405,7 +1405,6 @@ export interface dxGanttHeaderFilter {
     height?: number;
     /**
      * @docid
-     * @type object
      */
     search?: dxGanttHeaderFilterSearch;
     /**
@@ -1416,7 +1415,6 @@ export interface dxGanttHeaderFilter {
     searchTimeout?: number;
     /**
      * @docid
-     * @type object
      */
     texts?: dxGanttHeaderFilterTexts;
     /**
