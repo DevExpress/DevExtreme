@@ -94,26 +94,26 @@
             },
         ];
 
-        // $(function() {
-        //     $('#scrolledtabs').dxTabs({
-        //         dataSource: tabs,
-        //         width: 700,
-        //         // selectOnFocus: false, // TODO
-        //         selectOnFocus: true,
-        //         scrollByContent: true,
-        //         showNavButtons: true,
-        //     });
-        // });
-
         $(function() {
-            $('#scrolledtabs').dxTabPanel({
+            $('#scrolledtabs').dxTabs({
                 dataSource: tabs,
                 width: 700,
-                // selectOnFocus: false, // Не играет роли
+                // selectOnFocus: false, // TODO
+                selectOnFocus: true,
                 scrollByContent: true,
                 showNavButtons: true,
             });
         });
+
+        // $(function() {
+        //     $('#scrolledtabs').dxTabPanel({
+        //         dataSource: tabs,
+        //         width: 700,
+        //         // selectOnFocus: false, // Не играет роли
+        //         scrollByContent: true,
+        //         showNavButtons: true,
+        //     });
+        // });
     </script>
 </body>
 </html>

@@ -27,7 +27,7 @@ $tabs-selected-tab-bottom-border-color: $base-accent !default;
 * $name 40. Tab background color
 * $type color
 */
-$tabs-tab-bg: darken($base-bg, 3%) !default;
+$tabs-tab-bg: $base-bg !default;
 $tabs-tab-icon-color: $tabs-tab-color !default;
 $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
 $tabs-tab-button-disabled-opacity: 0 !default;

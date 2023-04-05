@@ -13,7 +13,7 @@
 @use "../badge";
 
 
-$material-tabs-background: darken($base-bg, 4%);
+$material-tabs-background: $base-bg;
 
 .dx-tabs {
   padding: 0;
