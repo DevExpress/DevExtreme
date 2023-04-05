@@ -90,7 +90,6 @@ QUnit.module('Chart Binding', {
     });
 
     QUnit.test('Bind chart instance to pivotGrid', function(assert) {
-        console.log('here');
         const pivotGrid = createPivotGrid(this.pivotGridOptions);
         const chart = createChart();
         const chartBinding = pivotGrid.bindChart(chart);

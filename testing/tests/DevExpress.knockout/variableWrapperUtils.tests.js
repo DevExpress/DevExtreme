@@ -1,6 +1,6 @@
 const ko = require('knockout');
 const variableWrapper = require('core/utils/variable_wrapper');
-const { logger } = require('core/utils/console')
+const { logger } = require('core/utils/console');
 
 require('integration/knockout');
 

@@ -26,46 +26,46 @@ QUnit.module('Markup', moduleConfig, () => {
     });
     test('should render task wrapper for each task', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const elements = this.$element.find(Consts.TASK_WRAPPER_SELECTOR);
         assert.equal(elements.length, data.tasks.length - 1);
     });
     test('should render dependencies', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const element = this.$element.find(Consts.TASK_ARROW_SELECTOR);
         assert.equal(element.length, data.dependencies.length);
     });
     test('should render resources', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const element = this.$element.find(Consts.TASK_RESOURCES_SELECTOR);
         assert.equal(element.length, data.resourceAssignments.length);
     });
     test('row heights', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListRowElement = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).last().get(0);
         const ganttViewRowElement = this.$element.find(Consts.GANTT_VIEW_ROW_SELECTOR).get(0);
         assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.01, 'row heights are equal');
     });
     test('auto height', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const initHeight = this.$element.height();
         const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(initHeight > this.$element.height(), 'collapsed height');
     });
     test('fixed height', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('height', 800);
-        this.clock.tick();
+        this.clock.tick(10);
         const initHeight = this.$element.height();
         const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
     });
     test('invalid start or end dates', function(assert) {
@@ -86,7 +86,7 @@ QUnit.module('Markup', moduleConfig, () => {
             dependencies: { dataSource: customDependencies }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 5);
 
@@ -105,7 +105,7 @@ QUnit.module('Markup', moduleConfig, () => {
             tasks: { dataSource: testTasks }
         });
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
         const data = {
             start: new Date('2019-02-21'),
             end: new Date('2019-02-22'),
@@ -115,7 +115,7 @@ QUnit.module('Markup', moduleConfig, () => {
         };
 
         this.instance.insertTask(data);
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-gantt .dx-row').css({ height: '63px' });
         this.instance._sizeHelper.updateGanttRowHeights();
         assert.equal(testTasks.length, 1, 'first new task was created in ds');
@@ -124,10 +124,10 @@ QUnit.module('Markup', moduleConfig, () => {
         let treeListRowElementHeight = treeListRowElement.getBoundingClientRect().height;
         assert.roughEqual(treeListRowElementHeight, rowHeight, 1.1, 'row heights are equal');
         this.instance.insertTask(data);
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-gantt .dx-row').css({ height: '63px' });
         this.instance._sizeHelper.updateGanttRowHeights();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(testTasks.length, 2, 'second new task was created in ds');
         rowHeight = this.instance._getGanttViewOption('rowHeight');
         treeListRowElement = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).last().get(0);
@@ -155,7 +155,7 @@ QUnit.module('Markup', moduleConfig, () => {
             tasks: { dataSource: testTasks }
         });
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
         const data = {
             start: new Date('2021-04-21'),
             end: new Date('2021-04-22'),
@@ -165,13 +165,13 @@ QUnit.module('Markup', moduleConfig, () => {
         };
 
         this.instance.insertTask(data);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(testTasks.length, 3, 'first new task was created in ds');
         let selectedTask = this.$element.find(Consts.TASK_SELECTED_SELECTOR);
         let selectedTaskIndex = selectedTask.eq(0).attr('task-index');
         assert.equal(selectedTaskIndex, 2, 'first new added task is selected');
         this.instance.insertTask(data);
-        this.clock.tick();
+        this.clock.tick(10);
         selectedTask = this.$element.find(Consts.TASK_SELECTED_SELECTOR);
         selectedTaskIndex = selectedTask.eq(0).attr('task-index');
         assert.equal(selectedTaskIndex, 3, 'second new added task is selected');
@@ -190,7 +190,7 @@ QUnit.module('Markup', moduleConfig, () => {
             }
         };
         this.createInstance(my_options);
-        this.clock.tick();
+        this.clock.tick(10);
     });
     test('12 format check (T1130809)', function(assert) {
         localization.locale('en-US');
@@ -205,6 +205,6 @@ QUnit.module('Markup', moduleConfig, () => {
             }
         };
         this.createInstance(my_options);
-        this.clock.tick();
+        this.clock.tick(10);
     });
 });

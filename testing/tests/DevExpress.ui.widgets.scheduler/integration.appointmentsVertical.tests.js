@@ -1077,7 +1077,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         scheduler.appointmentList[0].drag.toCell(10);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const appointmentData = dataUtils.data(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
         assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 1, 13), 'Start date is correct');
@@ -1118,7 +1118,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         scheduler.appointmentList[0].drag.toCell(75);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const appointmentData = dataUtils.data(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
         assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 16, 13), 'Start date is correct');

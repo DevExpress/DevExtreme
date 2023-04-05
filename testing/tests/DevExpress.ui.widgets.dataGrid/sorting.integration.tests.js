@@ -26,7 +26,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         const $idHeaderElement = $(dataGrid.element()).find('.dx-header-row td').eq(0);
         $idHeaderElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         let sortedColumns = dataGrid.getVisibleColumns().filter(col => col.sortIndex >= 0);
 
@@ -37,7 +37,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.columnOption('id', 'groupIndex', 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         sortedColumns = dataGrid.getVisibleColumns().filter(col => col.sortIndex >= 0);
 
@@ -49,7 +49,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         const $nameHeaderElement = $(dataGrid.element()).find('.dx-header-row td').eq(1);
         $nameHeaderElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         sortedColumns = dataGrid.getVisibleColumns().filter(col => col.sortIndex >= 0);
 
@@ -60,7 +60,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.columnOption('id', 'groupIndex', undefined);
-        this.clock.tick();
+        this.clock.tick(10);
 
         sortedColumns = dataGrid.getVisibleColumns().filter(col => col.sortIndex >= 0);
 
@@ -150,11 +150,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(1, 'groupIndex', 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $dataGrid = $(dataGrid.$element());
@@ -190,11 +190,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         dataGrid.columnOption(1, 'groupIndex', 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $dataGrid = $(dataGrid.$element());
@@ -265,10 +265,10 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.columnOption('FirstName', 'sortOrder', 'asc');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option({
@@ -278,7 +278,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
                 visible: true
             }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleColumns().length, 2, 'two visible columns');
@@ -295,7 +295,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             columns: ['a', 'b'],
             filterSyncEnabled: true,
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption('a', 'sortOrder', 'asc');
@@ -324,16 +324,16 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             columns: ['a', 'b'],
             filterSyncEnabled: true,
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.clearSorting();
         dataGrid.getDataSource().sort('a');
         dataGrid.getDataSource().load();
-        
+
         // assert
         assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), 'asc');
-        
+
         // act
         // same actions second time
         dataGrid.clearSorting();
@@ -377,16 +377,16 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         dataGrid.columnOption('field1', 'sortOrder', 'asc');
         dataGrid.columnOption('field2', 'groupIndex', 0);
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         dataGrid.state({});
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field1', 'sortOrder'), undefined, 'sorting is reseted');
@@ -425,15 +425,15 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         dataGrid.columnOption('field1', 'sortOrder', 'asc');
         dataGrid.columnOption('field2', 'groupIndex', 1);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.state({});
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('id', 'sortOrder'), 'asc', 'sorting is reseted');
@@ -451,11 +451,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was not reset');
@@ -469,14 +469,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, 'groupIndex', undefined);
         dataGrid.columnOption(1, 'sortOrder', undefined);
 
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was returned to default');
@@ -491,7 +491,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, 'groupIndex', undefined);
@@ -501,7 +501,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'sortOrder', 'asc');
 
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was returned to default');
@@ -521,7 +521,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.columnOption(0, 'sortOrder', 'desc');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.cellValue(0, 0), 2, 'first row value');
@@ -536,12 +536,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         try {
             // act
             dataGrid.columnOption('field2', 'sortOrder', 'desc');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(true, 'no exceptions');

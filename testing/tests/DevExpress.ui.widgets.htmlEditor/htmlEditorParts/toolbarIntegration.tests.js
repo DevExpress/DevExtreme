@@ -436,8 +436,8 @@ export default function() {
                 .change();
 
             $okDialogButton.trigger('dxclick');
-            this.clock.tick();
-            this.clock.tick();
+            this.clock.tick(10);
+            this.clock.tick(10);
         });
 
         test('Add a link with empty text', function(assert) {
@@ -619,7 +619,7 @@ export default function() {
             });
             const linkHref = $container.find('a').attr('href');
 
-            assert.strictEqual(linkHref, '')
+            assert.strictEqual(linkHref, '');
         });
 
         test('href should be empty on empty URL input submit (T1134100)', function(assert) {
@@ -670,8 +670,58 @@ export default function() {
             $linkFormatButton.trigger('dxclick');
 
             const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
-            
+
             assert.strictEqual(linkText, $textInput.val());
+        });
+
+        test('Text input should be visible in dialog if selected text has whitespaces on sides (T1134089)', function(assert) {
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: '<p>text with whitespaces</p>',
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(4, 6);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+
+            assert.strictEqual($textInput.val(), ' with ');
+        });
+
+        test('Selected text with whitespaces on sides should be replaced by link', function(assert) {
+            const done = assert.async();
+            const link = 'http://test.com';
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: '<p>text with whitespaces</p>',
+                onValueChanged: ({ value }) => {
+                    checkLink(assert, {
+                        href: link,
+                        content: ' with '
+                    }, value);
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(4, 6);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+            const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+            $urlInput
+                .val(link)
+                .change();
+
+            $okDialogButton.trigger('dxclick');
         });
 
         test('Update whole link by dialog (zero-length selection)', function(assert) {
@@ -788,7 +838,7 @@ export default function() {
                 }
             }).dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('history buttons are inactive when editor has initial value', function(assert) {
@@ -840,9 +890,9 @@ export default function() {
                 }
             }).dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
             instance.option('width', 100);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const toolbarWidth = $container.find(`.${TOOLBAR_CLASS}`).width();
             const beforeContainerWidth = $container.find('.dx-toolbar-before').width();
@@ -926,7 +976,7 @@ export default function() {
                 .trigger('dxclick');
 
             $('.dx-suggestion-list .dx-list-item').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
         });
     });
 }
