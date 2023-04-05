@@ -4032,6 +4032,26 @@ function getColsCountFromDOM($form) {
     return result;
 }
 
+QUnit.test('Setting "colCountByScreen" property of group with dot notation should update layout', function(assert) {
+    const config = {
+        screenByWidth: () => 'md',
+        items: [
+            {
+                itemType: 'group',
+                colCountByScreen: { md: 3 },
+                items: [{ dataField: 'name' }, { dataField: 'email' }, { dataField: 'age' }]
+            }
+        ],
+    };
+
+    const $form = $('#form').dxForm(config);
+    const instance = $form.dxForm('instance');
+
+    instance.option('items[0].colCountByScreen.md', 2);
+
+    assert.equal(getColsCountFromDOM($form), 2);
+});
+
 [
     { screenWidth: 1500, expectedSize: 'lg' },
     { screenWidth: 1000, expectedSize: 'md' },
