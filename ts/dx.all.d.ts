@@ -10485,7 +10485,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateRangeBox]
    */
-  export class dxDateRangeBox extends dxDateBox<dxDateRangeBoxOptions> {}
+  export class dxDateRangeBox extends dxDateBox<DevExpress.ui.dxDateRangeBox.Properties> {}
   module dxDateRangeBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxDateRangeBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
@@ -10540,35 +10540,32 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type Properties = dxDateRangeBoxOptions;
+    export type Properties = Omit<
+      dxDateBoxOptions<dxDateRangeBox>,
+      'value' | 'adaptivityEnabled' | 'interval' | 'type' | 'showAnalogClock'
+    > & {
+      /**
+       * [descr:dxDateRangeBoxOptions.endDate]
+       */
+      endDate?: Date | number | string;
+      /**
+       * [descr:dxDateRangeBoxOptions.pickerType]
+       */
+      pickerType?: DateRangePickerType;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDate]
+       */
+      startDate?: Date | number | string;
+      /**
+       * [descr:dxDateRangeBoxOptions.value]
+       */
+      value?: Array<Date | number | string>;
+    };
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxDateRangeBox,
       KeyboardEvent | MouseEvent | PointerEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
-  }
-  /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxDateRangeBoxOptions
-    extends Omit<dxDateBoxOptions<dxDateRangeBox>, 'value'> {
-    /**
-     * [descr:dxDateRangeBoxOptions.endDate]
-     */
-    endDate?: Date | number | string;
-    /**
-     * [descr:dxDateRangeBoxOptions.pickerType]
-     */
-    pickerType?: DevExpress.ui.dxDateRangeBox.DateRangePickerType;
-    /**
-     * [descr:dxDateRangeBoxOptions.startDate]
-     */
-    startDate?: Date | number | string;
-    /**
-     * [descr:dxDateRangeBoxOptions.value]
-     */
-    value?: Array<Date | number | string>;
   }
   /**
    * [descr:dxDeferRendering]

@@ -78,18 +78,17 @@ export type ValueChangedEvent =
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
+ * @public
  */
-export interface dxDateRangeBoxOptions extends Omit<dxDateBoxOptions<dxDateRangeBox>, 'value'> {
+export type Properties = Omit<dxDateBoxOptions<dxDateRangeBox>, 'value' | 'adaptivityEnabled' | 'interval' | 'type' | 'showAnalogClock'> & {
   /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
      */
   endDate?: Date | number | string;
   /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.pickerType
      * @default 'calendar'
      * @default 'native' &for(iOS)
      * @default 'native' &for(Android)
@@ -97,18 +96,18 @@ export interface dxDateRangeBoxOptions extends Omit<dxDateBoxOptions<dxDateRange
      */
   pickerType?: DateRangePickerType;
   /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
      */
   startDate?: Date | number | string;
   /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.value
      * @default [null, null]
      * @public
      */
   value?: Array<Date | number | string>;
-}
+};
 
 /**
  * @docid
@@ -117,10 +116,4 @@ export interface dxDateRangeBoxOptions extends Omit<dxDateBoxOptions<dxDateRange
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends dxDateBox<dxDateRangeBoxOptions> { }
-
-/** @public */
-export type Properties = dxDateRangeBoxOptions;
-
-/** @deprecated use Properties instead */
-export type Options = dxDateRangeBoxOptions;
+export default class dxDateRangeBox extends dxDateBox<Properties> { }
