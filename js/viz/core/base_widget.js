@@ -113,7 +113,7 @@ function callForEach(functions) {
     functions.forEach(c => c());
 }
 
-function floorDimensionsValuesInCanvas(canvas) {
+function floorCanvasDimensions(canvas) {
     return {
         ...canvas,
         height: _floor(canvas.height),
@@ -398,7 +398,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
         // Canvas is calculated before the renderer is created in order to capture actual size of the container
         const rawCanvas = that._calculateRawCanvas();
-        that._canvas = floorDimensionsValuesInCanvas(rawCanvas);
+        that._canvas = floorCanvasDimensions(rawCanvas);
         that._renderer = new Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
         that._renderer.resize(that._canvas.width, that._canvas.height);
     },
@@ -511,7 +511,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const rawCanvas = that._calculateRawCanvas();
 
         if(areCanvasesDifferent(that._canvas, rawCanvas) || that.__forceRender /* for charts */) {
-            that._canvas = floorDimensionsValuesInCanvas(rawCanvas);
+            that._canvas = floorCanvasDimensions(rawCanvas);
             that._recreateSizeDependentObjects(true);
             that._renderer.resize(this._canvas.width, this._canvas.height);
             that._change(['LAYOUT']);
