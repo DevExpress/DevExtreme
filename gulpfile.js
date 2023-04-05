@@ -112,6 +112,7 @@ gulp.task('dev-watch', gulp.parallel(
 
 gulp.task('dev', gulp.series(
     'default-dev',
+    'transpile-systemjs',
     'dev-watch'
 ));
 
