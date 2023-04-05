@@ -823,10 +823,8 @@ const LayoutManager = Widget.inherit({
                 this._invalidate();
                 break;
             case 'colCount':
-                this._resetColCount();
-                break;
             case 'colCountByScreen':
-                this._invalidate();
+                this._resetColCount();
                 break;
             case 'minColWidth':
                 if(this.option('colCount') === 'auto') {
