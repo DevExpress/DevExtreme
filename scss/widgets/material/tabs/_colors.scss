@@ -39,10 +39,10 @@ $tabs-tab-button-disabled-opacity: 0 !default;
 $tabs-hovered-tab-bg-color: null !default;
 
 @if $mode == "light" {
-  $tabs-hovered-tab-bg-color: darken($base-bg, 7%) !default;
+  $tabs-hovered-tab-bg-color: color.change($base-accent, $alpha: 0.08) !default;
 }
 
 @if $mode == "dark" {
-  $tabs-hovered-tab-bg-color: lighten($base-bg, 7%) !default;
+  $tabs-hovered-tab-bg-color: lighten($base-bg, 7%) !default; // TODO
 }
 
