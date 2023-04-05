@@ -61,7 +61,7 @@ const createPoint = function(series, data) {
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
         if(stubFunc) {
-            if (stubFunc.resetHistory) {
+            if(stubFunc.resetHistory) {
                 stubFunc.resetHistory();
             } else if(stubFunc.reset) {
                 stubFunc.reset();

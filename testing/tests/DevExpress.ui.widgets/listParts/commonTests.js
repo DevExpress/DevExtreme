@@ -2001,7 +2001,7 @@ QUnit.module('events', moduleSetup, () => {
         }
 
         const $element = this.element.dxList({
-            items:[{
+            items: [{
                 text: 'item 1',
                 onClick: () => {
                     assert.ok('onClick was fired');

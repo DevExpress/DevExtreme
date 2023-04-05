@@ -1135,7 +1135,7 @@ QUnit.module('Lookup', {
                 dropDownOptions: {
                     onShowing: (e) => {
                         const $overlayContent = e.component.$content().parent();
-                        $overlayContent.attr("role", "custom-role");
+                        $overlayContent.attr('role', 'custom-role');
                     }
                 }
             }).dxLookup('instance');

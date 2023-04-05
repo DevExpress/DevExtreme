@@ -4944,10 +4944,10 @@ QUnit.module('Popup open state', () => {
 
                 dateBox.open();
                 keyboard.keyDown('tab');
-        
+
                 assert.strictEqual(dateBox.option('opened'), false, 'popup is closed');
             });
-        })
+        });
     });
 
     ['date', 'time', 'datetime'].forEach(type => {
@@ -4965,10 +4965,10 @@ QUnit.module('Popup open state', () => {
 
                 dateBox.open();
                 keyboard.keyDown('tab');
-        
+
                 assert.strictEqual(dateBox.option('opened'), true, 'popup is still opened');
             });
-        })
+        });
     });
 });
 
