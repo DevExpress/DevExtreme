@@ -350,7 +350,8 @@ export const rowsModule = {
                                             switch(dataChangeType) {
                                                 case 'update':
                                                     if(item) {
-                                                        const columnIndices = change.columnIndices && change.columnIndices[index];
+                                                        const columnIndices = change.columnIndices?.[index];
+
                                                         if(isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
                                                             $rowElement.toggle(item.visible);
                                                         } else if(columnIndices) {
