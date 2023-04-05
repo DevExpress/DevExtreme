@@ -1,4 +1,4 @@
-import { Controllers, ViewController, Views } from './ui.grid_core.modules';
+import { Controllers, ViewController, Views } from '../module_types';
 
 interface State {
   _hiddenColumns: any;
@@ -12,7 +12,7 @@ interface State {
   _rowsView: Views['rowsView'];
 }
 
-interface AdaptiveColumnsController extends ViewController, State {
+export interface AdaptiveColumnsController extends ViewController, State {
   _isRowEditMode: (this: this) => any;
 
   _isItemModified: (this: this, item, cellOptions) => any;

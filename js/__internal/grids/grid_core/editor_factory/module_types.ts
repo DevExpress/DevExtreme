@@ -1,4 +1,4 @@
-import { ViewController } from './ui.grid_core.modules';
+import { ViewController } from '../module_types';
 
 interface State {
   _isFocusOverlay: any;

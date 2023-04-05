@@ -1,4 +1,4 @@
-import { Controllers, ViewController, Views } from '../ui.grid_core.modules';
+import { Controllers, ViewController, Views } from '../module_types';
 
 interface State {
   _updateFocusTimeout: any;
@@ -24,7 +24,7 @@ interface State {
   _adaptiveController: Controllers['adaptiveColumns'];
 }
 
-interface KeyboardNavigationController extends ViewController, State {
+export interface KeyboardNavigationController extends ViewController, State {
   _initViewHandlers: (this: this, ...args: any[]) => any;
 
   _initDocumentHandlers: (this: this, ...args: any[]) => any;
