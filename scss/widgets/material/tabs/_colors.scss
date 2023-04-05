@@ -60,3 +60,17 @@ $tabs-focused-tab-bg-color: null !default;
   $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.12) !default;
 }
 
+/**
+* $name 50. Focused tab background color
+* $type color
+*/
+$tabs-active-tab-bg-color: null !default;
+
+@if $mode == "light" {
+  $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
+}
+
+@if $mode == "dark" {
+  $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
+}
+
