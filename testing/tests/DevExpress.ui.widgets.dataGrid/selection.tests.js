@@ -4467,7 +4467,7 @@ QUnit.module('Deferred selection', {
             }
         });
         this.clock.tick();
-        
+
         // act
         this.deleteRow(0);
         this.clock.tick();

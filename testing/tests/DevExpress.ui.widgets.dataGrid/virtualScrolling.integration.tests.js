@@ -4969,7 +4969,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 useNative: false
             },
-            editing: {mode: 'batch', allowAdding: true},
+            editing: { mode: 'batch', allowAdding: true },
         });
 
         this.clock.tick(300);
@@ -5024,7 +5024,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 useNative: false
             },
-            editing: {mode: 'batch', allowAdding: true},
+            editing: { mode: 'batch', allowAdding: true },
         });
 
         this.clock.tick(300);
