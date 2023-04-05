@@ -14,6 +14,7 @@
 
 
 $material-tabs-background: $base-bg;
+$material-tabs-nav-button-background: color.change($button-default-hover-bg, $alpha: 0.08);
 
 .dx-tabs {
   padding: 0;
@@ -39,9 +40,13 @@ $material-tabs-background: $base-bg;
   box-shadow: none;
 
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
-    @include dx-button-flat-color-styling($base-icon-color, color.change($button-default-hover-bg, $alpha: 0.08), color.change($button-default-hover-bg, $alpha: 0.08), color.change($button-default-hover-bg, $alpha: 0.3));
+    @include dx-button-flat-color-styling($base-icon-color, $material-tabs-nav-button-background, $material-tabs-nav-button-background, $material-tabs-nav-button-background);
 
     border-radius: 0;
+
+    .dx-inkripple-wave {
+      background-color: $material-tabs-nav-button-background;
+    }
   }
 
   .dx-button-content {
@@ -120,6 +125,11 @@ $material-tabs-background: $base-bg;
       opacity: 0.3;
       background-color: $tabs-selected-tab-bottom-border-color;
     }
+  }
+
+  &.dx-state-active,
+  &.dx-state-active .dx-inkripple-wave {
+    background-color: $tabs-active-tab-bg-color;
   }
 }
 
