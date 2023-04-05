@@ -10,7 +10,7 @@
         v-model:selected-item-keys="selectedItemKeys"
       />
       <div class="selected-data">
-        <span class="caption">Selected IDs:</span>
+        <span class="caption">Selected IDs: </span>
         <span>{{ selectedItemKeys.join(", ") }}</span>
       </div>
     </div>

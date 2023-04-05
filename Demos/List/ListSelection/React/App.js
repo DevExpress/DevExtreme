@@ -14,82 +14,66 @@ const dataSource = new ArrayStore({
 const selectionModes = ['none', 'single', 'multiple', 'all'];
 const selectAllModes = ['page', 'allPages'];
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      selectionMode: 'all',
-      selectAllMode: 'page',
-      selectedItemKeys: [],
-    };
-    this.onSelectionModeChange = this.onSelectionModeChange.bind(this);
-    this.onSelectAllModeChange = this.onSelectAllModeChange.bind(this);
-    this.onSelectedItemKeysChange = this.onSelectedItemKeysChange.bind(this);
-  }
+export default function App() {
+  const [selectionMode, setSelectionMode] = React.useState('all');
+  const [selectAllMode, setSelectAllMode] = React.useState('page');
+  const [selectedItemKeys, setSelectedItemKeys] = React.useState([]);
 
-  onSelectionModeChange(args) {
-    this.setState({
-      selectionMode: args.value,
-    });
-  }
-
-  onSelectAllModeChange(args) {
-    this.setState({
-      selectAllMode: args.value,
-    });
-  }
-
-  onSelectedItemKeysChange(args) {
-    if (args.name === 'selectedItemKeys') {
-      this.setState({
-        selectedItemKeys: args.value,
-      });
+  const onSelectedItemKeysChange = React.useCallback(({ name, value }) => {
+    if (name === 'selectedItemKeys') {
+      if (selectionMode !== 'none' || selectedItemKeys.length !== 0) {
+        setSelectedItemKeys(value);
+      }
     }
-  }
+  }, [selectionMode, selectedItemKeys, setSelectedItemKeys]);
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="widget-container">
-          <List
-            dataSource={dataSource}
-            height={400}
-            showSelectionControls={true}
-            selectionMode={this.state.selectionMode}
-            selectAllMode={this.state.selectAllMode}
-            selectedItemKeys={this.state.selectedItemKeys}
-            onOptionChanged={this.onSelectedItemKeysChange}>
-          </List>
-          <div className="selected-data">
-            <span className="caption">Selected IDs:</span>
-            <span>{this.state.selectedItemKeys.join(', ')}</span>
-          </div>
+  const onSelectionModeChange = React.useCallback((value) => {
+    setSelectionMode(value);
+  }, [setSelectionMode]);
+
+  const onSelectAllModeChange = React.useCallback((value) => {
+    setSelectAllMode(value);
+  }, [setSelectAllMode]);
+
+  return (
+    <React.Fragment>
+      <div className="widget-container">
+        <List
+          dataSource={dataSource}
+          height={400}
+          showSelectionControls={true}
+          selectionMode={selectionMode}
+          selectAllMode={selectAllMode}
+          selectedItemKeys={selectedItemKeys}
+          onOptionChanged={onSelectedItemKeysChange}>
+        </List>
+        <div className="selected-data">
+          <span className="caption">Selected IDs: </span>
+          <span>{ selectedItemKeys.join(', ') }</span>
         </div>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <span>Selection Mode</span>
+      </div>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <span>Selection Mode</span>
             &nbsp;
-            <SelectBox
-              items={selectionModes}
-              value={this.state.selectionMode}
-              onValueChanged={this.onSelectionModeChange}>
-            </SelectBox>
-          </div>
-          <div className="option">
-            <span>Select All Mode</span>
-            &nbsp;
-            <SelectBox
-              disabled={this.state.selectionMode !== 'all'}
-              items={selectAllModes}
-              value={this.state.selectAllMode}
-              onValueChanged={this.onSelectAllModeChange}>
-            </SelectBox>
-          </div>
+          <SelectBox
+            items={selectionModes}
+            value={selectionMode}
+            onValueChange={onSelectionModeChange}>
+          </SelectBox>
         </div>
-      </React.Fragment>
-    );
-  }
+        <div className="option">
+          <span>Select All Mode</span>
+            &nbsp;
+          <SelectBox
+            disabled={selectionMode !== 'all'}
+            items={selectAllModes}
+            value={selectAllMode}
+            onValueChange={onSelectAllModeChange}>
+          </SelectBox>
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }
-
-export default App;

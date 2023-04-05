@@ -20,6 +20,10 @@ $(() => {
     onValueChanged(data) {
       listWidget.option('selectionMode', data.value);
       selectAllModeChooser.option('disabled', data.value !== 'all');
+
+      if (data.value === 'none') {
+        $('#selectedItemKeys').text('');
+      }
     },
   });
 
