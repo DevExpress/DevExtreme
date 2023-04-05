@@ -344,8 +344,8 @@ export const rowsModule = {
                                         const item = change.items && change.items[index];
 
                                         executors.push(() => {
-                                            const $rowsElement = this._getRowElements(tableElement);
-                                            const $rowElement = $rowsElement.eq(rowIndex);
+                                            const $rowElements = this._getRowElements(tableElement);
+                                            const $rowElement = $rowElements.eq(rowIndex);
 
                                             switch(dataChangeType) {
                                                 case 'update':
@@ -362,7 +362,7 @@ export const rowsModule = {
                                                     }
                                                     break;
                                                 case 'insert':
-                                                    if(!$rowsElement.length) {
+                                                    if(!$rowElements.length) {
                                                         if(tableElement) {
                                                             const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
                                                             $newRowElement.prependTo(target);
@@ -370,7 +370,7 @@ export const rowsModule = {
                                                     } else if($rowElement.length) {
                                                         $newRowElement.insertBefore($rowElement);
                                                     } else {
-                                                        $newRowElement.insertAfter($rowsElement.last());
+                                                        $newRowElement.insertAfter($rowElements.last());
                                                     }
                                                     if(highlightChanges && change.isLiveUpdate) {
                                                         $newRowElement.addClass(rowInsertedClass);
