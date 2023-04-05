@@ -243,6 +243,41 @@ QUnit.module('Modules used class', {}, () => {
             assert.deepEqual(RootController.calls[0].type, 'extenderOfExtender', 'check type es6Class');
             assert.deepEqual(RootController.calls[1].type, 'extender', 'check type class.inherit');
         });
+
+        QUnit.test('sinon.spy should work', function(assert) {
+            // arrange
+            /* const ExtendedExtender = {
+                extenderMethod: function() {
+                    RootController.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
+                    this.callBase();
+                }
+            };*/
+            const applyExtendedExtender = (Base) =>
+            (class ExtendedExtender extends Base {
+                extenderMethod() {
+                    RootController.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
+                    super.extenderMethod();
+                }
+            });
+            modules.registerModule('extenderOfExtender', {
+                extenders: {
+                    controllers: {
+                        'root-controller': applyExtendedExtender
+                    }
+                }
+            });
+            const instance = {};
+            modules.processModules(instance, modules);
+            const controllerInstance = instance._controllers['root-controller'];
+
+            sinon.spy(controllerInstance, 'extenderMethod');
+            // act
+            controllerInstance.extenderMethod();
+            // assert
+            assert.ok(controllerInstance.extenderMethod.calledOnce);
+        });
+
+
         QUnit.test('Constructor override', function(assert) {
             // arrange
             const applyExtendedExtender = (Base) => {
