@@ -16,12 +16,12 @@ test('Column chooser screenshot', async (t) => {
 
   await t
     .click(dataGrid.getColumnChooserButton())
-    .expect(Selector(`.${CLASS.columnChooser}`).exists)
-    .ok()
     // act
     .expect(await takeScreenshot('column-chooser', dataGrid.element))
     .ok()
     // assert
+    .expect(Selector(`.${CLASS.columnChooser}`).exists)
+    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

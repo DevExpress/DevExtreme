@@ -15,14 +15,14 @@ test('Validation popup screenshot', async (t) => {
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+a backspace enter')
-    .expect(Selector('.dx-datagrid-revert-tooltip').exists)
-    .ok()
-    .expect(Selector('.dx-invalid-message.dx-invalid-message-always.dx-datagrid-invalid-message').exists)
-    .ok()
     // act
     .expect(await takeScreenshot('validation-popup', dataGrid.element))
     .ok()
     // assert
+    .expect(Selector('.dx-datagrid-revert-tooltip').exists)
+    .ok()
+    .expect(Selector('.dx-invalid-message.dx-invalid-message-always.dx-datagrid-invalid-message').exists)
+    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

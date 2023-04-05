@@ -2193,12 +2193,12 @@ test('Popup EditForm screenshot', async (t) => {
 
   await t
     .click(commandCellRow0.getLinkEdit())
-    .expect(dataGrid.getPopupEditForm().element.exists)
-    .ok()
     // act
     .expect(await takeScreenshot('popup-edit-form', dataGrid.element))
     .ok()
     // assert
+    .expect(dataGrid.getPopupEditForm().element.exists)
+    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
