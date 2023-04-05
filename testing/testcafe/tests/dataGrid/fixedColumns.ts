@@ -1,3 +1,5 @@
+import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
@@ -125,4 +127,80 @@ test('Fixed columns should have same width as not fixed columns with columnAutoW
     },
     '#otherContainer',
   );
+});
+
+// T1148937
+test('Hovering over a row should work correctly when there is a fixed column and a column with a cellTemplate (React)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstDataRow = dataGrid.getDataRow(0);
+  const firstFixedDataRow = dataGrid.getFixedDataRow(0);
+  const secondDataRow = dataGrid.getDataRow(1);
+  const secondFixedDataRow = dataGrid.getFixedDataRow(1);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t.hover(firstDataRow.element);
+
+  // assert
+  await t
+    .expect(firstDataRow.isHovered)
+    .ok()
+    .expect(firstFixedDataRow.isHovered)
+    .ok()
+    .expect(await takeScreenshot('T1148937-grid-hover-row-1.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+
+  // act
+  await t.hover(secondFixedDataRow.element);
+
+  // assert
+  await t
+    .expect(secondDataRow.isHovered)
+    .ok()
+    .expect(secondFixedDataRow.isHovered)
+    .ok()
+    .expect(await takeScreenshot('T1148937-grid-hover-row-2.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
+    keyExpr: 'id',
+    renderAsync: false,
+    hoverStateEnabled: true,
+    templatesRenderAsynchronously: true,
+    columns: [
+      { dataField: 'id', fixed: true },
+      { dataField: 'text', cellTemplate: '#test' },
+    ],
+    showBorders: true,
+  });
+
+  await t.wait(100);
+
+  // simulating async rendering in React
+  await ClientFunction(() => {
+    const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid.getView('rowsView')._templatesCache = {};
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid._getTemplate = () => ({
+      render(options) {
+        setTimeout(() => {
+          ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
+          options.deferred?.resolve();
+        }, 100);
+      },
+    });
+
+    dataGrid.repaint();
+  })();
+
+  await t.wait(200);
 });
