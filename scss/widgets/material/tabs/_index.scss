@@ -108,24 +108,32 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
     background-color: $tabs-focused-tab-bg-color;
   }
 
-  &.dx-state-focused.dx-state-disabled {
-    color: $tabs-tab-selected-color;
+  &.dx-state-disabled {
+    color: color.change($tabs-tab-color, $alpha: 0.13);
 
     .dx-icon {
-      color: $tabs-tab-icon-selected-color;
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-      left: 0;
-      right: 0;
-      opacity: 0.3;
-      background-color: $tabs-selected-tab-bottom-border-color;
+      color: color.change($tabs-tab-icon-color, $alpha: 0.13);
     }
   }
+
+  // &.dx-state-focused.dx-state-disabled {
+  //   color: $tabs-tab-selected-color;
+
+  //   .dx-icon {
+  //     color: $tabs-tab-icon-selected-color;
+  //   }
+
+  //   &::before {
+  //     content: "";
+  //     position: absolute;
+  //     bottom: 0;
+  //     height: 2px;
+  //     left: 0;
+  //     right: 0;
+  //     opacity: 0.3;
+  //     background-color: $tabs-selected-tab-bottom-border-color;
+  //   }
+  // }
 
   &.dx-state-active,
   &.dx-state-active .dx-inkripple-wave {
@@ -144,9 +152,5 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
 .dx-state-disabled {
   &.dx-tabs {
     opacity: 1;
-  }
-
-  .dx-tab-content {
-    opacity: 0.3;
   }
 }
