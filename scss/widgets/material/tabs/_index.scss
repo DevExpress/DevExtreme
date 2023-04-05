@@ -39,7 +39,7 @@ $material-tabs-background: $base-bg;
   box-shadow: none;
 
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
-    @include dx-button-flat-color-styling($base-icon-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+    @include dx-button-flat-color-styling($base-icon-color, color.change($button-default-hover-bg, $alpha: 0.08), color.change($button-default-hover-bg, $alpha: 0.08), color.change($button-default-hover-bg, $alpha: 0.3));
 
     border-radius: 0;
   }

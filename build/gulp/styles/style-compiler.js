@@ -25,7 +25,7 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
     // 'dark',
     // 'contrast',
     'material.blue.light',
-    // 'material.blue.dark',
+    'material.blue.dark',
     // 'material.blue.light.compact',
 ];
 
