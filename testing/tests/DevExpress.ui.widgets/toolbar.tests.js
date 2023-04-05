@@ -1732,12 +1732,12 @@ QUnit.module('Toolbar disposing', () => {
 
         try {
             toolbar._dimensionChanged();
-        } catch (e) {
+        } catch(e) {
             assert.ok(false, e);
         } finally {
             assert.ok(true, 'the exception is not thrown');
         }
-    })
+    });
 });
 
 QUnit.module('Waiting fonts for material theme', moduleConfig, () => {

@@ -330,10 +330,10 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.clearSorting();
         dataGrid.getDataSource().sort('a');
         dataGrid.getDataSource().load();
-        
+
         // assert
         assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), 'asc');
-        
+
         // act
         // same actions second time
         dataGrid.clearSorting();

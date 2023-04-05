@@ -5012,7 +5012,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 useNative: false
             },
-            editing: {mode: 'batch', allowAdding: true},
+            editing: { mode: 'batch', allowAdding: true },
         });
 
         this.clock.tick(300);
@@ -5067,7 +5067,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 useNative: false
             },
-            editing: {mode: 'batch', allowAdding: true},
+            editing: { mode: 'batch', allowAdding: true },
         });
 
         this.clock.tick(300);
@@ -6502,7 +6502,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     QUnit.test('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', function(assert) {
         // arrange
         const data = [...new Array(14)].map((_, i) => ({
-            id: i+1
+            id: i + 1
         }));
 
         const dataGrid = createDataGrid({
@@ -6518,7 +6518,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 allowUpdating: true,
                 allowDeleting: true,
             },
-            repaintChangesOnly: true,          
+            repaintChangesOnly: true,
         });
         this.clock.tick();
 
@@ -6536,18 +6536,18 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         Array.from($rows).forEach((row, i) => {
             const $row = $(row);
-            if (i === 5) { // editing row
+            if(i === 5) { // editing row
                 assert.strictEqual($row.find('a').length, 2);
-                assert.strictEqual($row.find('a:eq(0)').text(), 'Save')
-                assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel')
+                assert.strictEqual($row.find('a:eq(0)').text(), 'Save');
+                assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel');
                 return;
-            }   
+            }
 
             // other rows
             assert.strictEqual($row.find('a').length, 2);
-            assert.strictEqual($row.find('a:eq(0)').text(), 'Edit')
-            assert.strictEqual($row.find('a:eq(1)').text(), 'Delete')
-        })
+            assert.strictEqual($row.find('a:eq(0)').text(), 'Edit');
+            assert.strictEqual($row.find('a:eq(1)').text(), 'Delete');
+        });
     });
 });
 
