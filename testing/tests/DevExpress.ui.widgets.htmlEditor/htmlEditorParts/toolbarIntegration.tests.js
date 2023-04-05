@@ -619,7 +619,7 @@ export default function() {
             });
             const linkHref = $container.find('a').attr('href');
 
-            assert.strictEqual(linkHref, '')
+            assert.strictEqual(linkHref, '');
         });
 
         test('href should be empty on empty URL input submit (T1134100)', function(assert) {
@@ -670,7 +670,7 @@ export default function() {
             $linkFormatButton.trigger('dxclick');
 
             const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
-            
+
             assert.strictEqual(linkText, $textInput.val());
         });
 

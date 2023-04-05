@@ -4492,10 +4492,10 @@ QUnit.module('Header Filter with real columnsController', {
                 displayExpr: 'value'
             }
         }];
-        
+
         this.options.dataSource = { load: loadSpy };
         this.options.syncLookupFilterValues = true;
-        this.options.remoteOperations = { groupPaging: true }
+        this.options.remoteOperations = { groupPaging: true };
         this.options.headerFilter.allowSearch = true;
 
         const $testElement = $('#container');
@@ -4503,7 +4503,7 @@ QUnit.module('Header Filter with real columnsController', {
         this.setupDataGrid();
         this.columnHeadersView.render($testElement);
         this.headerFilterView.render($testElement);
-        
+
         // assert
         assert.strictEqual(loadSpy.callCount, 1);
         loadSpy.reset();
@@ -4522,11 +4522,11 @@ QUnit.module('Header Filter with real columnsController', {
         // assert
         assert.strictEqual(loadSpy.callCount, 1);
         loadSpy.reset();
-                
+
         // act
         const list = $popupContent.find('.dx-list').dxList('instance');
         list.option('searchValue', 'value1');
-        
+
         // assert
         $listItemElements = $popupContent.find('.dx-list-item-content');
         assert.equal($listItemElements.length, 1, 'count list item');
