@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -37,7 +38,7 @@ test('Filter row\'s height should be adjusted by content (T1072609)', async (t) 
   await changeTheme('generic.light');
 });
 
-test('FilterRow renge overlay screenshot', async (t) => {
+test('FilterRow range overlay screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
@@ -46,6 +47,8 @@ test('FilterRow renge overlay screenshot', async (t) => {
     .click(filterEditor.menuButton);
   await t
     .click(filterEditor.menu.getItemByText('Between'))
+    .expect(Selector('dx-datagrid-filter-range-overlay').visible)
+    .ok()
     // act
     .expect(await takeScreenshot('filter-row-overlay', dataGrid.element))
     .ok()

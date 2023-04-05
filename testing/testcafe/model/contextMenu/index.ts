@@ -7,6 +7,7 @@ const CLASS = {
   contextMenu: 'dx-context-menu',
   item: 'dx-menu-item',
   overlay: 'dx-overlay',
+  itemText: 'dx-menu-item-text',
 };
 
 export default class ContextMenu extends Widget {
@@ -30,7 +31,7 @@ export default class ContextMenu extends Widget {
   }
 
   getItemByText(text: string): Selector {
-    return this.findItemByTextInContainer(text);
+    return this.findItemByText(text);
   }
 
   getItemByIndex(index: number): Selector {
@@ -50,8 +51,8 @@ export default class ContextMenu extends Widget {
     )();
   }
 
-  findItemByTextInContainer(text: string): Selector {
-    const span = this.element.find('.dx-menu-item-text');
+  findItemByText(text: string): Selector {
+    const span = this.element.find(`.${CLASS.itemText}`);
     return span.withExactText(text).parent();
   }
 }
