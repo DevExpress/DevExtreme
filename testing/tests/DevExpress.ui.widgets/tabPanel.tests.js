@@ -83,7 +83,7 @@ QUnit.module('rendering', {
             const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
             const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-            clock.tick();
+            clock.tick(10);
 
             assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
             assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
@@ -103,7 +103,7 @@ QUnit.module('rendering', {
             const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
             const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-            clock.tick();
+            clock.tick(10);
 
             assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
             assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
@@ -589,7 +589,7 @@ QUnit.module('keyboard navigation', {
 
         this.instance.focus();
         $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
 
@@ -604,7 +604,7 @@ QUnit.module('keyboard navigation', {
 
         this.instance.focus();
         $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tabsFocusedIndex = $(this.instance.option('focusedElement')).index();
         assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');

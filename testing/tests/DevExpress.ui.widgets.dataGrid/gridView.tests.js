@@ -1729,7 +1729,7 @@ QUnit.module('Synchronize columns', {
         assert.ok(!testElement.find('.dx-datagrid-scroll-container').length, 'no column headers');
         assert.ok(testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(testElement.find('.dx-scrollable-container').scrollLeft(), 100);
     });
 
@@ -1899,7 +1899,7 @@ QUnit.module('Synchronize columns', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.notOk($(that.getCellElement(0, 'field4'))[0].style.width, 'the fourth column has no width');

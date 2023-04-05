@@ -65,7 +65,13 @@ const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), 
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        if(stubFunc) {
+            if(stubFunc.resetHistory) {
+                stubFunc.resetHistory();
+            } else if(stubFunc.reset) {
+                stubFunc.reset();
+            }
+        }
     });
 }
 

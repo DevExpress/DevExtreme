@@ -76,7 +76,7 @@ QUnit.module('PivotGrid markup tests', () => {
             }
         });
 
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.ok(pivotGrid.$element().hasClass('dx-pivotgrid'), 'has dx-pivotgrid class');

@@ -402,7 +402,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         // act
         const $checkbox = $('.dx-header-row').find('.dx-checkbox');
         $checkbox.trigger('dxclick');
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.equal($checkbox.dxCheckBox('instance').option('value'), true, 'SelectAll checkbox value is OK');
@@ -549,7 +549,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         const $selectCheckbox = $expandableCell.find('.dx-select-checkbox').first();
 
         $selectCheckbox.focus();
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.ok(!$expandableCell.hasClass('dx-focused'));
@@ -1300,7 +1300,7 @@ QUnit.module('Recursive selection', {
         this.options.loadingTimeout = 0;
         this.options.selectedRowKeys = [1];
         this.setupTreeList();
-        clock.tick();
+        clock.tick(10);
 
         this.rowsView.render($testElement);
 
@@ -1309,7 +1309,7 @@ QUnit.module('Recursive selection', {
 
         // act
         this.loadDescendants();
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.deepEqual(this.getSelectedRowKeys('leavesOnly'), [2, 3, 4], 'leaves');

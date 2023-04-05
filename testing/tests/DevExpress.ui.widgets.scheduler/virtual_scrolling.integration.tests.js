@@ -24,7 +24,7 @@ const test = (description, callback) => {
     const testFunc = !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
-    return testFunc(description, sinon.test(callback));
+    return testFunc(description, callback);
 };
 
 testStart(() => initTestMarkup());

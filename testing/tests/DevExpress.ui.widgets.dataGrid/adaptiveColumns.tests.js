@@ -81,7 +81,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.columnOption('command:adaptive', 'visible'), 'adaptive command column is visible');
@@ -107,7 +107,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(cssInvokeCounter, 0, 'no $.css() invokes for width/height CSS properties');
@@ -126,7 +126,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.columnOption('command:adaptive', 'adaptiveHidden'), 'adaptive command column is not shown');
@@ -142,11 +142,11 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         this.option('columnHidingEnabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.columnOption('command:adaptive', 'visible'), 'adaptive command column is shown');
@@ -187,7 +187,7 @@ QUnit.module('AdaptiveColumns', {
 
         this.gridView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, 'There is no hidden columns');
@@ -199,11 +199,11 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         this.option('columnHidingEnabled', false);
-        this.clock.tick();
+        this.clock.tick(10);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.columnOption('command:adaptive', 'adaptiveHidden'), 'adaptive command column is hidden');
@@ -218,7 +218,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.rowsView.isClickableElement($('.dx-data-row td').eq(1)), 'row click isn\'t ignored');
@@ -236,12 +236,12 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(600);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cols = $('.dx-datagrid-rowsview col');
 
@@ -256,14 +256,14 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         this.columnsController.columnOption('command:adaptive', 'visibleIndex', -1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(600);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cols = $('.dx-datagrid-rowsview col');
 
@@ -290,7 +290,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $cols = $('.dx-datagrid-rowsview col');
@@ -319,7 +319,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.gridView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $cols = $('.dx-datagrid-rowsview col');
@@ -353,7 +353,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $tables = $('.dx-datagrid-rowsview table');
@@ -377,7 +377,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $tables = $('.dx-datagrid-rowsview table');
@@ -402,7 +402,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $tables = $('.dx-datagrid-rowsview table');
@@ -439,12 +439,12 @@ QUnit.module('AdaptiveColumns', {
 
         $('.dx-datagrid').width(100);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         let $cols = $('.dx-datagrid-rowsview col');
         const adaptiveRowsWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         this.dataController.collapseAll();
-        this.clock.tick();
+        this.clock.tick(10);
 
         $cols = $('.dx-datagrid-headers col');
         const adaptiveHeadersWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
@@ -495,7 +495,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.columnOption('command:adaptive', 'visible'), 'adaptive command column is shown');
@@ -509,7 +509,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
@@ -530,7 +530,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
@@ -565,7 +565,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -597,7 +597,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
@@ -634,7 +634,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
@@ -662,12 +662,12 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger(CLICK_NAMESPACE);
         this.columnsController.columnOption('lastName', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-form .dx-field-item-content').length, 1, 'items count');
@@ -690,14 +690,14 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger(CLICK_NAMESPACE);
         this.columnsController.columnOption('lastName', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
         this.columnsController.columnOption('lastName', 'visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-form .dx-field-item-content').length, 2, 'items count');
@@ -720,14 +720,14 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger(CLICK_NAMESPACE);
         this.columnsController.columnOption('lastName', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
         this.columnsController.columnOption('middleName', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-form .dx-field-item-content').length, 0, 'items count');
@@ -752,16 +752,16 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.columnsController.columnOption('command:adaptive', 'visibleIndex', -1);
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger(CLICK_NAMESPACE);
         this.columnsController.columnOption('lastName', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
         this.columnsController.columnOption('middleName', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const cols = $('col');
@@ -795,7 +795,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
@@ -820,7 +820,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick.dxDataGridAdaptivity');
@@ -837,13 +837,13 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick.dxDataGridAdaptivity');
         $('.dx-datagrid').width(600);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cols = $('.dx-datagrid-rowsview col');
 
@@ -870,7 +870,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick.dxDataGridAdaptivity');
@@ -909,7 +909,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick.dxDataGridAdaptivity');
@@ -943,7 +943,7 @@ QUnit.module('AdaptiveColumns', {
         this.columnHeadersView.render($container);
         this.rowsView.render($container);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.columnsResizerController.pointsByColumns(), [{
@@ -979,7 +979,7 @@ QUnit.module('AdaptiveColumns', {
         this.columnHeadersView.render($container);
         this.rowsView.render($container);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.columnsResizerController.pointsByColumns(), [], 'points by columns');
@@ -1011,7 +1011,7 @@ QUnit.module('AdaptiveColumns', {
         this.columnHeadersView.render($container);
         this.rowsView.render($container);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.columnsResizerController.pointsByColumns().length, 1, 'points by columns count');
@@ -1044,7 +1044,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($container);
         this.draggingHeaderView.render($container);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const that = this;
@@ -1088,7 +1088,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($container);
         this.draggingHeaderView.render($container);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const that = this;
@@ -1137,7 +1137,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($container);
         this.columnsSeparatorView.render($container);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.columnsResizerController._isResizing = true;
@@ -1171,7 +1171,7 @@ QUnit.module('AdaptiveColumns', {
         this.columns[1].width = 200;
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const columns = this.exportController._getColumns();
@@ -1195,11 +1195,11 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editors = $('.dx-form .dx-texteditor');
@@ -1216,7 +1216,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1);
@@ -1232,12 +1232,12 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(600);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1);
@@ -1255,7 +1255,7 @@ QUnit.module('AdaptiveColumns', {
         this.columnHeadersView.render($('#container'));
         this.rowsView.render($('#container2'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const col = $('.dx-datagrid-headers table').eq(0).find('col').get(1);
@@ -1276,7 +1276,7 @@ QUnit.module('AdaptiveColumns', {
         this.columnHeadersView.render($('#container'));
         this.rowsView.render($('#container2'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $cols = $('.dx-datagrid-headers table').eq(0).find('col');
@@ -1299,12 +1299,12 @@ QUnit.module('AdaptiveColumns', {
         this.columnHeadersView.render($('#container'));
         this.rowsView.render($('#container2'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(600);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const col = $('.dx-datagrid-headers table').eq(0).find('col').get(1);
@@ -1329,7 +1329,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.footerView.render($('#container2'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const col = $('.dx-datagrid-total-footer table').eq(0).find('col').get(1);
@@ -1354,12 +1354,12 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.footerView.render($('#container2'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(600);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const col = $('.dx-datagrid-total-footer table').eq(0).find('col').get(1);
@@ -1375,7 +1375,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-command-adaptive.dx-command-adaptive-hidden').length, 2);
@@ -1387,12 +1387,12 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(200);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-command-adaptive.dx-command-adaptive-hidden').length, 0);
@@ -1404,7 +1404,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $hiddenColumns;
         this.resizingController._getBestFitWidths = function() {
@@ -1415,7 +1415,7 @@ QUnit.module('AdaptiveColumns', {
         // act
         $('.dx-datagrid').width(250);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($hiddenColumns.length, 0);
@@ -1438,13 +1438,13 @@ QUnit.module('AdaptiveColumns', {
         };
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.expandRow(this.items[0]);
         $('.dx-datagrid').width(200);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-master-detail-row .dx-master-detail-cell.dx-datagrid-hidden-column').length, 0, 'master detail cell is not hidden');
@@ -1468,7 +1468,7 @@ QUnit.module('AdaptiveColumns', {
 
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-command-adaptive:not(.dx-datagrid-hidden-column)').length, 2, 'the adaptive column is shown');
@@ -1480,11 +1480,11 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.columnsController.columnOption('command:adaptive', 'visible', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-datagrid-adaptive-more').length, 0, 'command adaptive element');
@@ -1510,14 +1510,14 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
         $('.dx-datagrid').width(500);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-adaptive-detail-row .test-template').length, 1, 'cell template is shown');
@@ -1543,7 +1543,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-command-adaptive.dx-command-adaptive-hidden').length, 2, 'command adaptive element');
@@ -1568,7 +1568,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-command-adaptive.dx-command-adaptive-hidden').length, 2, 'command adaptive element should be hidden');
@@ -1591,7 +1591,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -1620,7 +1620,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-datagrid-adaptive-more').length, 2, 'command adaptive element');
@@ -1642,7 +1642,7 @@ QUnit.module('AdaptiveColumns', {
 
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-datagrid-adaptive-more').length, 1, 'command adaptive element');
@@ -1665,7 +1665,7 @@ QUnit.module('AdaptiveColumns', {
 
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-datagrid-adaptive-more').length, 2, 'command adaptive element');
@@ -1689,7 +1689,7 @@ QUnit.module('AdaptiveColumns', {
 
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-data-row .dx-datagrid-adaptive-more').length, 2, 'command adaptive element');
@@ -1704,7 +1704,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -1725,7 +1725,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         sinon.spy(this.rowsView, '_getRowElements');
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.rowsView._getRowElements.calledOnce);
@@ -1740,7 +1740,7 @@ QUnit.module('AdaptiveColumns', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const form = $('#container').find('.dx-form').dxForm('instance');
         const colWidth = form.option('colCount');
@@ -1775,7 +1775,7 @@ QUnit.module('AdaptiveColumns', {
         // act
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
@@ -1807,7 +1807,7 @@ QUnit.module('AdaptiveColumns', {
         // act
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
@@ -1851,7 +1851,7 @@ QUnit.module('AdaptiveColumns', {
         // act
         this.rowsView.render($testElement);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.rowsView.getRowElement(0)).children('.dx-command-adaptive').html(), '&nbsp;', 'adaptive cell');
@@ -1970,11 +1970,11 @@ QUnit.module('API', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
@@ -1988,7 +1988,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $adaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
@@ -1996,7 +1996,7 @@ QUnit.module('API', {
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
@@ -2004,7 +2004,7 @@ QUnit.module('API', {
 
         // act
         this.adaptiveColumnsController.collapseAdaptiveDetailRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!$('.dx-adaptive-detail-row').length, 'there is no field items');
@@ -2019,7 +2019,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $firstAdaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
@@ -2029,7 +2029,7 @@ QUnit.module('API', {
 
         // act
         $firstAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
@@ -2037,7 +2037,7 @@ QUnit.module('API', {
 
         // act
         $secondAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
@@ -2052,18 +2052,18 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(this.items[0]), 'row is expanded');
 
         // act
         this.adaptiveColumnsController.collapseAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(this.items[0]), 'row is collapsed');
@@ -2081,7 +2081,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2108,7 +2108,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.expandRow(this.items[0]);
@@ -2137,7 +2137,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2166,7 +2166,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.expandRow(this.items[0]);
@@ -2195,7 +2195,7 @@ QUnit.module('API', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2224,14 +2224,14 @@ QUnit.module('API', {
         setupDataGrid(this);
         this.rowsView.render($testElement);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         $rowElements = $testElement.find('tbody.dx-row');
         assert.strictEqual($rowElements.length, 3, 'row count');
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $rowElements = $testElement.find('tbody.dx-row');
@@ -2267,17 +2267,17 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let adaptiveDetailForm = $('.dx-adaptive-detail-row .dx-form').dxForm('instance');
         assert.notStrictEqual(adaptiveDetailForm, undefined, 'adaptive detail form is initialized');
 
         this.editingController.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         adaptiveDetailForm = $('.dx-adaptive-detail-row .dx-form').dxForm('instance');
         assert.strictEqual(adaptiveDetailForm, undefined, 'adaptive detail form is not initialized');
@@ -2296,12 +2296,12 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.editingController.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-datagrid').width(100);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $formItemElements = $('#container').find('.dx-datagrid-edit-form').first().find('.dx-datagrid-edit-form-item');
         assert.equal($formItemElements.length, 2, 'count editor');
@@ -2326,7 +2326,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -2352,7 +2352,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2430,7 +2430,7 @@ QUnit.module('Editing', {
 
         // act
         editor.option('value', 'Man');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editors = $('.dx-texteditor');
@@ -2466,7 +2466,7 @@ QUnit.module('Editing', {
 
         // act
         editor.option('value', 'Man');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editors = $('.dx-texteditor');
@@ -2493,7 +2493,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2531,7 +2531,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2565,7 +2565,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2597,7 +2597,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2644,7 +2644,7 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2677,7 +2677,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2706,7 +2706,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2734,7 +2734,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2760,7 +2760,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2786,7 +2786,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2813,7 +2813,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2844,7 +2844,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -2878,11 +2878,11 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editors = $('.dx-form .dx-texteditor');
@@ -2904,13 +2904,13 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
         sinon.spy(this.editingController, '_delayedInputFocus');
         $('.dx-field-item-content').first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._delayedInputFocus.callCount, 1, 'editor is focused');
@@ -2929,7 +2929,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2971,7 +2971,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3029,7 +3029,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3076,7 +3076,7 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3085,11 +3085,11 @@ QUnit.module('Editing', {
 
         $($itemsContent.last()).trigger('dxclick');
         const editor = $('.dx-texteditor').first().dxNumberBox('instance');
-        this.clock.tick();
+        this.clock.tick(10);
         editor.option('value', 102);
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $itemsContent = $('.dx-field-item-content');
 
         // assert
@@ -3127,7 +3127,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3174,7 +3174,7 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3182,17 +3182,17 @@ QUnit.module('Editing', {
         let editor;
 
         $($itemsContent.last()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 14);
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.eq(0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         editor = $('.dx-texteditor').first().dxTextBox('instance');
         editor.option('value', 'Test');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $itemsContent = $('.dx-field-item-content');
 
         // assert
@@ -3231,20 +3231,20 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
         let $itemsContent = $('.dx-field-item-content');
         $($itemsContent.eq(0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const editor = $('.dx-texteditor').first().dxTextBox('instance');
         editor.option('value', 'Test');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $itemsContent = $('.dx-field-item-content');
@@ -3281,7 +3281,7 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         let editor;
         let $itemsContent;
@@ -3290,17 +3290,17 @@ QUnit.module('Editing', {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.eq(1)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 30);
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.eq(0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         editor = $('.dx-texteditor').first().dxTextBox('instance');
         editor.option('value', 'test');
         $(document.body).trigger('dxpointerdown');
         $(document.body).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         this.adaptiveColumnsController.collapseAdaptiveDetailRow(dataSource[0]);
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
@@ -3349,7 +3349,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3396,7 +3396,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3434,12 +3434,12 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
         $('.dx-field-item-content').first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $editors = $('.dx-form .dx-texteditor');
@@ -3478,7 +3478,7 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3486,16 +3486,16 @@ QUnit.module('Editing', {
         const $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.last()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-texteditor').first().dxNumberBox('instance');
         editor.option('value', 102);
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-datagrid').width(1000);
         this.resizingController.resize();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($('.dx-cell-modified').text(), '102', 'text of modified cell');
     });
@@ -3530,7 +3530,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3562,7 +3562,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -3604,7 +3604,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3657,7 +3657,7 @@ QUnit.module('Editing', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -3682,7 +3682,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -3709,7 +3709,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -3741,7 +3741,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -3773,7 +3773,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -3799,16 +3799,16 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
 
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         const editors = $('.dx-texteditor');
 
         // assert
@@ -3818,7 +3818,7 @@ QUnit.module('Editing', {
         editors.first().dxTextBox('instance').option('value', '12test');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.adaptiveColumnsController.hasAdaptiveDetailRowExpanded(), 'row is collapsed');
@@ -3848,7 +3848,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -3882,7 +3882,7 @@ QUnit.module('Editing', {
         this.rowsView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -3966,12 +3966,12 @@ QUnit.module('Validation', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
         this.editingController.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('.dx-form .dx-texteditor input').first().focus();
 
@@ -4011,11 +4011,11 @@ QUnit.module('Validation', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('.dx-form .dx-texteditor input').first().focus();
 
@@ -4024,7 +4024,7 @@ QUnit.module('Validation', {
         this.clock.tick(10);
 
         this.editingController.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(dataSource[0]), 'the adaptive row is expanded');
     });
@@ -4057,7 +4057,7 @@ QUnit.module('Validation', {
         setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -4065,13 +4065,13 @@ QUnit.module('Validation', {
         let $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content.dx-validator').length === 1, 'item element has a validation styles');
@@ -4080,7 +4080,7 @@ QUnit.module('Validation', {
         // act
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content > .dx-widget.dx-validator').length === 1, 'editor into a form item has a validation styles');
@@ -4117,7 +4117,7 @@ QUnit.module('Validation', {
         setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -4125,13 +4125,13 @@ QUnit.module('Validation', {
         let $itemsContent = $('.dx-field-item-content');
 
         $itemsContent.first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content.dx-validator').length === 1, 'item element has a validation styles');
@@ -4140,7 +4140,7 @@ QUnit.module('Validation', {
         // act
         $itemsContent = $('.dx-field-item-content');
         $itemsContent.first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content > .dx-widget.dx-validator').length === 1, 'editor into a form item has a validation styles');
@@ -4177,14 +4177,14 @@ QUnit.module('Validation', {
         setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
         const $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-invalid-message.dx-widget').length, 0, 'Validation message is not shown');
@@ -4218,7 +4218,7 @@ QUnit.module('Validation', {
         setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         const showRevertButtonStub = sinon.stub(this.editorFactoryController, '_showRevertButton');
 
         // act
@@ -4227,13 +4227,13 @@ QUnit.module('Validation', {
         const $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content > .dx-widget.dx-validator').length === 1, 'item element has a validation styles');
@@ -4287,7 +4287,7 @@ QUnit.module('Validation', {
         setupDataGrid(this, $parentContainer);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -4295,13 +4295,13 @@ QUnit.module('Validation', {
         let $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.eq(1)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $itemsContent = $('.dx-field-item-content');
 
@@ -4323,11 +4323,11 @@ QUnit.module('Validation', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.rowsView.component.columnOption('C2', 'sortOrder', '0');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.rowsView._adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
@@ -4348,11 +4348,11 @@ QUnit.module('Validation', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.rowsView.component.columnOption('C2', 'sortOrder', '0');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.rowsView._adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
@@ -4432,7 +4432,7 @@ QUnit.module('Keyboard navigation', {
         this.gridView.render($('#container'));
         this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     },
@@ -4443,7 +4443,7 @@ QUnit.module('Keyboard navigation', {
 
     triggerFormItemClick: function(index) {
         $('.dx-field-item-content').eq(index).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
     },
 
     beforeEach: function() {
@@ -4469,7 +4469,7 @@ QUnit.module('Keyboard navigation', {
 
         // act
         eventsEngine.triggerHandler($nextItemContent, 'focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $input = this.getActiveInputElement();
@@ -4488,7 +4488,7 @@ QUnit.module('Keyboard navigation', {
 
         // act
         eventsEngine.triggerHandler($nextItemContent, 'focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $input = this.getActiveInputElement();
@@ -4504,11 +4504,11 @@ QUnit.module('Keyboard navigation', {
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell = this.$dataGrid.find('td:not([class])').eq(1);
         eventsEngine.triggerHandler($cell, 'focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $input = this.getActiveInputElement();
         assert.equal($input.val(), 'Super', 'current input is correct');
@@ -4526,16 +4526,16 @@ QUnit.module('Keyboard navigation', {
 
         $('.dx-datagrid').width(500);
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.editingController.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.getActiveInputElement().val(), 'Full Name');
@@ -4557,13 +4557,13 @@ QUnit.module('Keyboard navigation', {
         };
         this.setupModule();
         this.editingController.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 0 });
@@ -4590,7 +4590,7 @@ QUnit.module('Keyboard navigation', {
         this.setupModule();
 
         $('.dx-field-item-content').eq(0).focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(rowClickCounter, 0, 'onRowClick event was not thrown');
@@ -4628,7 +4628,7 @@ QUnit.module('Keyboard navigation', {
         // browser will focus element with tabIndex, if it was clicked
         $fieldItemContent.focus();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(rowDblClickCounter, 0, 'onRowDblClick was not called');
@@ -4643,14 +4643,14 @@ QUnit.module('Keyboard navigation', {
         // arrange
         this.setupModule();
         this.editingController.editCell(2, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const e = $.Event('keydown');
         e.key = 'Tab';
         e.shiftKey = true;
         this.getActiveInputElement().trigger(e);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.getActiveInputElement().val(), 'Full Name');
@@ -4665,7 +4665,7 @@ QUnit.module('Keyboard navigation', {
         // arrange
         this.setupModule();
         this.editingController.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const e = $.Event('keydown');
