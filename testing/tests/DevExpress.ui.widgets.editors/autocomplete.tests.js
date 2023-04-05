@@ -663,7 +663,7 @@ QUnit.module('dxAutocomplete', {
 
         keyboard.keyDown(keyDownConfig.key, keyDownConfig);
 
-        assert.strictEqual(this.instance._popup.option('visible'), true);
+        assert.strictEqual(this.instance.option('opened'), true);
     });
 
     QUnit.test('popup should be closed after press alt + arrow up', function(assert) {
@@ -674,12 +674,12 @@ QUnit.module('dxAutocomplete', {
         keyboard.keyDown(keyDownConfig.key, keyDownConfig);
         keyboard.keyDown(keyUpConfig.key, keyUpConfig);
 
-        assert.strictEqual(this.instance._popup.option('visible'), false);
+        assert.strictEqual(this.instance.option('opened'), false);
     });
 
-    QUnit.test('should fired open/close events after open/close popup by keyboard', function(assert) {
+    QUnit.test('should fire open/close events after open/close popup by keyboard', function(assert) {
         assert.expect(2);
-        
+
         this.instance.option({
             onOpened() {
                 assert.ok(true, 'event on open was fired');
