@@ -4049,7 +4049,7 @@ QUnit.test('Setting "colCountByScreen" property of group with dot notation shoul
 
     instance.option('items[0].colCountByScreen.md', 2);
 
-    assert.equal(getColsCountFromDOM($form), 2);
+    assert.strictEqual(getColsCountFromDOM($form), 2);
 });
 
 [
