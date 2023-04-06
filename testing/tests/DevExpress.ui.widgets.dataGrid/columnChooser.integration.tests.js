@@ -14,7 +14,7 @@ import messageLocalization from 'localization/message';
 
 QUnit.module('Column chooser', baseModuleConfig, () => {
     // T862537
-    QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
+    QUnit.test('column with allowHiding=false should not be draggable', function(assert) {
         // act
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -30,7 +30,10 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         dataGrid.showColumnChooser();
 
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 1, 'one drag action for hiding column');
+        const $draggableColumn = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.equal($draggableColumn.length, 1, 'column with no allowHiding=false should be draggable');
+        assert.strictEqual($draggableColumn.text(), 'Field 2');
     });
 
     // T1109671

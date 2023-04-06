@@ -33,7 +33,7 @@ const CLICK_TIMEOUT = 300;
 
 const processItems = function(that, chooserColumns) {
     const items = [];
-    const isSelectMode = that.option('columnChooser.mode') === 'select';
+    const isSelectMode = that._isSelectMode();
 
     if(chooserColumns.length) {
         each(chooserColumns, function(index, column) {
@@ -122,7 +122,7 @@ const columnChooserMembers = {
     _updateList: function(change) {
         let items;
         const $popupContent = this._popupContainer.$content();
-        const isSelectMode = this.option('columnChooser.mode') === 'select';
+        const isSelectMode = this._isSelectMode();
         const columnChooserList = this._columnChooserList;
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
@@ -217,7 +217,7 @@ const columnChooserMembers = {
     _renderTreeView: function($container, items) {
         const that = this;
         const columnChooser = this.option('columnChooser');
-        const isSelectMode = columnChooser.mode === 'select';
+        const isSelectMode = this._isSelectMode();
         /**
          * @type {import('../tree_view').Options}
          */
@@ -338,10 +338,14 @@ const columnChooserMembers = {
         };
     },
 
+    _isSelectMode: function() {
+        return this.option('columnChooser.mode') === 'select';
+    },
+
     _columnOptionChanged: function(e) {
         const changeTypes = e.changeTypes;
         const optionNames = e.optionNames;
-        const isSelectMode = this.option('columnChooser.mode') === 'select';
+        const isSelectMode = this._isSelectMode();
 
         this.callBase(e);
 
@@ -374,7 +378,7 @@ const columnChooserMembers = {
     getColumnElements: function() {
         const result = [];
         let $node;
-        const isSelectMode = this.option('columnChooser.mode') === 'select';
+        const isSelectMode = this._isSelectMode();
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const $content = this._popupContainer && this._popupContainer.$content();
         const $nodes = $content && $content.find('.dx-treeview-node');
@@ -407,7 +411,7 @@ const columnChooserMembers = {
     },
 
     allowColumnHeaderDragging: function(column) {
-        const isDragMode = this.option('columnChooser.mode') === 'drag';
+        const isDragMode = !this._isSelectMode();
 
         return isDragMode && this.isColumnChooserVisible() && column.allowHiding;
     },

@@ -435,6 +435,7 @@ export const columnHeadersModule = {
                     // testcafe1: screenshot of grid when all columns are hidden. It is for checking header's height
                     // test3,4,5: check that correct localiztion string is show in empty header
                     // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable
+                    // test7: reordering enabled, mutli-level columns, all are draggable, hide all except one column in 2nd level, last column is undraggable
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex);
 
