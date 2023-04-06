@@ -299,72 +299,83 @@ export const rowsModule = {
                     return this._findContentElement();
                 },
 
-                _updateContent: function(newTableElement, change) {
+                _updateContent: function(newTableElement, change, isFixedTableRendering) {
+                    this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
+
                     return this.waitAsyncTemplates().done(() => {
-                        const tableElement = this.getTableElement();
-                        const contentElement = this._findContentElement();
-                        const changeType = change && change.changeType;
-                        const executors = [];
-                        const highlightChanges = this.option('highlightChanges');
-                        const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
+                        const contentChanges = this._contentChanges;
 
-                        switch(changeType) {
-                            case 'update':
-                                each(change.rowIndices, (index, rowIndex) => {
-                                    const $newRowElement = this._getRowElements(newTableElement).eq(index);
-                                    const changeType = change.changeTypes && change.changeTypes[index];
-                                    const item = change.items && change.items[index];
+                        this._contentChanges = [];
 
-                                    executors.push(() => {
-                                        const $rowsElement = this._getRowElements();
-                                        const $rowElement = $rowsElement.eq(rowIndex);
+                        contentChanges.forEach(({ newTableElement, change, isFixedTableRendering }) => {
+                            const tableElement = this.getTableElement(isFixedTableRendering);
+                            const contentElement = this._findContentElement(isFixedTableRendering);
+                            const changeType = change?.changeType;
+                            const executors = [];
+                            const highlightChanges = this.option('highlightChanges');
+                            const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
 
-                                        switch(changeType) {
-                                            case 'update':
-                                                if(item) {
-                                                    const columnIndices = change.columnIndices && change.columnIndices[index];
-                                                    if(isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
-                                                        $rowElement.toggle(item.visible);
-                                                    } else if(columnIndices) {
-                                                        this._updateCells($rowElement, $newRowElement, columnIndices);
+                            switch(changeType) {
+                                case 'update':
+                                    each(change.rowIndices, (index, rowIndex) => {
+                                        const $newRowElement = this._getRowElements(newTableElement).eq(index);
+                                        const dataChangeType = change.changeTypes?.[index];
+                                        const item = change.items && change.items[index];
+
+                                        executors.push(() => {
+                                            const $rowElements = this._getRowElements(tableElement);
+                                            const $rowElement = $rowElements.eq(rowIndex);
+
+                                            switch(dataChangeType) {
+                                                case 'update':
+                                                    if(item) {
+                                                        const columnIndices = change.columnIndices?.[index];
+
+                                                        if(isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
+                                                            $rowElement.toggle(item.visible);
+                                                        } else if(columnIndices) {
+                                                            this._updateCells($rowElement, $newRowElement, columnIndices);
+                                                        } else {
+                                                            $rowElement.replaceWith($newRowElement);
+                                                        }
+                                                    }
+                                                    break;
+                                                case 'insert':
+                                                    if(!$rowElements.length) {
+                                                        if(tableElement) {
+                                                            const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
+                                                            $newRowElement.prependTo(target);
+                                                        }
+                                                    } else if($rowElement.length) {
+                                                        $newRowElement.insertBefore($rowElement);
                                                     } else {
-                                                        $rowElement.replaceWith($newRowElement);
+                                                        $newRowElement.insertAfter($rowElements.last());
                                                     }
-                                                }
-                                                break;
-                                            case 'insert':
-                                                if(!$rowsElement.length) {
-                                                    if(tableElement) {
-                                                        const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
-                                                        $newRowElement.prependTo(target);
+                                                    if(highlightChanges && change.isLiveUpdate) {
+                                                        $newRowElement.addClass(rowInsertedClass);
                                                     }
-                                                } else if($rowElement.length) {
-                                                    $newRowElement.insertBefore($rowElement);
-                                                } else {
-                                                    $newRowElement.insertAfter($rowsElement.last());
-                                                }
-                                                if(highlightChanges && change.isLiveUpdate) {
-                                                    $newRowElement.addClass(rowInsertedClass);
-                                                }
-                                                break;
-                                            case 'remove':
-                                                $rowElement.remove();
-                                                break;
-                                        }
+                                                    break;
+                                                case 'remove':
+                                                    $rowElement.remove();
+                                                    break;
+                                            }
+                                        });
                                     });
-                                });
-                                each(executors, function() {
-                                    this();
-                                });
+                                    each(executors, function() {
+                                        this();
+                                    });
 
-                                newTableElement.remove();
-                                break;
-                            default:
-                                this.setTableElement(newTableElement);
-                                contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
-                                this._renderContent(contentElement, newTableElement);
-                                break;
-                        }
+                                    newTableElement.remove();
+                                    break;
+                                default:
+                                    this.setTableElement(newTableElement, isFixedTableRendering);
+                                    contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
+                                    this._renderContent(contentElement, newTableElement, isFixedTableRendering);
+                                    break;
+                            }
+                        });
+                    }).fail(() => {
+                        this._contentChanges = [];
                     });
                 },
 
@@ -867,6 +878,7 @@ export const rowsModule = {
                     that._scrollLeft = -1;
                     that._scrollRight = 0;
                     that._hasHeight = false;
+                    that._contentChanges = [];
                     dataController.loadingChanged.add(function(isLoading, messageText) {
                         that.setLoading(isLoading, messageText);
                     });

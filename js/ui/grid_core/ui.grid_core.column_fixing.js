@@ -11,7 +11,6 @@ import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { move } from '../../animation/translator';
 import Scrollable from '../scroll_view/ui.scrollable';
-import { when } from '../../core/utils/deferred';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -165,14 +164,13 @@ const baseFixedColumns = {
 
                 $fixedTable = this._createTable(fixedColumns);
                 this._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
-                when(this._updateContent($fixedTable, change)).done(() => {
-                    this._isFixedTableRendering = false;
-                });
+                this._updateContent($fixedTable, change, true);
 
                 if(columnIndices) {
                     change.columnIndices = columnIndices;
                 }
 
+                this._isFixedTableRendering = false;
             }
         } else {
             this._fixedTableElement && this._fixedTableElement.parent().remove();
@@ -245,10 +243,10 @@ const baseFixedColumns = {
         return $cell;
     },
 
-    _wrapTableInScrollContainer: function() {
+    _wrapTableInScrollContainer: function($table, isFixedTableRendering) {
         const $scrollContainer = this.callBase.apply(this, arguments);
 
-        if(this._isFixedTableRendering) {
+        if(this._isFixedTableRendering || isFixedTableRendering) {
             $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS));
         }
 
@@ -348,14 +346,15 @@ const baseFixedColumns = {
         return normalizeColumnWidths(fixedColumns, result, fixedWidths);
     },
 
-    getTableElement: function() {
-        const tableElement = this._isFixedTableRendering ? this._fixedTableElement : this.callBase();
+    getTableElement: function(isFixedTableRendering) {
+        isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
+        const tableElement = isFixedTableRendering ? this._fixedTableElement : this.callBase();
 
         return tableElement;
     },
 
-    setTableElement: function(tableElement) {
-        if(this._isFixedTableRendering) {
+    setTableElement: function(tableElement, isFixedTableRendering) {
+        if(this._isFixedTableRendering || isFixedTableRendering) {
             this._fixedTableElement = tableElement.addClass(POINTER_EVENTS_NONE_CLASS);
         } else {
             this.callBase(tableElement);
@@ -645,13 +644,15 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         return browser.mozilla ? 60 : 0;
     },
 
-    _findContentElement: function() {
+    _findContentElement: function(isFixedTableRendering) {
         let $content;
         let scrollTop;
         const contentClass = this.addWidgetPrefix(CONTENT_CLASS);
         const element = this.element();
 
-        if(element && this._isFixedTableRendering) {
+        isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
+
+        if(element && isFixedTableRendering) {
             $content = element.children('.' + contentClass);
 
             const scrollable = this.getScrollable();
@@ -717,8 +718,8 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this._updateFixedTablePosition(scrollTop);
     },
 
-    _renderContent: function(contentElement, tableElement) {
-        if(this._isFixedTableRendering) {
+    _renderContent: function(contentElement, tableElement, isFixedTableRendering) {
+        if(this._isFixedTableRendering || isFixedTableRendering) {
             return contentElement
                 .empty()
                 .addClass(this.addWidgetPrefix(CONTENT_CLASS) + ' ' + this.addWidgetPrefix(CONTENT_FIXED_CLASS))

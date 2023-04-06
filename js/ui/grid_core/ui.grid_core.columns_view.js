@@ -891,16 +891,33 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     waitAsyncTemplates: function(forceWaiting = false) {
-        const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && Array.from(this._templateDeferreds) || [];
+        // @ts-expect-error
+        const result = new Deferred();
+        const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
-        return when.apply(this, templateDeferreds);
+        if(!needWaitAsyncTemplates) {
+            return result.resolve();
+        }
+
+        const waitTemplatesRecursion = () =>
+            when.apply(this, Array.from(this._templateDeferreds))
+                .done(() => {
+                    if(this._templateDeferreds.size > 0) {
+                        waitTemplatesRecursion();
+                    } else {
+                        result.resolve();
+                    }
+                }).fail(result.reject);
+
+        waitTemplatesRecursion();
+
+        return result.promise();
     },
 
-    _updateContent: function($newTableElement) {
+    _updateContent: function($newTableElement, change, isFixedTableRendering) {
         return this.waitAsyncTemplates().done(() => {
-            this.setTableElement($newTableElement);
-            this._wrapTableInScrollContainer($newTableElement);
+            this.setTableElement($newTableElement, isFixedTableRendering);
+            this._wrapTableInScrollContainer($newTableElement, isFixedTableRendering);
         });
     },
 
