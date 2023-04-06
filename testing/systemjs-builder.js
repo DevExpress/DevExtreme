@@ -187,6 +187,7 @@ const transpileModules = async() => {
     for(const filePath of listRuntimeFiles) {
         const file = fs.readFileSync(filePath);
         const { code } = await babel.transform(file.toString(), {
+            presets: ['@babel/preset-env'],
             plugins: ['@babel/plugin-transform-modules-systemjs']
         });
 
@@ -232,56 +233,42 @@ const transpileTests = async() => {
         'DevExpress.ui.widgets.editors'
     ];
 
+    const helpersList = getFileList(path.join(root, 'testing/helpers'));
+    const listFiles = [...helpersList];
+
     // eslint-disable-next-line no-restricted-syntax
     for(const folder of testingFolders) {
-        const listFiles = getFileList(path.join(root, 'testing/tests', folder));
-
-        // eslint-disable-next-line no-restricted-syntax
-        for(const filePath of listFiles) {
-            const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
-            try {
-                await builder.buildStatic(
-                    `[${filePath}]`,
-                    destPath,
-                    {
-                        minify: false,
-                        sourceMaps: true,
-                        encodeNames: false
-                    }
-                );
-            } catch(error) {
-                const file = fs.readFileSync(filePath);
-                const { code } = await babel.transform(file.toString(), {
-                    plugins: ['@babel/plugin-transform-modules-systemjs']
-                });
-
-                const destDir = path.dirname(destPath);
-                if(!fs.existsSync(destDir)) {
-                    fs.mkdirSync(destDir, { recursive: true });
-                }
-
-                fs.writeFileSync(destPath, code);
-            }
-        }
+        const testsList = getFileList(path.join(root, 'testing/tests', folder));
+        listFiles.push(...testsList);
     }
-};
-
-const transpileHelpers = async() => {
-    // eslint-disable-next-line spellcheck/spell-checker
-    const builder = new Builder(root, { ...config, transpiler: 'plugin-babel', });
-    const helpers = getFileList(path.join(root, 'testing/helpers'));
 
     // eslint-disable-next-line no-restricted-syntax
-    for(const filePath of helpers) {
-        await builder.buildStatic(
-            `[${filePath}]`,
-            filePath.replace('testing', 'artifacts/transpiled-testing'),
-            {
-                minify: false,
-                sourceMaps: true,
-                encodeNames: false
+    for(const filePath of listFiles) {
+        const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
+        try {
+            await builder.buildStatic(
+                `[${filePath}]`,
+                destPath,
+                {
+                    minify: false,
+                    sourceMaps: true,
+                    encodeNames: false
+                }
+            );
+        } catch(error) {
+            const file = fs.readFileSync(filePath);
+            const { code } = await babel.transform(file.toString(), {
+                plugins: ['@babel/plugin-transform-modules-systemjs']
+            });
+
+            const destDir = path.dirname(destPath);
+            if(!fs.existsSync(destDir)) {
+                fs.mkdirSync(destDir, { recursive: true });
             }
-        );
+
+            fs.writeFileSync(destPath, code);
+        }
+
     }
 };
 
@@ -293,13 +280,12 @@ const transpileHelpers = async() => {
     const traceFile = fs.readFileSync(traceFilePath).toString();
     fs.writeFileSync(traceFilePath, traceFile.replace(
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep;'
+        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
     ));
 
     switch(transpile) {
         case 'modules': return await transpileModules();
         case 'tests': return await transpileTests();
-        case 'helpers': return await transpileHelpers();
         case 'css': return await transpileCss();
     }
 })();
