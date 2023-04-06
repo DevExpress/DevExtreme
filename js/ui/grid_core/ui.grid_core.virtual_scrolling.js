@@ -1431,7 +1431,7 @@ export const virtualScrollingModule = {
                                 this.updateItems({
                                     repaintChangesOnly: true,
                                     needUpdateDimensions: true,
-                                    useProcessedItemsCache: true,
+                                    useProcessedItemsCache: !this.getController('editing')?.getChanges()?.length,
                                     cancelEmptyChanges: true
                                 });
                             }
