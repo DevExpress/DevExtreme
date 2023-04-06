@@ -30,8 +30,8 @@ const createSeries = function(options, renderSettings) {
         valueErrorBar: {
             displayMode: 'none'
         },
-        hoverStyle: { hatching: 'h-hatching', lightening: true },
-        selectionStyle: { hatching: 's-hatching', lightening: true },
+        hoverStyle: { hatching: 'h-hatching', highlight: true },
+        selectionStyle: { hatching: 's-hatching', highlight: true },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
     }, options);
