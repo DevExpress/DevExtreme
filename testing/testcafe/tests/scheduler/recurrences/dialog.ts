@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -18,9 +19,11 @@ test('Reccurence dialog screenshot', async (t) => {
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
     // act
-    .expect(await takeScreenshot('reccurence-dialog-screenshot', scheduler.element))
+    .expect(await takeScreenshot('reccurence-dialog-screenshot.png', scheduler.element))
     .ok()
     // assert
+    .expect(Selector('.dx-overlay-wrapper.dx-dialog'))
+    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
