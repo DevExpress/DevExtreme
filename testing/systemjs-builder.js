@@ -149,7 +149,8 @@ const getFileList = (dirName) => {
 
 const transpileModules = async() => {
     const builder = new Builder(root, config);
-    const listFiles = getFileList(path.join(root, 'artifacts', 'transpiled'));
+
+    const listFiles = getFileList(path.join(root, 'artifacts/transpiled'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
@@ -164,7 +165,7 @@ const transpileModules = async() => {
         );
     }
 
-    const listRenovationFiles = getFileList(path.join(root, 'artifacts', 'transpiled-renovation'));
+    const listRenovationFiles = getFileList(path.join(root, 'artifacts/transpiled-renovation'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listRenovationFiles) {
@@ -178,22 +179,41 @@ const transpileModules = async() => {
             }
         );
     }
+
+    const infernoPath = path.join(root, 'node_modules/@devextreme/runtime/esm/inferno');
+    const listRuntimeFiles = getFileList(infernoPath);
+
+    // eslint-disable-next-line no-restricted-syntax
+    for(const filePath of listRuntimeFiles) {
+        const file = fs.readFileSync(filePath);
+        const { code } = await babel.transform(file.toString(), {
+            plugins: ['@babel/plugin-transform-modules-systemjs']
+        });
+
+        const destPath = filePath.replace(infernoPath, path.join(root, 'artifacts/transpiled-systemjs/runtime/inferno'));
+        const destDir = path.dirname(destPath);
+        if(!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+        }
+
+        fs.writeFileSync(destPath, code);
+    }
 };
 
 const transpileCss = async() => {
     const builder = new Builder(root, config);
     const listFiles = [
         {
-            filePath: path.join(root, 'artifacts', 'css', 'dx.material.blue.light.css!'),
-            destPath: path.join(root, 'artifacts', 'css-systemjs', 'dx.material.blue.light.css'),
+            filePath: path.join(root, 'artifacts/css/dx.material.blue.light.css!'),
+            destPath: path.join(root, 'artifacts/css-systemjs/dx.material.blue.light.css'),
         },
         {
-            filePath: path.join(root, 'artifacts', 'css', 'dx.light.css!'),
-            destPath: path.join(root, 'artifacts', 'css-systemjs', 'dx.light.css'),
+            filePath: path.join(root, 'artifacts/css/dx.light.css!'),
+            destPath: path.join(root, 'artifacts/css-systemjs/dx.light.css'),
         },
         {
-            filePath: path.join(root, 'node_modules', 'systemjs-plugin-css', 'css.js'),
-            destPath: path.join(root, 'artifacts', 'css-systemjs', 'css.js'),
+            filePath: path.join(root, 'node_modules/systemjs-plugin-css/css.js'),
+            destPath: path.join(root, 'artifacts/css-systemjs/css.js'),
         }
     ];
 
@@ -214,7 +234,7 @@ const transpileTests = async() => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const folder of testingFolders) {
-        const listFiles = getFileList(path.join(root, 'testing', 'tests', folder));
+        const listFiles = getFileList(path.join(root, 'testing/tests', folder));
 
         // eslint-disable-next-line no-restricted-syntax
         for(const filePath of listFiles) {
@@ -249,7 +269,7 @@ const transpileTests = async() => {
 const transpileHelpers = async() => {
     // eslint-disable-next-line spellcheck/spell-checker
     const builder = new Builder(root, { ...config, transpiler: 'plugin-babel', });
-    const helpers = getFileList(path.join(root, 'testing', 'helpers'));
+    const helpers = getFileList(path.join(root, 'testing/helpers'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of helpers) {
@@ -273,7 +293,7 @@ const transpileHelpers = async() => {
     const traceFile = fs.readFileSync(traceFilePath).toString();
     fs.writeFileSync(traceFilePath, traceFile.replace(
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
+        'load.depMap[dep] = dep;'
     ));
 
     switch(transpile) {

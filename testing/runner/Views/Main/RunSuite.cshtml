@@ -174,9 +174,17 @@
 
             const cspMap = '@Model.NoCsp' !== 'True' ? {
                 'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+                'testing/helpers/': '@Url.Content("~/artifacts/transpiled-testing/helpers/")',
 
                 'css': '@Url.Content("~/artifacts/css-systemjs/css.js")',
                 'generic_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.light.css")',
+            } : {};
+
+            const cspPackages = '@Model.NoCsp' !== 'True' ? {
+                '@@devextreme/runtime/inferno': {
+                    main: '../../../../artifacts/transpiled-systemjs/runtime/inferno/index.js',
+                    defaultExtension: 'js'
+                },
             } : {};
 
             SystemJS.config({
@@ -280,6 +288,8 @@
                     'events': {
                         main: 'index'
                     },
+
+                    ...cspPackages,
                 },
                 packageConfigPaths: [
                     "@@devextreme/*/package.json",
