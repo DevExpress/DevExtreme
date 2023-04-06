@@ -130,7 +130,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
     QUnit.test('ColumnChooser popup\'s position can be changed', function(assert) {
         // arrange
-        let position = { my: 'left bottom', at: 'left bottom' , of: '#dataGrid'};
+        let position = { my: 'left bottom', at: 'left bottom', of: '#dataGrid' };
 
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -141,7 +141,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
         // act
         dataGrid.showColumnChooser();
-        
+
         // assert
         assert.propEqual(dataGrid.getView('columnChooserView')._popupContainer.option('position'), position);
 
@@ -149,7 +149,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         position = { my: 'right top', at: 'right top', of: '#dataGrid' };
         dataGrid.option('columnChooser.position', position);
         dataGrid.showColumnChooser();
-        
+
         // asert
         assert.propEqual(dataGrid.getView('columnChooserView')._popupContainer.option('position'), position);
     });
@@ -158,15 +158,15 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                selection: { allowSelectAll: true } 
+            columnChooser: {
+                mode: 'select',
+                selection: { allowSelectAll: true }
             },
             columns: [
                 {
                     caption: 'band1',
                     columns: [
-                        { dataField: 'field1' }, 
+                        { dataField: 'field1' },
                         { dataField: 'field2' }
                     ]
                 },
@@ -189,7 +189,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         getSelectAllCheckbox().option('value', false);
         this.clock.tick(500);
-        
+
         // assert
         assert.strictEqual(getVisibleColumns().length, 0, 'No column should be shown');
 
@@ -205,9 +205,9 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                selection: { allowSelectAll: true } 
+            columnChooser: {
+                mode: 'select',
+                selection: { allowSelectAll: true }
             },
             columns: [
                 {
@@ -236,7 +236,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
         getSelectAllCheckbox().option('value', false);
         this.clock.tick(500);
-        
+
         // assert
         assert.strictEqual(getVisibleColumns().length, 1, 'Only column without band column and with allowHiding=false is shown');
         assert.strictEqual(getVisibleColumns()[0].dataField, 'field5');
@@ -248,7 +248,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // assert
         assert.ok(selectedNodes.some(node => node.itemData.text === 'Field 3'), 'field2 is checked');
         assert.ok(selectedNodes.some(node => node.itemData.text === 'Field 5'), 'field5 is checked');
-        
+
         // act
         getSelectAllCheckbox().option('value', true);
         this.clock.tick(500);
@@ -256,18 +256,18 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // assert
         assert.strictEqual(getVisibleColumns().length, 5, 'All columns are shown');
     });
-    
+
     QUnit.test('Column chooser selection.recursive should work', function(assert) {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                selection: { recursive: true } 
+            columnChooser: {
+                mode: 'select',
+                selection: { recursive: true }
             },
             columns: [{
                 caption: 'band1',
                 columns: [
-                    { dataField: 'field1' }, 
+                    { dataField: 'field1' },
                     { dataField: 'field2' }
                 ]
             }, { dataField: 'field3' }],
@@ -299,14 +299,14 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Column chooser selection.recursive should work with column with allowHiding=false', function(assert) {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                selection: { recursive: true } 
+            columnChooser: {
+                mode: 'select',
+                selection: { recursive: true }
             },
             columns: [{
                 caption: 'band1',
                 columns: [
-                    { dataField: 'field1' }, 
+                    { dataField: 'field1' },
                     { dataField: 'field2', allowHiding: false }
                 ]
             }],
@@ -331,19 +331,19 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Column chooser with enabled selectAll and recursion should work correctly when unselect all', function(assert) {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                selection: { 
+            columnChooser: {
+                mode: 'select',
+                selection: {
                     allowSelectAll: true,
-                    recursive: true 
-                } 
+                    recursive: true
+                }
             },
             columns: [
                 'field1',
                 {
                     caption: 'band1',
                     columns: [
-                        { dataField: 'field2' }, 
+                        { dataField: 'field2' },
                         { dataField: 'field3', allowHiding: false }
                     ]
                 }
@@ -386,12 +386,12 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Column chooser column with allowHiding=false should be disabled', function(assert) {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                selection: { selectByClick: true } 
+            columnChooser: {
+                mode: 'select',
+                selection: { selectByClick: true }
             },
             columns: [
-                { dataField: 'field1' }, 
+                { dataField: 'field1' },
                 { dataField: 'field2' },
                 { dataField: 'field3', allowHiding: false },
             ],
@@ -413,12 +413,12 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            columnChooser: { 
-                mode: 'select', 
-                search: { 
+            columnChooser: {
+                mode: 'select',
+                search: {
                     enabled: true,
-                    editorOptions: { placeholder: 'custom_placeholder' } 
-                } 
+                    editorOptions: { placeholder: 'custom_placeholder' }
+                }
             },
             columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
             dataSource: []
@@ -426,9 +426,9 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
         // act
         dataGrid.showColumnChooser();
-        
+
         const textBox = $('.dx-textbox').dxTextBox('instance');
-    
+
         // assert
         assert.strictEqual(textBox.option('placeholder'), 'custom_placeholder', 'Placeholder should be custom');
     });
