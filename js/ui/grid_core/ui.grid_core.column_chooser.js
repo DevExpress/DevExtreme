@@ -400,14 +400,16 @@ const columnChooserMembers = {
     },
 
     allowDragging: function(column) {
-        const isColumnHidden = !column.visible && column.allowHiding;
         const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
+        const isColumnHidden = !column.visible && column.allowHiding;
 
-        return this.isColumnChooserVisible() && isColumnHidden && isParentColumnVisible;
+        return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
     },
 
     allowColumnHeaderDragging: function(column) {
-        return this.isColumnChooserVisible() && column.allowHiding;
+        const isDragMode = this.option('columnChooser.mode') === 'drag';
+
+        return isDragMode && this.isColumnChooserVisible() && column.allowHiding;
     },
 
     getBoundingRect: function() {

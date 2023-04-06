@@ -96,7 +96,8 @@ export const columnHeadersModule = {
                     const that = this;
 
                     return function($container, options) {
-                        const $content = createCellContent(that, $container, options);
+                        // make it more obvious
+                        const $content = column.command ? $container : createCellContent(that, $container, options);
                         const caption = column.command !== 'expand' && column.caption;
 
                         if(caption) {
@@ -251,6 +252,7 @@ export const columnHeadersModule = {
                     const rowIndex = this.getRowCount() === 1 ? null : options.row.rowIndex;
 
                     options.columns = this.getColumns(rowIndex);
+                    // options.columns = this._columnsController.getVisibleColumns(options.row.rowIndex);
 
                     this.callBase($table, options);
                 },
@@ -428,11 +430,17 @@ export const columnHeadersModule = {
                 },
 
                 allowColumnHeaderDragging: function(column) {
-                    // todo: write test for it
-                    // test1: only one column is reorderable. It should have class of drag
+                    // test1: many columns, but only one column is reorderable. It should have class of drag
+                    // test2: one column, it is reordarable. But shouldnot have class of drag
+                    // testcafe1: screenshot of grid when all columns are hidden. It is for checking header's height
+                    // test3,4,5: check that correct localiztion string is show in empty header
+                    // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable
+                    const rowIndex = column && this._columnsController.getRowIndex(column.index);
+                    const columns = this.getColumns(rowIndex);
+
                     const isReorderingEnabled = this.option('allowColumnReordering') || this._columnsController.isColumnOptionUsed('allowReordering');
 
-                    return isReorderingEnabled && column.allowReordering;
+                    return isReorderingEnabled && column.allowReordering && columns.length > 1;
                 },
 
                 getBoundingRect: function() {
