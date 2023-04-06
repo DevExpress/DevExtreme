@@ -177,25 +177,19 @@ class MenuBase extends HierarchicalCollectionWidget {
         this._initActions();
     }
 
-    _isValidHttpURL(url) {
-        return url.match(/^(http|https):\/\//);
-    }
-
     _getTextContainer(itemData) {
-        const itemText = itemData.text;
-        const url = itemData.url;
+        const { text, url, linkAttr } = itemData;
         const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
-        const itemContent = isPlainObject(itemData) ? itemText : String(itemData);
-        if(url && this._isValidHttpURL(url) && itemText) {
-            const linkAttr = isObject(itemData.linkAttr) ? itemData.linkAttr : {};
-            const $urlContainer = $('<a>');
-            $urlContainer
-                .attr({ 'href': url, ...linkAttr })
+        const itemContent = isPlainObject(itemData) ? text : String(itemData);
+        if(url && text) {
+            const linkAttributes = isObject(linkAttr) ? linkAttr : {};
+            $('<a>')
+                .attr({ ...linkAttributes, href: url })
                 .text(itemContent)
                 .appendTo($itemContainer);
             return $itemContainer;
         }
-        return itemText && $itemContainer.text(itemContent);
+        return text && $itemContainer.text(itemContent);
     }
 
     _getItemExtraPropNames() {
