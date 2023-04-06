@@ -474,7 +474,11 @@ export const GroupingHeaderPanelExtender = (function () {
     allowDragging(column) {
       const groupPanelOptions = this.option('groupPanel');
 
-      return this._isGroupPanelVisible() && groupPanelOptions.allowColumnDragging && column && column.allowGrouping;
+      return this._isGroupPanelVisible() && groupPanelOptions.allowColumnDragging && column.allowGrouping;
+    },
+
+    allowColumnHeaderDragging(column) {
+      return this.allowDragging(column);
     },
 
     getColumnElements() {

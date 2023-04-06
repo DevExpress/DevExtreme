@@ -399,10 +399,15 @@ const columnChooserMembers = {
         return this._columnsController.getChooserColumns();
     },
 
-    allowDragging: function(column, sourceLocation) {
-        const columnVisible = column && column.allowHiding && (sourceLocation !== 'columnChooser' || !column.visible && this._columnsController.isParentColumnVisible(column.index));
+    allowDragging: function(column) {
+        const isColumnHidden = !column.visible && column.allowHiding;
+        const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
 
-        return this.isColumnChooserVisible() && columnVisible;
+        return this.isColumnChooserVisible() && isColumnHidden && isParentColumnVisible;
+    },
+
+    allowColumnHeaderDragging: function(column) {
+        return this.isColumnChooserVisible() && column.allowHiding;
     },
 
     getBoundingRect: function() {
