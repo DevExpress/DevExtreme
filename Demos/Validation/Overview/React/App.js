@@ -1,7 +1,7 @@
 import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import TextBox from 'devextreme-react/text-box';
+import { TextBox, Button as TextBoxButton } from 'devextreme-react/text-box';
 import DateBox from 'devextreme-react/date-box';
 import Button from 'devextreme-react/button';
 import ValidationSummary from 'devextreme-react/validation-summary';
@@ -24,6 +24,7 @@ class App extends React.Component {
     super(props);
     const currentDate = new Date();
     this.maxDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21));
+    this.validatorInstance = null;
     this.countries = service.getCountries();
     this.cityPattern = '^[^0-9]+$';
     this.namePattern = /^[^0-9]+$/;
@@ -33,9 +34,33 @@ class App extends React.Component {
     };
     this.state = {
       password: '',
+      confirmPassword: '',
+      passwordMode: 'password',
+      confirmPasswordMode: 'password',
     };
+    this.passwordButton = {
+      icon: '../../../../images/icons/eye.png',
+      type: 'default',
+      onClick: () => {
+        this.setState({
+          passwordMode: (this.state.passwordMode === 'text' ? 'password' : 'text'),
+        });
+      },
+    };
+    this.confirmPasswordButton = {
+      icon: '../../../../images/icons/eye.png',
+      type: 'default',
+      onClick: () => {
+        this.setState({
+          confirmPasswordMode: (this.state.confirmPasswordMode === 'text' ? 'password' : 'text'),
+        });
+      },
+    };
+
     this.passwordComparison = this.passwordComparison.bind(this);
     this.onPasswordChanged = this.onPasswordChanged.bind(this);
+    this.onInit = this.onInit.bind(this);
+    this.onConfirmPasswordChanged = this.onConfirmPasswordChanged.bind(this);
   }
 
   render() {
@@ -61,9 +86,14 @@ class App extends React.Component {
             <div className="dx-field-label">Password</div>
             <div className="dx-field-value">
               <TextBox
-                mode="password"
+                mode={this.state.passwordMode}
                 value={this.state.password}
                 onValueChanged={this.onPasswordChanged}>
+                <TextBoxButton
+                  name="password"
+                  location="after"
+                  options={this.passwordButton}
+                />
                 <Validator>
                   <RequiredRule message="Password is required" />
                 </Validator>
@@ -73,8 +103,16 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Confirm Password</div>
             <div className="dx-field-value">
-              <TextBox mode="password">
-                <Validator>
+              <TextBox
+                value={this.state.confirmPassword}
+                onValueChanged={this.onConfirmPasswordChanged}
+                mode={this.state.confirmPasswordMode}>
+                <TextBoxButton
+                  name="password"
+                  location="after"
+                  options={this.confirmPasswordButton}
+                />
+                <Validator onInitialized={this.onInit}>
                   <RequiredRule message="Confirm Password is required" />
                   <CompareRule message="Password and Confirm Password do not match" comparisonTarget={this.passwordComparison} />
                 </Validator>
@@ -170,7 +208,7 @@ class App extends React.Component {
         </div>
 
         <div className="dx-fieldset">
-          <ValidationSummary id="summary"></ValidationSummary>
+          <ValidationSummary id="summary" />
           <Button
             width="100%"
             id="button"
@@ -180,6 +218,10 @@ class App extends React.Component {
         </div>
       </form>
     );
+  }
+
+  onInit(e) {
+    this.validatorInstance = e.component;
   }
 
   passwordComparison() {
@@ -193,6 +235,15 @@ class App extends React.Component {
   onPasswordChanged(e) {
     this.setState({
       password: e.value,
+    });
+    if (this.state.confirmPassword) {
+      this.validatorInstance.validate();
+    }
+  }
+
+  onConfirmPasswordChanged(e) {
+    this.setState({
+      confirmPassword: e.value,
     });
   }
 

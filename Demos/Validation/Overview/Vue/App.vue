@@ -25,8 +25,14 @@
         <div class="dx-field-value">
           <DxTextBox
             v-model:value="password"
-            mode="password"
+            v-model:mode="passwordMode"
+            @value-changed="onPasswordChanged"
           >
+            <DxTextBoxButton
+              name="password"
+              location="after"
+              :options="passwordButton"
+            />
             <DxValidator>
               <DxRequiredRule message="Password is required"/>
             </DxValidator>
@@ -36,8 +42,16 @@
       <div class="dx-field">
         <div class="dx-field-label">Confirm Password</div>
         <div class="dx-field-value">
-          <DxTextBox mode="password">
-            <DxValidator>
+          <DxTextBox
+            v-model:value="confirmPassword"
+            v-model:mode="confirmPasswordMode"
+          >
+            <DxTextBoxButton
+              name="password"
+              location="after"
+              :options="confirmPasswordButton"
+            />
+            <DxValidator @initialized="onInit">
               <DxRequiredRule message="Confirm Password is required"/>
               <DxCompareRule
                 :comparison-target="passwordComparison"
@@ -176,7 +190,7 @@
 <script>
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import DxTextBox from 'devextreme-vue/text-box';
+import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxButton from 'devextreme-vue/button';
 import DxValidationSummary from 'devextreme-vue/validation-summary';
@@ -219,6 +233,7 @@ export default {
     DxRangeRule,
     DxAsyncRule,
     DxValidationSummary,
+    DxTextBoxButton,
   },
   data() {
     const currentDate = new Date();
@@ -228,6 +243,23 @@ export default {
         X: /[02-9]/,
       },
       password: '',
+      confirmPassword: '',
+      passwordMode: 'password',
+      confirmPasswordMode: 'password',
+      passwordButton: {
+        icon: '../../../../images/icons/eye.png',
+        type: 'default',
+        onClick: () => {
+          this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
+        },
+      },
+      confirmPasswordButton: {
+        icon: '../../../../images/icons/eye.png',
+        type: 'default',
+        onClick: () => {
+          this.confirmPasswordMode = this.confirmPasswordMode === 'text' ? 'password' : 'text';
+        },
+      },
       namePattern: /^[^0-9]+$/,
       phonePattern: /^[02-9]\d{9}$/,
       maxDate: new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)),
@@ -242,6 +274,14 @@ export default {
     },
     asyncValidation(params) {
       return sendRequest(params.value);
+    },
+    onPasswordChanged() {
+      if (this.confirmPassword) {
+        this.validatorInstance.validate();
+      }
+    },
+    onInit(e) {
+      this.validatorInstance = e.component;
     },
     onFormSubmit(e) {
       notify({

@@ -12,6 +12,11 @@ $(() => {
     return d.promise();
   };
 
+  const changePasswordMode = function (name) {
+    const editor = $(name).dxTextBox('instance');
+    editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
+  };
+
   $('#summary').dxValidationSummary({ });
 
   $('#email-validation').dxTextBox({})
@@ -33,6 +38,21 @@ $(() => {
 
   $('#password-validation').dxTextBox({
     mode: 'password',
+    onValueChanged() {
+      const editor = $('#confirm-password-validation').dxTextBox('instance');
+      if (editor.option('value')) {
+        $('#confirm-password-validation').dxValidator('validate');
+      }
+    },
+    buttons: [{
+      name: 'password',
+      location: 'after',
+      options: {
+        icon: '../../../../images/icons/eye.png',
+        type: 'default',
+        onClick: () => changePasswordMode('#password-validation'),
+      },
+    }],
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -42,6 +62,15 @@ $(() => {
 
   $('#confirm-password-validation').dxTextBox({
     mode: 'password',
+    buttons: [{
+      name: 'password',
+      location: 'after',
+      options: {
+        icon: '../../../../images/icons/eye.png',
+        type: 'default',
+        onClick: () => changePasswordMode('#confirm-password-validation'),
+      },
+    }],
   }).dxValidator({
     validationRules: [{
       type: 'compare',

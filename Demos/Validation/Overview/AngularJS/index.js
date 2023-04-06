@@ -14,6 +14,11 @@ DemoApp.controller('DemoController', ($scope) => {
     return d.promise();
   };
 
+  const changePasswordMode = function (name) {
+    const editor = $(name).dxTextBox('instance');
+    editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
+  };
+
   $scope.emailValidationRules = {
     validationRules: [{
       type: 'required',
@@ -115,6 +120,38 @@ DemoApp.controller('DemoController', ($scope) => {
       type: 'pattern',
       pattern: /^[02-9]\d{9}$/,
       message: 'The phone must have a correct USA phone format',
+    }],
+  };
+
+  $scope.passwordOptions = {
+    mode: 'password',
+    onValueChanged() {
+      const editor = $('#confirm-password-validation').dxTextBox('instance');
+      if (editor.option('value')) {
+        $('#confirm-password-validation').dxValidator('validate');
+      }
+    },
+    buttons: [{
+      name: 'password',
+      location: 'after',
+      options: {
+        icon: '../../../../images/icons/eye.png',
+        type: 'default',
+        onClick: () => changePasswordMode('#password-validation'),
+      },
+    }],
+  };
+
+  $scope.confirmPasswordOptions = {
+    mode: 'password',
+    buttons: [{
+      name: 'password',
+      location: 'after',
+      options: {
+        icon: '../../../../images/icons/eye.png',
+        type: 'default',
+        onClick: () => changePasswordMode('#confirm-password-validation'),
+      },
     }],
   };
 

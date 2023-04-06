@@ -1,4 +1,6 @@
-import { Component, NgModule, enableProdMode } from '@angular/core';
+import {
+  Component, NgModule, enableProdMode, ViewChild,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
@@ -8,6 +10,7 @@ import {
   DxDateBoxModule,
   DxButtonModule,
   DxValidatorModule,
+  DxValidatorComponent,
   DxValidationSummaryModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
@@ -35,7 +38,15 @@ const sendRequest = function (value) {
 })
 
 export class AppComponent {
+  @ViewChild('targetValidator', { static: false }) validator: DxValidatorComponent;
+
   password = '';
+
+  confirmPassword = '';
+
+  passwordMode = 'password';
+
+  confirmPasswordMode = 'password';
 
   maxDate: Date = new Date();
 
@@ -51,6 +62,22 @@ export class AppComponent {
     X: /[02-9]/,
   };
 
+  passwordButton: any = {
+    icon: '../../../../images/icons/eye.png',
+    type: 'default',
+    onClick: () => {
+      this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
+    },
+  };
+
+  confirmPasswordButton: any = {
+    icon: '../../../../images/icons/eye.png',
+    type: 'default',
+    onClick: () => {
+      this.confirmPasswordMode = this.confirmPasswordMode === 'text' ? 'password' : 'text';
+    },
+  };
+
   constructor(service: Service) {
     this.maxDate = new Date(this.maxDate.setFullYear(this.maxDate.getFullYear() - 21));
     this.countries = service.getCountries();
@@ -64,6 +91,12 @@ export class AppComponent {
 
   asyncValidation(params) {
     return sendRequest(params.value);
+  }
+
+  onPasswordChanged() {
+    if (this.confirmPassword) {
+      this.validator.instance.validate();
+    }
   }
 
   onFormSubmit = function (e) {

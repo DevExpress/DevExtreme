@@ -26,7 +26,16 @@
     <div class="dx-field">
       <div class="dx-field-label">Password</div>
       <div class="dx-field-value">
-        <dx-text-box mode="password" [(value)]="password">
+        <dx-text-box
+          [mode]="passwordMode"
+          [(value)]="password"
+          (onValueChanged)="onPasswordChanged()"
+        >
+          <dxi-button
+            name="password"
+            location="after"
+            [options]="passwordButton"
+          ></dxi-button>
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -39,8 +48,13 @@
     <div class="dx-field">
       <div class="dx-field-label">Confirm Password</div>
       <div class="dx-field-value">
-        <dx-text-box mode="password">
-          <dx-validator>
+        <dx-text-box [(value)]="confirmPassword" [mode]="confirmPasswordMode">
+          <dxi-button
+            name="password"
+            location="after"
+            [options]="confirmPasswordButton"
+          ></dxi-button>
+          <dx-validator #targetValidator>
             <dxi-validation-rule
               type="required"
               message="Confirm Password is required"

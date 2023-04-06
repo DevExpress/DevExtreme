@@ -27,13 +27,13 @@
           <div class="dx-field">
             <div class="dx-field-label">Password</div>
             <div class="dx-field-value">
-              <div id="password-validation" dx-text-box="{ mode: 'password' }" dx-validator="passwordValidationRules"> </div>
+              <div id="password-validation" dx-text-box="passwordOptions" dx-validator="passwordValidationRules"> </div>
             </div>
           </div>
           <div class="dx-field">
             <div class="dx-field-label">Confirm Password</div>
             <div class="dx-field-value">
-              <div dx-text-box="{ mode: 'password' }" dx-validator="confirmPasswordValidationRules"> </div>
+              <div id="confirm-password-validation" dx-text-box="confirmPasswordOptions" dx-validator="confirmPasswordValidationRules"> </div>
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@
           </div>
           <div
             id="check"
-            dx-check-box="{ 
+            dx-check-box="{
                     value: false,
                     text: 'I agree to the Terms and Conditions'}"
             dx-validator="checkValidationRules"
