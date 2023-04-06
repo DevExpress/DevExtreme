@@ -216,7 +216,9 @@ const members = {
         return !!(this._toolbarOptions && this._toolbarOptions.visible);
     },
 
-    allowDragging: noop
+    allowDragging: noop,
+
+    allowColumnHeaderDragging: noop
 };
 
 const HeaderPanel = ColumnsView.inherit(members);
