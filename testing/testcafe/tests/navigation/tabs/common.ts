@@ -52,14 +52,14 @@ test('Tabs icon alignment', async (t) => {
       .pressKey('right')
       .dispatchEvent(thirdItem, 'mousedown');
 
-    await testScreenshot(t, takeScreenshot, `Tabs when third item has active state and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+    await testScreenshot(t, takeScreenshot, `Tabs when 3 item has active state and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
 
     await t
       .dispatchEvent(thirdItem, 'mouseup')
       .click(thirdItem)
       .hover(fourthItem);
 
-    await testScreenshot(t, takeScreenshot, `Tabs when third item is selected, fourth item has hover state and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
+    await testScreenshot(t, takeScreenshot, `Tabs when 3 item is selected, 4 item is hovered and selectOnFocus=${selectOnFocus}.png`, { element: '#tabs' });
 
     await t
       .expect(compareResults.isValid())
