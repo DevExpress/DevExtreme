@@ -429,6 +429,7 @@ export const columnHeadersModule = {
                 },
 
                 allowColumnHeaderDragging: function(column) {
+                    // todo: write test for it
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex);
 
