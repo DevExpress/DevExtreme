@@ -848,11 +848,10 @@ QUnit.module('Column chooser', {
             // assert
             if(columnIndex === 0) {
                 assert.notOk(value, 'first column is hidden');
-            }
-            else {
+            } else {
                 assert.ok(value, 'second column is visible');
             }
-            
+
             this.columnsChanged.fire({ optionNames: {}, changeTypes: {} });
         };
         columnChooserView._popupContainer.option('visible', true);
@@ -923,8 +922,8 @@ QUnit.module('Column chooser', {
 
         this.options.columnChooser.mode = 'select';
         $.extend(this.columns, [
-            { caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true }, 
-            { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 }, 
+            { caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true },
+            { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 },
             { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }
         ]);
         this.setTestElement($testElement);
