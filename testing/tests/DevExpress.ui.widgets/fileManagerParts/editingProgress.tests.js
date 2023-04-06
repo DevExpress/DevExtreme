@@ -25,7 +25,7 @@ const moduleConfig = {
     },
 
     afterEach: function() {
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.clock.restore();
         fx.off = false;
@@ -836,7 +836,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.logger.clear();
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         const expectedEntries = [ { message: '', status: 'default', type: 'notification-onActionProgress' } ];
         assert.deepEqual(this.logger.getEntries(), expectedEntries, 'success status removed');
     });
@@ -853,7 +853,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.logger.clear();
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
         const panel = this.notificationControl._getNotificationManager()._progressPanel;
@@ -876,7 +876,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.logger.clear();
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
         const panel = this.notificationControl._getNotificationManager()._progressPanel;
@@ -884,7 +884,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         assert.deepEqual(this.logger.getEntries(), []);
 
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
         panel._closeOperation(panel.getStoredInfos()[1]);

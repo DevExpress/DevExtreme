@@ -1568,7 +1568,7 @@ QUnit.test('Focus shouldn\'t be prevent when last appointment is reached', funct
 
     const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
     $($appointments.eq(3)).trigger('focusin');
-    this.clock.tick();
+    this.clock.tick(10);
 
     const keyboard = keyboardMock($appointments.eq(3));
 
@@ -1597,7 +1597,7 @@ QUnit.testInActiveWindow('Apps should be focused in right order', function(asser
     const apptInstance = this.instance.getAppointmentsInstance();
 
     $($appointments.eq(0)).trigger('focusin');
-    this.clock.tick();
+    this.clock.tick(10);
 
     const keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown('tab');
@@ -1631,7 +1631,7 @@ QUnit.testInActiveWindow('Apps should be focused in right order on month view wi
     const apptInstance = this.instance.getAppointmentsInstance();
 
     $($appointments.eq(0)).trigger('focusin');
-    this.clock.tick();
+    this.clock.tick(10);
 
     const keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown('tab');
@@ -1657,7 +1657,7 @@ QUnit.testInActiveWindow('Apps should be focused in back order while press shift
     const keyboard = keyboardMock($appointments.eq(0));
 
     $($appointments.eq(3)).trigger('focusin');
-    this.clock.tick();
+    this.clock.tick(10);
 
     keyboard.keyDown('tab', { shiftKey: true });
     assert.deepEqual($appointments.get(2), $(apptInstance.option('focusedElement')).get(0), 'app 1 in focus');

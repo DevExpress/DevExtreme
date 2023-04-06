@@ -550,8 +550,8 @@ QUnit.test('ScrollBar option changed', function(assert) {
     });
     const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
-    scrollBar.init.reset();
-    scrollBar.setPosition.reset();
+    scrollBar.init.resetHistory();
+    scrollBar.setPosition.resetHistory();
 
     this.themeManager.getOptions.withArgs('scrollBar').returns({
         visible: true,

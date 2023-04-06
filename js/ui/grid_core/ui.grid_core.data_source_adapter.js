@@ -1,7 +1,7 @@
-// @ts-check
 
 import Callbacks from '../../core/utils/callbacks';
-import gridCore from '../data_grid/ui.data_grid.core';
+import modules from './ui.grid_core.modules';
+import gridCoreUtils from './ui.grid_core.utils';
 // @ts-expect-error
 import { executeAsync, getKeyHash } from '../../core/utils/common';
 import { isDefined, isPlainObject, isFunction } from '../../core/utils/type';
@@ -12,7 +12,7 @@ import { applyBatch } from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
 
-export default gridCore.Controller.inherit((function() {
+export default modules.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
         if(items) {
             items = items.slice(0);
@@ -41,10 +41,10 @@ export default gridCore.Controller.inherit((function() {
 
         if(lastLoadOptions) {
             operationTypes = {
-                sorting: !gridCore.equalSortParameters(loadOptions.sort, lastLoadOptions.sort),
-                grouping: !gridCore.equalSortParameters(loadOptions.group, lastLoadOptions.group, true),
-                groupExpanding: !gridCore.equalSortParameters(loadOptions.group, lastLoadOptions.group) || lastLoadOptions.groupExpand,
-                filtering: !gridCore.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter),
+                sorting: !gridCoreUtils.equalSortParameters(loadOptions.sort, lastLoadOptions.sort),
+                grouping: !gridCoreUtils.equalSortParameters(loadOptions.group, lastLoadOptions.group, true),
+                groupExpanding: !gridCoreUtils.equalSortParameters(loadOptions.group, lastLoadOptions.group) || lastLoadOptions.groupExpand,
+                filtering: !gridCoreUtils.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter),
                 pageIndex: loadOptions.pageIndex !== lastLoadOptions.pageIndex,
                 skip: loadOptions.skip !== lastLoadOptions.skip,
                 take: loadOptions.take !== lastLoadOptions.take,
@@ -74,7 +74,7 @@ export default gridCore.Controller.inherit((function() {
     }
 
     function getPageDataFromCache(options, updatePaging) {
-        const groupCount = gridCore.normalizeSortingInfo(options.group || options.storeLoadOptions.group || options.loadOptions.group).length;
+        const groupCount = gridCoreUtils.normalizeSortingInfo(options.group || options.storeLoadOptions.group || options.loadOptions.group).length;
         const items = [];
         if(fillItemsFromCache(items, options, groupCount)) {
             return items;
@@ -390,7 +390,7 @@ export default gridCore.Controller.inherit((function() {
         _applyBatch: function(changes, fromStore) {
             const keyInfo = this._getKeyInfo();
             const dataSource = this._dataSource;
-            const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
+            const groupCount = gridCoreUtils.normalizeSortingInfo(this.group()).length;
             const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
             const isVirtualMode = this.option('scrolling.mode') === 'virtual';
 
@@ -606,7 +606,7 @@ export default gridCore.Controller.inherit((function() {
                 loadOptions.group = options.group || loadOptions.group;
             }
 
-            const groupCount = gridCore.normalizeSortingInfo(options.group || storeLoadOptions.group || loadOptions.group).length;
+            const groupCount = gridCoreUtils.normalizeSortingInfo(options.group || storeLoadOptions.group || loadOptions.group).length;
 
             if(options.cachedDataPartBegin) {
                 options.data = options.cachedDataPartBegin.concat(options.data);
@@ -622,7 +622,7 @@ export default gridCore.Controller.inherit((function() {
                 } else {
                     if(needStoreCache) {
                         if(!this._cachedStoreData) {
-                            this._cachedStoreData = cloneItems(options.data, gridCore.normalizeSortingInfo(storeLoadOptions.group).length);
+                            this._cachedStoreData = cloneItems(options.data, gridCoreUtils.normalizeSortingInfo(storeLoadOptions.group).length);
                         } else if(options.mergeStoreLoadData) {
                             options.data = this._cachedStoreData = this._cachedStoreData.concat(options.data);
                         }

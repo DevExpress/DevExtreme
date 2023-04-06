@@ -1,4 +1,3 @@
-// @ts-check
 
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
@@ -593,6 +592,11 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._silentOption(EDITING_EDITROWKEY_OPTION_NAME, value);
             } else {
                 this.option(EDITING_EDITROWKEY_OPTION_NAME, value);
+            }
+
+            if(this._refocusEditCell) {
+                this._refocusEditCell = false;
+                this._focusEditingCell();
             }
         },
 
@@ -1607,12 +1611,12 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                     this._saving = true;
 
-                    const options = {};
-
-                    this._saveEditDataInner(options)
+                    this._saveEditDataInner()
                         .always(() => {
                             this._saving = false;
-                            options.needFocusEditCell && this._focusEditingCell();
+                            if(this._refocusEditCell) {
+                                this._focusEditingCell();
+                            }
                         })
                         .done(deferred.resolve)
                         .fail(deferred.reject);
@@ -1627,47 +1631,49 @@ const EditingController = modules.ViewController.inherit((function() {
             }).fail(deferred.reject);
         },
 
-        _saveEditDataInner: function(options) {
+        _saveEditDataInner: function() {
+            // @ts-expect-error
+            const result = new Deferred();
             const results = [];
             const deferreds = [];
             const dataChanges = [];
-            const dataController = this._dataController;
-            const dataSource = dataController.dataSource();
-            // @ts-expect-error
-            const result = new Deferred();
+            const dataSource = this._dataController.dataSource();
 
-            when(this._fireOnSaving()).done(({ cancel, changes }) => {
-                if(cancel) {
-                    return result.resolve().promise();
-                }
+            when(this._fireOnSaving())
+                .done(({ cancel, changes }) => {
+                    if(cancel) {
+                        return result.resolve().promise();
+                    }
 
-                this._processChanges(deferreds, results, dataChanges, changes);
+                    this._processChanges(deferreds, results, dataChanges, changes);
 
-                if(deferreds.length) {
-                    // @ts-expect-error
-                    dataSource?.beginLoading();
+                    if(deferreds.length) {
+                        this._refocusEditCell = true;
+                        // @ts-expect-error
+                        dataSource?.beginLoading();
 
-                    when(...deferreds).done(() => {
-                        if(this._processSaveEditDataResult(results)) {
-                            this._endSaving(dataChanges, changes, result);
-                        } else {
+                        when(...deferreds).done(() => {
+                            if(this._processSaveEditDataResult(results)) {
+                                this._endSaving(dataChanges, changes, result);
+                            } else {
+                                // @ts-expect-error
+                                dataSource?.endLoading();
+                                result.resolve();
+                            }
+                        }).fail(error => {
                             // @ts-expect-error
                             dataSource?.endLoading();
-                            result.resolve();
-                        }
-                    }).fail(error => {
-                        // @ts-expect-error
-                        dataSource?.endLoading();
-                        result.resolve(error);
-                    });
+                            result.resolve(error);
+                        });
 
-                    return result.always(() => {
-                        options.needFocusEditCell = true;
-                    }).promise();
-                }
+                        return result
+                            .always(() => { this._refocusEditCell = true; })
+                            .promise();
+                    }
 
-                this._cancelSaving(result);
-            }).fail(result.reject);
+                    this._cancelSaving(result);
+                })
+                .fail(result.reject);
 
             return result.promise();
         },

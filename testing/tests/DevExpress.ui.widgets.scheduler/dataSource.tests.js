@@ -56,7 +56,7 @@ module('Events', {
             };
 
             scheduler.instance.addAppointment(newAppointment);
-            this.clock.tick();
+            this.clock.tick(10);
 
 
             const args = addingSpy.getCall(0).args[0];
@@ -80,7 +80,7 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
         });
@@ -142,7 +142,7 @@ module('Events', {
             const newAppointment = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' };
 
             scheduler.instance.addAppointment(newAppointment);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const args = addedSpy.getCall(0).args[0];
 
@@ -169,7 +169,7 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' });
-            this.clock.tick();
+            this.clock.tick(10);
 
             const error = addedSpy.getCall(0).args[0].error;
 
@@ -215,7 +215,7 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment($.extend({}, oldData[0]), newData);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const args = updatingSpy.getCall(0).args[0];
 
@@ -242,7 +242,7 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment(appointments[0], { startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Update operation is canceled');
         });
@@ -268,7 +268,7 @@ module('Events', {
                 scheduler.instance.showAppointmentPopup(appointments[0]);
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const appointmentForm = scheduler.instance._appointmentPopup.form;
 
@@ -505,7 +505,7 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment(oldData[0], newData);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const args = updatedSpy.getCall(0).args[0];
 
@@ -538,7 +538,7 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment(oldData[0], newData);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const error = updatedSpy.getCall(0).args[0].error;
 
@@ -595,7 +595,7 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const args = deletingSpy.getCall(0).args[0];
 
@@ -621,7 +621,7 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Delete operation is canceled');
         });
@@ -687,7 +687,7 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const args = deletedSpy.getCall(0).args[0];
             assert.ok(deletedSpy.calledOnce, 'onAppointmentDeleted was called');
@@ -713,7 +713,7 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment({});
-            this.clock.tick();
+            this.clock.tick(10);
 
             const error = deletedSpy.getCall(0).args[0].error;
 

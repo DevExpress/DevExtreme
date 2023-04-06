@@ -2645,7 +2645,7 @@ QUnit.test('reordering class should be present on item during drag', function(as
     const pointer = reorderingPointerMock($item, this.clock, true);
 
     pointer.dragStart().drag(10);
-    this.clock.tick();
+    this.clock.tick(10);
     assert.ok($item.hasClass(REORDERING_ITEM_CLASS), 'class was added');
     pointer.dragEnd();
     assert.ok(!$item.hasClass(REORDERING_ITEM_CLASS), 'class was removed');
@@ -2675,7 +2675,7 @@ QUnit.test('list item should be duplicated on drag start', function(assert) {
 
     pointer.dragStart().drag(10);
 
-    this.clock.tick();
+    this.clock.tick(10);
     let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
     assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
@@ -2700,7 +2700,7 @@ QUnit.test('list item duplicate should inherit direction (rtl)', function(assert
 
     pointer.dragStart().drag(10);
 
-    this.clock.tick();
+    this.clock.tick(10);
     let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
     assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
@@ -2724,7 +2724,7 @@ QUnit.test('cached items doesn\'t contains a ghost item after reordering', funct
     const pointer = reorderingPointerMock($items.first(), this.clock);
 
     pointer.dragStart(0.5).drag(0.6);
-    this.clock.tick();
+    this.clock.tick(10);
     pointer.dragEnd();
 
     const cachedItems = list._itemElements();
@@ -2744,7 +2744,7 @@ QUnit.test('ghost item should be moved by drag', function(assert) {
 
     pointer.dragStart().drag(10);
 
-    this.clock.tick();
+    this.clock.tick(10);
     const $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     const startPosition = topTranslation($ghostItem.parent());
 
@@ -2882,7 +2882,7 @@ QUnit.test('drop item should reorder list items with correct indexes', function(
     const pointer = reorderingPointerMock($item1, this.clock);
 
     pointer.dragStart(0.5).drag(1);
-    this.clock.tick();
+    this.clock.tick(10);
     pointer.dragEnd();
 });
 
@@ -2913,7 +2913,7 @@ QUnit.test('reordering should correctly handle items contains List widget', func
     const pointer = reorderingPointerMock($item1, this.clock);
 
     pointer.dragStart(0.5).drag(2);
-    this.clock.tick();
+    this.clock.tick(10);
     pointer.dragEnd();
 });
 

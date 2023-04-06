@@ -651,7 +651,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         try {
             this.getDataSource().filter(['id', '=', 2]);
             this.getDataSource().load();
-            clock.tick();
+            clock.tick(10);
         } catch(e) {
             assert.ok(false, e);
         }
@@ -1753,14 +1753,14 @@ QUnit.module('Remote Operations', { beforeEach: function() {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(loadingArgs.length, 2, 'two loading on init');
 
         // act
         loadingArgs = [];
         this.collapseRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();

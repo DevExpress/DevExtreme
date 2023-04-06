@@ -365,7 +365,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         });
 
         this.keyboard.caret({ start: 0, end: 5 }).keyDown('-');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.input.val(), '-$ 0.00', 'text is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 6 }, 'caret is good');
     });
@@ -377,7 +377,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         });
 
         this.keyboard.caret({ start: 0, end: 5 }).keyDown('-');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.input.val(), '-123.5', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 6 }, 'caret is good');
 
@@ -388,7 +388,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, 'caret is good');
 
         this.keyboard.caret({ start: 0, end: 2 }).keyDown('-');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.input.val(), '5', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 1 }, 'caret is good');
 
@@ -406,7 +406,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         });
 
         this.keyboard.caret({ start: 1, end: 3 }).keyDown('-');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.input.val(), '-123.4', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 4 }, 'caret is good');
 
@@ -421,7 +421,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         });
 
         this.keyboard.caret({ start: 1, end: 2 }).keyDown('-');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(this.input.val(), '<<123.4>>', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, 'caret is good');
@@ -434,7 +434,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         });
 
         this.keyboard.caret({ start: 1, end: 2 }).press('-').change();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(this.input.val(), '<<123.4>>', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, 'caret preserved');
@@ -477,7 +477,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
             .type('0.51')
             .change();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(this.input.val(), '-0.51', 'text is correct');
         assert.strictEqual(this.instance.option('value'), -0.51, 'value is correct');
     });

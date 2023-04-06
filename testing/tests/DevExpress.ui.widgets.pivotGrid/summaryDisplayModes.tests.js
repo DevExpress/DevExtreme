@@ -2,7 +2,7 @@ import $ from 'jquery';
 import summaryDisplayModes, {
     applyDisplaySummaryMode,
     applyRunningTotal,
-    summaryDictionary ,
+    summaryDictionary,
 } from '__internal/grids/pivot_grid/summary_display_modes/module'; // arguments: description, data
 import pivotGridUtils from '__internal/grids/pivot_grid/module_widget_utils';
 

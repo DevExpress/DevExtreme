@@ -1,23 +1,2 @@
-import './ui.data_grid.editor_factory';
-
-import gridCore from './ui.data_grid.core';
-import { editingModule } from '../grid_core/ui.grid_core.editing';
-import { extend } from '../../core/utils/extend';
-
-gridCore.registerModule('editing', extend(true, {}, editingModule, {
-    extenders: {
-        controllers: {
-            data: {
-                _changeRowExpandCore: function(key) {
-                    const editingController = this._editingController;
-
-                    if(Array.isArray(key)) {
-                        editingController && editingController.refresh();
-                    }
-
-                    return this.callBase.apply(this, arguments);
-                }
-            }
-        }
-    }
-}));
+// deprecated
+export * from '../../__internal/grids/data_grid/module_editing';

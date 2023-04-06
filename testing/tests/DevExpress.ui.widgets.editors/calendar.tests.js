@@ -65,6 +65,9 @@ const getBeforeViewInstance = (calendar) => {
 const getCurrentViewInstance = (calendar) => {
     return calendar._view;
 };
+const getAdditionalViewInstance = (calendar) => {
+    return calendar._additionalView;
+};
 const getAfterViewInstance = (calendar) => {
     return calendar._afterView;
 };
@@ -457,30 +460,41 @@ QUnit.module('Navigator integration', {
         assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
     });
 
-    QUnit.test('navigator caption is correct after fast right short swipe', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-        currentDate.setMonth(currentDate.getMonth() - 1);
+    [
+        {
+            viewsCount: 1,
+            expectedText: 'May 2015',
+            isLeftSwipe: false
+        },
+        {
+            viewsCount: 2,
+            expectedText: 'May 2015 - June 2015',
+            isLeftSwipe: false
+        },
+        {
+            viewsCount: 1,
+            expectedText: 'July 2015',
+            isLeftSwipe: true
+        },
+        {
+            viewsCount: 2,
+            expectedText: 'July 2015 - August 2015',
+            isLeftSwipe: true
+        },
+    ].forEach(({ viewsCount, expectedText, isLeftSwipe }) => {
+        QUnit.test(`navigator caption is correct after fast ${isLeftSwipe ? 'left' : 'right'} short swipe (viewsCount = ${viewsCount})`, function(assert) {
+            this.calendar.option('viewsCount', viewsCount);
+            const currentDate = new Date(this.calendar.option('currentDate'));
+            currentDate.setMonth(currentDate.getMonth() + isLeftSwipe ? -1 : 1);
 
-        const pointer = pointerMock(this.$element).start();
-        pointer.down().move(10).up();
+            const pointer = pointerMock(this.$element).start();
+            const moveValue = isLeftSwipe ? -10 : 10;
+            pointer.down().move(moveValue).up();
 
-        const navigatorText = this.$navigatorCaption.text();
-        const expectedText = 'May 2015';
+            const navigatorText = this.$navigatorCaption.text();
 
-        assert.equal(navigatorText, expectedText, 'navigator caption is correct');
-    });
-
-    QUnit.test('navigator caption is correct after fast left short swipe', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-        currentDate.setMonth(currentDate.getMonth() + 1);
-
-        const pointer = pointerMock(this.$element).start();
-        pointer.down().move(-10).up();
-
-        const navigatorText = this.$navigatorCaption.text();
-        const expectedText = 'July 2015';
-
-        assert.equal(navigatorText, expectedText, 'navigator caption is correct');
+            assert.equal(navigatorText, expectedText, 'navigator caption is correct');
+        });
     });
 
     QUnit.test('navigator buttons should displays correctly on short min/max range', function(assert) {
@@ -533,7 +547,7 @@ QUnit.module('Views initial positions', {
         }
     });
 
-    QUnit.test('calendar views position', function(assert) {
+    QUnit.test('calendar views position (viewsCount = 1)', function(assert) {
         const $view = $(getCurrentViewInstance(this.instance).$element());
         const viewWidth = $view.width();
 
@@ -542,7 +556,20 @@ QUnit.module('Views initial positions', {
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, viewWidth, 'main view is at the right');
     });
 
-    QUnit.test('calendar views position in RTL', function(assert) {
+    QUnit.test('calendar views position (viewsCount = 2)', function(assert) {
+        this.reinit({
+            viewsCount: 2
+        });
+        const $view = $(getCurrentViewInstance(this.instance).$element());
+        const viewWidth = $view.width();
+
+        assert.equal($view.position().left, 0, 'main view is at 0');
+        assert.equal(getAdditionalViewInstance(this.instance).$element().position().left, viewWidth);
+        assert.equal(getBeforeViewInstance(this.instance).$element().position().left, -viewWidth,);
+        assert.equal(getAfterViewInstance(this.instance).$element().position().left, 2 * viewWidth);
+    });
+
+    QUnit.test('calendar views position (viewsCount = 1; rtlEnabled)', function(assert) {
         this.reinit({ rtlEnabled: true });
 
         const $view = $(getCurrentViewInstance(this.instance).$element());
@@ -551,6 +578,20 @@ QUnit.module('Views initial positions', {
         assert.equal($view.position().left, 0, 'main view is at 0');
         assert.equal(getBeforeViewInstance(this.instance).$element().position().left, viewWidth, 'main view is at the left');
         assert.equal(getAfterViewInstance(this.instance).$element().position().left, -viewWidth, 'main view is at the right');
+    });
+
+    QUnit.test('calendar views position (viewsCount = 2; rtlEnabled)', function(assert) {
+        this.reinit({
+            viewsCount: 2,
+            rtlEnabled: true
+        });
+        const $view = $(getCurrentViewInstance(this.instance).$element());
+        const viewWidth = $view.width();
+
+        assert.equal($view.position().left, viewWidth);
+        assert.equal(getAdditionalViewInstance(this.instance).$element().position().left, 0);
+        assert.equal(getBeforeViewInstance(this.instance).$element().position().left, 2 * viewWidth,);
+        assert.equal(getAfterViewInstance(this.instance).$element().position().left, -viewWidth);
     });
 });
 
@@ -918,11 +959,11 @@ QUnit.module('Keyboard navigation', {
             iterateViews((_, type) => {
                 calendar.option('zoomLevel', type);
 
-                clock.tick();
+                clock.tick(10);
                 triggerKeydown($element, LEFT_ARROW_KEY_CODE, optionConfig);
                 assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], `${name}+left arrow navigates correctly`);
 
-                clock.tick();
+                clock.tick(10);
                 triggerKeydown($element, RIGHT_ARROW_KEY_CODE, optionConfig);
                 assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], `${name}+right arrow navigates correctly`);
             });
@@ -941,7 +982,7 @@ QUnit.module('Keyboard navigation', {
             triggerKeydown($element, LEFT_ARROW_KEY_CODE, optionConfig);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 10, this.value.getDate()), `${name}+left arrow navigates correctly`);
 
-            this.clock.tick();
+            this.clock.tick(10);
             triggerKeydown($element, RIGHT_ARROW_KEY_CODE, optionConfig);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 9, this.value.getDate()), `${name}+right arrow navigates correctly`);
         });
@@ -984,11 +1025,11 @@ QUnit.module('Keyboard navigation', {
         iterateViews((_, type) => {
             calendar.option('zoomLevel', type);
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageup navigates correctly');
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pagedown navigates correctly');
         });
@@ -1011,11 +1052,11 @@ QUnit.module('Keyboard navigation', {
         iterateViews((_, type) => {
             calendar.option('zoomLevel', type);
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageUp navigates correctly');
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pageDown navigates correctly');
         });
@@ -1472,44 +1513,54 @@ QUnit.module('Calendar footer', {
         }
     });
 
-    QUnit.test('correct views are rendered after animation', function(assert) {
-        const calendar = this.calendar;
-        const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
+    [1, 2].forEach((viewsCount) => {
+        QUnit.test(`correct views are rendered after animation (viewsCount = ${viewsCount}`, function(assert) {
+            const calendar = this.calendar;
+            calendar.option('viewsCount', viewsCount);
+            const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
 
-        $($todayButton).trigger('dxclick');
+            $($todayButton).trigger('dxclick');
 
-        const beforeViewDate = getBeforeViewInstance(calendar).option('date');
-        const afterViewDate = getAfterViewInstance(calendar).option('date');
-        const today = calendar.option('currentDate');
+            const beforeViewDate = getBeforeViewInstance(calendar).option('date');
+            const afterViewDate = getAfterViewInstance(calendar).option('date');
+            const today = calendar.option('currentDate');
 
-        assert.equal(beforeViewDate.getFullYear(), new Date(today.getFullYear(), today.getMonth() - 1).getFullYear(), 'before view year is correct');
-        assert.equal(beforeViewDate.getMonth(), new Date(today.getFullYear(), today.getMonth() - 1).getMonth(), 'before view month is correct');
-        assert.equal(afterViewDate.getFullYear(), new Date(today.getFullYear(), today.getMonth() + 1).getFullYear(), 'after view year is correct');
-        assert.equal(afterViewDate.getMonth(), new Date(today.getFullYear(), today.getMonth() + 1).getMonth(), 'after view month is correct');
-    });
+            assert.equal(beforeViewDate.getFullYear(), new Date(today.getFullYear(), today.getMonth() - 1).getFullYear(), 'before view year is correct');
+            assert.equal(beforeViewDate.getMonth(), new Date(today.getFullYear(), today.getMonth() - 1).getMonth(), 'before view month is correct');
+            assert.equal(afterViewDate.getFullYear(), new Date(today.getFullYear(), today.getMonth() + viewsCount).getFullYear(), 'after view year is correct');
+            assert.equal(afterViewDate.getMonth(), new Date(today.getFullYear(), today.getMonth() + viewsCount).getMonth(), 'after view month is correct');
 
-    QUnit.test('correct animation after today button click on the different zoom level', function(assert) {
-        this.calendar.option({
-            zoomLevel: 'century',
-            value: new Date(1973, 4, 5),
+            if(viewsCount === 2) {
+                const additionalViewDate = getAdditionalViewInstance(calendar).option('date');
+                assert.equal(additionalViewDate.getFullYear(), new Date(today.getFullYear(), today.getMonth() + 1).getFullYear(), 'additional view year is correct');
+                assert.equal(additionalViewDate.getMonth(), new Date(today.getFullYear(), today.getMonth() + 1).getMonth(), 'additional view month is correct');
+            }
         });
 
-        const origAnimate = fx.animate;
+        QUnit.test(`correct animation after today button click on the different zoom level (viewsCount = ${viewsCount}`, function(assert) {
+            this.calendar.option({
+                zoomLevel: 'century',
+                value: new Date(1973, 4, 5),
+                viewsCount
+            });
 
-        try {
-            let animationCount = 0;
+            const origAnimate = fx.animate;
 
-            fx.animate = (...args) => {
-                animationCount += 1;
-                return origAnimate.apply(fx, args);
-            };
+            try {
+                let animationCount = 0;
 
-            $(this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS))).trigger('dxclick');
+                fx.animate = (...args) => {
+                    animationCount += 1;
+                    return origAnimate.apply(fx, args);
+                };
 
-            assert.equal(animationCount, 1, 'only one animation was made for view change');
-        } finally {
-            fx.animate = origAnimate;
-        }
+                $(this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS))).trigger('dxclick');
+
+                assert.equal(animationCount, viewsCount, 'only one animation was made for view change');
+            } finally {
+                fx.animate = origAnimate;
+            }
+        });
     });
 });
 
@@ -2163,6 +2214,166 @@ QUnit.module('Options', {
                 const selectedRange = getCurrentViewInstance(this.calendar).option('range');
 
                 assert.ok(selectedRange.length < 240);
+            });
+        });
+    });
+
+    QUnit.module('ViewsCount = 2', {
+        beforeEach: function() {
+            this.options = {
+                focusStateEnabled: true,
+                values: [new Date('01/15/2023'), new Date('02/05/2023')],
+                selectionMode: 'range',
+                viewsCount: 2,
+            };
+            this.reinit(this.options);
+            this.viewWidth = this.calendar._viewWidth();
+        }
+    }, () => {
+        QUnit.test('Calendar should not have additional view after runtime multiview disable', function(assert) {
+            this.calendar.option('viewsCount', 1);
+
+            const additionalView = getAdditionalViewInstance(this.calendar);
+
+            assert.notOk(additionalView);
+        });
+
+        QUnit.test('Calendar should have additional view after runtime multiview enable', function(assert) {
+            this.reinit({
+                ...this.options,
+                viewsCount: 1
+            });
+
+            this.calendar.option('viewsCount', 2);
+            const additionalView = getAdditionalViewInstance(this.calendar);
+
+            assert.ok(additionalView, undefined);
+        });
+
+        QUnit.test('Click on date in additinal view should not trigger views movement', function(assert) {
+            let $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+            $cell.trigger('dxclick');
+
+            $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+            assert.strictEqual($cell.length, 1);
+        });
+
+        QUnit.test('Click on next month date in additinal view should trigger views movement', function(assert) {
+            let $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/03/03"]'));
+
+            $cell.trigger('dxclick');
+
+            $cell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+            assert.strictEqual($cell.length, 0);
+        });
+
+        QUnit.test('contouredDate should be moved to additional view after keyboard moving from the last date on main view', function(assert) {
+            const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/31"]'));
+            const keyboard = keyboardMock(this.$element);
+
+            $cell.trigger('dxclick');
+            keyboard.press('right');
+
+            const viewContouredDate = getCurrentViewInstance(this.calendar).option('contouredDate');
+            const additionalViewContouredDate = getAdditionalViewInstance(this.calendar).option('contouredDate');
+
+            assert.strictEqual(viewContouredDate, null);
+            assert.deepEqual(additionalViewContouredDate, new Date('2023/02/01'));
+        });
+
+        [
+            {
+                offset: 2,
+                button: 'next',
+                focusedView: 'main'
+            },
+            {
+                offset: 1,
+                button: 'next',
+                focusedView: 'additional'
+            },
+            {
+                offset: -1,
+                button: 'previous',
+                focusedView: 'main'
+            },
+            {
+                offset: -2,
+                button: 'previous',
+                focusedView: 'additional'
+            },
+        ].forEach(({ offset, button, focusedView }) => {
+            QUnit.test(`Click on ${button} month button should change currentDate on ${offset} months if ${focusedView} view is focused`, function(assert) {
+                if(focusedView === 'additional') {
+                    const $additionalViewCell = $(getAdditionalViewInstance(this.calendar).$element().find('*[data-value="2023/02/16"]'));
+
+                    $additionalViewCell.trigger('dxclick');
+                }
+
+                const currentDate = this.calendar.option('currentDate');
+                const navigatorButtonClass = button === 'next' ? CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS : CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS;
+                const $navigatorButton = this.$element.find(toSelector(navigatorButtonClass));
+
+                $navigatorButton.trigger('dxclick');
+
+                const newCurrentDate = this.calendar.option('currentDate');
+                const expectedCurrentDate = new Date(currentDate.setMonth(currentDate.getMonth() + offset));
+
+                assert.deepEqual(newCurrentDate, expectedCurrentDate);
+            });
+        });
+
+
+        [
+            {
+                currentDate: new Date('04/15/2023'),
+                offset: 3,
+                shouldRefresh: true
+            },
+            {
+                currentDate: new Date('11/15/2022'),
+                offset: -2,
+                shouldRefresh: true
+            },
+            {
+                currentDate: new Date('03/15/2023'),
+                offset: 2,
+                shouldRefresh: false
+            },
+            {
+                currentDate: new Date('12/15/2022'),
+                offset: -1,
+                shouldRefresh: false
+            }
+        ].forEach(({ currentDate, offset, shouldRefresh }) => {
+            QUnit.test(`Views should ${shouldRefresh ? '' : 'not'} be refreshed if currentDate change offset is than ${offset} months`, function(assert) {
+                const spy = sinon.spy(this.calendar, '_refreshViews');
+
+                this.calendar.option('currentDate', currentDate);
+
+                assert.strictEqual(spy.calledOnce, shouldRefresh);
+            });
+        });
+
+        [false, true].forEach((rtlEnabled) => {
+            QUnit.test(`Should double currentDate change on ${rtlEnabled ? 'right' : 'left'} swipe if additionalView is active (rtlEnabled=${rtlEnabled})`, function(assert) {
+                const calendar = this.calendar;
+                calendar.option('rtlEnabled', rtlEnabled);
+                const $cell = $(getAdditionalViewInstance(calendar).$element().find('*[data-value="2023/02/16"]'));
+
+                $cell.trigger('dxclick');
+                const currentDate = calendar.option('currentDate');
+                const pointer = pointerMock(this.$element).start();
+
+                pointer.swipeStart().swipeEnd(0.5 * rtlEnabled ? -1 : 1);
+
+                const expectedCurrentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, currentDate.getDate());
+                const newCurrentDate = calendar.option('currentDate');
+
+                assert.deepEqual(newCurrentDate, expectedCurrentDate);
             });
         });
     });
@@ -3613,300 +3824,218 @@ QUnit.module('Navigation - click on other view cell', {
     });
 });
 
+[1, 2].forEach((viewsCount) => {
+    QUnit.module(`Navigation - swiping (viewsCount=${viewsCount})`, {
+        beforeEach: function() {
+            fx.off = true;
 
-QUnit.module('Navigation - swiping', {
-    beforeEach: function() {
-        fx.off = true;
-
-        this.$element = $('<div>').appendTo('#qunit-fixture');
-        this.calendar = this.$element.dxCalendar({
-            currentDate: new Date(2013, 9, 15),
-            firstDayOfWeek: 1
-        }).dxCalendar('instance');
-
-        this.pointer = pointerMock(this.$element).start();
-
-        this.reinit = (options) => {
-            this.$element.remove();
             this.$element = $('<div>').appendTo('#qunit-fixture');
-            this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
+            this.calendar = this.$element.dxCalendar({
+                viewsCount,
+                currentDate: new Date(2013, 9, 15),
+                firstDayOfWeek: 1,
+            }).dxCalendar('instance');
+
             this.pointer = pointerMock(this.$element).start();
-        };
-    },
-    afterEach: function() {
-        this.$element.remove();
-        fx.off = false;
-    }
-}, () => {
-    QUnit.test('views count on continuous swipe', function(assert) {
-        assert.expect(1);
 
-        this.pointer.swipeStart().swipe(0.01);
-        assert.equal(this.$element.find('table').length, 3, 'Month views count is equal to 3');
-    });
-
-    QUnit.test('views offset on continuous right swipe', function(assert) {
-        const width = this.$element.width();
-        const offset = 0.5 * width;
-
-        this.pointer.swipeStart().swipe(0.5);
-
-        const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget');
-        const $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
-
-        assert.equal(translator.locate($wrapper).left, offset, 'Views wrapper position is correct');
-        assert.equal(translator.locate($tables.eq(0)).left, 0, 'First view position is correct');
-        assert.equal(translator.locate($tables.eq(1)).left, -width, 'Second view position is correct');
-    });
-
-    QUnit.test('views offset on continuous left swipe', function(assert) {
-        const width = this.$element.width();
-        const offset = 0.5 * width;
-
-        this.pointer.swipeStart().swipe(-0.5);
-
-        const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget');
-        const $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
-
-        assert.equal(translator.locate($wrapper).left, -offset, 'Views wrapper position is correct');
-        assert.equal(translator.locate($tables.eq(0)).left, 0, 'First view position is correct');
-        assert.equal(translator.locate($tables.eq(1)).left, -width, 'Second view position is correct');
-        assert.equal(translator.locate($tables.eq(2)).left, width, 'Third view position is correct');
-    });
-
-    QUnit.test('views after canceled right swipe', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-
-        this.pointer.swipeStart().swipeEnd(0, 0.4);
-
-        assert.equal(this.$element.find('table').length, 3, 'Calendar contains one view after swipe end');
-        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
-        assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('views after canceled left swipe', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-
-        this.pointer.swipeStart().swipeEnd(0, -0.4);
-
-        assert.equal(this.$element.find('table').length, 3, 'Calendar contains one view after swipe end');
-        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
-        assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('views after right long swipe end', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-        currentDate.setMonth(currentDate.getMonth() - 1);
-
-        this.pointer.swipeStart().swipe(0.6).swipeEnd(1, 0.6);
-
-        assert.equal(this.$element.find('table').length, 3, 'Calendar contains one view after long right swipe end');
-        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
-        assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('views after left long swipe end', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-        currentDate.setMonth(currentDate.getMonth() + 1);
-
-        this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1, -0.6);
-
-        assert.equal(this.$element.find('table').length, 3, 'Calendar contains one view after long left swipe end');
-        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
-        assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('views after fast long swipe end', function(assert) {
-        this.pointer.down().move(-100).move(-1000).up();
-        assert.ok(true, 'test must pass');
-    });
-
-    QUnit.test('views after right short swipe end', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        this.pointer.swipeStart().swipe(0.4).swipeEnd(1, 0.4);
-
-        assert.equal(this.$element.find('table').length, 3, 'Calendar contains one view after short right swipe end');
-        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
-        assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('views after left short swipe end', function(assert) {
-        const currentDate = new Date(this.calendar.option('currentDate'));
-        currentDate.setMonth(currentDate.getMonth() + 1);
-
-        this.pointer.swipeStart().swipe(-0.4).swipeEnd(-1, -0.4);
-
-        assert.equal(this.$element.find('table').length, 3, 'Calendar contains one view after short left swipe end');
-        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
-        assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('should not overlap during multidirectional swipe', function(assert) {
-        this.pointer.swipeStart().swipe(-0.1).swipe(0.01);
-
-        const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget');
-
-        assert.equal($views.length, 3, 'correct views count');
-        assert.ok($views.eq(1).position().left < 0, 'first additional view located at right');
-        assert.ok($views.eq(2).position().left > 0, 'second additional view located at left');
-    });
-
-    QUnit.test('views after right swipe end in rtl mode', function(assert) {
-        this.reinit({
-            currentDate: new Date(2013, 9, 15),
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        const calendar = this.calendar;
-
-        const newDate = new Date(calendar.option('currentDate'));
-        newDate.setMonth(newDate.getMonth() + 1);
-
-        this.pointer.swipeStart().swipe(0.6).swipeEnd(1, 0.6);
-
-        assert.equal(this.$element.find('table').eq(0).position().left, 0, 'View position is correct');
-        assert.equal(calendar.option('currentDate').getMonth(), newDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('views after left swipe end in rtl mode', function(assert) {
-        assert.expect(2);
-
-        this.reinit({
-            currentDate: new Date(2013, 9, 15),
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        const calendar = this.calendar;
-
-        const newDate = new Date(calendar.option('currentDate'));
-        newDate.setMonth(newDate.getMonth() - 1);
-
-        this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1, -0.6);
-
-        assert.equal(getCurrentViewInstance(calendar).$element().position().left, 0, 'View position is correct');
-        assert.equal(calendar.option('currentDate').getMonth(), newDate.getMonth(), 'Current month is correct');
-    });
-
-    QUnit.test('calendar must not leak views when navigating by swipe gesture', function(assert) {
-        this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
-        this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
-        this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
-        this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
-        assert.equal(this.$element.find('table').length, 3, 'correct views count');
-    });
-
-    QUnit.test('correct end position for animation after long left swipe end', function(assert) {
-        assert.expect(1);
-
-        const origAnimate = fx.animate;
-
-        try {
-            const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget');
-            const viewWidth = $views.eq(0).width();
-
-            fx.animate = ($element, config) => {
-                assert.equal(config.to.left, -viewWidth, 'view will be animated to bound');
-                return $.Deferred().resolve().promise();
+            this.reinit = (options) => {
+                this.$element.remove();
+                this.$element = $('<div>').appendTo('#qunit-fixture');
+                this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
+                this.pointer = pointerMock(this.$element).start();
             };
-
-            this.pointer.swipeStart().swipe(-2.3).swipeEnd(-2, -2.3);
-
-        } finally {
-            fx.animate = origAnimate;
+        },
+        afterEach: function() {
+            this.$element.remove();
+            fx.off = false;
         }
-    });
+    }, () => {
+        QUnit.test('views count on continuous swipe', function(assert) {
+            assert.expect(1);
 
-    QUnit.test('correct end position for animation after long right swipe end', function(assert) {
-        assert.expect(1);
+            this.pointer.swipeStart().swipe(0.01);
+            assert.equal(this.$element.find('table').length, 2 + viewsCount, 'Month views count is correct');
+        });
 
-        const origAnimate = fx.animate;
 
-        try {
+        ['left', 'right'].forEach((direction) => {
+            const directionMultiplayer = direction === 'right' ? 1 : -1;
+
+            QUnit.test(`views offset on continuous ${direction} swipe`, function(assert) {
+                const width = this.$element.width() / viewsCount;
+                const offset = 0.5 * width;
+
+                this.pointer.swipeStart().swipe(0.5 * directionMultiplayer);
+
+                const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget');
+                const $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
+
+                assert.roughEqual(translator.locate($wrapper).left, offset * directionMultiplayer, 1, 'Views wrapper position is correct');
+                assert.roughEqual(translator.locate($tables.eq(0)).left, 0, 1, 'Main view position is correct');
+                assert.roughEqual(translator.locate($tables.eq(1)).left, -width, 1, 'Before view position is correct');
+                assert.roughEqual(translator.locate($tables.eq(2)).left, width * viewsCount, 1, 'After view position is correct');
+
+                if(viewsCount === 2) {
+                    assert.equal(translator.locate($tables.eq(3)).left, width, 'After view position is correct');
+                }
+            });
+
+            QUnit.test(`views after canceled ${direction} swipe`, function(assert) {
+                const currentDate = new Date(this.calendar.option('currentDate'));
+
+                this.pointer.swipeStart().swipeEnd(0, 0.4 * directionMultiplayer);
+
+                assert.equal(this.$element.find('table').length, 2 + viewsCount, 'Calendar contains one view after swipe end');
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
+                assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
+                assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
+            });
+
+            QUnit.test(`views after ${direction} long swipe end`, function(assert) {
+                const currentDate = new Date(this.calendar.option('currentDate'));
+                currentDate.setMonth(currentDate.getMonth() - 1);
+
+                this.pointer.swipeStart().swipe(0.6 * directionMultiplayer).swipeEnd(1, 0.6 * directionMultiplayer);
+
+                assert.equal(this.$element.find('table').length, 2 + viewsCount, 'Calendar contains one view after long right swipe end');
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
+                assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
+                assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
+            });
+
+            QUnit.test(`views after ${direction} short swipe end`, function(assert) {
+                const currentDate = new Date(this.calendar.option('currentDate'));
+
+
+                currentDate.setMonth(currentDate.getMonth() - directionMultiplayer);
+                this.pointer.swipeStart().swipe(0.4 * directionMultiplayer).swipeEnd(1 * directionMultiplayer, 0.4 * directionMultiplayer);
+
+                assert.equal(this.$element.find('table').length, 2 + viewsCount, 'Calendar contains one view after short right swipe end');
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).position().left, 0, 'Views wrapper position is correct');
+                assert.equal(getCurrentViewInstance(this.calendar).$element().position().left, 0, 'View position is correct');
+                assert.equal(this.calendar.option('currentDate').getMonth(), currentDate.getMonth(), 'Current month is correct');
+            });
+
+            QUnit.test(`views after ${direction} swipe end in rtl mode`, function(assert) {
+                this.reinit({
+                    currentDate: new Date(2013, 9, 15),
+                    firstDayOfWeek: 1,
+                    rtlEnabled: true,
+                    viewsCount
+                });
+
+                const calendar = this.calendar;
+
+                const newDate = new Date(calendar.option('currentDate'));
+                newDate.setMonth(newDate.getMonth() + directionMultiplayer);
+
+                this.pointer.swipeStart().swipe(0.6 * directionMultiplayer).swipeEnd(1 * directionMultiplayer, 0.6 * directionMultiplayer);
+
+                assert.equal(this.$element.find('table').eq(0).position().left, 0, 'View position is correct');
+                assert.equal(calendar.option('currentDate').getMonth(), newDate.getMonth(), 'Current month is correct');
+            });
+
+            QUnit.test(`correct end position for animation after long ${direction} swipe end`, function(assert) {
+                assert.expect(1);
+
+                const origAnimate = fx.animate;
+
+                try {
+                    const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget');
+                    const viewWidth = $views.eq(0).width();
+
+                    fx.animate = (_, config) => {
+                        assert.roughEqual(config.to.left, -viewWidth * directionMultiplayer, 2, 'view will be animated to bound');
+                        return $.Deferred().resolve().promise();
+                    };
+
+                    this.pointer.swipeStart().swipe(-2.3 * directionMultiplayer).swipeEnd(-2 * directionMultiplayer, -2.3 * directionMultiplayer);
+
+                } finally {
+                    fx.animate = origAnimate;
+                }
+            });
+        });
+
+        QUnit.test('should not overlap during multidirectional swipe', function(assert) {
+            this.pointer.swipeStart().swipe(-0.1).swipe(0.01);
+
             const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget');
-            const viewWidth = $views.eq(0).width();
 
-            fx.animate = ($element, config) => {
-                assert.equal(config.to.left, viewWidth, 'view will be animated to bound');
-                return $.Deferred().resolve().promise();
+            assert.equal($views.length, 2 + viewsCount, 'correct views count');
+            assert.ok($views.eq(1).position().left < 0, 'first additional view located at right');
+            assert.ok($views.eq(2).position().left > 0, 'second additional view located at left');
+        });
+
+        QUnit.test('calendar must not leak views when navigating by swipe gesture', function(assert) {
+            this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
+            this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
+            this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
+            this.pointer.swipeStart().swipe(-0.6).swipeEnd(-1);
+            assert.equal(this.$element.find('table').length, 2 + viewsCount, 'correct views count');
+        });
+
+        QUnit.test('correct views wrapper position after swiping from boundary view', function(assert) {
+            this.reinit({
+                currentDate: new Date(2015, 8, 15),
+                min: new Date(2015, 8, 8),
+                max: new Date(2015, 8, 26)
+            });
+
+            const $viewsWrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS));
+
+            this.pointer.swipeStart().swipe(-0.8).swipeEnd(0, -0.8);
+            assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
+
+            this.pointer.swipeStart().swipe(0.8).swipeEnd(0, 0.8);
+            assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
+        });
+
+        QUnit.test('correct views wrapper position after canceled swipe', function(assert) {
+            this.reinit({
+                currentDate: new Date(2015, 8, 15),
+                min: new Date(2015, 8, 8),
+                max: new Date(2015, 8, 26)
+            });
+
+            const $viewsWrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS));
+
+            this.pointer.swipeStart().swipe(-0.2).swipeEnd(0, -0.2);
+            assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
+
+            this.pointer.swipeStart().swipe(0.2).swipeEnd(0, 0.2);
+            assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
+        });
+
+        // TODO: get rid of mocking private method
+        QUnit.test('performing a micro-swipe should not make the calendar jump by navigating to the same month', function(assert) {
+            const swipeEnd = $.Event(swipeEvents.end, { offset: 0, targetOffset: 0 });
+            this.calendar._navigate = () => {
+                assert.ok(false);
             };
-
-            this.pointer.swipeStart().swipe(2.3).swipeEnd(2, 2.3);
-
-        } finally {
-            fx.animate = origAnimate;
-        }
-    });
-
-    QUnit.test('correct views wrapper position after swiping from boundary view', function(assert) {
-        this.reinit({
-            currentDate: new Date(2015, 8, 15),
-            min: new Date(2015, 8, 8),
-            max: new Date(2015, 8, 26)
+            assert.expect(0);
+            $(this.$element).trigger(swipeEvents.start);
+            $(this.$element).trigger(swipeEnd);
         });
 
-        const $viewsWrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS));
+        QUnit.test('maxRightOffset and maxLeftOffset are correct when rltEnabled=true (T322033)', function(assert) {
+            this.reinit({
+                rtlEnabled: true,
+                min: new Date(2015, 10, 10),
+                max: new Date(2015, 11, 11),
+                value: new Date(2015, 10, 15)
+            });
 
-        this.pointer.swipeStart().swipe(-0.8).swipeEnd(0, -0.8);
-        assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
+            $(this.$element).on(swipeEvents.start, (e) => {
+                assert.equal(e.maxRightOffset, 1);
+                assert.equal(e.maxLeftOffset, 0);
+            });
 
-        this.pointer.swipeStart().swipe(0.8).swipeEnd(0, 0.8);
-        assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
-    });
-
-    QUnit.test('correct views wrapper position after canceled swipe', function(assert) {
-        this.reinit({
-            currentDate: new Date(2015, 8, 15),
-            min: new Date(2015, 8, 8),
-            max: new Date(2015, 8, 26)
+            this.pointer
+                .swipeStart()
+                .swipe(-0.8)
+                .swipeEnd(0, -0.8);
         });
-
-        const $viewsWrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS));
-
-        this.pointer.swipeStart().swipe(-0.2).swipeEnd(0, -0.2);
-        assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
-
-        this.pointer.swipeStart().swipe(0.2).swipeEnd(0, 0.2);
-        assert.equal($viewsWrapper.position().left, 0, 'views wrapper position is correct');
-    });
-
-    // TODO: get rid of mocking private method
-    QUnit.test('performing a micro-swipe should not make the calendar jump by navigating to the same month', function(assert) {
-        const swipeEnd = $.Event(swipeEvents.end, { offset: 0, targetOffset: 0 });
-        this.calendar._navigate = () => {
-            assert.ok(false);
-        };
-        assert.expect(0);
-        $(this.$element).trigger(swipeEvents.start);
-        $(this.$element).trigger(swipeEnd);
-    });
-
-    QUnit.test('maxRightOffset and maxLeftOffset are correct when rltEnabled=true (T322033)', function(assert) {
-        this.reinit({
-            rtlEnabled: true,
-            min: new Date(2015, 10, 10),
-            max: new Date(2015, 11, 11),
-            value: new Date(2015, 10, 15)
-        });
-
-        $(this.$element).on(swipeEvents.start, (e) => {
-            assert.equal(e.maxRightOffset, 1);
-            assert.equal(e.maxLeftOffset, 0);
-        });
-
-        this.pointer
-            .swipeStart()
-            .swipe(-0.8)
-            .swipeEnd(0, -0.8);
     });
 });
 
@@ -4050,6 +4179,19 @@ QUnit.module('Aria accessibility', {
 
         $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
+    });
+
+    QUnit.test('aria-selected on selected date cells on both views when viewsCount option equals 2', function(assert) {
+        const calendar = this.$element.dxCalendar({
+            value: '01/31/2015',
+            viewsCount: 2
+        }).dxCalendar('instance');
+
+        let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the main view cell');
+
+        $cell = $(getAdditionalViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the additional view cell');
     });
 
     ['multi', 'range'].forEach((selectionMode) => {

@@ -9,7 +9,7 @@
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
-@use "../../base/list";
+@use "../../base/list" as *;
 @use "../../base/list/mixins" as *;
 
 // adduse
@@ -19,6 +19,7 @@ $material-list-item-border-width: 1px;
 $material-list-border-width: 1px;
 $material-list-border: $material-list-border-width solid $list-border-color;
 $material-list-item-border: $material-list-item-border-width solid $list-border-color;
+$material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding - 2px;
 
 .dx-list-item-chevron {
   transform: rotate(0);
@@ -47,7 +48,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 }
 
 .dx-list-search {
-  padding-top: $material-list-searchbox-vertical-padding - 2px;
+  padding-top: $material-list-searchbox-padding-top;
 
   &.dx-searchbox {
     .dx-placeholder::before {
@@ -112,7 +113,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
     border: none;
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{$material-list-item-height});
+      height: calc(100% - #{$material-list-item-height + $material-list-searchbox-padding-top + $list-searchbox-margin-bottom});
     }
 
     .dx-empty-message {

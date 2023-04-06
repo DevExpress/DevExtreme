@@ -83,13 +83,13 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $headerCell = $(treeList.$element().find('.dx-header-row td').first());
 
         $($headerCell).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $dataRows = $(treeList.$element().find('.dx-data-row'));
@@ -109,7 +109,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $rowElement = $(treeList.getRowElement(0));
@@ -249,7 +249,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.option('scrolling.mode'), 'virtual', 'scrolling mode is virtual');
@@ -276,21 +276,21 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
         const navigationController = treeList.getController('keyboardNavigation');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         treeList.focus($(treeList.getCellElement(1, 0)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         navigationController._keyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(treeList.isRowExpanded(2), 'second row is expanded');
 
         // act
         navigationController._keyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(treeList.isRowExpanded(2), 'second row is collapsed');
@@ -315,16 +315,16 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             expandedRowKeys: [1]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $target = $(treeList.getCellElement(1, 0)).find('.dx-select-checkbox');
 
         treeList.focus($target.get(0));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $target.trigger(createEvent('keydown', { target: $target.get(0), key: ' ' }));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $checkBoxes = treeList.$element().find('.dx-select-checkbox');
@@ -348,11 +348,11 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('.dx-treelist-collapsed').trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $checkBoxes = treeList.$element().find('.dx-select-checkbox');
@@ -377,7 +377,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.$element().find('.dx-data-row').length, 2, 'two filtered rows are rendered');
@@ -399,7 +399,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $filterMenuElement = $(treeList.$element().find('.dx-treelist-filter-row').find('.dx-menu').first().find('.dx-menu-item'));
@@ -425,7 +425,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.$element().find('.dx-data-row').length, 2, 'two filtered rows are rendered');
@@ -449,15 +449,15 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(treeList.$element().find('.dx-data-row').length, 3, 'filtered rows are rendered');
         treeList.filter('gender', '=', 'male');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(treeList.$element().find('.dx-data-row').length, 3, 'filtered rows are rendered');
 
         // act
         treeList.clearFilter();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.$element().find('.dx-data-row').length, 6, 'six filtered rows are rendered');
@@ -480,12 +480,12 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(treeList.$element().find('.dx-data-row').length, 3, 'filtered rows are rendered');
 
         // act
         treeList.clearFilter();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.$element().find('.dx-data-row').length, 2, 'two rows are rendered');
@@ -506,7 +506,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // assert
@@ -530,7 +530,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.option('selection.showCheckBoxesMode'), 'always', 'showCheckBoxesMode is always');
@@ -550,10 +550,10 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const $selectCheckbox = $('#treeList').find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
         $($selectCheckbox).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($('#treeList').find('.dx-texteditor').length, 'Editing textEditor wasn\'t rendered');
@@ -594,7 +594,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick(500);
 
         treeList.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         visibleRows = treeList.getVisibleRows();
 
@@ -623,7 +623,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $firstDataCell = $(treeList.getCellElement(0, 0));
@@ -644,7 +644,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('#treeList').find('.dx-treelist-filter-row').length, 1, 'filter row is rendered');
@@ -664,7 +664,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             expandedRowKeys: [1]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $treeList = $(treeList.$element());
@@ -709,7 +709,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             }
         });
 
-        clock.tick();
+        clock.tick(10);
 
         // assert
         columnsWrapper.getCommandButtons().each((_, button) => {
@@ -741,7 +741,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cellElement = $(treeList.getCellElement(0, 0));
         $cellElement.trigger('contextmenu');
@@ -800,7 +800,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             columns: [{ dataField: 'field' }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(treeList.$element().find('.dx-treelist-filter-panel').is(':visible'), 'filter panel is visible');
@@ -827,7 +827,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $treeListElement = $(treeList.$element());
@@ -849,7 +849,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             columns: ['test']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const $treeList = $(treeList.$element());
         const $headerPanel = $treeList.find('.dx-treelist-header-panel');
 
@@ -958,7 +958,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
             dataSource: generateData(20),
             selectedRowKeys: [1]
         });
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(treeList.getVisibleRows().length, 40, 'row count');
@@ -997,7 +997,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.$element().find('.dx-treelist-headers .dx-header-row').length, 1, 'header row is rendered');
@@ -1022,7 +1022,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.getVisibleColumns().length, 6, 'visible column count');
@@ -1259,7 +1259,7 @@ QUnit.module('Expand/Collapse rows', () => {
         try {
             scrollable.scrollTo({ y: 300 }); // scroll to the last page
             isNativeScrolling && $(scrollable.container()).trigger('scroll');
-            clock.tick();
+            clock.tick(10);
 
             const topVisibleRowData = treeList.getTopVisibleRowData();
 
@@ -1416,7 +1416,7 @@ QUnit.module('Expand/Collapse rows', () => {
                 repaintChangesOnly: true
             });
 
-            clock.tick();
+            clock.tick(10);
             let $rowElement = $(treeList.getRowElement(treeList.getRowIndexByKey(1)));
 
             // assert
@@ -1424,7 +1424,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
             // act
             treeList.expandRow(1);
-            clock.tick();
+            clock.tick(10);
             $rowElement = $(treeList.getRowElement(treeList.getRowIndexByKey(1)));
 
             // assert
@@ -1432,7 +1432,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
             // act
             treeList.collapseRow(1);
-            clock.tick();
+            clock.tick(10);
             $rowElement = $(treeList.getRowElement(treeList.getRowIndexByKey(1)));
 
             // assert
@@ -1453,7 +1453,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             focusedRowIndex: 0
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(treeList.getRowElement(0)).hasClass('dx-row-focused'), 'first row is focused');
@@ -1475,7 +1475,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.pageIndex(), 1, 'page is changed');
@@ -1500,7 +1500,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.pageIndex(), 1, 'page is changed');
@@ -1528,7 +1528,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             focusedRowKey: 5
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange
         const childrenNodes = treeList.getNodeByKey(1).children;
@@ -1548,12 +1548,12 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             focusedRowKey: 4
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         treeList.collapseRow(3);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(treeList.isRowExpanded(3), false, 'parent node collapsed');
@@ -1570,7 +1570,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             focusedRowKey: 3
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const rowIndex = treeList.getRowIndexByKey(3);
@@ -1578,7 +1578,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
 
         // act
         $(treeList.getCellElement(4, 1)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(rowsViewWrapper.getDataRow(rowIndex).isFocusedRow(), 'Row 3 is not a focused row');
@@ -1605,7 +1605,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         const d = treeList.navigateToRow(12);
         d.done(callback);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
@@ -1628,12 +1628,12 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         const callback = sinon.spy();
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         const d = treeList.navigateToRow(2);
         d.done(callback);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
@@ -1670,7 +1670,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         d.done(callback);
 
         $(treeList.getScrollable().container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
@@ -1704,13 +1704,13 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
 
         const treeList = createTreeList(options);
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         options.dataSource.store().on('loading', loadingSpy);
 
         // act
         treeList.option(options);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(loadingSpy.callCount, 1, 'loading called once');
@@ -1739,14 +1739,14 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         try {
             // act
             createTreeList(options);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // arrange
             options.selection.mode = 'multiple';
 
             // act
             createTreeList(options);
-            this.clock.tick();
+            this.clock.tick(10);
         } catch(e) {
             // assert
             assert.ok(false, e.message);
@@ -1868,7 +1868,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         // act
         treeList.focus(treeList.getCellElement(0, 0));
         treeList.addRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $firstCellInAddedRow = $(treeList.getCellElement(1, 0));
@@ -2151,7 +2151,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
         // act
         treeList.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         const $row = $(treeList.getRowElement(2));
 
         // assert
@@ -2175,14 +2175,14 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             columns: ['Name'],
             expandedRowKeys: [1]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         treeList.getDataSource().store().push([{
             type: 'insert',
             data: { ID: 2, Head_ID: 1, Name: 'Alex' }
         }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange
         const $row = $(treeList.getRowElement(1));
@@ -2208,11 +2208,11 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             expandedRowKeys: [],
             onNodesInitialized: onNodesInitializedSpy
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         treeList.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onNodesInitializedSpy.callCount, 1, 'data did not reshape');
@@ -2236,11 +2236,11 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             keyExpr: 'id',
             parentIdExpr: 'parentId',
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         store.push([{ type: 'remove', key: 100 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(true, 'exception does not occur');
@@ -2335,7 +2335,7 @@ QUnit.module('Row dragging', defaultModuleConfig, () => {
                 }
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             pointerMock(treeList.getCellElement(0, 0)).start().down().move(100, 100);
@@ -2393,7 +2393,7 @@ QUnit.module('Selection', defaultModuleConfig, () => {
                 }
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $selectCheckBoxes = $('.dx-select-checkbox');

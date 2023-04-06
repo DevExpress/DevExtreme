@@ -222,6 +222,8 @@ jobs:
 
         npm run update-ts-reexports
 
+        git add . -N
+
         if git diff --exit-code ; then
           echo "Generated component reexports are up-to-date"
         else

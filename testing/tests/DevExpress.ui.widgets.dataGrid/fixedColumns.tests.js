@@ -1443,7 +1443,7 @@ QUnit.module('Fixed columns', {
 
             that.editorFactoryController.focus($fixTable.find('tr').eq(1).find('td').first());
 
-            that.clock.tick();
+            that.clock.tick(10);
 
             // assert
             assert.ok(scrollableInstance, 'has scrollable');
@@ -1461,7 +1461,7 @@ QUnit.module('Fixed columns', {
 
             // act
             nativePointerMock(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed')).start().wheel(-30);
-            that.clock.tick();
+            that.clock.tick(10);
 
             // assert
             assert.equal(countCallScrollOffsetChanged, 1, 'count call scrollChanged');
@@ -1966,7 +1966,7 @@ QUnit.module('Fixed columns', {
         const scrollable = that.rowsView.getScrollable();
         scrollable.scrollTo(500);
         $(scrollable.container()).trigger('scroll');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.rowsView.render(that.gridContainer);
@@ -2075,7 +2075,7 @@ QUnit.module('Fixed columns', {
         const scrollable = that.rowsView.getScrollable();
         scrollable.scrollTo(600);
         $(scrollable.container()).trigger('scroll');
-        that.clock.tick();
+        that.clock.tick(10);
 
         const positionTop = $fixedTable.position().top;
 
