@@ -11,16 +11,13 @@ $(() => {
   }];
 
   const map = $('#map').dxMap({
-    center: 'Brooklyn Bridge,New York,NY',
+    center: '40.7061, -73.9969',
     zoom: 14,
     height: 400,
     width: '100%',
     provider: 'bing',
     apiKey: {
-      // Specify your API keys for each map provider:
-      // bing: "YOUR_BING_MAPS_API_KEY",
-      // google: "YOUR_GOOGLE_MAPS_API_KEY",
-      // googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
+      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
     },
     type: mapTypes[0].key,
   }).dxMap('instance');

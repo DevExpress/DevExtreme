@@ -1,13 +1,13 @@
 <template>
   <div>
     <DxMap
-      :api-key="keys"
       :zoom="14"
       :height="400"
       v-model:type="mapTypeValue"
-      center="Brooklyn Bridge,New York,NY"
+      center="40.7061, -73.9969"
       width="100%"
       provider="bing"
+      :api-key="apiKey"
     />
     <div class="options">
       <div class="caption">Options</div>
@@ -36,11 +36,8 @@ export default {
   },
   data() {
     return {
-      keys: {
-        // Specify your API keys for each map provider:
-        // bing: "YOUR_BING_MAPS_API_KEY",
-        // google: "YOUR_GOOGLE_MAPS_API_KEY",
-        // googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
+      apiKey: {
+        bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
       },
       mapTypes,
       mapTypeValue: mapTypes[0].key,

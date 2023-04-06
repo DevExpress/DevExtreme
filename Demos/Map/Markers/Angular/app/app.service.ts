@@ -12,6 +12,14 @@ export class Marker {
   tooltip: Tooltip;
 }
 
+export type APIKey = {
+  bing?: string;
+
+  google?: string;
+
+  googleStatic?: string;
+};
+
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 
 const markers: Marker[] = [{

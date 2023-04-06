@@ -14,12 +14,9 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.type = mapTypes[0].key;
   $scope.mapOptions = {
     apiKey: {
-      // Specify your API keys for each map provider:
-      // bing: "YOUR_BING_MAPS_API_KEY",
-      // google: "YOUR_GOOGLE_MAPS_API_KEY",
-      // googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
+      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
     },
-    center: 'Brooklyn Bridge,New York,NY',
+    center: '40.7061, -73.9969',
     zoom: 14,
     height: 400,
     width: '100%',

@@ -25,6 +25,9 @@ $(() => {
 
   const mapWidget = $('#map').dxMap({
     provider: 'bing',
+    apiKey: {
+      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+    },
     zoom: 11,
     height: 440,
     width: '100%',

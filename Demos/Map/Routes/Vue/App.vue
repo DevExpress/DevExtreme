@@ -8,6 +8,7 @@
       v-model:routes="routesData"
       width="100%"
       provider="bing"
+      :api-key="apiKey"
     />
     <div class="options">
       <div class="caption">Options</div>
@@ -47,6 +48,9 @@ export default {
       routesData,
       routeModes: ['driving', 'walking'],
       routeColors: ['blue', 'green', 'red'],
+      apiKey: {
+        bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+      },
     };
   },
   methods: {

@@ -8,6 +8,7 @@
       v-model:marker-icon-src="markersIcon"
       width="100%"
       provider="bing"
+      :api-key="apiKey"
     />
     <div class="options">
       <div class="caption">Options</div>
@@ -46,6 +47,9 @@ export default {
     return {
       markersData,
       markersIcon: markerUrl,
+      apiKey: {
+        bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+      },
     };
   },
   methods: {

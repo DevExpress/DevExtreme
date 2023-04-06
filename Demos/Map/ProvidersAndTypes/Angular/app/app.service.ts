@@ -6,6 +6,14 @@ export class MapSetting {
   name: string;
 }
 
+export type APIKey = {
+  bing?: string;
+
+  google?: string;
+
+  googleStatic?: string;
+};
+
 const mapTypes: MapSetting[] = [{
   key: 'roadmap',
   name: 'Road Map',

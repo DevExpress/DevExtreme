@@ -4,6 +4,14 @@ export class Marker {
   location: any;
 }
 
+export type APIKey = {
+  bing?: string;
+
+  google?: string;
+
+  googleStatic?: string;
+};
+
 export class Route {
   weight: number;
 

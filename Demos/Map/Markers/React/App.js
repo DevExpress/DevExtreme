@@ -8,65 +8,56 @@ import { markersData } from './data.js';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.originMarkersData = markersData;
-    this.state = {
-      markerUrl,
-      markersData,
-    };
-    this.useCustomMarkers = this.useCustomMarkers.bind(this);
-    this.showTooltips = this.showTooltips.bind(this);
-  }
+const apiKey = {
+  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+};
 
-  useCustomMarkers(e) {
-    this.setState({
-      markerUrl: e.value ? markerUrl : null,
-      markersData: this.originMarkersData,
-    });
-  }
+export default function App() {
+  const [currentMarkersData, setCurrentMarkersData] = React.useState(markersData);
+  const [currentMarkerUrl, setCurrentMarkerUrl] = React.useState(markerUrl);
 
-  showTooltips() {
-    this.setState({
-      markersData: this.state.markersData.map((item) => {
-        const newItem = JSON.parse(JSON.stringify(item));
-        newItem.tooltip.isShown = true;
-        return newItem;
-      }),
-    });
-  }
+  const onCustomMarkersChange = React.useCallback((value) => {
+    setCurrentMarkerUrl(value ? currentMarkerUrl : null);
+    setCurrentMarkersData(markersData);
+  }, [setCurrentMarkerUrl, setCurrentMarkersData]);
 
-  render() {
-    return (
-      <div>
-        <Map
-          defaultZoom={11}
-          height={440}
-          width="100%"
-          controls={true}
-          markerIconSrc={this.state.markerUrl}
-          markers={this.state.markersData}
-          provider="bing">
-        </Map>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox
-              defaultValue={true}
-              text="Use custom marker icons"
-              onValueChanged={this.useCustomMarkers}
-            />
-          </div>
-          <div className="option">
-            <Button
-              text="Show all tooltips"
-              onClick={this.showTooltips}
-            />
-          </div>
+  const showTooltips = React.useCallback(() => {
+    setCurrentMarkersData(currentMarkersData.map((item) => {
+      const newItem = JSON.parse(JSON.stringify(item));
+      newItem.tooltip.isShown = true;
+      return newItem;
+    }));
+  }, [setCurrentMarkersData]);
+
+  return (
+    <React.Fragment>
+      <Map
+        defaultZoom={11}
+        height={440}
+        width="100%"
+        controls={true}
+        markerIconSrc={currentMarkerUrl}
+        markers={currentMarkersData}
+        provider="bing"
+        apiKey={apiKey}
+      >
+      </Map>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            defaultValue={true}
+            text="Use custom marker icons"
+            onValueChange={onCustomMarkersChange}
+          />
+        </div>
+        <div className="option">
+          <Button
+            text="Show all tooltips"
+            onClick={showTooltips}
+          />
         </div>
       </div>
-    );
-  }
+    </React.Fragment>
+  );
 }
-export default App;
