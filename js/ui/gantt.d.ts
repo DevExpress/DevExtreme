@@ -1406,7 +1406,7 @@ export interface dxGanttHeaderFilter {
     /**
      * @docid
      */
-    search?: dxGanttHeaderFilterSearch;
+    search?: GanttHeaderFilterSearch;
     /**
      * @docid
      * @default 500
@@ -1434,7 +1434,7 @@ export interface dxGanttHeaderFilter {
  * @type object
  * @namespace DevExpress.ui
  */
-export interface dxGanttHeaderFilterSearch {
+export interface GanttHeaderFilterSearch {
       /**
      * @docid
      * @default {}

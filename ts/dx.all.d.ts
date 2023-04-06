@@ -15366,7 +15366,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttHeaderFilter.search]
      */
-    search?: dxGanttHeaderFilterSearch;
+    search?: GanttHeaderFilterSearch;
     /**
      * [descr:dxGanttHeaderFilter.searchTimeout]
      * @deprecated [depNote:dxGanttHeaderFilter.searchTimeout]
@@ -15384,28 +15384,6 @@ declare module DevExpress.ui {
      * [descr:dxGanttHeaderFilter.width]
      */
     width?: number;
-  }
-  /**
-   * [descr:dxGanttHeaderFilterSearch]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxGanttHeaderFilterSearch {
-    /**
-     * [descr:dxGanttHeaderFilterSearch.editorOptions]
-     */
-    editorOptions?: any;
-    /**
-     * [descr:dxGanttHeaderFilterSearch.enabled]
-     */
-    enabled?: boolean;
-    /**
-     * [descr:dxGanttHeaderFilterSearch.mode]
-     */
-    mode?: DevExpress.common.SearchMode;
-    /**
-     * [descr:dxGanttHeaderFilterSearch.timeout]
-     */
-    timeout?: number;
   }
   /**
    * [descr:dxGanttHeaderFilterTexts]
@@ -24825,6 +24803,28 @@ declare module DevExpress.ui {
     | ((value: Date) => string)
     | ((value: number) => string)
     | ExternalFormat;
+  /**
+   * [descr:GanttHeaderFilterSearch]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface GanttHeaderFilterSearch {
+    /**
+     * [descr:GanttHeaderFilterSearch.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:GanttHeaderFilterSearch.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GanttHeaderFilterSearch.mode]
+     */
+    mode?: DevExpress.common.SearchMode;
+    /**
+     * [descr:GanttHeaderFilterSearch.timeout]
+     */
+    timeout?: number;
+  }
   /**
    * @deprecated 
    */
