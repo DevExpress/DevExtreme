@@ -59,12 +59,13 @@ const generatedTs = [
 const bundlesSrc = ['js/bundles/**/*.js'];
 
 const internalTsConfig = path.resolve(__dirname, '../../js/__internal/tsconfig.json');
+const internalAliasTsConfig = path.resolve(__dirname, '../../js/__internal/tsconfig-alias.json');
 const tsAliasBaseDir = path.resolve(__dirname, '../../js');
 const aliasTranspileConfig = {
-    configFile: internalTsConfig,
+    configFile: internalAliasTsConfig,
     outDir: tsAliasBaseDir,
-}
-const createAliasTranspileAsync = async (config) => {
+};
+const createAliasTranspileAsync = async(config) => {
     // eslint-disable-next-line spellcheck/spell-checker
     const transpileFunc = await tscAlias.prepareSingleFileReplaceTscAliasPaths(config);
 
@@ -74,8 +75,8 @@ const createAliasTranspileAsync = async (config) => {
             filePath: path,
         });
         return Buffer.from(newFileContentStr);
-    }
-}
+    };
+};
 
 const createModuleConfig = (name, dir, filePath) => {
     const isIndex = name === 'index.js';
@@ -114,9 +115,9 @@ function compileTS(isEsm) {
 
 function transpileTSAlias(transpileFunc) {
     return through2.obj((file, _, callback) => {
-            file.contents = transpileFunc(file.contents, file.path);
-            return callback(null, file);
-        });
+        file.contents = transpileFunc(file.contents, file.path);
+        return callback(null, file);
+    });
 }
 
 function transpile(src, dist, pipes = [], isEsm = false) {
@@ -133,7 +134,7 @@ function transpile(src, dist, pipes = [], isEsm = false) {
 
     return gulp.parallel([
         task,
-        async () => {
+        async() => {
             const transpileTSAliasFunc = await createAliasTranspileAsync(aliasTranspileConfig);
             return gulp.src([
                 'js/**/*.ts',
@@ -142,7 +143,7 @@ function transpile(src, dist, pipes = [], isEsm = false) {
             ]).pipe(compileTS(isEsm))
                 .js
                 .pipe(transpileTSAlias(transpileTSAliasFunc))
-                .pipe(gulp.dest(dist))
+                .pipe(gulp.dest(dist));
         }
     ]);
 }
@@ -267,7 +268,7 @@ gulp.task('renovated-components-watch', () => {
 });
 
 gulp.task('compile-ts-watch', () => {
-    gulp.watch(['js/**/*.ts', '!js/**/*.d.ts'], async () => {
+    gulp.watch(['js/**/*.ts', '!js/**/*.d.ts'], async() => {
         const transpileTSAliasFunc = await createAliasTranspileAsync(aliasTranspileConfig);
         return gulp
             .src([

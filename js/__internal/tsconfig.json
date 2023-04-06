@@ -37,12 +37,4 @@
       "@js/*": ["./*"],
     },
   },
-  "tsc-alias": {
-    "verbose": false,
-    "resolveFullPaths": false,
-    "fileExtensions": {
-      "inputGlob": "js,ts",
-      "outputCheck": ["js", "ts"]
-    }
-  }
 }
