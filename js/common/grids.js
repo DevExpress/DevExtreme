@@ -1,0 +1,4 @@
+/**
+ * @name GridBaseOptions.focusStateEnabled
+ * @hidden
+ */
