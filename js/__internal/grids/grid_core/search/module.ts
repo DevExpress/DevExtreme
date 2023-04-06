@@ -100,7 +100,6 @@ export const searchModule = {
             const filter = that.callBase();
             const searchFilter = calculateSearchFilter(that, that.option('searchPanel.text'));
 
-            // @ts-expect-error
             return gridCoreUtils.combineFilters([filter, searchFilter]);
           },
 

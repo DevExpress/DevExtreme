@@ -1,4 +1,3 @@
-// @ts-expect-error
 import { focusModule } from '@js/ui/grid_core/ui.grid_core.focus';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';

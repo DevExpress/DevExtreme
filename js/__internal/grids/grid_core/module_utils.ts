@@ -254,7 +254,7 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation) {
+  combineFilters(filters, operation?) {
     let resultFilter: any[] = [];
 
     operation = operation || 'and';

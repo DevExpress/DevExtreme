@@ -1,5 +1,4 @@
 import errors from '@js/ui/widget/ui.errors';
-// @ts-expect-error
 import { dataControllerModule } from '@js/ui/grid_core/ui.grid_core.data_controller';
 import gridCore from './module_core';
 import dataSourceAdapterProvider from './module_data_source_adapter';
