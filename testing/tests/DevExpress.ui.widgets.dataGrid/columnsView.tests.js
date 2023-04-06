@@ -527,7 +527,7 @@ QUnit.module('API methods', {
 
     QUnit.test('waitAsyncTemplates with async templates', function(assert) {
         // arrange
-        let deferred = $.Deferred();
+        const deferred = $.Deferred();
 
         this.options.renderAsync = false;
         this.options.templatesRenderAsynchronously = true;
@@ -546,7 +546,7 @@ QUnit.module('API methods', {
 
     QUnit.test('waitAsyncTemplates with dynamic addition of async templates', function(assert) {
         // arrange
-        let deferreds = [$.Deferred(), $.Deferred()];
+        const deferreds = [$.Deferred(), $.Deferred()];
 
         this.options.renderAsync = false;
         this.options.templatesRenderAsynchronously = true;
