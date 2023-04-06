@@ -13,7 +13,8 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSources": false,
-    "isolatedModules": true,
+    // NOTE: False to prevent false positive builds (with type errors)
+    "isolatedModules": false,
     // -- ts config
     "alwaysStrict": true,
     // NOTE: gulp transpile task overrides it
