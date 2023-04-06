@@ -42,7 +42,7 @@ const moduleConfig = {
         this.dialogResult = { };
 
         const showDialog = () => new Deferred().resolve(this.dialogResult).promise();
-        sinon.stub(this.fileManager._editing, '_showDialog', showDialog);
+        sinon.stub(this.fileManager._editing, '_showDialog').callsFake(showDialog);
     },
 
     afterEach: function() {

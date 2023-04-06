@@ -180,7 +180,7 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     height: 800
                 }, this.clock);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const cellHeight = scheduler.workSpace.getCellHeight();
                 const cellWidth = scheduler.workSpace.getCellWidth();
@@ -202,7 +202,7 @@ module('Integration: Appointments in Month view', {
                     views: ['day', 'week', 'month'],
                     height: 800
                 }, this.clock);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 scheduler.instance.option('currentView', 'month');
 

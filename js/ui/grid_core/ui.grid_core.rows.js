@@ -1,4 +1,3 @@
-// @ts-check
 
 import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
@@ -38,7 +37,11 @@ const LOADPANEL_HIDE_TIMEOUT = 200;
 function getMaxHorizontalScrollOffset(scrollable) {
     return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
-
+function isGroupRow({ rowType, column }) {
+    return rowType === 'group'
+    && isDefined(column.groupIndex)
+    && !column.showWhenGrouped && !column.command;
+}
 /**
  * @type {import('./ui.grid_core.modules').Module}
  */
@@ -134,9 +137,6 @@ export const rowsModule = {
                                 text += ' (' + options.groupContinuedMessage + ')';
                             }
                         }
-
-                        $container.addClass(GROUP_CELL_CLASS);
-
                         if(column.encodeHtml) {
                             container.textContent = text;
                         } else {
@@ -147,12 +147,18 @@ export const rowsModule = {
 
                 _update: function() { },
 
+                _updateCell: function($cell, options) {
+                    if(isGroupRow(options)) {
+                        $cell.addClass(GROUP_CELL_CLASS);
+                    }
+                    this.callBase.apply(this, arguments);
+                },
                 _getCellTemplate: function(options) {
                     const that = this;
                     const column = options.column;
                     let template;
 
-                    if(options.rowType === 'group' && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
+                    if(isGroupRow(options)) {
                         template = column.groupCellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultGroupTemplate(column) };
                     } else if((options.rowType === 'data' || column.command) && column.cellTemplate) {
                         template = column.cellTemplate;

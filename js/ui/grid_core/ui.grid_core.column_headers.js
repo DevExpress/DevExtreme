@@ -1,4 +1,3 @@
-// @ts-check
 
 import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
