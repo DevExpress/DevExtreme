@@ -3190,10 +3190,7 @@ declare module DevExpress.common.grids {
     TComponent extends GridBase<TRowData, TKey>,
     TRowData = any,
     TKey = any
-  > = Omit<
-    GridBaseOptionsBlank<TComponent, TRowData, TKey>,
-    'focusStateEnabled'
-  > & {
+  > = Omit<DevExpress.ui.WidgetOptions<TComponent>, 'focusStateEnabled'> & {
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -3545,19 +3542,6 @@ declare module DevExpress.common.grids {
      */
     syncLookupFilterValues?: boolean;
   };
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  interface GridBaseOptionsBlank<
-    TComponent extends GridBase<TRowData, TKey>,
-    TRowData = any,
-    TKey = any
-  > extends DevExpress.ui.WidgetOptions<TComponent> {
-    /**
-     * [descr:GridBaseOptions.focusStateEnabled]
-     */
-    focusStateEnabled?: any;
-  }
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
@@ -15032,136 +15016,34 @@ declare module DevExpress.ui {
    * @deprecated Use the Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type dxGanttColumn<TRowData = any, TKey = any> = Omit<
-    dxGanttColumnBlank<TRowData, TKey>,
-    | 'allowEditing'
-    | 'allowFixing'
-    | 'allowHiding'
-    | 'allowReordering'
-    | 'allowResizing'
-    | 'allowSearch'
-    | 'buttons'
-    | 'columns'
-    | 'editCellTemplate'
-    | 'editorOptions'
-    | 'fixed'
-    | 'fixedPosition'
-    | 'formItem'
-    | 'hidingPriority'
-    | 'isBand'
-    | 'lookup'
-    | 'name'
-    | 'ownerBand'
-    | 'renderAsync'
-    | 'setCellValue'
-    | 'showEditorAlways'
-    | 'showInColumnChooser'
-    | 'type'
-    | 'validationRules'
-  >;
-  /**
-   * [descr:dxGanttColumn]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  interface dxGanttColumnBlank<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxTreeList.Column<TRowData, TKey> {
-    /**
-     * [descr:dxGanttColumn.allowEditing]
-     */
-    allowEditing: any;
-    /**
-     * [descr:dxGanttColumn.allowFixing]
-     */
-    allowFixing: any;
-    /**
-     * [descr:dxGanttColumn.allowHiding]
-     */
-    allowHiding: any;
-    /**
-     * [descr:dxGanttColumn.allowReordering]
-     */
-    allowReordering: any;
-    /**
-     * [descr:dxGanttColumn.allowResizing]
-     */
-    allowResizing: any;
-    /**
-     * [descr:dxGanttColumn.allowSearch]
-     */
-    allowSearch: any;
-    /**
-     * [descr:dxGanttColumn.buttons]
-     */
-    buttons: any;
-    /**
-     * [descr:dxGanttColumn.columns]
-     */
-    columns: any;
-    /**
-     * [descr:dxGanttColumn.editorOptions]
-     */
-    editorOptions: any;
-    /**
-     * [descr:dxGanttColumn.editCellTemplate]
-     */
-    editCellTemplate: any;
-    /**
-     * [descr:dxGanttColumn.fixed]
-     */
-    fixed: any;
-    /**
-     * [descr:dxGanttColumn.fixedPosition]
-     */
-    fixedPosition: any;
-    /**
-     * [descr:dxGanttColumn.formItem]
-     */
-    formItem: any;
-    /**
-     * [descr:dxGanttColumn.hidingPriority]
-     */
-    hidingPriority: any;
-    /**
-     * [descr:dxGanttColumn.isBand]
-     */
-    isBand: any;
-    /**
-     * [descr:dxGanttColumn.lookup]
-     */
-    lookup: any;
-    /**
-     * [descr:dxGanttColumn.name]
-     */
-    name: any;
-    /**
-     * [descr:dxGanttColumn.ownerBand]
-     */
-    ownerBand: any;
-    /**
-     * [descr:dxGanttColumn.renderAsync]
-     */
-    renderAsync: any;
-    /**
-     * [descr:dxGanttColumn.setCellValue]
-     */
-    setCellValue: any;
-    /**
-     * [descr:dxGanttColumn.showEditorAlways]
-     */
-    showEditorAlways: any;
-    /**
-     * [descr:dxGanttColumn.showInColumnChooser]
-     */
-    showInColumnChooser: any;
-    /**
-     * [descr:dxGanttColumn.validationRules]
-     */
-    validationRules: any;
-    /**
-     * [descr:dxGanttColumn.type]
-     */
-    type: any;
-  }
+  interface dxGanttColumn<TRowData = any, TKey = any>
+    extends Omit<
+      DevExpress.ui.dxTreeList.Column<TRowData, TKey>,
+      | 'allowEditing'
+      | 'allowFixing'
+      | 'allowHiding'
+      | 'allowReordering'
+      | 'allowResizing'
+      | 'allowSearch'
+      | 'buttons'
+      | 'columns'
+      | 'editCellTemplate'
+      | 'editorOptions'
+      | 'fixed'
+      | 'fixedPosition'
+      | 'formItem'
+      | 'hidingPriority'
+      | 'isBand'
+      | 'lookup'
+      | 'name'
+      | 'ownerBand'
+      | 'renderAsync'
+      | 'setCellValue'
+      | 'showEditorAlways'
+      | 'showInColumnChooser'
+      | 'type'
+      | 'validationRules'
+    > {}
   /**
    * [descr:dxGanttContextMenu]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
