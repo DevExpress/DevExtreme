@@ -397,7 +397,7 @@ QUnit.module('Headers', {
         assert.strictEqual($(cells[0]).html(), '&nbsp;', '1 group space text');
         assert.strictEqual($(cells[1]).html(), '&nbsp;', '2 group space text');
         assert.strictEqual($(cells[2]).html(), '&nbsp;', '3 group space text');
-        assert.strictEqual($(cells[3]).html(), '&nbsp;', 'text column with command is empty');
+        assert.strictEqual($(cells[3]).html(), 'Select or drag a column here', 'text column with command is empty');
         assert.ok(cells.parent().outerHeight() >= 30, 'height header');
     });
 
@@ -680,8 +680,12 @@ QUnit.module('Headers', {
         // arrange
         const $testElement = $('#container');
 
-        $.extend(this.columns, [{ alignment: 'center', sortOrder: 'asc' }, { alignment: 'right', sortOrder: 'asc' },
-            { alignment: 'left', sortOrder: 'desc' }, { alignment: 'left', allowSorting: true }]);
+        $.extend(this.columns, [
+            { alignment: 'center', sortOrder: 'asc' },
+            { alignment: 'right', sortOrder: 'asc' },
+            { alignment: 'left', sortOrder: 'desc' },
+            { alignment: 'left', allowSorting: true }
+        ]);
 
         this.options.showColumnLines = true;
         this.options.sorting = {
@@ -1569,7 +1573,7 @@ QUnit.module('Headers', {
     QUnit.test('Not allow dragging when allowReordering true and one column', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView, { allowDragging: function() { return false; } }, { allowDragging: function() { return false; } }];
+        const draggingPanels = [this.columnHeadersView];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: true }]);
 
@@ -1586,7 +1590,7 @@ QUnit.module('Headers', {
     QUnit.test('Not allow dragging when allowReordering false', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView, { allowDragging: function() { return false; } }, { allowDragging: function() { return false; } }];
+        const draggingPanels = [this.columnHeadersView];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: false }, { caption: 'Column 2', allowReordering: false }]);
 
@@ -2320,8 +2324,11 @@ QUnit.module('Headers with band columns', {
         this.options.allowColumnReordering = true;
         this.setupDataGrid();
 
-        // act, assert
-        assert.ok(this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0]), 'allow dragging');
+        // act
+        const firstColumnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0], [this.columnHeadersView]);
+
+        // assert
+        assert.ok(firstColumnAllowDragging, 'first column can be dragged');
     });
 
     QUnit.test('Not allow dragging when allowReordering true and only one band column', function(assert) {
@@ -2330,8 +2337,11 @@ QUnit.module('Headers with band columns', {
         this.options.allowColumnReordering = true;
         this.setupDataGrid();
 
-        // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(0)[0]), 'not allow dragging');
+        // act
+        const bandColumnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(0)[0], [this.columnHeadersView]);
+
+        // assert
+        assert.notOk(bandColumnAllowDragging, 'band column can not be dragged');
     });
 
     QUnit.test('Not allow dragging when allowReordering true and one column', function(assert) {
@@ -2340,8 +2350,11 @@ QUnit.module('Headers with band columns', {
         this.options.allowColumnReordering = true;
         this.setupDataGrid();
 
-        // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0]), 'not allow dragging');
+        // act
+        const columnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0], [this.columnHeadersView]);
+
+        // assert
+        assert.notOk(columnAllowDragging, 'not allow dragging');
     });
 
     // T360137

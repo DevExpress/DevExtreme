@@ -96,11 +96,10 @@ export const columnHeadersModule = {
                     const that = this;
 
                     return function($container, options) {
+                        const $content = createCellContent(that, $container, options);
                         const caption = column.command !== 'expand' && column.caption;
 
                         if(caption) {
-                            const $content = createCellContent(that, $container, options);
-
                             $content.text(caption);
                         } else if(column.command) {
                             if(column.command === 'empty') {
