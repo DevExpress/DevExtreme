@@ -28,7 +28,7 @@ module.exports = {
                 }
             },
             commonImports: [
-                './common/common',
+                './common',
                 './common/grids',
                 './common/charts',
             ]

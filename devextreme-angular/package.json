@@ -38,7 +38,7 @@
     "core-js": "^2.6.12",
     "del": "^2.2.2",
     "devextreme": "23.1-next",
-    "devextreme-angular-generator": "^2.0.1",
+    "devextreme-angular-generator": "^2.0.2",
     "devextreme-internal-tools": "^10.0.0-beta.5",
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
