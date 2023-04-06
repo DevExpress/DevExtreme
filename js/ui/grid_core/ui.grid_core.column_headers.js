@@ -429,13 +429,10 @@ export const columnHeadersModule = {
 
                 allowColumnHeaderDragging: function(column) {
                     // todo: write test for it
-                    const rowIndex = column && this._columnsController.getRowIndex(column.index);
-                    const columns = this.getColumns(rowIndex);
-
+                    // test1: only one column is reorderable. It should have class of drag
                     const isReorderingEnabled = this.option('allowColumnReordering') || this._columnsController.isColumnOptionUsed('allowReordering');
-                    const reorderingColumnCount = columns.filter(column => column.allowReordering).length;
 
-                    return isReorderingEnabled && column.allowReordering && reorderingColumnCount > 1;
+                    return isReorderingEnabled && column.allowReordering;
                 },
 
                 getBoundingRect: function() {
