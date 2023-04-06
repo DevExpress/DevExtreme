@@ -147,19 +147,37 @@ const getFileList = (dirName) => {
     return files;
 };
 
-const transpileModules = () => {
+const transpileModules = async() => {
     const builder = new Builder(root, config);
     const listFiles = getFileList(path.join(root, 'artifacts', 'transpiled'));
 
-    return Promise.all(listFiles.map(filePath => builder.buildStatic(
-        `[${filePath}]`,
-        filePath.replace('transpiled', 'transpiled-systemjs'),
-        {
-            minify: false,
-            sourceMaps: true,
-            encodeNames: false
-        }
-    )));
+    // eslint-disable-next-line no-restricted-syntax
+    for(const filePath of listFiles) {
+        await builder.buildStatic(
+            `[${filePath}]`,
+            filePath.replace('transpiled', 'transpiled-systemjs'),
+            {
+                minify: false,
+                sourceMaps: true,
+                encodeNames: false
+            }
+        );
+    }
+
+    const listRenovationFiles = getFileList(path.join(root, 'artifacts', 'transpiled-renovation'));
+
+    // eslint-disable-next-line no-restricted-syntax
+    for(const filePath of listRenovationFiles) {
+        await builder.buildStatic(
+            `[${filePath}]`,
+            filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs'),
+            {
+                minify: false,
+                sourceMaps: true,
+                encodeNames: false
+            }
+        );
+    }
 };
 
 const transpileCss = async() => {
@@ -194,8 +212,6 @@ const transpileTests = async() => {
         'DevExpress.ui.widgets.editors'
     ];
 
-    const promises = [];
-
     // eslint-disable-next-line no-restricted-syntax
     for(const folder of testingFolders) {
         const listFiles = getFileList(path.join(root, 'testing', 'tests', folder));
@@ -228,8 +244,6 @@ const transpileTests = async() => {
             }
         }
     }
-
-    return Promise.all(promises);
 };
 
 const transpileHelpers = async() => {
@@ -259,7 +273,7 @@ const transpileHelpers = async() => {
     const traceFile = fs.readFileSync(traceFilePath).toString();
     fs.writeFileSync(traceFilePath, traceFile.replace(
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep;'
+        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
     ));
 
     switch(transpile) {
