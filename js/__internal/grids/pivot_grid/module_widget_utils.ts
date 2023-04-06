@@ -57,7 +57,6 @@ function createForeachTreeFunc(isAsync) {
         && ((new Date() as any) - (foreachTreeAsyncDate as any) >= 300)
       ) {
         foreachTreeAsyncDate = new Date();
-        // @ts-expect-error
         deferred = new Deferred();
         createForeachTreeAsyncHandler(deferred, i, false);
 
