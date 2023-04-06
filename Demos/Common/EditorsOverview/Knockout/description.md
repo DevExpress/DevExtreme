@@ -1,1 +1,0 @@
-DevExtreme provides a collection of JavaScript Editors that includes Calendar, DateBox, Switch, TextBox, and many others. These UI components allow entering, storing and validating data. Taking the best of the MVVM pattern, editors support two-way binding to view model properties. Explore all of them in other demos in this section.
