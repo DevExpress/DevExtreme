@@ -127,6 +127,10 @@ const config = {
             deps: ['jquery'],
             format: 'global',
             exports: 'angular'
+        },
+
+        '*.json': {
+            'loader': 'json'
         }
     }
 };
@@ -139,7 +143,10 @@ const getFileList = (dirName) => {
     for(const item of items) {
         if(item.isDirectory()) {
             files = [...files, ...getFileList(`${dirName}/${item.name}`)];
-        } else if(item.name.endsWith('.js')) {
+        } else if(
+            item.name.endsWith('.js') ||
+            (item.name.endsWith('.json') && !item.name.includes('tsconfig'))
+        ) {
             files.push(`${dirName}/${item.name}`);
         }
     }
@@ -215,7 +222,11 @@ const transpileCss = async() => {
         {
             filePath: path.join(root, 'node_modules/systemjs-plugin-css/css.js'),
             destPath: path.join(root, 'artifacts/css-systemjs/css.js'),
-        }
+        },
+        {
+            filePath: path.join(root, 'node_modules/systemjs-plugin-json/json.js'),
+            destPath: path.join(root, 'artifacts/css-systemjs/json.js'),
+        },
     ];
 
     // https://github.com/systemjs/plugin-css/issues/102#issuecomment-243473887
@@ -278,10 +289,14 @@ const transpileTests = async() => {
 
     const traceFilePath = path.join(root, 'node_modules/systemjs-builder/lib/trace.js');
     const traceFile = fs.readFileSync(traceFilePath).toString();
-    fs.writeFileSync(traceFilePath, traceFile.replace(
-        'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
-    ));
+    const replaceValue = 'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");';
+
+    if(!traceFile.includes(replaceValue)) {
+        fs.writeFileSync(traceFilePath, traceFile.replace(
+            'load.depMap[dep] = getCanonicalName(loader, normalized);',
+            replaceValue
+        ));
+    }
 
     switch(transpile) {
         case 'modules': return await transpileModules();
