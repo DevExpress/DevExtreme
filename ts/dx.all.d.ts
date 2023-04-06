@@ -1319,23 +1319,6 @@ declare module DevExpress.common {
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type ColumnChooserSelection = {
-    /**
-     * [descr:GridBaseOptions.columnChooser.selection.allowSelectAll]
-     */
-    allowSelectAll?: boolean;
-    /**
-     * [descr:GridBaseOptions.columnChooser.selection.recursive]
-     */
-    recursive?: boolean;
-    /**
-     * [descr:GridBaseOptions.columnChooser.selection.allowSelectAll]
-     */
-    selectByClick?: boolean;
-  };
-  /**
    * [descr:CompareRule]
    */
   export type CompareRule = {
@@ -2535,6 +2518,20 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnChooser.search.timeout]
      */
     timeout?: number;
+  };
+  export type ColumnChooserSelection = {
+    /**
+     * [descr:GridBaseOptions.columnChooser.selection.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser.selection.recursive]
+     */
+    recursive?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser.selection.allowSelectAll]
+     */
+    selectByClick?: boolean;
   };
   export type ColumnCustomizeTextArg = {
     value?: any;

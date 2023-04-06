@@ -17,6 +17,7 @@ export {
   ColumnChooser,
   ColumnChooserMode,
   ColumnChooserSearch,
+  ColumnChooserSelection,
   ColumnCustomizeTextArg,
   ColumnFixing,
   ColumnFixingTexts,

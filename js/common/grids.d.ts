@@ -550,8 +550,8 @@ export type ColumnChooserSearch = {
 };
 
 /**
- * @pulibc
- * @namespace
+ * @public
+ * @namespace DevExpress.common.grids
  */
 export type ColumnChooserSelection = {
   /**
