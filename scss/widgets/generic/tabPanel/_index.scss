@@ -20,6 +20,7 @@ $tab-selected-not-focused-right-rtl-shadow: $generic-tabpanel-inset-shadow-left,
 $tab-selected-not-focused-left-right-shadow: $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
 $tab-selected-not-focused-left-shadow: $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
 $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+$tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-left;
 
 
 @function get-tab-not-selected-not-focused-first-expanded-shadow($accent-color) {
@@ -189,7 +190,7 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right,
 
     .dx-tab.dx-tab-selected {
       &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-right-shadow, $tab-selected-not-focused-left-rtl-shadow);
+        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-right-shadow, $tab-selected-not-focused-left-right-rtl-shadow);
       }
     }
 

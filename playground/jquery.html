@@ -96,6 +96,24 @@
                     title: 'more',
                     // icon: 'more',
                 },
+                {
+                    id: 9,
+                    text: 'globe',
+                    title: 'globe',
+                    // icon: 'globe',
+                },
+                {
+                    id: 10,
+                    text: 'runner',
+                    title: 'runner',
+                    // icon: 'runner',
+                },
+                {
+                    id: 11,
+                    text: 'greaterorequal',
+                    title: 'greaterorequal',
+                    // icon: 'greaterorequal',
+                },
             ];
 
             const empty = [{},{},{},{},{},{},{}]
@@ -106,14 +124,16 @@
             //         width: 450,
             //         // selectOnFocus: true,
             //         selectOnFocus: false,
-            //         scrollByContent: true,
+            //         // scrollByContent: true,
             //         showNavButtons: true,
+            //         // selectionMode: 'multiple',
             //     });
             // });
             
             $('#scrolledtabs').dxTabPanel({
+                rtlEnabled: true,
                 dataSource: tabs,
-                width: 500,
+                width: 750,
                 scrollByContent: true,
                 showNavButtons: true,
             });
