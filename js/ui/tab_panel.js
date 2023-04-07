@@ -23,6 +23,7 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
+const DISABLED_FOCUSED_NEXT_TAB_CLASS = 'dx-disabled-focused-next-tab';
 
 const TabPanel = MultiView.inherit({
 
@@ -313,6 +314,10 @@ const TabPanel = MultiView.inherit({
         this._tabs.repaint();
     },
 
+    _toggleDisabledFocusedNextClass(index, isNextDisabledTabFocused) {
+        this._tabs._itemElements().eq(index).toggleClass(DISABLED_FOCUSED_NEXT_TAB_CLASS, isNextDisabledTabFocused);
+    },
+
     _optionChanged: function(args) {
         const name = args.name;
         const value = args.value;
@@ -366,6 +371,12 @@ const TabPanel = MultiView.inherit({
 
                 this._toggleWrapperFocusedClass(!isDisabled);
                 this._toggleDisabledFocusedClass(isDisabled);
+
+                const { selectedIndex } = this.option();
+
+                if(id !== selectedIndex) {
+                    this._toggleDisabledFocusedNextClass(selectedIndex, isDisabled && id === selectedIndex + 1);
+                }
 
                 this.callBase(args);
                 break;
