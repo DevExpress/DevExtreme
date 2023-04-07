@@ -4032,23 +4032,75 @@ function getColsCountFromDOM($form) {
     return result;
 }
 
-QUnit.test('Setting "colCountByScreen" property of group with dot notation should update layout', function(assert) {
-    const $form = $('#form').dxForm({
+QUnit.test('group colCountByScreen property change should update layout', function(assert) {
+    const form = $('#form').dxForm({
         screenByWidth: () => 'md',
-        items: [
-            {
+        items: [{
+            itemType: 'group',
+            colCountByScreen: { md: 1 },
+            items: ['name', 'email']
+        }],
+    }).dxForm('instance');
+
+    form.option('items[0].colCountByScreen.md', 2);
+
+    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
+});
+
+QUnit.test('nested group colCountByScreen property change should update layout', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'group',
+            items: [{
                 itemType: 'group',
-                colCountByScreen: { md: 3 },
-                items: [{ dataField: 'name' }, { dataField: 'email' }, { dataField: 'age' }]
-            }
-        ],
-    });
+                colCountByScreen: { md: 1 },
+                items: ['Phone', 'Email'],
+            }],
+        }],
+    }).dxForm('instance');
 
-    const instance = $form.dxForm('instance');
+    form.option('items[0].items[0].colCountByScreen.md', 2);
 
-    instance.option('items[0].colCountByScreen.md', 2);
+    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
+});
 
-    assert.strictEqual(getColsCountFromDOM($form), 2);
+QUnit.test('tab colCountByScreen property change should update layouts', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'tabbed',
+            tabs: [{
+                items: ['Phone', 'Email'],
+                colCountByScreen: { md: 2 },
+            }],
+        }],
+    }).dxForm('instance');
+
+    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
+
+    form.option('items[0].tabs[0].colCountByScreen.md', 1);
+
+    assert.strictEqual(getColsCountFromDOM($(form.$element())), 1);
+});
+
+QUnit.test('colCountByScreen property change with itemOption should update layout', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'tabbed',
+            name: 'groupName',
+            tabs: [{
+                name: 'tabName',
+                items: ['Phone', 'Email'],
+                colCountByScreen: { md: 1 },
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.itemOption('groupName.tabName', 'colCountByScreen.md', 2);
+
+    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
 });
 
 [
