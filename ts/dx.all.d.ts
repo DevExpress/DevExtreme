@@ -1523,6 +1523,8 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.useLegacyVisibleIndex]
      */
     useLegacyVisibleIndex?: boolean;
+
+    license?: string;
   };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
