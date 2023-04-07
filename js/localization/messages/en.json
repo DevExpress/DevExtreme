@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Value must be a number",
         "dxNumberBox-noDataText": "No data",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag here a column from the group panel",
+        "dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Column Chooser",
         "dxDataGrid-columnChooserEmptyText": "Drag a column here to hide it",
         "dxDataGrid-groupContinuesMessage": "Continues on the next page",

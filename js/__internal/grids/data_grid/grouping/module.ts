@@ -348,6 +348,22 @@ const onGroupingMenuItemClick = function (column, params) {
   }
 };
 
+const isGroupPanelVisible = (groupPanelOptions): boolean => {
+  const visible = groupPanelOptions?.visible;
+
+  if (visible === 'auto') {
+    return devices.current().deviceType === 'desktop';
+  }
+
+  return visible;
+};
+
+const allowDragging = (groupPanelOptions, column): boolean => {
+  const isVisible = isGroupPanelVisible(groupPanelOptions);
+
+  return isVisible && groupPanelOptions.allowColumnDragging && column.allowGrouping;
+};
+
 export const GroupingHeaderPanelExtender = (function () {
   return {
     _getToolbarItems() {
@@ -400,18 +416,7 @@ export const GroupingHeaderPanelExtender = (function () {
     },
 
     _isGroupPanelVisible() {
-      const groupPanelOptions = this.option('groupPanel');
-      let isVisible;
-
-      if (groupPanelOptions) {
-        isVisible = groupPanelOptions.visible;
-
-        if (isVisible === 'auto') {
-          isVisible = devices.current().deviceType === 'desktop';
-        }
-      }
-
-      return isVisible;
+      return isGroupPanelVisible(this.option('groupPanel'));
     },
 
     _renderGroupPanelItems($groupPanel, groupColumns) {
@@ -471,14 +476,10 @@ export const GroupingHeaderPanelExtender = (function () {
       }
     },
 
-    allowDragging(column) {
+    allowDragging(column): boolean {
       const groupPanelOptions = this.option('groupPanel');
 
-      return this._isGroupPanelVisible() && groupPanelOptions.allowColumnDragging && column.allowGrouping;
-    },
-
-    allowColumnHeaderDragging(column) {
-      return this.allowDragging(column);
+      return allowDragging(groupPanelOptions, column);
     },
 
     getColumnElements() {
@@ -638,6 +639,16 @@ const columnHeadersViewExtender = (function () {
         }
       }
       return items;
+    },
+
+    _isGroupPanelVisible(): boolean {
+      return isGroupPanelVisible(this.option('groupPanel'));
+    },
+
+    allowDragging(column): boolean {
+      const groupPanelOptions = this.option('groupPanel');
+
+      return allowDragging(groupPanelOptions, column) || this.callBase(column);
     },
   };
 }());

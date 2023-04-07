@@ -96,7 +96,6 @@ export const columnHeadersModule = {
                     const that = this;
 
                     return function($container, options) {
-                        // make it more obvious
                         const $content = column.command ? $container : createCellContent(that, $container, options);
                         const caption = column.command !== 'expand' && column.caption;
 
@@ -104,12 +103,37 @@ export const columnHeadersModule = {
                             $content.text(caption);
                         } else if(column.command) {
                             if(column.command === 'empty') {
-                                $container.text('Select or drag a column here');
+                                const text = that._getEmptyHeaderText();
+
+                                $container.text(text);
                             } else {
                                 $container.html('&nbsp;');
                             }
                         }
                     };
+                },
+
+                _getEmptyHeaderText: function() {
+                    const isGroupPanelVisible = this._isGroupPanelVisible();
+                    const isColumnChooserVisible = this._isColumnChooserEnabled();
+
+                    if(isGroupPanelVisible && isColumnChooserVisible) {
+                        return messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText');
+                    } else if(isGroupPanelVisible) {
+                        return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
+                    } else if(isColumnChooserVisible) {
+                        return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
+                    }
+
+                    return '';
+                },
+
+                _isGroupPanelVisible: function() {
+                    return false;
+                },
+
+                _isColumnChooserEnabled: function() {
+                    return false;
                 },
 
                 _getHeaderTemplate: function(column) {
@@ -417,21 +441,24 @@ export const columnHeadersModule = {
                     return this.callBase.apply(this, arguments);
                 },
 
-                allowDragging: function(column, draggingPanels) {
-                    for(let i = 0; i < draggingPanels.length; i++) {
-                        const draggingPanel = draggingPanels[i];
+                allowDragging: function(column) {
+                    /*
+                    which tests are written:
+                    2 columns - reordering: true
+                    1 column - reordering: true
+                    2 columns - reordering: false
+                    band { 2 columns } - reordering: true - check 1st data column
+                    band { 2 columns } - reordering: true - check band column
+                    band { 1 column } - reodering: true - check data column
+                    */
 
-                        if(draggingPanel?.allowColumnHeaderDragging(column)) {
-                            return true;
-                        }
-                    }
+                    // test2: all columns are draggable when columnchooser is open
+                    // test: last column is draggable to columnchooser (column + column and band + band)
+                    // test: last column is draggable to grouppanel
+                    // test: no reordering, no groupPanel, show chooser - column draggable
+                    // test: no reordering, no groupPanel, show chooser, column with allowHiding: false. column not draggable
 
-                    return false;
-                },
-
-                allowColumnHeaderDragging: function(column) {
                     // test1: many columns, but only one column is reorderable. It should have class of drag
-                    // test2: one column, it is reordarable. But shouldnot have class of drag
                     // testcafe1: screenshot of grid when all columns are hidden. It is for checking header's height
                     // test3,4,5: check that correct localiztion string is show in empty header
                     // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable
