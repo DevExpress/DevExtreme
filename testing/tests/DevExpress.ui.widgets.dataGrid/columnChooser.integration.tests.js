@@ -13,6 +13,66 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import messageLocalization from 'localization/message';
 
 QUnit.module('Column chooser', baseModuleConfig, () => {
+    QUnit.test('columns should be draggable when column chooser is open', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+            dataSource: []
+        });
+
+        // assert
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const $draggableColumns = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumns.length, 2, 'columns should be draggable');
+    });
+
+    QUnit.test('last column should be draggable to column chooser', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1' }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const $draggableColumns = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumns.length, 1, 'column should be draggable');
+    });
+
+    QUnit.test('columns should not be draggable if columnChooser.mode=select', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+            dataSource: [],
+            columnChooser: { mode: 'select' }
+        });
+
+        // assert
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const $draggableColumns = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumns.length, 0, 'columns should not be draggable');
+    });
+
     // T862537
     QUnit.test('column with allowHiding=false should not be draggable', function(assert) {
         // act
@@ -23,8 +83,8 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         });
 
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
 
         // act
         dataGrid.showColumnChooser();
@@ -32,7 +92,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // assert
         const $draggableColumn = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
 
-        assert.equal($draggableColumn.length, 1, 'column with no allowHiding=false should be draggable');
+        assert.strictEqual($draggableColumn.length, 1, 'column with no allowHiding=false should be draggable');
         assert.strictEqual($draggableColumn.text(), 'Field 2');
     });
 

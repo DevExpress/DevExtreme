@@ -1570,6 +1570,22 @@ QUnit.module('Headers', {
         assert.ok(isAllowDragging, 'allow dragging');
     });
 
+    QUnit.test('Allow dragging when many there are columns and one has allowReordering=true', function(assert) {
+        // arrange
+        const testElement = $('#container');
+
+        $.extend(this.columns, [{ caption: 'Column 1', allowReordering: false }, { caption: 'Column 2', allowReordering: true }]);
+
+        this.options.allowColumnReordering = true;
+
+        // act
+        this.columnHeadersView.render(testElement);
+
+        // assert
+        assert.notOk(this.columnHeadersView.allowDragging(this.columns[0]), 'not allow dragging');
+        assert.ok(this.columnHeadersView.allowDragging(this.columns[1]), 'allow dragging');
+    });
+
     // T117339
     QUnit.test('Not allow dragging when allowReordering true and one column', function(assert) {
         // arrange
