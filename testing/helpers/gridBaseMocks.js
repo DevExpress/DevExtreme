@@ -334,7 +334,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             columns[key].index = parseInt(key);
         }
 
-        if (columns) {
+        if(columns) {
             columns.forEach(column => {
                 if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
                     column.name = column.dataField;
@@ -979,14 +979,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
 
-        if(that.options.editing && that.options.editing.changes === undefined) {
-            if(that.options.editing) {
+        if(that.options.editing) {
+            if(that.options.editing.changes === undefined) {
                 that.options.editing.changes = [];
-            } else {
-                that.options.editing = {
-                    changes: []
-                };
             }
+        } else {
+            that.options.editing = {
+                changes: []
+            };
         }
 
         that.optionCalled = $.Callbacks();
@@ -1008,7 +1008,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                             if(that.needFireOptionChange && that._initialized && !that.preventOptionChanged) {
                                 const controllersAndViews = Object.assign({}, that._controllers, that._views);
                                 Object.keys(controllersAndViews).forEach((key) => {
-                                    if (controllersAndViews[key].optionChanged) {
+                                    if(controllersAndViews[key].optionChanged) {
                                         controllersAndViews[key].optionChanged({
                                             name: path[0],
                                             fullName: options,
