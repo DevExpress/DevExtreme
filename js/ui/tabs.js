@@ -41,6 +41,8 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
+const FOCUSED_NEXT_TAB_CLASS = 'dx-disabled-focused-next-tab';
+
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
 const BUTTON_NEXT_ICON = 'chevronnext';
@@ -425,6 +427,14 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _toggleDisabledFocusedNextClass(index, isNextDisabledTabFocused) {
+        this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextDisabledTabFocused);
+    },
+
+    _toggleFocusedNextClass(index, isNextTabFocused) {
+        this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextTabFocused);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -446,10 +456,23 @@ const Tabs = CollectionWidget.inherit({
             case 'badgeExpr':
                 this._invalidate();
                 break;
-            case 'focusedElement':
+            case 'focusedElement': {
+                const { value } = args;
+
+                const index = $(value).index();
+                const isDisabled = this._isDisabled(value);
+
+                const { selectedIndex } = this.option();
+
+                if(index !== selectedIndex) {
+                    this._toggleDisabledFocusedNextClass(selectedIndex, isDisabled && index === selectedIndex + 1);
+                    this._toggleFocusedNextClass(selectedIndex, index === selectedIndex + 1);
+                }
+
                 this.callBase(args);
                 this._scrollToItem(args.value);
                 break;
+            }
             default:
                 this.callBase(args);
         }

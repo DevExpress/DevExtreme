@@ -372,12 +372,6 @@ const TabPanel = MultiView.inherit({
                 this._toggleWrapperFocusedClass(!isDisabled);
                 this._toggleDisabledFocusedClass(isDisabled);
 
-                const { selectedIndex } = this.option();
-
-                if(id !== selectedIndex) {
-                    this._toggleDisabledFocusedNextClass(selectedIndex, isDisabled && id === selectedIndex + 1);
-                }
-
                 this.callBase(args);
                 break;
             }

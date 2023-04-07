@@ -113,6 +113,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
           }
         }
       }
+
+      &.dx-state-active.dx-state-focused {
+        box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
+      }
     }
 
     @include tabpanel-tabs-shadow-mixin($accent-color);
@@ -130,45 +134,8 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 
 .dx-tabpanel {
-  > .dx-tabpanel-tabs {
-    .dx-tabs {
-      display: block;
-      border: none;
-      background-color: $tabs-tab-bg;
-      color: $tabs-border-color;
-
-      .dx-tab {
-        color: $tabs-border-color;
-
-        .dx-tab-content {
-          color: $tabs-tab-color;
-        }
-
-        &::after,
-        &::before {
-          content: none;
-        }
-      }
-
-      .dx-tabs-nav-button {
-        color: $tabs-border-color;
-      }
-    }
-
-    .dx-tab {
+  > .dx-tabpanel-tabs .dx-tab {
       width: 140px;
-    }
-
-    .dx-tabs-scrollable {
-      margin-top: 0;
-      margin-bottom: 0;
-      height: 100%;
-
-      .dx-tabs-wrapper {
-        display: block;
-        border: none;
-      }
-    }
   }
 
   &:not(.dx-empty-collection) {
@@ -215,3 +182,4 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     }
   }
 }
+
