@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Der Wert muss eine Zahl sein",
         "dxNumberBox-noDataText": "Keine Daten",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "TODO",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "TODO",
+        "dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText": "TODO",
         "dxDataGrid-columnChooserTitle": "Spaltenauswahl",
         "dxDataGrid-columnChooserEmptyText": "Ziehen Sie Spalten hierhin, um sie zu verstecken",
         "dxDataGrid-groupContinuesMessage": "Weiter auf der nächsten Seite",

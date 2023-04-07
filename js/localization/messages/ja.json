@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "数値を指定してください。",
         "dxNumberBox-noDataText": "データがありません",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "TODO",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "TODO",
+        "dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText": "TODO",
         "dxDataGrid-columnChooserTitle": "列の選択",
         "dxDataGrid-columnChooserEmptyText": "隠したい列のヘッダーをここにドラッグしてください。",
         "dxDataGrid-groupContinuesMessage": "次ページに続く",

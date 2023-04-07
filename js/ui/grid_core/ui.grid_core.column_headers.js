@@ -74,6 +74,15 @@ export const columnHeadersModule = {
              * @type {Partial<import('./ui.grid_core.column_headers').ColumnHeadersView>}
              */
             const members = {
+                init: function() {
+                    this.callBase();
+
+                    this._columnChooserController = this.getController('columnChooser');
+
+                    this._columnChooserView = this.component.getView('columnChooserView');
+                    this._headerPanelView = this.component.getView('headerPanel');
+                },
+
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
@@ -114,26 +123,18 @@ export const columnHeadersModule = {
                 },
 
                 _getEmptyHeaderText: function() {
-                    const isGroupPanelVisible = this._isGroupPanelVisible();
-                    const isColumnChooserVisible = this._isColumnChooserEnabled();
+                    const hasHiddenColumns = this._columnChooserView.getColumns().filter(column => !column.visible).length;
+                    const hasGroupedColumns = this._headerPanelView.getColumns()?.length;
 
-                    if(isGroupPanelVisible && isColumnChooserVisible) {
+                    if(hasHiddenColumns && hasGroupedColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText');
-                    } else if(isGroupPanelVisible) {
+                    } else if(hasGroupedColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
-                    } else if(isColumnChooserVisible) {
+                    } else if(hasHiddenColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
                     }
 
                     return '';
-                },
-
-                _isGroupPanelVisible: function() {
-                    return false;
-                },
-
-                _isColumnChooserEnabled: function() {
-                    return false;
                 },
 
                 _getHeaderTemplate: function(column) {
@@ -452,17 +453,21 @@ export const columnHeadersModule = {
                     band { 1 column } - reodering: true - check data column
                     */
 
-                    // test2: all columns are draggable when columnchooser is open
-                    // test: last column is draggable to columnchooser (column + column and band + band)
-                    // test: last column is draggable to grouppanel
-                    // test: no reordering, no groupPanel, show chooser - column draggable
-                    // test: no reordering, no groupPanel, show chooser, column with allowHiding: false. column not draggable
-
-                    // test1: many columns, but only one column is reorderable. It should have class of drag
-                    // testcafe1: screenshot of grid when all columns are hidden. It is for checking header's height
+                    /*
+                    tests for headerView:
+                    // test1: many columns, but only one column is reorderable. It should have class of drag - DONE
                     // test3,4,5: check that correct localiztion string is show in empty header
-                    // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable
-                    // test7: reordering enabled, mutli-level columns, all are draggable, hide all except one column in 2nd level, last column is undraggable
+
+                    tests for columnChooser:
+                    // test2: all columns are draggable when columnchooser is open - done
+                    // test: last column is draggable to columnchooser - done
+                    // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable - done
+
+                    tests for groupPanel:
+
+                    other tests:
+                    // testcafe1: screenshot of grid when all columns are hidden in chooser. It is for checking header's height
+                    */
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex);
 

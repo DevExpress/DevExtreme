@@ -583,17 +583,6 @@ export const columnChooserModule = {
             },
 
             columnHeadersView: {
-                init: function() {
-                    this.callBase();
-
-                    this._columnChooserController = this.getController('columnChooser');
-                    this._columnChooserView = this.component.getView('columnChooserView');
-                },
-
-                _isColumnChooserEnabled: function() {
-                    return this._columnChooserController.isColumnChooserEnabled();
-                },
-
                 allowDragging: function(column) {
                     const isDragMode = !this._columnChooserController.isSelectMode();
                     const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();

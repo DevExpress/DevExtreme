@@ -641,10 +641,6 @@ const columnHeadersViewExtender = (function () {
       return items;
     },
 
-    _isGroupPanelVisible(): boolean {
-      return isGroupPanelVisible(this.option('groupPanel'));
-    },
-
     allowDragging(column): boolean {
       const groupPanelOptions = this.option('groupPanel');
 
