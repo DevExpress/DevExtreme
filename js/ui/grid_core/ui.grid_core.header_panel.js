@@ -218,7 +218,7 @@ const members = {
 
     allowDragging: noop,
 
-    getColumns: noop
+    getColumns: () => []
 };
 
 const HeaderPanel = ColumnsView.inherit(members);

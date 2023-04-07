@@ -123,8 +123,8 @@ export const columnHeadersModule = {
                 },
 
                 _getEmptyHeaderText: function() {
-                    const hasHiddenColumns = this._columnChooserView.getColumns().filter(column => !column.visible).length;
-                    const hasGroupedColumns = this._headerPanelView.getColumns()?.length;
+                    const hasHiddenColumns = this._columnChooserView?.getColumns().filter(column => !column.visible).length;
+                    const hasGroupedColumns = this._headerPanelView?.getColumns().length;
 
                     if(hasHiddenColumns && hasGroupedColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText');
@@ -462,11 +462,6 @@ export const columnHeadersModule = {
                     // test2: all columns are draggable when columnchooser is open - done
                     // test: last column is draggable to columnchooser - done
                     // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable - done
-
-                    tests for groupPanel:
-
-                    other tests:
-                    // testcafe1: screenshot of grid when all columns are hidden in chooser. It is for checking header's height
                     */
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex);

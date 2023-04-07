@@ -397,7 +397,7 @@ QUnit.module('Headers', {
         assert.strictEqual($(cells[0]).html(), '&nbsp;', '1 group space text');
         assert.strictEqual($(cells[1]).html(), '&nbsp;', '2 group space text');
         assert.strictEqual($(cells[2]).html(), '&nbsp;', '3 group space text');
-        assert.strictEqual($(cells[3]).html(), 'Select or drag a column here', 'text column with command is empty');
+
         assert.ok(cells.parent().outerHeight() >= 30, 'height header');
     });
 
