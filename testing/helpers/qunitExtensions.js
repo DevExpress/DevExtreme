@@ -251,7 +251,7 @@
             return;
         }
 
-        jQuery.fn.init = jQueryInit ? jQuery.fn.init : null;
+        jQuery.fn.init = jQueryInit != null ? jQueryInit : jQuery.fn.init;
 
         clearShadowRootTree();
     });
