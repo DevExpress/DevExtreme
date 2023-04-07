@@ -39,10 +39,15 @@ function getText(cell) {
     return $(cell).find('.dx-datagrid-text-content').first().text();
 }
 
+const isAllowDragging = function(column) {
+    return this.columnHeadersView.allowDragging(column, [this.columnHeadersView]);
+};
+
 QUnit.module('Headers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
+        this.isAllowDragging = isAllowDragging.bind(this);
         this.columns = [];
         this.options = {
             showColumnHeaders: true,
@@ -1556,7 +1561,6 @@ QUnit.module('Headers', {
     QUnit.test('Allow dragging when allowReordering true', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView, { allowDragging: function() { return false; } }, { allowDragging: function() { return false; } }];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: true }, { caption: 'Column 2', allowReordering: true }]);
 
@@ -1565,15 +1569,16 @@ QUnit.module('Headers', {
         // act
         this.columnHeadersView.render(testElement);
 
-        // act, assert
-        assert.ok(this.columnHeadersView.allowDragging({ caption: 'Column 1', allowReordering: true }, draggingPanels), 'allow dragging');
+        const isAllowDragging = this.isAllowDragging(this.columns[0]);
+
+        // assert
+        assert.ok(isAllowDragging, 'allow dragging');
     });
 
     // T117339
     QUnit.test('Not allow dragging when allowReordering true and one column', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: true }]);
 
@@ -1582,15 +1587,16 @@ QUnit.module('Headers', {
         // act
         this.columnHeadersView.render(testElement);
 
-        // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging({ caption: 'Column 1', allowReordering: true }, draggingPanels), 'not allow dragging');
+        const isAllowDragging = this.isAllowDragging(this.columns[0]);
+
+        // assert
+        assert.notOk(isAllowDragging, 'not allow dragging');
     });
 
     // T117339
     QUnit.test('Not allow dragging when allowReordering false', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: false }, { caption: 'Column 2', allowReordering: false }]);
 
@@ -1599,8 +1605,10 @@ QUnit.module('Headers', {
         // act
         this.columnHeadersView.render(testElement);
 
+        const isAllowDragging = this.isAllowDragging(this.columns[0]);
+
         // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging({ caption: 'Column 1', allowReordering: false }, draggingPanels), 'not allow dragging');
+        assert.notOk(isAllowDragging, 'not allow dragging');
     });
 
     QUnit.test('Headers with option onCellPrepared', function(assert) {
@@ -2118,6 +2126,7 @@ QUnit.module('Headers with band columns', {
     beforeEach: function() {
         const that = this;
 
+        that.isAllowDragging = isAllowDragging.bind(that);
         that.clock = sinon.useFakeTimers();
 
         that.columns = [];
@@ -2325,7 +2334,7 @@ QUnit.module('Headers with band columns', {
         this.setupDataGrid();
 
         // act
-        const firstColumnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0], [this.columnHeadersView]);
+        const firstColumnAllowDragging = this.isAllowDragging(this.columnsController.getVisibleColumns(1)[0]);
 
         // assert
         assert.ok(firstColumnAllowDragging, 'first column can be dragged');
@@ -2338,7 +2347,7 @@ QUnit.module('Headers with band columns', {
         this.setupDataGrid();
 
         // act
-        const bandColumnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(0)[0], [this.columnHeadersView]);
+        const bandColumnAllowDragging = this.isAllowDragging(this.columnsController.getVisibleColumns(0)[0]);
 
         // assert
         assert.notOk(bandColumnAllowDragging, 'band column can not be dragged');
@@ -2351,7 +2360,7 @@ QUnit.module('Headers with band columns', {
         this.setupDataGrid();
 
         // act
-        const columnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0], [this.columnHeadersView]);
+        const columnAllowDragging = this.isAllowDragging(this.columnsController.getVisibleColumns(1)[0]);
 
         // assert
         assert.notOk(columnAllowDragging, 'not allow dragging');
