@@ -4,6 +4,8 @@
 $generic-main-fa-button-label-padding: null !default;
 $generic-main-fa-button-size: null !default;
 
+$generic-fa-button-label-font-size: 12px !default;
+
 @if $size == "default" {
   $generic-main-fa-button-size: 48px !default;
   $generic-main-fa-button-label-padding: 0 25px 0 10px;

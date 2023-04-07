@@ -11,7 +11,7 @@
 
 $material-fa-button-size: 40px;
 $material-fa-button-label-offset: 16px;
-$material-fa-button-label-padding: 0 12px;
+$material-fa-button-label-padding: 4px 8px;
 
 @include dx-fa-button-mixin(
   $material-main-fa-button-size,
