@@ -2133,6 +2133,166 @@ QUnit.module('Headers with grouping', {
     });
 });
 
+QUnit.module('Headers with grouping and chooser', {
+    beforeEach: function() {
+        const that = this;
+
+        that.clock = sinon.useFakeTimers();
+
+        that.$element = function() {
+            return $('#container');
+        };
+
+        that.setupDataGrid = function(options) {
+            dataGridMocks.setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'grouping', 'columnChooser', 'headerPanel'], {
+                initViews: true,
+                controllers: {
+                    data: new dataGridMocks.MockDataController({ items: [] })
+                },
+                options: options
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('Check header text when all columns are grouped', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', groupIndex: 0 },
+                { caption: 'Column 2', groupIndex: 1 }
+            ],
+            groupPanel: { visible: true }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText'));
+    });
+
+    QUnit.test('Check header text when all columns are grouped but group panel is not visible', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', groupIndex: 0 },
+                { caption: 'Column 2', groupIndex: 1 }
+            ],
+            groupPanel: { visible: false }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.text(), '', 'no message');
+    });
+
+    QUnit.test('Check header text when all columns are hidden in column chooser', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', visible: false }
+            ],
+            columnChooser: { enabled: true }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'));
+    });
+
+    QUnit.test('Check header text when all columns are hidden but column chooser is not enabled', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', visible: false }
+            ],
+            columnChooser: { enabled: false }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.text(), '', 'no message');
+    });
+
+    QUnit.test('Check header text when all columns are hidden in column chooser or grouped in group panel', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', groupIndex: 0 }
+            ],
+            columnChooser: { enabled: true },
+            groupPanel: { visible: true }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText'));
+    });
+
+    QUnit.test('Check header text when all columns are hidden or grouped but column chooser and group panel are not enabled', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', groupIndex: 0 }
+            ],
+            columnChooser: { enabled: false },
+            groupPanel: { visible: false }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.text(), '', 'no message');
+    });
+});
+
 QUnit.module('Headers with band columns', {
     beforeEach: function() {
         const that = this;

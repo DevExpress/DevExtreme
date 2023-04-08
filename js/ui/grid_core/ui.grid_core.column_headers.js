@@ -123,8 +123,8 @@ export const columnHeadersModule = {
                 },
 
                 _getEmptyHeaderText: function() {
-                    const hasHiddenColumns = this._columnChooserView?.getColumns().filter(column => !column.visible).length;
-                    const hasGroupedColumns = this._headerPanelView?.getColumns().length;
+                    const hasHiddenColumns = this._columnChooserController?.isColumnChooserEnabled() && this._columnChooserView?.getColumns().filter(column => !column.visible).length;
+                    const hasGroupedColumns = this._headerPanelView?.isGroupPanelVisible() && this._headerPanelView?.getColumns().length;
 
                     if(hasHiddenColumns && hasGroupedColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText');

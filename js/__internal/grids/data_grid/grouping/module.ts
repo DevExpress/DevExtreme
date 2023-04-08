@@ -373,7 +373,7 @@ export const GroupingHeaderPanelExtender = (function () {
     },
 
     _appendGroupingItem(items) {
-      if (this._isGroupPanelVisible()) {
+      if (this.isGroupPanelVisible()) {
         let isRendered = false;
         const toolbarItem = {
           template: () => {
@@ -415,7 +415,7 @@ export const GroupingHeaderPanelExtender = (function () {
       event.preventDefault();
     },
 
-    _isGroupPanelVisible() {
+    isGroupPanelVisible() {
       return isGroupPanelVisible(this.option('groupPanel'));
     },
 
@@ -541,7 +541,7 @@ export const GroupingHeaderPanelExtender = (function () {
     },
 
     isVisible() {
-      return this.callBase() || this._isGroupPanelVisible();
+      return this.callBase() || this.isGroupPanelVisible();
     },
 
     optionChanged(args) {

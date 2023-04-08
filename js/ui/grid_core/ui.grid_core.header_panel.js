@@ -218,6 +218,8 @@ const members = {
 
     allowDragging: noop,
 
+    isGroupPanelVisible: noop,
+
     getColumns: () => []
 };
 
