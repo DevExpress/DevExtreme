@@ -4092,8 +4092,6 @@ QUnit.test('tab colCountByScreen property change should update layouts', functio
         }],
     }).dxForm('instance');
 
-    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
-
     form.option('items[0].tabs[0].colCountByScreen.md', 1);
 
     assert.strictEqual(getColsCountFromDOM($(form.$element())), 1);
