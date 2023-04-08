@@ -4069,15 +4069,15 @@ QUnit.test('nested group colCountByScreen property change should update layout',
             itemType: 'group',
             items: [{
                 itemType: 'group',
-                colCountByScreen: { md: 1 },
+                colCountByScreen: { md: 2 },
                 items: ['Phone', 'Email'],
             }],
         }],
     }).dxForm('instance');
 
-    form.option('items[0].items[0].colCountByScreen.md', 2);
+    form.option('items[0].items[0].colCountByScreen.md', 1);
 
-    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
+    assert.strictEqual(getColsCountFromDOM($(form.$element())), 1);
 });
 
 QUnit.test('tab colCountByScreen property change should update layouts', function(assert) {
