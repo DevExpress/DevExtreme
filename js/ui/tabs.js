@@ -427,10 +427,6 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _toggleDisabledFocusedNextClass(index, isNextDisabledTabFocused) {
-        this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextDisabledTabFocused);
-    },
-
     _toggleFocusedNextClass(index, isNextTabFocused) {
         this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextTabFocused);
     },
@@ -457,16 +453,11 @@ const Tabs = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'focusedElement': {
-                const { value } = args;
-
-                const index = $(value).index();
-                const isDisabled = this._isDisabled(value);
-
                 const { selectedIndex } = this.option();
+                const currentIndex = $(args.value).index();
 
-                if(index !== selectedIndex) {
-                    this._toggleDisabledFocusedNextClass(selectedIndex, isDisabled && index === selectedIndex + 1);
-                    this._toggleFocusedNextClass(selectedIndex, index === selectedIndex + 1);
+                if(currentIndex !== selectedIndex) {
+                    this._toggleFocusedNextClass(selectedIndex, currentIndex === selectedIndex + 1);
                 }
 
                 this.callBase(args);
