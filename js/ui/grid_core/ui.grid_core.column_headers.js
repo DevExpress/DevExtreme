@@ -268,7 +268,6 @@ export const columnHeadersModule = {
                     const rowIndex = this.getRowCount() === 1 ? null : options.row.rowIndex;
 
                     options.columns = this.getColumns(rowIndex);
-                    // options.columns = this._columnsController.getVisibleColumns(options.row.rowIndex);
 
                     this.callBase($table, options);
                 },
@@ -434,26 +433,6 @@ export const columnHeadersModule = {
                 },
 
                 allowDragging: function(column) {
-                    /*
-                    which tests are written:
-                    2 columns - reordering: true
-                    1 column - reordering: true
-                    2 columns - reordering: false
-                    band { 2 columns } - reordering: true - check 1st data column
-                    band { 2 columns } - reordering: true - check band column
-                    band { 1 column } - reodering: true - check data column
-                    */
-
-                    /*
-                    tests for headerView:
-                    // test1: many columns, but only one column is reorderable. It should have class of drag - DONE
-                    // test3,4,5: check that correct localiztion string is show in empty header
-
-                    tests for columnChooser:
-                    // test2: all columns are draggable when columnchooser is open - done
-                    // test: last column is draggable to columnchooser - done
-                    // test6: no reordering, columnChooser mode = 'select', columnChooser is open. No columns should be draggable - done
-                    */
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex);
 
