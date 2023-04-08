@@ -218,9 +218,7 @@ const members = {
 
     allowDragging: noop,
 
-    isGroupPanelVisible: noop,
-
-    getColumns: () => []
+    hasGroupedColumns: noop,
 };
 
 const HeaderPanel = ColumnsView.inherit(members);

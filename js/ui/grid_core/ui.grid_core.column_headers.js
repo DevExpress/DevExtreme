@@ -74,15 +74,6 @@ export const columnHeadersModule = {
              * @type {Partial<import('./ui.grid_core.column_headers').ColumnHeadersView>}
              */
             const members = {
-                init: function() {
-                    this.callBase();
-
-                    this._columnChooserController = this.getController('columnChooser');
-
-                    this._columnChooserView = this.component.getView('columnChooserView');
-                    this._headerPanelView = this.component.getView('headerPanel');
-                },
-
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
@@ -123,8 +114,8 @@ export const columnHeadersModule = {
                 },
 
                 _getEmptyHeaderText: function() {
-                    const hasHiddenColumns = this._columnChooserController?.isColumnChooserEnabled() && this._columnChooserView?.getColumns().filter(column => !column.visible).length;
-                    const hasGroupedColumns = this._headerPanelView?.isGroupPanelVisible() && this._headerPanelView?.getColumns().length;
+                    const hasHiddenColumns = this.component.getView('columnChooserView').hasHiddenColumns();
+                    const hasGroupedColumns = this.component.getView('headerPanel').hasGroupedColumns();
 
                     if(hasHiddenColumns && hasGroupedColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText');

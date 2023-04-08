@@ -386,14 +386,18 @@ QUnit.module('Headers', {
         // arrange
         const testElement = $('#container');
 
-        $.extend(this.columns, [{ headerCaption: 'Column 1', groupIndex: 0, command: 'expand' }, { headerCaption: 'Column 2', groupIndex: 1, command: 'expand' }, { headerCaption: 'Column 3', groupIndex: 2, command: 'expand' }, { command: 'empty' }]);
+        $.extend(this.columns, [
+            { headerCaption: 'Column 1', groupIndex: 0, command: 'expand' },
+            { headerCaption: 'Column 2', groupIndex: 1, command: 'expand' },
+            { headerCaption: 'Column 3', groupIndex: 2, command: 'expand' }
+        ]);
 
         // act
         this.columnHeadersView.render(testElement);
         const cells = testElement.find('td');
 
         // assert
-        assert.equal(cells.length, 4, 'headers count');
+        assert.equal(cells.length, 3, 'headers count');
         assert.strictEqual($(cells[0]).html(), '&nbsp;', '1 group space text');
         assert.strictEqual($(cells[1]).html(), '&nbsp;', '2 group space text');
         assert.strictEqual($(cells[2]).html(), '&nbsp;', '3 group space text');

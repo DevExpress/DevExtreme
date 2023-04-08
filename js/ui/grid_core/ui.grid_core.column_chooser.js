@@ -33,7 +33,7 @@ const CLICK_TIMEOUT = 300;
 
 const processItems = function(that, chooserColumns) {
     const items = [];
-    const isSelectMode = that._isSelectMode();
+    const isSelectMode = that.isSelectMode();
 
     if(chooserColumns.length) {
         each(chooserColumns, function(index, column) {
@@ -105,14 +105,6 @@ const columnChooserControllerMembers = {
             boundaryOffset: '2 2'
         };
     },
-
-    isSelectMode: function() {
-        return this.option('columnChooser.mode') === 'select';
-    },
-
-    isColumnChooserEnabled: function() {
-        return this.option('columnChooser.enabled');
-    }
 };
 const ColumnChooserController = modules.ViewController.inherit(columnChooserControllerMembers);
 
@@ -122,12 +114,6 @@ const ColumnChooserController = modules.ViewController.inherit(columnChooserCont
 const columnChooserMembers = {
     _resizeCore: noop,
 
-    init: function() {
-        this.callBase();
-
-        this._columnChooserController = this.getController('columnChooser');
-    },
-
     _isWinDevice: function() {
         // @ts-expect-error
         return !!devices.real().win;
@@ -136,7 +122,7 @@ const columnChooserMembers = {
     _updateList: function(change) {
         let items;
         const $popupContent = this._popupContainer.$content();
-        const isSelectMode = this._isSelectMode();
+        const isSelectMode = this.isSelectMode();
         const columnChooserList = this._columnChooserList;
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
@@ -188,7 +174,7 @@ const columnChooserMembers = {
             toolbarItems: [
                 { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' }
             ],
-            position: that._columnChooserController.getPosition(),
+            position: that.getController('columnChooser').getPosition(),
             width: columnChooserOptions.width,
             height: columnChooserOptions.height,
             rtlEnabled: that.option('rtlEnabled'),
@@ -231,7 +217,7 @@ const columnChooserMembers = {
     _renderTreeView: function($container, items) {
         const that = this;
         const columnChooser = this.option('columnChooser');
-        const isSelectMode = this._isSelectMode();
+        const isSelectMode = this.isSelectMode();
         /**
          * @type {import('../tree_view').Options}
          */
@@ -352,14 +338,10 @@ const columnChooserMembers = {
         };
     },
 
-    _isSelectMode: function() {
-        return this._columnChooserController.isSelectMode();
-    },
-
     _columnOptionChanged: function(e) {
         const changeTypes = e.changeTypes;
         const optionNames = e.optionNames;
-        const isSelectMode = this._isSelectMode();
+        const isSelectMode = this.isSelectMode();
 
         this.callBase(e);
 
@@ -392,7 +374,7 @@ const columnChooserMembers = {
     getColumnElements: function() {
         const result = [];
         let $node;
-        const isSelectMode = this._isSelectMode();
+        const isSelectMode = this.isSelectMode();
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const $content = this._popupContainer && this._popupContainer.$content();
         const $nodes = $content && $content.find('.dx-treeview-node');
@@ -425,7 +407,7 @@ const columnChooserMembers = {
     },
 
     allowColumnHeaderDragging: function(column) {
-        const isDragMode = !this._isSelectMode();
+        const isDragMode = !this.isSelectMode();
 
         return isDragMode && this.isColumnChooserVisible() && column.allowHiding;
     },
@@ -479,6 +461,16 @@ const columnChooserMembers = {
         return popupContainer && popupContainer.option('visible');
     },
 
+    isSelectMode: function() {
+        return this.option('columnChooser.mode') === 'select';
+    },
+
+    hasHiddenColumns: function() {
+        const isEnabled = this.option('columnChooser.enabled');
+
+        return isEnabled && !!this.getColumns().filter(column => !column.visible).length;
+    },
+
     publicMethods: function() {
         return ['showColumnChooser', 'hideColumnChooser'];
     }
@@ -514,12 +506,6 @@ export const columnChooserModule = {
     extenders: {
         views: {
             headerPanel: {
-                init: function() {
-                    this.callBase();
-
-                    this._columnChooserController = this.getController('columnChooser');
-                },
-
                 _getToolbarItems: function() {
                     const items = this.callBase();
 
@@ -528,7 +514,7 @@ export const columnChooserModule = {
 
                 _appendColumnChooserItem: function(items) {
                     const that = this;
-                    const columnChooserEnabled = that._columnChooserController.isColumnChooserEnabled();
+                    const columnChooserEnabled = that.option('columnChooser.enabled');
 
                     if(columnChooserEnabled) {
                         const onClickHandler = function() {
@@ -576,16 +562,19 @@ export const columnChooserModule = {
                 },
 
                 isVisible: function() {
-                    const columnChooserEnabled = this._columnChooserController.isColumnChooserEnabled();
+                    const that = this;
+                    const columnChooserEnabled = that.option('columnChooser.enabled');
 
-                    return this.callBase() || columnChooserEnabled;
+                    return that.callBase() || columnChooserEnabled;
                 }
             },
 
             columnHeadersView: {
                 allowDragging: function(column) {
-                    const isDragMode = !this._columnChooserController.isSelectMode();
-                    const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();
+                    const columnChooserView = this.component.getView('columnChooserView');
+
+                    const isDragMode = !columnChooserView.isSelectMode();
+                    const isColumnChooserVisible = columnChooserView.isColumnChooserVisible();
 
                     return (isDragMode && isColumnChooserVisible && column.allowHiding) || this.callBase(column);
                 },
@@ -593,14 +582,8 @@ export const columnChooserModule = {
         },
         controllers: {
             columns: {
-                init: function() {
-                    this.callBase();
-
-                    this._columnChooserController = this.getController('columnChooser');
-                },
-
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
-                    const isSelectMode = this._columnChooserController.isSelectMode();
+                    const isSelectMode = this.option('columnChooser.mode') === 'select';
                     const isMoveColumnDisallowed = isSelectMode && targetLocation === 'columnChooser';
 
                     return isMoveColumnDisallowed ? false : this.callBase(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation);
