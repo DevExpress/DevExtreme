@@ -113,6 +113,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget
  * @namespace DevExpress.viz
+ * @options BaseSparklineOptions
  */
 export default class BaseSparkline<TProperties> extends BaseWidget<TProperties> {
     /**

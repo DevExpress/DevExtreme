@@ -405,6 +405,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget
  * @namespace DevExpress.viz
+ * @options BaseGaugeOptions
  */
 export class BaseGauge<TProperties> extends BaseWidget<TProperties> {
     /**

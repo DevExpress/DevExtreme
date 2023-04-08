@@ -160,6 +160,7 @@ export interface DataSourceOptions<
 /**
  * @docid
  * @public
+ * @options DataSourceOptions
  */
 export default class DataSource<
     TItem = any,

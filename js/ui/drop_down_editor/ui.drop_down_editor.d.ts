@@ -147,6 +147,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
  * @inherits dxTextBox
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxDropDownEditorOptions
  */
 export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
     /**

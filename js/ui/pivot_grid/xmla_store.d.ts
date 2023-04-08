@@ -30,6 +30,7 @@ export interface XmlaStoreOptions {
  * @docid
  * @namespace DevExpress.data
  * @public
+ * @options XmlaStoreOptions
  */
  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class XmlaStore {

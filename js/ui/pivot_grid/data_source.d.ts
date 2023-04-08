@@ -506,6 +506,7 @@ export interface PivotGridDataSourceField {
  * @docid
  * @namespace DevExpress.data
  * @public
+ * @options PivotGridDataSourceOptions
  */
 export default class PivotGridDataSource {
     constructor(options?: Options);

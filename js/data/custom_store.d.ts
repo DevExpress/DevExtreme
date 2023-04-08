@@ -118,6 +118,7 @@ export interface CustomStoreOptions<
  * @docid
  * @inherits Store
  * @public
+ * @options CustomStoreOptions
  */
 export default class CustomStore<
     TItem = any,

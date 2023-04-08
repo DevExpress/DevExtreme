@@ -47,6 +47,7 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
  * @inherits FileSystemProviderBase
  * @namespace DevExpress.fileManagement
  * @public
+ * @options RemoteFileSystemProviderOptions
  */
 export default class RemoteFileSystemProvider extends FileSystemProviderBase {
     constructor(options?: Options);

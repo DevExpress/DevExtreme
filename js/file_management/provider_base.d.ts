@@ -46,6 +46,7 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
  * @docid
  * @namespace DevExpress.fileManagement
  * @hidden
+ * @options FileSystemProviderBaseOptions
  */
 export default class FileSystemProviderBase {
     constructor(options?: FileSystemProviderBaseOptions);

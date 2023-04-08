@@ -95,6 +95,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
  * @inherits FileSystemProviderBase
  * @namespace DevExpress.fileManagement
  * @public
+ * @options CustomFileSystemProviderOptions
  */
 export default class CustomFileSystemProvider extends FileSystemProviderBase {
     constructor(options?: Options);

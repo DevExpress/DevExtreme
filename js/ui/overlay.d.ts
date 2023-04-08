@@ -215,6 +215,7 @@ export interface dxOverlayAnimation {
  * @inherits Widget
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxOverlayOptions
  */
 export default class dxOverlay<TProperties> extends Widget<TProperties> {
     /**

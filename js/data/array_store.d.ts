@@ -28,6 +28,7 @@ export interface ArrayStoreOptions<
  * @docid
  * @inherits Store
  * @public
+ * @options ArrayStoreOptions
  */
 export default class ArrayStore<
     TItem = any,

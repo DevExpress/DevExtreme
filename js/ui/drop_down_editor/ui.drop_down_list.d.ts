@@ -179,6 +179,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxDropDownListOptions
  */
 export default class dxDropDownList<TProperties> extends dxDropDownEditor<TProperties> {
     getDataSource(): DataSource;

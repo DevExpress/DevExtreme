@@ -173,6 +173,16 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
      valueChangeMode?: SliderValueChangeMode;
 }
 
+/**
+ * @docid
+ * @inherits dxTrackBar
+ * @hidden
+ * @namespace DevExpress.ui
+ * @options dxSliderBaseOptions
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface dxSliderBase { }
+
 /** @public */
 export type Properties = dxSliderOptions;
 

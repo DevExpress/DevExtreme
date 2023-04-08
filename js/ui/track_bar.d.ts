@@ -26,5 +26,6 @@ export interface dxTrackBarOptions<TComponent> extends EditorOptions<TComponent>
  * @inherits Editor
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxTrackBarOptions
  */
 export default class dxTrackBar<TProperties> extends Editor<TProperties> { }

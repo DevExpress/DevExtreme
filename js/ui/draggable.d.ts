@@ -106,6 +106,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
  * @inherits DOMComponent
  * @hidden
  * @namespace DevExpress.ui
+ * @options DraggableBaseOptions
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DraggableBase { }

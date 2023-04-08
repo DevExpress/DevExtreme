@@ -94,6 +94,7 @@ export interface ODataStoreOptions<
  * @docid
  * @inherits Store
  * @public
+ * @options ODataStoreOptions
  */
 export default class ODataStore<
     TItem = any,

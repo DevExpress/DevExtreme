@@ -61,6 +61,7 @@ export interface HierarchicalCollectionWidgetOptions<
  * @inherits CollectionWidget
  * @hidden
  * @namespace DevExpress.ui
+ * @options HierarchicalCollectionWidgetOptions
  */
 export default class HierarchicalCollectionWidget<
     TProperties extends HierarchicalCollectionWidgetOptions<any, TItem, TKey>,

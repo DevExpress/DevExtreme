@@ -568,6 +568,7 @@ export interface BaseWidgetTooltip {
  * @hidden
  * @inherits DOMComponent
  * @namespace DevExpress.viz
+ * @options BaseWidgetOptions
  */
 export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
     /**

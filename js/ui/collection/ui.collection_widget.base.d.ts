@@ -163,6 +163,7 @@ export interface CollectionWidgetOptions<
  * @inherits Widget, DataHelperMixin
  * @hidden
  * @namespace DevExpress.ui
+ * @options CollectionWidgetOptions
  */
 export default class CollectionWidget<
     TProperties extends CollectionWidgetOptions<any, TItem, TKey>,

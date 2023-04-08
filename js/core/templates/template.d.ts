@@ -17,6 +17,7 @@ export interface dxTemplateOptions {
  * @section uiWidgetMarkupComponents
  * @type object
  * @public
+ * @options dxTemplateOptions
  */
 export type dxTemplate = Template;
 

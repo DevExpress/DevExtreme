@@ -115,6 +115,7 @@ export interface dxMenuBaseOptions<
  * @inherits HierarchicalCollectionWidget
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxMenuBaseOptions
  */
 export default class dxMenuBase<
   TProperties extends dxMenuBaseOptions<any, TItem, TKey>,

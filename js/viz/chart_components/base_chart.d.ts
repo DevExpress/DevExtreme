@@ -303,6 +303,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget, DataHelperMixin
  * @namespace DevExpress.viz
+ * @options BaseChartOptions
  */
 export class BaseChart<TProperties> extends BaseWidget<TProperties> {
     /**

@@ -74,6 +74,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
  * @inherits DOMComponent
  * @hidden
  * @namespace DevExpress.ui
+ * @options WidgetOptions
  */
 export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**

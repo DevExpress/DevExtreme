@@ -933,6 +933,7 @@ export interface Selection extends SelectionBase {
  * @inherits GridBase
  * @namespace DevExpress.ui
  * @public
+ * @options dxTreeListOptions
  */
 export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
