@@ -520,8 +520,8 @@ const Resizable = DOMComponent.inherit({
         if(isElement) {
             const areaElement = $(area)[0];
             if(isWindow(areaElement)) {
-                scrollOffset.scrollX = areaElement.pageXOffset;
-                scrollOffset.scrollY = areaElement.pageYOffset;
+                scrollOffset.scrollX = areaElement.scrollX;
+                scrollOffset.scrollY = areaElement.scrollY;
             }
         } else {
             const offset = this.$element().offset();

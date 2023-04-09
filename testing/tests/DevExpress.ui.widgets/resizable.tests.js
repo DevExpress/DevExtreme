@@ -1495,7 +1495,11 @@ QUnit.module('options', () => {
     });
 });
 
-QUnit.module('area', () => {
+QUnit.module('area', {
+    getResizableRect() {
+        return $('#resizable').get(0).getBoundingClientRect();
+    }
+},() => {
     QUnit.test('element bottom boundary', function(assert) {
         const $resizable = $('#resizable').dxResizable({
             area: $('#areaDiv')
@@ -1633,54 +1637,98 @@ QUnit.module('area', () => {
         assert.equal($resizable.offset().top + $resizable.outerHeight(), resizableBottom + 20);
     });
 
-    QUnit.test('resizing with "window" area that have a scroll offset', function(assert) {
-        const scrollY = 1500;
-        const scrollX = 2500;
-        const $resizable = $('#resizable')
-            .offset({ left: scrollX + 150, top: scrollY + 150 })
-            .css('border', '8px solid red');
-        const $fixtureElement = $('<div>')
-            .height(3000)
-            .width(3000)
-            .appendTo('body');
+    QUnit.module('as a window', () => {
+        QUnit.test('resize should be restricted by window boundaries', function(assert) {
+            const leftOffset = 100;
+            const topOffset = 100;
+            const rightOffset = window.innerWidth;
+            const bottomOffset = window.innerHeight;
+            $('#resizable').offset({ left: leftOffset, top: topOffset });
+    
+            $('#resizable').dxResizable({
+                area: window
+            });
+    
+            pointerMock(getHandle('top')).start().down().move(0, -500).dragEnd();
+            assert.strictEqual(this.getResizableRect().top, 0, 'top resize is restricted');
 
-        $(window)
-            .scrollTop(scrollY)
-            .scrollLeft(scrollX);
+            pointerMock(getHandle('left')).start().down().move(-500, 0).dragEnd();
+            assert.strictEqual(this.getResizableRect().left, 0, 'left resize is restricted');
 
-        $resizable.dxResizable({
-            area: $(window)
+            pointerMock(getHandle('right')).start().down().move(rightOffset * 2, 0).dragEnd();
+            assert.strictEqual(this.getResizableRect().right, rightOffset, 'right resize is restricted');
+
+            pointerMock(getHandle('bottom')).start().down().move(0, bottomOffset * 2).dragEnd();
+            assert.strictEqual(this.getResizableRect().bottom, bottomOffset, 'bottom resize is restricted');
         });
 
-        pointerMock(getHandle('left'))
-            .start({ x: scrollX, y: scrollY })
-            .down()
-            .move(-20, 0)
-            .dragEnd();
-        assert.strictEqual($resizable.outerWidth(), 70, 'width changed correctly');
+        QUnit.module('window is scrolled', {
+            beforeEach: function() {
+                const window = $(window);
+                this._windowInitialScroll = {
+                    x: window.scrollLeft(),
+                    y: window.scrollTop()
+                };
+                window.scrollLeft(300);
+                window.scrollTop(300);
+            },
+            afterEach: function() {
+                const window = $(window);
+                window.scrollLeft(this._windowInitialScroll.x);
+                window.scrollTop(this._windowInitialScroll.y);
+            }
+        }, () => {
+            QUnit.test('resize should be restricted by window boundaries considering scroll offset', function(assert) {
+                const leftOffset = 400;
+                const topOffset = 400;
+                $('#resizable').offset({ left: leftOffset, top: topOffset });
+        
+                $('#resizable').dxResizable({
+                    area: window
+                });
+        
+                pointerMock(getHandle('top')).start().down().move(0, -500).dragEnd();
+                assert.strictEqual(this.getResizableRect().top, window.scrollY, 'top resize is restricted');
+    
+                pointerMock(getHandle('left')).start().down().move(-500, 0).dragEnd();
+                assert.strictEqual(this.getResizableRect().left, window.scrollX, 'left resize is restricted');
+    
+                pointerMock(getHandle('right')).start().down().move(window.innerWidth * 2, 0).dragEnd();
+                assert.strictEqual(this.getResizableRect().right, window.scrollX + window.innerWidth, 'right resize is restricted');
+    
+                pointerMock(getHandle('bottom')).start().down().move(0, window.innerHeight * 2).dragEnd();
+                assert.strictEqual(this.getResizableRect().bottom, window.scrollY + window.innerHeight, 'bottom resize is restricted');
+            });
 
-        pointerMock(getHandle('top'))
-            .start({ x: scrollX, y: scrollY })
-            .down()
-            .move(0, -20)
-            .dragEnd();
-        assert.strictEqual($resizable.outerHeight(), 70, 'height changed correctly');
-        $fixtureElement.remove();
-    });
+            QUnit.test('dimensions should be updated according to resize delta', function(assert) {
+                const $resizable = $('#resizable');
+                $resizable.offset({ left: 100, top: 100 });
+                const resizeDelta = 25;
+                const initialSize = 50;
+
+                $resizable.dxResizable({
+                    area: $(window)
+                });
+        
+                pointerMock(getHandle('left')).start().down().move(-resizeDelta, 0).dragEnd();
+                assert.strictEqual($resizable.outerWidth(), initialSize + resizeDelta, 'width is changed correctly');
+        
+                pointerMock(getHandle('top')).start().down().move(0, -resizeDelta).dragEnd();
+                assert.strictEqual($resizable.outerHeight(), initialSize + resizeDelta, 'height is changed correctly');
+            });
+    
+        });
+    })
 
     // NOTE: For Sheduler use only. See T1150246.
-    QUnit.module('as an object', {
-        getRect($element) {
-            return $element.get(0).getBoundingClientRect();
-        }
-    }, () => {
+    QUnit.module('as an object', () => {
         QUnit.test('resize should be restricted by passed absolute coordinates', function(assert) {
             const $area = $('#areaDiv'); 
             const { left: areaLeft, top: areaTop } = $area.offset();
             const areaRight = areaLeft + $area.outerWidth();
             const areaBottom = areaTop + $area.outerHeight();
     
-            const $resizable = $('#resizable').dxResizable({
+            $('#resizable').dxResizable({
                 area: {
                     left: areaLeft,
                     top: areaTop,
@@ -1690,16 +1738,16 @@ QUnit.module('area', () => {
             });
     
             pointerMock(getHandle('left')).start().down().move(-100, 0).dragEnd();
-            assert.strictEqual(this.getRect($resizable).left, areaLeft, 'left resize is restricted');
+            assert.strictEqual(this.getResizableRect().left, areaLeft, 'left resize is restricted');
     
             pointerMock(getHandle('top')).start().down().move(0, -100).dragEnd();
-            assert.strictEqual(this.getRect($resizable).top, areaTop, 'top resize is restricted');
+            assert.strictEqual(this.getResizableRect().top, areaTop, 'top resize is restricted');
 
             pointerMock(getHandle('right')).start().down().move(100, 0).dragEnd();
-            assert.strictEqual(this.getRect($resizable).right, areaRight, 'right resize is restricted');
+            assert.strictEqual(this.getResizableRect().right, areaRight, 'right resize is restricted');
     
             pointerMock(getHandle('bottom')).start().down().move(0, 100).dragEnd();
-            assert.strictEqual(this.getRect($resizable).bottom, areaBottom, 'bottom resize is restricted');
+            assert.strictEqual(this.getResizableRect().bottom, areaBottom, 'bottom resize is restricted');
         });
 
         QUnit.module('resizable container is scrolled', {
@@ -1732,13 +1780,16 @@ QUnit.module('area', () => {
     
                 this.scrollDelta = 100;
             },
+            getResizableRect() {
+                return this.$resizable.get(0).getBoundingClientRect();
+            }
         }, () => {
             QUnit.test('vertical resize should be restricted by passed area considering scroll offset', function(assert) {
                 this.scrollView.scrollTo({ top: this.scrollDelta });
                 pointerMock(getHandle('bottom')).start().down().move(0, 500).dragEnd();
     
                 const expectedBottom = this.area.bottom - this.scrollDelta;
-                assert.strictEqual(this.getRect(this.$resizable).bottom, expectedBottom, 'resize was stopped on area boundary');
+                assert.strictEqual(this.getResizableRect().bottom, expectedBottom, 'resize was stopped on area boundary');
             });
     
             QUnit.test('horizontal resize should be restricted by passed area considering scroll offset', function(assert) {
@@ -1746,7 +1797,7 @@ QUnit.module('area', () => {
                 pointerMock(getHandle('right')).start().down().move(500, 0).dragEnd();
     
                 const expectedRight = this.area.right - this.scrollDelta;
-                assert.strictEqual(this.getRect(this.$resizable).right, expectedRight, 'resize was stopped on area boundary');
+                assert.strictEqual(this.getResizableRect().right, expectedRight, 'resize was stopped on area boundary');
             });
     
             QUnit.test('vertical resize should be restricted by passed area considering scroll offset after position change', function(assert) {
@@ -1758,7 +1809,7 @@ QUnit.module('area', () => {
                 pointerMock(getHandle('bottom')).start().down().move(0, 500).dragEnd();
     
                 const expectedBottom = this.area.bottom - this.scrollDelta;
-                assert.strictEqual(this.getRect(this.$resizable).bottom, expectedBottom, 'resize was stopped on area boundary');
+                assert.strictEqual(this.getResizableRect().bottom, expectedBottom, 'resize was stopped on area boundary');
             });
     
             QUnit.test('horizontal resize should be restricted by passed area considering scroll offset after position change', function(assert) {
@@ -1770,7 +1821,7 @@ QUnit.module('area', () => {
                 pointerMock(getHandle('right')).start().down().move(500, 0).dragEnd();
     
                 const expectedRight = this.area.right - this.scrollDelta;
-                assert.strictEqual(this.getRect(this.$resizable).right, expectedRight, 'resize was stopped on area boundary');
+                assert.strictEqual(this.getResizableRect().right, expectedRight, 'resize was stopped on area boundary');
             });
         });
     });
