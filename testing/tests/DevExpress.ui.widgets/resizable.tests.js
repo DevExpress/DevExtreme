@@ -1686,7 +1686,6 @@ QUnit.module('area', {
                 this.moveHandle('top', { y: -resizeDelta });
                 assert.strictEqual($resizable.outerHeight(), initialSize + resizeDelta, 'height is changed correctly');
             });
-    
         });
     })
 
