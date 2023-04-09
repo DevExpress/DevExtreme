@@ -84,6 +84,8 @@ const Resizable = DOMComponent.inherit({
 
     _initMarkup: function() {
         this.callBase();
+        this._initialOffset = this.$element().offset();
+        this._locationDelta = { top: 0, left: 0 };
         this._renderHandles();
     },
 
@@ -346,6 +348,9 @@ const Resizable = DOMComponent.inherit({
         const offsetTop = delta.y * (sides.top ? -1 : 1) - ((elementRect.height || height) - height);
         const offsetLeft = delta.x * (sides.left ? -1 : 1) - ((elementRect.width || width) - width);
 
+        this._locationDelta.top = sides.top ? offsetTop : 0;
+        this._locationDelta.left = sides.left ? offsetLeft : 0;
+
         move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
             left: location.left + (sides.left ? offsetLeft : 0)
@@ -518,6 +523,10 @@ const Resizable = DOMComponent.inherit({
                 scrollOffset.scrollX = areaElement.pageXOffset;
                 scrollOffset.scrollY = areaElement.pageYOffset;
             }
+        } else {
+            const offset = this.$element().offset();
+            scrollOffset.scrollX = offset.left - this._initialOffset.left;
+            scrollOffset.scrollY = offset.top - this._initialOffset.top;
         }
 
         return scrollOffset;
@@ -570,6 +579,12 @@ const Resizable = DOMComponent.inherit({
         result.height -= getOuterHeight(this.$element()) - getInnerHeight(this.$element());
     },
 
+    _updateScrollPositionCache() {
+        this._initialOffset.top += this._locationDelta.top;
+        this._initialOffset.left += this._locationDelta.left;
+        this._locationDelta = { left: 0, top: 0 };
+    },
+
     _dragEndHandler: function(e) {
         const $element = this.$element();
 
@@ -580,6 +595,7 @@ const Resizable = DOMComponent.inherit({
             handles: this._movingSides
         });
 
+        this._updateScrollPositionCache();
         this._toggleResizingClass(false);
     },
 

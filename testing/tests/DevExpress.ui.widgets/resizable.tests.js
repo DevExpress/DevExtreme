@@ -2,6 +2,7 @@ import translator from 'animation/translator';
 import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/resizable';
+import 'ui/scroll_view';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'generic_light.css!';
@@ -1573,27 +1574,6 @@ QUnit.module('area', () => {
         assert.equal($resizable.offset().top + $resizable.outerHeight(), $area.offset().top + 6 + $area.innerHeight());
     });
 
-    QUnit.test('It should be possible to set area as object with coordinates', function(assert) {
-        const $area = $('#areaDiv'); const areaOffset = $area.offset(); const areaOffsetLeft = areaOffset.left; const areaOffsetTop = areaOffset.top;
-
-        const $resizable = $('#resizable').dxResizable({
-            area: function() {
-                return {
-                    left: areaOffsetLeft,
-                    top: areaOffsetTop,
-                    right: areaOffsetLeft + $area.outerWidth(),
-                    bottom: areaOffsetTop + $area.outerHeight()
-                };
-            }
-        });
-
-        pointerMock(getHandle('left')).start().down().move(-70, 0).dragEnd();
-        assert.equal($resizable.offset().left, areaOffsetLeft);
-
-        pointerMock(getHandle('top')).start().down().move(0, -70).dragEnd();
-        assert.equal($resizable.offset().top, areaOffsetTop);
-    });
-
     QUnit.test('Borders should be included in drag offset if area is object with coordinates', function(assert) {
         const $area = $('#areaDiv');
         const areaOffset = $area.offset();
@@ -1686,6 +1666,113 @@ QUnit.module('area', () => {
             .dragEnd();
         assert.strictEqual($resizable.outerHeight(), 70, 'height changed correctly');
         $fixtureElement.remove();
+    });
+
+    // NOTE: For Sheduler use only. See T1150246.
+    QUnit.module('as an object', {
+        getRect($element) {
+            return $element.get(0).getBoundingClientRect();
+        }
+    }, () => {
+        QUnit.test('resize should be restricted by passed absolute coordinates', function(assert) {
+            const $area = $('#areaDiv'); 
+            const { left: areaLeft, top: areaTop } = $area.offset();
+            const areaRight = areaLeft + $area.outerWidth();
+            const areaBottom = areaTop + $area.outerHeight();
+    
+            const $resizable = $('#resizable').dxResizable({
+                area: {
+                    left: areaLeft,
+                    top: areaTop,
+                    right: areaRight,
+                    bottom: areaBottom
+                }
+            });
+    
+            pointerMock(getHandle('left')).start().down().move(-100, 0).dragEnd();
+            assert.strictEqual(this.getRect($resizable).left, areaLeft, 'left resize is restricted');
+    
+            pointerMock(getHandle('top')).start().down().move(0, -100).dragEnd();
+            assert.strictEqual(this.getRect($resizable).top, areaTop, 'top resize is restricted');
+
+            pointerMock(getHandle('right')).start().down().move(100, 0).dragEnd();
+            assert.strictEqual(this.getRect($resizable).right, areaRight, 'right resize is restricted');
+    
+            pointerMock(getHandle('bottom')).start().down().move(0, 100).dragEnd();
+            assert.strictEqual(this.getRect($resizable).bottom, areaBottom, 'bottom resize is restricted');
+        });
+
+        QUnit.module('resizable container is scrolled', {
+            beforeEach: function() {
+                this.$scrollView = $('<div>').attr('id', 'scrollView');
+                this.$resizable = $('<div>').css({ width: 200, height: 200, left: 0, top: 0 });
+                const $scrollableContent = $('<div>').css({height: 600, width: 600});
+                
+                $scrollableContent.append(this.$resizable);
+                this.$scrollView.append($scrollableContent);
+                $('#qunit-fixture').append(this.$scrollView);
+    
+                this.scrollView = this.$scrollView.dxScrollView({
+                    height: 400,
+                    width: 400,
+                    direction: 'both'
+                }).dxScrollView('instance');
+    
+                const { left, top } = this.$scrollView.offset();
+                this.area = {
+                    left, 
+                    top,
+                    right: left + this.$scrollView.width(),
+                    bottom: top + this.$scrollView.height()
+                };
+        
+                this.$resizable.dxResizable({
+                    area: this.area
+                });
+    
+                this.scrollDelta = 100;
+            },
+        }, () => {
+            QUnit.test('vertical resize should be restricted by passed area considering scroll offset', function(assert) {
+                this.scrollView.scrollTo({ top: this.scrollDelta });
+                pointerMock(getHandle('bottom')).start().down().move(0, 500).dragEnd();
+    
+                const expectedBottom = this.area.bottom - this.scrollDelta;
+                assert.strictEqual(this.getRect(this.$resizable).bottom, expectedBottom, 'resize was stopped on area boundary');
+            });
+    
+            QUnit.test('horizontal resize should be restricted by passed area considering scroll offset', function(assert) {
+                this.scrollView.scrollTo({ left: this.scrollDelta });
+                pointerMock(getHandle('right')).start().down().move(500, 0).dragEnd();
+    
+                const expectedRight = this.area.right - this.scrollDelta;
+                assert.strictEqual(this.getRect(this.$resizable).right, expectedRight, 'resize was stopped on area boundary');
+            });
+    
+            QUnit.test('vertical resize should be restricted by passed area considering scroll offset after position change', function(assert) {
+                this.scrollView.scrollTo({ top: this.scrollDelta });
+    
+                // NOTE: change resizable top position
+                pointerMock(getHandle('top')).start().down().move(0, 100).dragEnd();
+    
+                pointerMock(getHandle('bottom')).start().down().move(0, 500).dragEnd();
+    
+                const expectedBottom = this.area.bottom - this.scrollDelta;
+                assert.strictEqual(this.getRect(this.$resizable).bottom, expectedBottom, 'resize was stopped on area boundary');
+            });
+    
+            QUnit.test('horizontal resize should be restricted by passed area considering scroll offset after position change', function(assert) {
+                this.scrollView.scrollTo({ left: this.scrollDelta });
+    
+                // NOTE: change resizable left position
+                pointerMock(getHandle('left')).start().down().move(100, 0).dragEnd();
+    
+                pointerMock(getHandle('right')).start().down().move(500, 0).dragEnd();
+    
+                const expectedRight = this.area.right - this.scrollDelta;
+                assert.strictEqual(this.getRect(this.$resizable).right, expectedRight, 'resize was stopped on area boundary');
+            });
+        });
     });
 });
 
