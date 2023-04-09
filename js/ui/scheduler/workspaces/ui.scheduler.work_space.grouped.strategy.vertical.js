@@ -3,7 +3,6 @@ import { Cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import { calculateDayDuration, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
-const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
 
 class VerticalGroupedStrategy {
@@ -78,22 +77,18 @@ class VerticalGroupedStrategy {
 
     getGroupBoundsOffset(groupIndex, [$firstCell, $lastCell]) {
         return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
-            const startDayHour = this._workSpace.option('startDayHour');
-            const endDayHour = this._workSpace.option('endDayHour');
-            const hoursInterval = this._workSpace.option('hoursInterval');
+            const { startDayHour, endDayHour, hoursInterval } = this._workSpace.option();
 
-            const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
-            const scrollTop = this.getScrollableScrollTop();
-            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
+            const hoursInDay = calculateDayDuration(startDayHour, endDayHour) / hoursInterval;
+            const dayHeight = hoursInDay * this._workSpace.getCellHeight();
 
-            if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
-                topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
-            }
-
+            const scrollViewTop = this._workSpace.getScrollable().$element().get(0).getBoundingClientRect().top;
+            const topOffset = scrollViewTop + groupIndex * dayHeight;
             const bottomOffset = topOffset + dayHeight;
 
             const { left } = $firstCell.getBoundingClientRect();
             const { right } = $lastCell.getBoundingClientRect();
+
             return this._groupBoundsOffset = {
                 left,
                 right,
