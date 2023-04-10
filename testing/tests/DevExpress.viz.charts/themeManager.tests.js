@@ -88,7 +88,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.75
             },
-            lightening: true,
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -101,7 +101,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.5
             },
-            lightening: true,
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -183,7 +183,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.75
             },
-            lightening: true,
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -196,7 +196,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.5
             },
-            lightening: true,
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -320,7 +320,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.75
             },
-            lightening: false,
+            highlight: false,
             border: {
                 visible: false,
                 width: 3
@@ -334,7 +334,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.5
             },
-            lightening: true,
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
