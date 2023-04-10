@@ -1165,6 +1165,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             value: node.internalFields.selected,
             onValueChanged: this._changeCheckboxValue.bind(this),
             focusStateEnabled: false,
+            elementAttr: { 'aria-label': 'checkbox' },
             disabled: this._disabledGetter(node)
         });
     },
