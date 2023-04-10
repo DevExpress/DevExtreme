@@ -15,9 +15,6 @@ const BING_MAP_READY = '_bingScriptReady';
 let BING_URL_V8 = 'https://www.bing.com/api/maps/mapcontrol?callback=' + BING_MAP_READY;
 
 const INFOBOX_V_OFFSET_V8 = 13;
-
-const BING_CREDENTIALS = 'AhuxC0dQ1DBTNo8L-H9ToVMQStmizZzBJdraTSgCzDSWPsA1Qd8uIvFSflzxdaLH';
-
 const MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
 
 
@@ -166,7 +163,7 @@ const BingProvider = DynamicProvider.inherit({
         const controls = this._option('controls');
 
         this._map = new Microsoft.Maps.Map(this._$container[0], {
-            credentials: this._keyOption('bing') || BING_CREDENTIALS,
+            credentials: this._keyOption('bing'),
             zoom: this._option('zoom'),
             showDashboard: controls,
             showMapTypeSelector: controls,
