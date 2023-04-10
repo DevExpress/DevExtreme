@@ -811,7 +811,13 @@ const Sortable = Draggable.inherit({
         }
 
         if(position) {
+            const isLastVerticalPosition = isVerticalOrientation && toIndex === items.length;
+            const outerPlaceholderHeight = getOuterHeight($placeholderElement);
+
             position.left = that._makeLeftCorrection(position.left);
+            position.top = isLastVerticalPosition && position.top >= outerPlaceholderHeight
+                ? position.top - outerPlaceholderHeight
+                : position.top;
 
             that._move(position, $placeholderElement);
         }
@@ -936,7 +942,7 @@ const Sortable = Draggable.inherit({
         this._getAction('onReorder')(args);
 
         return args.promise || (new Deferred()).resolve();
-    }
+    },
 });
 
 registerComponent(SORTABLE, Sortable);
