@@ -4024,9 +4024,11 @@ function getColsCountFromDOM($form) {
 
     const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
     [1, 2, 3, 4].forEach(colCount => {
-        if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
-            result = colCount;
-        }
+        $lastCol.each((_, $item) => {
+            if($($item).hasClass(`dx-col-${colCount - 1}`)) {
+                result = colCount;
+            }
+        });
     });
 
     return result;
@@ -4044,7 +4046,7 @@ QUnit.test('group colCountByScreen property change should update layout', functi
 
     form.option('items[0].colCountByScreen.md', 2);
 
-    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 2);
 });
 
 QUnit.test('nested group colCountByScreen property change should update layout', function(assert) {
@@ -4062,7 +4064,7 @@ QUnit.test('nested group colCountByScreen property change should update layout',
 
     form.option('items[0].items[0].colCountByScreen.md', 1);
 
-    assert.strictEqual(getColsCountFromDOM($(form.$element())), 1);
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 1);
 });
 
 QUnit.test('tab colCountByScreen property change should update layouts', function(assert) {
@@ -4079,7 +4081,7 @@ QUnit.test('tab colCountByScreen property change should update layouts', functio
 
     form.option('items[0].tabs[0].colCountByScreen.md', 1);
 
-    assert.strictEqual(getColsCountFromDOM($(form.$element())), 1);
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 1);
 });
 
 QUnit.test('colCountByScreen property change with itemOption should update layout', function(assert) {
@@ -4098,7 +4100,7 @@ QUnit.test('colCountByScreen property change with itemOption should update layou
 
     form.itemOption('groupName.tabName', 'colCountByScreen.md', 2);
 
-    assert.strictEqual(getColsCountFromDOM($(form.$element())), 2);
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 2);
 });
 
 [
