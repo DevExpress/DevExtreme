@@ -84,6 +84,7 @@ function createDefaultBatch(dev) {
     if(!env.BUILD_TESTCAFE) {
         tasks.push('discover-declarations');
     }
+    tasks.push('transpile-systemjs');
     return gulp.series(tasks);
 }
 
@@ -112,7 +113,6 @@ gulp.task('dev-watch', gulp.parallel(
 
 gulp.task('dev', gulp.series(
     'default-dev',
-    'transpile-systemjs',
     'dev-watch'
 ));
 
