@@ -136,7 +136,7 @@ module('Integration: Appointment editing', {
                     currentView: 'timelineMonth'
                 });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const updateAppointment = scheduler.instance._updateAppointment;
                 const spy = sinon.spy(noop);
@@ -165,7 +165,7 @@ module('Integration: Appointment editing', {
 
                 const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const updateAppointment = scheduler.instance._updateAppointment;
                 const spy = sinon.spy(noop);
@@ -296,7 +296,7 @@ module('Integration: Appointment editing', {
 
                 const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const updateAppointment = scheduler.instance.updateAppointment;
                 const spy = sinon.spy(() => new Deferred());

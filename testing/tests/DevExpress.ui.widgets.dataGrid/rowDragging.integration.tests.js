@@ -43,7 +43,7 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
                 }
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             pointerMock(dataGrid.getCellElement(0, 0)).start().down().move(100, 100);

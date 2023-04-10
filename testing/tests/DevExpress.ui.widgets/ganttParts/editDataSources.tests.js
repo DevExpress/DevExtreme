@@ -39,13 +39,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
@@ -68,13 +68,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: false }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
@@ -121,13 +121,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
@@ -174,13 +174,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: false }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
@@ -227,13 +227,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
@@ -280,13 +280,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: false }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
@@ -311,10 +311,10 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             tasks: { dataSource: tasksDataSource },
             editing: { enabled: true }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.instance._treeList.getVisibleRows().length, 4, 'tasks filtered');
         this.instance.deleteTask('4');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.instance._treeList.getVisibleRows().length, 3, 'tasks removed');
     });
     test('check render for ds with delay T1024748', function(assert) {
@@ -350,7 +350,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick(200);
+        this.clock.tick(300);
 
         const titleText = $(this.instance._treeList.getCellElement(0, 0)).text();
         assert.equal(titleText, tasks[0].title, 'title cell text is right');

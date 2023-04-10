@@ -100,7 +100,7 @@ QUnit.module('Column chooser', {
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
         const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
@@ -121,7 +121,7 @@ QUnit.module('Column chooser', {
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
         const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
@@ -529,7 +529,7 @@ QUnit.module('Column chooser', {
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
         const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
@@ -548,7 +548,7 @@ QUnit.module('Column chooser', {
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(searchBoxWrapper.getEditorInput().attr('aria-label'), messageLocalization.format('Search'), 'Search box input aria-label attribute');
@@ -1116,7 +1116,7 @@ QUnit.module('Column chooser', {
 
         const popupInstance = this.columnChooserView._popupContainer;
         popupInstance.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 2, 'hidden column count');

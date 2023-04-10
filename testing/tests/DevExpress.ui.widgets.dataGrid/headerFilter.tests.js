@@ -163,7 +163,7 @@ QUnit.module('Header Filter dataController', {
         dataSource.load().done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(items, [{ text: 'test1', value: 1 }]);
@@ -203,7 +203,7 @@ QUnit.module('Header Filter dataController', {
         dataSource.load().done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(items, [{ text: 'blank', value: null }, { field: 1, text: 'test1', value: 1 }]);
@@ -244,7 +244,7 @@ QUnit.module('Header Filter dataController', {
         dataSource.load().done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(items, [{ text: 'test1', value: 1 }, { text: 'test2', value: 2 }]);
@@ -2286,7 +2286,7 @@ QUnit.module('Header Filter', {
 
             // act
             that.headerFilterController.showHeaderFilterMenu(0);
-            that.clock.tick();
+            that.clock.tick(10);
 
             // assert
             $popupContent = that.headerFilterView.getPopupContainer().$content();
@@ -3907,7 +3907,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // act
         that.headerFilterController.getDataSource(column).load({ userData: {} });
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.deepEqual(loadOptions.customQueryParams, { param: 'test' }, 'custom query param');
@@ -3931,7 +3931,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // act
         const dataSource = that.headerFilterController.getDataSource(column);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(dataSource.group.length, 1, 'one group parameter');
@@ -4033,7 +4033,7 @@ QUnit.module('Header Filter with real columnsController', {
         dataSourceOptions.load({ group: dataSourceOptions.group }).done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(getTreeText(items), ['1992', 'September', '6', '12', '13'], 'loaded data');
@@ -4096,7 +4096,7 @@ QUnit.module('Header Filter with real columnsController', {
                 }).done(function(data) {
                     items = data;
                 });
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.deepEqual(getTreeText(items), [
@@ -4154,7 +4154,7 @@ QUnit.module('Header Filter with real columnsController', {
         dataSourceOptions.load({}).done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(getTreeText(items), [
@@ -4400,7 +4400,7 @@ QUnit.module('Header Filter with real columnsController', {
             // act
             const list = $popupContent.find('.dx-list').dxList('instance');
             list.scrollBy(100);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             $listItemElements = $popupContent.find('.dx-list-item-content');
