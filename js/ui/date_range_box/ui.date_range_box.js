@@ -24,7 +24,7 @@ class DateRangeBox extends DateBox {
             /**
              * @name dxDateRangeBoxOptions.showAnalogClock
              * @hidden
-             */
+            */
 
             /**
             * @name dxDateRangeBoxOptions.type
