@@ -516,17 +516,27 @@ if(Quill) {
 
             if('value' in widget.option()) {
                 this._setValueSilent(widget, formats[name]);
+            } else if(name === 'link') {
+                this._updateLinkButton(name, widget, selection);
             } else {
-                if(name === 'link' && selection?.length === 0) { // T1157840
-                    const nextIndexFormat = this.quill.getFormat({
-                        length: 0,
-                        index: selection.index + 1
-                    });
-                    if(!nextIndexFormat[name]) {
-                        return;
-                    }
-                }
                 widget.$element().addClass(ACTIVE_FORMAT_CLASS);
+            }
+        }
+
+        _updateLinkButton(name, widget, selection) {
+            // NOTE:
+            // See T1157840
+            // When a mouse pointer is placed on the link's right border, the quill.scroll.descendant method does not return information about the link.
+            // In this case, the "Add link" button should be inactive.
+
+            if(selection.length === 0) {
+                const nextIndexFormat = this.quill.getFormat({
+                    length: 0,
+                    index: selection.index + 1
+                });
+                if(nextIndexFormat[name]) {
+                    widget.$element().addClass(ACTIVE_FORMAT_CLASS);
+                }
             }
         }
 
