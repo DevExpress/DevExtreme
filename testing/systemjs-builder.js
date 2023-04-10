@@ -241,20 +241,9 @@ const transpileCss = async(Builder) => {
 
 const transpileTests = async(Builder) => {
     const builder = new Builder(root, config);
-    const testingFolders = [
-        'DevExpress.ui.widgets',
-        'DevExpress.ui.widgets.dataGrid',
-        'DevExpress.ui.widgets.editors'
-    ];
-
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
-    const listFiles = [...helpersList];
-
-    // eslint-disable-next-line no-restricted-syntax
-    for(const folder of testingFolders) {
-        const testsList = getFileList(path.join(root, 'testing/tests', folder));
-        listFiles.push(...testsList);
-    }
+    const testsList = getFileList(path.join(root, 'testing/tests'));
+    const listFiles = [].concat(helpersList, testsList).filter(name => name.endsWith('.js'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
