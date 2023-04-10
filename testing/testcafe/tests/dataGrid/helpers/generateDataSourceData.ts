@@ -10,6 +10,7 @@ export const getData = (rowCount: number, colCount: number): Record<string, stri
 
   return items;
 };
+
 export const getNumberData = (rowCount: number, colCount: number): Record<string, number>[] => {
   const items: Record<string, number>[] = [];
   for (let i = 0; i < rowCount; i += 1) {

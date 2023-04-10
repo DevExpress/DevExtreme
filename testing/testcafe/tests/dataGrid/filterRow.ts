@@ -48,7 +48,7 @@ test('FilterRow range overlay screenshot', async (t) => {
   await t
     .click(filterEditor.menu.getItemByText('Between'))
     // act
-    .expect(await takeScreenshot('filter-row-overlay', dataGrid.element))
+    .expect(await takeScreenshot('filter-row-overlay.png', dataGrid.element))
     .ok()
     // assert
     .expect(Selector('.dx-datagrid-filter-range-overlay').exists)

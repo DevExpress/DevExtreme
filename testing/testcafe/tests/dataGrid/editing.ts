@@ -2194,7 +2194,7 @@ test('Popup EditForm screenshot', async (t) => {
   await t
     .click(commandCellRow0.getLinkEdit())
     // act
-    .expect(await takeScreenshot('popup-edit-form', dataGrid.element))
+    .expect(await takeScreenshot('popup-edit-form.png', dataGrid.element))
     .ok()
     // assert
     .expect(dataGrid.getPopupEditForm().element.exists)

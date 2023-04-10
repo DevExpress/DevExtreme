@@ -17,7 +17,7 @@ test('Validation popup screenshot', async (t) => {
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+a backspace enter')
     // act
-    .expect(await takeScreenshot('validation-popup', dataGrid.element))
+    .expect(await takeScreenshot('validation-popup.png', dataGrid.element))
     .ok()
     // assert
     .expect(Selector('.dx-datagrid-revert-tooltip').exists)

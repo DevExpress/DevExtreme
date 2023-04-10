@@ -17,7 +17,7 @@ test('Column chooser screenshot', async (t) => {
   await t
     .click(dataGrid.getColumnChooserButton())
     // act
-    .expect(await takeScreenshot('column-chooser', dataGrid.element))
+    .expect(await takeScreenshot('column-chooser.png', dataGrid.element))
     .ok()
     // assert
     .expect(Selector(`.${CLASS.columnChooser}`).exists)

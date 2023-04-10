@@ -37,7 +37,7 @@ test('HeaderFilter popup screenshot', async (t) => {
   await t
     .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon())
     // act
-    .expect(await takeScreenshot('header-filter-popup', dataGrid.element))
+    .expect(await takeScreenshot('header-filter-popup.png', dataGrid.element))
     .ok()
     // assert
     .expect(Selector('.dx-header-filter-menu').exists)
