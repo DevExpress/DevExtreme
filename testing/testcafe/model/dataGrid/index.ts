@@ -25,6 +25,7 @@ export const CLASS = {
   focusedRow: 'dx-row-focused',
   filterPanel: 'filter-panel',
   filterRow: 'filter-row',
+  filterRangeOverlay: 'filter-range-overlay',
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -40,6 +41,8 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
+  revertTooltip: 'revert-tooltip',
+  invalidMessage: 'invalid-message',
 
   toolbar: 'dx-toolbar',
   contextMenu: 'dx-context-menu',
@@ -79,10 +82,13 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): 
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
+  body: Selector;
+
   constructor(id: string | Selector) {
     super(id);
 
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
+    this.body = Selector('body');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -156,6 +162,10 @@ export default class DataGrid extends Widget {
     return this.getFilterRow().find(`[aria-colindex='${columnIndex + 1}']`);
   }
 
+  getFilterRangeOverlay(): Selector {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+  }
+
   getFilterEditor<T>(
     columnIndex: number,
     EditorType: new(mainElement: Selector) => T,
@@ -167,6 +177,14 @@ export default class DataGrid extends Widget {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
+  getRevertTooltip(): Selector {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
+  }
+
+  getInvalidMessageTooltip(): Selector {
+    return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
+  }
+
   getPager(): Pager {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
@@ -176,7 +194,7 @@ export default class DataGrid extends Widget {
   }
 
   getColumnChooser(): ColumnChooser {
-    return new ColumnChooser(Selector('body').find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+    return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {

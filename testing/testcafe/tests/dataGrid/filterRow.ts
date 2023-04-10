@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -51,7 +50,7 @@ test('FilterRow range overlay screenshot', async (t) => {
     .expect(await takeScreenshot('filter-row-overlay.png', dataGrid.element))
     .ok()
     // assert
-    .expect(Selector('.dx-datagrid-filter-range-overlay').exists)
+    .expect(dataGrid.getFilterRangeOverlay().exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

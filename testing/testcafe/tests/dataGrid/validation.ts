@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -20,9 +19,9 @@ test('Validation popup screenshot', async (t) => {
     .expect(await takeScreenshot('validation-popup.png', dataGrid.element))
     .ok()
     // assert
-    .expect(Selector('.dx-datagrid-revert-tooltip').exists)
+    .expect(dataGrid.getRevertTooltip().exists)
     .ok()
-    .expect(Selector('.dx-invalid-message.dx-invalid-message-always.dx-datagrid-invalid-message').exists)
+    .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

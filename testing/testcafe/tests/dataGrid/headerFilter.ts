@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -11,10 +10,11 @@ fixture.disablePageReloads`Header Filter`
 test('The header filter should fit inside the viewport if the grid is scrolled horizontally (T1156848)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+  const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
 
   // act
   await dataGrid.scrollBy({ x: 100 });
-  await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon());
+  await t.click(filterIconElement);
 
   // assert
   await t
@@ -33,14 +33,16 @@ test('The header filter should fit inside the viewport if the grid is scrolled h
 test('HeaderFilter popup screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+  const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+  const filterIconElement = headerCell.getFilterIcon();
 
   await t
-    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon())
+    .click(filterIconElement)
     // act
     .expect(await takeScreenshot('header-filter-popup.png', dataGrid.element))
     .ok()
     // assert
-    .expect(Selector('.dx-header-filter-menu').exists)
+    .expect(headerCell.getHeaderFilterMenu().exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
