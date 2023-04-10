@@ -104,7 +104,6 @@ function run_test_impl {
                     --headless
                     --remote-debugging-address=0.0.0.0
                     --remote-debugging-port=9222
-                    --remote-allow-origin=*
                 )
             else
                 chrome_command="dbus-launch --exit-with-session $chrome_command"
@@ -123,7 +122,6 @@ function run_test_impl {
                     --enable-impl-side-painting
                     --enable-skia-benchmarking
                     --disable-web-security
-                    --remote-allow-origin=*
                 )
             fi
 
