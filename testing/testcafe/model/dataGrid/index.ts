@@ -52,7 +52,6 @@ export const CLASS = {
   columnChooserButton: 'column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
-  filterEditor: 'dx-editor-with-menu',
   commandDrag: 'dx-command-drag',
 };
 
@@ -170,7 +169,7 @@ export default class DataGrid extends Widget {
     columnIndex: number,
     EditorType: new(mainElement: Selector) => T,
   ): T {
-    return new EditorType(this.getFilterCell(columnIndex).find(`.${CLASS.filterEditor}`));
+    return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
   }
 
   getOverlay(): Overlay {

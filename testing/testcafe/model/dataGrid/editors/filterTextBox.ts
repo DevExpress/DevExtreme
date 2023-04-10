@@ -9,6 +9,8 @@ const CLASS = {
 };
 
 export default class FilterTextBox extends TextBox {
+  body: Selector;
+
   menuButton: Selector;
 
   menu: ContextMenu;
@@ -16,7 +18,8 @@ export default class FilterTextBox extends TextBox {
   constructor(selector: Selector) {
     super(selector);
 
+    this.body = Selector('body');
     this.menuButton = this.element.find(`.${CLASS.menuButton}`);
-    this.menu = new ContextMenu(Selector('body').find(`.${CLASS.gridMarker}.${CLASS.filterMenu}`));
+    this.menu = new ContextMenu(this.body.find(`.${CLASS.gridMarker}.${CLASS.filterMenu}`));
   }
 }
