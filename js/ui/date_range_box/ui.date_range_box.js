@@ -7,10 +7,6 @@ import DateBox from '../date_box';
 class DateRangeBox extends DateBox {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            endDate: null,
-            startDate: null,
-            value: [null, null],
-
             /**
             * @name dxDateRangeBoxOptions.adaptivityEnabled
             * @hidden
