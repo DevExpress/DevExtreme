@@ -503,13 +503,13 @@ if(Quill) {
                     continue;
                 }
 
-                this._markActiveFormatWidget(formatName, formatWidget, formats);
+                this._markActiveFormatWidget(formatName, formatWidget, formats, selection);
             }
 
             this._toggleClearFormatting(hasFormats || selection.length > 1);
         }
 
-        _markActiveFormatWidget(name, widget, formats) {
+        _markActiveFormatWidget(name, widget, formats, selection) {
             if(this._isColorFormat(name)) {
                 this._updateColorWidget(name, formats[name]);
             }
@@ -517,6 +517,15 @@ if(Quill) {
             if('value' in widget.option()) {
                 this._setValueSilent(widget, formats[name]);
             } else {
+                if(selection?.length === 0) {
+                    const nextPositionFormat = this.quill.getFormat({
+                        length: 0,
+                        index: selection.index + 1
+                    });
+                    if(!nextPositionFormat[name]) {
+                        return;
+                    }
+                }
                 widget.$element().addClass(ACTIVE_FORMAT_CLASS);
             }
         }
