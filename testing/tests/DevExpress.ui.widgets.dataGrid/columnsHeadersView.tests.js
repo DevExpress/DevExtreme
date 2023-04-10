@@ -2270,7 +2270,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
-        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText'));
+        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'));
     });
 
     QUnit.test('Check header text when all columns are hidden or grouped but column chooser and group panel are not enabled', function(assert) {

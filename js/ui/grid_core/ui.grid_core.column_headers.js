@@ -118,7 +118,7 @@ export const columnHeadersModule = {
                     const hasGroupedColumns = this.component.getView('headerPanel').hasGroupedColumns();
 
                     if(hasHiddenColumns && hasGroupedColumns) {
-                        return messageLocalization.format('dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText');
+                        return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText');
                     } else if(hasGroupedColumns) {
                         return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
                     } else if(hasHiddenColumns) {

@@ -85,7 +85,7 @@
 
         "dxDataGrid-emptyHeaderWithColumnChooserText": "TODO",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "TODO",
-        "dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText": "TODO",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "TODO",
         "dxDataGrid-columnChooserTitle": "Spaltenauswahl",
         "dxDataGrid-columnChooserEmptyText": "Ziehen Sie Spalten hierhin, um sie zu verstecken",
         "dxDataGrid-groupContinuesMessage": "Weiter auf der nächsten Seite",

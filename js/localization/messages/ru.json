@@ -85,7 +85,7 @@
 
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Пустой хедер 1",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Пустой хедер 2",
-        "dxDataGrid-emptyHeaderWithColummnChooserAndGroupPanelText": "Пустой хедер 3",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Пустой хедер 3",
         "dxDataGrid-columnChooserTitle": "Выбор столбцов",
         "dxDataGrid-columnChooserEmptyText": "Перетащите столбец сюда, чтобы скрыть его",
         "dxDataGrid-groupContinuesMessage": "Продолжение на следующей странице",
