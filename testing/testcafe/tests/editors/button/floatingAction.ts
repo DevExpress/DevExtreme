@@ -72,6 +72,7 @@ for (const label of ['Add Row', '']) {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
+        .click(Selector('body'))
         .click(Selector(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`));
 
       await testScreenshot(t, takeScreenshot, `FAB is opened with two speed dial actions,label='${label}',icon='${icon}'.png`, {
@@ -188,6 +189,7 @@ for (const label of ['Add Row', '']) {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await t.debug();
       await t
+        .click(Selector('body'))
         .click(Selector(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`));
 
       await t
