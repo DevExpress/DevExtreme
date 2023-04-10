@@ -13,6 +13,9 @@ const busyCache = {
   dependencies: {},
 };
 
+const REGEXP_IS_TS_NOT_DTS = /^(?!.*\.d\.ts$).*\.ts$/;
+const REGEXP_IS_DTS = /\.d\.ts$/;
+
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
 
@@ -41,7 +44,7 @@ export default class DependencyCollector {
 
   static isArraysEqual(array1: string[], array2: string[]): boolean {
     return array1.length === array2.length
-    && array1.every((value, index) => value === array2[index]);
+      && array1.every((value, index) => value === array2[index]);
   }
 
   treeProcessor(node: ScriptsDependencyTree): string[] {
@@ -71,6 +74,7 @@ export default class DependencyCollector {
 
   getFullDependencyTree(filePath: string): ScriptsDependencyTree {
     let cacheItem = this.scriptsCache[filePath];
+    const isTsFile = REGEXP_IS_TS_NOT_DTS.test(filePath);
     const filePathInProcess = filePathMap.get(filePath);
 
     if (!filePathInProcess && cacheItem === undefined) {
@@ -89,14 +93,16 @@ export default class DependencyCollector {
       }))
         // NOTE: Workaround for the filing-cabinet issue:
         // https://github.com/dependents/node-filing-cabinet/issues/112
-        .map((path: string) => path.replace(/\.d\.ts$/, '.js'))
+        .map((path: string) => path.replace(REGEXP_IS_DTS, '.js'))
         .filter((path: string): boolean => path !== null
-            && existsSync(path)
-            && !path.includes('node_modules')
-            && !path.includes('viz'));
+          && existsSync(path)
+          && !path.includes('node_modules')
+          && !path.includes('viz'));
 
       cacheItem = {
-        widget: DependencyCollector.getWidgetFromAst(precinct.ast),
+        widget: isTsFile
+          ? ''
+          : DependencyCollector.getWidgetFromAst(precinct.ast),
         dependencies: {},
       };
 

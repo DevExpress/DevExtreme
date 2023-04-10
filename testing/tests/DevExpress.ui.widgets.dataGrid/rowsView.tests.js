@@ -54,7 +54,7 @@ function getText(element) {
     return $(element).text();
 }
 
-function createRowsView(rows, dataController, columns, initDefaultOptions, userOptions) {
+function createRowsView(rows, dataController, columns, initDefaultOptions, userOptions, extraModules = []) {
     let i;
 
     dataController = dataController || new MockDataController({ items: rows });
@@ -92,7 +92,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         }
     };
 
-    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
+    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'].concat(extraModules), {
         initViews: true,
         controllers: {
             columns: columnsController,
@@ -7819,6 +7819,80 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
                 assert.strictEqual(rowsView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
             });
         });
+    });
+
+    QUnit.test('The table should only be updated after all templates have been rendered when renderAsync = false and templatesRenderAsynchronously = true', function(assert) {
+        // arrange
+        const items = this.items;
+        const $testElement = $('#container');
+        const columns = [{ dataField: 'name', fixed: true }, 'id'];
+
+        columns[0].cellTemplate = '#testTemplate';
+        const rowsView = this.createRowsView(items, null, columns, null, { renderAsync: false, templatesRenderAsynchronously: true }, 'columnFixing');
+
+        rowsView.component._getTemplate = function() {
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        $(options.container).text(options.model.value);
+                        options.deferred && options.deferred.resolve();
+                    }, 400);
+                }
+            };
+        };
+
+        // act
+        rowsView.render($testElement, { changeType: 'refresh' });
+        this.clock.tick(400);
+
+        // assert
+        assert.strictEqual(rowsView._getRowElements().length, 1, 'row count');
+
+        // act
+        rowsView.render($testElement, {
+            changeType: 'update',
+            changeTypes: ['insert'],
+            rowIndices: [1],
+            items: [{ data: { name: 'test2', id: 2, date: new Date(2001, 0, 2) }, values: ['test2', 2, '2/01/2001'], rowType: 'data', dataIndex: 1 }],
+        });
+        this.clock.tick(200);
+
+        // assert
+        assert.strictEqual(rowsView._getRowElements().length, 1, 'row count');
+
+        // act
+        rowsView.render($testElement, {
+            changeType: 'update',
+            changeTypes: ['insert'],
+            rowIndices: [2],
+            items: [{ data: { name: 'test3', id: 3, date: new Date(2001, 0, 3) }, values: ['test3', 3, '3/01/2001'], rowType: 'data', dataIndex: 2 }],
+        });
+        this.clock.tick(200);
+
+        // assert
+        assert.strictEqual(rowsView._getRowElements().length, 1, 'row count');
+
+        // act
+        this.clock.tick(200);
+
+        // assert
+        const $rowElements = $(rowsView._getRowElements());
+        assert.strictEqual($rowElements.length, 3, 'row count');
+
+        let $cells = $rowElements.eq(0).children();
+        assert.strictEqual($cells.length, 2, 'cell count of the first row');
+        assert.strictEqual($cells.eq(0).text(), 'test1', 'first cell text of the first row');
+        assert.strictEqual($cells.eq(1).text(), '1', 'second cell text of the first row');
+
+        $cells = $rowElements.eq(1).children();
+        assert.strictEqual($cells.length, 2, 'cell count of the second row');
+        assert.strictEqual($cells.eq(0).text(), 'test2', 'first cell text of the second row');
+        assert.strictEqual($cells.eq(1).text(), '2', 'second cell text of the second row');
+
+        $cells = $rowElements.eq(2).children();
+        assert.strictEqual($cells.length, 2, 'cell count of the third row');
+        assert.strictEqual($cells.eq(0).text(), 'test3', 'first cell text of the third row');
+        assert.strictEqual($cells.eq(1).text(), '3', 'second cell text of the third row');
     });
 });
 

@@ -27,8 +27,8 @@ const createSeries = function(options, renderSettings) {
             selectionStyle: {}
         },
         valueErrorBar: {},
-        hoverStyle: { hatching: 'h-hatching', lightening: true },
-        selectionStyle: { hatching: 's-hatching', lightening: true },
+        hoverStyle: { hatching: 'h-hatching', highlight: true },
+        selectionStyle: { hatching: 's-hatching', highlight: true },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
     }, options);
@@ -304,7 +304,7 @@ QUnit.module('Bubble. Point styles', {
                 color: 'h-color',
                 size: 'h-size',
                 opacity: 'h-opacity',
-                lightening: true,
+                highlight: true,
                 border: {
                     visible: true,
                     color: 'h-b-color',
@@ -315,7 +315,7 @@ QUnit.module('Bubble. Point styles', {
                 color: 's-color',
                 size: 's-size',
                 opacity: 's-opacity',
-                lightening: true,
+                highlight: true,
                 border: {
                     visible: true,
                     color: 's-b-color',
@@ -427,7 +427,7 @@ QUnit.test('custom styles are defined', function(assert) {
         },
         hoverStyle: {
             color: { fillId: 'id_color_1' },
-            lightening: true,
+            highlight: true,
             hatching: { direction: 'left' },
             border: {
                 visible: true,
@@ -435,7 +435,7 @@ QUnit.test('custom styles are defined', function(assert) {
         },
         selectionStyle: {
             color: { fillId: 'id_color_2' },
-            lightening: true,
+            highlight: true,
             hatching: { direction: 'left' },
             border: {
                 visible: true,
@@ -625,7 +625,7 @@ QUnit.test('customize point color. all', function(assert) {
                     color: 'h-color',
                     size: 'h-size',
                     opacity: 'h-opacity',
-                    lightening: true,
+                    highlight: true,
                     border: {
                         visible: true,
                         color: 'h-b-color',
@@ -637,7 +637,7 @@ QUnit.test('customize point color. all', function(assert) {
                     color: 's-color',
                     size: 's-size',
                     opacity: 's-opacity',
-                    lightening: true,
+                    highlight: true,
                     border: {
                         visible: true,
                         color: 's-b-color',
