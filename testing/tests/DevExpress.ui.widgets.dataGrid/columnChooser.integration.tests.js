@@ -398,8 +398,6 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
             dataSource: []
         });
 
-        window.grid = dataGrid;
-
         // act
         dataGrid.showColumnChooser();
 
