@@ -143,26 +143,24 @@ test('Hovering over a row should work correctly when there is a fixed column and
   await t.hover(firstDataRow.element);
 
   // assert
+  await takeScreenshot('T1148937-grid-hover-row-1.png', dataGrid.element);
+
   await t
     .expect(firstDataRow.isHovered)
     .ok()
     .expect(firstFixedDataRow.isHovered)
-    .ok()
-    .expect(await takeScreenshot('T1148937-grid-hover-row-1.png', '#container'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+    .ok();
 
   // act
   await t.hover(secondFixedDataRow.element);
 
   // assert
+  await takeScreenshot('T1148937-grid-hover-row-2.png', dataGrid.element);
+
   await t
     .expect(secondDataRow.isHovered)
     .ok()
     .expect(secondFixedDataRow.isHovered)
-    .ok()
-    .expect(await takeScreenshot('T1148937-grid-hover-row-2.png', '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
