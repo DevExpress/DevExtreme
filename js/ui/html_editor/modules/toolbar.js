@@ -517,7 +517,7 @@ if(Quill) {
             if('value' in widget.option()) {
                 this._setValueSilent(widget, formats[name]);
             } else {
-                if(selection?.length === 0) {
+                if(selection?.length === 0) { // T1157840
                     const nextPositionFormat = this.quill.getFormat({
                         length: 0,
                         index: selection.index + 1

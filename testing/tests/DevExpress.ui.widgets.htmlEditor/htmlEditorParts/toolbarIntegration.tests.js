@@ -108,6 +108,27 @@ export default function() {
                 .trigger('dxclick');
         });
 
+        test('No active buttons when cursor placed on right side of formatted text(T1157840)', function(assert) {
+            const initialSelection = {
+                index: 2,
+                length: 3
+            };
+            const $editorContainer = $('#htmlEditor');
+            const instance = $editorContainer.dxHtmlEditor({
+                value: '<p>text_text_text</p>',
+                toolbar: { items: ['bold'] },
+            })
+                .dxHtmlEditor('instance');
+
+            instance.setSelection(initialSelection.index, initialSelection.length);
+            instance.format('bold', true);
+            instance.setSelection(initialSelection.index + initialSelection.length, 0);
+
+            const $activeFormats = $editorContainer.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
+
+            assert.strictEqual($activeFormats.length, 0);
+        });
+
         test('Apply format via color dialog located in the adaptive menu', function(assert) {
             const done = assert.async();
             const toolbarClickStub = sinon.stub();
