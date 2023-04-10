@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import DataGrid, { CLASS } from '../../model/dataGrid';
+import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Column chooser`
@@ -20,7 +19,7 @@ test('Column chooser screenshot', async (t) => {
     .expect(await takeScreenshot('column-chooser.png', dataGrid.element))
     .ok()
     // assert
-    .expect(Selector(`.${CLASS.columnChooser}`).exists)
+    .expect(dataGrid.getColumnChooser().element.exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

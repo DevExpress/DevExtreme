@@ -14,6 +14,7 @@ import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
+import ColumnChooser from './columnChooser';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -35,7 +36,7 @@ export const CLASS = {
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
 
-  columnChooser: 'dx-datagrid-column-chooser',
+  columnChooser: 'column-chooser',
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
@@ -172,6 +173,10 @@ export default class DataGrid extends Widget {
 
   getFooterRow(): Selector {
     return this.element.find(`.${CLASS.footerRow}`);
+  }
+
+  getColumnChooser(): ColumnChooser {
+    return new ColumnChooser(Selector('body').find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {

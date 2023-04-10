@@ -51,7 +51,7 @@ export default class ContextMenu extends Widget {
     )();
   }
 
-  findItemByText(text: string): Selector {
+  private findItemByText(text: string): Selector {
     const span = this.element.find(`.${CLASS.itemText}`);
     return span.withExactText(text).parent();
   }
