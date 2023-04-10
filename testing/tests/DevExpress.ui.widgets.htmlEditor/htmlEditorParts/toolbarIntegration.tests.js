@@ -108,7 +108,7 @@ export default function() {
                 .trigger('dxclick');
         });
 
-        test('No active buttons when cursor placed on right side of formatted text(T1157840)', function(assert) {
+        test('Bold button should have active state when cursor placed on right side of formatted text(T1157840)', function(assert) {
             const initialSelection = {
                 index: 2,
                 length: 3
@@ -122,6 +122,21 @@ export default function() {
             instance.setSelection(initialSelection.index, initialSelection.length);
             instance.format('bold', true);
             instance.setSelection(initialSelection.index + initialSelection.length, 0);
+
+            const $activeFormats = $htmlEditor.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
+
+            assert.strictEqual($activeFormats.length, 1);
+        });
+
+        test('Add link button should not have active state when cursor placed on right side of formatted text(T1157840)', function(assert) {
+            const textOfLink = 'text';
+            const $htmlEditor = $('#htmlEditor');
+            const instance = $htmlEditor.dxHtmlEditor({
+                value: `<p><a>${textOfLink}</a>text</p>`,
+                toolbar: { items: ['link'] },
+            }).dxHtmlEditor('instance');
+
+            instance.setSelection(textOfLink.length, 0);
 
             const $activeFormats = $htmlEditor.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 

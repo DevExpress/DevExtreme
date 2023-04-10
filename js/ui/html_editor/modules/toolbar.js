@@ -517,7 +517,7 @@ if(Quill) {
             if('value' in widget.option()) {
                 this._setValueSilent(widget, formats[name]);
             } else {
-                if(selection?.length === 0) { // T1157840
+                if(name === 'link' && selection?.length === 0) { // T1157840
                     const nextIndexFormat = this.quill.getFormat({
                         length: 0,
                         index: selection.index + 1
