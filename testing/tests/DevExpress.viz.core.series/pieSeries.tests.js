@@ -549,7 +549,7 @@ const checkTwoGroups = function(assert, series) {
                 },
                 hoverStyle: {
                     color: 'h-color',
-                    lightening: true,
+                    highlight: true,
                     border: {
                         visible: true,
                         color: 'h-b-color',
@@ -559,7 +559,7 @@ const checkTwoGroups = function(assert, series) {
                 },
                 selectionStyle: {
                     color: 's-color',
-                    lightening: true,
+                    highlight: true,
                     border: {
                         visible: true,
                         color: 's-b-color',
@@ -683,7 +683,7 @@ const checkTwoGroups = function(assert, series) {
             },
             hoverStyle: {
                 color: { fillId: 'id_color_2' },
-                lightening: true,
+                highlight: true,
                 hatching: { direction: 'left' },
                 border: {
                     visible: true,
@@ -691,7 +691,7 @@ const checkTwoGroups = function(assert, series) {
             },
             selectionStyle: {
                 color: { fillId: 'id_color_3' },
-                lightening: true,
+                highlight: true,
                 hatching: { direction: 'left' },
                 border: {
                     visible: true,
@@ -739,14 +739,14 @@ const checkTwoGroups = function(assert, series) {
                 visible: true,
             },
             hoverStyle: {
-                lightening: true,
+                highlight: true,
                 hatching: { direction: 'left' },
                 border: {
                     visible: true,
                 }
             },
             selectionStyle: {
-                lightening: true,
+                highlight: true,
                 hatching: { direction: 'left' },
                 border: {
                     visible: true,

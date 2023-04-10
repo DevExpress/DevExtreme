@@ -18,7 +18,7 @@ const baseBarSeriesMethods = {
         return {
             fill: extractColor(styleOptions.color) || defaultColor,
             hatching: styleOptions.hatching,
-            filter: styleOptions.lightening
+            filter: styleOptions.highlight
         };
     },
 
@@ -29,7 +29,7 @@ const baseBarSeriesMethods = {
         const base = chartSeries._parsePointStyle.call(this, style, color, defaultBorderColor);
         base.fill = color;
         base.hatching = style.hatching;
-        base.filter = style.lightening;
+        base.filter = style.highlight;
         base.dashStyle = style.border && style.border.dashStyle || 'solid';
         delete base.r;
 
