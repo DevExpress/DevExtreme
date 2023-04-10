@@ -42,3 +42,73 @@ test('Column chooser screenshot', async (t) => {
     enabled: true,
   },
 }));
+
+test('Column chooser checkboxes should be aligned correctly with plain structure', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getColumnChooserButton())
+    .wait(500);
+
+  const columnChooser = dataGrid.getColumnChooser();
+
+  await t
+    .expect(await takeScreenshot('column-chooser-checkbox-alignment-plain-structure.png', columnChooser.content))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  columns: ['field1', 'field2', 'field3'],
+  width: 700,
+  columnChooser: {
+    enabled: true,
+    mode: 'select',
+    search: {
+      enabled: true,
+    },
+    selection: {
+      allowSelectAll: true,
+    },
+  },
+}));
+
+test('Column chooser checkboxes should be aligned correctly with tree structure', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaderPanel().getColumnChooserButton())
+    .wait(500);
+
+  const columnChooser = dataGrid.getColumnChooser();
+
+  await t
+    .expect(await takeScreenshot('column-chooser-checkbox-alignment-tree-structure.png', columnChooser.content))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  columns: [
+    'field1',
+    {
+      caption: 'band1',
+      columns: ['field2', 'field3'],
+    },
+  ],
+  width: 700,
+  columnChooser: {
+    enabled: true,
+    mode: 'select',
+    search: {
+      enabled: true,
+    },
+    selection: {
+      allowSelectAll: true,
+    },
+  },
+}));
