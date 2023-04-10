@@ -77,7 +77,7 @@ function run_test_impl {
         "firefox")
             kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
 
-            local profile_path="/firefox-profile" 
+            local profile_path="/firefox-profile"
             [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
             local firefox_args="-profile $profile_path $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
@@ -104,6 +104,7 @@ function run_test_impl {
                     --headless
                     --remote-debugging-address=0.0.0.0
                     --remote-debugging-port=9222
+                    --remote-allow-origin=*
                 )
             else
                 chrome_command="dbus-launch --exit-with-session $chrome_command"
@@ -122,6 +123,7 @@ function run_test_impl {
                     --enable-impl-side-painting
                     --enable-skia-benchmarking
                     --disable-web-security
+                    --remote-allow-origin=*
                 )
             fi
 
