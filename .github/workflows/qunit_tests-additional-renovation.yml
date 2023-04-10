@@ -61,6 +61,7 @@ jobs:
       fail-fast: false
       matrix:
         envs: [
+          { CONSTEL: "csp", name: "CSP Test (remove it)" },
           { CONSTEL: "misc", TZ: 'PST8PDT', NO_CSP: true, name: 'misc-PST8PDT' },
           { CONSTEL: "misc", TZ: 'Japan', NO_CSP: true, name: 'misc-Japan' },
           { CONSTEL: "misc", TZ: 'Australia/ACT', NO_CSP: true, name: 'misc-Australia' },
