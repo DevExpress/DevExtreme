@@ -172,21 +172,6 @@ const transpileModules = async() => {
         );
     }
 
-    const listRenovationFiles = getFileList(path.join(root, 'artifacts/transpiled-renovation'));
-
-    // eslint-disable-next-line no-restricted-syntax
-    for(const filePath of listRenovationFiles) {
-        await builder.buildStatic(
-            `[${filePath}]`,
-            filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs'),
-            {
-                minify: false,
-                sourceMaps: true,
-                encodeNames: false
-            }
-        );
-    }
-
     const infernoPath = path.join(root, 'node_modules/@devextreme/runtime/esm/inferno');
     const listRuntimeFiles = getFileList(infernoPath);
 
@@ -208,8 +193,26 @@ const transpileModules = async() => {
     }
 };
 
-const transpileCss = async() => {
+const transpileRenovationModules = async() => {
     const builder = new Builder(root, config);
+
+    const listRenovationFiles = getFileList(path.join(root, 'artifacts/transpiled-renovation'));
+
+    // eslint-disable-next-line no-restricted-syntax
+    for(const filePath of listRenovationFiles) {
+        await builder.buildStatic(
+            `[${filePath}]`,
+            filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs'),
+            {
+                minify: false,
+                sourceMaps: true,
+                encodeNames: false
+            }
+        );
+    }
+};
+
+const transpileCss = async() => {
     const listFiles = [
         {
             filePath: path.join(root, 'artifacts/css/dx.material.blue.light.css!'),
@@ -229,11 +232,12 @@ const transpileCss = async() => {
         },
     ];
 
-    // https://github.com/systemjs/plugin-css/issues/102#issuecomment-243473887
-    // eslint-disable-next-line no-restricted-syntax
-    for(const { filePath, destPath } of listFiles) {
-        await builder.bundle(filePath, destPath);
-    }
+    await Promise.all(
+        listFiles.map(({ filePath, destPath }) => {
+            const builder = new Builder(root, config);
+            return builder.bundle(filePath, destPath);
+        })
+    );
 };
 
 const transpileTests = async() => {
@@ -300,6 +304,7 @@ const transpileTests = async() => {
 
     switch(transpile) {
         case 'modules': return await transpileModules();
+        case 'modules-renovation': return await transpileRenovationModules();
         case 'tests': return await transpileTests();
         case 'css': return await transpileCss();
     }
