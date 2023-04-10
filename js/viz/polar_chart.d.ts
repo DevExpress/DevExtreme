@@ -1571,11 +1571,11 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening
+       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.highlight
        * @default true
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      lightening?: boolean;
+      highlight?: boolean;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width
        * @default 3
@@ -1698,11 +1698,11 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening
+       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.highlight
        * @default true
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      lightening?: boolean;
+      highlight?: boolean;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width
        * @default 3
