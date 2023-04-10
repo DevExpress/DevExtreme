@@ -521,7 +521,7 @@ declare module DevExpress {
     /**
      * [descr:AnimationConfig.from]
      */
-    from?: DevExpress.animation.AnimationState;
+    from?: DevExpress.common.AnimationState;
     /**
      * [descr:AnimationConfig.staggerDelay]
      */
@@ -536,11 +536,11 @@ declare module DevExpress {
     /**
      * [descr:AnimationConfig.to]
      */
-    to?: DevExpress.animation.AnimationState;
+    to?: DevExpress.common.AnimationState;
     /**
      * [descr:AnimationConfig.type]
      */
-    type?: DevExpress.animation.AnimationType;
+    type?: DevExpress.common.AnimationType;
   };
   /**
    * [descr:animationPresets]
@@ -1216,6 +1216,28 @@ declare module DevExpress {
   }
 }
 declare module DevExpress.animation {
+  export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
+  export type CollisionResolutionCombination =
+    | 'fit'
+    | 'fit flip'
+    | 'fit flipfit'
+    | 'fit none'
+    | 'flip'
+    | 'flip fit'
+    | 'flip none'
+    | 'flipfit'
+    | 'flipfit fit'
+    | 'flipfit none'
+    | 'none'
+    | 'none fit'
+    | 'none flip'
+    | 'none flipfit';
+  /**
+   * @deprecated Use the PositionConfig type instead
+   */
+  export interface positionConfig extends PositionConfig {}
+}
+declare module DevExpress.common {
   /**
    * @deprecated Use the AnimationConfig type instead
    */
@@ -1268,28 +1290,6 @@ declare module DevExpress.animation {
     | 'slide'
     | 'slideIn'
     | 'slideOut';
-  export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
-  export type CollisionResolutionCombination =
-    | 'fit'
-    | 'fit flip'
-    | 'fit flipfit'
-    | 'fit none'
-    | 'flip'
-    | 'flip fit'
-    | 'flip none'
-    | 'flipfit'
-    | 'flipfit fit'
-    | 'flipfit none'
-    | 'none'
-    | 'none fit'
-    | 'none flip'
-    | 'none flipfit';
-  /**
-   * @deprecated Use the PositionConfig type instead
-   */
-  export interface positionConfig extends PositionConfig {}
-}
-declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
   /**
    * [descr:AsyncRule]
