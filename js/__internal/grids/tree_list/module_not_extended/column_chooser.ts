@@ -1,4 +1,5 @@
-import treeListCore from './ui.tree_list.core';
-import { columnChooserModule } from '../grid_core/ui.grid_core.column_chooser';
+// @ts-expect-error
+import { columnChooserModule } from '@js/ui/grid_core/ui.grid_core.column_chooser';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('columnChooser', columnChooserModule);

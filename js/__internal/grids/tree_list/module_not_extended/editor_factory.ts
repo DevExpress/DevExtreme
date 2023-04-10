@@ -1,4 +1,5 @@
-import treeListCore from './ui.tree_list.core';
-import { editorFactoryModule } from '../grid_core/ui.grid_core.editor_factory';
+// @ts-expect-error
+import { editorFactoryModule } from '@js/ui/grid_core/ui.grid_core.editor_factory';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('editorFactory', editorFactoryModule);

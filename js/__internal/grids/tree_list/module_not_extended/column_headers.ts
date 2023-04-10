@@ -1,4 +1,5 @@
-import treeListCore from './ui.tree_list.core';
-import { columnHeadersModule } from '../grid_core/ui.grid_core.column_headers';
+// @ts-expect-error
+import { columnHeadersModule } from '@js/ui/grid_core/ui.grid_core.column_headers';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('columnHeaders', columnHeadersModule);

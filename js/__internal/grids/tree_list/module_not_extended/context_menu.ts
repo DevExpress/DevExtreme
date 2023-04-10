@@ -1,4 +1,4 @@
-import treeListCore from './ui.tree_list.core';
-import { contextMenuModule } from '../grid_core/ui.grid_core.context_menu';
+import { contextMenuModule } from '@js/ui/grid_core/ui.grid_core.context_menu';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('contextMenu', contextMenuModule);
