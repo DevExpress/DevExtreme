@@ -518,11 +518,11 @@ if(Quill) {
                 this._setValueSilent(widget, formats[name]);
             } else {
                 if(selection?.length === 0) { // T1157840
-                    const nextPositionFormat = this.quill.getFormat({
+                    const nextIndexFormat = this.quill.getFormat({
                         length: 0,
                         index: selection.index + 1
                     });
-                    if(!nextPositionFormat[name]) {
+                    if(!nextIndexFormat[name]) {
                         return;
                     }
                 }

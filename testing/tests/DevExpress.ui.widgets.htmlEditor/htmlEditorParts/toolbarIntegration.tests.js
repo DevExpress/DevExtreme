@@ -113,18 +113,17 @@ export default function() {
                 index: 2,
                 length: 3
             };
-            const $editorContainer = $('#htmlEditor');
-            const instance = $editorContainer.dxHtmlEditor({
+            const $htmlEditor = $('#htmlEditor');
+            const instance = $htmlEditor.dxHtmlEditor({
                 value: '<p>text_text_text</p>',
                 toolbar: { items: ['bold'] },
-            })
-                .dxHtmlEditor('instance');
+            }).dxHtmlEditor('instance');
 
             instance.setSelection(initialSelection.index, initialSelection.length);
             instance.format('bold', true);
             instance.setSelection(initialSelection.index + initialSelection.length, 0);
 
-            const $activeFormats = $editorContainer.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
+            const $activeFormats = $htmlEditor.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 
             assert.strictEqual($activeFormats.length, 0);
         });
