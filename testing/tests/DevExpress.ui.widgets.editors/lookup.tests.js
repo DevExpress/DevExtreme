@@ -1114,6 +1114,40 @@ QUnit.module('Lookup', {
         assert.equal(this.popup.option('height'), popupHeight, 'popupHeight applied to popover');
     });
 
+    [true, false].forEach((usePopover) => {
+        QUnit.test(`overlay should contain role="dialog" when usePopover: ${usePopover}`, function(assert) {
+            const instance = $('#lookup').dxLookup({
+                usePopover: usePopover
+            }).dxLookup('instance');
+
+            this.togglePopup();
+
+            const $overlayContent = $(instance.content()).parent();
+
+            assert.strictEqual($overlayContent.attr('role'), 'dialog');
+        });
+    });
+
+    [true, false].forEach((usePopover) => {
+        QUnit.test(`user should be able to set custom role for overlay when usePopover: ${usePopover}`, function(assert) {
+            const instance = $('#lookup').dxLookup({
+                usePopover: usePopover,
+                dropDownOptions: {
+                    onShowing: (e) => {
+                        const $overlayContent = e.component.$content().parent();
+                        $overlayContent.attr('role', 'custom-role');
+                    }
+                }
+            }).dxLookup('instance');
+
+            this.togglePopup();
+
+            const $overlayContent = $(instance.content()).parent();
+
+            assert.strictEqual($overlayContent.attr('role'), 'custom-role');
+        });
+    });
+
     QUnit.test('showEvent/hideEvent is null when usePopover is true', function(assert) {
         this.instance.option({
             usePopover: true
@@ -2244,7 +2278,7 @@ QUnit.module('popup options', {
 
         const defaultHeight = $('.dx-overlay-content').outerHeight();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($('.dx-overlay-content').outerHeight() > defaultHeight, 'popup height is changed when data is loaded');
     });
@@ -2343,7 +2377,7 @@ QUnit.module('popup options', {
             assert.ok(lookup.option('dropDownOptions.hideOnParentScroll'), 'is true by default');
 
             lookup.open();
-            this.clock.tick();
+            this.clock.tick(10);
             assert.ok(lookup.option('dropDownOptions.hideOnParentScroll'), 'still true after opening');
 
         } finally {
@@ -3064,7 +3098,7 @@ QUnit.module('dataSource integration', {
 
         const $input = $(toSelector(POPUP_CONTENT_CLASS) + ' ' + toSelector(TEXTEDITOR_INPUT_CLASS));
         $($input.val('o')).trigger('input');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($('.dx-list-item').length, 2, 'filters execute on input event');
     });
 
@@ -3167,7 +3201,7 @@ QUnit.module('dataSource integration', {
         keyboard.type('1');
         this.clock.tick(loadDelay * 2);
         keyboard.type('2');
-        this.clock.tick(loadDelay / 2);
+        this.clock.tick(loadDelay / 2 + 10);
         const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
 
         assert.ok($loadPanel.is(':visible'), 'load panel is visible');

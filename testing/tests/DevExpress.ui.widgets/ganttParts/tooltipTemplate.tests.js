@@ -20,13 +20,13 @@ const moduleConfig = {
 QUnit.module('Tooltip Template', moduleConfig, () => {
     test('common', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const tooltip = this.$element.find(Consts.TOOLTIP_SELECTOR);
         let tooltipText = tooltip.text();
         const taskTitle = data.tasks[0].title;
@@ -43,7 +43,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
     });
     test('custom text', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (item, container) => {
             return customTooltipText;
@@ -56,16 +56,16 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         const customProgressTooltipFunction = (item, container) => {
             return customProgressTooltipText;
         };
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.instance.option('taskTimeTooltipContentTemplate', customTimeTooltipFunction);
         this.instance.option('taskProgressTooltipContentTemplate', customProgressTooltipFunction);
-        this.clock.tick();
+        this.clock.tick(10);
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const tooltip = this.$element.find(Consts.TOOLTIP_SELECTOR);
         let tooltipText = tooltip.text();
         assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
@@ -78,24 +78,24 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
     });
     test('custom jQuery', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>' + customTooltipText + '</div>');
         const customTimeTooltipText = 'TestCustomTimeTooltipJQuery';
         const customTimeTooltipJQuery = $('<div>' + customTimeTooltipText + '</div>');
         const customProgressTooltipText = 'TestCustomProgressTooltipJQuery';
         const customProgressTooltipJQuery = $('<div>' + customProgressTooltipText + '</div>');
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('taskTooltipContentTemplate', customTooltipJQuery);
         this.instance.option('taskTimeTooltipContentTemplate', customTimeTooltipJQuery);
         this.instance.option('taskProgressTooltipContentTemplate', customProgressTooltipJQuery);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
 
-        this.clock.tick();
+        this.clock.tick(10);
         const tooltip = this.$element.find(Consts.TOOLTIP_SELECTOR);
         let tooltipText = tooltip.text();
         assert.equal(tooltipText, customTooltipText, 'Custom template with jQuery works correctly');
@@ -108,7 +108,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
     });
     test('different tooltips for tasks', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
             if(task.id === 3 || task.id === 4) {
@@ -116,21 +116,21 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
             }
             return;
         };
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
-        this.clock.tick();
+        this.clock.tick(10);
         const ganttCore = getGanttViewCore(this.instance);
-        this.clock.tick();
+        this.clock.tick(10);
         ganttCore.taskEditController.show(1);
         ganttCore.taskEditController.showTaskInfo(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         const tooltipDisplayStyle = this.$element.find(Consts.TOOLTIP_SELECTOR)[0].style.display;
         assert.equal(tooltipDisplayStyle, 'none', 'Empty content template doesnt show tooltip');
         ganttCore.taskEditController.tooltip.hide();
-        this.clock.tick();
+        this.clock.tick(10);
         ganttCore.taskEditController.show(2);
         ganttCore.taskEditController.showTaskInfo(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         const tooltipText = this.$element.find(Consts.TOOLTIP_SELECTOR).text();
         assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
     });

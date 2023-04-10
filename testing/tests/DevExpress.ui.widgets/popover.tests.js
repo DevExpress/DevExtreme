@@ -2284,3 +2284,27 @@ QUnit.module('target option', {
     });
 });
 
+QUnit.module('aria accessibility', {
+    beforeEach: function() {
+        fixtures.simple.create();
+    },
+    afterEach: function() {
+        fixtures.simple.drop();
+    }
+}, () => {
+    QUnit.test('role="tooltip" attribute should be added to popover by default', function(assert) {
+        const $popover = $('#what');
+        new Popover($popover);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlay.attr('role'), 'tooltip');
+    });
+
+    QUnit.test('role="dialog" attribute should be set if popover has toolbarItems', function(assert) {
+        const $popover = $('#what');
+        new Popover($popover, { toolbarItems: [{ text: 'Title', location: 'before' }] });
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlay.attr('role'), 'dialog');
+    });
+});

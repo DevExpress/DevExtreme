@@ -17732,6 +17732,14 @@ declare module DevExpress.ui {
      * [descr:dxMenuItem.items]
      */
     items?: Array<DevExpress.ui.dxMenu.Item>;
+    /**
+     * [descr:dxMenuItem.url]
+     */
+    url?: string;
+    /**
+     * [descr:dxMenuItem.linkAttr]
+     */
+    linkAttr?: { [key: string]: any };
   }
   /**
    * @deprecated use Properties instead

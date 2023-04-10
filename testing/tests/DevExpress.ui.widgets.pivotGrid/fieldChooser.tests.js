@@ -2580,7 +2580,7 @@ QUnit.module('FieldChooser encodeHtml', {
                 }
             }, options));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             return this.pivotGrid;
         };

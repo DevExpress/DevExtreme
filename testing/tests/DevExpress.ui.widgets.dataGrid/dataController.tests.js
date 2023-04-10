@@ -221,7 +221,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         dataSource.store().push([{ type: 'remove', key: 1 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(pushedSpy.callCount, 1, 'the pushed callback was called only once');
@@ -248,7 +248,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         dataSource.store().push([{ type: 'remove', key: 1 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataPushedHandlerSpy.callCount, 1, 'the handler of the pushed callback was called only once');
@@ -359,7 +359,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.dataController.optionChanged({ name: 'dataSource' });
         this.dataController.optionChanged({ name: 'grouping' });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(loadingSpy.callCount, 1, 'loading called once');
@@ -435,12 +435,12 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.setDataSource(dataSource);
         dataSource.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const items = this.dataController.items();
         this.columnsController.columnOption(1, 'visible', false);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.notStrictEqual(this.dataController.items(), items);
         assert.strictEqual(changedCount, 2);
@@ -582,7 +582,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // act
         this.dataController.collapseAll();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedCallCount, 1, 'changed called one time');
@@ -637,7 +637,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // act
         this.dataController.collapseAll();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedCallCount, 1, 'changed called one time after collapseAll');
@@ -673,7 +673,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         this.dataController.collapseAll();
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.expandRow(['Alex']);
 
@@ -2272,7 +2272,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
         dataController.setDataSource(dataSource);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataController.items()[0].values[1], new Date(1987, 4, 5));
@@ -2303,7 +2303,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
         dataController.setDataSource(dataSource);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataController.items()[0].values[1], new Date(1985, 2, 21));
@@ -2336,7 +2336,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
         dataController.setDataSource(dataSource);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataController.items()[0].values[1], new Date(Date.UTC(1985, 2, 21)));
@@ -2373,7 +2373,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
         dataController.setDataSource(dataSource);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         lookupLoadResult = $.Deferred();
         // act
@@ -2389,7 +2389,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             refreshed = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(changedCount, 0, 'changed call count');
         assert.ok(!refreshed, 'not refreshed');
@@ -2400,7 +2400,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // assert
         assert.equal(changedCount, 0, 'changed call count');
         assert.ok(!refreshed, 'not refreshed');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(changedCount, 1, 'changed call count');
         assert.ok(refreshed, 'refreshed');
     });
@@ -2442,7 +2442,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         dataController.refresh(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedCount, 1, 'changed call count');
@@ -2479,7 +2479,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedCount, 1, 'changed call count');
@@ -2513,7 +2513,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
         dataController.setDataSource(dataSource);
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         dataController.changed.add(function(args) {
@@ -2526,7 +2526,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         this.columnsController.changeSortOrder(0, 'desc');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedCount, 1, 'changed call count');
@@ -2737,7 +2737,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // act
         this.option('dataSource', dataSource);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.items().length, 3);
@@ -3338,7 +3338,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
             changedCallCount++;
         });
         dataController.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataController.pageIndex(), 1);
         assert.equal(changedCallCount, 1);
     });
@@ -3595,7 +3595,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         dataController.setViewportItemIndex(999);
         assert.strictEqual(this.dataController.pageIndex(), 49);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(dataController.items().length, 21, 'items');
 
@@ -3634,7 +3634,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         dataController.setViewportItemIndex(998);
         assert.strictEqual(this.dataController.pageIndex(), 49);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(dataController.items().length, 39);
 
@@ -3735,7 +3735,7 @@ const setupVirtualRenderingModule = function() {
     this.dataController.viewportSize(10);
     this.dataController._dataSource._renderTime = 50;
 
-    this.clock.tick();
+    this.clock.tick(10);
 
     this.changedArgs = [];
 
@@ -3872,7 +3872,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     QUnit.test('scroll to second render page and expand row after expand row on the first page and refresh', function(assert) {
         this.dataController.expandRow(1);
         this.dataController.refresh();
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.setViewportPosition(50);
         this.dataController.expandRow(5);
 
@@ -4051,7 +4051,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(10);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         assert.strictEqual(this.dataController.items().length, 10);
         assert.strictEqual(this.dataController.items()[0].key, 0);
@@ -4077,7 +4077,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.optionChanged({ name: 'scrolling' });
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(10);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         assert.strictEqual(this.dataController.items().length, 10);
         assert.strictEqual(this.dataController.items()[0].key, 0);
@@ -4100,19 +4100,19 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(10);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.expandRow(1);
         this.dataController.expandRow(19);
         this.dataController.expandRow(20);
 
         this.dataController.setViewportPosition(200);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.changedArgs = [];
         this.dataController.setViewportPosition(400);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController.items().length, 10);
@@ -4131,7 +4131,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     QUnit.test('Search should work correctly when rowRenderingMode is set to \'virtual\'', function(assert) {
     // arrange, act
         this.option('searchPanel.text', 'test');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController.items().length, 0, 'item count');
@@ -4139,7 +4139,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         // act
         this.option('searchPanel.text', '');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController.items().length, 10, 'item count');
@@ -4391,20 +4391,20 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize: 2
         });
         this.dataController.viewportSize(2);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
 
         this.dataController.setViewportItemIndex(7);
         // act
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.equal(changedArgs.length, 0);
 
         // act
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.equal(changedArgs.length, 2);
@@ -4429,7 +4429,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             changedArgs.push(e);
         });
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedArgs.length, 3);
@@ -4457,7 +4457,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             changedArgs.push(e);
         });
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedArgs.length, 4);
@@ -4479,9 +4479,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const dataController = this.dataController;
 
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataController.setViewportItemIndex(7);
-        this.clock.tick();
+        this.clock.tick(10);
         dataController.changed.add(function(e) {
             changedArgs.push(e);
             virtualItems.push(dataController.virtualItemsCount());
@@ -4489,7 +4489,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // act
         dataController.reload(true);
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.deepEqual(changedArgs, []);
@@ -4497,7 +4497,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.ok(dataController.isLoaded());
 
         // act
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.equal(changedArgs.length, 2);
@@ -4599,7 +4599,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             finalized = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(finalized);
     });
 
@@ -4607,8 +4607,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
     QUnit.test('update loading on reload when error occurred', function(assert) {
         let finalized;
         let loadResult;
-
-        const clock = this.clock;
 
         this.options.loadingTimeout = 0;
 
@@ -4648,11 +4646,11 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             finalized = true;
         });
 
-        clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(finalized);
-        clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!dataController.isLoaded(), 'isLoaded after error');
@@ -4678,7 +4676,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
 
         dataController.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataController.loadingChanged.add(function() {
             events.push('loadingChanged');
@@ -4690,7 +4688,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // act
         dataController.reload(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(events, ['loadingChanged', 'loadingChanged', 'changed']);
@@ -4833,7 +4831,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         dataController.load();
         dataController.viewportSize(3);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!isLoading, 'not loading');
@@ -4844,7 +4842,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         dataController.changeRowExpand([0]);
 
         assert.ok(isLoading, 'loading started');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(!isLoading, 'loading ended');
     });
 
@@ -5019,7 +5017,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // act
         this.dataController.setViewportPosition(500);
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleItems = this.dataController.items();
         const loadedItems = this.dataController.dataSource().items();
 
@@ -5066,7 +5064,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // act
         this.dataController.viewportSize(15);
         this.dataController.setViewportPosition(100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 0, loadPageCount: 1, skipForCurrentPage: 5 }, 'load page params after scrolling');
@@ -5104,9 +5102,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.dataController.viewportSize(15);
         this.dataController.setViewportPosition(50);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.setViewportPosition(0);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.changed.add(changedSpy);
 
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
@@ -5116,7 +5114,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // act
         this.dataController.setViewportPosition(100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
         const change = changedSpy.args[0][0];
@@ -5161,10 +5159,10 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.dataController.viewportSize(15);
         this.dataController.setViewportPosition(50);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.setViewportPosition(0);
         this.dataController.setViewportPosition(1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.changed.add(changedSpy);
 
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
@@ -5174,7 +5172,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // act
         this.dataController.setViewportPosition(10);
-        this.clock.tick();
+        this.clock.tick(10);
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
 
@@ -5757,7 +5755,7 @@ QUnit.module('Infinite scrolling', {
         this.dataController.setViewportItemIndex(10);
         this.dataController.setViewportItemIndex(10);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(loadingCount, 1);
@@ -5810,7 +5808,7 @@ QUnit.module('Infinite scrolling', {
 
         // act
         this.dataController.setViewportItemIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 0);
@@ -6023,7 +6021,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
             pageSize: 3
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const dataController = this.dataController;
 
@@ -6034,7 +6032,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         dataController.pageIndex(0);
         dataController.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataController.pageIndex(), 0, 'page index');
@@ -6122,7 +6120,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         // act
         this.dataController.setViewportPosition(500);
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleItems = this.dataController.items();
         const loadedItems = this.dataController.dataSource().items();
 
@@ -6168,9 +6166,9 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.dataController.viewportSize(15);
         this.dataController.setViewportPosition(50);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.setViewportPosition(0);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.changed.add(changedSpy);
 
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
@@ -6180,7 +6178,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         // act
         this.dataController.setViewportPosition(100);
-        this.clock.tick();
+        this.clock.tick(10);
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
         const change = changedSpy.args[0][0];
@@ -6225,10 +6223,10 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.dataController.viewportSize(15);
         this.dataController.setViewportPosition(50);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.setViewportPosition(0);
         this.dataController.setViewportPosition(1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.changed.add(changedSpy);
 
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
@@ -6238,7 +6236,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         // act
         this.dataController.setViewportPosition(10);
-        this.clock.tick();
+        this.clock.tick(10);
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
 
@@ -6971,7 +6969,7 @@ QUnit.module('Filtering', {
         });
         that.dataController.setDataSource(that.dataSource);
         that.dataSource.load();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // arrange
         that.dataController.changed.add(function() {
@@ -6980,7 +6978,7 @@ QUnit.module('Filtering', {
 
         // act
         that.columnOption('name', 'filterType', 'exclude');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.strictEqual(that.columnsController.getColumns()[0].filterType, 'exclude', 'filterType is changed');
@@ -7009,7 +7007,7 @@ QUnit.module('Filtering', {
         that.dataController.setDataSource(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const items = that.dataController.items();
@@ -7029,7 +7027,7 @@ QUnit.module('Filtering', {
 
         // act
         that.dataController.clearFilter();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         columns = that.columnsController.getColumns();
@@ -8013,7 +8011,7 @@ QUnit.module('Filtering', {
         this.dataController.setDataSource(this.dataSource);
         this.dataSource.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.items().length, 1);
@@ -9126,7 +9124,7 @@ QUnit.module('Editing', { beforeEach: function() {
         // act
         this.editingController.getFirstEditableCellInRow = function() { return $([]); };
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.editRow(0);
@@ -9181,7 +9179,7 @@ QUnit.module('Error handling', {
         this.dataController.dataErrorOccurred.add(function(error) {
             callbackDataErrors.push(error.message);
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataErrors, ['Load error']);
@@ -9216,7 +9214,7 @@ QUnit.module('Error handling', {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataErrors.length, 1);
@@ -9250,7 +9248,7 @@ QUnit.module('Error handling', {
             callbackDataErrors.push(error.message);
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataErrors, ['Load error']);
@@ -9284,7 +9282,7 @@ QUnit.module('Error handling', {
 
         this.editingController.getFirstEditableCellInRow = function() { return $([]); };
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.addRow();
@@ -9322,7 +9320,7 @@ QUnit.module('Error handling', {
         // act
         setupDataGridModules(this, ['data', 'columns', 'editing']);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.deleteRow(0);
@@ -9462,7 +9460,7 @@ QUnit.module('Remote Grouping', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!storeLoadOptions.group, 'no group option');
@@ -9497,7 +9495,7 @@ QUnit.module('Remote Grouping', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.totalCount(), 2, 'totalCount');
@@ -9533,7 +9531,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), []);
@@ -9567,7 +9565,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!storeLoadOptions.skip && !storeLoadOptions.take, 'no paging options');
@@ -9603,7 +9601,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.items().length, 2, 'two items are loaded');
@@ -9648,7 +9646,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!errorId, 'no errors');
@@ -9696,7 +9694,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'count' }], 'totalSummary option');
@@ -9744,7 +9742,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!errorId, 'no errors');
@@ -9788,9 +9786,9 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.filter(['age', '>', 20]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.getVisibleRows().length, 1, 'rows are filtered');
@@ -9827,7 +9825,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, 0, 'skip option');
@@ -9888,7 +9886,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, undefined, 'skip option');
@@ -9961,7 +9959,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, undefined, 'skip option');
@@ -10029,7 +10027,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, 0, 'skip option');
@@ -10089,7 +10087,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, 0, 'skip option');
@@ -10150,7 +10148,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, undefined, 'no skip option');
@@ -10215,7 +10213,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, undefined, 'no skip option');
@@ -10285,7 +10283,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, undefined, 'no skip option');
@@ -10353,7 +10351,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.pageIndex(1);
 
         const items = this.dataController.items();
@@ -10409,7 +10407,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(storeLoadOptions.skip, undefined, 'no skip option');
@@ -10446,7 +10444,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10477,7 +10475,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 1);
@@ -10511,7 +10509,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10549,7 +10547,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10593,7 +10591,7 @@ QUnit.module('Summary', {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10639,7 +10637,7 @@ QUnit.module('Summary', {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10680,7 +10678,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10724,7 +10722,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10768,7 +10766,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), []);
@@ -10794,7 +10792,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10832,7 +10830,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10873,7 +10871,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(errorId, 'E1026', 'error message');
@@ -10916,7 +10914,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -10968,7 +10966,7 @@ QUnit.module('Summary', {
 
         // act
         setupDataGridModules(this, ['data', 'columns', 'selection', 'summary']);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.footerItems(), [{
@@ -11026,14 +11024,14 @@ QUnit.module('Summary', {
         };
 
         setupDataGridModules(this, ['data', 'columns', 'selection', 'summary', 'grouping']);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const changedSpy = sinon.spy();
         this.dataController.changed.add(changedSpy);
 
         // act
         this.selectRows([1, 2]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(changedSpy.callCount, 2);
@@ -11069,7 +11067,7 @@ QUnit.module('Summary', {
         };
 
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.options.summary.totalItems.push({
@@ -11078,7 +11076,7 @@ QUnit.module('Summary', {
         });
 
         this.dataController.optionChanged({ name: 'summary' });
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // assert
@@ -11118,7 +11116,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11162,7 +11160,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController.items().length, 5);
@@ -11198,7 +11196,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController.items().length, 7);
@@ -11237,7 +11235,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11277,7 +11275,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11315,7 +11313,7 @@ QUnit.module('Summary', {
         };
 
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.columnsController.columnOption('name', 'groupIndex', 0);
@@ -11353,11 +11351,11 @@ QUnit.module('Summary', {
         };
 
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.option('sortByGroupSummaryInfo', [{ summaryItem: 'count' }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // assert
@@ -11409,7 +11407,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11445,7 +11443,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11485,7 +11483,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const headerFilterDataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[1]));
         let headerFilterItems;
@@ -11513,7 +11511,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'count'), 0, 'find by summaryType');
@@ -11551,7 +11549,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11596,7 +11594,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11645,7 +11643,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11705,7 +11703,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11759,7 +11757,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.expandRow(['Alex']);
 
@@ -11800,7 +11798,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11841,7 +11839,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11882,7 +11880,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11921,7 +11919,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11954,7 +11952,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -11987,7 +11985,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -12033,7 +12031,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -12090,7 +12088,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -12138,7 +12136,7 @@ QUnit.module('Summary', {
 
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataController.isLoading());
@@ -12222,7 +12220,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('Total summary items without editing', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.getTotalValues(), [5, 20]);
@@ -12231,7 +12229,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('modify cell', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.setValue(0, 3);
 
         // assert
@@ -12241,7 +12239,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('modify cell and cancelEditData', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.setValue(0, 3);
         this.cancelEditData();
 
@@ -12252,7 +12250,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('add row', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.addRow();
 
         // assert
@@ -12263,7 +12261,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('add row if data is grouped', function(assert) {
         // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.getDataSource().group('id');
         this.getDataSource().load();
         this.addRow();
@@ -12276,7 +12274,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('add row and modify cell', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.addRow();
         this.setValue(0, 1);
 
@@ -12287,7 +12285,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('add row and delete row', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.addRow();
         this.deleteRow(0);
 
@@ -12298,7 +12296,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('delete row', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.deleteRow(3);
 
         // assert
@@ -12309,7 +12307,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('delete row if data is grouped', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.getDataSource().group('id');
         this.getDataSource().load();
 
@@ -12328,7 +12326,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('modify cell and delete row', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.setValue(3, 100);
         this.deleteRow(3);
 
@@ -12339,7 +12337,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('delete row and undelete row', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.deleteRow(3);
         this.undeleteRow(3);
 
@@ -12350,7 +12348,7 @@ QUnit.module('Summary with Editing', {
     QUnit.test('modify cell, delete row and undelete row', function(assert) {
     // act
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
         this.setValue(3, 100);
         this.deleteRow(3);
         this.undeleteRow(3);
@@ -12361,7 +12359,7 @@ QUnit.module('Summary with Editing', {
 
     QUnit.test('partial update after editing', function(assert) {
         this.setupDataGridModules();
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.addRow();
 
@@ -12721,7 +12719,7 @@ QUnit.module('Master Detail', {
         this.options.loadingTimeout = 0;
         this.setupDataGrid();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.changeRowExpand([0]);
@@ -12730,7 +12728,7 @@ QUnit.module('Master Detail', {
         assert.equal(events.length, 1, 'one expand event called');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -13763,7 +13761,7 @@ QUnit.module('Refresh changesOnly', {
 
         this.dataController.refresh(true);
         this.dataController.refresh();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -13788,7 +13786,7 @@ QUnit.module('Refresh changesOnly', {
 
         this.dataController.refresh();
         this.dataController.refresh(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -13813,7 +13811,7 @@ QUnit.module('Refresh changesOnly', {
 
         this.dataController.refresh(true);
         this.dataController.refresh(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -14320,7 +14318,7 @@ QUnit.module('Using DataSource instance', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!this.dataSource.filter(), 'no filter');
@@ -14330,7 +14328,7 @@ QUnit.module('Using DataSource instance', {
         // act
         this.dataSource.filter(['field1', '=', 2]);
         this.dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const filter = this.dataSource.filter();
@@ -14350,7 +14348,7 @@ QUnit.module('Using DataSource instance', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.changed.add(function() {
             changes.push('data');
@@ -14364,7 +14362,7 @@ QUnit.module('Using DataSource instance', {
         this.dataSource.group('field1');
         this.dataSource.pageSize(5);
         this.dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.columnOption(0, 'groupIndex'), 0);
@@ -14390,7 +14388,7 @@ QUnit.module('Using DataSource instance', {
             dataSource: this.dataSource
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.changed.add(function() {
             changes.push('data');
@@ -14403,7 +14401,7 @@ QUnit.module('Using DataSource instance', {
         // act
         this.dataSource.sort({ selector: 'field3', desc: true });
         this.dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.columnOption(0, 'sortIndex'), undefined);
@@ -14427,12 +14425,12 @@ QUnit.module('Using DataSource instance', {
             dataSource: this.dataSource
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataSource.pageIndex(1);
         this.dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.pageIndex(), 1);
@@ -14447,7 +14445,7 @@ QUnit.module('Using DataSource instance', {
             scrolling: { mode: 'infinite' }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 3);
@@ -14455,7 +14453,7 @@ QUnit.module('Using DataSource instance', {
 
         // act
         this.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 5);
@@ -14466,7 +14464,7 @@ QUnit.module('Using DataSource instance', {
 
         // act
         this.dataSource.reload(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 3);
@@ -14484,7 +14482,7 @@ QUnit.module('Using DataSource instance', {
             grouping: { autoExpandAll: true }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(this.columnsController.getGroupColumns().length, 1, 'grouped columns count');
         assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'field1', desc: false, isExpanded: true }], 'dataSource group when autoExpandAll true');
@@ -14492,7 +14490,7 @@ QUnit.module('Using DataSource instance', {
         // act
         this.option('grouping.autoExpandAll', false);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.columnsController.getGroupColumns().length, 1, 'grouped columns count');
@@ -14514,7 +14512,7 @@ QUnit.module('Using DataSource instance', {
             dataSource: this.dataSource
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.items().length, 3, 'items count');
@@ -14529,7 +14527,7 @@ QUnit.module('Using DataSource instance', {
             dataSource: this.dataSource
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         try {
         // act
@@ -14579,14 +14577,14 @@ QUnit.module('Exporting', {
         let allItems;
         this.setupDataGridModules({});
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.loadAll().done(function(items) {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 0, 'items count');
@@ -14606,7 +14604,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.dataErrorOccurred.add(function(e) {
             dataErrorOccurredArgs.push(e);
@@ -14621,7 +14619,7 @@ QUnit.module('Exporting', {
             error = e;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 0, 'items count');
@@ -14644,7 +14642,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -14655,7 +14653,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 3, 'items count');
@@ -14692,7 +14690,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -14703,7 +14701,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 2, 'items count');
@@ -14745,7 +14743,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(this.dataController.pageCount(), 4, 'pageCount');
 
@@ -14759,7 +14757,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 4, 'items count');
@@ -14817,7 +14815,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(this.dataController.pageCount(), 1, 'pageCount');
 
@@ -14832,7 +14830,7 @@ QUnit.module('Exporting', {
             allSummary = summary;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(changedCallCount, 0, 'changed call count');
@@ -14896,7 +14894,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(this.dataController.pageCount(), 1, 'pageCount');
 
@@ -14911,7 +14909,7 @@ QUnit.module('Exporting', {
             allSummary = summary;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(changedCallCount, 0, 'changed call count');
@@ -14986,7 +14984,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(this.dataController.pageCount(), 1, 'pageCount');
 
@@ -15003,7 +15001,7 @@ QUnit.module('Exporting', {
             allSummary = summary;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(loadArgs.length, 0, 'load count');
@@ -15030,7 +15028,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.expandRow(this.array[0]);
@@ -15039,7 +15037,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataController.items()[1].rowType, 'detail', 'detail row in original items');
@@ -15065,7 +15063,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.updateFieldValue({
@@ -15079,7 +15077,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(allItems.length, 5, 'all items count');
@@ -15098,14 +15096,14 @@ QUnit.module('Exporting', {
             columns: ['field1', { dataField: 'field2', filterValue: 3 }, 'field3']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.loadAll().done(function(items) {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(allItems.length, 2, 'all items count');
@@ -15122,14 +15120,14 @@ QUnit.module('Exporting', {
             columns: [{ dataField: 'group', dataType: 'number', groupIndex: 0 }, 'id']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.loadAll().done(function(items) {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(allItems.length, 3, 'all items count');
@@ -15153,7 +15151,7 @@ QUnit.module('Exporting', {
             isLoadAllFailed = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(isLoadAllFailed, 'loadAll failed');
@@ -15172,7 +15170,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.beginCustomLoading('test');
@@ -15180,7 +15178,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
         this.dataController.endCustomLoading();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(allItems.length, 5, 'loaded all item count');
@@ -15200,7 +15198,7 @@ QUnit.module('Exporting', {
             columns: ['field1', 'field2', 'field3']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         // act
@@ -15212,7 +15210,7 @@ QUnit.module('Exporting', {
 
         this.dataController.pageIndex(1);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!isLoadAllFailed, 'loadAll is not failed');
@@ -15236,14 +15234,14 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.loadAll().done(function(items) {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(allItems.length, 5, 'all items count');
@@ -15262,7 +15260,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -15273,7 +15271,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 3, 'items count');
@@ -15311,7 +15309,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -15322,7 +15320,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 2, 'items count');
@@ -15367,14 +15365,14 @@ QUnit.module('Exporting', {
             columns: [{ dataField: 'field1', filterValues: [2] }, 'field2', 'field3']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.loadAll([this.array[1], this.array[2], this.array[3]]).done(function(items) {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(allItems.length, 2, 'two items are loaded');
@@ -15395,7 +15393,7 @@ QUnit.module('Exporting', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.editingController.updateFieldValue({
@@ -15409,7 +15407,7 @@ QUnit.module('Exporting', {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(allItems.length, 2, 'all items count');
@@ -15512,7 +15510,7 @@ QUnit.module('onOptionChanged', {
         const that = this;
 
         that.option.restore();
-        sinon.stub(that, 'option', function(optionName, value) {
+        sinon.stub(that, 'option').callsFake(function(optionName, value) {
             if(optionName === 'paging.pageSize' && value === 3) {
                 pageSize = that.dataController.dataSource().pageSize();
             }

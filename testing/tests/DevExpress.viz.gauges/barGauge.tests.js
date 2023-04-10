@@ -582,7 +582,7 @@ QUnit.test('Connectors should be moved by turning if labels are not moved', func
         resolveLabelOverlapping: 'shift',
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const text1 = group.children[3];
     const text2 = group.children[7];
@@ -607,7 +607,7 @@ QUnit.test('The connector should move without turning', function(assert) {
         resolveLabelOverlapping: 'shift',
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];
@@ -623,7 +623,7 @@ QUnit.test('The connector should move without turning', function(assert) {
         assert.deepEqual(line2.rotate.lastCall.args, [0], 'line 2 is shifted without rotation');
         assert.roughEqual(text2._stored_settings.x, 34, 1, 'text 2 is coord x');
         assert.roughEqual(text2._stored_settings.y, 222, 1, 'text 2 is coord y');
-        assert.deepEqual(line3._stored_settings.points, [130.8819, 197.5093, 4 , 22], 'line 3 coords');
+        assert.deepEqual(line3._stored_settings.points, [130.8819, 197.5093, 4, 22], 'line 3 coords');
         assert.deepEqual(line3.rotate.lastCall.args, [0], 'line 3 is shifted without rotation');
         assert.roughEqual(text3._stored_settings.x, 34, 1, 'text 3 is coord x');
         assert.roughEqual(text3._stored_settings.y, 222, 1, 'text 3 is coord y');
@@ -641,7 +641,7 @@ QUnit.test('Label location if the angle < 90, resolveLabelOverlapping - shift, w
         }
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];
@@ -669,7 +669,7 @@ QUnit.test('label location if the angle < 90, resolveLabelOverlapping - shift', 
         resolveLabelOverlapping: 'shift',
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];
@@ -729,7 +729,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift, w
         }
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];
@@ -757,7 +757,7 @@ QUnit.test('label location if the angle = 90, resolveLabelOverlapping - shift', 
         resolveLabelOverlapping: 'shift'
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];
@@ -788,7 +788,7 @@ QUnit.test('label location if the angle > 90, resolveLabelOverlapping - shift, w
         }
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];
@@ -816,7 +816,7 @@ QUnit.test('label location if the angle is > 90, resolveLabelOverlapping - shift
         resolveLabelOverlapping: 'shift'
     });
     const group = this.getBarsGroup();
-    const line1 = group.children[2]
+    const line1 = group.children[2];
     const line2 = group.children[6];
     const line3 = group.children[10];
     const text1 = group.children[3];

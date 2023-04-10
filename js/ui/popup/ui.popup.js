@@ -262,6 +262,8 @@ const Popup = Overlay.inherit({
             .children().eq(0);
 
         this._toggleContentScrollClass();
+
+        this.$overlayContent().attr('role', 'dialog');
     },
 
     _render: function() {

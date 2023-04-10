@@ -21,7 +21,7 @@ QUnit.module('DataSources', moduleConfig, () => {
     test('inserting', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const tasksCount = data.tasks.length;
         const taskData = {
@@ -32,7 +32,7 @@ QUnit.module('DataSources', moduleConfig, () => {
             parentId: '1'
         };
         getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(taskData);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = data.tasks[data.tasks.length - 1];
         assert.equal(createdTask.title, taskData.title, 'new task title is right');
@@ -42,7 +42,7 @@ QUnit.module('DataSources', moduleConfig, () => {
     test('updating', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTaskId = 3;
         const dataToUpdate = {
@@ -51,7 +51,7 @@ QUnit.module('DataSources', moduleConfig, () => {
             title: 'New'
         };
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), dataToUpdate);
-        this.clock.tick();
+        this.clock.tick(10);
         const updatedTask = data.tasks.filter((t) => t.id === updatedTaskId)[0];
         assert.equal(updatedTask.title, dataToUpdate.title, 'task title is updated');
         assert.equal(updatedTask.start, dataToUpdate.start, 'new task start is updated');
@@ -61,12 +61,12 @@ QUnit.module('DataSources', moduleConfig, () => {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 3);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const removedTaskId = 3;
         const tasksCount = data.tasks.length;
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString(), false);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(data.tasks.length, tasksCount - 1, 'tasks less');
         const removedTask = data.tasks.filter((t) => t.id === removedTaskId)[0];
         assert.equal(removedTask, undefined, 'task was removed');
@@ -77,10 +77,10 @@ QUnit.module('DataSources', moduleConfig, () => {
             tasks: { dataSource: [] },
             validation: { autoUpdateParentTasks: true }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.instance.option('tasks.dataSource', data.tasks);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.instance._treeList.option('expandedRowKeys').length, 2, 'each task is loaded and expanded');
     });
     test('incorrect tasks data', function(assert) {
@@ -95,7 +95,7 @@ QUnit.module('DataSources', moduleConfig, () => {
             tasks: { dataSource: failTasks },
             validation: { autoUpdateParentTasks: true }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let keys = this.instance.getVisibleTaskKeys();
         assert.equal(keys.length, 3, 'incorrect keys filtered');
         assert.equal(keys[0], 1, 'correct key');
@@ -103,7 +103,7 @@ QUnit.module('DataSources', moduleConfig, () => {
         assert.equal(keys[2], 3, 'correct key');
 
         this.instance.option('validation.autoUpdateParentTasks', false);
-        this.clock.tick();
+        this.clock.tick(10);
         keys = this.instance.getVisibleTaskKeys();
         assert.equal(keys.length, 3, 'incorrect keys filtered');
         assert.equal(keys[0], 1, 'correct key');
@@ -119,7 +119,7 @@ QUnit.module('DataSources', moduleConfig, () => {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('columns', columns);
         this.instance.option('editing.enabled', true);
-        this.clock.tick();
+        this.clock.tick(10);
         const taskData = {
             start: new Date('2019-02-21'),
             end: new Date('2019-02-22'),
@@ -128,7 +128,7 @@ QUnit.module('DataSources', moduleConfig, () => {
             parentId: '1'
         };
         getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(taskData);
-        this.clock.tick();
+        this.clock.tick(10);
         const titleText = $(this.instance._treeList.getCellElement(data.tasks.length - 1, 0)).text();
         const progress = $(this.instance._treeList.getCellElement(data.tasks.length - 1, 1)).text();
         const endDate = new Date($(this.instance._treeList.getCellElement(data.tasks.length - 1, 2)).text());
@@ -151,7 +151,7 @@ QUnit.module('DataSources', moduleConfig, () => {
                 { dataField: 'end', caption: 'End Date' }
             ]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const data = {
             start: new Date('2019-02-21'),
@@ -159,7 +159,7 @@ QUnit.module('DataSources', moduleConfig, () => {
             title: 'New'
         };
         this.instance.updateTask(tasks[2].id, data);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const titleText = $(this.instance._treeList.getCellElement(2, 0)).text();
         const startDate = new Date($(this.instance._treeList.getCellElement(2, 1)).text());
