@@ -28,7 +28,7 @@ const environment = {
             getMargins: sinon.stub()
         };
 
-        this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar', function(renderer, group) {
+        this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar').callsFake(function(renderer, group) {
             const scrollBar = new originalScrollBar(renderer, group);
             const originalUpdateSize = scrollBar.updateSize;
 
@@ -44,7 +44,7 @@ const environment = {
         let axisIndex = 0;
         const originalAxis = axisModule.Axis;
 
-        this.axisStub = sinon.stub(axisModule, 'Axis', function(renderingSettings) {
+        this.axisStub = sinon.stub(axisModule, 'Axis').callsFake(function(renderingSettings) {
             const axis = new originalAxis(renderingSettings);
 
             for(const stubName in axesStubs[axisIndex]) {
@@ -73,7 +73,7 @@ const environment = {
     },
     afterEach: function() {
         this.renderer = null;
-        rendererModule.Renderer.reset();
+        rendererModule.Renderer.resetHistory();
         this.axisStub.restore();
         this.scrollBarStub && this.scrollBarStub.restore();
         this.legendStub.restore();
@@ -110,8 +110,8 @@ function createAxisStubs() {
 
 function resetAxisStubs(axis) {
     axis.draw.reset();
-    axis.getMargins.reset();
-    axis.estimateMargins.reset();
+    axis.getMargins.resetHistory();
+    axis.estimateMargins.resetHistory();
     axis.updateSize.reset();
     axis.shift.reset();
     axis.createTicks.reset();

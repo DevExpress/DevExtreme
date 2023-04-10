@@ -20,7 +20,7 @@ const moduleConfig = {
 QUnit.module('Options', moduleConfig, () => {
     test('taskListWidth', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('width', 1000);
         const treeListWrapperElement = this.$element.find(Consts.TREELIST_WRAPPER_SELECTOR);
         const splitterWrapper = this.$element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
@@ -43,7 +43,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('showResources', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
         this.instance.option('showResources', false);
         assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, 0);
@@ -52,7 +52,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('showDependencies', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
         this.instance.option('showDependencies', false);
         assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, 0);
@@ -61,7 +61,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('taskTitlePosition', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const milestoneCount = data.tasks.reduce((count, t) => {
             return t.start.getTime() === t.end.getTime() ? count + 1 : count;
         }, 0);
@@ -116,7 +116,7 @@ QUnit.module('Options', moduleConfig, () => {
             columns: ['t']
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const taskWrapperElements = this.$element.find(Consts.TASK_WRAPPER_SELECTOR);
         assert.equal(taskWrapperElements.length, tasksDS.length);
         const firstTitle = taskWrapperElements.first().children().children().first().text();
@@ -145,7 +145,7 @@ QUnit.module('Options', moduleConfig, () => {
             ]
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         let $treeListHeaderRow = this.$element.find(Consts.TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 2, 'treeList has 2 columns');
         assert.equal($treeListHeaderRow.children().eq(0).text(), 'Subject', 'first column title is checked');
@@ -168,7 +168,7 @@ QUnit.module('Options', moduleConfig, () => {
             selectedRowKey: selectedRowKey
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const treeListSelectedRowKeys = this.instance._treeList.option('selectedRowKeys');
         assert.equal(treeListSelectedRowKeys.length, 1, 'only one treeList row is selected');
         assert.equal(treeListSelectedRowKeys, selectedRowKey, 'second treeList row is selected');
@@ -177,12 +177,12 @@ QUnit.module('Options', moduleConfig, () => {
         this.instance.option('selectedRowKey', 1);
         assert.equal(this.$element.find(Consts.SELECTION_SELECTOR).length, 1);
         this.instance.option('selectedRowKey', undefined);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(this.$element.find(Consts.SELECTION_SELECTOR).length, 0);
     });
     test('allowSelection', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('selectedRowKey', 1);
         assert.equal(this.$element.find(Consts.SELECTION_SELECTOR).length, 1);
         this.instance.option('allowSelection', false);
@@ -190,7 +190,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('showRowLines', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.$element.find(Consts.GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR).length > 0, 'ganttView has borders by default');
         assert.equal(this.instance._treeList.option('showRowLines'), true, 'treeList has borders by default');
         this.instance.option('showRowLines', false);
@@ -202,7 +202,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
     test('editing', function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         let coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
         assert.equal(coreEditingSettings.enabled, false, 'editing is prohibited by default');
         assert.equal(coreEditingSettings.allowTaskInsert, true, 'task adding allowed by default');
@@ -245,7 +245,7 @@ QUnit.module('Options', moduleConfig, () => {
             return this.$element.find('.dx-gantt-tsa').eq(1).find('.dx-gantt-si').text().indexOf(text) > -1;
         };
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(isHeaderContainsText('January'), 'is months scale type (auto)');
         this.instance.option('scaleType', 'minutes');
@@ -271,7 +271,7 @@ QUnit.module('Options', moduleConfig, () => {
     test('calculateCellValue for key', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
         this.instance.option('columns', [{ dataField: 'id' }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columns = this.instance._treeList.getVisibleColumns();
 

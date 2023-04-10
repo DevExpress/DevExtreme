@@ -912,11 +912,11 @@ QUnit.module('Keyboard navigation', {
             iterateViews((_, type) => {
                 calendar.option('zoomLevel', type);
 
-                clock.tick();
+                clock.tick(10);
                 triggerKeydown($element, LEFT_ARROW_KEY_CODE, optionConfig);
                 assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], `${name}+left arrow navigates correctly`);
 
-                clock.tick();
+                clock.tick(10);
                 triggerKeydown($element, RIGHT_ARROW_KEY_CODE, optionConfig);
                 assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], `${name}+right arrow navigates correctly`);
             });
@@ -935,7 +935,7 @@ QUnit.module('Keyboard navigation', {
             triggerKeydown($element, LEFT_ARROW_KEY_CODE, optionConfig);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 10, this.value.getDate()), `${name}+left arrow navigates correctly`);
 
-            this.clock.tick();
+            this.clock.tick(10);
             triggerKeydown($element, RIGHT_ARROW_KEY_CODE, optionConfig);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 9, this.value.getDate()), `${name}+right arrow navigates correctly`);
         });
@@ -978,11 +978,11 @@ QUnit.module('Keyboard navigation', {
         iterateViews((_, type) => {
             calendar.option('zoomLevel', type);
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageup navigates correctly');
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pagedown navigates correctly');
         });
@@ -1005,11 +1005,11 @@ QUnit.module('Keyboard navigation', {
         iterateViews((_, type) => {
             calendar.option('zoomLevel', type);
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageUp navigates correctly');
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pageDown navigates correctly');
         });

@@ -143,7 +143,7 @@ QUnit.module('Options', {
         });
 
         scheduler.instance.option('startDateExpr', 'StartDate');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
     });
 
@@ -420,7 +420,7 @@ QUnit.module('Options', {
         const initialAppointmentHeight = getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
 
         scheduler.instance.option('height', 200);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.notEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialAppointmentHeight, 'Appointment was repainted');
     });
@@ -446,7 +446,7 @@ QUnit.module('Options', {
         scheduler.instance.option('height', 400);
         $('#scheduler').show();
         triggerShownEvent($('#scheduler'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.notEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialAppointmentHeight, 'Appointment was repainted');
     });

@@ -1358,7 +1358,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1395,7 +1395,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 1);
@@ -1432,7 +1432,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1467,7 +1467,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1502,7 +1502,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1525,9 +1525,9 @@ QUnit.module('Real dataGrid', {
                 savingTimeout: 0
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.option('filterValue', ['field', '=', 1]);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(customSaveSpy.lastCall.args[0].filterValue, ['field', '=', 1]);
     });
 });

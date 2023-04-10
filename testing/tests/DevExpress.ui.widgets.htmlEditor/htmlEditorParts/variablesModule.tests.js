@@ -133,7 +133,7 @@ QUnit.module('Variables module', moduleConfig, () => {
         variables.showPopup();
         $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(this.log, [{
             format: 'variable',

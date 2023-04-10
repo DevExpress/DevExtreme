@@ -20,7 +20,7 @@ const moduleConfig = {
 QUnit.module('Task Template', moduleConfig, () => {
     test('common', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick();
+        this.clock.tick(10);
         const taskText = this.$element.find(Consts.TASK_SELECTOR)[0].textContent;
         const taskTitle = data.tasks[0].title;
         assert.equal(taskText.indexOf(taskTitle), 0, 'Default task works correctly');
@@ -41,10 +41,10 @@ QUnit.module('Task Template', moduleConfig, () => {
             taskContentTemplate: customTaskFunction
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const elements = this.$element.find(Consts.TASK_WRAPPER_SELECTOR);
         assert.equal(elements.length, customTasks.length, 'Should render task wrapper for each task');
-        this.clock.tick();
+        this.clock.tick(10);
         const taskText = this.$element.find(Consts.TASK_WRAPPER_SELECTOR).first().text();
         assert.equal(taskText, customTaskText, 'Custom task text works correctly');
     });
@@ -61,7 +61,7 @@ QUnit.module('Task Template', moduleConfig, () => {
             taskContentTemplate: customTaskFunction
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const taskText = this.$element.find(Consts.TASK_WRAPPER_SELECTOR).first().text();
         assert.equal(taskText, customTaskText, 'Custom template with jQuery works correctly');
     });
@@ -91,7 +91,7 @@ QUnit.module('Task Template', moduleConfig, () => {
             taskContentTemplate: customTaskFunction
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
         const taskWrapperElements = this.$element.find(Consts.TASK_WRAPPER_SELECTOR);
         const taskText = taskWrapperElements[1].textContent;
         assert.equal(taskText, customTaskText, 'Custom task text works correctly');

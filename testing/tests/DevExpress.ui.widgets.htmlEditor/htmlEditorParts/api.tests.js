@@ -391,9 +391,9 @@ testModule('API', moduleConfig, () => {
 
         this.instance.on('valueChanged', valueChangeStub);
         this.instance.option('value', '<p>First row</p><p>Second row</p>');
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('value', 'New text');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(valueChangeStub.lastCall.args[0].value, '<p>New text</p>');
         assert.strictEqual(updateContentSpy.callCount, 2, 'value changed twice -> update content two times');
@@ -406,7 +406,7 @@ testModule('API', moduleConfig, () => {
 
         this.instance.on('valueChanged', valueChangeStub);
         this.instance.option('value', '<p>new markup</p><p></p>');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(valueChangeStub.callCount, 1);
         assert.strictEqual(valueChangeStub.getCall(0).args[0].value, '<p>new markup</p>', 'markup optimized');
@@ -419,7 +419,7 @@ testModule('API', moduleConfig, () => {
 
         this.instance.on('valueChanged', valueChangeStub);
         this.instance.option('value', '<p>markup</p><p></p>');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(valueChangeStub.callCount, 0);
     });
@@ -467,14 +467,14 @@ testModule('API', moduleConfig, () => {
         };
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     test('onContentReady event should trigger after editor without transcluded content rendered', function(assert) {
         this.options.onContentReady = sinon.stub();
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
     });
 
@@ -482,7 +482,7 @@ testModule('API', moduleConfig, () => {
         this.options = { onContentReady: sinon.stub() };
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
     });
 
@@ -491,7 +491,7 @@ testModule('API', moduleConfig, () => {
         this.options = { onContentReady: sinon.stub() };
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
     });
 });

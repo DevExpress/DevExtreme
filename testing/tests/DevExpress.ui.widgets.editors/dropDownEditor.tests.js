@@ -913,11 +913,11 @@ QUnit.module('Templates', () => {
 
         try {
             dropDownEditor.repaint();
-            clock.tick();
+            clock.tick(10);
         } catch(e) {
             assert.ok(false, `error is raised: ${e.message}`);
         } finally {
-            clock.tick();
+            clock.tick(10);
             clock.restore();
             assert.ok(true);
         }
@@ -1119,7 +1119,7 @@ QUnit.module('Templates', () => {
             });
 
             keyboard.type('z5');
-            this.clock.tick();
+            this.clock.tick(10);
             assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
         } finally {
             this.clock.restore();

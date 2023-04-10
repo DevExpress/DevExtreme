@@ -600,7 +600,7 @@ QUnit.module('popup options', moduleConfig, () => {
         try {
             instance.open();
 
-            this.clock.tick();
+            this.clock.tick(10);
             const popup = $('.dx-popup').dxPopup('instance');
             const maxHeight = popup.option('maxHeight');
 
@@ -681,7 +681,7 @@ QUnit.module('popup options', moduleConfig, () => {
             $('#dd-content').height(contentHeight);
             instance.close();
             instance.open();
-            this.clock.tick();
+            this.clock.tick(10);
 
             const popup = this.$element.find('.dx-popup').dxPopup('instance');
             const maxHeight = popup.option('maxHeight');
@@ -739,7 +739,7 @@ QUnit.module('popup options', moduleConfig, () => {
 
                 instance.open();
                 $content.focus();
-                this.clock.tick();
+                this.clock.tick(10);
                 $(window).trigger('scroll');
 
                 assert.strictEqual(instance.option('opened'), isMac);
@@ -824,7 +824,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         const keyboard = keyboardMock($input2);
 
         keyboard.press('tab');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.notOk(instance.option('opened'), 'popup was closed');
     });

@@ -58,7 +58,7 @@ module('Table context menu integration', {
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             return $(CONTEXT_MENU_OVERLAY_SELECTOR);
         };
@@ -68,7 +68,7 @@ module('Table context menu integration', {
 
             const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
             $ItemsHasSubmenu.eq(firstMenuItemIndex).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             return $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
         };
     },
@@ -83,7 +83,7 @@ module('Table context menu integration', {
 
             const $tableElement = this.$element.find('td').eq(0);
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
             assert.ok($contextMenu.length);
@@ -93,7 +93,7 @@ module('Table context menu integration', {
             this.createWidget();
 
             this.$element.find('p').eq(0).trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
             assert.strictEqual($contextMenu.length, 0);
@@ -106,7 +106,7 @@ module('Table context menu integration', {
             const $tableElement = this.$element.find('td').eq(5);
             eventsEngine.trigger($tableElement, createEvent('dxcontextmenu', clickCoordinates));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             const startPosition = this.instance._getQuillContainer().get(0).getBoundingClientRect();
             const contextMenuPosition = this.instance.getModule('tableContextMenu')._contextMenu.option('position');
@@ -188,15 +188,15 @@ module('Table context menu integration', {
             const $tableElement = this.$element.find('td').eq(0);
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             this.$element.trigger('dxclick');
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
@@ -210,7 +210,7 @@ module('Table context menu integration', {
             const $tableElement = this.$element.find('td').eq(0);
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
@@ -228,14 +228,14 @@ module('Table context menu integration', {
             const $tableElement = this.$element.find('td').eq(0);
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
             const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
             $ItemsHasSubmenu.eq(0).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
 
@@ -248,14 +248,14 @@ module('Table context menu integration', {
             const $tableElement = this.$element.find('td').eq(0);
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
             const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
             $ItemsHasSubmenu.eq(1).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
 
@@ -268,7 +268,7 @@ module('Table context menu integration', {
             const $tableElement = this.$element.find('td').eq(0);
 
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
@@ -528,7 +528,7 @@ module('Table context menu integration', {
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             $menuItems.eq(0).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $table = this.$element.find('table');
 
@@ -548,7 +548,7 @@ module('Table context menu integration', {
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
@@ -598,7 +598,7 @@ module('Table context menu integration', {
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
@@ -633,13 +633,13 @@ module('Table context menu integration', {
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
             $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             $menuItems.eq(1).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $toolbarFormatRight = this.$element.find('.dx-alignright-format');
 

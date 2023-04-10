@@ -707,7 +707,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             inertiaEnabled: false,
             onPullDown: function() {
                 $scrollView.dxScrollView('release');
-                clock.tick();
+                clock.tick(10);
             },
             onEnd: function() {
                 assert.equal($topPocket.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_LOADING_CLASS), false, 'scrollview-pull-down-loading class removed');
@@ -935,7 +935,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             inertiaEnabled: false,
             onReachBottom: function() {
                 this.release();
-                clock.tick();
+                clock.tick(10);
             },
             onEnd: function() {
                 const location = getScrollOffset($scrollView);
@@ -1123,7 +1123,7 @@ QUnit.module('api', moduleConfig, () => {
             inertiaEnabled: false,
             onPullDown: function() {
                 this.release();
-                clock.tick();
+                clock.tick(10);
             },
             onEnd: function() {
                 const location = getScrollOffset($scrollView);
@@ -1157,7 +1157,7 @@ QUnit.module('api', moduleConfig, () => {
             assert.ok($reachBottom.is(':hidden'), 'reach bottom is hidden');
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('release with preventReachBottom', function(assert) {
@@ -1170,7 +1170,7 @@ QUnit.module('api', moduleConfig, () => {
             inertiaEnabled: false,
             onPullDown: function() {
                 this.release(true);
-                clock.tick();
+                clock.tick(10);
             },
             onEnd: function() {
                 const $bottomPocketLoading = $scrollView.find('.' + SCROLLVIEW_REACHBOTTOM_CLASS);
@@ -1200,7 +1200,7 @@ QUnit.module('api', moduleConfig, () => {
                 assert.ok(true, 'release without loading fails');
             });
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('release fires update', function(assert) {
@@ -1214,7 +1214,7 @@ QUnit.module('api', moduleConfig, () => {
 
         $scrollView.dxScrollView('release');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
     });

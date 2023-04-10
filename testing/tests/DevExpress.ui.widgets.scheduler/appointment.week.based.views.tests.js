@@ -110,7 +110,7 @@ module('Integration: Appointment Day, Week views', {
                 cellDuration: 15
             }, this.clock);
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
@@ -208,7 +208,7 @@ module('Integration: Appointment Day, Week views', {
                 ];
 
                 const scheduler = createInstance({ dataSource: appointments, currentDate: new Date(2015, 1, 9) }, this.clock);
-                this.clock.tick();
+                this.clock.tick(10);
                 const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
                 const resultHeight = cellHeight * 2;
 
@@ -233,7 +233,7 @@ module('Integration: Appointment Day, Week views', {
                     height: 1500
                 }, this.clock);
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 const spy = sinon.spy(scheduler.instance._appointmentPopup, 'show');
 
@@ -266,7 +266,7 @@ module('Integration: Appointment Day, Week views', {
                     currentDate: new Date(2015, 3, 23)
                 }, this.clock);
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 scheduler.instance.showAppointmentPopup(task);
 
