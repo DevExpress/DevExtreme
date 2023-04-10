@@ -178,6 +178,7 @@ jobs:
         TZ: ${{ matrix.envs.TZ }}
         PERF: ${{ matrix.envs.PERF }}
         NO_HEADLESS: ${{ matrix.envs.NO_HEADLESS }}
+        NO_CSP: ${{ matrix.envs.NO_CSP }}
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
