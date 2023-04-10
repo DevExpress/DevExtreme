@@ -69,11 +69,11 @@ module('Virtual Scrolling', {
     afterEach: function() {
         this.virtualScrollingDispatcher.dispose();
 
-        if (typeof eventsEngine.on.restore === 'function') {
+        if(typeof eventsEngine.on.restore === 'function') {
             eventsEngine.on.restore();
         }
 
-        if (typeof eventsEngine.off.restore === 'function') {
+        if(typeof eventsEngine.off.restore === 'function') {
             eventsEngine.off.restore();
         }
     }
