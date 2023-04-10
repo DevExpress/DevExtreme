@@ -1,4 +1,3 @@
-const Builder = require('systemjs-builder');
 const path = require('path');
 const fs = require('fs');
 const babel = require('@babel/core');
@@ -154,7 +153,7 @@ const getFileList = (dirName) => {
     return files;
 };
 
-const transpileModules = async() => {
+const transpileModules = async(Builder) => {
     const builder = new Builder(root, config);
 
     const listFiles = getFileList(path.join(root, 'artifacts/transpiled'));
@@ -193,7 +192,7 @@ const transpileModules = async() => {
     }
 };
 
-const transpileRenovationModules = async() => {
+const transpileRenovationModules = async(Builder) => {
     const builder = new Builder(root, config);
 
     const listRenovationFiles = getFileList(path.join(root, 'artifacts/transpiled-renovation'));
@@ -212,7 +211,7 @@ const transpileRenovationModules = async() => {
     }
 };
 
-const transpileCss = async() => {
+const transpileCss = async(Builder) => {
     const listFiles = [
         {
             filePath: path.join(root, 'artifacts/css/dx.material.blue.light.css!'),
@@ -240,7 +239,7 @@ const transpileCss = async() => {
     );
 };
 
-const transpileTests = async() => {
+const transpileTests = async(Builder) => {
     const builder = new Builder(root, config);
     const testingFolders = [
         'DevExpress.ui.widgets',
@@ -302,10 +301,12 @@ const transpileTests = async() => {
         ));
     }
 
+    const Builder = require('systemjs-builder');
+
     switch(transpile) {
-        case 'modules': return await transpileModules();
-        case 'modules-renovation': return await transpileRenovationModules();
-        case 'tests': return await transpileTests();
-        case 'css': return await transpileCss();
+        case 'modules': return await transpileModules(Builder);
+        case 'modules-renovation': return await transpileRenovationModules(Builder);
+        case 'tests': return await transpileTests(Builder);
+        case 'css': return await transpileCss(Builder);
     }
 })();
