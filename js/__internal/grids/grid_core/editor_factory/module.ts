@@ -246,7 +246,7 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
   },
 };
 
-const EditorFactory = modules.ViewController.inherit(members).include(EditorFactoryMixin);
+const EditorFactory: any = modules.ViewController.inherit(EditorFactoryMixin).inherit(members);
 
 export const editorFactoryModule: Module = {
   defaultOptions() {
