@@ -41,6 +41,7 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .eql('changedinput')
 
     .pressKey('backspace')
+    .wait(500)
     .expect(input.value)
     .eql('_')
     .expect(textBox.option('value'))
@@ -51,6 +52,7 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .eql('changedinputchangedinput')
 
     .pressKey('backspace')
+    .wait(500)
     .expect(input.value)
     .eql('_')
     .expect(textBox.option('value'))
