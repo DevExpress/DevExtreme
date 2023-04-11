@@ -1,4 +1,5 @@
-import treeListCore from './ui.tree_list.core';
-import { headerPanelModule } from '../grid_core/ui.grid_core.header_panel';
+// @ts-expect-error
+import { headerPanelModule } from '@js/ui/grid_core/ui.grid_core.header_panel';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('headerPanel', headerPanelModule);

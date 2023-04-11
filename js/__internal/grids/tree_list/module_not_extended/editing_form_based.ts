@@ -1,5 +1,4 @@
-
-import treeListCore from './ui.tree_list.core';
-import { editingFormBasedModule } from '../grid_core/ui.grid_core.editing_form_based';
+import { editingFormBasedModule } from '@js/ui/grid_core/ui.grid_core.editing_form_based';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('editingFormBased', editingFormBasedModule);

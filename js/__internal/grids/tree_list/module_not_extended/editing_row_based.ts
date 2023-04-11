@@ -1,5 +1,4 @@
-
-import treeListCore from './ui.tree_list.core';
-import { editingRowBasedModule } from '../grid_core/ui.grid_core.editing_row_based';
+import { editingRowBasedModule } from '@js/ui/grid_core/ui.grid_core.editing_row_based';
+import treeListCore from '../module_core';
 
 treeListCore.registerModule('editingRowBased', editingRowBasedModule);

@@ -1,28 +1,29 @@
-import treeListCore from './ui.tree_list.core';
-import { extend } from '../../core/utils/extend';
-import { stateStoringModule } from '../grid_core/ui.grid_core.state_storing';
+import { extend } from '@js/core/utils/extend';
+import { stateStoringModule } from '@js/ui/grid_core/ui.grid_core.state_storing';
+import treeListCore from './module_core';
+
 const origApplyState = stateStoringModule.extenders.controllers.stateStoring.applyState;
 
 treeListCore.registerModule('stateStoring', extend(true, {}, stateStoringModule, {
-    extenders: {
-        controllers: {
-            stateStoring: {
-                applyState: function(state) {
-                    origApplyState.apply(this, arguments);
-                    this.option('expandedRowKeys', state.expandedRowKeys ? state.expandedRowKeys.slice() : []);
-                }
-            },
-            data: {
-                getUserState: function() {
-                    const state = this.callBase.apply(this, arguments);
+  extenders: {
+    controllers: {
+      stateStoring: {
+        applyState(state) {
+          origApplyState.apply(this, arguments as any);
+          this.option('expandedRowKeys', state.expandedRowKeys ? state.expandedRowKeys.slice() : []);
+        },
+      },
+      data: {
+        getUserState() {
+          const state = this.callBase.apply(this, arguments);
 
-                    if(!this.option('autoExpandAll')) {
-                        state.expandedRowKeys = this.option('expandedRowKeys');
-                    }
+          if (!this.option('autoExpandAll')) {
+            state.expandedRowKeys = this.option('expandedRowKeys');
+          }
 
-                    return state;
-                }
-            }
-        }
-    }
+          return state;
+        },
+      },
+    },
+  },
 }));
