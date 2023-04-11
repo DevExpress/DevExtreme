@@ -532,6 +532,25 @@ QUnit.module('typing', moduleConfig, () => {
 
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
+
+    QUnit.test('caret should be moved after a new char even if it was before a stub on typing', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '(((((0',
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        for(let i = 1; i < 5; ++i) {
+            keyboard
+                .caret(i)
+                .type('2');
+
+            assert.strictEqual(keyboard.caret().start, 6, 'caret was moved after a new char');
+            assert.strictEqual(textEditor.option('text'), '(((((2', 'text is correct');
+        }
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {

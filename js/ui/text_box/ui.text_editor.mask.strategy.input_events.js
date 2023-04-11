@@ -70,7 +70,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
             const { start, end } = this.editorCaret();
             const correction = updatedCharsCount - textLength;
 
-            if(start <= updatedCharsCount && updatedCharsCount > 1) {
+            if(updatedCharsCount > 1) {
                 this.editorCaret({ start: start + correction, end: end + correction });
             }
 
