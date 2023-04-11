@@ -2181,6 +2181,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
         assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText'));
     });
 
@@ -2203,7 +2204,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
-        assert.strictEqual(emptyCell.text(), '', 'no message');
+        assert.strictEqual(emptyCell.html(), '&nbsp;', 'no message');
     });
 
     QUnit.test('Check header text when all columns are hidden in column chooser', function(assert) {
@@ -2225,6 +2226,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
         assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'));
     });
 
@@ -2247,7 +2249,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
-        assert.strictEqual(emptyCell.text(), '', 'no message');
+        assert.strictEqual(emptyCell.html(), '&nbsp;', 'no message');
     });
 
     QUnit.test('Check header text when all columns are hidden in column chooser or grouped in group panel', function(assert) {
@@ -2270,6 +2272,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
         assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'));
     });
 
@@ -2293,7 +2296,7 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
-        assert.strictEqual(emptyCell.text(), '', 'no message');
+        assert.strictEqual(emptyCell.html(), '&nbsp;', 'no message');
     });
 });
 
