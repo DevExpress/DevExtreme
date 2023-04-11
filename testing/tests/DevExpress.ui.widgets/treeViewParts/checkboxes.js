@@ -277,6 +277,28 @@ const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
     });
 });
 
+QUnit.test('selectAll checkbox should have aria-label=checkbox attribute', function(assert) {
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { text: 'item' } ],
+    });
+
+    const $selectAllCheckbox = wrapper.getElement().find('.dx-treeview-select-all-item');
+
+    assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'checkbox');
+});
+
+QUnit.test('checkbox should have aria-label=checkbox attribute', function(assert) {
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'normal',
+        items: [ { text: 'item' } ],
+    });
+
+    const $checkbox = wrapper.getElement().find('.dx-checkbox');
+
+    assert.strictEqual($checkbox.attr('aria-label'), 'checkbox');
+});
+
 QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
     const selectAllValueChangedLog = [];
     const wrapper = new TreeViewTestWrapper({
