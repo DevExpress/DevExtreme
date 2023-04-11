@@ -80,6 +80,10 @@ test('"!" character should not be accepted if mask restricts it (T1156419)', asy
     .eql(' ')
     .expect(textBox.option('text'))
     .eql(' ');
-}).before(async () => createWidget('dxTextBox', {
-  mask: '9',
-}, '#textBox'));
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'textBox', { });
+
+  return createWidget('dxTextBox', {
+    mask: '9',
+  }, '#textBox');
+});

@@ -532,31 +532,6 @@ QUnit.module('typing', moduleConfig, () => {
 
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
-
-    QUnit.test('"!" character should not be accepted if mask restricts it (T1156419)', function(assert) {
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '0',
-        });
-        const textEditor = $textEditor.dxTextEditor('instance');
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input, true);
-
-        caretWorkaround();
-        keyboard.caret(0);
-
-        $input.trigger($.Event('keypress', {
-            shiftKey: true,
-            keyCode: 0,
-            key: '!',
-            charCode: 33,
-            char: undefined,
-            which: 33
-        }));
-        keyboard.input('!');
-
-        assert.strictEqual(textEditor.option('text'), '_', 'restricted character was not accepted');
-    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {
