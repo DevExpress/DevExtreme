@@ -37,7 +37,7 @@ export const dataControllerModule = {
         };
     },
     controllers: {
-        data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
+        data: modules.Controller.inherit(DataHelperMixin).inherit((function() {
             /**
              * @param {import('./ui.grid_core.data_controller').DataController} that
              * @param {string} optionName
