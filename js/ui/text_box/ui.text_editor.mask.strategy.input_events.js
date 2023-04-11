@@ -15,7 +15,8 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
         this._prevCaret = this.editorCaret();
     }
 
-    _inputHandler({ originalEvent }) {
+    _inputHandler(event) {
+        const { originalEvent } = event;
         if(!originalEvent) {
             return;
         }
@@ -51,6 +52,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
             });
 
             if(!hasValidChars) {
+                event.stopImmediatePropagation();
                 this.editorCaret(this._prevCaret);
             }
         }
