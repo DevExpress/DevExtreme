@@ -1,4 +1,4 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -97,10 +97,10 @@ test('Appointment EditForm screenshot', async (t) => {
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
     // act
-    .expect(await takeScreenshot('appointment-popup-screenshot', appointment.element))
+    .expect(await takeScreenshot('appointment-popup-screenshot.png', appointment.element))
     .ok()
     // assert
-    .expect(Selector('.dx-scheduler-appointment-popup').exists)
+    .expect(scheduler.appointmentPopup.element.exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

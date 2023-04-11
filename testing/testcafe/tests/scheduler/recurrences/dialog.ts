@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -22,7 +21,7 @@ test('Reccurence dialog screenshot', async (t) => {
     .expect(await takeScreenshot('reccurence-dialog-screenshot.png', scheduler.element))
     .ok()
     // assert
-    .expect(Selector('.dx-overlay-wrapper.dx-dialog'))
+    .expect(Scheduler.getEditRecurrenceDialog().element.exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
