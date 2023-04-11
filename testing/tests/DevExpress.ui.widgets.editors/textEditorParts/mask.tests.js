@@ -569,6 +569,30 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(keyboard.caret().start, 5, 'caret was moved after a new char');
         assert.strictEqual(textEditor.option('text'), '+1 (2__) ___ ___', 'text is correct');
     });
+
+    QUnit.test('ctrl+z should not raise an error', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type('2')
+            .caret({ start: 0, end: 1 })
+            .beforeInput();
+
+        try {
+            const originalEvent = $.Event('input', { inputType: 'historyUndo', data: null });
+            keyboard.triggerEvent($.Event('input', { originalEvent }));
+        } catch(e) {
+            assert.ok(false, `error is raised: ${e.message}`);
+        } finally {
+            assert.ok(true, 'no error is raised');
+        }
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {

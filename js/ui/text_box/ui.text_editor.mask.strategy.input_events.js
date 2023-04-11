@@ -33,7 +33,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
                 text: this._getEmptyString(length)
             });
         } else {
-            if(!currentCaret.end) {
+            if(!currentCaret.end || !data) {
                 return;
             }
 
