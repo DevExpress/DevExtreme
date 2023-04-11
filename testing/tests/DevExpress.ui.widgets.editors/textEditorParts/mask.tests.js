@@ -495,6 +495,68 @@ QUnit.module('typing', moduleConfig, () => {
         keyboard.caret(0);
         keyboard.type('1');
     });
+
+    QUnit.test('input event should be fired after input if mask is used', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '9'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type('1');
+
+        assert.strictEqual(inputHandlerStub.callCount, 1, 'input event is fired');
+    });
+
+    QUnit.test('input event should not be fired if input text was not changed because of mask', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '9',
+            value: '1'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(1)
+            .type('1');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('"!" character should not be accepted if mask restricts it (T1156419)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0',
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        caretWorkaround();
+        keyboard.caret(0);
+
+        $input.trigger($.Event('keypress', {
+            shiftKey: true,
+            keyCode: 0,
+            key: '!',
+            charCode: 33,
+            char: undefined,
+            which: 33
+        }));
+        keyboard.input('!');
+
+        assert.strictEqual(textEditor.option('text'), '_', 'restricted character was not accepted');
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {
