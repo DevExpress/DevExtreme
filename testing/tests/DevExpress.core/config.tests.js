@@ -100,11 +100,13 @@ QUnit.test('DevExpress.config.optionsParser works correct', function(assert) {
         [
             `'dxTemplate': {
                name: "title",
+               max-count: 123,
+               isOpen: true,
                test: {
-                arr: ['a1', 'a2'],
+                arr: ['a1', 'a2', true, 123],
                },
               }`,
-            { 'dxTemplate': { 'name': 'title', test: { arr: ['a1', 'a2'] } } },
+            { 'dxTemplate': { name: 'title', 'max-count': 123, isOpen: true, test: { arr: ['a1', 'a2', true, 123] } } },
         ],
         [
             '"dxTemplate": { "name": "title" }',
