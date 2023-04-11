@@ -54,12 +54,34 @@ const simpleDependencies: ScriptsDependencyTree = {
       },
       widget: 'toolbar',
     },
+    'data_grid.js': {
+      dependencies: {
+        'grid_core.ts': {
+          dependencies: {
+            'menu.js': {
+              dependencies: {},
+              widget: 'menu',
+            },
+            'render.js': {
+              dependencies: {},
+              widget: '',
+            },
+          },
+          widget: '',
+        },
+      },
+      widget: 'datagrid',
+    },
   },
   widget: '',
 };
 
+const tsFilesSet = new Set<string>([
+  'grid_core',
+]);
+
 const filesContent: { [key: string]: string } = {
-  'dx.all.js': 'import t from \'./toolbar\';import b from \'./button\';',
+  'dx.all.js': 'import t from \'./toolbar\';import b from \'./button\'; import grid from \'./data_grid\';',
   'toolbar.js': 'import m from \'./menu\';import u from \'./utils\';\n// STYLE toolbar',
   'menu.js': '// STYLE menu',
   'button.js': 'import u from \'./utils\';\n// STYLE button',
@@ -67,6 +89,8 @@ const filesContent: { [key: string]: string } = {
   'utils.js': 'import f from \'./fx\';import i from \'./icon\';import t from \'./render\';',
   'render.js': 'import t from \'./utils\';',
   'fx.js': '',
+  'data_grid.js': 'import core from \'./grid_core\'; // STYLE dataGrid',
+  'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';',
 
   // validation tests
   '../scss/widgets/righttheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";',
@@ -89,7 +113,10 @@ jest.mock('fs', () => ({
 
 jest.mock('filing-cabinet', () => ({
   __esModule: true,
-  default: (options: cabinet.Options): string => `${options.partial.replace('./', '')}.js`,
+  default: (options: cabinet.Options): string => {
+    const normalizedPartial = options.partial.replace('./', '');
+    return `${normalizedPartial}.${tsFilesSet.has(normalizedPartial) ? 'ts' : 'js'}`;
+  },
 }));
 
 describe('DependencyCollector', () => {

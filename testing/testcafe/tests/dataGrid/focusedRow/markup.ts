@@ -10,8 +10,8 @@ fixture.disablePageReloads`Focused row - markup`
 
 // TODO: Enable multi-theming testcafe run in the future.
 [
-  Themes.genericLight,
   Themes.materialBlue,
+  Themes.genericLight,
 ].forEach((theme) => {
   test(`markup - ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

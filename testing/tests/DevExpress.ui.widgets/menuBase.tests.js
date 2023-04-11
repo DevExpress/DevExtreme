@@ -347,14 +347,15 @@ QUnit.module('Menu rendering', () => {
         });
     });
 
-    QUnit.test('item should be rendered as simple text if item.url is incorrect', function(assert) {
+    QUnit.test('item should be rendered as link if item.url without protocol', function(assert) {
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: '/some_url' }]
         });
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`);
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
 
-        assert.ok(!content.children()[0]);
-        assert.strictEqual(content.text(), 'Item text');
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), '/some_url');
+        assert.strictEqual(content.text, 'Item text');
     });
 
     QUnit.test('should update item link after update item option with new url', function(assert) {
@@ -439,6 +440,17 @@ QUnit.module('Menu rendering', () => {
 
         assert.notOk(content.children()[0].getAttribute('href'));
         assert.strictEqual(content.text(), 'Custom Item');
+    });
+
+    QUnit.test('linkAttr.href option should not replace item.url', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { href: '/extra_url' } }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.text, 'Item text');
     });
 });
 
