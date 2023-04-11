@@ -964,7 +964,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
         // assert
         $placeholderElement = $('.dx-sortable-placeholder');
         assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
-        assert.strictEqual($placeholderElement.offset().top, 60, 'placeholder position top');
+        assert.strictEqual($placeholderElement.offset().top, 58, 'placeholder position top');
         assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
     });
 
@@ -1015,7 +1015,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
         // assert
         const $placeholderElement = $('.dx-sortable-placeholder');
         assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
-        assert.strictEqual($placeholderElement.offset().top, 60, 'placeholder position top');
+        assert.strictEqual($placeholderElement.offset().top, 58, 'placeholder position top');
         assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
     });
 

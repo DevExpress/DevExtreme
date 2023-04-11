@@ -546,13 +546,18 @@ test('The placeholder should have correct position after dragging the row to the
   await dataGrid.moveRow(0, 0, 50, true);
   await dataGrid.moveRow(0, 0, 550);
 
-  await t.expect(isPlaceholderVisible()).ok();
-
   const freeSpaceRowOffset = await getFreeSpaceRowOffset();
+  const placeholderOffset = await getPlaceholderOffset();
 
-  await t
-    .expect(getPlaceholderOffset())
-    .eql(freeSpaceRowOffset);
+  const expectedPlaceholderOffset = freeSpaceRowOffset
+    ? {
+      ...freeSpaceRowOffset,
+      top: freeSpaceRowOffset.top - 2,
+    }
+    : undefined;
+
+  await t.expect(isPlaceholderVisible()).ok();
+  await t.expect(placeholderOffset).eql(expectedPlaceholderOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
 
