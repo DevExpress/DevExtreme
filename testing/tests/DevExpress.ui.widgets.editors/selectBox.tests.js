@@ -52,12 +52,13 @@ QUnit.testStart(() => {
 
     $('#qunit-fixture').html(markup);
 
-    $('#selectBoxWithoutScrollWrapper')
-        .css('position', 'fixed')
-        .css('right', '0')
-        .css('bottom', '0')
-        .css('width', '500px')
-        .css('height', '500px');
+    $('#selectBoxWithoutScrollWrapper').css({
+        position: 'fixed',
+        right: 0,
+        bottom: 0,
+        width: '500px',
+        height: '500px'
+    });
 
     $('#test-container').css('overflow', 'hidden');
 });
