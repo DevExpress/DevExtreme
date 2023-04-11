@@ -1,13 +1,13 @@
 import $ from 'jquery';
+import { getWidth, getHeight } from 'core/utils/size';
+import 'generic_light.css!';
+import '__internal/grids/pivot_grid/sortable/module';
+import 'ui/scroll_view/ui.scrollable';
+
 import pointerMock from '../../helpers/pointerMock.js';
 
 const HORIZONTAL_WIDTH_LARGE = 1500;
 const HORIZONTAL_WIDTH_SMALL = 900;
-
-import 'generic_light.css!';
-import 'ui/pivot_grid/ui.sortable';
-import 'ui/scroll_view/ui.scrollable';
-import { getWidth, getHeight } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -1905,7 +1905,7 @@ QUnit.module('Scroll group content', {
             .down()
             .move(offset.left + $item.width() / 2 + 10, offset.top);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!this.onScroll.called);
     });

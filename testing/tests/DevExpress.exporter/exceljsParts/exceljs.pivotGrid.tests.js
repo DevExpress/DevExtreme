@@ -13,8 +13,8 @@ import 'ui/pivot_grid/ui.pivot_grid';
 
 import 'generic_light.css!';
 
-import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
-import { PivotGridExport } from 'ui/pivot_grid/ui.pivot_grid.export.js';
+import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller';
+import { PivotGridExport } from 'ui/pivot_grid/ui.pivot_grid.export';
 
 let helper;
 
@@ -101,7 +101,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
         ], [
             { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
-            { excelCell: { value: null, alignment: undefined }, pivotCell: { value: undefined } }
+            { excelCell: { value: '', alignment: alignRightTopWrap }, pivotCell: { text: '', colspan: 1, rowspan: 1, value: undefined } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
@@ -116,6 +116,221 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkOutlineLevel([0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Empty pivot complicated', function(assert) {
+        const done = assert.async();
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            dataSource: {
+                store: [
+                    {
+                        Row: 'A',
+                        SubRow: 'A_A',
+                        SubSubRow: 'A_A_A',
+                        Date: '2022-01-02T00:00:00',
+                    },
+                    {
+                        Row: 'A',
+                        SubRow: 'A_A',
+                        SubSubRow: 'A_A_A',
+                        Date: '2022-06-02T00:00:00',
+                    },
+                    {
+                        Row: 'B',
+                        SubRow: 'B_B',
+                        SubSubRow: 'B_B_B',
+                        Date: '2023-01-02T00:00:00',
+                    },
+                    {
+                        Row: 'B',
+                        SubRow: 'B_B',
+                        SubSubRow: 'B_B_B',
+                        Date: '2023-06-02T00:00:00',
+                    },
+                ],
+                fields: [{
+                    dataField: 'Row',
+                    width: 250,
+                    expanded: true,
+                    area: 'row',
+                }, {
+                    dataField: 'SubRow',
+                    width: 250,
+                    expanded: true,
+                    area: 'row',
+                }, {
+                    dataField: 'SubSubRow',
+                    width: 250,
+                    expanded: true,
+                    area: 'row',
+                }, {
+                    dataField: 'Date',
+                    dataType: 'date',
+                    expanded: true,
+                    area: 'column',
+                }],
+            },
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 3, text: '' } },
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '2022', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 4, rowspan: 1, text: '2022', width: 100, type: 'D', path: [2022], expanded: true, dataSourceIndex: 1 } },
+            { excelCell: { value: '2022', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'D', path: [2022], expanded: true, dataSourceIndex: 1 } },
+            { excelCell: { value: '2022', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'D', path: [2022], expanded: true, dataSourceIndex: 1 } },
+            { excelCell: { value: '2022', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'D', path: [2022], expanded: true, dataSourceIndex: 1 } },
+            { excelCell: { value: '2022 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 3, text: '2022 Total', width: 100, type: 'T', path: [2022], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: '2023', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 4, rowspan: 1, text: '2023', width: 100, type: 'D', path: [2023], expanded: true, dataSourceIndex: 6 } },
+            { excelCell: { value: '2023', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'D', path: [2023], expanded: true, dataSourceIndex: 6 } },
+            { excelCell: { value: '2023', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'D', path: [2023], expanded: true, dataSourceIndex: 6 } },
+            { excelCell: { value: '2023', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'D', path: [2023], expanded: true, dataSourceIndex: 6 } },
+            { excelCell: { value: '2023 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 3, text: '2023 Total', width: 100, type: 'T', path: ['2023'], expanded: true, dataSourceIndex: 6, isLast: true } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 3, text: 'Grand Total', width: 100, type: 'GT', path: [''], expanded: true, dataSourceIndex: 1, isLast: true } },
+        ], [
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Q1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'Q1', width: 100, type: 'D', path: [2022, 1], expanded: true, dataSourceIndex: 2 } },
+            { excelCell: { value: 'Q1 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 2, text: 'Q1 Total', width: 100, type: 'T', path: [2022, 1], expanded: true, dataSourceIndex: 2, isLast: true } },
+            { excelCell: { value: 'Q2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'Q2', width: 100, type: 'D', path: [2022, 2], expanded: true, dataSourceIndex: 4 } },
+            { excelCell: { value: 'Q2 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 2, text: 'Q2 Total', width: 100, type: 'T', path: [2022, 2], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: '2022 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2022], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: 'Q1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'Q1', width: 100, type: 'D', path: [2023, 1], expanded: true, dataSourceIndex: 7 } },
+            { excelCell: { value: 'Q1 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 2, text: 'Q1 Total', width: 100, type: 'T', path: [2023, 1], expanded: true, dataSourceIndex: 7, isLast: true } },
+            { excelCell: { value: 'Q2', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'Q2', width: 100, type: 'D', path: [2023, 2], expanded: true, dataSourceIndex: 9 } },
+            { excelCell: { value: 'Q2 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 2, text: 'Q2 Total', width: 100, type: 'T', path: [2023, 2], expanded: true, dataSourceIndex: 9, isLast: true } },
+            { excelCell: { value: '2023 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2023], expanded: true, dataSourceIndex: 6, isLast: true } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'GT', path: [''], expanded: true, dataSourceIndex: 1, isLast: true } },
+        ], [
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'January', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'January', width: 100, type: 'D', path: [2022, 1, 1], expanded: true, dataSourceIndex: 3, isLast: true } },
+            { excelCell: { value: 'Q1 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2022, 1], expanded: true, dataSourceIndex: 2, isLast: true } },
+            { excelCell: { value: 'June', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'June', width: 100, type: 'D', path: [2022, 2, 6], expanded: true, dataSourceIndex: 5, isLast: true } },
+            { excelCell: { value: 'Q2 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2022, 2], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: '2022 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2022], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: 'January', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'January', width: 100, type: 'D', path: [2023, 1, 1], expanded: true, dataSourceIndex: 8, isLast: true } },
+            { excelCell: { value: 'Q1 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2023, 1], expanded: true, dataSourceIndex: 7, isLast: true } },
+            { excelCell: { value: 'June', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: 'June', width: 100, type: 'D', path: [2023, 2, 6], expanded: true, dataSourceIndex: 10, isLast: true } },
+            { excelCell: { value: 'Q2 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2023, 2], expanded: true, dataSourceIndex: 9, isLast: true } },
+            { excelCell: { value: '2023 Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'T', path: [2023], expanded: true, dataSourceIndex: 6, isLast: true } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100, type: 'GT', path: [''], expanded: true, dataSourceIndex: 1, isLast: true } },
+        ], [
+            { excelCell: { value: 'A', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 2, text: 'A', width: 250, type: 'D', path: ['A'], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: 'A_A', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A_A', width: 250, type: 'D', path: ['A', 'A_A'], expanded: true, dataSourceIndex: 2, isLast: true } },
+            { excelCell: { value: 'A_A_A', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A_A_A', width: 250, type: 'D', path: ['A', 'A_A', 'A_A_A'], expanded: true, dataSourceIndex: 3, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ], [
+            { excelCell: { value: 'A', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'D', path: ['A'], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: 'A_A Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 2, rowspan: 1, text: 'A_A Total', width: 250, type: 'T', path: ['A', 'A_A'], expanded: true, dataSourceIndex: 2, isLast: true } },
+            { excelCell: { value: 'A_A Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'T', path: ['A', 'A_A'], expanded: true, dataSourceIndex: 2, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ], [
+            { excelCell: { value: 'A Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 3, rowspan: 1, text: 'A Total', width: 250, type: 'T', path: ['A'], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: 'A Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'T', path: ['A'], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: 'A Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'T', path: ['A'], expanded: true, dataSourceIndex: 1, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ], [
+            { excelCell: { value: 'B', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 2, text: 'B', width: 250, type: 'D', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: 'B_B', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'B_B', width: 250, type: 'D', path: ['B', 'B_B'], expanded: true, dataSourceIndex: 5, isLast: true } },
+            { excelCell: { value: 'B_B_B', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'B_B_B', width: 250, type: 'D', path: ['B', 'B_B', 'B_B_B'], expanded: true, dataSourceIndex: 6, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ], [
+            { excelCell: { value: 'B', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'D', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: 'B_B Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 2, rowspan: 1, text: 'B_B Total', width: 250, type: 'T', path: ['B', 'B_B'], expanded: true, dataSourceIndex: 5, isLast: true } },
+            { excelCell: { value: 'B_B Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'T', path: ['B', 'B_B'], expanded: true, dataSourceIndex: 5, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ], [
+            { excelCell: { value: 'B Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 3, rowspan: 1, text: 'B Total', width: 250, type: 'T', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: 'B Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'T', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: 'B Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'T', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ], [
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 3, rowspan: 1, text: 'Grand Total', width: 250, type: 'GT', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'GT', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 250, type: 'GT', path: ['B'], expanded: true, dataSourceIndex: 4, isLast: true } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+            { excelCell: { value: null, alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '' } },
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+            helper.checkValues(expectedCells);
             done();
         });
     });
@@ -5954,7 +6169,7 @@ QUnit.module('Text customization', moduleConfig, () => {
 
         const done = assert.async();
         exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
-            assert.equal(this.worksheet.getCell('B2').value, null);
+            assert.equal(this.worksheet.getCell('B2').value, '');
             done();
         });
     });

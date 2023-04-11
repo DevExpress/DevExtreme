@@ -25,7 +25,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $stripLines = this.$element.find(Consts.PARENT_TASK_SELECTOR);
         assert.ok($stripLines.length > 0, 'parent tasks has className');
@@ -44,14 +44,14 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let dataToCheck = [];
         this.instance._onParentTasksRecalculated = (data) => {
             dataToCheck = data;
         };
         getGanttViewCore(this.instance).viewModel.updateModel(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataToCheck.length, 3, 'length');
         assert.equal(dataToCheck[0].start, start, 'parent 0 start date');
@@ -81,13 +81,13 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.instance._onParentTasksRecalculated = (data) => {
             dataToCheck = data;
         };
-        this.clock.tick();
+        this.clock.tick(10);
         let $parentTasks = this.$element.find(Consts.PARENT_TASK_SELECTOR);
         assert.equal(dataToCheck.length, 0, 'length');
         assert.equal($parentTasks.length, 0, 'parent tasks exists');
 
         this.instance.option('validation.autoUpdateParentTasks', true);
-        this.clock.tick();
+        this.clock.tick(10);
         $parentTasks = this.$element.find(Consts.PARENT_TASK_SELECTOR);
         assert.equal($parentTasks.length, 2, 'parent tasks not exists');
         assert.equal(dataToCheck.length, 3, 'length');
@@ -103,7 +103,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
 
         dataToCheck = [];
         this.instance.option('validation.autoUpdateParentTasks', false);
-        this.clock.tick();
+        this.clock.tick(10);
         $parentTasks = this.$element.find(Consts.PARENT_TASK_SELECTOR);
         assert.equal(dataToCheck.length, 0, 'length');
         assert.equal($parentTasks.length, 0, 'parent tasks exists');
@@ -126,7 +126,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
             }]
         };
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const customCellText0 = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').first().text();
         const customCellText1 = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).eq(1).find('td').first().text();
@@ -151,10 +151,10 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         };
         this.createInstance(options);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         showTaskEditDialog(this.instance);
-        this.clock.tick();
+        this.clock.tick(10);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const $inputs = $dialog.find(Consts.INPUT_TEXT_EDITOR_SELECTOR);
         assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
@@ -163,7 +163,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         titleTextBox.option('value', testTitle);
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         const firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
     });
@@ -189,7 +189,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         };
         this.createInstance(options);
         this.instance.option('onTaskUpdated', (e) => { values = e.values; });
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.deleteTask(4);
         this.clock.tick();
 
@@ -217,7 +217,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         };
         this.createInstance(options);
         this.instance.option('onTaskUpdated', (e) => { values = e.values; });
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.updateTask(4, { 'end': new Date('2020-02-20') });
         this.clock.tick();
 
@@ -250,7 +250,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
             }
             extend(updated[e.key], e.values);
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const newEnd = new Date('2020-02-27');
         this.instance.updateTask(4, { 'end': newEnd });
         this.clock.tick();

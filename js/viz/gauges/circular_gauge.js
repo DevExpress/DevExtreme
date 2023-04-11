@@ -294,6 +294,7 @@ dxCircularGauge._TESTS_selectRectByAspectRatio = selectRectByAspectRatio;
 const indicators = dxCircularGauge.prototype._factory.indicators = {};
 dxCircularGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
+/* eslint-disable import/namespace */
 indicators._default = circularIndicators._default;
 indicators['rectangleneedle'] = circularIndicators['rectangleneedle'];
 indicators['triangleneedle'] = circularIndicators['triangleneedle'];
@@ -301,6 +302,7 @@ indicators['twocolorneedle'] = circularIndicators['twocolorneedle'];
 indicators['trianglemarker'] = circularIndicators['trianglemarker'];
 indicators['textcloud'] = circularIndicators['textcloud'];
 indicators['rangebar'] = circularIndicators['rangebar'];
+/* eslint-enable import/namespace */
 
 dxCircularGauge.prototype._factory.RangeContainer = CircularRangeContainer;
 

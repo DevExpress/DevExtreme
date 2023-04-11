@@ -577,7 +577,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             instance.collapseGroup(0);
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $groups = $element.find('.' + LIST_GROUP_CLASS);
             assert.equal($groups.length, 2, 'second group was loaded');
@@ -677,7 +677,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             instance.collapseGroup(1);
 
-            this.clock.tick();
+            this.clock.tick(10);
             assert.ok(instance.$element().find('.dx-list-next-button').length, 'button was not removed');
         } finally {
             fx.off = false;
@@ -713,7 +713,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             instance.collapseGroup(1);
 
-            this.clock.tick();
+            this.clock.tick(10);
             assert.ok(instance.$element().find('.dx-list-next-button').length, 'button was not removed');
         } finally {
             fx.off = false;
@@ -1771,7 +1771,7 @@ QUnit.module('selection', moduleSetup, () => {
             }
         });
 
-        clock.tick(0);
+        clock.tick(10);
     });
 
     QUnit.test('selection should not be removed after second click if selectionMode is single', function(assert) {
@@ -2038,7 +2038,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             pageLoadMode: 'scrollBottom'
         });
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         assert.equal($.trim($list.find('.dx-list-item').text()), '012');
     });
@@ -2112,7 +2112,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         });
 
         const scrollView = element.dxScrollView('instance');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(scrollView._loading, false, 'scrollView not in loading state');
     });
 
@@ -2140,7 +2140,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(scrollView._loading, false, 'scrollview not in loading state after first data load');
 
         dataSource.load();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(scrollView._loading, true, 'scrollview loading started on data reload');
 
         this.clock.tick(dataSourceLoadTime);
@@ -2646,7 +2646,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual($element.dxList('option', 'items'), [1, 2], 'only first page is loaded');
     });
@@ -2665,10 +2665,10 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $element.show().triggerHandler('dxshown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual($element.dxList('option', 'items'), [1, 2, 3, 4], 'all data loaded');
     });
@@ -3260,14 +3260,14 @@ QUnit.module('scrollView integration', {
             pageLoadMode: 'scrollBottom'
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
 
         assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
 
         $container.height(listHeight * 10);
         resizeCallbacks.fire();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(getListItemsCount(), 10, 'second page loaded');
     });
@@ -3289,14 +3289,14 @@ QUnit.module('scrollView integration', {
             pageLoadMode: 'scrollBottom'
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
 
         assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
 
         $container.height(listHeight * 2);
         resizeCallbacks.fire();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(getListItemsCount(), 5, 'new page has not been loaded');
     });
@@ -3453,7 +3453,7 @@ QUnit.module('keyboard navigation', {
         let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerdown');
         let keyboard = keyboardMock($element);
         const itemHeight = $item.outerHeight();
-        this.clock.tick();
+        this.clock.tick(10);
 
         instance.option('height', itemHeight * 3);
 
@@ -3462,7 +3462,7 @@ QUnit.module('keyboard navigation', {
 
         $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(1);
         $item.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         keyboard = keyboardMock($element);
         keyboard.keyDown('up');
         assert.equal(instance.scrollTop(), 0, 'item scrolled to visible area at top when up arrow were pressed');
@@ -3487,10 +3487,10 @@ QUnit.module('keyboard navigation', {
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
 
         $firstItem.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.keyDown('up');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok($selectAllItem.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
 
         $element.trigger($.Event('keydown', { key: 'Enter' }));
@@ -3521,24 +3521,24 @@ QUnit.module('keyboard navigation', {
         const $lastItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
 
         $firstItem.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.keyDown('up');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok($selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
 
         keyboard.keyDown('up');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!$selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox isn\'t focused');
         assert.ok($lastItem.hasClass('dx-state-focused'), 'last item is focused');
 
         keyboard.keyDown('down');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok($selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
 
         keyboard.keyDown('down');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(!$selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox isn\'t focused');
         assert.ok($firstItem.hasClass('dx-state-focused'), 'first item is focused');
     });
@@ -3577,7 +3577,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(instance.scrollTop(), 0, 'list scrolled to zero');
 
         $item.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(instance.scrollTop(), 0, 'item was not scrolled to half-visible item by click on it');
     });
@@ -3959,7 +3959,7 @@ if(devices.real().deviceType === 'desktop') {
                 const $item_2 = $(helper.getItems().eq(2));
                 eventsEngine.trigger($item_2, 'dxclick');
                 eventsEngine.trigger($item_2, 'dxpointerdown');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
@@ -3978,7 +3978,7 @@ if(devices.real().deviceType === 'desktop') {
                 const $item_1 = $(helper.getItems().eq(1));
                 eventsEngine.trigger($item_1, 'dxclick');
                 eventsEngine.trigger($item_1, 'dxpointerdown');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
@@ -4037,7 +4037,7 @@ if(QUnit.urlParams['nojquery']) {
             $(this.root).trigger(this.createEvent('mousedown'));
             $(this.root).trigger(this.createEvent('touchstart'));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.ok(this.getItems().eq(1).hasClass('dx-state-focused'));
         });

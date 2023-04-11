@@ -912,11 +912,11 @@ QUnit.module('Keyboard navigation', {
             iterateViews((_, type) => {
                 calendar.option('zoomLevel', type);
 
-                clock.tick();
+                clock.tick(10);
                 triggerKeydown($element, LEFT_ARROW_KEY_CODE, optionConfig);
                 assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], `${name}+left arrow navigates correctly`);
 
-                clock.tick();
+                clock.tick(10);
                 triggerKeydown($element, RIGHT_ARROW_KEY_CODE, optionConfig);
                 assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], `${name}+right arrow navigates correctly`);
             });
@@ -935,7 +935,7 @@ QUnit.module('Keyboard navigation', {
             triggerKeydown($element, LEFT_ARROW_KEY_CODE, optionConfig);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 10, this.value.getDate()), `${name}+left arrow navigates correctly`);
 
-            this.clock.tick();
+            this.clock.tick(10);
             triggerKeydown($element, RIGHT_ARROW_KEY_CODE, optionConfig);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 9, this.value.getDate()), `${name}+right arrow navigates correctly`);
         });
@@ -978,11 +978,11 @@ QUnit.module('Keyboard navigation', {
         iterateViews((_, type) => {
             calendar.option('zoomLevel', type);
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageup navigates correctly');
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pagedown navigates correctly');
         });
@@ -1005,11 +1005,11 @@ QUnit.module('Keyboard navigation', {
         iterateViews((_, type) => {
             calendar.option('zoomLevel', type);
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageUp navigates correctly');
 
-            clock.tick();
+            clock.tick(10);
             triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pageDown navigates correctly');
         });
@@ -3607,6 +3607,24 @@ QUnit.module('Aria accessibility', {
 
         $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
+    });
+
+    QUnit.test('aria-selected should be added to selected date cell afrer view change', function(assert) {
+        const calendar = this.$element.dxCalendar({
+            value: new Date(2023, 1, 1),
+            focusStateEnabled: true
+        }).dxCalendar('instance');
+
+        const keyboard = keyboardMock(this.$element);
+
+        let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+
+        keyboard.press('up');
+        keyboard.press('down');
+
+        $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
     });
 
     QUnit.test('cell id should be set before widget activedescendant attribute', function(assert) {

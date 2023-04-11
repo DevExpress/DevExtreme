@@ -63,7 +63,7 @@ QUnit.module('maxSpeedDialActionCount option', () => {
                     .appendTo($container)
                     .dxSpeedDialAction({ icon: 'favorites' })
                     .dxSpeedDialAction('instance'));
-            } catch(error) {}
+            } catch(error) { }
         }
 
         assert.equal($(FAB_MAIN_SELECTOR).length, 1, 'one main fab is created');

@@ -1,12 +1,12 @@
-import '../../../testing/content/orders.js';
-
 import $ from 'jquery';
-import RemoteStore from 'ui/pivot_grid/remote_store';
-import { sort } from 'ui/pivot_grid/data_source.utils';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
-import { forEachGroup } from 'ui/pivot_grid/remote_store.utils';
+import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/module';
+import { forEachGroup } from '__internal/grids/pivot_grid/remote_store/module_utils';
+import { sort } from '__internal/grids/pivot_grid/data_source/module_utils';
+import pivotGridUtils from '__internal/grids/pivot_grid/module_widget_utils';
 import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
+
+import '../../../testing/content/orders.js';
 
 function getCustomArrayStore(data) {
     const arrayStore = new ArrayStore(data);
@@ -686,6 +686,7 @@ QUnit.module('Discover', () => {
 
     QUnit.test('Take only 20 first items for discover', function(assert) {
         sinon.spy(pivotGridUtils, 'discoverObjectFields');
+
         const dataSource = [];
 
         for(let i = 0; i < 20; i++) {

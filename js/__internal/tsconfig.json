@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../",
+    "outDir": "./build",
+    "allowJs": true,
+    "noEmitOnError": true,
+    "resolveJsonModule": false,
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    // -- ts config
+    "alwaysStrict": true,
+    // NOTE: gulp transpile task overrides it
+    "module": "commonJs",
+    // NOTE: gulp transpile task overrides it
+    "target": "es5",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitThis": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strict": true,
+    // TODO: set to true
+    "noImplicitAny": false,
+    // TODO: set to true after typescript update
+    //"useUnknownInCatchVariables": true,
+    //"noImplicitOverride": true,
+    "paths": {
+      "@js/*": ["./*"],
+    },
+  },
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": false,
+    "fileExtensions": {
+      "inputGlob": "js,ts",
+      "outputCheck": ["js", "ts"]
+    }
+  }
+}

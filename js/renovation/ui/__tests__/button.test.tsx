@@ -232,7 +232,7 @@ describe('Button', () => {
           expect(getEventHandlers(EVENT.click)).toBeUndefined();
         });
 
-        it('should call "onSubmit" callback by submit input click ', () => {
+        it('should call "onSubmit" callback by submit input click', () => {
           const onSubmit = jest.fn();
           const button = new Button({ useSubmitBehavior: true, onSubmit });
           button.submitInputRef = { current: {} } as any;
@@ -313,8 +313,8 @@ describe('Button', () => {
             const options = { keyName: 'enter', which: 'enter', originalEvent };
             const button = new Button({ onKeyDown, onClick });
             button.keyDown(options);
-            expect(onKeyDown).toBeCalled();
-            expect(onClick).not.toBeCalled();
+            expect(onKeyDown).toHaveBeenCalled();
+            expect(onClick).not.toHaveBeenCalled();
           });
 
           it('should prevent default key down event and simulate click by space/enter keys', () => {
@@ -329,7 +329,7 @@ describe('Button', () => {
             };
             const button = new Button({ onClick });
             button.keyDown(options);
-            expect(options.originalEvent.preventDefault).toBeCalled();
+            expect(options.originalEvent.preventDefault).toHaveBeenCalled();
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith({
               event: options.originalEvent,
@@ -341,7 +341,7 @@ describe('Button', () => {
             const button = new Button({ onClick });
             const originalEvent = {} as Event & { cancel: boolean };
             button.keyDown({ keyName: 'A', which: 'A', originalEvent });
-            expect(onClick).not.toBeCalled();
+            expect(onClick).not.toHaveBeenCalled();
           });
         });
 
@@ -370,7 +370,7 @@ describe('Button', () => {
             const button = new Button({ useSubmitBehavior: false });
             button.submitInputRef = { current: { click: jest.fn() } } as any;
             button.onWidgetClick(event);
-            expect(button.submitInputRef.current?.click).not.toBeCalled();
+            expect(button.submitInputRef.current?.click).not.toHaveBeenCalled();
           });
         });
 

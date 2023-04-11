@@ -309,8 +309,8 @@ QUnit.module('label integration', {
         };
 
         class TextEditorLabelMock extends TextEditorLabel {
-            updateMaxWidth = sinon.stub()
-            updateBeforeWidth = sinon.stub()
+            updateMaxWidth = sinon.stub();
+            updateBeforeWidth = sinon.stub();
         }
 
         this.TextEditorLabelMock = (args) => { this.labelArgs = args; return this.labelMock = new TextEditorLabelMock(args); };

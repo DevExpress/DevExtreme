@@ -64,7 +64,7 @@ module('All day appointments dragging', config, () => {
         let pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
         pointer.up();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $allDayAppointment = $element.find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment');
 
@@ -96,7 +96,7 @@ module('All day appointments dragging', config, () => {
         let pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell').eq(3), $appointment);
         pointer.up();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $allDayAppointment = $element.find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment');
 
@@ -131,7 +131,7 @@ module('All day appointments dragging', config, () => {
         triggerDragEnter($(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0), $appointment);
         pointer.up();
 
-        this.clock.tick();
+        this.clock.tick(10);
         const appointmentData = dataUtils.data($(scheduler.instance.$element()).find('.dx-scheduler-appointment').get(0), 'dxItemData');
 
         assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 8, 0, 0), 'Start date is correct');
@@ -160,7 +160,7 @@ module('All day appointments dragging', config, () => {
         const pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
         pointer.up();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(workspace.option('allDayExpanded'), true);
     });
@@ -184,7 +184,7 @@ module('All day appointments dragging', config, () => {
         const pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
         pointer.up();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $allDayCell = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0);
         const $allDayAppointment = $element.find('.dx-scheduler-all-day-appointment').eq(0);
@@ -212,7 +212,7 @@ module('All day appointments dragging', config, () => {
         triggerDragEnter($(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0), $appointment);
         pointer.up();
 
-        this.clock.tick();
+        this.clock.tick(10);
         const workspace = $(scheduler.instance.$element()).find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance');
 
         assert.equal(workspace.option('allDayExpanded'), false);

@@ -1,30 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
-import { changeTheme } from '../../../helpers/changeTheme';
-import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import PivotGrid from '../../../model/pivotGrid';
-
-const disableMouseUpEvent = ClientFunction(() => {
-  const proto = (window as any)['%testCafeAutomation%'].DragToOffset.prototype.constructor.prototype;
-
-  // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle
-  (window as any)._originalMouseup = proto._mouseup;
-
-  // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle
-  proto._mouseup = () => new Promise((r) => setTimeout(r, 1));
-});
-
-const enableMouseUpEvent = ClientFunction(() => {
-  // eslint-disable-next-line no-underscore-dangle,spellcheck/spell-checker
-  (window as any)['%testCafeAutomation%'].DragToOffset.prototype.constructor.prototype._mouseup = (window as any)._originalMouseup;
-});
-
-const DRAG_MOUSE_OPTIONS = { speed: 0.1 };
+import { DRAG_MOUSE_OPTIONS } from '../const';
 
 fixture.disablePageReloads`pivotGrid_fieldChooser_drag-and-drop_T1138119 `
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop the tree view item in all directions', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -34,31 +17,31 @@ test('Drag-n-drop the tree view item in all directions', async (t) => {
 
   const fieldChooser = pivotGrid.getFieldChooser();
   const treeView = fieldChooser.getTreeView();
+  const treeViewNode = treeView.getNode();
 
-  await disableMouseUpEvent();
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(treeView.getNode(), 0, -30, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNode, 0, -30, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_top.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(treeViewNode, 'mouseup');
 
-  await t.drag(treeView.getNode(), 30, 0, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNode, 30, 0, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_right.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(treeViewNode, 'mouseup');
 
-  await t.drag(treeView.getNode(), 0, 30, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNode, 0, 30, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_bottom.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(treeViewNode, 'mouseup');
 
-  await t.drag(treeView.getNode(), -30, 0, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNode, -30, 0, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_left.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(treeViewNode, 'mouseup');
 
-  await enableMouseUpEvent();
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('generic.light');
   await createWidget('dxPivotGrid', {
     dataSource: {
       store: [{
@@ -91,31 +74,31 @@ test('Drag-n-drop the row area item in all directions', async (t) => {
   await t.click(pivotGrid.getFieldChooserButton());
 
   const fieldChooser = pivotGrid.getFieldChooser();
+  const rowAreaItem = fieldChooser.getRowAreaItem();
 
-  await disableMouseUpEvent();
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(fieldChooser.getRowAreaItem(), 0, -30, DRAG_MOUSE_OPTIONS);
+  await t.drag(rowAreaItem, 0, -30, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_top.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(rowAreaItem, 'mouseup');
 
-  await t.drag(fieldChooser.getRowAreaItem(), 30, 0, DRAG_MOUSE_OPTIONS);
+  await t.drag(rowAreaItem, 30, 0, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_right.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(rowAreaItem, 'mouseup');
 
-  await t.drag(fieldChooser.getRowAreaItem(), 0, 30, DRAG_MOUSE_OPTIONS);
+  await t.drag(rowAreaItem, 0, 30, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_bottom.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(rowAreaItem, 'mouseup');
 
-  await t.drag(fieldChooser.getRowAreaItem(), -30, 0, DRAG_MOUSE_OPTIONS);
+  await t.drag(rowAreaItem, -30, 0, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_left.png', { element: fieldChooser.element });
-  await t.click(fieldChooser.element);
+  await t.dispatchEvent(rowAreaItem, 'mouseup');
 
-  await enableMouseUpEvent();
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('generic.light');
   await createWidget('dxPivotGrid', {
     dataSource: {
       fields: [{

@@ -83,11 +83,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [{ field1: '1', field2: '2' }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-texteditor [id]').length, 0, 'editors has no accessibility id');
@@ -125,7 +125,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         columnsWrapper.getCommandButtons().each((_, button) => {
@@ -156,7 +156,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 }
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $buttons = columnsWrapper.getCommandButtons();
             const $commandCell = $(dataGrid.getCellElement(0, 0));
@@ -187,7 +187,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 ]
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const $commandCell = $(dataGrid.getCellElement(0, 0));
@@ -217,7 +217,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $buttons = columnsWrapper.getCommandButtons();
 
@@ -246,7 +246,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.deleteRow(0);
@@ -292,7 +292,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $commandCell = $(dataGrid.getCellElement(0, 1));
@@ -319,6 +319,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 },
             ],
             templatesRenderAsynchronously: true,
+            renderAsync: false,
             integrationOptions: {
                 templates: {
                     buttonTemplate: {
@@ -335,7 +336,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $commandCell = $(dataGrid.getCellElement(0, 1));
@@ -357,15 +358,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
         });
 
-        clock.tick();
+        clock.tick(10);
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
         scrollable.scrollTo({ y: 5 });
-        clock.tick();
+        clock.tick(10);
 
         // act
         dataGrid.addRow();
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
@@ -387,15 +388,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
         });
 
-        clock.tick();
+        clock.tick(10);
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
         scrollable.scrollTo({ y: 10 });
-        clock.tick();
+        clock.tick(10);
 
         // act
         dataGrid.addRow();
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
@@ -626,7 +627,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.cellValue(0, 1, 'test');
         dataGrid.closeEditCell();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(counter, 2);
@@ -658,7 +659,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $(dataGrid.$element().find('.dx-data-row > td').eq(0)).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR).length, 1, 'one editor is shown');
@@ -702,7 +703,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         gridInstance.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $freeSpaceRow = $grid.find('.dx-freespace-row');
@@ -732,12 +733,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         const dataGrid = $grid.dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.cellValue(0, 'field1', 'updated');
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.saveEditData();
 
         // act
@@ -769,11 +770,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         dataGrid.addRow();
         dataGrid.cellValue(0, 0, '2');
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.option('dataSource', array);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').val(), '2', 'first row doesn\'t dissapear');
@@ -801,7 +802,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         instance.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
@@ -887,9 +888,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.selectRows(1);
 
         $dataGrid.find('.dx-link-delete').first().trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
         $dataGrid.find('.dx-link-delete').first().trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 1, 'row count');
@@ -1027,7 +1028,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.deleteRow(0);
             dataGrid.deleteRow(0);
             dataGrid.getScrollable().scrollTo({ y: 10000 });
-            this.clock.tick();
+            this.clock.tick(10);
 
             for(let i = 0; i < 25; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
@@ -1066,11 +1067,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 { type: 'remove', key: 2 },
                 { type: 'remove', key: 3 },
             ]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             for(let i = 0; i < 5; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
-                this.clock.tick();
+                this.clock.tick(10);
             }
 
             // assert
@@ -1116,7 +1117,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.saveEditData();
             for(let i = 0; i < 25; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
-                this.clock.tick();
+                this.clock.tick(10);
             }
 
             // assert
@@ -1157,7 +1158,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 10000 });
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
-            this.clock.tick();
+            this.clock.tick(10);
             for(let i = 0; i < 20; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
             }
@@ -1210,7 +1211,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         const $dataGridTables = $dataGrid.find('.dx-datagrid-table');
         // assert
@@ -1460,14 +1461,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
         assert.roughEqual(getOuterHeight($tableElements.eq(0)), 68, 3.01, 'height main table');
 
         dataGrid.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
@@ -1501,20 +1502,20 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             columns: ['Prefix', 'FirstName']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('input')
             .val('new')
             .change();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-error-message').length, 1, 'Error message is shown');
@@ -1541,7 +1542,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             .trigger('dxclick');
 
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $firstRowEditors = $(dataGrid.getRowElement(1)).find('.dx-texteditor');
 
@@ -1551,7 +1552,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-cancel').trigger(pointerEvents.up).click();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(dataGrid.getRowElement(1)).find('.dx-texteditor').length, 'row doesn\'t have editor');
@@ -1603,17 +1604,17 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [...Array(10)].map((_, i) => { return { id: i + 1 }; })
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.pageIndex(2);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.pageIndex(3);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.pageIndex(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($($(dataGrid.$element()).find('.dx-error-row')).length, 0, 'no errors');
@@ -1633,7 +1634,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }, 'description']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $dataCells = $(dataGrid.getRowElement(0)).find('td');
 
@@ -1687,21 +1688,21 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(dataGrid.getVisibleRows()[0].isNewRow, 'grid has new row');
 
         // act
         nestedDataGrid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(nestedDataGrid.getVisibleRows()[0].isNewRow, 'nested grid has new row');
 
         // act
         nestedDataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $cellElements = $(nestedDataGrid.getRowElement(0)).children();
@@ -1710,7 +1711,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $cellElements.first().find('.dx-texteditor-input').first().trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $overlayWrapper = $(dataGrid.element()).find('.dx-overlay-wrapper.dx-datagrid-invalid-message');
@@ -1749,13 +1750,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     columnFixing: { enabled: true }
                 });
 
-                this.clock.tick();
+                this.clock.tick(10);
 
                 for(let i = 1; i <= 3; i++) {
                     // act
                     let $cellElement = $(dataGrid.getCellElement(1, i));
                     $cellElement.trigger('dxclick');
-                    this.clock.tick();
+                    this.clock.tick(10);
                     $cellElement = $(dataGrid.getCellElement(1, i));
 
                     // assert
@@ -1765,7 +1766,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     // act
                     $cellElement.find('.dx-texteditor-input').val(i).trigger('change');
                     dataGrid.closeEditCell();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
@@ -1787,7 +1788,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 },
                 onCellClick: cellClickSpy
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             dataGrid.addRow();
@@ -1854,11 +1855,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 allowUpdating: true
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), 'cell has dx-cell-focus-disabled class');
@@ -1874,14 +1875,14 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 allowUpdating: true
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
@@ -1908,7 +1909,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // act
         const selectCheckBox = rowsViewWrapper.getDataRow(1).getSelectCheckBox();
         selectCheckBox.getElement().trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedRowChangingFiresCount, 1, 'onFocusedRowChanging fires count');
@@ -1945,7 +1946,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // act
         const selectCheckBox = rowsViewWrapper.getDataRow(1).getSelectCheckBox();
         selectCheckBox.getElement().trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedRowChangingFiresCount, 1, 'onFocusedRowChanging fires count');
@@ -2025,7 +2026,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         dataGrid.editRow(0);
         dataGrid.option('editing.form.items[1].editorOptions', { height: 100 });
         dataGrid.cellValue(0, 'name', 'new name');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $popupEditors = $('.dx-popup-content').find('.dx-texteditor');
@@ -2060,11 +2061,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             dataGrid.editCell(1, 0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const navigationController = dataGrid.getController('keyboardNavigation');
             navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal($(dataGrid.getCellElement(0, 1)).find('input').length, 0, `cell is not being edited in '${editingMode}' editing mode`);
@@ -2091,15 +2092,15 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGridWrapper.filterPanel.getPanelText().trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
         filterBuilder.getItemValueTextElement(0).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         headerFilterMenu.getDropDownListItem(1).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         headerFilterMenu.getButtonOK().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(filterBuilder.getItemValueTextParts().length, 2, 'IsAnyOf operation applyed');
@@ -2169,7 +2170,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const rowHeight = $(grid.getRowElement(0)).height();
         this.clock.restore();
 
@@ -2210,10 +2211,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
 
         grid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
@@ -2223,7 +2224,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         this.clock.tick(1000);
         $secondCell = $(grid.getCellElement(0, 1));
         $secondCell.trigger(pointerEvents.down).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $secondCell = $(grid.getCellElement(0, 1));
 
         // assert
@@ -2253,10 +2254,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
 
         grid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $secondCell = $(grid.getCellElement(0, 1));
         $secondCell.trigger(pointerEvents.down).trigger('dxclick');
@@ -2298,10 +2299,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
         let $firstCell = $(grid.getCellElement(0, 0));
         $firstCell.trigger(pointerEvents.down).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $firstCell = $(grid.getCellElement(0, 0));
 
         // assert
@@ -2311,7 +2312,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         $inputElement.val('');
         $inputElement.trigger('change');
         headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $firstCell = $(grid.getCellElement(0, 0));
 
         // assert
@@ -2348,14 +2349,14 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
         let $firstCell = $(grid.getCellElement(0, 0));
         $firstCell.trigger(pointerEvents.down).trigger('dxclick');
 
         const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
         $inputElement.val('');
         $inputElement.trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
         $firstCell = $(grid.getCellElement(0, 0));
 
         // assert
@@ -2393,11 +2394,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $firstCell = $(grid.getCellElement(0, 0));
         $firstCell.trigger(pointerEvents.down).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $firstCell = $(grid.getCellElement(0, 0));
 
         assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
@@ -2407,7 +2408,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         $inputElement.trigger('change');
 
         headerPanel.getElement().trigger(pointerEvents.down).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $firstCell = $(grid.getCellElement(0, 0));
 
         // assert
@@ -2471,7 +2472,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             };
 
             const grid = createDataGrid(gridConfig);
-            this.clock.tick();
+            this.clock.tick(10);
             $(grid.getCellElement(0, 0)).trigger('dxclick');
             const $dropDownIcon = $(grid.element()).find('.dx-dropdowneditor-icon');
 
@@ -2480,7 +2481,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
 
             $dropDownIcon.trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             const $dropDownGridElement = $('.dx-overlay-wrapper.dx-dropdowneditor-overlay .my-class');
 
             // assert
@@ -2494,7 +2495,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             $row1.trigger('dxpointerdown');
             $row1.trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             const $dropDownPopupElement = $('.dx-overlay-wrapper.dx-dropdowneditor-overlay');
             const $dropDownBoxElement = $(grid.getCellElement(0, 0)).find('.dx-dropdownbox');
 
@@ -2527,10 +2528,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
             };
 
             const grid = createDataGrid(gridConfig);
-            this.clock.tick();
+            this.clock.tick(10);
 
             grid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $firstCell = $(grid.getCellElement(0, 0));
 
@@ -2563,10 +2564,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
 
         grid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $firstCell = $(grid.getCellElement(0, 0));
 
@@ -2599,10 +2600,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
             };
 
             const grid = createDataGrid(gridConfig);
-            this.clock.tick();
+            this.clock.tick(10);
 
             grid.editCell(0, 0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $firstCell = $(grid.getCellElement(0, 0));
 
@@ -2635,17 +2636,17 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
         grid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         grid.cellValue(0, 0, 'test1');
-        this.clock.tick();
+        this.clock.tick(10);
 
         try {
             grid.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
             grid.dispose();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(true);
@@ -2675,11 +2676,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
         };
 
         const grid = createDataGrid(gridConfig);
-        this.clock.tick();
+        this.clock.tick(10);
         grid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         grid.cellValue(0, 0, '');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell = $(grid.getCellElement(0, 0));
         const errorOverlay = $cell.find('.dx-invalid-message.dx-overlay').dxOverlay('instance');
@@ -2725,9 +2726,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             $(grid.$element()).find('input').val(123).trigger('change');
             action === 'close edit cell' ? grid.closeEditCell() : grid.cancelEditData();
-            this.clock.tick();
+            this.clock.tick(10);
             $(grid.getCellElement(0, 1)).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             const callCount = action === 'close edit cell' ? 3 : 4;
 
             // assert
@@ -2775,15 +2776,15 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 } else {
                     dataGrid.editCell(0, 0);
                 }
-                this.clock.tick();
+                this.clock.tick(10);
                 $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').focus();
-                this.clock.tick();
+                this.clock.tick(10);
                 if(editMode !== 'Row') {
                     dataGrid.editCell(0, 1);
-                    this.clock.tick();
+                    this.clock.tick(10);
                 }
                 $(dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input').focus();
-                this.clock.tick();
+                this.clock.tick(10);
 
 
                 // assert
@@ -2830,17 +2831,17 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         // act
         dataGrid.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.cellValue(0, 1, '');
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.editCell(0, 2);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.cellValue(0, 2, '');
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
@@ -2898,7 +2899,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             $(dataGrid.element()).find('.dx-icon-edit-button-addrow').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             let $firstRow = $(dataGrid.getRowElement(0));
             const $inputElement = $firstRow.find('.dx-texteditor-input').first();
@@ -2908,9 +2909,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             $inputElement.val('tst').trigger('change');
-            this.clock.tick();
+            this.clock.tick(10);
             $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
-            this.clock.tick();
+            this.clock.tick(10);
             const visibleRows = dataGrid.getVisibleRows();
 
             // assert
@@ -2955,7 +2956,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             let $firstCell = $(dataGrid.getCellElement(0, 0));
             $firstCell.trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             $firstCell = $(dataGrid.getCellElement(0, 0));
 
             // assert
@@ -2964,9 +2965,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             const $inputElement = $firstCell.find('.dx-texteditor-input').first();
             $inputElement.val('tst').trigger('change');
-            this.clock.tick();
+            this.clock.tick(10);
             $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
-            this.clock.tick();
+            this.clock.tick(10);
             const visibleRows = dataGrid.getVisibleRows();
 
             // assert
@@ -3076,9 +3077,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             dataGrid.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
             dataGrid.cellValue(0, 0, 1);
-            this.clock.tick();
+            this.clock.tick(10);
             let $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
             let $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
             $field2EditorIcon.trigger('dxclick');
@@ -3091,7 +3092,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             $field2EditorIcon.trigger('dxclick');
             dataGrid.cellValue(0, 0, 2);
-            this.clock.tick();
+            this.clock.tick(10);
             $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
             $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
             $field2EditorIcon.trigger('dxclick');
@@ -3104,7 +3105,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             $field2EditorIcon.trigger('dxclick');
             dataGrid.cellValue(0, 0, 3);
-            this.clock.tick();
+            this.clock.tick(10);
             $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
             $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
             $field2EditorIcon.trigger('dxclick');
@@ -3147,11 +3148,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowUpdating: true
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(dataGrid.cellValue(0, 1), false, 'cell value after the first click');
@@ -3160,7 +3161,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(dataGrid.cellValue(0, 1), true, 'cell value after the second click');
@@ -3170,7 +3171,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(dataGrid.cellValue(0, 1), false, 'cell value after the third click');
@@ -3210,18 +3211,18 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowUpdating: true
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             $(dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-inserted'), 'first row is inserted');
 
             // act
             $(dataGrid.getRowElement(1)).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'cell is invalid after the first click');
@@ -3229,11 +3230,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             $(dataGrid.getCellElement(0, 1)).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             $(dataGrid.getRowElement(1)).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(insertSpy.callCount, 1, 'insert is called after the last click');
@@ -3259,15 +3260,15 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowUpdating: true
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
             dataGrid.editCell(0, 0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $firstCell = $(dataGrid.getCellElement(0, 0));
             const $firstInput = $firstCell.find('input.dx-texteditor-input');
             $firstInput.focus();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($firstCell.hasClass('dx-focused'));
@@ -3281,10 +3282,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
             $firstInput.val('123');
             let $secondCell = $(dataGrid.getCellElement(0, 1));
             $secondCell.find('.dx-checkbox').trigger(pointerEvents.down);
-            this.clock.tick();
+            this.clock.tick(10);
             $secondCell = $(dataGrid.getCellElement(0, 1));
             $secondCell.find('.dx-checkbox').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'first cell value');
@@ -3317,17 +3318,17 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     },
                 }]
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             const getLookupCell = () => dataGrid.getCellElement(0, 1);
 
             const selectLookupValue = (lookupValueIndex) => {
                 $(getLookupCell()).trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
                 $(getLookupCell()).find('.dx-dropdowneditor-button').trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
                 $('.dx-scrollable-wrapper .dx-scrollview-content .dx-item-content').eq(lookupValueIndex).trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
             };
 
             // act
@@ -3362,16 +3363,16 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowUpdating: true
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
             dataGrid.editCell(0, 1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $input = $(dataGrid.getCellElement(0, 1)).find('input.dx-texteditor-input');
             $input.val('123');
             $input.trigger('change');
             dataGrid.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
@@ -3432,7 +3433,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             },
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         idCallCount = 0;
 
@@ -3458,11 +3459,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 allowUpdating: true,
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-link-edit').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $textBox = $('.dx-textbox');
@@ -3491,16 +3492,16 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowUpdating: true,
                 },
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             dataGrid.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const editor1 = $(dataGrid.getCellElement(0, 0)).find('.dx-textbox').dxTextBox('instance');
 
             // act
             editor1.option('value', 'test');
-            this.clock.tick();
+            this.clock.tick(10);
 
 
             // assert
@@ -3525,11 +3526,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowAdding: true
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             dataGrid.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'row is in editing mode');
@@ -3545,7 +3546,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-inserted'), 'first inserted row');
@@ -3590,14 +3591,14 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
                 // act
                 dataGrid.addRow();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.ok(isNewRowExists(dataGrid, editMode), 'there is a new row');
 
                 // act
                 dataGrid.cancelEditData();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.notOk(isNewRowExists(dataGrid, editMode), 'no new row');
@@ -3821,14 +3822,14 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(isNewRowExists(dataGrid, editMode), 'there is a new row');
 
             // act
             setCellValue(0, 0, 'test');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok(isValidCell(0, 0), 'first cell is valid');
@@ -3837,12 +3838,12 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             setCellValue(0, 1, 'incorrect');
-            this.clock.tick();
+            this.clock.tick(10);
 
             setCellValue(0, 2, 'test');
-            this.clock.tick();
+            this.clock.tick(10);
             setCellValue(0, 2, '');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.notOk(isValidCell(0, 1), 'second cell is not valid');
@@ -3874,7 +3875,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 ],
             });
             const navigationController = dataGrid.getController('keyboardNavigation');
-            this.clock.tick(0);
+            this.clock.tick(10);
 
             const emulateEnterKeyPress = () => {
                 const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
@@ -3887,14 +3888,14 @@ QUnit.module('Editing', baseModuleConfig, () => {
             const $input = $(dataGrid.getCellElement(0, 1)).find('input');
             $input.val('');
             $input.trigger('change');
-            this.clock.tick();
+            this.clock.tick(10);
             $input.trigger('focus');
-            this.clock.tick();
+            this.clock.tick(10);
 
             emulateEnterKeyPress();
-            this.clock.tick();
+            this.clock.tick(10);
             emulateEnterKeyPress();
-            this.clock.tick();
+            this.clock.tick(10);
 
             const validationMessages = $('.dx-invalid-message.dx-widget');
             assert.strictEqual(validationMessages.length, 1, 'only 1 validation message must be shown');
@@ -3923,14 +3924,14 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 },
                 columns: ['selected', 'field2'],
             });
-            this.clock.tick(0);
+            this.clock.tick(10);
 
             // act
             const clickWithMouseDownEvent = (element) => {
                 $(element).trigger('dxpointerdown');
-                this.clock.tick();
+                this.clock.tick(10);
                 $(element).trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
             };
 
             const checkbox2 = $(dataGrid.getCellElement(0, 0)).find('.dx-checkbox');
@@ -3962,25 +3963,25 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 mode: 'virtual',
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.totalCount(), 2, 'totalCount before update');
 
         // act
         dataGrid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.totalCount(), 3, 'totalCount after adding row');
 
         // act
         dataGrid.deleteRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.deleteRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.totalCount(), 1, 'totalCount after removing rows');
@@ -4001,7 +4002,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 editRowKey: 1,
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $popupContent = dataGrid.getController('editing').getPopupContent() || [];
@@ -4028,13 +4029,13 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 allowUpdating: true,
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
         $(dataGrid.getCellElement(0, 0)).find('.dx-selectbox').dxSelectBox('option', 'value', 2);
         dataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $cell = $(dataGrid.getCellElement(0, 0));
@@ -4108,7 +4109,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
         $firstCell.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4124,7 +4125,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         $firstCell.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4143,7 +4144,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -4167,7 +4168,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         dataGrid.addRow();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4180,7 +4181,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         // act
         $firstCell.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4199,7 +4200,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -4226,7 +4227,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
         $firstCell.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4242,7 +4243,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         $firstCell.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4261,7 +4262,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -4290,7 +4291,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
         $firstCell.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4306,7 +4307,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         $firstCell.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4320,7 +4321,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         const $saveButton = $('.dx-datagrid-save-button');
         $saveButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
@@ -4328,7 +4329,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -4365,7 +4366,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         dataGrid.addRow();
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4378,7 +4379,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         // act
         $firstCell.trigger('dxclick');
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4388,19 +4389,19 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
         dataGrid.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
         scrollable.scrollTo({ y: 0 });
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -4468,7 +4469,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         dataGrid.addRow();
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4481,7 +4482,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         // act
         $firstCell.trigger('dxclick');
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
@@ -4491,19 +4492,19 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
 
         dataGrid.saveEditData();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
         scrollable.scrollTo({ y: 0 });
-        that.clock.tick();
+        that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -4561,7 +4562,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $cellElement = $(dataGrid.getCellElement(0, 1));
@@ -4643,7 +4644,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 500 });
@@ -4675,13 +4676,13 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
         const store = dataGrid.getDataSource().store();
 
         // act
         store.push([{ type: 'remove', key: 12 }]);
         store.push([{ type: 'remove', key: 11 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($('#dataGrid').find('.dx-datagrid-rowsview').find('.dx-virtual-row').length, 0, 'no virtual rows');
@@ -4703,7 +4704,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             dataSource: []
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $addRowButton = dataGrid.$element().find('.dx-datagrid-addrow-button');
@@ -4723,7 +4724,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         dataGrid.option('editing.allowUpdating', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
@@ -4731,7 +4732,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         dataGrid.option('editing.allowUpdating', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
@@ -4812,14 +4813,14 @@ QUnit.module('Assign options', baseModuleConfig, () => {
                 }
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         changeEditorValue();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $popupEditorInput = $('.dx-popup-content').find('.dx-texteditor').eq(0).find('input').eq(0);
@@ -4965,7 +4966,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.addRow();
@@ -4973,7 +4974,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.addRow();
 
         dataGrid.option('dataSource', items); // angular binding
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
@@ -5003,7 +5004,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         fx.off = false;
 
@@ -5013,13 +5014,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         $inputElement.val('name1').trigger('change');
         dataGrid.saveEditData();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $inputElement = $('.dx-popup-content').find('input').first();
         $inputElement.val('name2').trigger('change');
         dataGrid.saveEditData();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
@@ -5049,12 +5050,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'value', allowEditing: true }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         this.clock.tick(1000);
 
         // act
         $('.dx-checkbox').eq(0).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-checkbox').eq(0).attr('aria-checked'), 'true', 'checkbox is checked');
@@ -5080,7 +5081,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             repaintChangesOnly: true,
             columns: ['name', 'value']
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editCell(0, 0);
@@ -5093,9 +5094,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         let $checkbox = $('.dx-checkbox').eq(0);
         $input.trigger('change');
         $checkbox.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         $checkbox.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $checkbox = $('.dx-checkbox').eq(0);
@@ -5122,9 +5123,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         const navigationController = dataGrid.getController('keyboardNavigation');
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         $(':focus').on('focusout', function(e) {
             // emulate browser behaviour
             $(e.target).trigger('change');
@@ -5134,7 +5135,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // act
         const event = $.Event('keydown', { target: $(':focus').get(0) });
         navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(event.isDefaultPrevented(), 'keydown event is prevented');
@@ -5155,9 +5156,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
             columns: [{ dataField: 'name', showEditorAlways: true }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
         $(':focus').on('focusout', function(e) {
             // emulate browser behaviour
             $(e.target).trigger('change');
@@ -5168,7 +5169,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const $secondRowEditor = $(dataGrid.getRowElement(1)).find('.dx-texteditor-input');
         $secondRowEditor.trigger('dxpointerdown');
         $secondRowEditor.trigger('focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataSource[0].name, 'test', 'data is changed');
@@ -5194,7 +5195,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 dataType: 'date'
             }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
@@ -5232,11 +5233,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 },
             }],
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $input = $('.dx-texteditor-input');
         const editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
@@ -5251,7 +5252,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // act
         const event = $.Event('keydown', { key: 'enter' });
         $input.trigger(event);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.cellValue(0, 'BirthDate'), newValue, 'value is changed');
@@ -5280,11 +5281,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
                         editorOptions: { useMaskBehavior }
                     }]
                 });
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // act
                 dataGrid.editCell(0, 0);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
                 const instance = editor.getElement().dxDateBox('instance');
@@ -5327,16 +5328,16 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         const that = this;
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         dataGrid.cellValue(0, 0, '');
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         dataGrid.updateDimensions();
 
@@ -5469,13 +5470,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         triggerTabPress(dataGrid.getCellElement(0, 0));
-        this.clock.tick();
+        this.clock.tick(10);
 
         triggerTabPress(dataGrid.getCellElement(0, 1));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getView('rowsView').getScrollable().scrollLeft(), 400, 'Correct offset');
@@ -5691,7 +5692,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.editCell(0, 1);
 
         dataSource.store().update(1, { field1: 'test5' });
@@ -5701,7 +5702,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.refresh(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.getCellElement(0, 1)).is($cell), 'first cell isn\'t updated');
@@ -5734,12 +5735,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             columns: ['id', 'field1']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.editCell(0, 1);
         dataGrid.closeEditCell();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const activeRowKey = 1;
@@ -5788,13 +5789,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.editCell(0, 1);
 
         for(let i = 0; i < 5; i++) {
             dataSource.store().update(1, { field1: 'changed' + i });
             dataGrid.refresh(true);
-            this.clock.tick();
+            this.clock.tick(10);
         }
 
         // assert
@@ -5838,7 +5839,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.expandRow(1);
 
         dataSource.store().update(1, { field1: 'changed' });
@@ -5848,7 +5849,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.refresh(true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.element()).find('.detail').is($detail), 'detail element isn\'t updated');
@@ -5904,13 +5905,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
 
         dataGrid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.cancelEditData();
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.addRow();
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getCellElement(2, 1)).find('.dx-link-delete').trigger('dxpointerdown').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows()[2].removed, true, 'row 2 is marked as removed');
@@ -5935,14 +5936,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 }]
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.deleteRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'row is removed');
@@ -6012,17 +6013,17 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 },
             ],
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const selectBox = $(dataGrid.getCellElement(0, 'CityID')).find('.dx-selectbox').dxSelectBox('instance');
@@ -6050,7 +6051,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('position.of');
@@ -6058,12 +6059,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.closeEditCell();
-        this.clock.tick();
+        this.clock.tick(10);
 
         themes.isMaterial = function() { return true; };
 
         dataGrid.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('position.of');
@@ -6110,7 +6111,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         dataGrid.addRow();
         dataGrid.cellValue(0, 0, 3);
@@ -6123,7 +6124,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.saveEditData();
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(isLoadingOccurs, true, 'loadingChanged is occurs');
@@ -6183,12 +6184,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: array
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.cellValue(2, 1, 666);
         dataGrid.saveEditData();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 4, 'visible row count');
@@ -6213,7 +6214,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                     mode: editMode.toLowerCase()
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             if(editMode === 'Row') {
@@ -6221,7 +6222,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             } else {
                 dataGrid.editCell(0, 0);
             }
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $editor = $(dataGrid.getCellElement(0, 0)).find('.dx-dropdowneditor');
 
@@ -6266,11 +6267,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editCell(5, 5);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cellElement = $(dataGrid.getCellElement(5, 5));
         const $revertButton = $(dataGrid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content');
@@ -6291,7 +6292,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             left: $validationMessage.offset().left - $cellElement.offset().left,
         };
         dataGrid.getScrollable().scrollTo({ top: 100, left: 100 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($revertButton.offset().top - $cellElement.offset().top, revertButtonDiff.top, 'top revert position relative to the cell is not changed');
@@ -6326,13 +6327,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         for(let i = 0; i < 5; i++) {
             dataGrid.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             dataGrid.saveEditData();
-            this.clock.tick();
+            this.clock.tick(10);
         }
 
         // assert
@@ -6363,7 +6364,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             } else {
                 dataGrid.editRow(0);
             }
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $input = $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input');
@@ -6398,7 +6399,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
         sinon.spy(resizingController, 'resize');
         sinon.spy(rowsView, 'synchronizeRows');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(resizingController.resize.callCount, 1, 'resize call count before editCell');
         assert.equal(rowsView.synchronizeRows.callCount, 1, 'synchronizeRows call count before editCell');
 
@@ -6593,7 +6594,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         }
                     }).dxDataGrid('instance');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
@@ -6612,7 +6613,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.saveEditData();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
@@ -6645,11 +6646,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         }
                     }).dxDataGrid('instance');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // act
                     dataGrid.option('editing.changes', changes);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
@@ -6668,7 +6669,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.saveEditData();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
@@ -6702,11 +6703,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         }
                     }).dxDataGrid('instance');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // act
                     dataGrid.option('editing.changes', changes);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
@@ -6714,7 +6715,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.pageIndex(1);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     visibleRows = dataGrid.getVisibleRows();
@@ -6732,7 +6733,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.saveEditData();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
@@ -6767,7 +6768,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         }
                     }).dxDataGrid('instance');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
@@ -6775,7 +6776,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.pageIndex(1);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     visibleRows = dataGrid.getVisibleRows();
@@ -6794,7 +6795,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.saveEditData();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
@@ -6834,11 +6835,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         }
                     }).dxDataGrid('instance');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // act
                     dataGrid.option('editing.changes', changes);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
@@ -6848,7 +6849,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.pageIndex(1);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     visibleRows = dataGrid.getVisibleRows();
@@ -6866,7 +6867,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.saveEditData();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
@@ -6906,11 +6907,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         }
                     }).dxDataGrid('instance');
 
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // act
                     dataGrid.option('editing.changes', changes);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
@@ -6919,7 +6920,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.pageIndex(1);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     visibleRows = dataGrid.getVisibleRows();
@@ -6938,7 +6939,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // act
                     dataGrid.saveEditData();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
@@ -7011,7 +7012,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             const $firstRow = $(dataGrid.getRowElement(0));
 
             $firstRow.find('input').first().val('test').trigger('change');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
@@ -7019,7 +7020,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
             // act
             $firstRow.find('input').eq(1).val('test').trigger('change');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
@@ -7048,7 +7049,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             const $firstRow = $(dataGrid.getRowElement(0));
 
             $firstRow.find('input').first().val('test').trigger('change');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
@@ -7145,7 +7146,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             } else {
                 dataGrid.editRow(0);
             }
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             switch(editMode) {
@@ -7205,7 +7206,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                 }
                 dataGrid.option(`editing.${editingOption}`, optionValue);
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should not be called on option change');
@@ -7231,20 +7232,20 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             },
             columns: ['id', 'value', 'field']
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const popup = $(dataGrid.getController('editing').getPopupContent());
         const valueInput = popup.find('.dx-texteditor-input').eq(1);
         const fieldInput = popup.find('.dx-texteditor-input').eq(2);
 
         valueInput.trigger('focus').val('35').trigger('change');
-        this.clock.tick();
+        this.clock.tick(10);
 
         fieldInput.trigger('focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(document.activeElement.id, fieldInput.attr('id'), 'focus is not reset after changing the field used for a summary');
     });
@@ -7272,11 +7273,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 e.promise.resolve();
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('#dataGrid .dx-link-delete').eq(0).trigger('dxpointerdown').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('#dataGrid .dx-datagrid-pager').is(':visible'), 'Pager is visible');
@@ -7296,14 +7297,14 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             onEditCanceling,
             onEditCanceled
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('#dataGrid .dx-link-cancel').eq(0).trigger('dxpointerdown').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling call count');
@@ -7334,7 +7335,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let $secondCell = $(dataGrid.getCellElement(0, 1));
@@ -7343,7 +7344,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $secondCell = $(dataGrid.getCellElement(0, 1));
@@ -7381,7 +7382,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick(300);
+            this.clock.tick(400);
 
             // assert
             const visibleRows = dataGrid.getVisibleRows();
@@ -7712,7 +7713,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             $(dataGrid.getCellElement(newRowVisibleIndex, 1)).find('.dx-texteditor-input').val('111').trigger('change');
             dataGrid.pageIndex(pageIndexToChange);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(dataGrid.pageIndex(), pageIndexToChange, 'page index is changed manually');
@@ -7720,7 +7721,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual(dataGrid.pageIndex(), pageIndexToChange === 0 ? 1 : 0, 'switched to page with a new row');
@@ -7849,12 +7850,12 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                 }
             };
 
-            this.clock.tick(300);
+            this.clock.tick(400);
 
             if(newRowPosition === 'viewportTop' || newRowPosition === 'viewportBottom') {
                 // act
                 dataGrid.getScrollable().scrollTo({ top: 1500 });
-                this.clock.tick(300);
+                this.clock.tick(400);
 
                 // assert
                 assert.strictEqual(dataGrid.getTopVisibleRowData().id, 45, 'first visible row data after scroll');
@@ -7862,7 +7863,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick(300);
+            this.clock.tick(400);
             newRowInfo = getNewRowInfo();
 
             // assert
@@ -7873,7 +7874,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             $(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val('111').trigger('change');
             dataGrid.getScrollable().scrollTo({ top: newRowPosition === 'first' ? 3500 : 0 });
-            this.clock.tick(300);
+            this.clock.tick(400);
 
             // assert
             assert.ok(dataGrid.getVisibleRows()[0].key >= newRowPosition === 'first' ? 91 : 1, 'top visible row key');

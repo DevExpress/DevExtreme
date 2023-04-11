@@ -11,7 +11,7 @@ import Widget from '../widget/ui.widget';
 import notify from '../notify';
 
 import { findItemsByKeys, extendAttributes } from './ui.file_manager.common';
-import FileItemsController from './file_items_controller';
+import { FileItemsController, OPERATIONS } from './file_items_controller';
 import { defaultPermissions, FileManagerCommandManager } from './ui.file_manager.command_manager';
 import FileManagerContextMenu from './ui.file_manager.context_menu';
 import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
@@ -747,7 +747,7 @@ class FileManager extends Widget {
     _onDataLoading({ operation }) {
         let options = null;
 
-        if(operation === 'navigation') {
+        if(operation === OPERATIONS.NAVIGATION) {
             options = {
                 focusedItemKey: this._itemKeyToFocus,
                 selectedItemKeys: this.option('selectedItemKeys')
@@ -755,7 +755,7 @@ class FileManager extends Widget {
             this._itemKeyToFocus = undefined;
         }
 
-        this._itemView.refresh(options);
+        this._itemView.refresh(options, operation);
     }
 
     _onSelectedDirectoryChanged() {

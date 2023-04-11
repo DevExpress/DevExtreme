@@ -73,7 +73,6 @@ import {
     getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
-import { ScrollSemaphore } from '../../../renovation/ui/scheduler/utils/semaphore/scrollSemaphore';
 import {
     getCellWidth,
     getCellHeight,
@@ -84,6 +83,7 @@ import {
 
 import { utils } from '../utils';
 import { compileGetter } from '../../../core/utils/data';
+import { getMemoizeScrollTo } from '../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -489,55 +489,33 @@ class SchedulerWorkSpace extends WidgetObserver {
         return config;
     }
 
-    _createCrossScrollingConfig(currentConfig) {
-        const config = {};
-        config.direction = 'both';
+    _createCrossScrollingConfig({ onScroll }) {
+        return {
+            direction: 'both',
+            onScroll: (event) => {
+                onScroll?.();
 
-        const currentOnScroll = currentConfig.onScroll;
-
-        config.onScroll = e => {
-            currentOnScroll();
-
-            this._dataTableSemaphore.take(e.scrollOffset);
-
-            if(this._sideBarSemaphore.isFree(e.scrollOffset)) {
-                this._sidebarScrollable?.scrollTo({
-                    top: e.scrollOffset.top
-                });
+                this._scrollSync.sidebar({ top: event.scrollOffset.top });
+                this._scrollSync.header({ left: event.scrollOffset.left });
+            },
+            onEnd: () => {
+                this.option('onScrollEnd')();
             }
-
-            if(this._headerSemaphore.isFree(e.scrollOffset)) {
-                this._headerScrollable?.scrollTo({
-                    left: e.scrollOffset.left
-                });
-            }
-
-            this._dataTableSemaphore.release();
         };
-
-        config.onEnd = () => {
-            this.option('onScrollEnd')();
-        };
-
-        return config;
     }
 
     _headerScrollableConfig() {
-        const config = {
+        return {
             useKeyboard: false,
             showScrollbar: 'never',
             direction: 'horizontal',
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            onScroll: e => {
-                this._headerSemaphore.take(e.scrollOffset);
-                this._dataTableSemaphore.isFree(e.scrollOffset) && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
-                this._headerSemaphore.release();
+            onScroll: (event) => {
+                this._scrollSync.dateTable({ left: event.scrollOffset.left });
             }
         };
-
-        return config;
     }
 
     _visibilityChanged(visible) {
@@ -2287,9 +2265,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _init() {
-        this._headerSemaphore = new ScrollSemaphore();
-        this._sideBarSemaphore = new ScrollSemaphore();
-        this._dataTableSemaphore = new ScrollSemaphore();
+        this._scrollSync = {};
         this._viewDataProvider = null;
         this._cellsSelectionState = null;
         this._activeStateUnit = CELL_SELECTOR;
@@ -2422,6 +2398,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $dateTableScrollable = $('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
 
         this._dateTableScrollable = this._createComponent($dateTableScrollable, Scrollable, this._dateTableScrollableConfig());
+        this._scrollSync.dateTable = getMemoizeScrollTo(() => this._dateTableScrollable);
     }
 
     _createWorkSpaceElements() {
@@ -2512,6 +2489,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             .appendTo(this._$headerTablesContainer);
 
         this._headerScrollable = this._createComponent($headerScrollable, Scrollable, this._headerScrollableConfig());
+        this._scrollSync.header = getMemoizeScrollTo(() => this._headerScrollable);
     }
 
     _createSidebarScrollable() {
@@ -2526,14 +2504,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            onScroll: e => {
-                this._sideBarSemaphore.take(e.scrollOffset);
-                if(this._dataTableSemaphore.isFree(e.scrollOffset)) {
-                    this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
-                }
-                this._sideBarSemaphore.release();
+            onScroll: (event) => {
+                this._scrollSync.dateTable({ top: event.scrollOffset.top });
             }
         });
+        this._scrollSync.sidebar = getMemoizeScrollTo(() => this._sidebarScrollable);
     }
 
     _attachTableClasses() {

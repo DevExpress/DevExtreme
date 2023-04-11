@@ -3,7 +3,7 @@ import fx from 'animation/fx';
 import { Deferred } from 'core/utils/deferred';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import ErrorCode from 'file_management/error_codes';
-import FileItemsController from 'ui/file_manager/file_items_controller';
+import { FileItemsController } from 'ui/file_manager/file_items_controller';
 import { createTestFileSystem, createUploaderFiles, stubFileReader, createEditingEvents } from '../../../helpers/fileManagerHelpers.js';
 import TestFileSystemProvider from '../../../helpers/fileManager/file_provider.test.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
@@ -25,7 +25,7 @@ const moduleConfig = {
     },
 
     afterEach: function() {
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.clock.restore();
         fx.off = false;
@@ -836,7 +836,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.logger.clear();
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         const expectedEntries = [ { message: '', status: 'default', type: 'notification-onActionProgress' } ];
         assert.deepEqual(this.logger.getEntries(), expectedEntries, 'success status removed');
     });
@@ -853,7 +853,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.logger.clear();
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
         const panel = this.notificationControl._getNotificationManager()._progressPanel;
@@ -876,7 +876,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.logger.clear();
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
         const panel = this.notificationControl._getNotificationManager()._progressPanel;
@@ -884,7 +884,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         assert.deepEqual(this.logger.getEntries(), []);
 
         this.notificationControl.tryShowProgressPanel();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
         panel._closeOperation(panel.getStoredInfos()[1]);

@@ -12,9 +12,11 @@ const DRAG_START_EVENT_NAME = dragEventStart + EVENTS_NS;
 const DRAG_EVENT_NAME = dragEventMove + EVENTS_NS;
 const DRAG_END_EVENT_NAME = dragEventEnd + EVENTS_NS;
 
+/* eslint-disable import/namespace */
 const PINCH_START_EVENT_NAME = transformEvents['pinchstart'] + EVENTS_NS;
 const PINCH_EVENT_NAME = transformEvents['pinch'] + EVENTS_NS;
 const PINCH_END_EVENT_NAME = transformEvents['pinchend'] + EVENTS_NS;
+/* eslint-enable import/namespace */
 
 const SCROLL_BAR_START_EVENT_NAME = 'dxc-scroll-start' + EVENTS_NS;
 const SCROLL_BAR_MOVE_EVENT_NAME = 'dxc-scroll-move' + EVENTS_NS;

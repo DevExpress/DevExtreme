@@ -262,6 +262,8 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                 let items = data;
 
                 if(isLookup) {
+                    items = items.filter((item) => item[column.lookup.valueExpr] !== null);
+
                     if(this.pageIndex() === 0 && !this.searchValue()) {
                         items = items.slice(0);
                         items.unshift(null);

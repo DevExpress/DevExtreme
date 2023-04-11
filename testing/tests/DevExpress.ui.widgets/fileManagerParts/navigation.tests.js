@@ -4,7 +4,7 @@ import 'ui/file_manager';
 import FileSystemError from 'file_management/error.js';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import ObjectFileSystemProvider from 'file_management/object_provider.js';
-import FileItemsController from 'ui/file_manager/file_items_controller';
+import { FileItemsController } from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
 import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
@@ -1170,7 +1170,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
             ],
             currentPath: targetPath
         });
-        this.clock.tick(400);
+        this.clock.tick(500);
 
         currentPath = this.fileManager.option('currentPath');
         currentPathKeys = this.fileManager.option('currentPathKeys');
@@ -1281,7 +1281,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
             }),
             currentPath: targetPath
         });
-        this.clock.tick(operationDelay * 2 + 1);
+        this.clock.tick(operationDelay * 2 + 100);
 
         currentPath = this.fileManager.option('currentPath');
         currentPathKeys = this.fileManager.option('currentPathKeys');
@@ -1338,7 +1338,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
                 })
             }),
         });
-        this.clock.tick(operationDelay * 2 + 1);
+        this.clock.tick(operationDelay * 2 + 100);
 
         currentPath = this.fileManager.option('currentPath');
         currentPathKeys = this.fileManager.option('currentPathKeys');

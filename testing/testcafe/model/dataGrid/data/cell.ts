@@ -59,4 +59,8 @@ export default class DataCell extends FocusableElement {
   getLinkEdit(): Selector {
     return this.element.find(`.${CLASS.linkEdit}`);
   }
+
+  getIconByTitle(title: string): Selector {
+    return this.element.find(`a[title=${title}]`);
+  }
 }

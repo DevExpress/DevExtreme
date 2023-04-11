@@ -16,7 +16,12 @@ import Guid from '../../core/guid';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
-export default class FileItemsController {
+export const OPERATIONS = {
+    NAVIGATION: 'navigation',
+    REFRESH: 'refresh'
+};
+
+export class FileItemsController {
 
     constructor(options) {
         options = options || {};
@@ -186,7 +191,7 @@ export default class FileItemsController {
 
         if(requireRaiseSelectedDirectory && this._isInitialized) {
             if(!this._dataLoading) {
-                this._raiseDataLoading('navigation');
+                this._raiseDataLoading(OPERATIONS.NAVIGATION);
             }
             this._raiseSelectedDirectoryChanged(directoryInfo);
         }
@@ -654,7 +659,7 @@ export default class FileItemsController {
 
         return this._executeDataLoad(() => {
             return this._refreshDeferred = this._refreshInternal();
-        }, 'refresh');
+        }, OPERATIONS.REFRESH);
     }
 
     startSingleLoad() {
@@ -701,7 +706,7 @@ export default class FileItemsController {
     }
 
     _setCurrentDirectoryByPathParts(pathParts, useKeys) {
-        return this._executeDataLoad(() => this._setCurrentDirectoryByPathPartsInternal(pathParts, useKeys), 'navigation');
+        return this._executeDataLoad(() => this._setCurrentDirectoryByPathPartsInternal(pathParts, useKeys), OPERATIONS.NAVIGATION);
     }
 
     _setCurrentDirectoryByPathPartsInternal(pathParts, useKeys) {

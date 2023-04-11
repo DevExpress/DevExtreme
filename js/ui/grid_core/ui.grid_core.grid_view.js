@@ -1,4 +1,4 @@
-import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
+import { getOuterWidth, getInnerWidth, getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import { deferRender, deferUpdate } from '../../core/utils/common';
@@ -17,6 +17,7 @@ const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
 const IMPORTANT_MARGIN_CLASS = 'important-margin';
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
+const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
 
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 
@@ -28,14 +29,6 @@ const isPercentWidth = function(width) {
 
 const isPixelWidth = function(width) {
     return isString(width) && width.slice(-2) === 'px';
-};
-
-const getContainerHeight = function($container) {
-    const clientHeight = $container.get(0).clientHeight;
-    const paddingTop = parseFloat($container.css('paddingTop'));
-    const paddingBottom = parseFloat($container.css('paddingBottom'));
-
-    return clientHeight - paddingTop - paddingBottom;
 };
 
 const calculateFreeWidth = function(that, widths) {
@@ -64,8 +57,7 @@ const ResizingController = modules.ViewController.inherit({
             this._refreshSizesHandler = (e) => {
                 dataController.changed.remove(this._refreshSizesHandler);
 
-                const templateDeferreds = e && e.templateDeferreds || [];
-                when.apply(this, templateDeferreds).done(() => {
+                this._rowsView.waitAsyncTemplates(e).done(() => {
                     this._refreshSizes(e);
                 });
             };
@@ -94,7 +86,7 @@ const ResizingController = modules.ViewController.inherit({
             if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                 !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
                 deferUpdate(() => deferRender(() => deferUpdate(() => {
-                    that._setScrollerSpacing(that._hasHeight);
+                    that._setScrollerSpacing();
                     that._rowsView.resize();
                 })));
             } else {
@@ -178,26 +170,28 @@ const ResizingController = modules.ViewController.inherit({
 
         $rowsTable.css('tableLayout', isBestFit ? 'auto' : 'fixed');
         $rowsTable.children('colgroup').css('display', isBestFit ? 'none' : '');
+
+        // NOTE T1156153: Hide group row column to get correct fixed column widths.
+        each($rowsFixedTable.find(GROUP_ROW_SELECTOR), (idx, item) => {
+            $(item).css('display', isBestFit ? 'none' : '');
+        });
+
         $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
         this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);
         this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
-
-        this._toggleContentMinHeight(isBestFit); // T1047239
 
         if(this._needStretch()) {
             $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
         }
     },
 
-    _toggleContentMinHeight: function(isBestFit) {
-        if(this.option('wordWrapEnabled')) {
-            const scrollable = this._rowsView.getScrollable();
-            const $contentElement = this._rowsView._findContentElement();
+    _toggleContentMinHeight: function(value) {
+        const scrollable = this._rowsView.getScrollable();
+        const $contentElement = this._rowsView._findContentElement();
 
-            if(scrollable?.option('useNative') === false) {
-                $contentElement.css({ minHeight: isBestFit ? gridCoreUtils.getContentHeightLimit(browser) : '' });
-            }
+        if(scrollable?.option('useNative') === false) {
+            $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : '' });
         }
     },
 
@@ -205,6 +199,7 @@ const ResizingController = modules.ViewController.inherit({
         const columnsController = this._columnsController;
         const visibleColumns = columnsController.getVisibleColumns();
         const columnAutoWidth = this.option('columnAutoWidth');
+        const wordWrapEnabled = this.option('wordWrapEnabled');
         let needBestFit = this._needBestFit();
         let hasMinWidth = false;
         let resetBestFitMode;
@@ -212,6 +207,7 @@ const ResizingController = modules.ViewController.inherit({
         let resultWidths = [];
         let focusedElement;
         let selectionRange;
+
         const normalizeWidthsByExpandColumns = function() {
             let expandColumnWidth;
 
@@ -250,6 +246,8 @@ const ResizingController = modules.ViewController.inherit({
             this._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
+
+        this._toggleContentMinHeight(wordWrapEnabled); // T1047239
 
         const $element = this.component.$element();
         if($element && $element[0] && this._maxWidth) {
@@ -303,6 +301,10 @@ const ResizingController = modules.ViewController.inherit({
             deferRender(() => {
                 if(needBestFit || isColumnWidthsCorrected) {
                     this._setVisibleWidths(visibleColumns, resultWidths);
+                }
+
+                if(wordWrapEnabled) {
+                    this._toggleContentMinHeight(false);
                 }
             });
         });
@@ -479,22 +481,25 @@ const ResizingController = modules.ViewController.inherit({
         return Math.ceil(result);
     },
 
+    _getGroupElement: function() {
+        return this.component.$element().children().get(0);
+    },
+
     updateSize: function(rootElement) {
         const that = this;
-        let $groupElement;
-        let width;
         const $rootElement = $(rootElement);
         const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
         if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
-            $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
+            const $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
+
             if($groupElement.length) {
                 $groupElement.detach();
             }
 
-            that._hasHeight = !!getContainerHeight($rootElement);
+            that._hasHeight = !!getHeight($rootElement);
 
-            width = getWidth($rootElement);
+            const width = getWidth($rootElement);
             $rootElement.addClass(importantMarginClass);
             that._hasWidth = getWidth($rootElement) === width;
             $rootElement.removeClass(importantMarginClass);
@@ -547,7 +552,7 @@ const ResizingController = modules.ViewController.inherit({
         return result.promise();
     },
     _resetGroupElementHeight: function() {
-        const groupElement = this.component.$element().children().get(0);
+        const groupElement = this._getGroupElement();
         const scrollable = this._rowsView.getScrollable();
 
         if(groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
@@ -567,9 +572,9 @@ const ResizingController = modules.ViewController.inherit({
         }
         return true;
     },
-    _setScrollerSpacingCore: function(hasHeight) {
+    _setScrollerSpacingCore: function() {
         const that = this;
-        const vScrollbarWidth = hasHeight ? that._rowsView.getScrollbarWidth() : 0;
+        const vScrollbarWidth = that._rowsView.getScrollbarWidth();
         const hScrollbarWidth = that._rowsView.getScrollbarWidth(true);
 
         deferRender(function() {
@@ -578,45 +583,43 @@ const ResizingController = modules.ViewController.inherit({
             that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
         });
     },
-    _setScrollerSpacing: function(hasHeight) {
-        if(this.option('scrolling.useNative') === true) {
-            // T722415, T758955
+    _setScrollerSpacing: function() {
+        const scrollable = this._rowsView.getScrollable();
+        // T722415, T758955
+        const isNativeScrolling = this.option('scrolling.useNative') === true;
+
+        if(!scrollable || isNativeScrolling) {
             deferRender(() => {
                 deferUpdate(() => {
-                    this._setScrollerSpacingCore(hasHeight);
+                    this._setScrollerSpacingCore();
                 });
             });
-        } else {
-            this._setScrollerSpacingCore(hasHeight);
-        }
+        } else { this._setScrollerSpacingCore(); }
     },
     _updateDimensionsCore: function() {
         const that = this;
+
         const dataController = that._dataController;
+        const editorFactory = that.getController('editorFactory');
         const rowsView = that._rowsView;
+
         const $rootElement = that.component.$element();
-        const groupElement = $rootElement.children().get(0);
-        const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
+        const groupElement = this._getGroupElement();
+
+        const rootElementHeight = getHeight($rootElement);
+        const height = that.option('height') || $rootElement.get(0).style.height;
+        const isHeightSpecified = !!height && height !== 'auto';
+
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
-        const height = that.option('height') || $rootElement.get(0).style.height;
-        const editorFactory = that.getController('editorFactory');
-        const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
-        let $testDiv;
+        const isMaxHeightApplied = groupElement && groupElement.scrollHeight === groupElement.offsetHeight;
 
         that.updateSize($rootElement);
-        const hasHeight = that._hasHeight || maxHeightHappened;
-
-        if(height && (that._hasHeight ^ (height !== 'auto'))) {
-            $testDiv = $('<div>');
-            setHeight($testDiv, height);
-            $testDiv.appendTo($rootElement);
-            that._hasHeight = !!getHeight($testDiv);
-            $testDiv.remove();
-        }
 
         deferRender(function() {
-            rowsView.height(null, hasHeight);
+            const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
+            rowsView.hasHeight(hasHeight);
+
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
@@ -628,7 +631,7 @@ const ResizingController = modules.ViewController.inherit({
             }
             deferUpdate(function() {
                 that._updateLastSizes($rootElement);
-                that._setScrollerSpacing(hasHeight);
+                that._setScrollerSpacing();
 
                 each(VIEW_NAMES, function(index, viewName) {
                     const view = that.getView(viewName);

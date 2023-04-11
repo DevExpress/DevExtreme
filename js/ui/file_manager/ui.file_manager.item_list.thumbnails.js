@@ -1,5 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
+import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
@@ -9,6 +11,7 @@ import messageLocalization from '../../localization/message';
 
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 import FileManagerItemListBase from './ui.file_manager.item_list';
+import { OPERATIONS } from './file_items_controller';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
@@ -19,6 +22,7 @@ const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _initMarkup() {
         super._initMarkup();
+        this._needResetScrollPosition = false;
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
 
@@ -45,7 +49,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onItemListSelectionChanged.bind(this),
-            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this)
+            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
+            onContentReady: this._onItemListContentReady.bind(this)
         });
     }
 
@@ -150,6 +155,20 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
+    _onItemListContentReady() {
+        if(this._needResetScrollPosition) {
+            this._resetScrollTopPosition();
+            this._needResetScrollPosition = false;
+        }
+    }
+
+    _resetScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
+        setTimeout(() => this._itemList.getScrollable()?.scrollTo(0));
+    }
+
     _setSelectedItemKeys(itemKeys) {
         this._itemList.option('selectedItemKeys', itemKeys);
     }
@@ -158,7 +177,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._itemList.option('focusedItemKey', itemKey);
     }
 
-    refresh(options) {
+    refresh(options, operation) {
         const actualOptions = {
             dataSource: this._createDataSource()
         };
@@ -170,6 +189,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             actualOptions.selectedItemKeys = options.selectedItemKeys;
         }
 
+        if(!isDefined(actualOptions.focusedItemKey) && operation === OPERATIONS.NAVIGATION) {
+            this._needResetScrollPosition = true;
+        }
         this._itemList.option(actualOptions);
 
         this._refreshDeferred = new Deferred();

@@ -1,6 +1,2 @@
-import gridCore from './ui.data_grid.core';
-import { headerPanelModule } from '../grid_core/ui.grid_core.header_panel';
-
-export const HeaderPanel = headerPanelModule.views.headerPanel;
-
-gridCore.registerModule('headerPanel', headerPanelModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/header_panel';

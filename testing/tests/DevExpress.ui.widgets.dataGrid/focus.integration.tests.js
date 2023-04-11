@@ -67,7 +67,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 groupIndex: 0,
             }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const cellBackgroundColor = 'rgba(0, 0, 0, 0)';
         const $groupedRow = $(dataGrid.getRowElement(0)[0]);
@@ -97,19 +97,19 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.expandRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         masterDetailDataGrids[0].option('focusedRowKey', 3);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.getCellElement(2, 1)).trigger(pointerEvents.down);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const row = detailRowsViewWrapper.getDataRow(0);
         assert.ok(row.isFocusedRow(), 'master detail has focused row');
@@ -164,7 +164,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('focusedRowKey', 'Smith');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(rowsView.getRow(4).hasClass('dx-row-focused'), 'Focused row');
@@ -193,7 +193,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('focusedRowKey', 'Smith');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const rowIndex = dataGrid.getRowIndexByKey('Smith');
 
@@ -227,21 +227,21 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act, assert - focusedRowKey
         dataGrid.option('focusedRowKey', 'Smith');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 0, 'Page index not changed');
         assert.equal(dataGrid.option('focusedRowKey'), 'Smith', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
 
         // act, assert - paging
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 1, 'Page index');
         assert.equal(dataGrid.option('focusedRowKey'), 'Smith', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
 
         // act, assert - sorting
         dataGrid.columnOption('phone', { sortOrder: 'desc' });
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 1, 'Page index');
         assert.equal(dataGrid.option('focusedRowKey'), 'Smith', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
@@ -250,7 +250,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.clearSorting();
         // act, assert - filtering
         dataGrid.filter(['phone', 'startsWith', '454']);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 0, 'Page index changed');
         assert.equal(dataGrid.option('focusedRowKey'), 'Smith', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
@@ -292,7 +292,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 2, 'Page index changed');
@@ -324,14 +324,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act, assert - focusedRowKey
         dataGrid.option('focusedRowKey', 'Ben');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 0, 'Page index not changed');
         assert.equal(dataGrid.option('focusedRowKey'), 'Ben', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), 1, 'focusedRowIndex');
 
         // act, assert - paging
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 1, 'Page index');
         assert.equal(dataGrid.option('focusedRowKey'), 'Ben', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
@@ -340,7 +340,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.pageIndex(2);
         dataGrid.option('focusedRowKey', 'Smith');
         dataGrid.columnOption('name', { sortOrder: 'desc' });
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 2, 'Page index');
         assert.equal(dataGrid.option('focusedRowKey'), 'Smith', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
@@ -349,7 +349,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.clearSorting();
         // act, assert - filtering
         dataGrid.filter(['phone', 'startsWith', '454']);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(dataGrid.pageIndex(), 0, 'Page index changed');
         assert.equal(dataGrid.option('focusedRowKey'), 'Smith', 'focusedRowKey');
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
@@ -384,11 +384,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 }
             }
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption('id', 'sortOrder', 'desc');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
@@ -422,14 +422,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowEnabled: true,
             focusedRowIndex: 0,
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, 'lookup.dataSource', [{}]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
@@ -458,7 +458,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const rowsView = dataGrid.getView('rowsView');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const rowIndex = dataGrid.getRowIndexByKey('Sean');
 
         // assert
@@ -532,7 +532,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick(300);
+        this.clock.tick(400);
 
         // assert
         assert.equal(dataGrid.getTopVisibleRowData().id, 150, 'Focused row is visible');
@@ -567,11 +567,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 10000 });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.option('focusedRowKey', 15);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ top: 250 });
         this.clock.tick(1000);
 
@@ -600,12 +600,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 useNative: false
             }
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey(30), 1), 'navigated row in viewport');
 
         dataGrid.columnOption(0, 'sortOrder', 'desc');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(dataGrid.getRowIndexByKey(30), 0, 'navigated row is rendered');
         assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey(30), 1), 'navigated row in viewport');
@@ -633,13 +633,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getCellElement(7, 0))
             .trigger('dxpointerdown');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].key, 1, 'Visible row is not changed');
@@ -660,12 +660,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const navigationController = dataGrid.getController('keyboardNavigation');
 
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
-        this.clock.tick();
+        this.clock.tick(10);
 
         navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
 
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'));
     });
@@ -700,15 +700,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 600 });
         $(scrollable.container()).trigger('scroll');
-        this.clock.tick();
+        this.clock.tick(10);
         $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
@@ -808,11 +808,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
         const rowsView = dataGrid.getView('rowsView');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('focusedRowIndex', 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
@@ -838,11 +838,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 useNative: false,
             }
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 10000 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getTopVisibleRowData().id, 3, 'top visible row id');
@@ -864,14 +864,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('focusedRowIndex', 0);
         dataGrid.option('focusedRowIndex', 1);
         dataGrid.option('focusedRowIndex', 2);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(data[0].id.key, 4, 'first row data was not modified');
@@ -900,10 +900,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             paging: { pageSize: 2 }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.pageIndex(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 1, 'pageIndex');
@@ -926,11 +926,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowEnabled: true,
             scrolling: { mode: 'infinite', useNative: false }
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('focusedRowKey', 'Smith');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const rowIndex = dataGrid.getRowIndexByKey('Smith');
@@ -963,7 +963,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act, assert
         try {
             dataGrid.pageIndex(1);
-            this.clock.tick();
+            this.clock.tick(10);
         } catch(e) {
             assert.ok(false, e);
         }
@@ -1044,7 +1044,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.focus(dataGrid.getCellElement(1, 2));
         const keyboardController = dataGrid.getController('keyboardNavigation');
         keyboardController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(':focus').get(0) }) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell = $(dataGrid.element()).find('.dx-focused');
 
@@ -1077,17 +1077,17 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 $(container).append(tr);
             },
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const input = $(dataGrid.getRowElement(0)).find('.dx-texteditor-input').eq(0);
         const keyboard = keyboardMock(input);
 
         input.trigger('focus');
-        this.clock.tick();
+        this.clock.tick(10);
 
         keyboard.keyDown('tab');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(keyboard.event._defaultPrevented, 'event should not be prevented');
@@ -1111,7 +1111,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             .val('test')
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $search = $($(dataGrid.$element()).find('.dx-datagrid-search-panel'));
@@ -1133,11 +1133,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowIndex: 1
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const focusedRowElement = dataGrid.getView('rowsView').getRow(1);
@@ -1159,7 +1159,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowIndex: 0
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('focusedRowKey', '2');
@@ -1180,11 +1180,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [{ id: 1 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('focusedRowKey', 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedRowChangedCallCount, 1, 'focusedRowChangedCallCount');
@@ -1259,7 +1259,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedRowChangedCallCount, 1, 'focusedRowChangedCallCount');
@@ -1276,7 +1276,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [{ id: 1 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedRowChangedCallCount, 0, 'focusedRowChangedCallCount');
@@ -1333,7 +1333,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }).dxDataGrid('instance');
 
             dataGrid.editRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.ok(true, 'no exception');
         });
@@ -1353,7 +1353,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }).dxDataGrid('instance');
 
             dataGrid.focus(dataGrid.getCellElement(0, 0));
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.ok(true, 'no exception');
         });
@@ -1378,14 +1378,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'there is no focused row');
 
         const $firstCell = $(dataGrid.getCellElement(0, 1));
         $firstCell.trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $firstRow = $(dataGrid.getRowElement(0));
 
@@ -1419,11 +1419,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             columns: [{ type: 'buttons' }, 'name', 'phone']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(dataGrid.getRowElement(0)).find('.dx-editor-cell').eq(0).hasClass('dx-focused'), 'first editable cell is active');
@@ -1464,7 +1464,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onFocusedRowChangedSpy.callCount, 1, 'onFocusedRowChanged is fired');
@@ -1486,7 +1486,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onFocusedRowChangedSpy.callCount, 1, 'onFocusedRowChanged is fired');
@@ -1511,7 +1511,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onFocusedRowChangedSpy.callCount, 1, 'onFocusedRowChanged is fired');
@@ -1582,7 +1582,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $input.val(1);
         $input.trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
 
@@ -1651,12 +1651,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             columns: ['id']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('dataSource', []);
         dataGrid.columnOption(0, 'caption', 'test');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no rows');
@@ -1721,7 +1721,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             .val(1)
             .trigger('change');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').is(':focus'), 'filter row\'s cell is focused');
     });
@@ -1772,7 +1772,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange
         const dataController = dataGrid.getController('data');
@@ -1780,7 +1780,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // act
         dataGrid.option('focusedRowKey', 5);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(dataController._getLastItemIndex.callCount > 0, '_getLastItemIndex has called after set focusedRowKey');
@@ -1826,7 +1826,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollBy(400);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const firstVisibleRowKey = dataGrid.getVisibleRows()[0].key;
         const scrollTop = scrollable.scrollTop();
@@ -1835,9 +1835,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         const $checkBox = $cell.find('.dx-checkbox').eq(0);
 
         $checkBox.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         $checkBox.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].key, firstVisibleRowKey, 'first visible row key');
@@ -1916,7 +1916,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 autoNavigateToFocusedRow: true,
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
@@ -2005,29 +2005,29 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 columns: ['Name', 'Description']
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             dataGrid.cellValue(0, 0, 'test');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
 
             // act
             $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
 
             // act
             $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
@@ -2052,7 +2052,7 @@ QUnit.module('View\'s focus', {
 
         this.focusGridCell = function($target) {
             this.dataGrid.focus($target);
-            this.clock.tick();
+            this.clock.tick(10);
         };
     },
     afterEach: function() {
@@ -2110,13 +2110,13 @@ QUnit.module('View\'s focus', {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataGrid.expandRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         $(detailGrid.getCellElement(0, 0)).focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const focusOverlay = detailRowsViewWrapper.getFocusOverlay();
@@ -2135,11 +2135,11 @@ QUnit.module('View\'s focus', {
                 e.isHighlighted = false;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(this.dataGrid.getCellElement(0, 0))
             .trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
@@ -2148,7 +2148,7 @@ QUnit.module('View\'s focus', {
         // act
         const navigationController = this.dataGrid.getController('keyboardNavigation');
         navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedCellChangingCount, 2, 'onFocusedCellChanging fires count');
@@ -2206,10 +2206,10 @@ QUnit.module('View\'s focus', {
             }
         });
         this.dataGrid.expandRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         const $dateBoxInput = $(this.dataGrid.$element()).find('.internal-grid .dx-datagrid-filter-row').find('.dx-texteditor-input').first();
         $dateBoxInput.focus();
-        this.clock.tick();
+        this.clock.tick(10);
         const keyboard = keyboardMock($dateBoxInput);
 
         // act
@@ -2249,18 +2249,18 @@ QUnit.module('View\'s focus', {
             }
         });
         this.dataGrid.expandRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.keyboardNavigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };
         const $dateBoxInput = $(this.dataGrid.$element()).find('.internal-grid .dx-datagrid-filter-row').find('.dx-texteditor-input').first();
         $dateBoxInput.focus();
-        this.clock.tick();
+        this.clock.tick(10);
         const keyboard = keyboardMock($dateBoxInput);
 
         // act
         keyboard.keyDown('1');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, 'Master grid focusedCellPosition is not changed');
@@ -2375,7 +2375,7 @@ QUnit.module('View\'s focus', {
             onFocusedRowChanged
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group'], 'group rows are rendered');
@@ -2385,7 +2385,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group', 'data'], 'rows are rendered');
@@ -2421,7 +2421,7 @@ QUnit.module('View\'s focus', {
             onFocusedRowChanged
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data'], 'data rows are rendered');
@@ -2431,7 +2431,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data', 'detail'], 'rows are rendered');
@@ -2469,7 +2469,7 @@ QUnit.module('View\'s focus', {
             onFocusedCellChanged,
             onFocusedRowChanged
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group'], 'group rows are rendered');
@@ -2479,7 +2479,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group', 'data'], 'rows are rendered');
@@ -2517,7 +2517,7 @@ QUnit.module('View\'s focus', {
             onFocusedCellChanged,
             onFocusedRowChanged
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data'], 'group rows are rendered');
@@ -2527,7 +2527,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data', 'detail'], 'rows are rendered');
@@ -2563,7 +2563,7 @@ QUnit.module('View\'s focus', {
             onFocusedRowChanged
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group'], 'group rows are rendered');
@@ -2573,7 +2573,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group', 'data'], 'rows are rendered');
@@ -2609,7 +2609,7 @@ QUnit.module('View\'s focus', {
             onFocusedRowChanged
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data'], 'group rows are rendered');
@@ -2619,7 +2619,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data', 'detail'], 'rows are rendered');
@@ -2655,7 +2655,7 @@ QUnit.module('View\'s focus', {
             onFocusedRowChanged
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group'], 'group rows are rendered');
@@ -2665,7 +2665,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['group', 'group', 'data'], 'rows are rendered');
@@ -2701,7 +2701,7 @@ QUnit.module('View\'s focus', {
             onFocusedRowChanged
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data'], 'group rows are rendered');
@@ -2711,7 +2711,7 @@ QUnit.module('View\'s focus', {
         // act
         const $command = $(dataGrid.getRowElement(1)).find('.dx-command-expand');
         $command.trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ['data', 'data', 'detail'], 'rows are rendered');
@@ -2736,14 +2736,14 @@ QUnit.module('View\'s focus', {
             width: 120
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell0 = $(dataGrid.getCellElement(0, 0));
         $cell0.trigger(CLICK_EVENT).trigger('dxclick');
 
         let keyboard = keyboardMock($cell0);
         keyboard.keyDown('right');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell1 = $(dataGrid.getCellElement(0, 2));
 
@@ -2755,7 +2755,7 @@ QUnit.module('View\'s focus', {
 
         keyboard = keyboardMock($cell1);
         keyboard.keyDown('left');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($cell0.hasClass('dx-focused'), 'cell is focused');
@@ -2807,12 +2807,12 @@ QUnit.module('View\'s focus', {
                             { dataField: 'description', allowEditing: false }
                         ]
                     });
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // act
                     let $cell = $(dataGrid.getCellElement(rowIndex, 1));
                     $cell.trigger(CLICK_EVENT).trigger('dxclick');
-                    this.clock.tick();
+                    this.clock.tick(10);
                     let keyboard = keyboardMock($cell);
                     keyboard.keyDown('a');
                     this.clock.tick(25); // 25 because of T882996
@@ -2824,7 +2824,7 @@ QUnit.module('View\'s focus', {
                     // act
                     keyboard = keyboardMock($cell);
                     keyboard.keyDown(arrowKey);
-                    this.clock.tick();
+                    this.clock.tick(10);
                     $cell = $(dataGrid.getCellElement(rowIndex, 1));
                     const cellValue = dataGrid.cellValue(rowIndex, 1);
 
@@ -2872,12 +2872,12 @@ QUnit.module('View\'s focus', {
                     }
                 ]
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             let $cell = $(dataGrid.getCellElement(0, 0));
             $cell.trigger(CLICK_EVENT).trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
             let keyboard = keyboardMock($cell);
             keyboard.keyDown('2');
             this.clock.tick(25);
@@ -2891,7 +2891,7 @@ QUnit.module('View\'s focus', {
             // act
             keyboard = keyboardMock($input);
             keyboard.keyDown('5');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
@@ -2931,14 +2931,14 @@ QUnit.module('View\'s focus', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell1_0 = $(dataGrid.getCellElement(1, 0));
         $cell1_0.trigger(CLICK_EVENT).trigger('dxclick');
 
         const keyboard = keyboardMock($cell1_0);
         keyboard.keyDown('tab', { shiftKey: true });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $lastCell = $(dataGrid.getRowElement(0)).children().last();
         const $editButton = $lastCell.find('.dx-link-edit');
@@ -2981,14 +2981,14 @@ QUnit.module('View\'s focus', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell1_0 = $(dataGrid.getCellElement(1, 0));
         $cell1_0.trigger(CLICK_EVENT).trigger('dxclick');
 
         const keyboard = keyboardMock($cell1_0);
         keyboard.keyDown('tab', { shiftKey: true });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $lastCell = $(dataGrid.getRowElement(0)).children().last();
         const $editButton = $lastCell.find('.dx-link-edit');
@@ -3024,7 +3024,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
         scrollable.scrollTo({ left: this.keyboardNavigationController._getMaxHorizontalOffset() });
@@ -3037,7 +3037,7 @@ QUnit.module('View\'s focus', {
         $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('tab');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
 
         // assert
@@ -3073,7 +3073,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         scrollable.scrollTo({ left: 0 });
 
@@ -3085,7 +3085,7 @@ QUnit.module('View\'s focus', {
         $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('tab');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -3121,7 +3121,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
 
         // assert
@@ -3132,7 +3132,7 @@ QUnit.module('View\'s focus', {
         $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($lastCell);
         keyboard.keyDown('tab', { shiftKey: true });
-        this.clock.tick();
+        this.clock.tick(10);
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
         const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
@@ -3169,7 +3169,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -3181,7 +3181,7 @@ QUnit.module('View\'s focus', {
         $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($lastCell);
         keyboard.keyDown('tab', { shiftKey: true });
-        this.clock.tick();
+        this.clock.tick(10);
         const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
         // assert
@@ -3220,14 +3220,14 @@ QUnit.module('View\'s focus', {
                     columns[16].fixed = true;
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $cell0_last = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
             $cell0_last.trigger(CLICK_EVENT).trigger('dxclick');
             const keyboard = keyboardMock($cell0_last);
             keyboard.keyDown('tab');
-            this.clock.tick();
+            this.clock.tick(10);
             const $cell1_first = $(this.dataGrid.getCellElement(1, 0));
 
             // assert
@@ -3267,14 +3267,14 @@ QUnit.module('View\'s focus', {
                     columns[16].fixed = true;
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $cell0_last = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
             $cell0_last.trigger(CLICK_EVENT).trigger('dxclick');
             const keyboard = keyboardMock($cell0_last);
             keyboard.keyDown('tab');
-            this.clock.tick();
+            this.clock.tick(10);
             const $cell1_first = $(this.dataGrid.getCellElement(1, 0));
 
             // assert
@@ -3311,14 +3311,14 @@ QUnit.module('View\'s focus', {
                     columns[16].fixed = true;
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $cell1_first = $(this.dataGrid.getCellElement(1, 0));
             $cell1_first.trigger(CLICK_EVENT).trigger('dxclick');
             const keyboard = keyboardMock($cell1_first);
             keyboard.keyDown('tab', { shiftKey: true });
-            this.clock.tick();
+            this.clock.tick(10);
             const $cell0_last = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
 
             // assert
@@ -3356,14 +3356,14 @@ QUnit.module('View\'s focus', {
                     columns[16].fixed = true;
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             const $cell0_last = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
             $cell0_last.trigger(CLICK_EVENT).trigger('dxclick');
             const keyboard = keyboardMock($cell0_last);
             keyboard.keyDown('tab', { shiftKey: true });
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
@@ -3399,7 +3399,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
         scrollable.scrollTo({ left: this.keyboardNavigationController._getMaxHorizontalOffset() });
@@ -3412,7 +3412,7 @@ QUnit.module('View\'s focus', {
         $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('right');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
 
         // assert
@@ -3450,7 +3450,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
         scrollable.scrollTo({ left: this.keyboardNavigationController._getMaxHorizontalOffset() });
@@ -3463,7 +3463,7 @@ QUnit.module('View\'s focus', {
         $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('right');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
 
         // assert
@@ -3499,7 +3499,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         scrollable.scrollTo({ left: 0 });
 
@@ -3511,7 +3511,7 @@ QUnit.module('View\'s focus', {
         $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('left');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -3551,7 +3551,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         scrollable.scrollTo({ left: 0 });
 
@@ -3563,7 +3563,7 @@ QUnit.module('View\'s focus', {
         $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('left');
-        this.clock.tick();
+        this.clock.tick(10);
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
 
         // assert
@@ -3598,7 +3598,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
 
         // assert
@@ -3609,7 +3609,7 @@ QUnit.module('View\'s focus', {
         $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($lastCell);
         keyboard.keyDown('left');
-        this.clock.tick();
+        this.clock.tick(10);
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
         const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
@@ -3648,7 +3648,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
 
         // assert
@@ -3659,7 +3659,7 @@ QUnit.module('View\'s focus', {
         $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($lastCell);
         keyboard.keyDown('left');
-        this.clock.tick();
+        this.clock.tick(10);
         const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
         // assert
@@ -3695,7 +3695,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -3707,7 +3707,7 @@ QUnit.module('View\'s focus', {
         $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($lastCell);
         keyboard.keyDown('right');
-        this.clock.tick();
+        this.clock.tick(10);
         const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
         // assert
@@ -3746,7 +3746,7 @@ QUnit.module('View\'s focus', {
                 columns[16].fixed = true;
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         const scrollable = this.dataGrid.getScrollable();
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -3758,7 +3758,7 @@ QUnit.module('View\'s focus', {
         $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
         const keyboard = keyboardMock($lastCell);
         keyboard.keyDown('right');
-        this.clock.tick();
+        this.clock.tick(10);
         const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
 
         // assert
@@ -3789,17 +3789,17 @@ QUnit.module('View\'s focus', {
                 }
             }, 'description']
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $inputElement = $(this.dataGrid.element()).find('input');
 
         // act
         $inputElement.trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         $inputElement.focus();
-        this.clock.tick();
+        this.clock.tick(10);
         $inputElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($inputElement.is(':focus'), 'input is focused');
@@ -3816,13 +3816,13 @@ QUnit.module('View\'s focus', {
             },
             focusedRowEnabled: true,
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $checkbox = $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox');
 
         // act
         $checkbox.trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($checkbox.parents('tr').hasClass('dx-row-focused'), 'row is focused');
@@ -3857,18 +3857,18 @@ QUnit.module('View\'s focus', {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').trigger(CLICK_EVENT).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').attr('tabindex'), '0', 'tab index is set to the expanded button');
 
         // act
         $(this.dataGrid.element()).find('.myclass .dx-link-edit:eq(0)').trigger('dxpointerdown').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').attr('tabindex'), '0', 'tab index is set to the expanded button');
@@ -3901,11 +3901,11 @@ QUnit.module('View\'s focus', {
                 }
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataGrid.expandRow(2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.dataGrid.getScrollable().scrollTo({ top: this.dataGrid.getScrollable().scrollHeight() });
         const scrollTop = this.dataGrid.getScrollable().scrollTop();
@@ -3933,17 +3933,17 @@ QUnit.module('View\'s focus', {
                     }
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $inputElement = $('<input>').prependTo($('#container'));
 
             // act
             this.dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             $inputElement.trigger('focus');
-            this.clock.tick();
+            this.clock.tick(10);
             $inputElement.trigger('dxpointerdown').trigger('dxclick');
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.ok($inputElement.is(':focus'), 'input is focused');
@@ -3979,19 +3979,19 @@ QUnit.module('View\'s focus', {
                 }
             ],
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         for(let i = 0; i < 2; i++) {
             for(let j = 0; j < 2; j++) {
                 // act
                 $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 if(i === 0 && j === 0) {
                     $(this.dataGrid.getCellElement(i, j)).find('.dx-texteditor-input').val('').trigger('change');
-                    this.clock.tick();
+                    this.clock.tick(10);
                 }
 
                 // assert
@@ -4029,10 +4029,10 @@ QUnit.module('View\'s focus', {
                 }
             ],
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(this.dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.dataGrid.getVisibleRows()[0].isNewRow, 'the first new row');
@@ -4047,9 +4047,9 @@ QUnit.module('View\'s focus', {
 
                 // act
                 $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
-                this.clock.tick();
+                this.clock.tick(10);
                 $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), `the first cell is rendered as invalid when the {${i}, ${j}} cell is clicked`);
@@ -4091,7 +4091,7 @@ QUnit.module('View\'s focus', {
                     e.isHighlighted = true;
                 }
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             let keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
@@ -4399,18 +4399,18 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const navigationController = dataGrid.getController('keyboardNavigation');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ left: 0, top: 1500 });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const rowData = dataGrid.getTopVisibleRowData();
 
         dataGrid.editCell(dataGrid.getRowIndexByKey(rowData) + 1, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.$element()).find('.dx-textbox').dxTextBox('instance').option('value', 'Test');
         navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(Math.floor(rowData.index / 20), 2, 'scroll position is on third page');
@@ -4447,17 +4447,17 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const navigationController = dataGrid.getController('keyboardNavigation');
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ x: 0, y: 10000 });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const rowData = dataGrid.getTopVisibleRowData();
         dataGrid.editCell(dataGrid.getRowIndexByKey(array[198]), 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.$element()).find('.dx-textbox').dxTextBox('instance').option('value', 'Test');
         navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.roughEqual(dataGrid.getTopVisibleRowData().index, rowData.index, 1.01, 'scroll position is not changed');
@@ -4487,11 +4487,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'value', allowEditing: true }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('.dx-checkbox').eq(0).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('.dx-checkbox').eq(0).attr('aria-checked'), 'true', 'first checkbox is checked');
@@ -4643,10 +4643,10 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.focus($(dataGrid.getCellElement(0, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $inputs = $($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR));
@@ -4691,7 +4691,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $(dataGrid.$element()).find('.dx-form .dx-texteditor').first().dxTextBox('instance');
         const $input = $(editor.$element().find('.dx-texteditor-input'));
@@ -4701,7 +4701,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         triggerTabPress($input);
         $($input).trigger('change');
         $(dataGrid.$element()).find('.dx-form .dx-texteditor-input').eq(1).focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $secondEditor = $(dataGrid.$element()).find('.dx-form .dx-texteditor').eq(1);
@@ -4735,7 +4735,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($cell.length, 1, 'editor cell exists');
 
         dataGrid.getController('editorFactory').focus($cell);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $focusOverlay = $($(dataGrid.$element()).find('.dx-datagrid-focus-overlay'));
 
@@ -4746,7 +4746,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // act
         $(dataGrid.$element()).width(100);
         dataGrid.resize();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const newFocusWidth = $focusOverlay.width();
@@ -4769,7 +4769,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 1, field2: 2 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(dataGrid.element()).find('.dx-checkbox').first().focus();
 
@@ -4799,7 +4799,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         dataGrid.editRow(0);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.focus(dataGrid.getCellElement(0, 1));
 
         // assert
@@ -4809,7 +4809,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         $('.dx-link-cancel').trigger('dxpointerdown').trigger('click');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $commandCell = $(dataGrid.getCellElement(0, 1));
@@ -4899,7 +4899,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         resizeController._isResizing = true;
 
         dataGrid.focus(dataGrid.getCellElement(0, 0));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk($dataGrid.find('.dx-datagrid-focus-overlay').length, 'overlay is not rendered');
@@ -4927,7 +4927,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         const $columnsSeparator = $dataGrid.find('.dx-datagrid-columns-separator');
 
         dataGrid.focus(dataGrid.getCellElement(0, 0));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $overlay = $dataGrid.find('.dx-datagrid-focus-overlay');
@@ -4944,7 +4944,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // act
         resizeController._isResizing = false;
         $dataGrid.trigger($.Event('dxclick'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($overlay.length, 'overlay is rendered');
@@ -5009,14 +5009,14 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
                 }
             }],
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.getScrollable().scrollTo({ y: 10 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $('#button1').trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 10, 'scroll top is not changed');

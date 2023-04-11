@@ -1,5 +1,5 @@
 function checkLink(assert, { content, href, afterLink }, text) {
-    if(href) {
+    if(href || href === '') {
         const matcher = new RegExp(`href="${href}"`);
         assert.ok(!!text.match(matcher), 'HREF OK');
     }

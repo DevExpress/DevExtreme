@@ -430,7 +430,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         renderDelayedTemplates: function(e) {
-            this._waitAsyncTemplates(e).done(() => {
+            this.waitAsyncTemplates(e).done(() => {
                 this._updateContentPosition(true);
             });
             this.callBase.apply(this, arguments);
@@ -485,7 +485,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             const contentTable = contentElement.children().first();
             if(changeType === 'append' || changeType === 'prepend') {
-                this._waitAsyncTemplates(change).done(() => {
+                this.waitAsyncTemplates(change).done(() => {
                     const $tBodies = this._getBodies(tableElement);
                     if($tBodies.length === 1) {
                         this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
@@ -679,11 +679,14 @@ const VirtualScrollingRowsViewExtender = (function() {
             const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
             const zeroTopPosition = e.scrollOffset.top === 0;
             const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;
+            const hasScrolled = isScrollTopChanged || e.forceUpdateScrollPosition;
+            const isValidScrollTarget = this._hasHeight || !legacyScrollingMode && zeroTopPosition;
 
-            if((isScrollTopChanged || e.forceUpdateScrollPosition) && (this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+            if(hasScrolled && isValidScrollTarget && this._rowHeight) {
                 this._scrollTop = e.scrollOffset.top;
+                const isVirtualRowRendering = isVirtualMode(this) || this.option('scrolling.rowRenderingMode') !== 'standard';
 
-                if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false) {
+                if(isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
                     this._updateContentItemSizes();
                     this._updateViewportSize(null, this._scrollTop);
                 }
@@ -1598,31 +1601,38 @@ export const virtualScrollingModule = {
                         }
                     });
                 },
+
+                hasResizeTimeout: function() {
+                    return !!this._resizeTimeout;
+                },
+
                 resize: function() {
-                    const that = this;
-                    const callBase = that.callBase;
+                    const callBase = this.callBase;
                     let result;
 
-                    if(isVirtualMode(that) || gridCoreUtils.isVirtualRowRendering(that)) {
-                        clearTimeout(that._resizeTimeout);
-                        const diff = new Date() - that._lastTime;
-                        const updateTimeout = that.option('scrolling.updateTimeout');
-                        if(that._lastTime && diff < updateTimeout) {
+                    if(isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
+                        clearTimeout(this._resizeTimeout);
+                        this._resizeTimeout = null;
+
+                        const diff = new Date() - this._lastTime;
+                        const updateTimeout = this.option('scrolling.updateTimeout');
+
+                        if(this._lastTime && diff < updateTimeout) {
                             result = new Deferred();
-                            that._resizeTimeout = setTimeout(function() {
-                                callBase.apply(that).done(result.resolve).fail(result.reject);
-                                that._lastTime = new Date();
+                            this._resizeTimeout = setTimeout(() => {
+                                this._resizeTimeout = null;
+                                callBase.apply(this).done(result.resolve).fail(result.reject);
+                                this._lastTime = new Date();
                             }, updateTimeout);
-                            that._lastTime = new Date();
+                            this._lastTime = new Date();
                         } else {
-                            result = callBase.apply(that);
-                            if(that._dataController.isLoaded()) {
-                                that._lastTime = new Date();
+                            result = callBase.apply(this);
+                            if(this._dataController.isLoaded()) {
+                                this._lastTime = new Date();
                             }
                         }
-
                     } else {
-                        result = callBase.apply(that);
+                        result = callBase.apply(this);
                     }
                     return result;
                 },

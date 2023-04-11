@@ -27,7 +27,8 @@ const resources = [{
 }];
 
 ['week', 'month', 'timelineDay', 'timelineMonth'].forEach((view) => {
-  testJquery(`cell templates should work in JQuery in ${view}`,
+  testJquery(
+    `cell templates should work in JQuery in ${view}`,
     async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -38,7 +39,8 @@ const resources = [{
         screenshotComparerOptions,
       ))
         .ok();
-    }).before(
+    },
+  ).before(
     async (t, { platform }) => {
       await t.resizeWindow(1200, 800);
       await createWidget(platform, 'dxScheduler', {
@@ -63,7 +65,8 @@ const resources = [{
     },
   ).after(async (t) => restoreBrowserSize(t));
 
-  testReact(`cell templates should work in React in ${view}`,
+  testReact(
+    `cell templates should work in React in ${view}`,
     async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -74,7 +77,8 @@ const resources = [{
         screenshotComparerOptions,
       ))
         .ok();
-    }).before(
+    },
+  ).before(
     async (t, { platform }) => {
       await t.resizeWindow(1200, 800);
       await createWidget(platform, 'dxScheduler', {

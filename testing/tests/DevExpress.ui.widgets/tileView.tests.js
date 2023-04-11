@@ -521,7 +521,7 @@ QUnit.module('keyboard navigation', {
         const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         keyboard.keyDown('home');
 
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).first().hasClass('dx-state-focused'), 'first element obtained dx-state-focused after press home');
@@ -532,7 +532,7 @@ QUnit.module('keyboard navigation', {
         const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
         keyboard.keyDown('end');
 
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).last().hasClass('dx-state-focused'), 'last element obtained dx-state-focused after press end');
@@ -567,7 +567,7 @@ $.each(configs, function(direction, config) {
             const instance = $('#widget').dxTileView('instance');
 
             $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown('right');
 
             assert.equal(isRenderer(instance.option('focusedElement')), !!globalConfig().useJQuery, 'focusedElement is correct');
@@ -584,7 +584,7 @@ $.each(configs, function(direction, config) {
             const keyboard = this.keyboard;
 
             $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown('left');
 
             assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass('dx-state-focused'), 'left element obtained dx-state-focused after press left arrow');
@@ -600,7 +600,7 @@ $.each(configs, function(direction, config) {
             const keyboard = this.keyboard;
 
             $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown('down');
 
             assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass('dx-state-focused'), 'down element obtained dx-state-focused after press down arrow');
@@ -616,7 +616,7 @@ $.each(configs, function(direction, config) {
             const keyboard = this.keyboard;
 
             $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown('pageDown');
 
             assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass('dx-state-focused'), 'pageDown element obtained dx-state-focused after press pageDown arrow');
@@ -632,7 +632,7 @@ $.each(configs, function(direction, config) {
             const keyboard = this.keyboard;
 
             $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown('up');
 
             assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass('dx-state-focused'), 'up element obtained dx-state-focused after press up arrow');
@@ -648,7 +648,7 @@ $.each(configs, function(direction, config) {
             const keyboard = this.keyboard;
 
             $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown('pageUp');
 
             assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass('dx-state-focused'), 'up element obtained dx-state-focused after press pageUp');
@@ -672,7 +672,7 @@ $.each(configs, function(direction, config) {
             assert.equal(instance.scrollPosition(), 0, 'scrollPosition equal zero on init');
 
             $element.find(TILEVIEW_ITEM_SELECTOR).first().trigger('dxpointerdown');
-            this.clock.tick();
+            this.clock.tick(10);
             keyboard.keyDown(testConfig.forward);
             assert.equal(instance.scrollPosition(), 80, 'scrollPosition equal 80 after press forward arrow (item num 7)');
 

@@ -497,7 +497,7 @@ QUnit.module('deferred datasource', {
             items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }]
         });
         dropDownButton.option('selectedItemKey', 2);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(getActionButton(dropDownButton).text(), 'Item 2', 'action button has been changed');
     });
 });

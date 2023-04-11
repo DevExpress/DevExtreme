@@ -1480,7 +1480,7 @@ QUnit.module('adaptivity', {
         const $item2 = $('.dx-list-item').eq(1);
 
         $($item2).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($item2.hasClass('dx-state-focused'), 'only item2 is focused');
         assert.ok(!$item1.hasClass('dx-state-focused'), 'only item2 is focused');
@@ -1892,6 +1892,22 @@ QUnit.module('adaptivity without hiding in menu', {
     });
 });
 
+QUnit.module('Toolbar disposing', () => {
+    QUnit.test('_dimensionChanged call should not raise any error if toolbar is disposed (T1147410)', function(assert) {
+        const toolbar = $('#toolbar').dxToolbar().dxToolbar('instance');
+
+        toolbar.dispose();
+
+        try {
+            toolbar._dimensionChanged();
+        } catch(e) {
+            assert.ok(false, e);
+        } finally {
+            assert.ok(true, 'the exception is not thrown');
+        }
+    });
+});
+
 QUnit.module('Waiting fonts for material theme', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -1930,7 +1946,7 @@ QUnit.module('Waiting fonts for material theme', {
             height: 50
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         themes.isMaterial = origIsMaterial;
     });
 
@@ -1963,4 +1979,3 @@ QUnit.module('Waiting fonts for material theme', {
         themes.isMaterial = origIsMaterial;
     });
 });
-

@@ -233,13 +233,13 @@ QUnit.module('widget sizing render', () => {
     });
 
     [true, false].forEach(autoResizeEnabled => {
-        [100, '100px', '50%', '20vh'].forEach(minHeight => {
+        [100, '100px', '50%', '20vh', '10em'].forEach(minHeight => {
             QUnit.test(`input should have correct size when autoResizeEnabled is ${autoResizeEnabled} and minHeight equals ${minHeight}`, function(assert) {
                 const $element = $('#widget').dxTextArea({ minHeight, autoResizeEnabled });
                 const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 const inputHeight = $input.outerHeight();
                 const borderHeight = parseInt($element.css('borderTopWidth'));
-                const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode);
+                const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode, $element.get(0));
 
                 assert.strictEqual(inputHeight + 2 * borderHeight, parsedMinHeight, 'height is ok');
             });

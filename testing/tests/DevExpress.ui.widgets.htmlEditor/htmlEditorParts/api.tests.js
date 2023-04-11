@@ -7,6 +7,8 @@ import { isObject } from 'core/utils/type';
 const { test, module: testModule } = QUnit;
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -254,19 +256,52 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>', 'redo operation');
     });
 
-    test('clearHistory', function(assert) {
+    test('value should not change on undo after "clearHistory" call', function(assert) {
         this.createEditor();
         this.instance.insertText(0, 'a');
-        this.clock.tick(1000);
-        this.instance.insertText(0, 'b');
-        this.clock.tick(1000);
-        this.instance.insertText(0, 'c');
         this.clock.tick(1000);
 
         this.instance.clearHistory();
         this.instance.undo();
 
-        assert.strictEqual(this.instance.option('value'), '<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>', 'history is empty');
+        assert.strictEqual(this.instance.option('value'), '<p>aTest 1</p><p>Test 2</p><p>Test 3</p>', 'value is actual');
+    });
+
+    test('value should not change on redo after "clearHistory" call', function(assert) {
+        this.createEditor();
+        this.instance.insertText(0, 'a');
+        this.clock.tick(1000);
+        this.instance.undo();
+
+        this.instance.clearHistory();
+        this.instance.redo();
+
+        assert.strictEqual(this.instance.option('value'), '<p>Test 1</p><p>Test 2</p><p>Test 3</p>', 'value is actual');
+    });
+
+    test('undo button should have disabled state after call "clearHistory"', function(assert) {
+        this.options.toolbar = { items: ['undo'] };
+        this.createEditor();
+        this.instance.insertText(0, 'a');
+        this.clock.tick(1000);
+        const $undoButton = $('#htmlEditor').find(`.${BUTTON_CLASS}`);
+
+        this.instance.clearHistory();
+
+        assert.strictEqual($undoButton.hasClass(DISABLED_STATE_CLASS), true, 'undo button disabled');
+    });
+
+    test('redo button should have disabled state after call "undo"->"clearHistory"', function(assert) {
+        this.options.toolbar = { items: ['redo'] };
+        this.createEditor();
+        this.instance.insertText(0, 'a');
+        this.clock.tick(1000);
+        const $redoButton = $('#htmlEditor').find(`.${BUTTON_CLASS}`);
+
+        this.instance.undo();
+        this.instance.clearHistory();
+
+        assert.strictEqual($redoButton.hasClass(DISABLED_STATE_CLASS), true, 'redo button disabled');
     });
 
     test('registerModule', function(assert) {
@@ -356,9 +391,9 @@ testModule('API', moduleConfig, () => {
 
         this.instance.on('valueChanged', valueChangeStub);
         this.instance.option('value', '<p>First row</p><p>Second row</p>');
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.option('value', 'New text');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(valueChangeStub.lastCall.args[0].value, '<p>New text</p>');
         assert.strictEqual(updateContentSpy.callCount, 2, 'value changed twice -> update content two times');
@@ -371,7 +406,7 @@ testModule('API', moduleConfig, () => {
 
         this.instance.on('valueChanged', valueChangeStub);
         this.instance.option('value', '<p>new markup</p><p></p>');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(valueChangeStub.callCount, 1);
         assert.strictEqual(valueChangeStub.getCall(0).args[0].value, '<p>new markup</p>', 'markup optimized');
@@ -384,7 +419,7 @@ testModule('API', moduleConfig, () => {
 
         this.instance.on('valueChanged', valueChangeStub);
         this.instance.option('value', '<p>markup</p><p></p>');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(valueChangeStub.callCount, 0);
     });
@@ -432,14 +467,14 @@ testModule('API', moduleConfig, () => {
         };
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     test('onContentReady event should trigger after editor without transcluded content rendered', function(assert) {
         this.options.onContentReady = sinon.stub();
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
     });
 
@@ -447,7 +482,7 @@ testModule('API', moduleConfig, () => {
         this.options = { onContentReady: sinon.stub() };
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
     });
 
@@ -456,7 +491,7 @@ testModule('API', moduleConfig, () => {
         this.options = { onContentReady: sinon.stub() };
         this.createEditor();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
     });
 });

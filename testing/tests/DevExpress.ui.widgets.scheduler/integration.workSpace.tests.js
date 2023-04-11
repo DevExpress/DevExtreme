@@ -764,25 +764,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
     });
 
     if(isDesktopEnvironment()) {
-        test('ScrollTo of dateTable scrollable shouldn\'t be called when dateTable scrollable scroll in timeLine view', function(assert) {
-            const scheduler = createWrapper({
-                currentDate: new Date(2017, 3, 16),
-                dataSource: [],
-                currentView: 'timelineWeek',
-                height: 500
-            });
-
-            const headerScrollable = scheduler.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
-            const dateTableScrollable = scheduler.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-            const headerScrollToSpy = sinon.spy(headerScrollable, 'scrollTo');
-            const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
-
-            dateTableScrollable.scrollBy(1000);
-
-            assert.ok(headerScrollToSpy.calledOnce, 'header scrollTo was called');
-            assert.notOk(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was not called');
-        });
-
         test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', function(assert) {
             const date = new Date(2019, 5, 1, 9, 40);
 
@@ -812,45 +793,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineWeek');
         });
     }
-
-    test('ScrollTo of dateTable & header scrollable should are called when headerScrollable scroll', function(assert) {
-        const scheduler = createWrapper({
-            currentDate: new Date(2017, 3, 16),
-            dataSource: [],
-            currentView: 'timelineWeek',
-            height: 500
-        });
-
-        const headerScrollable = scheduler.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
-        const dateTableScrollable = scheduler.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-        const headerScrollToSpy = sinon.spy(headerScrollable, 'scrollTo');
-        const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
-
-        headerScrollable.scrollBy(1000);
-
-        assert.ok(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was called');
-        assert.notOk(headerScrollToSpy.calledOnce, 'header scrollTo wasn\'t called');
-    });
-
-    test('ScrollTo of sidebar scrollable shouldn\'t be called when sidebar scrollable scroll and crossScrollingEnabled is turn on', function(assert) {
-        const scheduler = createWrapper({
-            currentDate: new Date(2017, 3, 16),
-            dataSource: [],
-            crossScrollingEnabled: true,
-            currentView: 'week',
-            height: 500
-        });
-
-        const sideBarScrollable = scheduler.instance.$element().find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-        const dateTableScrollable = scheduler.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-        const sideBarScrollToSpy = sinon.spy(sideBarScrollable, 'scrollTo');
-        const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
-
-        sideBarScrollable.scrollBy(1000);
-
-        assert.notOk(sideBarScrollToSpy.calledOnce, 'sidebar scrollTo was not called');
-        assert.ok(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was called');
-    });
 
     test('intervalCount should be passed to workSpace', function(assert) {
         const scheduler = createWrapper({

@@ -503,7 +503,7 @@ const Form = Widget.inherit({
             }
         });
 
-        tryUpdateTabPanelInstance([{ guid: item.guid }, ...item.tabs], tabPanel);
+        tryUpdateTabPanelInstance([{ guid: item.guid }, ...(item.tabs ?? [])], tabPanel);
     },
 
     _itemGroupTemplate: function(item, e, $container) {

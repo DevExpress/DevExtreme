@@ -1,6 +1,6 @@
 import './core';
 import './number';
-// eslint-disable-next-line no-restricted-imports
+// eslint-disable-next-line no-restricted-imports, import/no-unresolved
 import 'globalize/date';
 
 const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];

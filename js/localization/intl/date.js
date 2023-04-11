@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import localizationCoreUtils from '../core';
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const NARROW_NO_BREAK_SPACE_REGEX = /[\u202F]/g;
 
 const getIntlFormatter = format => {
     return date => {
@@ -38,7 +39,9 @@ const getFormatter = format => {
 };
 
 function formatDateTime(date, format) {
-    return getFormatter(format)(date).replace(SYMBOLS_TO_REMOVE_REGEX, '');
+    return getFormatter(format)(date)
+        .replace(SYMBOLS_TO_REMOVE_REGEX, '')
+        .replace(NARROW_NO_BREAK_SPACE_REGEX, ' ');
 }
 
 const formatNumber = number => {

@@ -945,7 +945,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
         filterRowInput.find('input').val(90);
         filterRowInput.find('input').trigger('keyup');
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         const $button = testElement.find('.dx-apply-button');
         assert.ok(!$button.hasClass('dx-state-disabled'), 'button is enabled');
@@ -1051,7 +1051,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
         filterRowInput.find('input').val(90);
         filterRowInput.find('input').trigger('keyup');
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         const $editorContainer = filterRowInput.closest('.dx-editor-container');
         const $filterCellContainer = filterRowInput.closest('.dx-editor-cell');
@@ -1080,7 +1080,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
         filterRowInput.find('input').val(90);
         filterRowInput.find('input').trigger('keyup');
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         $button = testElement.find('.dx-apply-button');
         $($button).trigger('dxclick');
@@ -1251,7 +1251,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $testElement.find('.dx-datagrid-filter-row .dx-texteditor input').first();
         filterRowInput.val(90);
         filterRowInput.trigger('keyup');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.headerPanel.render();
@@ -1283,7 +1283,7 @@ QUnit.module('Filter Row', {
         const $filterMenu = $('.dx-filter-menu').first();
 
         $filterMenu.trigger('focusin');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $rootMenuItem = $filterMenu.find('.dx-menu-item');
         $rootMenuItem.trigger('mouseenter');
@@ -1491,7 +1491,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             .find('input')
             .focus();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok($filterMenu.parent().find('input').is(':focus'), 'filter input is focused');
 
         const rootMenuItem = $filterMenu.find('.dx-menu-item').eq(0);
@@ -1507,7 +1507,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             .find('.dx-menu-item')
             .trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($filterMenu.parent().find('input').is(':focus'), 'filter input is focused');
     });
@@ -1527,7 +1527,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // act
         that.editorFactoryController.focus(that.gridContainer.find('td').first());
-        that.clock.tick();
+        that.clock.tick(10);
 
         assert.roughEqual(that.gridContainer.find('.dx-datagrid-focus-overlay').outerHeight(), that.gridContainer.find('td').first().outerHeight(), 1.01, 'height focus overlay');
     });
@@ -1685,7 +1685,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // act
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
@@ -1711,7 +1711,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // act
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $startRange = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first();
@@ -1892,7 +1892,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // arrange
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
@@ -1934,7 +1934,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.columnHeadersView.render($testElement);
 
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
         assert.equal($startRangeInput.length, 1, 'has input');
@@ -2174,7 +2174,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.columnHeadersView.render($testElement);
 
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');

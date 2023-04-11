@@ -2,6 +2,7 @@
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
+// eslint-disable-next-line import/no-relative-packages
 import { renderTemplate } from '../../../../../node_modules/@devextreme/runtime/cjs/declarations/index';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,9 +65,9 @@ describe('DomComponentWrapper', () => {
         } as Partial<DomComponentWrapperProps> as any);
 
         const { properties } = component;
-        expect(renderTemplate).not.toBeCalled();
+        expect(renderTemplate).not.toHaveBeenCalled();
         (properties as any).itemTemplate();
-        expect(renderTemplate).toBeCalledTimes(1);
+        expect(renderTemplate).toHaveBeenCalledTimes(1);
         expect('itemTemplate' in properties).toStrictEqual(true);
         expect(properties.tabIndex).toStrictEqual(2);
         expect(properties.disabled).toStrictEqual(true);
@@ -82,9 +83,9 @@ describe('DomComponentWrapper', () => {
         } as Partial<DomComponentWrapperProps> as any);
 
         const { properties } = component;
-        expect(renderTemplate).not.toBeCalled();
+        expect(renderTemplate).not.toHaveBeenCalled();
         (properties as any).itemTemplate();
-        expect(renderTemplate).not.toBeCalled();
+        expect(renderTemplate).not.toHaveBeenCalled();
       });
 
       it('picks props except valueChange', () => {
@@ -206,8 +207,8 @@ describe('DomComponentWrapper', () => {
 
         component.setupWidget();
 
-        expect(DomComponentMock).toBeCalledTimes(1);
-        expect(DomComponentMock).toBeCalledWith(widgetRef.current, spy.mock.results[0].value);
+        expect(DomComponentMock).toHaveBeenCalledTimes(1);
+        expect(DomComponentMock).toHaveBeenCalledWith(widgetRef.current, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -219,7 +220,7 @@ describe('DomComponentWrapper', () => {
         const dispose = component.setupWidget();
         dispose();
 
-        expect((disposeDom as any).mock.instances[0].dispose).toBeCalledTimes(1);
+        expect((disposeDom as any).mock.instances[0].dispose).toHaveBeenCalledTimes(1);
       });
 
       it('updateWidget. Widget is not initialized', () => {
@@ -228,8 +229,8 @@ describe('DomComponentWrapper', () => {
 
         component.updateWidget();
 
-        expect(DomComponentMock).toBeCalledTimes(0);
-        expect(spy).toBeCalledTimes(0);
+        expect(DomComponentMock).toHaveBeenCalledTimes(0);
+        expect(spy).toHaveBeenCalledTimes(0);
       });
 
       it('updateWidget. Widget is initialized', () => {
@@ -240,9 +241,9 @@ describe('DomComponentWrapper', () => {
 
         component.updateWidget();
 
-        expect(instance.beginUpdate).toBeCalledTimes(1);
+        expect(instance.beginUpdate).toHaveBeenCalledTimes(1);
         expect(spy.mock.results[0].value).toEqual(component.properties);
-        expect(instance.endUpdate).toBeCalledTimes(1);
+        expect(instance.endUpdate).toHaveBeenCalledTimes(1);
       });
 
       it('updateWidget. Properties are not changed', () => {
@@ -253,9 +254,9 @@ describe('DomComponentWrapper', () => {
         (getUpdatedOptions as jest.Mock) = jest.fn(() => []);
         component.updateWidget();
 
-        expect(instance.beginUpdate).toBeCalledTimes(0);
-        expect(instance.option).toBeCalledTimes(0);
-        expect(instance.endUpdate).toBeCalledTimes(0);
+        expect(instance.beginUpdate).toHaveBeenCalledTimes(0);
+        expect(instance.option).toHaveBeenCalledTimes(0);
+        expect(instance.endUpdate).toHaveBeenCalledTimes(0);
       });
 
       it('updateWidget. Properties are changed', () => {
@@ -269,9 +270,9 @@ describe('DomComponentWrapper', () => {
         ]);
         component.updateWidget();
 
-        expect(instance.beginUpdate).toBeCalledTimes(1);
-        expect(instance.option).toBeCalledWith('someProp', 'someValue');
-        expect(instance.endUpdate).toBeCalledTimes(1);
+        expect(instance.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(instance.option).toHaveBeenCalledWith('someProp', 'someValue');
+        expect(instance.endUpdate).toHaveBeenCalledTimes(1);
       });
 
       it('setRootElementRef, set rootElementRef to div ref', () => {

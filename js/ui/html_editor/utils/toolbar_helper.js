@@ -184,6 +184,10 @@ function getLinkRange(module, range) {
     return result;
 }
 
+function getColorFromFormat(value) {
+    return Array.isArray(value) ? value[0] : value;
+}
+
 function prepareLinkHandler(module) {
     return () => {
         module.quill.focus();
@@ -191,7 +195,7 @@ function prepareLinkHandler(module) {
         let selection = module.quill.getSelection();
         const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
-        const isCursorAtLink = formats.link && selection?.length === 0;
+        const isCursorAtLink = formats.link !== undefined && selection?.length === 0;
         let href = formats.link || '';
 
         if(isCursorAtLink) {
@@ -549,9 +553,9 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
         formData: {
             width: startCellWidth,
             height: isDefined(formats.cellHeight) ? parseInt(formats.cellHeight) : getOuterHeight($cell),
-            backgroundColor: formats.cellBackgroundColor || cellStyles.backgroundColor,
+            backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || cellStyles.backgroundColor,
             borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
-            borderColor: formats.cellBorderColor || cellStyles.borderTopColor,
+            borderColor: getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor,
             borderWidth: parseInt(isDefined(formats.cellBorderWidth) ? formats.cellBorderWidth : cellStyles.borderTopWidth),
             alignment: formats.cellTextAlign || startTextAlign,
             verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,

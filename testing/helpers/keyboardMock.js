@@ -57,8 +57,7 @@ let focused;
                 try {
                     start = input.selectionStart;
                     end = input.selectionEnd;
-                } catch(e) {
-                }
+                } catch(e) {}
             }
             return { start: start, end: end };
         },

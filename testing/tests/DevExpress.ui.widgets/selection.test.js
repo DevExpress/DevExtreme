@@ -451,7 +451,7 @@ QUnit.test('clearSelection should work if it call after select', function(assert
 
     // act
     selection.clearSelection();
-    this.clock.tick();
+    this.clock.tick(10);
 
     // assert
     assert.deepEqual(selection.getSelectedItemKeys(), [], 'selection is cleared');
@@ -799,7 +799,7 @@ QUnit.test('selection should work with custom store without filter implementatio
 
         dataSource.load();
         selection.selectedItemKeys(2);
-        clock.tick();
+        clock.tick(10);
     } finally {
         clock.restore();
     }

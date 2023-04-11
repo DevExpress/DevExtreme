@@ -1,6 +1,10 @@
 import { isDefined } from '../../../core/utils/type';
 import { getPageWidth, getPageHeight } from './pdf_utils';
+
 import { roundToThreeDecimals } from './draw_utils';
+
+import { getMultiPageRowPages, checkPageContainsOnlyHeader } from './rows_spliting_utils/get_multipage_row_pages';
+import { createOnSplitMultiPageRow } from './rows_spliting_utils/create_on_split_multipage_row';
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],
@@ -28,8 +32,8 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     const headerHeight = headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0);
 
     const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
-        (pagesLength, currentCoordinate) => {
-            const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
+        (isFirstPage, currentCoordinate) => {
+            const additionalHeight = (!isFirstPage && options.repeatHeaders)
                 ? headerHeight
                 : 0;
             return roundToThreeDecimals(currentCoordinate + additionalHeight) <= roundToThreeDecimals(maxBottomRight.y);
@@ -54,8 +58,9 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
             currentPageRects.push(args.topRect);
             rectsToSplit.push(args.bottomRect);
-        });
-
+        },
+        createOnSplitMultiPageRow(doc, options, headerHeight, maxBottomRight)
+    );
     if(options.repeatHeaders) {
         for(let i = 1; i < verticallyPages.length; i++) {
             verticallyPages[i].forEach(rect => rect.y += headerHeight);
@@ -102,22 +107,21 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             pageIndex += 1;
         }
     }
-
     return verticallyPages.map(rects => {
         return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
     });
 }
 
-
-function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredicate, onSeparateCallback) {
+function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPage, onSeparateCallback, onSplitMultiPageRow) {
     const pages = [];
     const rectsToSplit = [...rects];
+    const isFitToPageForMultiPageRow = (isFirstPage, rectHeight) => (isFitToPage(isFirstPage, rectHeight + marginValue));
 
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectCoordinate = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectCoordinate = rect[coordinate] + rect[dimension];
-            if(checkPredicate(pages.length, currentRectCoordinate)) {
+            if(isFitToPage(pages.length === 0, currentRectCoordinate)) {
                 if(currentPageMaxRectCoordinate <= currentRectCoordinate) {
                     currentPageMaxRectCoordinate = currentRectCoordinate;
                 }
@@ -127,6 +131,15 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
             }
         });
 
+        const isCurrentPageContainsOnlyHeader = checkPageContainsOnlyHeader(currentPageRects, pages.length === 0);
+        const multiPageRowPages = getMultiPageRowPages(
+            currentPageRects,
+            rectsToSplit,
+            isCurrentPageContainsOnlyHeader,
+            onSplitMultiPageRow,
+            isFitToPageForMultiPageRow,
+        );
+
         const rectsToSeparate = rectsToSplit.filter(rect => {
             // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
             const currentRectLeft = rect[coordinate];
@@ -135,7 +148,6 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
                 return true;
             }
         });
-
         rectsToSeparate.forEach(rect => {
             onSeparateCallback(rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit);
             const index = rectsToSplit.indexOf(rect);
@@ -150,22 +162,32 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
                 rectsToSplit.splice(index, 1);
             }
         });
-
         rectsToSplit.forEach(rect => {
             rect[coordinate] = isDefined(currentPageMaxRectCoordinate)
                 ? (rect[coordinate] - currentPageMaxRectCoordinate + marginValue)
                 : rect[coordinate];
         });
 
-        if(currentPageRects.length > 0) {
+        const firstPageContainsHeaderAndMultiPageRow = isCurrentPageContainsOnlyHeader && multiPageRowPages.length > 0;
+        if(firstPageContainsHeaderAndMultiPageRow) {
+            const [firstPage, ...restOfPages] = multiPageRowPages;
+            pages.push([...currentPageRects, ...firstPage]);
+            pages.push(...restOfPages);
+        } else if(currentPageRects.length > 0) {
             pages.push(currentPageRects);
+            pages.push(...multiPageRowPages);
+        } else if(multiPageRowPages.length > 0) {
+            pages.push(...multiPageRowPages);
+            pages.push(rectsToSplit);
         } else {
             pages.push(rectsToSplit);
             break;
         }
+
     }
 
     return pages;
 }
 
 export { splitByPages };
+

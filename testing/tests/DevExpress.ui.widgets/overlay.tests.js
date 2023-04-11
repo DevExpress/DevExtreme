@@ -210,7 +210,7 @@ testModule('render', moduleConfig, () => {
             });
 
             assert.strictEqual(onShowingSpy.called, false);
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual(onShowingSpy.called, true);
         } finally {
             clock.restore();
@@ -260,7 +260,7 @@ testModule('render', moduleConfig, () => {
                 visible: true
             });
             overlay.hide();
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual(overlay.$content().is(':visible'), false);
         } finally {
             clock.restore();
@@ -339,15 +339,18 @@ testModule('render', moduleConfig, () => {
         assert.ok(overlayContainer.parent().hasClass(VIEWPORT_CLASS), 'overlay\'s container is the viewport\'s child');
     });
 
-    test('Overlay does not fail if swatch is undefined (render before documentReady, T713615)', function(assert) {
+    test('Overlay does not fail if swatch is undefined (render before documentReady, T713615, T1143527)', function(assert) {
         const stub = sinon.stub(swatch, 'getSwatchContainer', () => {
-            stub.restore();
             return undefined;
         });
 
-        const container = $('#container');
-        container.dxOverlay({ visible: true }).dxOverlay('instance');
-        assert.expect(0);
+        try {
+            $('#container').dxOverlay({ visible: true });
+
+            assert.expect(0);
+        } finally {
+            stub.restore();
+        }
     });
 
     QUnit.module('Breaking change t1123711 - warning W1021', () => {

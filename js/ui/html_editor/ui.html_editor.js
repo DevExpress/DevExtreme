@@ -158,17 +158,24 @@ const HtmlEditor = Editor.inherit({
         return this._$submitElement;
     },
 
+    _createNoScriptFrame: function() {
+        return $('<iframe>')
+            .css('display', 'none')
+            .attr({
+                // eslint-disable-next-line spellcheck/spell-checker
+                srcdoc: '', // NOTE: srcdoc is used to prevent an excess "Blocked script execution" error in Opera. See T1150911.
+                id: 'xss-frame',
+                sandbox: 'allow-same-origin'
+            });
+    },
+
     _removeXSSVulnerableHtml: function(value) {
         // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
         // "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
         // error can be logged to the console if the html value is XSS vulnerable.
 
-        const $frame = $('<iframe>')
-            .css('display', 'none')
-            .attr({
-                id: 'xss-frame',
-                sandbox: 'allow-same-origin'
-            })
+        const $frame = this
+            ._createNoScriptFrame()
             .appendTo('body');
 
         const frame = $frame.get(0);
@@ -196,9 +203,10 @@ const HtmlEditor = Editor.inherit({
 
         removeInlineHandlers(frameDocumentBody);
 
-        $(frameDocumentBody)
-            .find('script')
-            .remove();
+        // NOTE: Do not use jQuery to prevent an excess "Blocked script execution" error in Safari.
+        frameDocumentBody
+            .querySelectorAll('script')
+            .forEach(scriptNode => { scriptNode.remove(); });
 
         const sanitizedHtml = frameDocumentBody.innerHTML;
 
@@ -501,7 +509,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _moduleOptionChanged: function(moduleName, args) {
-        const moduleInstance = this._quillInstance?.getModule(moduleName);
+        const moduleInstance = this.getModule(moduleName);
         const shouldPassOptionsToModule = Boolean(moduleInstance);
 
         if(shouldPassOptionsToModule) {
@@ -576,7 +584,7 @@ const HtmlEditor = Editor.inherit({
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
-                    this._quillInstance.getModule('resizing').option(args.name, args.value);
+                    this.getModule('resizing').option(args.name, args.value);
                 }
                 break;
             case 'width':
@@ -592,8 +600,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _repaintToolbar: function() {
-        const toolbar = this._quillInstance.getModule('toolbar');
-        toolbar && toolbar.repaint();
+        this._applyToolbarMethod('repaint');
     },
 
     _updateHtmlContent: function(html) {
@@ -631,6 +638,10 @@ const HtmlEditor = Editor.inherit({
         if(this._quillInstance && this._quillInstance.history) {
             this._quillInstance.history[methodName]();
         }
+    },
+
+    _applyToolbarMethod(methodName) {
+        this.getModule('toolbar')?.[methodName]();
     },
 
     addCleanCallback(callback) {
@@ -695,6 +706,7 @@ const HtmlEditor = Editor.inherit({
 
     clearHistory: function() {
         this._applyQuillHistoryMethod('clear');
+        this._applyToolbarMethod('updateHistoryWidgets');
     },
 
     undo: function() {

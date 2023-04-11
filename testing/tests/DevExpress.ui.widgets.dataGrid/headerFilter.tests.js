@@ -163,7 +163,7 @@ QUnit.module('Header Filter dataController', {
         dataSource.load().done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(items, [{ text: 'test1', value: 1 }]);
@@ -203,7 +203,7 @@ QUnit.module('Header Filter dataController', {
         dataSource.load().done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(items, [{ text: 'blank', value: null }, { field: 1, text: 'test1', value: 1 }]);
@@ -244,7 +244,7 @@ QUnit.module('Header Filter dataController', {
         dataSource.load().done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(items, [{ text: 'test1', value: 1 }, { text: 'test2', value: 2 }]);
@@ -2288,7 +2288,7 @@ QUnit.module('Header Filter', {
 
             // act
             that.headerFilterController.showHeaderFilterMenu(0);
-            that.clock.tick();
+            that.clock.tick(10);
 
             // assert
             $popupContent = that.headerFilterView.getPopupContainer().$content();
@@ -3909,7 +3909,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // act
         that.headerFilterController.getDataSource(column).load({ userData: {} });
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.deepEqual(loadOptions.customQueryParams, { param: 'test' }, 'custom query param');
@@ -3933,7 +3933,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // act
         const dataSource = that.headerFilterController.getDataSource(column);
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal(dataSource.group.length, 1, 'one group parameter');
@@ -4035,7 +4035,7 @@ QUnit.module('Header Filter with real columnsController', {
         dataSourceOptions.load({ group: dataSourceOptions.group }).done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(getTreeText(items), ['1992', 'September', '6', '12', '13'], 'loaded data');
@@ -4098,7 +4098,7 @@ QUnit.module('Header Filter with real columnsController', {
                 }).done(function(data) {
                     items = data;
                 });
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.deepEqual(getTreeText(items), [
@@ -4156,7 +4156,7 @@ QUnit.module('Header Filter with real columnsController', {
         dataSourceOptions.load({}).done(function(data) {
             items = data;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(getTreeText(items), [
@@ -4402,7 +4402,7 @@ QUnit.module('Header Filter with real columnsController', {
             // act
             const list = $popupContent.find('.dx-list').dxList('instance');
             list.scrollBy(100);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             $listItemElements = $popupContent.find('.dx-list-item-content');
@@ -4411,7 +4411,134 @@ QUnit.module('Header Filter with real columnsController', {
             assert.strictEqual($listItemElements.eq(1).text(), 'value0');
             assert.strictEqual($listItemElements.eq(-1).text(), 'value39');
         });
+
+        // T1133935
+        [true, false].forEach((syncLookupFilterValues) => {
+            [true, false].forEach((lookupDataSourceHasNullItem) => {
+                QUnit.test(`Header filter should not contain two blank items if dataSource has item with nullish lookup value,
+                        syncLookupFilterValues = ${syncLookupFilterValues}
+                        lookupOptimization = ${hasLookupOptimization}
+                        lookupDataSourceHasNullItem = ${lookupDataSourceHasNullItem}`,
+                function(assert) {
+                    const lookupDataSource = [
+                        { id: 1, value: 'value1' },
+                        { id: 2, value: 'value2' }
+                    ];
+
+                    if(lookupDataSourceHasNullItem) {
+                        lookupDataSource.unshift({ id: null, value: null });
+                    }
+
+                    // arrange
+                    this.options.columns = [{
+                        dataField: 'column1',
+                        allowFiltering: true,
+                        lookup: {
+                            dataSource: lookupDataSource,
+                            valueExpr: 'id',
+                            displayExpr: 'value',
+                        },
+                        calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                    }];
+
+                    this.options.dataSource = [
+                        { column1: 1, text: 'value1' },
+                        { column1: 2, text: 'value2' },
+                        { column1: null, text: null, },
+                    ];
+
+
+                    this.options.syncLookupFilterValues = syncLookupFilterValues;
+
+                    const $testElement = $('#container');
+
+                    this.setupDataGrid();
+                    this.headerFilterView.render($testElement);
+
+                    // act
+                    this.headerFilterController.showHeaderFilterMenu(0);
+
+                    // assert
+                    const $popupContent = this.headerFilterView.getPopupContainer().$content();
+                    const $listItemElements = $popupContent.find('.dx-list-item-content');
+                    assert.equal($listItemElements.length, 3, 'count list item');
+                    assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+                    assert.strictEqual($listItemElements.eq(1).text(), 'value1');
+                    assert.strictEqual($listItemElements.eq(2).text(), 'value2');
+                });
+            });
+        });
     });
+
+    QUnit.test('There is no additional request to grid datasource after searching in filter row editor with groupPaging: true', function(assert) {
+        // arrange
+        const loadSpy = sinon.spy((loadOptions) => {
+            const d = $.Deferred();
+            new ArrayStore([
+                { column1: 1 },
+                { column1: 2 },
+            ]).load(loadOptions).done(items => d.resolve({
+                data: items,
+                totalCount: 2,
+            }));
+
+            return d;
+        });
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+
+        this.options.dataSource = { load: loadSpy };
+        this.options.syncLookupFilterValues = true;
+        this.options.remoteOperations = { groupPaging: true };
+        this.options.headerFilter.allowSearch = true;
+
+        const $testElement = $('#container');
+
+        this.setupDataGrid();
+        this.columnHeadersView.render($testElement);
+        this.headerFilterView.render($testElement);
+
+        // assert
+        assert.strictEqual(loadSpy.callCount, 1);
+        loadSpy.reset();
+
+        // act
+        this.headerFilterController.showHeaderFilterMenu(0);
+
+        // assert
+        const $popupContent = this.headerFilterView.getPopupContainer().$content();
+        let $listItemElements = $popupContent.find('.dx-list-item-content');
+        assert.equal($listItemElements.length, 3, 'count list item');
+        assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+        assert.strictEqual($listItemElements.eq(1).text(), 'value1');
+        assert.strictEqual($listItemElements.eq(2).text(), 'value2');
+
+        // assert
+        assert.strictEqual(loadSpy.callCount, 1);
+        loadSpy.reset();
+
+        // act
+        const list = $popupContent.find('.dx-list').dxList('instance');
+        list.option('searchValue', 'value1');
+
+        // assert
+        $listItemElements = $popupContent.find('.dx-list-item-content');
+        assert.equal($listItemElements.length, 1, 'count list item');
+        assert.strictEqual($listItemElements.eq(0).text(), 'value1');
+
+        // assert
+        assert.strictEqual(loadSpy.callCount, 0);
+        loadSpy.reset();
+    });
+
 
     // T938460
     QUnit.test('The selection should work correctly after searching when calculateDisplayValue is used and when a lookup\'s key is specified', function(assert) {
@@ -4460,6 +4587,7 @@ QUnit.module('Header Filter with real columnsController', {
             }]
         };
         this.setupDataGrid();
+        this.columnHeadersView.render($testElement);
         this.columnHeadersView.render($testElement);
         this.headerFilterView.render($testElement);
 

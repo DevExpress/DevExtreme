@@ -2365,6 +2365,7 @@ export interface ColumnBase<TRowData = any> {
     allowHeaderFiltering?: boolean;
     /**
      * @docid GridBaseColumn.allowHiding
+     * @default false &for(command column)
      * @default true
      * @public
      */
@@ -2611,7 +2612,6 @@ export interface ColumnBase<TRowData = any> {
     /**
      * @docid GridBaseColumn.sortIndex
      * @default undefined
-     * @fires GridBaseOptions.onOptionChanged
      * @public
      */
     sortIndex?: number;

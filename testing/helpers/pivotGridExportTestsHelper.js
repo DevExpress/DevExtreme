@@ -1,4 +1,4 @@
-import 'ui/pivot_grid/ui.pivot_grid';
+import '__internal/grids/pivot_grid/module_widget';
 
 import $ from 'jquery';
 import { isDefined } from '../../../js/core/utils/type.js';

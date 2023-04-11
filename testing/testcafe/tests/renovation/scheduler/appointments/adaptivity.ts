@@ -18,7 +18,8 @@ fixture.disablePageReloads.skip('Renovated scheduler - Adaptive appointments');
   { groupOrientation: 'vertical', rtlEnabled: true },
   { groupOrientation: 'horizontal', rtlEnabled: true },
 ].forEach(({ groupOrientation, rtlEnabled }) => {
-  test(`it should be rendered correctly if groupOrientation=${groupOrientation}, rtl=${rtlEnabled}`,
+  test(
+    `it should be rendered correctly if groupOrientation=${groupOrientation}, rtl=${rtlEnabled}`,
     async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
       const { collectors } = scheduler;
@@ -41,7 +42,8 @@ fixture.disablePageReloads.skip('Renovated scheduler - Adaptive appointments');
           screenshotComparerOptions,
         ))
         .ok();
-    }).before(
+    },
+  ).before(
     async (t, { platform }) => {
       await t.resizeWindow(1200, 800);
       await createWidget(platform, 'dxScheduler', {

@@ -22,7 +22,7 @@ QUnit.module('Material theme', baseModuleConfig, () => {
             }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataGridInstance.editCell(0, 0);
 
         const beforeElement = window.getComputedStyle(document.querySelector('.dx-placeholder'), ':before');
@@ -47,7 +47,7 @@ QUnit.module('Material theme', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const scrollable = dataGridInstance.getScrollable();
 

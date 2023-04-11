@@ -77,7 +77,8 @@ test('Scheduler should renders correctly if resource dataSource is not set', asy
     .ok()
     .expect(appointment2.element.exists)
     .ok();
-}).before(async () => createWidget('dxScheduler',
+}).before(async () => createWidget(
+  'dxScheduler',
   {
     height: 600,
     width: 800,
@@ -99,7 +100,8 @@ test('Scheduler should renders correctly if resource dataSource is not set', asy
       fieldExpr: 'roomId',
       label: 'Room',
     }],
-  }));
+  },
+));
 
 test('Resource with allowMultiple should be set correctly for new the appointment (T1075028)', async (t) => {
   const scheduler = new Scheduler('#container');

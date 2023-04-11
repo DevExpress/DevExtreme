@@ -54,47 +54,103 @@ if(isDesktopEnvironment()) {
             });
         };
 
-        const testCases = [
-            {
-                name: 'header',
-                scrollPosition: { x: 10 },
-                text: 'header'
-            }, {
-                name: 'dataTable',
-                scrollPosition: { x: 10 },
-                text: 'dataTable(horizontal scrolling)'
-            }, {
-                name: 'dataTable',
-                scrollPosition: { y: 10 },
-                text: 'dataTable(vertical scrolling)'
-            }, {
-                name: 'sideBar',
-                scrollPosition: { y: 10 },
-                text: 'sideBar'
-            }
-        ];
+        const getScrollableArray = (scheduler) => {
+            const { getHeaderScrollable, getDateTableScrollable, getSideBarScrollable } = scheduler.workSpace;
 
-        testCases.forEach(testCase => {
-            test(`When ${testCase.text} was scrolling, semaphore should prevent scroll myself`, function(assert) {
-                const scheduler = createScheduler();
+            return [
+                getHeaderScrollable().dxScrollable('instance'),
+                getDateTableScrollable().dxScrollable('instance'),
+                getSideBarScrollable().dxScrollable('instance'),
+            ];
+        };
 
-                const { getHeaderScrollable, getDateTableScrollable, getSideBarScrollable } = scheduler.workSpace;
+        test('Header scroll should do dateTable scroll', function(assert) {
+            const done = assert.async();
+            const scheduler = createScheduler();
 
-                const map = {
-                    'header': getHeaderScrollable().dxScrollable('instance'),
-                    'dataTable': getDateTableScrollable().dxScrollable('instance'),
-                    'sideBar': getSideBarScrollable().dxScrollable('instance')
-                };
+            const [header, dateTable, sideBar] = getScrollableArray(scheduler);
 
-                const headerScrollToSpy = sinon.spy(map.header, 'scrollTo');
-                const dateTableScrollToSpy = sinon.spy(map.dataTable, 'scrollTo');
-                const sideBarScrollToSpy = sinon.spy(map.sideBar, 'scrollTo');
+            header.scrollTo({ left: 100 });
 
-                map[testCase.name].scrollTo(testCase.scrollPosition);
+            setTimeout(() => {
+                assert.equal(header.scrollLeft(), 100, 'header was scrolled');
+                assert.equal(dateTable.scrollTop(), 0, 'date table wasn\'t scrolled vertically');
+                assert.equal(dateTable.scrollLeft(), 100, 'date table was scrolled horizontally');
+                assert.equal(sideBar.scrollTop(), 0, 'sidebar wasn\'t scrolled');
 
-                assert.equal(headerScrollToSpy.callCount, 1, 'header should scroll once');
-                assert.equal(dateTableScrollToSpy.callCount, 1, 'dataTable should scroll once');
-                assert.equal(sideBarScrollToSpy.callCount, 1, 'side bar should scroll once');
+                done();
+            });
+        });
+
+        test('DateTable vertical scroll should do sidebar scroll', function(assert) {
+            const done = assert.async();
+            const scheduler = createScheduler();
+
+            const [header, dateTable, sideBar] = getScrollableArray(scheduler);
+
+            dateTable.scrollTo({ top: 100 });
+
+            setTimeout(() => {
+                assert.equal(header.scrollLeft(), 0, 'header wasn\'t scrolled');
+                assert.equal(dateTable.scrollTop(), 100, 'date table was scrolled vertically');
+                assert.equal(dateTable.scrollLeft(), 0, 'date table wasn\'t scrolled horizontally');
+                assert.equal(sideBar.scrollTop(), 100, 'sidebar was scrolled');
+
+                done();
+            });
+        });
+
+        test('DateTable horizontal scroll should do header scroll', function(assert) {
+            const done = assert.async();
+            const scheduler = createScheduler();
+
+            const [header, dateTable, sideBar] = getScrollableArray(scheduler);
+
+            dateTable.scrollTo({ left: 100 });
+
+            setTimeout(() => {
+                assert.equal(header.scrollLeft(), 100, 'header was scrolled');
+                assert.equal(dateTable.scrollTop(), 0, 'date table wasn\'t scrolled vertically');
+                assert.equal(dateTable.scrollLeft(), 100, 'date table was scrolled horizontally');
+                assert.equal(sideBar.scrollTop(), 0, 'sidebar wasn\'t scrolled');
+
+                done();
+            });
+        });
+
+        test('DateTable vertical & horizontal scroll should do sidebar & header scroll', function(assert) {
+            const done = assert.async();
+            const scheduler = createScheduler();
+
+            const [header, dateTable, sideBar] = getScrollableArray(scheduler);
+
+            dateTable.scrollTo({ left: 100, top: 100 });
+
+            setTimeout(() => {
+                assert.equal(header.scrollLeft(), 100, 'header was scrolled');
+                assert.equal(dateTable.scrollTop(), 100, 'date table was scrolled vertically');
+                assert.equal(dateTable.scrollLeft(), 100, 'date table was scrolled horizontally');
+                assert.equal(sideBar.scrollTop(), 100, 'sidebar was scrolled');
+
+                done();
+            });
+        });
+
+        test('Sidebar scroll should call dateTable scroll', function(assert) {
+            const done = assert.async();
+            const scheduler = createScheduler();
+
+            const [header, dateTable, sideBar] = getScrollableArray(scheduler);
+
+            sideBar.scrollTo({ top: 100 });
+
+            setTimeout(() => {
+                assert.equal(header.scrollLeft(), 0, 'header wasn\'t scrolled');
+                assert.equal(dateTable.scrollTop(), 100, 'date table was scrolled vertically');
+                assert.equal(dateTable.scrollLeft(), 0, 'date table wasn\'t scrolled horizontally');
+                assert.equal(sideBar.scrollTop(), 100, 'sidebar was scrolled');
+
+                done();
             });
         });
     });

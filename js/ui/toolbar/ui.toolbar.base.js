@@ -144,6 +144,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _dimensionChanged: function() {
+        if(this._disposed) {
+            return;
+        }
+
         this._arrangeItems();
         this._applyCompactMode();
     },

@@ -581,6 +581,7 @@ export const BaseChart = BaseWidget.inherit({
     _createTracker: function() {
         const that = this;
 
+        // eslint-disable-next-line import/namespace
         that._tracker = new trackerModule[that._trackerType]({
             seriesGroup: that._seriesGroup,
             renderer: that._renderer,

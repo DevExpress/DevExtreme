@@ -52,7 +52,7 @@ QUnit.module('Popup module', moduleConfig, () => {
         const insertEmbedContent = sinon.spy(popupModule, 'insertEmbedContent');
 
         popupModule.showPopup();
-        this.clock.tick();
+        this.clock.tick(10);
         const $suggestionList = $(`.${SUGGESTION_LIST_CLASS}`);
         const $suggestionListWrapper = $suggestionList.closest(`.${SUGGESTION_LIST_WRAPPER_CLASS}`);
 
@@ -96,7 +96,7 @@ QUnit.module('Popup module', moduleConfig, () => {
         const popupModule = new PopupModule({}, this.options);
 
         popupModule.showPopup();
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $wrapper = $(popupModule._popup.$wrapper());
 

@@ -936,7 +936,7 @@ QUnit.module('Async templates', {
 }, () => {
     QUnit.test('render tabs', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290 });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -948,7 +948,7 @@ QUnit.module('Async templates', {
             itemTemplate: null
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -961,7 +961,7 @@ QUnit.module('Async templates', {
             itemTemplate: null
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -974,28 +974,28 @@ QUnit.module('Async templates', {
             itemTemplate: null
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
     });
 
     QUnit.test('render tabs with scrollable', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
     });
 
     QUnit.test('render tabs with scrollable and navigation buttons', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
     });
 
     QUnit.test('Add scrollable when width is changed from large to small', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: false });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 150;
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -1003,7 +1003,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('Add scrollable and navigation buttons when width is changed from large to small', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: true });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 150;
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
@@ -1011,7 +1011,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('Remove scrollable when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 290;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -1019,7 +1019,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 290;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -1029,9 +1029,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Add scrollable when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: false, repaintChangesOnly });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(10);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithScrollable();
             testWrapper.checkNavigationButtons(false);
@@ -1040,9 +1040,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Add scrollable and navigation buttons when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(10);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithScrollable();
             testWrapper.checkNavigationButtons(true);
@@ -1051,9 +1051,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Remove scrollable when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(5);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithoutScrollable();
             testWrapper.checkNavigationButtons(false);
@@ -1062,9 +1062,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(5);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithoutScrollable();
             testWrapper.checkNavigationButtons(false);

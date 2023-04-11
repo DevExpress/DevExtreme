@@ -6,18 +6,18 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
+import { isDefined } from 'core/utils/type';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
-import pointerMock from '../../helpers/pointerMock.js';
-import { isDefined } from 'core/utils/type';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+import '__internal/grids/pivot_grid/field_chooser/module';
+import '__internal/grids/pivot_grid/module_widget';
 
-import 'ui/pivot_grid/ui.pivot_grid';
+import pointerMock from '../../helpers/pointerMock.js';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
@@ -48,6 +48,7 @@ const createMockDataSource = function(options) {
             return false;
         },
         load: sinon.stub(),
+        sortLocal: sinon.stub(),
         on: sinon.stub(),
         off: sinon.stub(),
         isLoading: sinon.stub().returns(false)
@@ -2579,7 +2580,7 @@ QUnit.module('FieldChooser encodeHtml', {
                 }
             }, options));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             return this.pivotGrid;
         };

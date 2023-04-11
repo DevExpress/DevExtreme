@@ -163,7 +163,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             finalized = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(finalized);
@@ -493,7 +493,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.selectionController.selectRows([]);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(loadingCount, 0, 'no loadings');
@@ -880,7 +880,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         // act
         this.options.selectedRowKeys = [{ name: 'Dan', age: 16 }];
         this.dataController.init();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         assert.strictEqual(onSelectionChangedCounter, 0, 'onSelectionChanged not called');
@@ -1017,14 +1017,14 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.dataController.optionChanged({ name: 'dataSource' });
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.store().on('loading', function(options) {
             loadOptions = options;
         });
 
         // act
         this.selectionController.selectAll();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(loadOptions.expand, 'testExpand', 'dataSource expand options sent correctly');
@@ -1368,7 +1368,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             isSelectAllStates.push(that.selectionController.isSelectAll());
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(loadingCount, 1, 'one loading after init dataSource');
@@ -1395,13 +1395,13 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.dataController.optionChanged({ name: 'dataSource' });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.selectRows(['Dan1', 'Dan3']);
         this.clearSelection();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.getSelectedRowKeys(), []);
@@ -1595,7 +1595,7 @@ QUnit.module('Selection without dataSource', { beforeEach: setupModule, afterEac
             changeCallCount++;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changeCallCount, 1);
@@ -1626,7 +1626,7 @@ QUnit.module('Selection without dataSource', { beforeEach: setupModule, afterEac
 
         selectionController.selectAll();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(selectionController.getSelectedRowKeys().length, 2);
@@ -2182,7 +2182,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
 
         // act
         store.push([{ type: 'remove', key: 2 }]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.selectionController.isSelectAll(), false, 'nothing is selected');
@@ -3480,7 +3480,7 @@ QUnit.module('Selection with views', {
             const $selectCheckBox = dataRow0.getSelectCheckBox(0).getElement();
             $selectCheckBox.trigger(clickEvent.name);
 
-            clock.tick();
+            clock.tick(10);
 
             clock.restore();
         });
@@ -3980,7 +3980,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(!this.dataController.items()[1].isSelected);
@@ -3997,7 +3997,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
@@ -4016,7 +4016,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -4036,7 +4036,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -4056,7 +4056,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -4078,7 +4078,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -4115,14 +4115,14 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.selectRows([1, 3, 4, 6], true);
-        this.clock.tick();
+        this.clock.tick(10);
         this.deselectRows([3, 6]);
-        this.clock.tick();
+        this.clock.tick(10);
         this.selectRows([1, 2, 4, 5]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const expectedSelectionFilter = [
@@ -4149,7 +4149,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.selectionController.selectRows([0]);
@@ -4181,7 +4181,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.selectionController.selectionChanged.add(selectionChanged);
 
@@ -4211,7 +4211,7 @@ QUnit.module('Deferred selection', {
             onSelectionChanged: selectionChangedStub
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         selectionChangedStub.reset();
@@ -4225,7 +4225,7 @@ QUnit.module('Deferred selection', {
             selectedKeys = keys;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(selectedKeys, [6, 7]);
         assert.strictEqual(selectionChangedStub.callCount, 1);
@@ -4249,7 +4249,7 @@ QUnit.module('Deferred selection', {
             loadingCount++;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(loadingCount, 1, 'one loading count');
 
@@ -4278,7 +4278,7 @@ QUnit.module('Deferred selection', {
             selection: { mode: 'selectAll', deferred: true }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         let items = this.dataController.items();
         assert.equal(items.length, 2, 'filtered items');
@@ -4312,7 +4312,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
@@ -4325,7 +4325,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
@@ -4352,7 +4352,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
@@ -4362,7 +4362,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 0, 'selected rows data count');
@@ -4381,7 +4381,7 @@ QUnit.module('Deferred selection', {
             selection: { mode: 'multiple', deferred: true }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const items = this.dataController.items();
         assert.equal(items.length, 1, 'filtered items');
@@ -4414,7 +4414,7 @@ QUnit.module('Deferred selection', {
             selection: { mode: 'multiple', deferred: true }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.selectRows([1], true);
         this.selectionController.selectAll();
@@ -4425,6 +4425,31 @@ QUnit.module('Deferred selection', {
         // assert
         assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter is empty');
     });
+
+    QUnit.test('Selecting multiple rows with deffered selection and preserve:false should not check for filter duplication (T1147676)', function(assert) {
+        const data = generateItems(100);
+        this.setupDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            height: 400,
+            selection: {
+                deferred: true,
+                mode: 'multiple'
+            },
+        });
+        this.clock.tick(10);
+        const spy = sinon.spy(this.selectionController._selection._selectionStrategy, '_removeSameFilter');
+        this.selectRows(data.map(data => data.id).slice(2));
+        this.clock.tick(100);
+        assert.equal(spy.callCount, 0, 'no extra calls');
+        this.selectRows([0]);
+        this.clock.tick(10);
+        this.selectRows([1], true);
+        this.clock.tick(10);
+        assert.notEqual(spy.callCount, 0, 'called for preserved selection');
+        spy.restore();
+    });
+
 });
 
 QUnit.module('Selection with virtual scrolling', {

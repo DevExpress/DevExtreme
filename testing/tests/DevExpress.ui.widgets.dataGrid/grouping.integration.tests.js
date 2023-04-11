@@ -116,17 +116,17 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 autoExpandAll: false
             }
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow([0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.expandRow([0, 0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.columnOption('cityId', 'groupIndex', undefined);
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
 
@@ -241,16 +241,16 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
         const $dataGrid = $(dataGrid.element());
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 4, '4 toolbar items are hidden, group panel has a long message');
 
         dataGrid.columnOption('field2', 'groupIndex', 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 0, 'all toolbar items are visible, group panel has a group with short name');
 
         dataGrid.clearGrouping();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 4, '4 toolbar items are hidden after clear grouping');
     });
 
@@ -413,7 +413,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $visibleColumns;
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-group-space)'));
 
@@ -425,7 +425,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         $('#container').width(150);
         instance.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-group-space)'));
 
         // assert
@@ -485,7 +485,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columnController = dataGrid.getController('columns');
 
@@ -517,14 +517,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }, 'field2']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columnController = dataGrid.getController('columns');
 
         // act
         columnController.moveColumn(0, 1, 'group', 'headers');
         cellTemplateCallCount = 0;
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(cellTemplateCallCount, 2, 'cellTemplate call count');
@@ -720,7 +720,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const cell0_0 = $(dataGrid.getCellElement(0, 0)).get(0);
         const cell1_1 = $(dataGrid.getCellElement(1, 1)).get(0);
@@ -729,7 +729,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getDataSource().store().push([
             { type: 'update', key: 1, data: { Count: 100 } }
         ]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0), cell0_0, 'expand cell in the first row is not re-rendered');
@@ -753,7 +753,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid(options);
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         options.dataSource.store().on('loading', loadingSpy);
 
@@ -764,7 +764,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         options.paging = {};
 
         dataGrid.option(options);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(loadingSpy.callCount, 1, 'loading called once');
@@ -782,12 +782,12 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             columns: [{ dataField: 'field1', showWhenGrouped: true }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $dataGrid.dxDataGrid('instance').columnOption('field1', 'groupIndex', 0);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const cols = $dataGrid.find('colgroup').first().children();
@@ -804,7 +804,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('dataSource', [{ a: 1, b: 2 }]);
         dataGrid.option('columns', ['a', { dataField: 'b', groupIndex: 0 }]);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
@@ -821,11 +821,11 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, { groupIndex: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $groupPanelItems = $('#dataGrid').find('.dx-group-panel-item');
@@ -849,12 +849,12 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const toolbar = dataGrid.$element().find('.dx-toolbar').dxToolbar('instance');
         toolbar.option('items', toolbar.option('items'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $groupPanelItems = $('#dataGrid').find('.dx-toolbar .dx-datagrid-drag-action');
@@ -906,12 +906,12 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             dataSource: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }, { field1: '5', field2: '6' }]
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, { groupIndex: 0 });
         dataGrid.option('grouping.autoExpandAll', false);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $groupPanelItems = $('#dataGrid').find('.dx-group-panel-item');
@@ -969,17 +969,17 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const dataGrid = $dataGrid.dxDataGrid('instance');
         const columnController = dataGrid.getController('columns');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // act
         const gridInitialWidth = $dataGrid.outerWidth();
 
         columnController.moveColumn(2, 0, 'headers', 'group');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const gridWidthAfterGrouping = $dataGrid.outerWidth();
 
         columnController.moveColumn(0, 1, 'group', 'headers');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const gridWidthAfterUngrouping = $dataGrid.outerWidth();
 
@@ -999,12 +999,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
         calculateCellValue.reset();
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: 'test1', field2: 'test2' }, 'calculateCellValue - first call arguments');
@@ -1018,11 +1018,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was not reset');
@@ -1036,17 +1036,17 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, 'groupIndex', undefined);
         dataGrid.columnOption(1, 'sortOrder', undefined);
 
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was returned to default');
@@ -1150,7 +1150,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 assert.step(`rowExpanded rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(['value1']).done(() => {
@@ -1158,7 +1158,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
             assert.step(`done rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.verifySteps([
             'rowExpanded rowCount: 2, groupRow: true, dataRow: true',

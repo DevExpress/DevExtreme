@@ -53,6 +53,8 @@ const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS = 'dx-colorview-color-previ
 const COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT = 'dx-colorview-color-preview-color-current';
 const COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW = 'dx-colorview-color-preview-color-new';
 
+const BLACK_COLOR = '#000000';
+
 const ColorView = Editor.inherit({
 
     _supportedKeys: function() {
@@ -250,7 +252,7 @@ const ColorView = Editor.inherit({
     },
 
     _setCurrentColor: function(value) {
-        value = value || '#000000';
+        value = value || BLACK_COLOR;
         const newColor = new Color(value);
         if(!newColor.colorIsInvalid) {
             if(!this._currentColor || this._makeRgba(this._currentColor) !== this._makeRgba(newColor)) {
@@ -260,12 +262,15 @@ const ColorView = Editor.inherit({
                 }
             }
         } else {
+            if(!this._currentColor) {
+                this._currentColor = new Color(BLACK_COLOR);
+            }
             this.option('value', this._currentColor.baseColor);
         }
     },
 
     _setBaseColor: function(value) {
-        const color = value || '#000000';
+        const color = value || BLACK_COLOR;
         const newColor = new Color(color);
 
         if(!newColor.colorIsInvalid) {
@@ -655,23 +660,13 @@ const ColorView = Editor.inherit({
 
     _makeCSSLinearGradient: function($el) {
         const color = this._currentColor;
-        const colorAsRgb = [color.r, color.g, color.b].join(',');
-        const colorAsHex = color.toHex().replace('#', '');
+        const colorAsRgb = `${color.r},${color.g},${color.b}`;
+        const rtlEnabled = this.option('rtlEnabled');
+        const startColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '1' : '0'})`;
+        const finishColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '0' : '1'})`;
+        const backgroundImage = `linear-gradient(-90deg, ${startColor}, ${finishColor})`;
 
-        const combineGradientString = function(colorAsRgb, colorAsHex) {
-            const rtlEnabled = this.option('rtlEnabled');
-            const startColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '1' : '0') + ')';
-            const finishColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '0' : '1') + ')';
-
-            return [
-                'background-image: -webkit-linear-gradient(180deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: -moz-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: -o-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')'
-            ].join(';');
-        };
-
-        $el.attr('style', combineGradientString.call(this, colorAsRgb, colorAsHex));
+        $el.css('backgroundImage', backgroundImage);
     },
 
     _renderAlphaChannelInput: function() {

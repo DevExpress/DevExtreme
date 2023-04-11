@@ -84,7 +84,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGrid = $(dataGrid.element());
 
-        clock.tick();
+        clock.tick(10);
         const container = $dataGrid.find('.dx-toolbar-label');
 
         assert.equal(container.length, 1);
@@ -590,7 +590,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $('#dataGrid').parent().width(300);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($('#dataGrid').width(), 300, 'width 100% is applied');
@@ -635,7 +635,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         const dataGrid = $dataGrid.dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const firstRenderHeight = $dataGrid.height();
 
@@ -648,7 +648,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // T450683
-    QUnit.test('rowsview height should not be reseted during updateDimension when min-height/max-height are not specified', function(assert) {
+    QUnit.test('rowsview hasHeight should not be reseted during updateDimension when min-height/max-height are not specified', function(assert) {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
             showBorders: true,
@@ -665,14 +665,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataGrid = $dataGrid.dxDataGrid('instance');
         const rowsView = dataGrid.getView('rowsView');
 
-        sinon.spy(rowsView, 'height');
+        sinon.spy(rowsView, 'hasHeight');
 
         // act
         dataGrid.updateDimensions();
 
         // assert
-        const heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-        assert.equal(heightCalls.length, 1, 'rowsview height is assigned once');
+        const heightCalls = rowsView.hasHeight.getCalls().filter(function(call) { return call.args.length > 0; });
+        assert.equal(heightCalls.length, 1, 'rowsview hasHeight is assigned once');
     });
 
     // T108204

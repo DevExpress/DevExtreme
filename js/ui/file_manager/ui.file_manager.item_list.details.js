@@ -9,6 +9,7 @@ import DataGrid from '../data_grid/ui.data_grid';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
+import { OPERATIONS } from './file_items_controller';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';
@@ -444,7 +445,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    refresh(options) {
+    refresh(options, operation) {
         const actualOptions = {
             dataSource: this._createDataSource()
         };
@@ -457,6 +458,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             }
         }
 
+        const hasNoScrollTarget = !isDefined(actualOptions.focusedRowKey) && actualOptions.focusedRowIndex === -1;
+        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
+            actualOptions.paging = {
+                pageIndex: 0
+            };
+        }
         this._filesView.option(actualOptions);
 
         this._refreshDeferred = new Deferred();

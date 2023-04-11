@@ -180,7 +180,7 @@ export default function() {
                 });
             }
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.equal(instance.option('value'), '<h1>Hi!</h1><p>Test</p>');
             assert.equal(markup, '<h1>Hi!</h1><p>Test</p>');
@@ -196,7 +196,7 @@ export default function() {
             const $element = instance.$element();
             const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.equal(instance.option('value'), '<p>Test1</p><p>Test2</p>');
             assert.equal(markup, '<p>Test1</p><p>Test2</p>');
@@ -284,7 +284,7 @@ export default function() {
                 .dxHtmlEditor()
                 .dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $element = instance.$element();
             const markup = $element.find(getSelector(CONTENT_CLASS)).html();
@@ -301,7 +301,7 @@ export default function() {
                 .dxHtmlEditor()
                 .dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $element = instance.$element();
             const markup = $element.find(getSelector(CONTENT_CLASS)).html();
@@ -323,12 +323,12 @@ export default function() {
                 })
                 .dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.expect(1);
             instance.setSelection(0, 4);
             instance.format('align', 'center');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('editor should respect attributes of the single formatted line', function(assert) {
@@ -344,12 +344,12 @@ export default function() {
                 })
                 .dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.expect(1);
             instance.setSelection(1, 0);
             instance.format('align', 'center');
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('editor should have an empty string value when all content has been removed', function(assert) {
@@ -427,7 +427,7 @@ export default function() {
                 .dxHtmlEditor({ 'value': expected })
                 .dxHtmlEditor('instance');
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.strictEqual(instance.option('value'), expected);
         });
@@ -446,6 +446,13 @@ export default function() {
             delete window._isInlineHandlerExecuted;
         }
     }, () => {
+        test('frame should have an empty srcdoc attribute to prevent an excess "Blocked script execution" error in Opera (T1150911)', function(assert) {
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+            const $frame = htmlEditor._createNoScriptFrame();
+
+            assert.strictEqual($frame.attr('srcdoc'), '', 'srcdoc attribute is set');
+        });
+
         test('script embedded in html value should not be executed on init', function(assert) {
             const done = assert.async();
 
@@ -651,7 +658,7 @@ export default function() {
                 .dxHtmlEditor('instance');
 
             instance.insertEmbed(0, 'extendedImage', { src: 'http://test.test/test.jpg', width: 100, height: 100, alt: 'altering' });
-            this.clock.tick();
+            this.clock.tick(10);
         });
 
         test('render link', function(assert) {

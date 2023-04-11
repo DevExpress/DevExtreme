@@ -308,7 +308,7 @@ QUnit.module('displayExpr', moduleConfig, () => {
         });
 
         $dropDownList.dxDropDownList('option', 'opened', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(args, [2].concat(dataSource), 'displayExpr args is correct');
     });
@@ -442,7 +442,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             deferRendering: false
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual($dropDownList.dxDropDownList('option', 'items'), dataSource, 'displayExpr args is correct');
     });
 
@@ -453,7 +453,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             opened: true
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual($dropDownList.dxDropDownList('option', 'items'), items, 'rendered all items');
     });
 
@@ -528,7 +528,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             itemTemplate: new Template($template)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($.trim($('.dx-list-item').text()), 'test', 'template rendered');
     });
@@ -580,7 +580,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const dropDownList = $dropDownList.dxDropDownList('instance');
         dropDownList.option('value', { key: 0, value: 'one' });
 
-        this.clock.tick();
+        this.clock.tick(10);
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         assert.equal($input.val(), 'one', 'item displayed');
     });
@@ -1006,7 +1006,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
             value: 1
         }).dxDropDownList('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(dropDownList.option('selectedItem'), items[0], 'selected item');
     });
@@ -1018,10 +1018,10 @@ QUnit.module('selectedItem', moduleConfig, () => {
             selectedItem: 1
         }).dxDropDownList('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dropDownList.option('items', ['a', 'b', 's', 'd']);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(dropDownList.option('value'), 1, 'value is unchanged');
         assert.strictEqual(dropDownList.option('selectedItem'), null, 'selected item was reset');
@@ -1035,10 +1035,10 @@ QUnit.module('selectedItem', moduleConfig, () => {
             selectedItem: '1'
         }).dxDropDownList('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dropDownList.option('dataSource', ['a', 'b', 's', 'd']);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(dropDownList.option('value'), '1', 'value is unchanged');
         assert.strictEqual(dropDownList.option('selectedItem'), null, 'selected item was reset');
@@ -1051,10 +1051,10 @@ QUnit.module('selectedItem', moduleConfig, () => {
             selectedItem: 2
         }).dxDropDownList('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dropDownList.option('dataSource', [5, 2, 6, 7]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(dropDownList.option('value'), 2, 'value is correct');
         assert.strictEqual(dropDownList.option('selectedItem'), 2, 'selected item was not reset');
@@ -1110,7 +1110,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $dropDownList.dxDropDownList('option', 'onSelectionChanged', e => {
             assert.equal(e.selectedItem, 1, 'selectedItem provided in onValueChanged');
@@ -1118,7 +1118,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
 
         $dropDownList.dxDropDownList('option', 'value', 1);
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('selectedItem should be chosen synchronously if item is already loaded', function(assert) {
@@ -1142,11 +1142,11 @@ QUnit.module('selectedItem', moduleConfig, () => {
             opened: true
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $(`.${LIST_CLASS}`).dxList('_loadNextPage');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $dropDownList.dxDropDownList('option', 'value', 0);
 
@@ -1339,7 +1339,7 @@ QUnit.module('popup', moduleConfig, () => {
             done();
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
@@ -1386,7 +1386,7 @@ QUnit.module('popup', moduleConfig, () => {
             done();
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('popup should be configured with templatesRenderAsynchronously=false (T470619)', function(assert) {
@@ -1467,7 +1467,7 @@ QUnit.module('dataSource integration', moduleConfig, function() {
             value
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual($dropDownList.dxDropDownList('option', 'selectedItem'), data[0], 'value found');
     });
@@ -1546,7 +1546,7 @@ QUnit.module('action options', moduleConfig, () => {
 
         const instance = $dropDownList.dxDropDownList('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $listItem = instance._$list.find(LIST_ITEM_SELECTOR).eq(1);
 

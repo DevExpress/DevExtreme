@@ -175,7 +175,7 @@ QUnit.test('dxDataGrid', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     const $cols = $('.dx-datagrid-rowsview col');
     assert.roughEqual(parseInt($cols[0].style.width), 100, 1.01);
@@ -206,7 +206,7 @@ QUnit.test('dxDataGrid - search with row template should highlight data without 
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal($($('.mycell')[0]).text(), 'text.1');
 
@@ -265,7 +265,7 @@ QUnit.test('dxDataGrid - search with cell template should highlight data without
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal($($('.mycell')[0]).text(), 'text1');
 
@@ -322,7 +322,7 @@ QUnit.test('dxDataGrid - row template should rendered correctly with grouping', 
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     const $rows = $('.dx-datagrid-rowsview tbody > tr');
 
@@ -424,7 +424,7 @@ QUnit.test('Two-way binding', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     let $rows = $markup.find('.dx-data-row');
     assert.equal($rows.length, 2, 'row count');
@@ -461,7 +461,7 @@ QUnit.test('Two-way binding when columnFixing', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     let $rows = $markup.find('.dx-datagrid-content-fixed .dx-data-row');
     assert.equal($rows.length, 2, 'row count');
@@ -501,7 +501,7 @@ QUnit.test('Two-way binding does not work for inserted rows', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     scope.$apply(function() {
         scope.grid.addRow();
@@ -539,7 +539,7 @@ QUnit.test('Assign selectedRowKeys option via binding', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
     scope.$apply(function() {
         scope.selectedRowKeys = [{ field1: 1, field2: 2 }];
         scope.selectedRowKeysInstance = scope.selectedRowKeys;
@@ -577,12 +577,12 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
 
     $($markup.find('.dx-data-row').eq(0).children().first()).trigger('dxclick');
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
 
     scope.$apply(function() {
@@ -591,7 +591,7 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
         scope.grid.refresh();
     });
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
 
     assert.equal($markup.find('.dx-header-row').eq(0).children().length, 2, 'two cells in header row');
@@ -620,7 +620,7 @@ QUnit.test('Scope refreshing count on init', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal(refreshingCount, 4);
 });
@@ -923,7 +923,7 @@ QUnit.test('dxDateBox with list strategy automatically scrolls to selected item 
 
     initMarkup($markup, function() {}, this);
 
-    this.clock.tick();
+    this.clock.tick(40);
 
     const $popupContent = $('.dx-popup-content');
     const $selectedItem = $popupContent.find('.dx-list-item-selected');

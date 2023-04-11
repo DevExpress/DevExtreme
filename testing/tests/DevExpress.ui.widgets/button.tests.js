@@ -316,7 +316,7 @@ QUnit.module('Button', function() {
             const pointer = pointerMock($inkButton);
 
             pointer.start('touch').down();
-            clock.tick();
+            clock.tick(10);
             pointer.start('touch').up();
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
 
@@ -324,13 +324,13 @@ QUnit.module('Button', function() {
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
 
             pointer.start('touch').down();
-            clock.tick();
+            clock.tick(10);
             pointer.start('touch').up();
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
 
             inkButton.option('useInkRipple', true);
             pointer.start('touch').down();
-            clock.tick();
+            clock.tick(10);
             pointer.start('touch').up();
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
 
@@ -424,7 +424,7 @@ QUnit.module('Button', function() {
             this.$form = $('#form');
             this.clickButton = function() {
                 this.$element.trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
             };
         },
         afterEach: function() {

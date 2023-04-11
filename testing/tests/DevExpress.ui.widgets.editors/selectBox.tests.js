@@ -453,7 +453,7 @@ QUnit.module('functionality', moduleSetup, () => {
             .type('one')
             .change();
 
-        this.clock.tick();
+        this.clock.tick(10);
         selectBox.option('opened', false);
         selectBox.option('dataSource', null);
         $element.find(`.${DX_DROP_DOWN_BUTTON}`).trigger('dxclick');
@@ -685,7 +685,7 @@ QUnit.module('functionality', moduleSetup, () => {
             selectedItem: items[0]
         }).dxSelectBox('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '', 'selected item');
         assert.strictEqual(selectBox.option('selectedItem'), null, 'selected item');
@@ -1656,11 +1656,11 @@ QUnit.module('clearButton', moduleSetup, () => {
             value: 1
         }).dxSelectBox('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         pointerMock($selectBox.find(toSelector(CLEAR_BUTTON_AREA))).click();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '', 'text field is cleared');
         assert.strictEqual(selectBox.option('value'), null, 'value is null');
@@ -2710,8 +2710,7 @@ QUnit.module('editing', moduleSetup, () => {
 
         try {
             keyboard.change();
-        } catch(e) {
-        }
+        } catch(e) { }
 
         assert.equal($input.val(), '1', 'input value is correct');
         assert.equal($selectBox.dxSelectBox('option', 'value'), '1', 'widget value is correct');
@@ -3888,7 +3887,7 @@ QUnit.module('search substitution', {
 
         try {
             listItem.trigger('dxpointerdown');
-            clock.tick();
+            clock.tick(10);
             let $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
             assert.equal($input.val(), '', 'input value should not be changed when selection is not complete');
@@ -4273,7 +4272,7 @@ QUnit.module('regressions', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
         const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
@@ -4303,7 +4302,7 @@ QUnit.module('regressions', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
         const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
@@ -4334,7 +4333,7 @@ QUnit.module('regressions', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
         const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
@@ -4365,7 +4364,7 @@ QUnit.module('regressions', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
         const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
@@ -5461,7 +5460,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
         keyboardMock($input).type('a');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($selectBox.dxSelectBox('option', 'opened'), true, 'value typed in input');
         assert.deepEqual($('.dx-list').dxList('option', 'items'), ['a', 'ab', 'ac'], 'items filtered');
@@ -5593,7 +5592,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
         $($input).trigger('dxclick');
         $($input).trigger('dxclick'); // NOTE: open again
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual($('.dx-list').dxList('option', 'items'), ['a', 'b'], 'all items');
     });
 
