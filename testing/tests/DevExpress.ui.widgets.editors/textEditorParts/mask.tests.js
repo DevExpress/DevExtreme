@@ -551,6 +551,24 @@ QUnit.module('typing', moduleConfig, () => {
             assert.strictEqual(textEditor.option('text'), '(((((2', 'text is correct');
         }
     });
+
+    QUnit.test('caret should be moved after a new char even if all text was selected before type', function(assert) {
+        const mask = '+1 (000) 000 000';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret({ start: 0, end: mask.length })
+            .type('2');
+
+        assert.strictEqual(keyboard.caret().start, 5, 'caret was moved after a new char');
+        assert.strictEqual(textEditor.option('text'), '+1 (2__) ___ ___', 'text is correct');
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {
@@ -741,6 +759,44 @@ QUnit.module('backspace key', moduleConfig, () => {
         assert.strictEqual($input.val(), '_', 'input value is correct');
         assert.strictEqual(textEditor.option('value'), '', 'textEditor value property is correct');
         assert.strictEqual(textEditor.option('text'), '_', 'textEditor text property is correct');
+    });
+
+    QUnit.test('backspace should skip all consecutive stubs', function(assert) {
+        const mask = '000---';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(mask.length)
+            .press('backspace');
+
+        assert.strictEqual(keyboard.caret().start, 3, '3 stub chars were skipped');
+        assert.strictEqual(textEditor.option('text'), '___---', 'text is correct');
+    });
+
+    QUnit.test('backspace should not move a caret if all previous chars are stubs', function(assert) {
+        const mask = '---0';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(3)
+            .press('backspace')
+            .press('backspace')
+            .press('backspace');
+
+        assert.strictEqual(keyboard.caret().start, 3, 'caret position is not changed');
+        assert.strictEqual(textEditor.option('text'), '---_', 'text is correct');
     });
 });
 
