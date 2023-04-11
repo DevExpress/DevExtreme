@@ -657,6 +657,46 @@ QUnit.module('dxAutocomplete', {
         });
     });
 
+    QUnit.test('popup should be opened after press alt + arrow down', function(assert) {
+        const keyboard = this.keyboard;
+        const keyDownConfig = { key: KEY_DOWN, altKey: true };
+
+        keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+        assert.strictEqual(this.instance.option('opened'), true);
+    });
+
+    QUnit.test('popup should be closed after press alt + arrow up', function(assert) {
+        const keyboard = this.keyboard;
+        const keyDownConfig = { key: KEY_DOWN, altKey: true };
+        const keyUpConfig = { key: KEY_UP, altKey: true };
+
+        keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+        keyboard.keyDown(keyUpConfig.key, keyUpConfig);
+
+        assert.strictEqual(this.instance.option('opened'), false);
+    });
+
+    QUnit.test('should fire open/close events after open/close popup by keyboard', function(assert) {
+        assert.expect(2);
+
+        this.instance.option({
+            onOpened() {
+                assert.ok(true, 'event on open was fired');
+            },
+            onClosed() {
+                assert.ok(true, 'event on closed was fired');
+            }
+        });
+
+        const keyboard = this.keyboard;
+        const keyDownConfig = { key: KEY_DOWN, altKey: true };
+        const keyUpConfig = { key: KEY_UP, altKey: true };
+
+        keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+        keyboard.keyDown(keyUpConfig.key, keyUpConfig);
+    });
+
     QUnit.testInActiveWindow('enter - prevent default', function(assert) {
         assert.expect(1);
 

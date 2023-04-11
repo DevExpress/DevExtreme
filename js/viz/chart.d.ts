@@ -3506,11 +3506,11 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      */
     width?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.lightening
+     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.highlight
      * @default true
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      */
-    lightening?: boolean;
+    highlight?: boolean;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
@@ -3960,11 +3960,11 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      */
     width?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.lightening
+     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.highlight
      * @default true
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      */
-    lightening?: boolean;
+    highlight?: boolean;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
