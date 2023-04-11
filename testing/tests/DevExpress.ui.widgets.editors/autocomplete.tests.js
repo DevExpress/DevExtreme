@@ -40,8 +40,8 @@ QUnit.testStart(() => {
         </div>\
     </div>';
 
-    $('#qunit-fixture').html(markup);
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#qunit-fixture').append(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';

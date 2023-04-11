@@ -26,9 +26,13 @@ QUnit.testStart(() => {
         </div>';
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
-    document.getElementById('content').style = 'width: 300px; height: 300px;';
-    document.getElementById('textAreaInScrollable').style = 'margin: 50px;';
+    $('#widthRootStyle').css('width', '300px');
+
+    $('#content')
+        .css('width', '300px')
+        .css('height', '300px');
+
+    $('#textAreaInScrollable').css('margin', '50px;');
 });
 
 

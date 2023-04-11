@@ -151,7 +151,7 @@ QUnit.module('Navigator', {
         let actualScrollTop;
         try {
             brick.appendTo('#qunit-fixture');
-            brick[0].style = 'height: 50000px;';
+            brick.css('height', '50000px');
             brick.insertBefore(this.$element);
             $window.scrollTop(50000);
             actualScrollTop = $window.scrollTop();

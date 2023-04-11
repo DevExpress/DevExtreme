@@ -19,7 +19,7 @@ testStart(() => {
         </div>`;
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';

@@ -24,7 +24,7 @@ testStart(() => {
         <div id="widthRootStyle"></div>`;
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const SLIDER_CLASS = 'dx-slider';
@@ -254,7 +254,7 @@ module('render', moduleOptions, () => {
         }).css('width', 500);
 
         // the width of the right and left margin must be 0 (T927984)
-        $element.find('.' + SLIDER_BAR_CLASS)[0].style = 'margin: 14px 0px;';
+        $element.find('.' + SLIDER_BAR_CLASS).css('margin', '14px 0px');
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
@@ -280,7 +280,7 @@ module('render', moduleOptions, () => {
         });
 
         // the width of the right and left margin must be 0 (T927984)
-        $element.find('.' + SLIDER_BAR_CLASS)[0].style = 'margin: 14px 0px;';
+        $element.find('.' + SLIDER_BAR_CLASS).css('margin', '14px 0px');
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);

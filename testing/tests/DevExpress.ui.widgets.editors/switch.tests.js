@@ -18,8 +18,8 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('invisibleSwitch').style = 'display: none;';
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#invisibleSwitch').css('display', 'none');
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const SWITCH_CLASS = 'dx-switch';

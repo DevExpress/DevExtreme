@@ -38,8 +38,8 @@ QUnit.testStart(() => {
         <div id="containerWithWidth"><div id="innerDateBox"></div></div';
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('containerWithWidth').style = 'width: 100px;';
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#containerWithWidth').css('width', '100px');
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const currentDate = new Date(2015, 11, 31);

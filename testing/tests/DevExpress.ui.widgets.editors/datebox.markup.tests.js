@@ -11,7 +11,7 @@ QUnit.testStart(function() {
         <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#widthRootStyle').css('width', '300px');
 });
 
 import 'generic_light.css!';

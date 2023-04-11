@@ -17,7 +17,7 @@ QUnit.testStart(() => {
         </div>';
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    $('#widthRootStyle').css('width', '300px');
     addShadowDomStyles($('#qunit-fixture'));
 });
 

@@ -151,10 +151,13 @@ QUnit.module('Regression', {
         const topDiff = 22;
 
         const $element = $('<div />');
-        $element[0].style = 'height: 100px;';
+        $element.css('height', '100px');
 
         const $bingo = $('<div id=\'bingo\' />');
-        $bingo[0].style = 'overflow-y: scroll; height: 100px;';
+
+        $bingo
+            .css('overflow-y', 'scroll')
+            .css('height', '100px');
 
         $element.insertAfter(
             this.fixture.$element.wrap($bingo)

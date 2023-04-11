@@ -19,7 +19,7 @@ QUnit.testStart(function() {
             <div id="customDateView"></div>';
 
     $('#qunit-fixture').html(markup);
-    document.getElementById('roller').style = 'height: 20px;';
+    $('#roller').css('height', '20px');
 });
 
 
