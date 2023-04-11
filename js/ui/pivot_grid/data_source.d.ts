@@ -18,12 +18,12 @@ import XmlaStore, {
 } from './xmla_store';
 
 import {
-    SearchMode,
     SortOrder,
 } from '../../common';
 
 import {
     FilterType,
+    HeaderFilterSearch,
     SummaryType,
 } from '../../common/grids';
 
@@ -385,14 +385,16 @@ export interface PivotGridDataSourceField {
      */
     headerFilter?: {
         allowSearch?: boolean;
+        /**
+         * @docid PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll
+         * @default true
+         */
         allowSelectAll?: boolean;
         height?: number;
-        search?: {
-            editorOptions?: any;
-            enabled?: boolean;
-            mode?: SearchMode;
-            timeout?: number;
-        };
+        /**
+         * @docid PivotGridDataSourceOptions.fields.headerFilter.search
+         */
+        search?: HeaderFilterSearch;
         width?: number;
     };
     /**

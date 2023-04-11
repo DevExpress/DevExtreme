@@ -605,7 +605,6 @@ export type ColumnHeaderFilter = {
   height?: number;
   /**
    * @docid GridBaseColumn.headerFilter.search
-   * @type object
    */
   search?: ColumnHeaderFilterSearch;
   /**
@@ -623,35 +622,17 @@ export type ColumnHeaderFilter = {
 
 /**
  * @public
+ * @docid
  * @namespace DevExpress.common.grids
+ * @inherits HeaderFilterSearch
  */
-export type ColumnHeaderFilterSearch = {
+export type ColumnHeaderFilterSearch = HeaderFilterSearch & {
   /**
-   * @docid GridBaseColumn.headerFilter.search.editorOptions
-   * @default {}
-   */
-  editorOptions?: any;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.enabled
-   * @default false
-   */
-  enabled?: boolean;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.mode
-   * @default 'contains'
-   */
-  mode?: SearchMode;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.searchExpr
+   * @docid
    * @type getter|Array<getter>
    * @default undefined
    */
   searchExpr?: string | Function | Array<string | Function>;
-  /**
-   * @docid GridBaseColumn.headerFilter.search.timeout
-   * @default 500
-   */
-  timeout?: number;
 };
 
 /**
@@ -1155,7 +1136,6 @@ export type HeaderFilter = {
   height?: number;
   /**
    * @docid GridBaseOptions.headerFilter.search
-   * @type object
    */
   search?: HeaderFilterSearch;
   /**
@@ -1189,26 +1169,27 @@ export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'q
 
 /**
  * @public
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterSearch = {
   /**
-   * @docid GridBaseOptions.headerFilter.search.editorOptions
+   * @docid
    * @default {}
    */
   editorOptions?: any;
   /**
-   * @docid GridBaseOptions.headerFilter.search.enabled
+   * @docid
    * @default false
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.search.mode
+   * @docid
    * @default 'contains'
    */
   mode?: SearchMode;
   /**
-   * @docid GridBaseOptions.headerFilter.search.timeout
+   * @docid
    * @default 500
    */
   timeout?: number;

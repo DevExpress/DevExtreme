@@ -26,11 +26,11 @@ import {
     Mode,
     FieldChooserLayout,
     ScrollMode,
-    SearchMode,
 } from '../common';
 
 import {
     ApplyChangesMode,
+    HeaderFilterSearch,
     StateStoreType,
 } from '../common/grids';
 
@@ -320,28 +320,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        */
-      search?: {
-        /**
-         * @docid
-         * @default {}
-         */
-        editorOptions?: any;
-        /**
-         * @docid
-         * @default false
-         */
-        enabled?: boolean;
-        /**
-         * @docid
-         * @default 'contains'
-         */
-        mode?: SearchMode;
-        /**
-         * @docid
-         * @default 500
-         */
-        timeout?: number;
-      };
+      search?: HeaderFilterSearch;
       /**
        * @docid
        * @default 500

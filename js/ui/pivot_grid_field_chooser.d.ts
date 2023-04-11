@@ -14,11 +14,12 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    FieldChooserLayout, SearchMode,
+    FieldChooserLayout,
 } from '../common';
 
 import {
     ApplyChangesMode,
+    HeaderFilterSearch,
 } from '../common/grids';
 
 export {
@@ -100,28 +101,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
       /**
        * @docid
        */
-      search?: {
-        /**
-         * @docid
-         * @default {}
-         */
-        editorOptions?: any;
-        /**
-         * @docid
-         * @default false
-         */
-        enabled?: boolean;
-        /**
-         * @docid
-         * @default 'contains'
-         */
-        mode?: SearchMode;
-        /**
-         * @docid
-         * @default 500
-         */
-        timeout?: number;
-      };
+      search?: HeaderFilterSearch;
       /**
        * @docid
        * @default 500

@@ -59,32 +59,3 @@ export default PivotGrid;
  * @default undefined
  * @deprecated
  */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll
- * @type boolean
- * @default true
- */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.search
- * @type object
- */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.search.editorOptions
- * @type any
- * @default {}
- */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.search.enabled
- * @type boolean
- * @default false
- */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.search.mode
- * @type Enums.SearchMode
- * @default 'contains'
- */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.search.timeout
- * @type number
- * @default 500
- */

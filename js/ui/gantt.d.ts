@@ -39,10 +39,13 @@ import {
 
 import {
     FirstDayOfWeek,
-    SearchMode,
     SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
+
+import {
+    HeaderFilterSearch,
+} from '../common/grids';
 
 export type GanttPdfExportDateRange = 'all' | 'visible';
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
@@ -1406,7 +1409,7 @@ export interface dxGanttHeaderFilter {
     /**
      * @docid
      */
-    search?: GanttHeaderFilterSearch;
+    search?: HeaderFilterSearch;
     /**
      * @docid
      * @default 500
@@ -1427,34 +1430,6 @@ export interface dxGanttHeaderFilter {
      * @default 252
      */
     width?: number;
-}
-
-/**
- * @docid
- * @type object
- * @namespace DevExpress.ui
- */
-export interface GanttHeaderFilterSearch {
-      /**
-     * @docid
-     * @default {}
-     */
-    editorOptions?: any;
-    /**
-     * @docid
-     * @default false
-     */
-    enabled?: boolean;
-    /**
-     * @docid
-     * @default 'contains'
-     */
-    mode?: SearchMode;
-    /**
-     * @docid
-     * @default 500
-     */
-    timeout?: number;
 }
 
 /**
