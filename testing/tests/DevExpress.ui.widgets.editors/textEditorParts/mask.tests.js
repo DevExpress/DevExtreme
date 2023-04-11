@@ -1770,6 +1770,22 @@ QUnit.module('paste', moduleConfig, () => {
 
         assert.equal($input.val(), '00', '\'v\' char from ctrl+V combination was ignored');
     });
+
+    QUnit.todo('digit stub should not be duplicated after paste if caret is placed before the stub', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '10000'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .paste('6');
+
+        assert.strictEqual(textEditor.option('text'), '16___', 'only pasted digit is added');
+    });
 });
 
 QUnit.module('drag text', moduleConfig, () => {
