@@ -665,6 +665,64 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         assert.equal($input.val(), 'x-x_', 'char removed');
     });
+
+    QUnit.test('backspace press should trigger input event', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '9',
+            value: '1',
+            onInput: inputHandlerStub
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual(inputHandlerStub.callCount, 1, 'input event was fired');
+    });
+
+    QUnit.test('backspace press should not trigger input event when caret is at 0 position', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '9',
+            value: '1',
+            onInput: inputHandlerStub
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .press('backspace');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('mask char should be rendered instead of deleted char after a backspace press', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '9',
+            value: '1',
+            valueChangeEvent: 'input'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual($input.val(), '_', 'input value is correct');
+        assert.strictEqual(textEditor.option('value'), '', 'textEditor value property is correct');
+        assert.strictEqual(textEditor.option('text'), '_', 'textEditor text property is correct');
+    });
 });
 
 QUnit.module('delete key', moduleConfig, () => {
