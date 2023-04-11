@@ -46,7 +46,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 height: 400,
                 showRowGrandTotals: true
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             const cellElement = pivotGridElement.querySelector(`.${PIVOTGRID_EXPANDED_CLASS}`);
             const cellTextElement = cellElement.lastChild;

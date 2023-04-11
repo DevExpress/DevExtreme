@@ -1306,7 +1306,7 @@ QUnit.module('Focus', {
         };
 
         testElement.trigger($.Event('keydown.dxDataGridEditorFactory', { key: 'Tab' }));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(isFocused, 'cell is focused');
@@ -1320,7 +1320,7 @@ QUnit.module('Focus', {
 
         // act
         this.editorFactoryController.focus(testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editorFactoryController.focus(), testElement, 'focused element');
@@ -1449,7 +1449,7 @@ QUnit.module('Focus', {
         // act
         $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(1).children().eq(1).trigger('dxpointerdown');
         $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(1).children().eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(1).children().eq(1);
@@ -1460,7 +1460,7 @@ QUnit.module('Focus', {
         $testElement.find('.dx-datagrid-filter-row input').eq(1).trigger('focus');
         $testElement.find('.dx-datagrid-filter-row input').eq(1).trigger('dxpointerdown');
         $testElement.find('.dx-datagrid-filter-row input').eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-filter-row > td').eq(1);
@@ -1511,7 +1511,7 @@ QUnit.module('Focus', {
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);
         $cell.trigger('dxpointerdown');
         $cell.trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);
@@ -1558,7 +1558,7 @@ QUnit.module('Focus', {
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);
         $cell.trigger('dxpointerdown');
         $cell.trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);

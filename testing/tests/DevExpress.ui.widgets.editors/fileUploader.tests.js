@@ -915,7 +915,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         });
         const instance = $fileUploader.dxFileUploader('instance');
         simulateFileChoose($fileUploader, [fakeContentFile]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const expectedCallsCount = Math.ceil(fakeContentFile.size / instance.option('chunkSize'));
         assert.equal(index, expectedCallsCount, 'count of calls onProgress event is valid');
@@ -971,7 +971,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
             }
         });
         simulateFileChoose($fileUploader, files);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(fileUploadedCount, files.length, 'Count uploaded files is correct');
         for(let i = 0; i < files.length; i++) {
@@ -992,7 +992,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
         simulateFileChoose($fileUploader, files);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(uploadedFiles.length, files.length, 'count uploaded files is valid');
         for(let i = 0; i < files.length; i++) {
@@ -1018,7 +1018,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         simulateFileChoose($fileUploader, files);
         assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
     });
     test('abortUpload callback should not rise for not uploading files', function(assert) {
@@ -1080,7 +1080,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         simulateFileChoose($fileUploader, files);
         assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
         assert.strictEqual($fileUploader.dxFileUploader('option', 'progress'), 100, 'progress is 100%');
     });
@@ -3345,7 +3345,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         $selectButton.trigger('focusin');
         keyboard.keyDown('enter');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(stub.calledOnce, 'press on select button leads to input click');
     });

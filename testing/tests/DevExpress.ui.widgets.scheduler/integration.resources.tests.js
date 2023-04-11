@@ -239,7 +239,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task1);
 
         let taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -301,7 +301,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -352,7 +352,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 4, 24)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(appointment);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();

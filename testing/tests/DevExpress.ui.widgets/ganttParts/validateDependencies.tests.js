@@ -36,7 +36,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -56,12 +56,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -90,7 +90,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -110,12 +110,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -144,7 +144,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -164,12 +164,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -198,7 +198,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -218,12 +218,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -252,7 +252,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -272,12 +272,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -307,7 +307,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -327,12 +327,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -363,7 +363,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -383,12 +383,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -418,7 +418,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -438,12 +438,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -473,7 +473,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -493,12 +493,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -529,7 +529,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -549,12 +549,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -585,7 +585,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -605,12 +605,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -640,7 +640,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -660,12 +660,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -694,7 +694,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -714,12 +714,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -748,7 +748,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -768,12 +768,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -802,7 +802,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -825,17 +825,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-05-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick();
+        this.clock.tick(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -864,7 +864,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -887,17 +887,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-01-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick();
+        this.clock.tick(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -926,7 +926,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -949,17 +949,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-01-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick();
+        this.clock.tick(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -988,7 +988,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -1011,17 +1011,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-01-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
         getGanttViewCore(this.instance).validationController.lockPredecessorToSuccessor = false;
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick();
+        this.clock.tick(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -1050,7 +1050,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         const task1 = {
             'my_id': 1000,
@@ -1070,15 +1070,15 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.instance.insertTask(task2);
         this.clock.tick();
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.instance.showTaskDetailsDialog(globalLastInsertedKey);
-        this.clock.tick();
+        this.clock.tick(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 

@@ -73,7 +73,7 @@ QUnit.module('Initialization', {
         } finally {
             $('#scheduler').show();
             triggerShownEvent($('#scheduler'));
-            this.clock.tick();
+            this.clock.tick(10);
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
         }
     });

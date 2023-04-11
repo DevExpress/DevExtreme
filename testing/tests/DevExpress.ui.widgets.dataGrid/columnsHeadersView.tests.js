@@ -801,7 +801,7 @@ QUnit.module('Headers', {
         // act
         headerElement.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         sortElements = testElement.find('.' + 'dx-sort-up');
         assert.equal(sortElements.length, 1, 'up sort');
@@ -811,7 +811,7 @@ QUnit.module('Headers', {
         headerElement = testElement.find('td');
         headerElement.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         sortElements = testElement.find('.' + 'dx-sort-down');
         assert.equal(sortElements.length, 1, 'down sort');
@@ -821,7 +821,7 @@ QUnit.module('Headers', {
         headerElement = testElement.find('td');
         headerElement.eq(0).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         sortElements = testElement.find('.' + 'dx-sort');
@@ -845,7 +845,7 @@ QUnit.module('Headers', {
 
         // act
         headerElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(headerElement.attr('aria-sort'), 'none');
     });
@@ -867,7 +867,7 @@ QUnit.module('Headers', {
 
         // act
         headerElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(headerElement.attr('aria-sort'), 'none');
     });
@@ -889,7 +889,7 @@ QUnit.module('Headers', {
 
         // act
         headerElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(headerElement.attr('aria-sort'), 'ascending');
     });
@@ -915,7 +915,7 @@ QUnit.module('Headers', {
         // act
         popupMenu.find('.dx-menu-item').first().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('td').first().find('.dx-sort-up').length, 1, 'has element with class dx-sort-up');
@@ -942,7 +942,7 @@ QUnit.module('Headers', {
         // act
         popupMenu.find('.dx-menu-item').eq(1).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('td').first().find('.dx-sort-down').length, 1, 'has element with class dx-sort-down');
@@ -973,7 +973,7 @@ QUnit.module('Headers', {
         // act
         popupMenu.find('.dx-menu-item').last().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('td').first().find('.dx-sort-up').length, 0, 'not has element with class dx-sort-up');
@@ -1137,7 +1137,7 @@ QUnit.module('Headers', {
         // act
         testElement.find('td').last().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.strictEqual(testElement.find('td').last().find('.dx-sort:not(.dx-sort-none)').length, 0);
     });
@@ -2359,7 +2359,7 @@ QUnit.module('Headers with band columns', {
         // act
         $popupMenu.find('.dx-menu-item').first().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($cell.find('.dx-sort-up').length, 1, 'has element with class dx-sort-up');
@@ -2871,7 +2871,7 @@ QUnit.module('Multiple sorting', {
             const $headerCells = $testElement.find('.dx-header-row').children();
 
             $headerCells.eq(1).trigger($.Event('dxclick', { [key]: true }));
-            this.clock.tick();
+            this.clock.tick(10);
 
             const cols = this.columnsController.getVisibleColumns();
             assert.strictEqual(cols[0].sortOrder, undefined, 'first column has not sort order');

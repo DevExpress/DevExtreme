@@ -120,14 +120,14 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('2');
         this.clock.tick(525);
         keyboardMock($(':focus')[0]).keyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal($('.dx-selectbox-popup').length, 1, 'drop down created');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
         keyboardMock($(':focus')[0]).keyDown('enter');
 
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal($input.length, 0, 'input');
@@ -140,11 +140,11 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('1');
         this.clock.tick(525);
         keyboardMock($(':focus')[0]).keyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         keyboardMock($(':focus')[0]).keyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('upArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-row .dx-texteditor-container input').eq(0);
@@ -179,7 +179,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('1');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing by char key');
@@ -201,7 +201,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is not in editing mode');
@@ -225,7 +225,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -233,7 +233,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -260,11 +260,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'row is editing');
@@ -272,7 +272,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -299,7 +299,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -307,7 +307,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -335,7 +335,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -343,7 +343,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -370,11 +370,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -382,7 +382,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -410,11 +410,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -422,7 +422,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -449,7 +449,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -457,7 +457,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -487,7 +487,7 @@ QUnit.module('Customize keyboard navigation', {
         this.renderGridView();
 
 
-        this.clock.tick();
+        this.clock.tick(10);
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
@@ -503,7 +503,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedSpy.callCount, 2, 'changed count');
@@ -529,11 +529,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'row is editing');
@@ -541,7 +541,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -568,7 +568,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -576,7 +576,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -603,11 +603,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -615,7 +615,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -648,7 +648,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -678,7 +678,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -711,7 +711,7 @@ QUnit.module('Customize keyboard navigation', {
         const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -744,7 +744,7 @@ QUnit.module('Customize keyboard navigation', {
         const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -765,7 +765,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -776,7 +776,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -799,7 +799,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -810,7 +810,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -859,7 +859,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         fireKeyDown($editor.find('.dx-texteditor-input'), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -911,7 +911,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         fireKeyDown($editor.find('.dx-texteditor-input'), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -963,7 +963,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         fireKeyDown($editor.find('.dx-texteditor-input'), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1015,7 +1015,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         fireKeyDown($editor.find('.dx-texteditor-input'), 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1067,7 +1067,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1118,7 +1118,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1170,7 +1170,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1221,7 +1221,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1273,7 +1273,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1304,7 +1304,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('D');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -1350,7 +1350,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('rightArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1400,7 +1400,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('leftArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1450,7 +1450,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('upArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1500,7 +1500,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
 
@@ -1548,7 +1548,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('A');
         this.clock.tick(25);
 
@@ -1560,7 +1560,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
 
         this.triggerKeyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $editor = $('.dx-texteditor').eq(0);
@@ -1603,7 +1603,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('1');
         this.clock.tick(25);
 
@@ -1616,7 +1616,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.val(), '1', 'input value');
 
         this.triggerKeyDown('upArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-row .dx-texteditor-input').eq(0);
@@ -1687,7 +1687,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('rightArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('1');
         this.clock.tick(25);
 
@@ -1699,7 +1699,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.val(), '1', 'input value');
 
         this.triggerKeyDown('leftArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-row .dx-texteditor-container input').eq(0);
@@ -1737,7 +1737,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('1');
         this.clock.tick(25);
 
@@ -1750,7 +1750,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('upArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-row .dx-numberbox .dx-texteditor-container input').eq(0);
@@ -1788,7 +1788,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('rightArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('1');
         this.clock.tick(25);
 
@@ -1800,7 +1800,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.val(), '1', 'input value');
 
         this.triggerKeyDown('leftArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-row .dx-texteditor-input').eq(0);
@@ -1843,7 +1843,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.ok(true);
 
         this.triggerKeyDown('1');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         let $input = $('.dx-texteditor-input').eq(0);
@@ -1854,7 +1854,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         fireKeyDown($input, 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-texteditor-input').eq(0);
@@ -1866,10 +1866,10 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('2');
-        this.clock.tick();
+        this.clock.tick(10);
         $input = $('.dx-texteditor-input').eq(0);
         fireKeyDown($input, 'ArrowUp');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $input = $('.dx-texteditor-input').eq(0);
         assert.equal($input.length, 0, 'input');
@@ -1908,7 +1908,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('1');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         let $input = $('.dx-texteditor-input').eq(0);
@@ -1919,7 +1919,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         fireKeyDown($input, 'Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-texteditor-input').eq(0);
@@ -1930,10 +1930,10 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('2');
-        this.clock.tick();
+        this.clock.tick(10);
         $input = $('.dx-texteditor-input').eq(0);
         fireKeyDown($input, 'ArrowUp');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $input = $('.dx-texteditor-input').eq(0);
         assert.equal($input.length, 0, 'input');
@@ -1982,7 +1982,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('downArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('1');
         this.clock.tick(25);
 
@@ -1994,9 +1994,9 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.val(), '#_1.00', 'input value');
 
         this.triggerKeyDown('upArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('upArrow');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('1');
         this.clock.tick(25);
 
@@ -2008,7 +2008,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.val(), '#_1.00', 'input value');
 
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         $input = $('.dx-row .dx-texteditor-container input').eq(0);
@@ -2093,7 +2093,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2101,7 +2101,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2109,7 +2109,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2117,7 +2117,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2125,7 +2125,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2213,7 +2213,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('Enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $input = $('.dx-texteditor-input');
@@ -2264,7 +2264,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2272,7 +2272,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2280,7 +2280,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2288,7 +2288,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2296,7 +2296,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2345,7 +2345,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2353,7 +2353,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2361,7 +2361,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2369,7 +2369,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2377,7 +2377,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2425,7 +2425,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2433,7 +2433,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2441,7 +2441,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2449,7 +2449,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2457,7 +2457,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2503,7 +2503,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2522,7 +2522,7 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(input, 'Editor input');
         assert.equal(getTextSelection(input), input.value, 'Selection');
@@ -2572,7 +2572,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2589,7 +2589,7 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(input, 'Editor input');
         assert.notEqual(getTextSelection(input), input.value, 'Selection');
@@ -2641,7 +2641,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2660,7 +2660,7 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(input, 'Editor input');
         assert.equal(getTextSelection(input), input.value, 'Selection');
@@ -2710,7 +2710,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2727,7 +2727,7 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.ok(input, 'Editor input');
         assert.notEqual(getTextSelection(input), input.value, 'Selection');
@@ -2790,7 +2790,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2798,7 +2798,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('Enter');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2806,7 +2806,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('Escape');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.notOk(input, 'Editor input');
@@ -2814,7 +2814,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2842,7 +2842,7 @@ QUnit.module('Customize keyboard navigation', {
             // act
             this.focusCell(0, 0);
             this.triggerKeyDown('a');
-            this.clock.tick();
+            this.clock.tick(10);
             const $input = $('.dx-texteditor-input');
 
             // assert
@@ -2931,7 +2931,7 @@ QUnit.module('Customize keyboard navigation', {
 
             // act
             this.focusCell(0, 0);
-            this.clock.tick();
+            this.clock.tick(10);
             $(this.getCellElement(0, 0)).trigger($.Event('keydown', { key: 'b' }));
             $(this.getCellElement(0, 0)).find('.dx-texteditor-input').first().trigger($.Event('beforeinput'));
             this.clock.tick(300);

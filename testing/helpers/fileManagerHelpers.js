@@ -973,7 +973,7 @@ export const getFileChunkCount = (file, chunkSize) => {
 
 export const stubFileReader = object => {
     if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
-        sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+        sinon.stub(object, '_createFileReader').callsFake(() => new FileReaderMock());
     }
 };
 

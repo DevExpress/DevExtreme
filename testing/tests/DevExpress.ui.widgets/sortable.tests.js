@@ -2737,7 +2737,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
 
                     // act
                     scrollView.scrollTo({ y: 100 });
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     assert.ok($(scrollView.container()).scrollTop() > 0, 'scrollTop > 0');
@@ -2745,17 +2745,17 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     // act
                     let items = $(this.$element).children();
                     const pointer = pointerMock(items.last()).start().down().move(0, -200);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     scrollView.scrollTo({ y: 0 });
                     $(scrollView.content()).trigger('scroll');
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     pointer.move(0, -25);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     pointer.up();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     items = $(this.$element).children();
@@ -2790,16 +2790,16 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     // act
                     let items = $(this.$element).children();
                     const pointer = pointerMock(items.first()).start().down().move(0, 200);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     scrollView.scrollTo({ y: 100 });
                     this.clock.tick(100);
 
                     pointer.move(0, 40);
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     pointer.up();
-                    this.clock.tick();
+                    this.clock.tick(10);
 
                     // assert
                     items = $(this.$element).children();

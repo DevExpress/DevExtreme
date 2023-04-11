@@ -309,11 +309,11 @@ QUnit.module('Mentions module', moduleConfig, () => {
         const removeWord = { ops: [{ delete: 3 }] };
 
         mention.onTextChange(addMarker, {}, 'user');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(hidePopupSpy.notCalled);
 
         mention.onTextChange(removeWord, {}, 'user');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(hidePopupSpy.calledOnce);
     });
 
@@ -325,10 +325,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
         const removeMarker = { ops: [{ delete: 1 }] };
 
         mention.onTextChange(addMarker, {}, 'user');
-        this.clock.tick();
+        this.clock.tick(10);
         mention.onTextChange(removeMarker, {}, 'user');
         mention.onTextChange(addMarker, {}, 'user');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(filterListSpy.notCalled);
     });
@@ -409,7 +409,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
-        this.clock.tick();
+        this.clock.tick(10);
         const $list = $(`.${SUGGESTION_LIST_CLASS}`);
         const isListFocused = $list.hasClass(FOCUSED_STATE_CLASS);
         const isFirstListItemFocused = $list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_STATE_CLASS);
@@ -424,7 +424,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.$element.trigger($.Event('keydown', { key: 'ArrowDown', which: KEY_CODES.ARROW_DOWN }));
 
         const $list = $(`.${SUGGESTION_LIST_CLASS}`);
@@ -465,12 +465,13 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
         assert.strictEqual($items.length, 50);
 
         this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
+
         $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
         const isLastItemOnPageFocused = $items.eq(49).hasClass(FOCUSED_STATE_CLASS);
 
@@ -484,7 +485,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
 
@@ -502,7 +503,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
 
@@ -528,10 +529,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
 
             mention.savePosition(0);
             mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
-            this.clock.tick();
+            this.clock.tick(10);
 
             this.$element.trigger($.Event('keydown', { key, which: code }));
-            this.clock.tick();
+            this.clock.tick(10);
 
             const expectedDelta = new this.Delta()
                 .delete(1)
@@ -552,7 +553,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
 
             mention.savePosition(0);
             mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
-            this.clock.tick();
+            this.clock.tick(10);
 
             mention.onTextChange(INSERT_TEXT_DELTA, {}, 'user');
             this.clock.tick(POPUP_HIDING_TIMEOUT);
@@ -572,7 +573,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $list = $(`.${SUGGESTION_LIST_CLASS}`);
 
@@ -630,7 +631,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
         const mention = new Mentions(this.quillMock, this.options);
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
-        this.clock.tick();
+        this.clock.tick(10);
 
         $('#qunit-fixture').triggerHandler('scroll');
 
@@ -643,7 +644,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
 
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
-        this.clock.tick();
+        this.clock.tick(10);
         mention.onTextChange({ ops: [{ insert: 'A' }] }, {}, 'user');
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
