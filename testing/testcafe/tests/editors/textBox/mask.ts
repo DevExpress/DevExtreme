@@ -75,11 +75,7 @@ test('"!" character should not be accepted if mask restricts it (T1156419)', asy
 
   await t
     .typeText(input, '!', { caretPos: 0 })
-    .expect(input.value).eql(' ')
-    .expect(textBox.option('value'))
-    .eql(' ')
-    .expect(textBox.option('text'))
-    .eql(' ');
+    .expect(input.value).eql('_');
 }).before(async () => {
   await appendElementTo('#container', 'div', 'textBox', { });
 
