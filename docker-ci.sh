@@ -77,7 +77,7 @@ function run_test_impl {
         "firefox")
             kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
 
-            local profile_path="/firefox-profile" 
+            local profile_path="/firefox-profile"
             [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
             local firefox_args="-profile $profile_path $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
