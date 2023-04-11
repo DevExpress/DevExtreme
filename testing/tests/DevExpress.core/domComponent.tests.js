@@ -1173,17 +1173,6 @@ QUnit.module('default', {
         assert.equal(element.style.height, '10px', 'height is correct');
     });
 
-    // QUnit.test('license check mechanism', function(assert) {
-    //     const licenseStub = sinon.stub(license, 'checkLicense');
-    //
-    //     try {
-    //         $('#component').TestComponent();
-    //         assert.equal(licenseStub.callCount, 1, 'the checkLicense method is called');
-    //     } finally {
-    //         licenseStub.restore();
-    //     }
-    // });
-
     QUnit.test('license check mechanism - log once', function(assert) {
         config({ license: '' });
         license.resetLicenseCheckSkipCondition();
@@ -1201,8 +1190,38 @@ QUnit.module('default', {
         }
     });
 
+    QUnit.test('license check mechanism - log on wrong license', function(assert) {
+        config({ license: 'WRONG_LICENSE' });
+        license.resetLicenseCheckSkipCondition();
+
+        const loggerStub = sinon.stub(logger, 'warn');
+
+        try {
+            $('#component').TestComponent();
+            assert.equal(loggerStub.callCount, 1, 'the warn method is called once');
+            assert.ok(license.getLicenseCheckSkipCondition());
+        } finally {
+            loggerStub.restore();
+        }
+    });
+
+    QUnit.test('license check mechanism - log on unavailable version', function(assert) {
+        config({ license: btoa(JSON.stringify({ versions: ['19.1', '19.2'] })) });
+        license.resetLicenseCheckSkipCondition();
+
+        const loggerStub = sinon.stub(logger, 'warn');
+
+        try {
+            $('#component').TestComponent();
+            assert.equal(loggerStub.callCount, 1, 'the warn method is called once');
+            assert.ok(license.getLicenseCheckSkipCondition());
+        } finally {
+            loggerStub.restore();
+        }
+    });
+
     QUnit.test('license check mechanism - no log on correct license', function(assert) {
-        config({ license: '1234567890' });
+        config({ license: btoa(JSON.stringify({ versions: ['23.1', '23.2', '24.1', '24.2'] })) });
         license.resetLicenseCheckSkipCondition();
 
         const loggerStub = sinon.stub(logger, 'warn');
