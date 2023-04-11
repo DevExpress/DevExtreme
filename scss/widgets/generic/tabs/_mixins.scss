@@ -1,0 +1,73 @@
+@use "colors" as *;
+@use "shadows" as *;
+
+// adduse
+
+@mixin tabpanel-navigation-shadow-mixin($accent-color) {
+  .dx-tabs-nav-button-left {
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+  }
+
+  .dx-tabs-nav-button-right {
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
+  }
+}
+
+
+@mixin tabpanel-tab-shadow-mixin($tab-shadow, $tab-rtl-shadow) {
+  box-shadow: $tab-shadow;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    box-shadow: $tab-rtl-shadow;
+  }
+}
+
+
+@mixin boundary-tabs-shadow-mixin($accent-color) {
+  &.dx-tabs-expanded {
+    .dx-tab:not(.dx-state-focused, .dx-tab-selected) {
+      &:first-of-type {
+        @include tabpanel-tab-shadow-mixin(
+          get-tab-not-selected-not-focused-first-expanded-shadow($accent-color),
+          get-tab-not-selected-not-focused-first-expanded-rtl-shadow($accent-color)
+        );
+      }
+    }
+  }
+
+  &.dx-tabs-stretched {
+    .dx-tab:not(.dx-state-focused, .dx-tab-selected) {
+      &:last-of-type {
+        @include tabpanel-tab-shadow-mixin(
+          get-tab-not-selected-not-focused-first-stretched-shadow($accent-color),
+          get-tab-not-selected-not-focused-first-stretched-rtl-shadow($accent-color)
+        );
+      }
+    }
+  }
+}
+
+
+@mixin tabs-shadow-mixin($accent-color, $target-class) {
+  .dx-tab {
+    &.#{$target-class} {
+      box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
+    }
+
+    &.#{$target-class},
+    &.dx-tab-active {
+      .dx-tab-content {
+        color: $tabs-tab-selected-color;
+      }
+
+      &.dx-state-disabled {
+        .dx-tab-content {
+          color: $tabs-tab-color;
+        }
+      }
+    }
+  }
+
+  @include boundary-tabs-shadow-mixin($accent-color);
+}
