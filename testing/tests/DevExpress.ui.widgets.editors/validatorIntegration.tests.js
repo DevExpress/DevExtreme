@@ -150,8 +150,14 @@ QUnit.module('Regression', {
         const validator = this.fixture.createTextBoxWithValidator({ validationRules: [{ type: 'required' }] });
         const topDiff = 22;
 
-        $('<div style=\'height: 100px\'/>').insertAfter(
-            this.fixture.$element.wrap('<div id=\'bingo\' style=\'overflow-y: scroll; height: 100px\' />')
+        const $element = $('<div />');
+        $element[0].style = 'height: 100px;';
+
+        const $bingo = $('<div id=\'bingo\' />');
+        $bingo[0].style = 'overflow-y: scroll; height: 100px;';
+
+        $element.insertAfter(
+            this.fixture.$element.wrap($bingo)
         );
         const $scrollableWrapper = validator.$element().parent().appendTo('body');
 

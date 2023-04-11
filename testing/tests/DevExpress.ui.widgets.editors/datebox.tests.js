@@ -31,18 +31,15 @@ import { RESIZE_WAIT_TIMEOUT } from '../DevExpress.ui.widgets/scrollableParts/sc
 
 QUnit.testStart(() => {
     const markup =
-        '<style>\
-            #containerWithWidth {\
-                width: 100px;\
-            }\
-        </style>\
-        <div id="parent-div"></div>\
+        '<div id="parent-div"></div>\
         <div id="dateBox"></div>\
         <div id="dateBoxWithPicker"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="containerWithWidth"><div id="innerDateBox"></div></div';
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('containerWithWidth').style = 'width: 100px;';
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
 });
 
 const currentDate = new Date(2015, 11, 31);

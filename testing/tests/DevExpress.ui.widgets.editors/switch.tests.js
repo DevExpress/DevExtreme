@@ -13,11 +13,13 @@ QUnit.testStart(function() {
             <div id="switch"></div>\
             <div id="switch2"></div>\
             <div id="widget"></div>\
-            <div style="display:none" id="invisibleSwitch"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="invisibleSwitch"></div>\
+            <div id="widthRootStyle"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('invisibleSwitch').style = 'display: none;';
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
 });
 
 const SWITCH_CLASS = 'dx-switch';

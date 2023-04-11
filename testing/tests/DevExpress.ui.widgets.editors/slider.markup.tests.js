@@ -16,9 +16,10 @@ testStart(function() {
     const markup = `
         <div id="slider"></div>
         <div id="widget"></div>
-        <div id="widthRootStyle" style="width: 300px;"></div>`;
+        <div id="widthRootStyle"></div>`;
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
 });
 
 module('slider markup', () => {

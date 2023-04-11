@@ -14,11 +14,12 @@ import { RESIZE_WAIT_TIMEOUT } from '../DevExpress.ui.widgets/scrollableParts/sc
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="roller" style="height: 20px"></div>\
+        '<div id="roller"></div>\
             <div id="picker"></div>\
             <div id="customDateView"></div>';
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('roller').style = 'height: 20px;';
 });
 
 

@@ -19,7 +19,7 @@ QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
             <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="widthRootStyle"></div>\
             <div id="autocomplete"></div>\
         \
         <div id="autocomplete2"></div>\
@@ -41,6 +41,7 @@ QUnit.testStart(() => {
     </div>';
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
 });
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -1619,14 +1620,12 @@ QUnit.module('widget sizing render', {
     });
 
     QUnit.testInActiveWindow('filter is not reset', function(assert) {
-        const $fixture = $('#qunit-fixture');
-        const requiredCSS = $('<style>.dx-popup-content {padding: 0 !important;border: none !important;margin: 0 !important;</style>');
-        requiredCSS.appendTo($fixture);
-
         const $element = $('#widget').dxAutocomplete({
             items: ['Congo', 'Canada', 'Zimbabwe'],
             searchTimeout: 0
         });
+
+        $element.find('.dx-popup-content')[0].style = 'padding: 0 !important;border: none !important;margin: 0 !important;';
 
         const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
         const keyboard = keyboardMock($input);

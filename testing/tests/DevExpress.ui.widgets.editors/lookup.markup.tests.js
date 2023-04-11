@@ -11,7 +11,7 @@ const { test, module, testStart } = QUnit;
 testStart(() => {
     const markup =
         `<div id="lookup"></div>
-        <div id="widthRootStyle" style="width: 300px;"></div>
+        <div id="widthRootStyle"></div>
         <div id="lookupFieldTemplate">
             <div data-options="dxTemplate: { name: 'field' }">
                 <span>test</span>
@@ -19,6 +19,7 @@ testStart(() => {
         </div>`;
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
 });
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';

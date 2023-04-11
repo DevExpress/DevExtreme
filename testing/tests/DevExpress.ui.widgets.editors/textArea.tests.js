@@ -14,18 +14,21 @@ QUnit.testStart(() => {
     const markup =
         '<div id="textarea"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="container">\
             <div id="withContainer"></div>\
         </div>\
         <div id="scrollable">\
-            <div id="content" style="width: 300px; height: 300px;">\
-                <div id="textAreaInScrollable" style="margin: 50px;">\
+            <div id="content">\
+                <div id="textAreaInScrollable">\
                 </div>\
             </div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
+    document.getElementById('content').style = 'width: 300px; height: 300px;';
+    document.getElementById('textAreaInScrollable').style = 'margin: 50px;';
 });
 
 

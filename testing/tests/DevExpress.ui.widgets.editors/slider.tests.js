@@ -21,9 +21,10 @@ testStart(() => {
     const markup =
         `<div id="slider"></div>
         <div id="widget"></div>
-        <div id="widthRootStyle" style="width: 300px;"></div>`;
+        <div id="widthRootStyle"></div>`;
 
     $('#qunit-fixture').html(markup);
+    document.getElementById('widthRootStyle').style = 'width: 300px;';
 });
 
 const SLIDER_CLASS = 'dx-slider';
@@ -246,13 +247,14 @@ module('render', moduleOptions, () => {
     });
 
     test('drag handler', function(assert) {
-        // the width of the right and left margin must be 0 (T927984)
-        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('#qunit-fixture'));
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
             value: 0
         }).css('width', 500);
+
+        // the width of the right and left margin must be 0 (T927984)
+        $element.find('.' + SLIDER_BAR_CLASS)[0].style = 'margin: 14px 0px;';
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
@@ -266,12 +268,9 @@ module('render', moduleOptions, () => {
         pointerMock($bar).start().down().move(500 + $handle.outerWidth() / 2).up();
         assert.equal(handlePositionAgainstTrackBar($handle).left, 500);
         assert.equal($range.width(), 500);
-        styles.remove();
     });
 
     test('smooth drag of handler', function(assert) {
-        // the width of the right and left margin must be 0 (T927984)
-        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('#qunit-fixture'));
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
@@ -280,6 +279,9 @@ module('render', moduleOptions, () => {
             width: 500
         });
 
+        // the width of the right and left margin must be 0 (T927984)
+        $element.find('.' + SLIDER_BAR_CLASS)[0].style = 'margin: 14px 0px;';
+
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
         const pointer = pointerMock($handle);
@@ -287,7 +289,6 @@ module('render', moduleOptions, () => {
         pointer.start().down($range.offset().left).move(100);
         assert.equal(handlePositionAgainstTrackBar($handle).left, 100);
         pointer.up();
-        styles.remove();
     });
 
     test('value should be updated on swipestart on mobile devices', function(assert) {
