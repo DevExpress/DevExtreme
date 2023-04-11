@@ -96,19 +96,15 @@ export const columnHeadersModule = {
                     const that = this;
 
                     return function($container, options) {
-                        const $content = column.command ? $container : createCellContent(that, $container, options);
-                        const caption = column.command !== 'expand' && column.caption;
+                        const isCellContentEmpty = !!column.command && column.command !== 'empty';
 
-                        if(caption) {
-                            $content.text(caption);
-                        } else if(column.command) {
-                            if(column.command === 'empty') {
-                                const text = that._getEmptyHeaderText();
+                        if(isCellContentEmpty) {
+                            $container.html('&nbsp;');
+                        } else {
+                            const $content = createCellContent(that, $container, options);
+                            const text = column.command === 'empty' ? that._getEmptyHeaderText() : column.caption;
 
-                                $container.text(text);
-                            } else {
-                                $container.html('&nbsp;');
-                            }
+                            $content.text(text);
                         }
                     };
                 },
