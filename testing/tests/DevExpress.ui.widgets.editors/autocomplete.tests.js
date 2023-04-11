@@ -1625,7 +1625,10 @@ QUnit.module('widget sizing render', {
             searchTimeout: 0
         });
 
-        $element.find('.dx-popup-content')[0].style = 'padding: 0 !important;border: none !important;margin: 0 !important;';
+        $element.find('.dx-popup-content')
+            .css('padding', '0 !important')
+            .css('border', 'none !important')
+            .css('margin', '0 !important');
 
         const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
         const keyboard = keyboardMock($input);
