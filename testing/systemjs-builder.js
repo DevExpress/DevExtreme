@@ -212,31 +212,34 @@ const transpileRenovationModules = async(Builder) => {
 };
 
 const transpileCss = async(Builder) => {
-    const listFiles = [
-        {
-            filePath: path.join(root, 'artifacts/css/dx.material.blue.light.css!'),
-            destPath: path.join(root, 'artifacts/css-systemjs/dx.material.blue.light.css'),
-        },
-        {
-            filePath: path.join(root, 'artifacts/css/dx.light.css!'),
-            destPath: path.join(root, 'artifacts/css-systemjs/dx.light.css'),
-        },
-        {
-            filePath: path.join(root, 'node_modules/systemjs-plugin-css/css.js'),
-            destPath: path.join(root, 'artifacts/css-systemjs/css.js'),
-        },
-        {
-            filePath: path.join(root, 'node_modules/systemjs-plugin-json/json.js'),
-            destPath: path.join(root, 'artifacts/css-systemjs/json.js'),
-        },
-    ];
+    const pluginsList = ['css', 'json'];
 
     await Promise.all(
-        listFiles.map(({ filePath, destPath }) => {
+        pluginsList.map(pluginName => {
             const builder = new Builder(root, config);
-            return builder.bundle(filePath, destPath);
+
+            return builder.bundle(
+                path.join(root, `node_modules/systemjs-plugin-${pluginName}/${pluginName}.js`),
+                path.join(root, `artifacts/css-systemjs/${pluginName}.js`)
+            );
         })
     );
+
+    const cssList = ['artifacts/css/dx.light.css', 'artifacts/css/dx.material.blue.light.css'];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for(const cssFile of cssList) {
+        const destPath = path.join(root, cssFile.replace('css', 'css-systemjs'));
+        const destDir = path.dirname(destPath);
+        if(!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+        }
+
+        const systemInject = `System.register('${cssFile}', [], false, function () {});`;
+        const cssInject = `(function(c){if (typeof document == 'undefined') return;var d=document,a='appendChild',i='styleSheet',s=d.createElement('link');s.rel='stylesheet';s.type='text/css';s.href='/${cssFile}';d.getElementsByTagName('head')[0][a](s);})();`;
+
+        fs.writeFileSync(destPath, [systemInject, cssInject].join('\n'));
+    }
 };
 
 const transpileTests = async(Builder) => {
