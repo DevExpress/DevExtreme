@@ -10,8 +10,8 @@ runs:
         # List of browser versions
         # Chrome:  https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
         # Firefox: https://www.ubuntuupdates.org/package/ubuntu_mozilla_security/focal/main/base/firefox
-        CHROME_VERSION:  ""
-        FIREFOX_VERSION: ""
+        CHROME_VERSION:  "110.0.5481.177-1"
+        FIREFOX_VERSION: "112.0+build2-0ubuntu0.20.04.1"
 
       run: |
 
