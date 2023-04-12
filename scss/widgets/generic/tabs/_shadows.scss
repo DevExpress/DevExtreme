@@ -1,8 +1,6 @@
-@use "../colors" as *;
+// adduse
 @use "sizes" as *;
 @use "colors" as *;
-
-// adduse
 
 $generic-tabpanel-inset-shadow-left: inset $generic-tabs-border-width 0;
 $generic-tabpanel-inset-shadow-top: inset 0 $generic-tabs-border-width;
