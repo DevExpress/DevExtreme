@@ -676,10 +676,11 @@ export default function() {
 
         test('Add link dialog should contains info about link when cursor places on right border of link(T1062588)', function(assert) {
             const linkText = 'text';
+            const linkAddress = 'http://devexpress.com';
             const $container = $('#htmlEditor');
             const instance = $container.dxHtmlEditor({
                 toolbar: { items: ['link'] },
-                value: `<a href="http://devexpress.com">${linkText}</a>`,
+                value: `<a href="${linkAddress}">${linkText}</a>`,
             }).dxHtmlEditor('instance');
 
             instance.setSelection(linkText.length, 0);
@@ -687,8 +688,10 @@ export default function() {
             const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
             $linkFormatButton.trigger('dxclick');
 
+            const $linkAddressInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
             const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
 
+            assert.strictEqual(linkAddress, $linkAddressInput.val());
             assert.strictEqual(linkText, $textInput.val());
         });
 
