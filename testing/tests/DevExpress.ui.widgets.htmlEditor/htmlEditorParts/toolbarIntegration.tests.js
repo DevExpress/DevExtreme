@@ -688,8 +688,9 @@ export default function() {
             const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
             $linkFormatButton.trigger('dxclick');
 
-            const $linkAddressInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
-            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+            const $formInputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+            const $linkAddressInput = $formInputs.first();
+            const $textInput = $formInputs.last();
 
             assert.strictEqual(linkAddress, $linkAddressInput.val());
             assert.strictEqual(linkText, $textInput.val());
