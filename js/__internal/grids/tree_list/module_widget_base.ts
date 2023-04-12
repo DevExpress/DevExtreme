@@ -97,7 +97,7 @@ const TreeList = (Widget as any).inherit({
 
     that.callBase();
 
-    if (!this.disableDeprecationWarnings) {
+    if (!this.option('_disableDeprecationWarnings')) {
       gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
     }
 
