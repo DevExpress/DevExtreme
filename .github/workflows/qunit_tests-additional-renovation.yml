@@ -109,7 +109,7 @@ jobs:
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(1/2)", NO_CSP: true, name: 'ui.scheduler(1/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(2/2)", NO_CSP: true, name: 'ui.scheduler(2/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", NO_CSP: true, name: 'viz-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", NO_CSP: true, name: 'renovation-firefox' }
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' }
         ]
 
     steps:
