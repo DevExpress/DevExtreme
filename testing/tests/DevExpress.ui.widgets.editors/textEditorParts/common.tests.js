@@ -499,7 +499,15 @@ QUnit.module('label integration', {
             this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
         };
 
+        const that = this;
+
         class TextEditorLabelMock extends TextEditorLabel {
+            constructor(args) {
+                super(args);
+                that.labelArgs = args;
+                that.labelMock = this;
+            }
+
             updateMaxWidth = sinon.stub();
             updateBeforeWidth = sinon.stub();
             updateMode = sinon.stub();
@@ -508,9 +516,7 @@ QUnit.module('label integration', {
             updateContainsButtonsBefore = sinon.stub();
         }
 
-        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return this.labelMock = new TextEditorLabelMock(args); };
-
-        TextEditor.mockTextEditorLabel(this.TextEditorLabelMock);
+        TextEditor.mockTextEditorLabel(TextEditorLabelMock);
     },
     afterEach: function() {
         Object.values(this.labelMock, (stub) => {
