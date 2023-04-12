@@ -183,6 +183,7 @@
 
         const shadowContainer = document.createElement('div');
         const style = document.createElement('style');
+        style.setAttribute('nonce', 'qunit-extension');
 
         shadowContainer.className = 'shadow-container';
 
