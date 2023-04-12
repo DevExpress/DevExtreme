@@ -40,7 +40,7 @@ QUnit.testStart(() => {
         </div>\
     </div>';
 
-    $('#qunit-fixture').append(markup);
+    $('#qunit-fixture').html(markup);
     $('#widthRootStyle').css('width', '300px');
 });
 
