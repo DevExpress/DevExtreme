@@ -288,7 +288,7 @@ QUnit.test('selectAll checkbox should have aria-label=checkbox attribute', funct
 
     const $selectAllCheckbox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
 
-    assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'checkbox');
+    assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'Select All');
 });
 
 QUnit.test('checkbox should have aria-label=checkbox attribute', function(assert) {
@@ -299,7 +299,7 @@ QUnit.test('checkbox should have aria-label=checkbox attribute', function(assert
 
     const $checkbox = $(`.${CHECKBOX_CLASS}`);
 
-    assert.strictEqual($checkbox.attr('aria-label'), 'checkbox');
+    assert.strictEqual($checkbox.attr('aria-label'), 'Check State');
 });
 
 QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
