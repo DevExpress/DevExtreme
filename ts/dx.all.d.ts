@@ -1064,16 +1064,16 @@ declare module DevExpress {
      * [descr:PositionConfig.collision]
      */
     collision?:
-      | DevExpress.animation.CollisionResolutionCombination
+      | DevExpress.common.CollisionResolutionCombination
       | {
           /**
            * [descr:PositionConfig.collision.x]
            */
-          x?: DevExpress.animation.CollisionResolution;
+          x?: DevExpress.common.CollisionResolution;
           /**
            * [descr:PositionConfig.collision.y]
            */
-          y?: DevExpress.animation.CollisionResolution;
+          y?: DevExpress.common.CollisionResolution;
         };
     /**
      * [descr:PositionConfig.my]
@@ -1215,28 +1215,6 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
-declare module DevExpress.animation {
-  export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
-  export type CollisionResolutionCombination =
-    | 'fit'
-    | 'fit flip'
-    | 'fit flipfit'
-    | 'fit none'
-    | 'flip'
-    | 'flip fit'
-    | 'flip none'
-    | 'flipfit'
-    | 'flipfit fit'
-    | 'flipfit none'
-    | 'none'
-    | 'none fit'
-    | 'none flip'
-    | 'none flipfit';
-  /**
-   * @deprecated Use the PositionConfig type instead
-   */
-  export interface positionConfig extends PositionConfig {}
-}
 declare module DevExpress.common {
   /**
    * @deprecated Use the AnimationConfig type instead
@@ -1318,6 +1296,22 @@ declare module DevExpress.common {
   };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
+  export type CollisionResolutionCombination =
+    | 'fit'
+    | 'fit flip'
+    | 'fit flipfit'
+    | 'fit none'
+    | 'flip'
+    | 'flip fit'
+    | 'flip none'
+    | 'flipfit'
+    | 'flipfit fit'
+    | 'flipfit none'
+    | 'none'
+    | 'none fit'
+    | 'none flip'
+    | 'none flipfit';
   /**
    * [descr:CompareRule]
    */
@@ -1582,6 +1576,10 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+  /**
+   * @deprecated Use the PositionConfig type instead
+   */
+  export interface positionConfig extends PositionConfig {}
   /**
    * [descr:RangeRule]
    */

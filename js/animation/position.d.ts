@@ -1,115 +1,23 @@
-import {
-    UserDefinedElement,
-} from '../core/element';
+import { PositionConfig } from '../common/animation/position';
 
-import {
-    HorizontalAlignment,
-    PositionAlignment,
-    VerticalAlignment,
-} from '../common';
-
-/** @public */
-export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
-/** @public */
-export type CollisionResolutionCombination = 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit';
-
+export {
 /**
- * @docid
- * @namespace DevExpress
- * @type object
- * @public
+ * @deprecated Import from common/animation/position instead
  */
-export interface PositionConfig {
-    /**
-     * @docid
-     * @public
-     */
-    at?: PositionAlignment | {
-      /**
-       * @docid
-       */
-      x?: HorizontalAlignment;
-      /**
-       * @docid
-       */
-      y?: VerticalAlignment;
-    };
-    /**
-     * @docid
-     * @public
-     */
-    boundary?: string | UserDefinedElement | Window;
-    /**
-     * @docid
-     * @public
-     */
-    boundaryOffset?: string | {
-      /**
-       * @docid
-       * @default 0
-       */
-      x?: number;
-      /**
-       * @docid
-       * @default 0
-       */
-      y?: number;
-    };
-    /**
-     * @docid
-     * @public
-     */
-    collision?: CollisionResolutionCombination | {
-      /**
-       * @docid
-       * @default 'none'
-       */
-      x?: CollisionResolution;
-      /**
-       * @docid
-       * @default 'none'
-       */
-      y?: CollisionResolution;
-    };
-    /**
-     * @docid
-     * @public
-     */
-    my?: PositionAlignment | {
-      /**
-       * @docid
-       */
-      x?: HorizontalAlignment;
-      /**
-       * @docid
-       */
-      y?: VerticalAlignment;
-    };
-    /**
-     * @docid
-     * @public
-     */
-    of?: string | UserDefinedElement | Window;
-    /**
-     * @docid
-     * @public
-     */
-    offset?: string | {
-      /**
-       * @docid
-       * @default 0
-       */
-      x?: number;
-      /**
-       * @docid
-       * @default 0
-       */
-      y?: number;
-    };
-}
+  CollisionResolution,
+/**
+ * @deprecated Import from common/animation/position instead
+ */
+  CollisionResolutionCombination,
+} from '../common/animation/position';
+export {
+/**
+ * @deprecated Import from common/animation/position instead
+ */
+  PositionConfig,
+};
 
 /**
- * @public
- * @deprecated Use the PositionConfig type instead
+ * @deprecated Import from common/animation/position instead
  */
 export interface positionConfig extends PositionConfig { }
