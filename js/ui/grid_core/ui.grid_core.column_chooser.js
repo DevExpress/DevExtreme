@@ -467,8 +467,9 @@ const columnChooserMembers = {
 
     hasHiddenColumns: function() {
         const isEnabled = this.option('columnChooser.enabled');
+        const hiddenColumns = this.getColumns().filter(column => !column.visible);
 
-        return isEnabled && !!this.getColumns().filter(column => !column.visible).length;
+        return isEnabled && hiddenColumns.length;
     },
 
     publicMethods: function() {

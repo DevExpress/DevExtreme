@@ -351,17 +351,16 @@ const onGroupingMenuItemClick = function (column, params) {
 const isGroupPanelVisible = (groupPanelOptions): boolean => {
   const visible = groupPanelOptions?.visible;
 
-  if (visible === 'auto') {
-    return devices.current().deviceType === 'desktop';
-  }
-
-  return visible;
+  return visible === 'auto'
+    ? devices.current().deviceType === 'desktop'
+    : !!visible;
 };
 
 const allowDragging = (groupPanelOptions, column): boolean => {
   const isVisible = isGroupPanelVisible(groupPanelOptions);
+  const canDrag = groupPanelOptions.allowColumnDragging && column.allowGrouping;
 
-  return isVisible && groupPanelOptions.allowColumnDragging && column.allowGrouping;
+  return isVisible && !!canDrag;
 };
 
 export const GroupingHeaderPanelExtender = (function () {
@@ -415,7 +414,7 @@ export const GroupingHeaderPanelExtender = (function () {
       event.preventDefault();
     },
 
-    _isGroupPanelVisible() {
+    _isGroupPanelVisible(): boolean {
       return isGroupPanelVisible(this.option('groupPanel'));
     },
 
@@ -544,8 +543,8 @@ export const GroupingHeaderPanelExtender = (function () {
       return this.callBase() || this._isGroupPanelVisible();
     },
 
-    hasGroupedColumns() {
-      return this._isGroupPanelVisible() && this.getColumns().length;
+    hasGroupedColumns(): boolean {
+      return this._isGroupPanelVisible() && !!this.getColumns().length;
     },
 
     optionChanged(args) {

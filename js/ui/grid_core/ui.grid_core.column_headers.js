@@ -110,18 +110,22 @@ export const columnHeadersModule = {
                 },
 
                 _getEmptyHeaderText: function() {
-                    const hasHiddenColumns = this.component.getView('columnChooserView').hasHiddenColumns();
-                    const hasGroupedColumns = this.component.getView('headerPanel').hasGroupedColumns();
+                    const hasHiddenColumns = !!this.component.getView('columnChooserView').hasHiddenColumns();
+                    const hasGroupedColumns = !!this.component.getView('headerPanel').hasGroupedColumns();
 
-                    if(hasHiddenColumns && hasGroupedColumns) {
-                        return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText');
-                    } else if(hasGroupedColumns) {
-                        return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
-                    } else if(hasHiddenColumns) {
-                        return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
+                    switch(true) {
+                        case (hasHiddenColumns && hasGroupedColumns):
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText');
+
+                        case hasGroupedColumns:
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
+
+                        case hasHiddenColumns:
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
+
+                        default:
+                            return '';
                     }
-
-                    return '';
                 },
 
                 _getHeaderTemplate: function(column) {
