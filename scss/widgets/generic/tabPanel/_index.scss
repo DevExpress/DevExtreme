@@ -5,13 +5,19 @@
 @use "../sizes" as *;
 @use "../tabs/sizes" as *;
 @use "../tabs/colors" as *;
-@use "../tabs/shadows" as *;
 @use "../tabs/mixins" as *;
 @use "../../base/tabPanel";
 @use "shadows" as *;
 
-
 // adduse
+
+$tab-selected-not-focused-right-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
+$tab-selected-not-focused-right-rtl-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
+$tab-selected-not-focused-left-right-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
+$tab-selected-not-focused-left-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
+$tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
+$tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
+
 
 @mixin tabpanel-tabs-shadow-mixin($accent-color) {
   .dx-tabs {
