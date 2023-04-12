@@ -109,7 +109,7 @@ const TreeList = (Widget as any).inherit({
     that.callBase();
 
     if (!this.disableDeprecationWarnings) {
-      gridCoreUtils.logColumnsDeprecatedWarningIfNeed(this.NAME, this.option('columns'));
+      gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
     }
 
     treeListCore.processModules(that, treeListCore);
