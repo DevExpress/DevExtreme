@@ -31,12 +31,10 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-<!-- <body style="background-color: black;"> -->
 <body>
-    <div style="margin-left: 5px;">
-        <div id="scrolledtabs" style="margin-bottom: 20px;"></div>
-        <div id="scrolledtabs2"></div>
-    </div>
+    <div id="scrolledtabs" style="margin-bottom: 10px;"></div>
+    <!-- <div id="scrolledtabs2"></div> -->
+
     <script>
         $(function() {
             const tabs = [
@@ -120,25 +118,26 @@
                 },
             ];
 
-            const empty = [{},{},{},{},{},{},{}]
-
-            $(function() {
-                $('#scrolledtabs').dxTabs({
-                    dataSource: tabs,
-                    width: 450,
-                    selectOnFocus: false,
-                    scrollByContent: true,
-                    // showNavButtons: true,
-                });
-            });
-            
-            $('#scrolledtabs2').dxTabPanel({
-                // rtlEnabled: true,
-                dataSource: tabs,
-                width: 550,
-                scrollByContent: true,
+            $('#scrolledtabs').dxTabs({
+                items: tabs,
+                // items: [
+                //     { text: 'text 1' },
+                //     { text: 'long text example' },
+                //     { text: 'text 2' },
+                // ],
+                selectOnFocus: false,
+                scrollingEnabled: true,
                 showNavButtons: true,
+                width: 700,
             });
+
+            // $('#scrolledtabs2').dxTabPanel({
+            //     // rtlEnabled: true,
+            //     dataSource: tabs,
+            //     width: 550,
+            //     scrollByContent: true,
+            //     showNavButtons: true,
+            // });
         });
     </script>
 </body>

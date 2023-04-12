@@ -27,29 +27,37 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 
 @function get-tab-not-selected-not-focused-first-expanded-shadow($accent-color) {
-  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-last-expanded-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color;
 }
 
 @function get-tab-not-selected-not-focused-first-expanded-rtl-shadow($accent-color) {
-  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-last-expanded-rtl-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
 }
 
 @function get-tab-not-selected-not-focused-first-stretched-shadow($accent-color) {
-  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
 }
 
 @function get-tab-not-selected-not-focused-first-stretched-rtl-shadow($accent-color) {
-  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
 }
 
 
 @mixin tabpanel-navigation-shadow-mixin($accent-color) {
   .dx-tabs-nav-button-left {
-    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
   }
 
   .dx-tabs-nav-button-right {
-    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
   }
 }
 
@@ -71,6 +79,13 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
         @include tabpanel-tab-shadow-mixin(
           get-tab-not-selected-not-focused-first-expanded-shadow($accent-color),
           get-tab-not-selected-not-focused-first-expanded-rtl-shadow($accent-color)
+        );
+      }
+
+      &:last-of-type {
+        @include tabpanel-tab-shadow-mixin(
+          get-tab-not-selected-not-focused-last-expanded-shadow($accent-color),
+          get-tab-not-selected-not-focused-last-expanded-rtl-shadow($accent-color)
         );
       }
     }
@@ -96,7 +111,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     }
   }
 
-  @include boundary-tabs-shadow-mixin($accent-color);
+  @include boundary-tabs-shadow-mixin($tabs-border-color);
 }
 
 
@@ -149,8 +164,6 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 }
 
 .dx-tabs {
-  display: block;
-  border: none;
   background-color: $tabs-tab-bg;
   color: $tabs-border-color;
   box-shadow: $generic-tabpanel-inset-shadow-bottom $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
