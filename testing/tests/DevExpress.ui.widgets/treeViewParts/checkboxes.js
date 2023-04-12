@@ -280,7 +280,7 @@ const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
     });
 });
 
-QUnit.test('selectAll checkbox should have aria-label=checkbox attribute', function(assert) {
+QUnit.test('selectAll checkbox should have aria-label=Select All attribute', function(assert) {
     initTree({
         items: [ { text: 'item' } ],
         showCheckBoxesMode: 'selectAll'
@@ -291,7 +291,7 @@ QUnit.test('selectAll checkbox should have aria-label=checkbox attribute', funct
     assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'Select All');
 });
 
-QUnit.test('checkbox should have aria-label=checkbox attribute', function(assert) {
+QUnit.test('checkbox should have aria-label=Check State attribute', function(assert) {
     initTree({
         items: [ { text: 'item' } ],
         showCheckBoxesMode: 'normal'
