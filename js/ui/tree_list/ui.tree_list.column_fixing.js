@@ -1,4 +1,1 @@
-import core from './ui.tree_list.core';
-import { columnFixingModule } from '../grid_core/ui.grid_core.column_fixing';
-
-core.registerModule('columnFixing', columnFixingModule);
+import '../../__internal/grids/tree_list/module_not_extended/column_fixing';
