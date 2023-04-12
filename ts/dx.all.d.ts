@@ -2505,31 +2505,37 @@ declare module DevExpress.common.grids {
     sortOrder?: SortOrder;
   };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
+  /**
+   * [descr:ColumnChooserSearch]
+   */
   export type ColumnChooserSearch = {
     /**
-     * [descr:GridBaseOptions.columnChooser.search.editorOptions]
+     * [descr:ColumnChooserSearch.editorOptions]
      */
     editorOptions?: any;
     /**
-     * [descr:GridBaseOptions.columnChooser.search.enabled]
+     * [descr:ColumnChooserSearch.enabled]
      */
     enabled?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.search.timeout]
+     * [descr:ColumnChooserSearch.timeout]
      */
     timeout?: number;
   };
+  /**
+   * [descr:ColumnChooserSelection]
+   */
   export type ColumnChooserSelection = {
     /**
-     * [descr:GridBaseOptions.columnChooser.selection.allowSelectAll]
+     * [descr:ColumnChooserSelection.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.selection.recursive]
+     * [descr:ColumnChooserSelection.recursive]
      */
     recursive?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.selection.allowSelectAll]
+     * [descr:ColumnChooserSelection.selectByClick]
      */
     selectByClick?: boolean;
   };
