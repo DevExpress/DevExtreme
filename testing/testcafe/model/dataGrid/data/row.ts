@@ -14,6 +14,7 @@ const CLASS = {
   insertedRow: 'dx-row-inserted',
   editedRow: 'dx-edit-row',
   groupExpanded: 'group-opened',
+  stateHover: 'dx-state-hover',
 };
 
 export default class DataRow extends FocusableElement {
@@ -31,6 +32,8 @@ export default class DataRow extends FocusableElement {
 
   isExpanded: Promise<boolean>;
 
+  isHovered: Promise<boolean>;
+
   constructor(element: Selector, widgetName: string) {
     super(element);
     this.widgetName = widgetName;
@@ -40,6 +43,7 @@ export default class DataRow extends FocusableElement {
     this.isInserted = this.element.hasClass(CLASS.insertedRow);
     this.isEdited = this.element.hasClass(CLASS.editedRow);
     this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${Widget.addClassPrefix(this.widgetName, CLASS.groupExpanded)}`).exists;
+    this.isHovered = this.element.hasClass(CLASS.stateHover);
   }
 
   getDataCell(index: number): DataCell {
