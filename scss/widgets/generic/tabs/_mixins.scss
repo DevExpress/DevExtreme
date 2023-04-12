@@ -54,19 +54,6 @@
     &.#{$target-class} {
       box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
     }
-
-    &.#{$target-class},
-    &.dx-tab-active {
-      .dx-tab-content {
-        color: $tabs-tab-selected-color;
-      }
-
-      &.dx-state-disabled {
-        .dx-tab-content {
-          color: $tabs-tab-color;
-        }
-      }
-    }
   }
 
   @include boundary-tabs-shadow-mixin($accent-color);

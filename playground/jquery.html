@@ -31,6 +31,7 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
+<!-- <body style="background-color: black;"> -->
 <body>
     <div style="margin-left: 5px;">
         <div id="scrolledtabs" style="margin-bottom: 20px;"></div>
@@ -121,24 +122,23 @@
 
             const empty = [{},{},{},{},{},{},{}]
 
-            $(function() {
-                $('#scrolledtabs').dxTabs({
-                    dataSource: tabs,
-                    width: 450,
-                    // selectOnFocus: true,
-                    selectOnFocus: true,
-                    scrollByContent: true,
-                    // showNavButtons: true,
-                });
-            });
-            
-            // $('#scrolledtabs2').dxTabPanel({
-            //     // rtlEnabled: true,
-            //     dataSource: tabs,
-            //     width: 550,
-            //     scrollByContent: true,
-            //     showNavButtons: true,
+            // $(function() {
+            //     $('#scrolledtabs').dxTabs({
+            //         dataSource: tabs,
+            //         width: 450,
+            //         selectOnFocus: false,
+            //         scrollByContent: true,
+            //         // showNavButtons: true,
+            //     });
             // });
+            
+            $('#scrolledtabs2').dxTabPanel({
+                // rtlEnabled: true,
+                dataSource: tabs,
+                width: 550,
+                scrollByContent: true,
+                showNavButtons: true,
+            });
         });
     </script>
 </body>

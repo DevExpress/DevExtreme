@@ -35,6 +35,10 @@
   &.dx-tab-selected {
     background-color: $tabs-tab-selected-bg;
     color: $tabs-tab-selected-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
   }
 
   &.dx-state-active {
@@ -66,12 +70,7 @@
   box-shadow: $generic-tabpanel-inset-shadow-bottom $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
 
   .dx-tab {
-    color: $tabs-border-color;
-    box-shadow: $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
-
-    .dx-tab-content {
-      color: $tabs-tab-color;
-    }
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
   }
 
   .dx-tabs-nav-button {
