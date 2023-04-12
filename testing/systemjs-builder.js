@@ -293,25 +293,28 @@ const patchBuilder = (fileName, searchValue, replaceValue) => {
     }
 };
 
-(async() => {
-    // eslint-disable-next-line no-undef
-    const { transpile } = parseArguments(process.argv);
-
-    await patchBuilder(
+const updateBuilder = () => {
+    patchBuilder(
         'trace.js',
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
         'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
     );
 
-    await patchBuilder(
+    patchBuilder(
         'compile.js',
         'exportDefault ? "true" : "false"',
         'exportDefault && !compileOpts.namedExports ? "true" : "false"'
     );
+};
+
+(async() => {
+    // eslint-disable-next-line no-undef
+    const { transpile } = parseArguments(process.argv);
 
     const Builder = require('systemjs-builder');
 
     switch(transpile) {
+        case 'builder': return updateBuilder();
         case 'modules': return await transpileModules(Builder);
         case 'modules-renovation': return await transpileRenovationModules(Builder);
         case 'tests': return await transpileTests(Builder);
