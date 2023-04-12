@@ -35,6 +35,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 @mixin tabpanel-shadow-mixin($accent-color, $target-class) {
   & > .dx-tabpanel-tabs {
+    .dx-tabs {
+      display: block;
+    }
+
     .dx-tab {
       &.#{$target-class} {
         box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
