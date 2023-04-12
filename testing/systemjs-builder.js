@@ -295,7 +295,10 @@ const updateBuilder = () => {
     patchBuilder(
         'trace.js',
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/").replace("/node_modules/", "/../node_modules/");'
+        'load.depMap[dep] = dep' +
+        '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
+        '.replace("/node_modules/", "/../node_modules/")' +
+        '.replace("hogan-3.0.2.js", "hogan-3.0.2.amd.js");'
     );
 
     patchBuilder(
