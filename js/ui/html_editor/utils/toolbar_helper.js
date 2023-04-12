@@ -170,14 +170,31 @@ function getTargetTableNode(module, partName) {
 function getLinkRange(module, range) {
     const Quill = getQuill();
     const LinkBlot = Quill.import('formats/link');
+    let link;
+    let linkOffset;
+    let indexOffset = 0;
 
-    const [link, offset] = module.quill.scroll.descendant(
+    [link, linkOffset] = module.quill.scroll.descendant(
         LinkBlot,
         range.index
     );
 
+    if(!link && range.length === 0) {
+        // NOTE:
+        // See T1157840
+        // When a mouse pointer is placed on the link's right border, the quill.scroll.descendant method does not return information about the link.
+        // In this case, the "Add link" form should contains information about link.
+        [link, linkOffset] = module.quill.scroll.descendant(
+            LinkBlot,
+            range.index - 1
+        );
+        if(link) {
+            indexOffset = 1;
+        }
+    }
+
     const result = !link ? null : {
-        index: range.index - offset,
+        index: range.index - linkOffset - indexOffset,
         length: link.length()
     };
 
