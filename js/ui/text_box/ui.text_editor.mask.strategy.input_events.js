@@ -1,6 +1,7 @@
 import BaseMaskStrategy from './ui.text_editor.mask.strategy.base';
 
 const DELETE_INPUT_TYPE = 'deleteContentBackward';
+const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
 
 class InputEventsMaskStrategy extends BaseMaskStrategy {
     _getStrategyName() {
@@ -24,6 +25,16 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
         const { inputType, data } = originalEvent;
         const currentCaret = this.editorCaret();
 
+        if(HISTORY_INPUT_TYPES.includes(inputType)) {
+            this._updateEditorMask({
+                start: currentCaret.start,
+                length: currentCaret.end - currentCaret.start,
+                text: ''
+            });
+            this.editorCaret(this._prevCaret);
+            event.stopImmediatePropagation();
+            return;
+        } else
         if(inputType === DELETE_INPUT_TYPE) {
             const length = (this._prevCaret.end - this._prevCaret.start) || 1;
             this.editor.setBackwardDirection();

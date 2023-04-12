@@ -570,9 +570,9 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(textEditor.option('text'), '+1 (2__) ___ ___', 'text is correct');
     });
 
-    QUnit.test('ctrl+z should not raise an error', function(assert) {
+    QUnit.test('ctrl+z should not raise an error if all text is selected', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '0'
+            mask: '0',
         });
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -585,13 +585,40 @@ QUnit.module('typing', moduleConfig, () => {
             .beforeInput();
 
         try {
-            const originalEvent = $.Event('input', { inputType: 'historyUndo', data: null });
-            keyboard.triggerEvent($.Event('input', { originalEvent }));
+            keyboard.input(null, 'historyUndo');
         } catch(e) {
             assert.ok(false, `error is raised: ${e.message}`);
         } finally {
             assert.ok(true, 'no error is raised');
         }
+    });
+
+    QUnit.test('ctrl+z should be ignored', function(assert) {
+        const inputHandlerStub = sinon.stub();
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0',
+            onInput: inputHandlerStub
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+
+        keyboard
+            .caret(0)
+            .type('2')
+            .caret({ start: 0, end: 1 })
+            .press('backspace')
+            .beforeInput();
+
+        inputHandlerStub.resetHistory();
+
+        keyboard.input(null, 'historyUndo');
+
+        assert.strictEqual(textEditor.option('text'), '_', 'text is not changed');
+        assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, 'caret position not changed');
+        assert.ok(inputHandlerStub.notCalled, 'input event was not raised');
     });
 });
 
