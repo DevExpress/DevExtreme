@@ -213,9 +213,8 @@ export const HeaderFilterView = modules.View.inherit({
             hideOnParentScroll: false, // T756320
             dragEnabled: false,
             hideOnOutsideClick: true,
+            wrapperAttr: { class: HEADER_FILTER_MENU_CLASS },
             focusStateEnabled: false,
-            copyRootClassesToWrapper: true,
-            _ignoreCopyRootClassesToWrapperDeprecation: true,
             toolbarItems: [
                 {
                     toolbar: 'bottom', location: 'after', widget: 'dxButton', options: {
