@@ -319,6 +319,9 @@
 
 <script nonce="Z27qXj">
     (function() {
+        // It is required to avoid calling eval in exceljs lib
+        window.regeneratorRuntime = null;
+
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
         var imports = integrationImportPaths.map(function(importPath) {
