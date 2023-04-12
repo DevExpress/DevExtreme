@@ -17,7 +17,7 @@ fixture.disablePageReloads`Layout:Appointments:allDayExpr`
   config: {
   },
   data: {
-    AllDay: true,
+    allDay: true,
   },
 }].forEach(({ config, data }) => {
   test('All day appointment should be render valid in case without endDate property(T1155630)', async (t) => {
