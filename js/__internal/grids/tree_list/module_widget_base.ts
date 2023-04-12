@@ -71,17 +71,6 @@ const TreeList = (Widget as any).inherit({
     return result;
   },
 
-  _setDeprecatedOptions() {
-    this.callBase();
-
-    if (this.disableDeprecationWarnings) { return; }
-
-    extend(this._deprecatedOptions, {
-      'headerFilter.allowSearch': { since: '23.1', message: 'Use the "headerFilter.search.enabled" option instead' },
-      'headerFilter.searchTimeout': { since: '23.1', message: 'Use the "headerFilter.search.timeout" option instead' },
-    });
-  },
-
   _defaultOptionsRules() {
     return this.callBase().concat([
       {
