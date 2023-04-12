@@ -674,7 +674,7 @@ export default function() {
             assert.strictEqual(linkText, $textInput.val());
         });
 
-        test('Add link dialog should contains info about link when cursor places on right border of link(T1062588)', function(assert) {
+        test('Add link dialog should contains info about link when cursor places on right border of link(T1157840)', function(assert) {
             const linkText = 'text';
             const linkAddress = 'http://devexpress.com';
             const $container = $('#htmlEditor');
