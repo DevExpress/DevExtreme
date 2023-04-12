@@ -15,6 +15,8 @@ import { FullPageSize } from '../common/types';
 import { getElementMinWidth } from '../utils/get_element_width';
 import { InternalPagerProps } from '../common/pager_props';
 
+const PAGE_SIZE_SMALL_DESCRIPTION = 'Page size';
+
 export const viewFunction = ({
   width,
   props: {
@@ -28,6 +30,7 @@ export const viewFunction = ({
     value={pageSize}
     valueChange={pageSizeChange}
     width={width}
+    inputAttr={ { 'aria-label': PAGE_SIZE_SMALL_DESCRIPTION } }
   />
 );
 

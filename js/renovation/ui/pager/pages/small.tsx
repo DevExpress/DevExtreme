@@ -17,6 +17,7 @@ const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
+const PAGER_PAGE_INDEX_DESCRIPTION = 'Page index';
 
 export const viewFunction = ({
   pageIndexRef,
@@ -35,6 +36,7 @@ export const viewFunction = ({
       width={width}
       value={value}
       valueChange={valueChange}
+      inputAttr={ { 'aria-label': PAGER_PAGE_INDEX_DESCRIPTION } }
     />
     <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
     <Page
