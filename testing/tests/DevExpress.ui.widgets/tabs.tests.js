@@ -161,7 +161,8 @@ QUnit.module('General', () => {
             items: [
                 { text: '0' },
                 { text: '1', disabled: true },
-            ]
+            ],
+            focusStateEnabled: true,
         });
         const $item = $element.find(`.${DISABLED_STATE_CLASS}`).eq(0);
         const keyboard = keyboardMock($element);
