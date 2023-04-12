@@ -46,21 +46,6 @@ for (const label of ['Add Row', '']) {
 
       await setGlobalConfig();
 
-      await ClientFunction(() => {
-        (window as any).DevExpress.config({
-          floatingActionButtonConfig: {
-            icon: 'edit',
-            shading: false,
-            position: {
-              of: '#container',
-              my: 'right bottom',
-              at: 'right bottom',
-              offset: '-16 -16',
-            },
-          },
-        });
-      })();
-
       await createWidget('dxSpeedDialAction', {
         label,
         icon,
@@ -160,21 +145,6 @@ for (const label of ['Add Row', '']) {
       await appendElementTo('#container', 'div', 'speed-dial-action');
 
       await setGlobalConfig();
-
-      await ClientFunction(() => {
-        (window as any).DevExpress.config({
-          floatingActionButtonConfig: {
-            icon: 'edit',
-            shading: false,
-            position: {
-              of: '#container',
-              my: 'right bottom',
-              at: 'right bottom',
-              offset: '-16 -16',
-            },
-          },
-        });
-      })();
 
       await createWidget('dxSpeedDialAction', {
         label,
