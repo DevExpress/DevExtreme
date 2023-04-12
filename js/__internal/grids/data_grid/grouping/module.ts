@@ -358,7 +358,7 @@ const isGroupPanelVisible = (groupPanelOptions): boolean => {
 
 const allowDragging = (groupPanelOptions, column): boolean => {
   const isVisible = isGroupPanelVisible(groupPanelOptions);
-  const canDrag = groupPanelOptions.allowColumnDragging && column.allowGrouping;
+  const canDrag = groupPanelOptions?.allowColumnDragging && column.allowGrouping;
 
   return isVisible && !!canDrag;
 };
