@@ -5,6 +5,13 @@ const { spawn } = require('child_process');
 const gulp = require('gulp');
 
 const root = path.resolve(__dirname, '../..');
+
+gulp.task('transpile-systemjs-builder', (callback) => {
+    spawn('node', [path.resolve(root, 'testing/systemjs-builder.js'), '--transpile=builder'], { stdio: 'inherit' })
+        .on('error', callback)
+        .on('close', code => code ? callback(new Error(code)) : callback());
+});
+
 gulp.task('transpile-systemjs-modules', (callback) => {
     spawn('node', [path.resolve(root, 'testing/systemjs-builder.js'), '--transpile=modules'], { stdio: 'inherit' })
         .on('error', callback)
@@ -29,9 +36,12 @@ gulp.task('transpile-systemjs-css', (callback) => {
         .on('close', code => code ? callback(new Error(code)) : callback());
 });
 
-gulp.task('transpile-systemjs', gulp.parallel(
-    'transpile-systemjs-modules',
-    'transpile-systemjs-modules-renovation',
-    'transpile-systemjs-tests',
-    'transpile-systemjs-css'
+gulp.task('transpile-systemjs', gulp.series(
+    'transpile-systemjs-builder',
+    gulp.parallel(
+        'transpile-systemjs-modules',
+        'transpile-systemjs-modules-renovation',
+        'transpile-systemjs-tests',
+        'transpile-systemjs-css'
+    )
 ));
