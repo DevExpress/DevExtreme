@@ -20,7 +20,7 @@ fixture.disablePageReloads`Layout:Appointments:allDayExpr`
     allDay: true,
   },
 }].forEach(({ config, data }) => {
-  test('All day appointment should be render valid in case without endDate property(T1155630)', async (t) => {
+  test(`All day appointment should be render valid in case without endDate property with allDayExpr=${config.allDayExpr}(T1155630)`, async (t) => {
     const { toolbar, workSpace } = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -44,6 +44,8 @@ fixture.disablePageReloads`Layout:Appointments:allDayExpr`
       }],
       views: ['week', 'timelineWeek'],
       currentView: 'week',
+      cellDuration: 360,
+      startDayHour: 18,
       currentDate: new Date(2023, 2, 21),
       height: 600,
       ...config,
