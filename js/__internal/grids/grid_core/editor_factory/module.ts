@@ -25,7 +25,7 @@ const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
 const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
 
-const EditorFactory = modules.ViewController.inherit({
+const EditorFactory = modules.ViewController.inherit(EditorFactoryMixin).inherit({
   _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
     const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus, .dx-adaptive-item-text:focus`;
@@ -225,7 +225,7 @@ const EditorFactory = modules.ViewController.inherit({
     clearTimeout(this._updateFocusTimeoutID);
     eventsEngine.off(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
   },
-}).include(EditorFactoryMixin);
+});
 
 export const editorFactoryModule = {
   defaultOptions() {

@@ -31,7 +31,7 @@ export const dataControllerModule = {
         };
     },
     controllers: {
-        data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
+        data: modules.Controller.inherit(DataHelperMixin).inherit((function() {
             const changePaging = function(that, optionName, value) {
                 const dataSource = that._dataSource;
 
