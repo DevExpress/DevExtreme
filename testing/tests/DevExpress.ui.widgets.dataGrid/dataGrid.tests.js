@@ -13,6 +13,10 @@ QUnit.testStart(function() {
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
+
+            .myClass .dx-editor-cell .dx-texteditor .dx-texteditor-input {
+                height: 60px;
+            }
         </style>
 
         <!--qunit-fixture-->
@@ -4956,6 +4960,63 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         // assert
         assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-data-row').get(-1), lastRowElement, 'rows are re-render');
+    });
+
+    [true, false].forEach((renderAsync) => {
+        // T1150306
+        QUnit.test(`Headers should display correctly when there are a fixed command column, headerCellTemplate is set and renderAsync = ${renderAsync} (react)`, function(assert) {
+            // arrange
+            assert.expect(3);
+
+            $('#dataGrid').addClass('myClass');
+
+            // act
+            const dataGrid = createDataGrid({
+                renderAsync,
+                templatesRenderAsynchronously: true,
+                dataSource: generateItems(100),
+                height: 600,
+                selection: {
+                    mode: 'multiple'
+                },
+                filterRow: {
+                    visible: true
+                },
+                columnFixing: {
+                    enabled: true
+                },
+                columns: [{
+                    dataField: 'field1',
+                    headerCellTemplate: '#testTemplate'
+                }]
+            });
+            this.clock.tick(100);
+
+            dataGrid.getView('columnHeadersView')._templatesCache = {};
+            sinon.stub(dataGrid, '_getTemplate', function(selector) {
+                // assert
+                assert.strictEqual(selector, '#testTemplate', 'template name');
+
+                return {
+                    render: function(options) {
+                        setTimeout(() => {
+                            $(options.container).append($('<div/>').height(60));
+                            options.deferred && options.deferred.resolve();
+                        }, 100);
+                    }
+                };
+            });
+
+            // act
+            dataGrid.repaint();
+            this.clock.tick(100);
+
+            // assert
+            const $tableElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-datagrid-content:not(.dx-datagrid-content-fixed) .dx-datagrid-table');
+            const $fixedTableElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-datagrid-content-fixed .dx-datagrid-table');
+
+            assert.strictEqual($tableElement.height(), $fixedTableElement.height(), 'table height is equal to fixed table height');
+        });
     });
 });
 

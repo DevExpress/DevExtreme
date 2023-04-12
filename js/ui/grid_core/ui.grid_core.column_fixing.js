@@ -474,7 +474,6 @@ const baseFixedColumns = {
     },
 
     synchronizeRows: function() {
-        const that = this;
         const rowHeights = [];
         const fixedRowHeights = [];
         let rowIndex;
@@ -482,36 +481,37 @@ const baseFixedColumns = {
         let $fixedRowElements;
         let $contentElement;
 
+        this.waitAsyncTemplates(true).done(() => {
+            if(this._isFixedColumns && this._tableElement && this._fixedTableElement) {
+                const heightTable = this._getClientHeight(this._tableElement.get(0));
+                const heightFixedTable = this._getClientHeight(this._fixedTableElement.get(0));
+                $rowElements = this._getRowElements(this._tableElement);
+                $fixedRowElements = this._getRowElements(this._fixedTableElement);
+                $contentElement = this._findContentElement();
 
-        if(that._isFixedColumns && that._tableElement && that._fixedTableElement) {
-            const heightTable = that._getClientHeight(that._tableElement.get(0));
-            const heightFixedTable = that._getClientHeight(that._fixedTableElement.get(0));
-            $rowElements = that._getRowElements(that._tableElement);
-            $fixedRowElements = that._getRowElements(that._fixedTableElement);
-            $contentElement = that._findContentElement();
+                if(heightTable !== heightFixedTable) {
+                    $contentElement && $contentElement.css('height', heightTable);
+                    $rowElements.css('height', '');
+                    $fixedRowElements.css('height', '');
 
-            if(heightTable !== heightFixedTable) {
-                $contentElement && $contentElement.css('height', heightTable);
-                $rowElements.css('height', '');
-                $fixedRowElements.css('height', '');
-
-                for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
-                    rowHeights.push(that._getClientHeight($rowElements.get(rowIndex)));
-                    fixedRowHeights.push(that._getClientHeight($fixedRowElements.get(rowIndex)));
-                }
-                for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
-                    const rowHeight = rowHeights[rowIndex];
-                    const fixedRowHeight = fixedRowHeights[rowIndex];
-                    if(rowHeight > fixedRowHeight) {
-                        $fixedRowElements.eq(rowIndex).css('height', rowHeight);
-                    } else if(rowHeight < fixedRowHeight) {
-                        $rowElements.eq(rowIndex).css('height', fixedRowHeight);
+                    for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
+                        rowHeights.push(this._getClientHeight($rowElements.get(rowIndex)));
+                        fixedRowHeights.push(this._getClientHeight($fixedRowElements.get(rowIndex)));
                     }
-                }
+                    for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
+                        const rowHeight = rowHeights[rowIndex];
+                        const fixedRowHeight = fixedRowHeights[rowIndex];
+                        if(rowHeight > fixedRowHeight) {
+                            $fixedRowElements.eq(rowIndex).css('height', rowHeight);
+                        } else if(rowHeight < fixedRowHeight) {
+                            $rowElements.eq(rowIndex).css('height', fixedRowHeight);
+                        }
+                    }
 
-                $contentElement && $contentElement.css('height', '');
+                    $contentElement && $contentElement.css('height', '');
+                }
             }
-        }
+        });
     },
 
     setScrollerSpacing: function(width) {
