@@ -6,12 +6,13 @@ import eventsEngine from '../../events/core/events_engine';
 import errors from '../widget/ui.errors';
 import swatchContainer from '../widget/swatch_container';
 import SpeedDialItem from './speed_dial_item';
-import { isMaterial } from '../themes';
+import { isMaterial, isCompact } from '../themes';
 
 const { getSwatchContainer } = swatchContainer;
 
 const FAB_MAIN_CLASS = 'dx-fa-button-main';
 const FAB_MAIN_CLASS_WITH_LABEL = 'dx-fa-button-with-label';
+const FAB_MAIN_CLASS_WITHOUT_ICON = 'dx-fa-button-without-icon';
 const FAB_CLOSE_ICON_CLASS = 'dx-fa-button-icon-close';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
@@ -87,9 +88,9 @@ class SpeedDialMainItem extends SpeedDialItem {
             actions: [],
             activeStateEnabled: true,
             hoverStateEnabled: true,
-            indent: 55,
+            indent: isCompact() ? 49 : 55,
             childIndent: 40,
-            childOffset: 9,
+            childOffset: isCompact() ? 2 : 9,
             callOverlayRenderShading: true,
             hideOnOutsideClick: true
         };
@@ -104,12 +105,22 @@ class SpeedDialMainItem extends SpeedDialItem {
         return super._defaultOptionsRules().concat([
             {
                 device() {
-                    return isMaterial();
+                    return isMaterial() && !isCompact();
                 },
                 options: {
                     indent: 72,
                     childIndent: 56,
                     childOffset: 8
+                }
+            },
+            {
+                device() {
+                    return isMaterial() && isCompact();
+                },
+                options: {
+                    indent: 58,
+                    childIndent: 48,
+                    childOffset: 1
                 }
             }
         ]);
@@ -126,6 +137,12 @@ class SpeedDialMainItem extends SpeedDialItem {
     _renderLabel() {
         super._renderLabel();
         this.$element().toggleClass(FAB_MAIN_CLASS_WITH_LABEL, !!this._$label);
+    }
+
+    _renderIcon() {
+        super._renderIcon();
+
+        this.$element().toggleClass(FAB_MAIN_CLASS_WITHOUT_ICON, !this.option('icon'));
     }
 
     _renderCloseIcon() {
