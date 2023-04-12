@@ -28,7 +28,7 @@ fixture.disablePageReloads`Layout:Appointments:allDayExpr`
       .expect(await takeScreenshot(`week-all-day-expr-${config.allDayExpr}.png`, workSpace)).ok();
 
     await t
-      .click(toolbar.viewSwitcher.getButton('timelineWeek').element);
+      .click(toolbar.viewSwitcher.getButton('Timeline Week').element);
 
     await t
       .expect(await takeScreenshot(`timelineWeek-all-day-expr-${config.allDayExpr}.png`, workSpace)).ok();
