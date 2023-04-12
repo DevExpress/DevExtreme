@@ -674,6 +674,24 @@ export default function() {
             assert.strictEqual(linkText, $textInput.val());
         });
 
+        test('Add link dialog should contains info about link when cursor places on right border of link(T1062588)', function(assert) {
+            const linkText = 'text';
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: `<a href="http://devexpress.com">${linkText}</a>`,
+            }).dxHtmlEditor('instance');
+
+            instance.setSelection(linkText.length, 0);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+
+            assert.strictEqual(linkText, $textInput.val());
+        });
+
         test('Text input should be visible in dialog if selected text has whitespaces on sides (T1134089)', function(assert) {
             const $container = $('#htmlEditor');
             const instance = $container.dxHtmlEditor({
