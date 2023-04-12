@@ -232,7 +232,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .pressKey('tab')
     .expect(headers.hasFocusedState)
     .ok()
-    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .expect(filterRow.getFilterCell(1).getEditorInput().element.focused)
     .ok()
 
     .pressKey('tab')
@@ -246,7 +246,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .pressKey('tab')
     .expect(headers.hasFocusedState)
     .ok()
-    .expect(filterRow.getFilterCell(2).getEditor().element.focused)
+    .expect(filterRow.getFilterCell(2).getEditorInput().element.focused)
     .ok();
 
   // rowsView
@@ -477,7 +477,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
   await t
     .pressKey('shift+tab')
     .expect(headers.hasFocusedState).ok()
-    .expect(filterRow.getFilterCell(2).getEditor().element.focused)
+    .expect(filterRow.getFilterCell(2).getEditorInput().element.focused)
     .ok()
 
     .pressKey('shift+tab')
@@ -491,7 +491,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .pressKey('shift+tab')
     .expect(headers.hasFocusedState)
     .ok()
-    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .expect(filterRow.getFilterCell(1).getEditorInput().element.focused)
     .ok()
 
     .pressKey('shift+tab')
@@ -901,7 +901,7 @@ test('Select views by Ctrl+Up, Ctrl+Down keys', async (t) => {
     .pressKey('ctrl+down')
     .expect(headers.hasFocusedState)
     .ok('headers has focused state')
-    .expect(filterRow.getFilterCell(0).getEditor().element.focused)
+    .expect(filterRow.getFilterCell(0).getEditorInput().element.focused)
     .ok('focused filterRow cell[0, 0]')
 
     .pressKey('ctrl+down')
@@ -934,7 +934,7 @@ test('Select views by Ctrl+Up, Ctrl+Down keys', async (t) => {
     .pressKey('ctrl+up')
     .expect(headers.hasFocusedState)
     .ok('headers has focused state')
-    .expect(filterRow.getFilterCell(0).getEditor().element.focused)
+    .expect(filterRow.getFilterCell(0).getEditorInput().element.focused)
     .ok('focused filterRow cell[0, 0]')
 
     .pressKey('ctrl+up')
@@ -2854,7 +2854,7 @@ test('Lookup editor should update cell value on down or up key when cell is focu
   test(`Editor in the filter row should not lose focus when groups are expanded after the filtering (repaintChangesOnly is ${repaintChangesOnly}) (T1038332)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const filterRowCell = dataGrid.getHeaders().getFilterRow().getFilterCell(1);
-    const filterRowEditor = filterRowCell.getEditor();
+    const filterRowEditor = filterRowCell.getEditorInput();
 
     // act
     await t

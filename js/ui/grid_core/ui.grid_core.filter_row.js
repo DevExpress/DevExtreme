@@ -253,7 +253,8 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const that = this;
             const sharedData = {};
             const $editorContainer = $cell.find('.dx-editor-container');
-            const $overlay = $('<div>').addClass(that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).appendTo($cell);
+            const filterRangeOverlayClass = that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS);
+            const $overlay = $('<div>').addClass(filterRangeOverlayClass).appendTo($cell);
 
             return that._createComponent($overlay, Overlay, {
                 height: 'auto',
@@ -261,8 +262,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 showTitle: false,
                 focusStateEnabled: false,
                 hideOnOutsideClick: true,
-                copyRootClassesToWrapper: true,
-                _ignoreCopyRootClassesToWrapperDeprecation: true,
+                wrapperAttr: { class: filterRangeOverlayClass },
                 animation: false,
                 position: {
                     my: 'top',
