@@ -20,7 +20,7 @@ const PAGER_PAGE_SIZE_SMALL_DESCRIPTION = 'Page size';
 export const viewFunction = ({
   width,
   props: {
-    pageSize, pageSizeChange, pageSizes,
+    pageSize, pageSizeChange, pageSizes, inputAttr,
   },
 }: PageSizeSmall): JSX.Element => (
   <SelectBox
@@ -30,7 +30,7 @@ export const viewFunction = ({
     value={pageSize}
     valueChange={pageSizeChange}
     width={width}
-    inputAttr={ { 'aria-label': PAGER_PAGE_SIZE_SMALL_DESCRIPTION } }
+    inputAttr={inputAttr}
   />
 );
 
@@ -39,6 +39,8 @@ export class PageSizeSmallProps {
   @Ref() parentRef!: RefObject<HTMLElement>;
 
   @OneWay() pageSizes!: FullPageSize[];
+
+  @OneWay() inputAttr = { 'aria-label': PAGER_PAGE_SIZE_SMALL_DESCRIPTION };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
