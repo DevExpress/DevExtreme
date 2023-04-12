@@ -172,7 +172,6 @@ function getLinkRange(module, range) {
     const LinkBlot = Quill.import('formats/link');
     let link;
     let linkOffset;
-    let indexOffset = 0;
 
     [link, linkOffset] = module.quill.scroll.descendant(
         LinkBlot,
@@ -183,18 +182,18 @@ function getLinkRange(module, range) {
         // NOTE:
         // See T1157840
         // When a mouse pointer is placed on the link's right border, the quill.scroll.descendant method does not return information about the link.
-        // In this case, the "Add link" form should contains information about link.
+        // In this case, we receive a necessary information from the previous index.
         [link, linkOffset] = module.quill.scroll.descendant(
             LinkBlot,
             range.index - 1
         );
         if(link) {
-            indexOffset = 1;
+            linkOffset += 1;
         }
     }
 
     const result = !link ? null : {
-        index: range.index - linkOffset - indexOffset,
+        index: range.index - linkOffset,
         length: link.length()
     };
 
