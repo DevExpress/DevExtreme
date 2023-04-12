@@ -295,7 +295,7 @@ const updateBuilder = () => {
     patchBuilder(
         'trace.js',
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
+        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/").replace("/node_modules/", "/../node_modules/");'
     );
 
     patchBuilder(
