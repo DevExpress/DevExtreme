@@ -205,7 +205,8 @@ const transpileRenovationModules = async(Builder) => {
             {
                 minify: false,
                 sourceMaps: true,
-                encodeNames: false
+                encodeNames: false,
+                namedExports: filePath.includes('__internal') && filePath.includes('module.js')
             }
         );
     }
@@ -278,20 +279,33 @@ const transpileTests = async(Builder) => {
     }
 };
 
+const patchBuilder = (fileName, searchValue, replaceValue) => {
+    const filePath = path.join(root, 'node_modules/systemjs-builder/lib/', fileName);
+    const file = fs.readFileSync(filePath).toString();
+
+    if(!file.includes(replaceValue)) {
+        fs.writeFileSync(filePath, file.replace(
+            searchValue,
+            replaceValue
+        ));
+    }
+};
+
 (async() => {
     // eslint-disable-next-line no-undef
     const { transpile } = parseArguments(process.argv);
 
-    const traceFilePath = path.join(root, 'node_modules/systemjs-builder/lib/trace.js');
-    const traceFile = fs.readFileSync(traceFilePath).toString();
-    const replaceValue = 'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");';
+    await patchBuilder(
+        'trace.js',
+        'load.depMap[dep] = getCanonicalName(loader, normalized);',
+        'load.depMap[dep] = dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/");'
+    );
 
-    if(!traceFile.includes(replaceValue)) {
-        fs.writeFileSync(traceFilePath, traceFile.replace(
-            'load.depMap[dep] = getCanonicalName(loader, normalized);',
-            replaceValue
-        ));
-    }
+    await patchBuilder(
+        'compile.js',
+        'exportDefault ? "true" : "false"',
+        'exportDefault && !compileOpts.namedExports ? "true" : "false"'
+    );
 
     const Builder = require('systemjs-builder');
 
