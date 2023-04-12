@@ -44,13 +44,24 @@ const config = {
         if(optionsString.trim().charAt(0) !== '{') {
             optionsString = '{' + optionsString + '}';
         }
+
         try {
-            // eslint-disable-next-line no-new-func
-            return (new Function('return ' + optionsString))();
+            return JSON.parse(optionsString);
         } catch(ex) {
-            throw errors.Error('E3018', ex, optionsString);
+            try {
+                return JSON.parse(normalizeToJSONString(optionsString));
+            } catch(exNormalize) {
+                throw errors.Error('E3018', ex, optionsString);
+            }
         }
-    }
+    },
+};
+
+const normalizeToJSONString = (optionsString) => {
+    return optionsString
+        .replace(/'/g, '"') // replace all ' to "
+        .replace(/,\s*([\]}])/g, '$1') // remove trailing commas
+        .replace(/([{,])\s*([^":\s]+)\s*:/g, '$1"$2":'); // add quotes for unquoted keys
 };
 
 const deprecatedFields = [ 'decimalSeparator', 'thousandsSeparator' ];

@@ -21,7 +21,7 @@ const baseAreaMethods = {
             fill: extractColor(styleOptions.color) || defaultColor,
             opacity: styleOptions.opacity,
             hatching: styleOptions.hatching,
-            filter: styleOptions.lightening
+            filter: styleOptions.highlight
         };
     },
 
@@ -92,7 +92,7 @@ const baseAreaMethods = {
                 fill: extractColor(options.color) || defaultColor,
                 hatching: options.hatching,
                 opacity: options.opacity,
-                filter: options.lightening ?? null
+                filter: options.highlight ?? null
             }
         };
     },

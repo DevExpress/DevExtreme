@@ -14,6 +14,7 @@ import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
+import ColumnChooser from './columnChooser';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -23,6 +24,8 @@ export const CLASS = {
   groupRow: 'dx-group-row',
   focusedRow: 'dx-row-focused',
   filterPanel: 'filter-panel',
+  filterRow: 'filter-row',
+  filterRangeOverlay: 'filter-range-overlay',
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -34,13 +37,19 @@ export const CLASS = {
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
 
+  columnChooser: 'column-chooser',
+
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
+  revertTooltip: 'revert-tooltip',
+  invalidMessage: 'invalid-message',
 
   toolbar: 'dx-toolbar',
+  contextMenu: 'dx-context-menu',
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
+  columnChooserButton: 'column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
@@ -72,10 +81,13 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): 
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
+  body: Selector;
+
   constructor(id: string | Selector) {
     super(id);
 
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
+    this.body = Selector('body');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -141,8 +153,35 @@ export default class DataGrid extends Widget {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
   }
 
+  getFilterRow(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
+  }
+
+  getFilterCell(columnIndex: number): Selector {
+    return this.getFilterRow().find(`[aria-colindex='${columnIndex + 1}']`);
+  }
+
+  getFilterRangeOverlay(): Selector {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+  }
+
+  getFilterEditor<T>(
+    columnIndex: number,
+    EditorType: new(mainElement: Selector) => T,
+  ): T {
+    return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
+  }
+
   getOverlay(): Overlay {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
+  }
+
+  getRevertTooltip(): Selector {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
+  }
+
+  getInvalidMessageTooltip(): Selector {
+    return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
   }
 
   getPager(): Pager {
@@ -151,6 +190,10 @@ export default class DataGrid extends Widget {
 
   getFooterRow(): Selector {
     return this.element.find(`.${CLASS.footerRow}`);
+  }
+
+  getColumnChooser(): ColumnChooser {
+    return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
@@ -259,6 +302,10 @@ export default class DataGrid extends Widget {
 
   getRevertButton(): Selector {
     return this.element.find(`.${CLASS.revertButton}`);
+  }
+
+  getColumnChooserButton(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {

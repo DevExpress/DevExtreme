@@ -104,7 +104,7 @@ QUnit.test('map ready action', function(assert) {
         onReady: function(e) {
             assert.ok(true, 'map ready');
             assert.equal(window.Microsoft.optionsSpecified, true, 'map options specified');
-            assert.ok(window.Microsoft.options.credentials, 'map credentials specified');
+            assert.strictEqual(window.Microsoft.options.credentials, '', 'map credentials are not specified by default');
             assert.ok(e.originalMap instanceof Microsoft.Maps.Map, 'map instance specified');
 
             done();
