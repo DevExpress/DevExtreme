@@ -206,7 +206,9 @@ const transpileRenovationModules = async(Builder) => {
                 minify: false,
                 sourceMaps: true,
                 encodeNames: false,
-                namedExports: filePath.includes('__internal') && filePath.includes('module.js')
+                namedExports: filePath.includes('__internal') && (
+                    filePath.includes('module.js') || filePath.includes('grouping')
+                )
             }
         );
     }
