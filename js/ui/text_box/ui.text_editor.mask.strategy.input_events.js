@@ -44,7 +44,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
                 text: this._getEmptyString(length)
             });
         } else {
-            if(!currentCaret.end || !data) {
+            if(!currentCaret.end) {
                 return;
             }
 
