@@ -49,8 +49,7 @@ test('Column chooser checkboxes should be aligned correctly with plain structure
   const dataGrid = new DataGrid('#container');
 
   await t
-    .click(dataGrid.getHeaderPanel().getColumnChooserButton())
-    .wait(500);
+    .click(dataGrid.getHeaderPanel().getColumnChooserButton());
 
   const columnChooser = dataGrid.getColumnChooser();
 
@@ -81,8 +80,7 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
   const dataGrid = new DataGrid('#container');
 
   await t
-    .click(dataGrid.getHeaderPanel().getColumnChooserButton())
-    .wait(500);
+    .click(dataGrid.getHeaderPanel().getColumnChooserButton());
 
   const columnChooser = dataGrid.getColumnChooser();
 

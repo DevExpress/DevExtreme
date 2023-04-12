@@ -45,7 +45,9 @@ const processItems = function(that, chooserColumns) {
                 parentId: isDefined(column.ownerBand) ? column.ownerBand : null
             };
 
-            if(isSelectMode && !(isRecursive && column.hasColumns)) {
+            const isRecursiveWithColumns = isRecursive && column.hasColumns;
+
+            if(isSelectMode && !isRecursiveWithColumns) {
                 item.selected = column.visible;
             }
 
@@ -296,24 +298,26 @@ const columnChooserMembers = {
         const that = this;
         const selectionOptions = this.option('columnChooser.selection') || {};
 
-        const flatNodes = (nodes, result = []) => {
-            nodes.forEach(node => {
-                result.push(node);
+        const getFlatNodes = (nodes) => {
+            const addNodesToArray = (nodes, flatNodesArray) => {
+                return nodes.reduce((result, node) => {
+                    result.push(node);
 
-                if(node.children.length) {
-                    flatNodes(node.children, result);
-                }
-            });
+                    if(node.children.length) {
+                        addNodesToArray(node.children, result);
+                    }
 
-            return result;
+                    return result;
+                }, flatNodesArray);
+            };
+
+            return addNodesToArray(nodes, []);
         };
 
         const updateSelection = (e, nodes) => {
-            nodes.forEach(node => {
-                if(node.itemData.allowHiding === false) {
-                    e.component.selectItem(node.key);
-                }
-            });
+            nodes
+                .filter(node => node.itemData.allowHiding === false)
+                .forEach(node => e.component.selectItem(node.key));
         };
 
         const updateColumnVisibility = (nodes) => {
@@ -324,30 +328,32 @@ const columnChooserMembers = {
             });
         };
 
-        let _timeout;
+        let updateColumnVisibilityTimeout;
         let isUpdatingSelection = false;
 
         const selectionChangedHandler = e => {
-            if(!isUpdatingSelection) {
-                const nodes = flatNodes(e.component.getNodes());
-
-                isUpdatingSelection = true;
-                e.component.beginUpdate();
-
-                updateSelection(e, nodes);
-
-                isUpdatingSelection = false;
-                e.component.endUpdate();
-
-                clearTimeout(_timeout);
-                _timeout = setTimeout(() => {
-                    that.component.beginUpdate();
-
-                    updateColumnVisibility(nodes);
-
-                    that.component.endUpdate();
-                }, CLICK_TIMEOUT);
+            if(isUpdatingSelection) {
+                return;
             }
+
+            const nodes = getFlatNodes(e.component.getNodes());
+
+            isUpdatingSelection = true;
+            e.component.beginUpdate();
+
+            updateSelection(e, nodes);
+
+            isUpdatingSelection = false;
+            e.component.endUpdate();
+
+            clearTimeout(updateColumnVisibilityTimeout);
+            updateColumnVisibilityTimeout = setTimeout(() => {
+                that.component.beginUpdate();
+
+                updateColumnVisibility(nodes);
+
+                that.component.endUpdate();
+            }, CLICK_TIMEOUT);
         };
 
         return {
