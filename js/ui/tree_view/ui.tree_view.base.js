@@ -1137,7 +1137,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const value = this._dataAdapter.isAllSelected();
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
-            tabIndex: 1,
             text: this.option('selectAllText'),
             onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
