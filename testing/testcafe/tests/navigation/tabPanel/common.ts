@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import TabPanel from '../../../model/tabPanel';
 import { Item } from '../../../../../js/ui/tab_panel.d';
 
 fixture.disablePageReloads`TabPanel_common`
@@ -137,6 +138,7 @@ test('TabPanel borders without scrolling', async (t) => {
 
 test('TabPanel when its disabled item has focus', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const tabPanel = new TabPanel('#container');
 
   await testScreenshot(t, takeScreenshot, 'TabPanel without focus.png', { element: '#container' });
 
@@ -145,6 +147,16 @@ test('TabPanel when its disabled item has focus', async (t) => {
 
   await t.pressKey('right');
   await testScreenshot(t, takeScreenshot, 'TabPanel when its disabled item has focus.png', { element: '#container' });
+
+  await t.pressKey('right');
+
+  const thirdItem = tabPanel.getItem(2);
+
+  await t.hover(thirdItem.element);
+  await testScreenshot(t, takeScreenshot, 'TabPanel when its available item has hover state.png', { element: '#container' });
+
+  await t.dispatchEvent(thirdItem.element, 'mousedown');
+  await testScreenshot(t, takeScreenshot, 'TabPanel when its available item has active state.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
