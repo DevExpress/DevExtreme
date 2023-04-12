@@ -144,7 +144,7 @@ const getFileList = (dirName) => {
             files = [...files, ...getFileList(`${dirName}/${item.name}`)];
         } else if(
             item.name.endsWith('.js') ||
-            (item.name.endsWith('.json') && !item.name.includes('tsconfig'))
+            (item.name.endsWith('.json') && !item.name.includes('tsconfig') && !item.name.includes('__meta'))
         ) {
             files.push(`${dirName}/${item.name}`);
         }
@@ -247,7 +247,7 @@ const transpileTests = async(Builder) => {
     const builder = new Builder(root, config);
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
-    const listFiles = [].concat(helpersList, testsList).filter(name => name.endsWith('.js'));
+    const listFiles = [].concat(helpersList, testsList);
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
