@@ -77,8 +77,8 @@ const DataGrid = (Widget as any).inherit({
     extend(this._deprecatedOptions, {
       useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
       rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
-      'columnChooser.allowSearch': { since: '23.1', alias: 'columnChooser.search.enabled' },
-      'columnChooser.searchTimeout': { since: '23.1', alias: 'columnChooser.search.timeout' },
+      'columnChooser.allowSearch': { since: '23.1', message: 'Use the "columnChooser.search.enabled" option instead' },
+      'columnChooser.searchTimeout': { since: '23.1', message: 'Use the "columnChooser.search.timeout" option instead' },
     });
   },
 

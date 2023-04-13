@@ -74,8 +74,8 @@ const TreeList = (Widget as any).inherit({
     this.callBase();
 
     extend(this._deprecatedOptions, {
-      'columnChooser.allowSearch': { since: '23.1', alias: 'columnChooser.search.enabled' },
-      'columnChooser.searchTimeout': { since: '23.1', alias: 'columnChooser.search.timeout' },
+      'columnChooser.allowSearch': { since: '23.1', message: 'Use the "columnChooser.search.enabled" option instead' },
+      'columnChooser.searchTimeout': { since: '23.1', message: 'Use the "columnChooser.search.timeout" option instead' },
     });
   },
 

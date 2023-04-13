@@ -218,6 +218,10 @@ const columnChooserMembers = {
         const that = this;
         const columnChooser = this.option('columnChooser');
         const isSelectMode = columnChooser.mode === 'select';
+
+        const searchEnabled = isDefined(columnChooser.allowSearch) ? columnChooser.allowSearch : columnChooser.search?.enabled;
+        const searchTimeout = isDefined(columnChooser.searchTimeout) ? columnChooser.searchTimeout : columnChooser.search?.timeout;
+
         /**
          * @type {import('../tree_view').Options}
          */
@@ -230,8 +234,8 @@ const columnChooserMembers = {
             itemTemplate: 'item',
             showCheckBoxesMode: 'none',
             rootValue: null,
-            searchEnabled: columnChooser.search?.enabled,
-            searchTimeout: columnChooser.search?.timeout,
+            searchEnabled: searchEnabled,
+            searchTimeout: searchTimeout,
             searchEditorOptions: columnChooser.search?.editorOptions,
         };
 
