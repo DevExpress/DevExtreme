@@ -1368,6 +1368,8 @@
             "Name": "CustomizeKeyboardNavigation",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+              "/Models/TreeList/InMemoryEmployeesDataContext.cs",
               "/Models/TreeList/Employee.cs",
               "/Models/SampleData/TreeListEmployees.cs"
             ],
