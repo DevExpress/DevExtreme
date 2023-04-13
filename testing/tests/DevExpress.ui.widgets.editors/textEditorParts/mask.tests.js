@@ -948,20 +948,20 @@ QUnit.module('selection', moduleConfig, () => {
                 'X': 'x'
             }
         });
+        const textEditor = $textEditor.dxTextEditor('instance');
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
-        caretWorkaround($input);
-
         keyboard
+            .caret(0)
             .type('x')
             .type('x')
             .caret({ start: 0, end: 2 });
 
         keyboard.type('x');
 
-        assert.equal($input.val(), 'x_', 'printed only one char');
+        assert.strictEqual(textEditor.option('text'), 'x_', 'only first char is typed, second is cleared');
     });
 
     QUnit.test('all selected chars should be deleted on backspace', function(assert) {
