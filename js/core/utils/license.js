@@ -1,5 +1,6 @@
 import config from '../config';
 import { logger } from './console';
+import { version } from '../version';
 
 let checked = false;
 
@@ -13,8 +14,9 @@ export const checkLicense = function() {
         // TODO do a real license key extraction
         // eslint-disable-next-line no-undef
         const decodedLicense = JSON.parse(atob(encodedLicense));
+        const currentMinor = version.substr(0, version.lastIndexOf('.'));
 
-        if(decodedLicense?.versions.indexOf('23.1') === -1) {
+        if(decodedLicense?.versions.indexOf(currentMinor) === -1) {
             logger.warn('License not found or invalid!');
         }
     } catch(err) {
