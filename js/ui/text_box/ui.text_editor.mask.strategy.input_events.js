@@ -56,6 +56,16 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
                 return;
             }
 
+            const length = (this._prevCaret?.end - this._prevCaret?.start) || 1;
+            if(length > 1) {
+                this.editor.setBackwardDirection();
+                this._updateEditorMask({
+                    start: currentCaret.start,
+                    length,
+                    text: this._getEmptyString(length)
+                });
+            }
+
             this._autoFillHandler(originalEvent);
 
             this.editorCaret(currentCaret);
