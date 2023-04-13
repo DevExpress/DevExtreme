@@ -5,8 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/> -->
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -33,111 +32,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="scrolledtabs" style="margin-bottom: 10px;"></div>
-    <div id="scrolledtabs2"></div>
-
+    <div id="button"></div>
     <script>
         $(function() {
-            const tabs = [
-                {
-                    id: 0,
-                    text: 'user',
-                    title: 'user',
-                    icon: 'user',
-                },
-                {
-                    id: 1,
-                    text: 'comment',
-                    title: 'comment',
-                    icon: 'comment',
-                    disabled: true,
-                },
-                {
-                    id: 2,
-                    text: 'find',
-                    title: 'find',
-                    icon: 'find',
-                    disabled: true,
-                },
-                {
-                    id: 3,
-                    text: 'copy',
-                    title: 'copy',
-                    icon: 'copy',
-                },
-                {
-                    id: 4,
-                    text: 'checklist',
-                    title: 'checklist',
-                    icon: 'checklist',
-                    // disabled: true,
-                },
-                {
-                    id: 5,
-                    text: 'link',
-                    title: 'link',
-                    icon: 'link',
-                    disabled: true,
-                },
-                {
-                    id: 6,
-                    text: 'import',
-                    title: 'import',
-                    icon: 'import',
-                    disabled: true,
-                },
-                {
-                    id: 7,
-                    text: 'header',
-                    title: 'header',
-                    icon: 'header',
-                    disabled: true,
-                },
-                {
-                    id: 8,
-                    text: 'more',
-                    title: 'more',
-                    icon: 'more',
-                },
-                {
-                    id: 9,
-                    text: 'globe',
-                    title: 'globe',
-                    icon: 'globe',
-                },
-                {
-                    id: 10,
-                    text: 'runner',
-                    title: 'runner',
-                    icon: 'runner',
-                },
-                {
-                    id: 11,
-                    text: 'greaterorequal',
-                    title: 'greaterorequal',
-                    icon: 'greaterorequal',
-                },
-            ];
-
-            $('#scrolledtabs').dxTabs({
-                items: tabs,
-                // items: [
-                //     { text: 'text 1' },
-                //     { text: 'long text example' },
-                //     { text: 'text 2' },
-                // ],
-                selectOnFocus: false,
-                scrollingEnabled: true,
-                showNavButtons: true,
-                width: 450,
-            });
-
-            $('#scrolledtabs2').dxTabPanel({
-                // rtlEnabled: true,
-                dataSource: tabs,
-                width: 550,
-                scrollByContent: true,
-                showNavButtons: true,
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
