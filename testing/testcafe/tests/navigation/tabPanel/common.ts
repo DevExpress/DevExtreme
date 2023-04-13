@@ -195,3 +195,39 @@ test('TabPanel when its disabled item has focus', async (t) => {
 
   return createWidget('dxTabPanel', tabPanelOptions);
 });
+
+test('Tab borders in TabPanel with expanded tabs', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .pressKey('tab')
+    .pressKey('right')
+    .pressKey('right');
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel with expanded tabs.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    height: 120,
+    width: 450,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});

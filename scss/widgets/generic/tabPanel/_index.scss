@@ -30,6 +30,18 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
       box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
     }
   }
+
+  $tabs-expanded: '.dx-tabs-expanded .dx-tab:not(.dx-state-focused, .dx-tab-selected)';
+
+  .dx-tab,
+  #{$tabs-expanded}:last-of-type,
+  #{$tabs-expanded}:only-child {
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
+  }
+
+  #{$tabs-expanded}:first-of-type {
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
+  }
 }
 
 
