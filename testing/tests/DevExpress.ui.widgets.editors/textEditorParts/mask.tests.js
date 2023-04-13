@@ -929,6 +929,28 @@ QUnit.module('backspace key', moduleConfig, () => {
         assert.strictEqual(keyboard.caret().start, 3, '3 stub chars were skipped');
         assert.strictEqual(textEditor.option('text'), '___---', 'text is correct');
     });
+
+    ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'].forEach((inputType) => {
+        QUnit.test(`backspace should not remove mask if it is an event with ${inputType} input type`, function(assert) {
+            const mask = '+1 (0)';
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask
+            });
+            const textEditor = $textEditor.dxTextEditor('instance');
+
+            const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input, true);
+            caretWorkaround($input);
+
+            keyboard.caret({ start: 0, end: mask.length });
+            $input.val(''); // NOTE: Emulates fast key press which clears input earlier than input event is raised.
+            keyboard
+                .beforeInput()
+                .input(null, inputType);
+
+            assert.strictEqual(textEditor.option('text'), '+1 (_)', 'mask is not removed');
+        });
+    });
 });
 
 QUnit.module('delete key', moduleConfig, () => {
