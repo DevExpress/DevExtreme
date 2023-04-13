@@ -107,7 +107,6 @@ export const masterDetailModule = {
               that.updateItems({
                 changeType: 'update',
                 rowIndices: that._getRowIndicesForExpand(key),
-                isMasterDetail: true,
               });
 
               // @ts-expect-error

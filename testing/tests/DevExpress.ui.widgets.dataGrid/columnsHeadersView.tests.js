@@ -2960,7 +2960,7 @@ QUnit.module('Render templates with renderAsync', {
         [true, false].forEach((renderAsync) => {
             QUnit.test(`Render column with headerCellTemplate when renderAsync = ${renderAsync} and templatesRenderAsynchronously=${templatesRenderAsynchronously}`, function(assert) {
                 // arrange
-                assert.expect(1);
+                assert.expect(3);
 
                 const $testElement = $('#container');
                 const options = {
@@ -2991,7 +2991,13 @@ QUnit.module('Render templates with renderAsync', {
 
                 // act
                 this.columnHeadersView.render($testElement);
+
+                // assert
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                 this.clock.tick(50);
+
+                // assert
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
             });
         });
     });

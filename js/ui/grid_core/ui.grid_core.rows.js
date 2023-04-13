@@ -300,7 +300,7 @@ export const rowsModule = {
                 },
 
                 _updateContent: function(newTableElement, change) {
-                    return this.waitAsyncTemplates(change).done(() => {
+                    return this.waitAsyncTemplates().done(() => {
                         const tableElement = this.getTableElement();
                         const contentElement = this._findContentElement();
                         const changeType = change && change.changeType;
