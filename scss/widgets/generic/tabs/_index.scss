@@ -88,6 +88,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
           get-tab-not-selected-not-focused-last-expanded-rtl-shadow($accent-color)
         );
       }
+
+      &:only-child {
+        box-shadow: $tab-selected-not-focused-left-right-shadow;
+      }
     }
   }
 
