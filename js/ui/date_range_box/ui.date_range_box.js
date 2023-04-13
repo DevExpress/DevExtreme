@@ -226,6 +226,51 @@ class DateRangeBox extends Widget {
 
         super._clean();
     }
+
+    _optionChanged(args) {
+        const { name } = args;
+
+        switch(name) {
+            case 'acceptCustomValue':
+            case 'applyButtonText':
+            case 'applyValueMode':
+            case 'calendarOptions':
+            case 'cancelButtonText':
+            case 'dateOutOfRangeMessage':
+            case 'disabledDates':
+            case 'displayFormat':
+            case 'dropDownOptions':
+            case 'endDate':
+            case 'invalidDateMessage':
+            case 'isValid':
+            case 'label':
+            case 'labelMode':
+            case 'maxLength':
+            case 'opened':
+            case 'openOnFieldClick':
+            case 'placeholder':
+            case 'readOnly':
+            case 'showClearButton':
+            case 'showDropDownButton':
+            case 'spellcheck':
+            case 'startDate':
+            case 'stylingMode':
+            case 'text':
+            case 'todayButtonText':
+            case 'useHiddenSubmitElement':
+            case 'useMaskBehavior':
+            case 'validationError':
+            case 'validationErrors':
+            case 'validationMessageMode':
+            case 'validationMessagePosition':
+            case 'validationStatus':
+            case 'value':
+            case 'valueChangeEvent':
+                break;
+            default:
+                super._optionChanged(args);
+        }
+    }
 }
 
 registerComponent('dxDateRangeBox', DateRangeBox);
