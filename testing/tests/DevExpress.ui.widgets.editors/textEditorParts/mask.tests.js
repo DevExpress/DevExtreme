@@ -506,6 +506,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
@@ -525,6 +526,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(1)
@@ -541,6 +543,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         for(let i = 1; i < 5; ++i) {
             keyboard
@@ -561,6 +564,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret({ start: 0, end: mask.length })
@@ -578,6 +582,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
@@ -596,6 +601,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret({ start: 0, end: mask.length })
@@ -612,6 +618,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
@@ -638,7 +645,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
-
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
@@ -815,6 +822,7 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(1)
@@ -834,6 +842,7 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
@@ -852,6 +861,7 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(1)
@@ -871,6 +881,7 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(mask.length)
@@ -931,6 +942,7 @@ QUnit.module('delete key', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(1)
@@ -952,6 +964,7 @@ QUnit.module('selection', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
@@ -1931,6 +1944,7 @@ QUnit.module('paste', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
 
         keyboard
             .caret(0)
