@@ -924,7 +924,7 @@ QUnit.module('delete key', moduleConfig, () => {
         assert.equal($input.val(), '_- x', 'letter deleted');
     });
 
-    QUnit.todo('should skip consecutive stub chars', function(assert) {
+    QUnit.skip('should skip consecutive stub chars', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '0---0'
         });
@@ -1923,7 +1923,7 @@ QUnit.module('paste', moduleConfig, () => {
         assert.equal($input.val(), '00', '\'v\' char from ctrl+V combination was ignored');
     });
 
-    QUnit.todo('digit stub should not be duplicated after paste if caret is placed before the stub', function(assert) {
+    QUnit.skip('digit stub should not be duplicated after paste if caret is placed before the stub', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '10000'
         });
