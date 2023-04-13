@@ -605,24 +605,6 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
     });
 
-    QUnit.test('caret should be set before first empty char if stub char is inputed when all text is selected', function(assert) {
-        const mask = '+1 (0)';
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask
-        });
-        const textEditor = $textEditor.dxTextEditor('instance');
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input, true);
-
-        keyboard
-            .caret({ start: 0, end: mask.length })
-            .type('1');
-
-        assert.strictEqual(keyboard.caret().start, 4, 'caret position is correct');
-        assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
-    });
-
     QUnit.test('ctrl+z should not raise an error if all text is selected', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '0',

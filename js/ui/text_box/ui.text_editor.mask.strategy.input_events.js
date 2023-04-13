@@ -60,14 +60,11 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
 
             this.editorCaret(currentCaret);
 
-            const length = this._prevCaret?.end - this._prevCaret?.start;
-            const newData = data + (length ? this._getEmptyString(length - data.length) : '');
-
             this.editor.setForwardDirection();
             const hasValidChars = this._updateEditorMask({
                 start: this._prevCaret?.start,
-                length: length || newData.length,
-                text: newData
+                length: 1,
+                text: data ?? ''
             });
 
             if(!hasValidChars) {
@@ -85,6 +82,8 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
         const textLength = args.text.length;
         const updatedCharsCount = this.editor._handleChain(args);
 
+        this.editor._displayMask();
+
         if(this.editor.isForwardDirection()) {
             const { start, end } = this.editorCaret();
             const correction = updatedCharsCount - textLength;
@@ -95,7 +94,6 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
 
             this.editor._adjustCaret();
         }
-        this.editor._displayMask();
 
         return !!updatedCharsCount;
     }
