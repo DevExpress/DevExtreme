@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import {
     EventInfo,
     NativeEventInfo,
@@ -96,13 +97,51 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxDateBoxOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
+export interface dxDateBoxOptions extends dxDateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default false
      * @public
      */
     adaptivityEnabled?: boolean;
+    /**
+     * @docid
+     * @default 30
+     * @public
+     */
+    interval?: number;
+    /**
+     * @docid
+     * @default 'calendar'
+     * @default 'native' &for(iOS)
+     * @default 'native' &for(Android)
+     * @public
+     */
+    pickerType?: DatePickerType;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showAnalogClock?: boolean;
+    /**
+     * @docid
+     * @default "date"
+     * @public
+     */
+    type?: DateType;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    value?: Date | number | string;
+}
+
+/**
+ * @namespace DevExpress.ui
+ */
+export interface dxDateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
     /**
      * @docid
      * @default "OK"
@@ -149,12 +188,6 @@ export interface dxDateBoxOptions<TComponent> extends dxDropDownEditorOptions<TC
     displayFormat?: Format;
     /**
      * @docid
-     * @default 30
-     * @public
-     */
-    interval?: number;
-    /**
-     * @docid
      * @default "Value must be a date or time"
      * @public
      */
@@ -173,24 +206,10 @@ export interface dxDateBoxOptions<TComponent> extends dxDropDownEditorOptions<TC
     min?: Date | number | string;
     /**
      * @docid
-     * @default 'calendar'
-     * @default 'native' &for(iOS)
-     * @default 'native' &for(Android)
-     * @public
-     */
-    pickerType?: DatePickerType;
-    /**
-     * @docid
      * @default ""
      * @public
      */
     placeholder?: string;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    showAnalogClock?: boolean;
     /**
      * @docid
      * @default "Today"
@@ -199,37 +218,24 @@ export interface dxDateBoxOptions<TComponent> extends dxDropDownEditorOptions<TC
     todayButtonText?: string;
     /**
      * @docid
-     * @default "date"
-     * @public
-     */
-    type?: DateType;
-    /**
-     * @docid
      * @default false
      * @public
      */
     useMaskBehavior?: boolean;
     /**
      * @docid
-     * @default null
-     * @public
-     */
-    value?: Date | number | string;
-
-    /**
-     * @docid
      * @type dxPopupOptions
      */
     dropDownOptions?: PopupProperties;
 }
+
 /**
  * @docid
  * @isEditor
  * @inherits dxDropDownEditor
  * @namespace DevExpress.ui
- * @public
  */
-export default class dxDateBox<TProperties = Properties> extends dxDropDownEditor<TProperties> {
+export class dxDateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -244,10 +250,20 @@ export default class dxDateBox<TProperties = Properties> extends dxDropDownEdito
     open(): void;
 }
 
-interface DateBoxInstance extends dxDateBox<Properties> { }
+/**
+ * @docid
+ * @isEditor
+ * @inherits dxDateBoxBase
+ * @namespace DevExpress.ui
+ * @public
+ */
+export default class dxDateBox extends dxDateBoxBase<Properties> {}
 
-/** @public */
-export type Properties = dxDateBoxOptions<DateBoxInstance>;
+/**
+ * @public
+ * @namespace DevExpress.ui
+ */
+export type Properties = dxDateBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

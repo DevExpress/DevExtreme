@@ -9,7 +9,7 @@ import {
   DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import dxDateBox, { dxDateBoxOptions } from './date_box';
+import { dxDateBoxBase, dxDateBoxBaseOptions } from './date_box';
 
 import {
   ValueChangedInfo,
@@ -79,8 +79,9 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
  * @public
+ * @namespace DevExpress.ui
  */
-export type Properties = Omit<dxDateBoxOptions<dxDateRangeBox>, 'value' | 'adaptivityEnabled' | 'interval' | 'type' | 'showAnalogClock'> & {
+export type Properties = dxDateBoxBaseOptions<dxDateRangeBox> & {
   /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
@@ -112,8 +113,8 @@ export type Properties = Omit<dxDateBoxOptions<dxDateRangeBox>, 'value' | 'adapt
 /**
  * @docid
  * @isEditor
- * @inherits dxDateBox
+ * @inherits dxDateBoxBase
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends dxDateBox<Properties> { }
+export default class dxDateRangeBox extends dxDateBoxBase<Properties> { }
