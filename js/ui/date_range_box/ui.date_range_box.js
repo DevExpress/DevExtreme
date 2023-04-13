@@ -14,7 +14,7 @@ const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 
-// STYLE dateBox
+// STYLE dateRangeBox
 
 class DateRangeBox extends Widget {
     _getDefaultOptions() {
