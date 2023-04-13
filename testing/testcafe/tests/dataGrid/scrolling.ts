@@ -1287,3 +1287,56 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
     });
   });
 });
+
+test('Editors should keep changes after being scrolled out of sight (T1145698)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.wait(200)
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+a')
+    .typeText(dataGrid.getDataCell(0, 0).element, 'test')
+    .click(dataGrid.getDataCell(1, 0).element)
+    .pressKey('ctrl+a')
+    .typeText(dataGrid.getDataCell(1, 0).element, 'test')
+    .pressKey('enter');
+
+  await dataGrid.scrollTo({ y: 500 });
+  await dataGrid.scrollTo({ y: 0 });
+
+  // assert
+  await t.wait(300)
+    .expect(dataGrid.apiGetCellValue(0, 0))
+    .eql('test')
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('test');
+}).before(async () => {
+  const getItems = (): Record<string, unknown>[] => {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 0; i < 65; i += 1) {
+      items.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+      });
+    }
+    return items;
+  };
+
+  return createWidget('dxDataGrid', {
+    dataSource: getItems(),
+    keyExpr: 'ID',
+    columns: [{
+      dataField: 'Name',
+      showEditorAlways: true,
+    }],
+    scrolling: {
+      mode: 'virtual',
+    },
+    height: 300,
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+      allowAdding: true,
+    },
+  });
+});

@@ -1428,11 +1428,16 @@ export const virtualScrollingModule = {
 
                             const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
 
-                            if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
+                            const needToUpdateItems = !(loadingItemsStarted
+                                || this._isLoading && checkLoading
+                                || checkLoadedParamsOnly);
+
+                            if(needToUpdateItems) {
+                                const noPendingChangesInEditing = !this.getController('editing')?.getChanges()?.length;
                                 this.updateItems({
                                     repaintChangesOnly: true,
                                     needUpdateDimensions: true,
-                                    useProcessedItemsCache: true,
+                                    useProcessedItemsCache: noPendingChangesInEditing,
                                     cancelEmptyChanges: true
                                 });
                             }
