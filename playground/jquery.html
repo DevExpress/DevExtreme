@@ -5,7 +5,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/> -->
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -33,7 +34,7 @@
 </head>
 <body>
     <div id="scrolledtabs" style="margin-bottom: 10px;"></div>
-    <!-- <div id="scrolledtabs2"></div> -->
+    <div id="scrolledtabs2"></div>
 
     <script>
         $(function() {
@@ -128,16 +129,16 @@
                 selectOnFocus: false,
                 scrollingEnabled: true,
                 showNavButtons: true,
-                width: 700,
+                width: 450,
             });
 
-            // $('#scrolledtabs2').dxTabPanel({
-            //     // rtlEnabled: true,
-            //     dataSource: tabs,
-            //     width: 550,
-            //     scrollByContent: true,
-            //     showNavButtons: true,
-            // });
+            $('#scrolledtabs2').dxTabPanel({
+                // rtlEnabled: true,
+                dataSource: tabs,
+                width: 550,
+                scrollByContent: true,
+                showNavButtons: true,
+            });
         });
     </script>
 </body>

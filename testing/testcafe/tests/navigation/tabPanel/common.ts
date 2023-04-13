@@ -151,12 +151,16 @@ test('TabPanel when its disabled item has focus', async (t) => {
   await t.pressKey('right');
 
   const thirdItem = tabPanel.getItem(2);
-
-  await t.hover(thirdItem.element);
-  await testScreenshot(t, takeScreenshot, 'TabPanel when its available item has hover state.png', { element: '#container' });
+  const fourthItem = tabPanel.getItem(3);
 
   await t.dispatchEvent(thirdItem.element, 'mousedown');
-  await testScreenshot(t, takeScreenshot, 'TabPanel when its available item has active state.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TabPanel when 3 item has active state.png', { element: '#container' });
+
+  await t
+    .dispatchEvent(thirdItem.element, 'mouseup')
+    .hover(fourthItem.element);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel when 4 item has hover state.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -167,9 +171,9 @@ test('TabPanel when its disabled item has focus', async (t) => {
       title: 'John Heart',
       text: 'John Heart',
     }, {
-      disabled: true,
       title: 'Olivia Peyton',
       text: 'Olivia Peyton',
+      disabled: true,
     }, {
       title: 'Robert Reagan',
       text: 'Robert Reagan',
@@ -185,7 +189,7 @@ test('TabPanel when its disabled item has focus', async (t) => {
   const tabPanelOptions = {
     dataSource,
     height: 120,
-    width: 350,
+    width: 450,
     showNavButtons: true,
   };
 
