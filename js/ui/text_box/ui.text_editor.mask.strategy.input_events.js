@@ -34,8 +34,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
             this.editorCaret(this._prevCaret);
             event.stopImmediatePropagation();
             return;
-        } else
-        if(inputType === DELETE_INPUT_TYPE) {
+        } else if(inputType === DELETE_INPUT_TYPE) {
             const length = (this._prevCaret.end - this._prevCaret.start) || 1;
             this.editor.setBackwardDirection();
             this._updateEditorMask({
@@ -43,6 +42,15 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
                 length,
                 text: this._getEmptyString(length)
             });
+
+            const beforeAdjustCaret = this.editorCaret();
+            this.editor.setForwardDirection();
+            this.editor._adjustCaret();
+            const adjustedForwardCaret = this.editorCaret();
+            if(adjustedForwardCaret.start !== beforeAdjustCaret.start) {
+                this.editor.setBackwardDirection();
+                this.editor._adjustCaret();
+            }
         } else {
             if(!currentCaret.end) {
                 return;
@@ -85,7 +93,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
                 this.editorCaret({ start: start + correction, end: end + correction });
             }
 
-            this.editor.isForwardDirection() && this.editor._adjustCaret();
+            this.editor._adjustCaret();
         }
         this.editor._displayMask();
 

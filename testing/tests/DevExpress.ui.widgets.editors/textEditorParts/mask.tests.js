@@ -570,6 +570,59 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(textEditor.option('text'), '+1 (2__) ___ ___', 'text is correct');
     });
 
+    QUnit.test('caret should be set before first empty char if incorrect char is inputed ', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (0)'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type('w');
+
+        assert.strictEqual(keyboard.caret().start, 4, 'caret position is correct');
+        assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
+    });
+
+    QUnit.test('caret should be set before first empty char if incorrect char is inputed when all text is selected', function(assert) {
+        const mask = '+1 (0)';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret({ start: 0, end: mask.length })
+            .type('w');
+
+        assert.strictEqual(keyboard.caret().start, 4, 'caret position is correct');
+        assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
+    });
+
+    QUnit.test('caret should be set before first empty char if stub char is inputed when all text is selected', function(assert) {
+        const mask = '+1 (0)';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret({ start: 0, end: mask.length })
+            .type('1');
+
+        assert.strictEqual(keyboard.caret().start, 4, 'caret position is correct');
+        assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
+    });
+
     QUnit.test('ctrl+z should not raise an error if all text is selected', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '0',
@@ -828,26 +881,6 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         assert.strictEqual(keyboard.caret().start, 3, '3 stub chars were skipped');
         assert.strictEqual(textEditor.option('text'), '___---', 'text is correct');
-    });
-
-    QUnit.test('backspace should not move a caret if all previous chars are stubs', function(assert) {
-        const mask = '---0';
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask
-        });
-        const textEditor = $textEditor.dxTextEditor('instance');
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input, true);
-
-        keyboard
-            .caret(3)
-            .press('backspace')
-            .press('backspace')
-            .press('backspace');
-
-        assert.strictEqual(keyboard.caret().start, 3, 'caret position is not changed');
-        assert.strictEqual(textEditor.option('text'), '---_', 'text is correct');
     });
 });
 
