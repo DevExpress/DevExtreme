@@ -926,6 +926,21 @@ QUnit.module('delete key', moduleConfig, () => {
 
         assert.equal($input.val(), '_- x', 'letter deleted');
     });
+
+    QUnit.todo('should skip consecutive stub chars', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0---0'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(1)
+            .press('del');
+
+        assert.deepEqual(keyboard.caret(), { start: 4, end: 4 }, 'caret is set after a stub');
+    });
 });
 
 QUnit.module('selection', moduleConfig, () => {
