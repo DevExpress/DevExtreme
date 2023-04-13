@@ -82,32 +82,32 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @namespace DevExpress.ui
  */
 export type Properties = dxDateBoxBaseOptions<dxDateRangeBox> & {
-  /**
+    /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
      */
-  endDate?: Date | number | string;
-  /**
+    endDate?: Date | number | string;
+    /**
      * @docid dxDateRangeBoxOptions.pickerType
      * @default 'calendar'
      * @default 'native' &for(iOS)
      * @default 'native' &for(Android)
      * @public
      */
-  pickerType?: DateRangePickerType;
-  /**
+    pickerType?: DateRangePickerType;
+    /**
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
      */
-  startDate?: Date | number | string;
-  /**
+    startDate?: Date | number | string;
+    /**
      * @docid dxDateRangeBoxOptions.value
      * @default [null, null]
      * @public
      */
-  value?: Array<Date | number | string>;
+    value?: Array<Date | number | string>;
 };
 
 /**
