@@ -29315,9 +29315,9 @@ declare module DevExpress.viz {
      */
     width?: number;
     /**
-     * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.lightening]
+     * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.highlight]
      */
-    lightening?: boolean;
+    highlight?: boolean;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -29639,9 +29639,9 @@ declare module DevExpress.viz {
      */
     width?: number;
     /**
-     * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.lightening]
+     * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.highlight]
      */
-    lightening?: boolean;
+    highlight?: boolean;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -32018,9 +32018,9 @@ declare module DevExpress.viz {
         width?: number;
       };
       /**
-       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.lightening]
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.highlight]
        */
-      lightening?: boolean;
+      highlight?: boolean;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label]
@@ -32176,9 +32176,9 @@ declare module DevExpress.viz {
         width?: number;
       };
       /**
-       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.lightening]
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.highlight]
        */
-      lightening?: boolean;
+      highlight?: boolean;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping]
@@ -33185,9 +33185,9 @@ declare module DevExpress.viz {
         width?: number;
       };
       /**
-       * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening]
+       * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.highlight]
        */
-      lightening?: boolean;
+      highlight?: boolean;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width]
        */
@@ -33276,9 +33276,9 @@ declare module DevExpress.viz {
         width?: number;
       };
       /**
-       * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening]
+       * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.highlight]
        */
-      lightening?: boolean;
+      highlight?: boolean;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width]
        */

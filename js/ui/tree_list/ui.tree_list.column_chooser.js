@@ -1,4 +1,1 @@
-import treeListCore from './ui.tree_list.core';
-import { columnChooserModule } from '../grid_core/ui.grid_core.column_chooser';
-
-treeListCore.registerModule('columnChooser', columnChooserModule);
+import '../../__internal/grids/tree_list/module_not_extended/column_chooser';

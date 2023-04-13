@@ -21,7 +21,7 @@ const Autocomplete = DropDownList.inherit({
 
         return extend({}, parent, {
             upArrow: function(e) {
-                if(!isCommandKeyPressed(e)) {
+                if(parent.upArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
                     e.preventDefault();
                     e.stopPropagation();
                     if(item && !this._calcNextItem(-1)) {
@@ -32,7 +32,7 @@ const Autocomplete = DropDownList.inherit({
                 return true;
             },
             downArrow: function(e) {
-                if(!isCommandKeyPressed(e)) {
+                if(parent.downArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
                     e.preventDefault();
                     e.stopPropagation();
                     if(item && !this._calcNextItem(1)) {

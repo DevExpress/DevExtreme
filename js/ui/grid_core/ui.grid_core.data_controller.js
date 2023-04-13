@@ -1,4 +1,3 @@
-// @ts-check
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
@@ -38,7 +37,7 @@ export const dataControllerModule = {
         };
     },
     controllers: {
-        data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
+        data: modules.Controller.inherit(DataHelperMixin).inherit((function() {
             /**
              * @param {import('./ui.grid_core.data_controller').DataController} that
              * @param {string} optionName

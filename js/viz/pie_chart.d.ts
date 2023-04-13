@@ -596,10 +596,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
           width?: number;
       };
       /**
-       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.lightening
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.highlight
        * @default true
        */
-      lightening?: boolean;
+      highlight?: boolean;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
@@ -794,10 +794,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
           width?: number;
       };
       /**
-       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.lightening
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.highlight
        * @default true
        */
-      lightening?: boolean;
+      highlight?: boolean;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping

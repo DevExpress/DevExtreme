@@ -21,6 +21,7 @@ export const dependencies: FlatStylesDependencies = {
   colorbox: ['validation', 'button', 'loadindicator', 'numberbox', 'textbox', 'popup'],
   selectbox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list', 'checkbox'],
   datebox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'calendar', 'numberbox', 'loadpanel', 'scrollview', 'list', 'checkbox', 'selectbox', 'box'],
+  daterangebox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'calendar', 'numberbox', 'loadpanel', 'scrollview', 'list', 'checkbox', 'selectbox', 'box', 'datebox'],
   drawer: [],
   deferrendering: ['loadindicator'],
   dropdownbox: ['validation', 'button', 'loadindicator', 'textbox', 'popup'],
@@ -57,5 +58,5 @@ export const dependencies: FlatStylesDependencies = {
   scheduler: ['validation', 'button', 'popup', 'loadindicator', 'loadpanel', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'textbox', 'numberbox', 'checkbox', 'calendar', 'scrollview', 'list', 'selectbox', 'datebox', 'form', 'buttongroup', 'radiogroup', 'textarea', 'tagbox', 'switch', 'dropdownbutton', 'popover', 'tooltip', 'toolbar'],
   filemanager: ['toast', 'validation', 'button', 'loadindicator', 'textbox', 'contextmenu', 'checkbox', 'treeview', 'loadpanel', 'scrollview', 'popup', 'toolbar', 'numberbox', 'list', 'selectbox', 'calendar', 'box', 'datebox', 'multiview', 'tabs', 'tabpanel', 'responsivebox', 'form', 'menu', 'filterbuilder', 'buttongroup', 'dropdownbutton', 'sortable', 'datagrid', 'drawer', 'progressbar', 'fileuploader'],
   diagram: ['loadindicator', 'validation', 'button', 'loadpanel', 'scrollview', 'popup', 'toolbar', 'textbox', 'contextmenu', 'list', 'checkbox', 'selectbox', 'numberbox', 'colorbox', 'popover', 'accordion', 'tooltip', 'multiview', 'tabs', 'tabpanel', 'progressbar', 'fileuploader'],
-  gantt: ['loadindicator', 'loadpanel', 'validation', 'button', 'popup', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'textbox', 'numberbox', 'checkbox', 'calendar', 'scrollview', 'list', 'selectbox', 'datebox', 'form', 'tagbox', 'radiogroup', 'popover', 'actionsheet', 'toolbar', 'contextmenu', 'treelist', 'treeview', 'menu', 'filterbuilder', 'sortable'],
+  gantt: ['loadindicator', 'loadpanel', 'validation', 'button', 'popup', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'textbox', 'numberbox', 'checkbox', 'calendar', 'scrollview', 'list', 'selectbox', 'datebox', 'form', 'tagbox', 'radiogroup', 'popover', 'actionsheet', 'toolbar', 'contextmenu', 'treeview', 'menu', 'filterbuilder', 'sortable', 'treelist'],
 };
