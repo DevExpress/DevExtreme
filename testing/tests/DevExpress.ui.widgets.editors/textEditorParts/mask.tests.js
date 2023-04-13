@@ -655,6 +655,21 @@ QUnit.module('typing', moduleConfig, () => {
         assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, 'caret position not changed');
         assert.ok(inputHandlerStub.notCalled, 'input event was not raised');
     });
+
+    QUnit.test('space should set caret before position available for input', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (0)',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type(' ');
+
+        assert.deepEqual(keyboard.caret(), { start: 4, end: 4 }, 'caret position is correct');
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {
