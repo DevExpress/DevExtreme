@@ -97,7 +97,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxDateBoxOptions extends dxDateBoxBaseOptions<dxDateBox> {
+export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default false
@@ -141,7 +141,7 @@ export interface dxDateBoxOptions extends dxDateBoxBaseOptions<dxDateBox> {
 /**
  * @namespace DevExpress.ui
  */
-export interface dxDateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
+export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
     /**
      * @docid
      * @default "OK"
@@ -234,8 +234,9 @@ export interface dxDateBoxBaseOptions<TComponent> extends dxDropDownEditorOption
  * @isEditor
  * @inherits dxDropDownEditor
  * @namespace DevExpress.ui
+ * @hidden
  */
-export class dxDateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
+export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -253,15 +254,14 @@ export class dxDateBoxBase<TProperties = Properties> extends dxDropDownEditor<TP
 /**
  * @docid
  * @isEditor
- * @inherits dxDateBoxBase
+ * @inherits DateBoxBase
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateBox extends dxDateBoxBase<Properties> {}
+export default class dxDateBox extends DateBoxBase<Properties> {}
 
 /**
  * @public
- * @namespace DevExpress.ui
  */
 export type Properties = dxDateBoxOptions;
 

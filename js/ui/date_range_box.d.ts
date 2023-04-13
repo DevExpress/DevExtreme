@@ -9,7 +9,7 @@ import {
   DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import { dxDateBoxBase, dxDateBoxBaseOptions } from './date_box';
+import { DateBoxBase, DateBoxBaseOptions } from './date_box';
 
 import {
   ValueChangedInfo,
@@ -79,9 +79,8 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
  * @public
- * @namespace DevExpress.ui
  */
-export type Properties = dxDateBoxBaseOptions<dxDateRangeBox> & {
+export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
@@ -113,8 +112,8 @@ export type Properties = dxDateBoxBaseOptions<dxDateRangeBox> & {
 /**
  * @docid
  * @isEditor
- * @inherits dxDateBoxBase
+ * @inherits DateBoxBase
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends dxDateBoxBase<Properties> { }
+export default class dxDateRangeBox extends DateBoxBase<Properties> { }
