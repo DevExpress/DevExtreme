@@ -13,6 +13,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
     }
 
     _beforeInputHandler() {
+        this._previousText = this.editor.option('text');
         this._prevCaret = this.editorCaret();
     }
 
@@ -32,8 +33,6 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
                 text: ''
             });
             this.editorCaret(this._prevCaret);
-            event.stopImmediatePropagation();
-            return;
         } else if(inputType === DELETE_INPUT_TYPE) {
             const length = (this._prevCaret.end - this._prevCaret.start) || 1;
             this.editor.setBackwardDirection();
@@ -78,9 +77,12 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
             });
 
             if(!hasValidChars) {
-                event.stopImmediatePropagation();
                 this.editorCaret(this._prevCaret);
             }
+        }
+
+        if(this.editor.option('text') === this._previousText) {
+            event.stopImmediatePropagation();
         }
     }
 

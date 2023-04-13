@@ -535,6 +535,45 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
 
+    QUnit.test('input event should not be fired if input text was not changed but caret was moved after stub', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '++ 0',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('w');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('input event should not be fired if existing char was inputed', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '0',
+            value: '1'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('1');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
     QUnit.test('caret should be moved after a new char even if it was before a stub on typing', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '(((((0',
