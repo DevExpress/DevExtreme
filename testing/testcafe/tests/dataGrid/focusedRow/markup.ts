@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
 import { Themes } from '../helpers/themes';
 
-fixture.disablePageReloads`Focused row - markup`
+fixture`Focused row - markup`
   .page(url(__dirname, '../../container.html'));
 
 // TODO: Enable multi-theming testcafe run in the future.

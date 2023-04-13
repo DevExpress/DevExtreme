@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`CheckBox_ValidationMessage`
+fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
 
 test('ValidationMessage integrated in editor should not raise any errors when it is placed inside of form and has name "style" (T941581)', async (t) => {

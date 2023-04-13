@@ -6,8 +6,8 @@ import createWidget from '../../../helpers/createWidget';
 import { sales } from '../data.js';
 import PivotGrid from '../../../model/pivotGrid';
 
-fixture.disablePageReloads`PivotGrid_fieldChooser`
-  .page(url(__dirname, '../container.html'));
+fixture`PivotGrid_fieldChooser`
+  .page(url(__dirname, '../../container.html'));
 
 test('Change dataFiels order with one invisible field (T1079461)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -24,6 +24,7 @@ test('Change dataFiels order with one invisible field (T1079461)', async (t) => 
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'FieldChooser change dataField order with invisible fields.png', { element: '.dx-overlay-content.dx-popup-draggable' });
 
   await t
@@ -130,6 +131,7 @@ test('Change dataFiels order with two invisible fields', async (t) => {
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'FieldChooser change dataField order with two invisible fields.png', { element: '.dx-overlay-content.dx-popup-draggable' });
 
   await t
@@ -244,6 +246,7 @@ test('Change dataFiels order with three invisible fields (T1079461)', async (t) 
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
+  await t.hover('body', { offsetX: 0, offsetY: 0 });
   await testScreenshot(t, takeScreenshot, 'FieldChooser change dataField order with three invisible fields.png', { element: '.dx-overlay-content.dx-popup-draggable' });
 
   await t

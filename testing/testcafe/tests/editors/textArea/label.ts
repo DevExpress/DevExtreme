@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Label`
+fixture`Label`
   .page(url(__dirname, '../../container.html'));
 
 const labelMods = ['floating', 'static'];

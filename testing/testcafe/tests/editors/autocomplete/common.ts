@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Autocomplete_placeholder`
+fixture`Autocomplete_placeholder`
   .page(url(__dirname, '../../container.html'));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {

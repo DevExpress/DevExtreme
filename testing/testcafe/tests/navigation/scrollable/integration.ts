@@ -4,11 +4,15 @@ import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Integration_DataGrid`
+fixture`Integration_DataGrid`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((useNative) => {
   test(`The rows in the fixed column are not aligned when the grid is encapsulated inside a <td> element, useNative: ${useNative} (T1071725)`, async (t) => {
+    // NOTE: for some reason of the toolbar buttons was hovered on the screenshot
+    // try to force mouse to the (0, 0) position to prevent hovering
+    // await t.hover('body', { offsetX: 0, offsetY: 0 });
+
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Grid with scrollable wrapped in td el, useNative=${useNative}.png`, { element: '#container' });

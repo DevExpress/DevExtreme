@@ -18,12 +18,12 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 { dependencies: { themeName } })();
 
 let testCafe;
+let stopwatch = null;
+
 createTestCafe({
     hostname: 'localhost',
     port1: 1437,
     port2: 1438,
-    // eslint-disable-next-line spellcheck/spell-checker
-    experimentalProxyless: true,
 })
     .then(tc => {
         testCafe = tc;
@@ -58,7 +58,7 @@ createTestCafe({
             }
         });
 
-        runner.concurrency(args.concurrency || 3);
+        runner.concurrency(1);
 
         const filters = [];
         if(indices) {
@@ -89,7 +89,8 @@ createTestCafe({
         }
 
         const runOptions = {
-            quarantineMode: { successThreshold: 1, attemptLimit: 3 },
+            assertionTimeout: 1000,
+            nativeAutomation: true,
         };
 
         if(args.componentFolder.trim() !== 'renovation') {
@@ -108,13 +109,18 @@ createTestCafe({
             }
         }
 
-        if(args.browsers === 'chrome:docker') {
-            runOptions.disableScreenshots = true;
-        }
+        runOptions.disableScreenshots = true;
+
+        stopwatch = Date.now();
 
         return runner.run(runOptions);
     })
     .then(failedCount => {
+        // eslint-disable-next-line no-console
+        console.log('--------execution time-------------');
+        // eslint-disable-next-line no-console
+        console.log(Date.now() - stopwatch);
+
         testCafe.close();
         process.exit(failedCount);
     });

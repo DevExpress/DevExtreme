@@ -3,8 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
 
 // T1147695
-fixture
-  .disablePageReloads`Keyboard Navigation - skip drag cell`
+fixture`Keyboard Navigation - skip drag cell`
   .page(url(__dirname, '../../container.html'));
 
 const TREE_LIST_SELECTOR = '#container';

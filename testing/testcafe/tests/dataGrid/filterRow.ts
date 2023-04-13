@@ -6,7 +6,7 @@ import FilterTextBox from '../../model/dataGrid/editors/filterTextBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { getNumberData } from './helpers/generateDataSourceData';
 
-fixture.disablePageReloads`FilterRow`
+fixture`FilterRow`
   .page(url(__dirname, '../container.html'));
 
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {

@@ -11,9 +11,9 @@ import PivotGrid from '../../model/pivotGrid';
 
 const testFixture = () => {
   if (isMaterial()) {
-    return fixture.disablePageReloads.skip;
+    return fixture.skip;
   }
-  return fixture.disablePageReloads;
+  return fixture;
 };
 
 testFixture()`PivotGrid_scrolling`

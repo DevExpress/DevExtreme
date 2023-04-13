@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import PivotGrid from '../../../model/pivotGrid';
 import { DRAG_MOUSE_OPTIONS } from '../const';
 
-fixture.disablePageReloads`pivotGrid_fieldPanel_drag-n-drop`
+fixture`pivotGrid_fieldPanel_drag-n-drop`
   .page(url(__dirname, '../../container.html'));
 
 test('Field panel items markup in the middle of the drag-n-drop', async (t) => {

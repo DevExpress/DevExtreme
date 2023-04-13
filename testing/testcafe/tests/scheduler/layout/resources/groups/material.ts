@@ -4,7 +4,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture.disablePageReloads`Scheduler: Material theme layout`
+fixture`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => {
     await changeTheme('generic.light');

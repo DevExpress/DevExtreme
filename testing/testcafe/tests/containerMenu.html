@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TestCafe Tests Container</title>
+
+    <link rel="dx-theme" data-theme="generic.light" href="../../../artifacts/css/dx.light.css" data-active="true">
+    <link rel="dx-theme" data-theme="generic.light.compact" href="../../../artifacts/css/dx.light.compact.css" data-active="false">
+    <link rel="dx-theme" data-theme="generic.dark" href="../../../artifacts/css/dx.dark.css" data-active="false">
+    <link rel="dx-theme" data-theme="generic.contrast" href="../../../artifacts/css/dx.contrast.css" data-active="false">
+    <link rel="dx-theme" data-theme="material.blue.light" href="../../../artifacts/css/dx.material.blue.light.css" data-active="false">
+    <link rel="dx-theme" data-theme="material.blue.light.compact" href="../../../artifacts/css/dx.material.blue.light.compact.css" data-active="false">
+
+    <script type="text/javascript" src="../../../artifacts/js/dx.all.debug.js"></script>
+</head>
+<body>
+    <div id="container">
+    </div>
+    <div id="otherContainer">
+    </div>
+
+    <script>
+        const options = {
+            items: [{
+                text: 'Item 1',
+                items: [{
+                    text: 'item 1_1',
+                    items: [{
+                        text: 'item_1_1_1',
+                    }],
+                }],
+            }],
+                showFirstSubmenuMode: 'onHover',
+                hideSubmenuOnMouseLeave: true,
+                onSubmenuShowing: function (a, b, c, d) {
+                    debugger;
+                }
+        }
+
+        window.widget = new DevExpress.ui.dxMenu(document.querySelector('#container'), options);
+
+        document.addEventListener('mousemove', e => {
+            const div = document.createElement('div');
+
+            div.style.position = 'absolute';
+            div.style.top      = e.clientY - 5 + 'px';
+            div.style.left     = e.clientX + 'px';
+
+            div.style.width  = '1px';
+            div.style.height = '1px';
+            if(e.isTrusted) {
+                div.style.backgroundColor = 'blue';
+            } else {
+                div.style.backgroundColor = 'red';
+            }
+
+            document.body.appendChild(div);
+        });
+    </script>
+</body>
+</html>

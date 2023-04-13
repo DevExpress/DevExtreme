@@ -4,7 +4,7 @@ import TextBox from '../../../model/textBox';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`TextBox_mask`
+fixture`TextBox_mask`
   .page(url(__dirname, '../../container.html'));
 
 // note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377

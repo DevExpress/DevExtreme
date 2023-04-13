@@ -3,7 +3,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:AppointmentForm:IntegerFormatNumberBox`
+fixture`Layout:AppointmentForm:IntegerFormatNumberBox`
   .page(url(__dirname, '../../../container.html'));
 
 test('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {

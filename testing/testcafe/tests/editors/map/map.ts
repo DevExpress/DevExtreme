@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`Map`
+fixture`Map`
   .page(url(__dirname, '../../container.html'));
 
 test('Map should not raise errors when it is disposed immediately after creating (T914315)', async (t) => {

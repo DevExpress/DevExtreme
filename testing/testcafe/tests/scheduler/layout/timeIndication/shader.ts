@@ -4,7 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
+fixture`Scheduler: Current Time Indication: Shader`
   .page(url(__dirname, '../../../container.html'));
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];

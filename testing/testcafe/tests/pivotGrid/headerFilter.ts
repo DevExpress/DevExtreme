@@ -5,7 +5,7 @@ import { testScreenshot } from '../../helpers/themeUtils';
 import PivotGrid from '../../model/pivotGrid';
 import { sales } from './data';
 
-fixture.disablePageReloads`pivotGrid_headerFilter`
+fixture`pivotGrid_headerFilter`
   .page(url(__dirname, '../container.html'));
 
 test('Header filter popup', async (t) => {

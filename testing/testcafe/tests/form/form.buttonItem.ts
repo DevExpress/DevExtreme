@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`Form`
+fixture`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
 const testName = 'ButtonItem';

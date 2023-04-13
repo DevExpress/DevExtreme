@@ -4,7 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 
-fixture.disablePageReloads`Master detail`
+fixture`Master detail`
   .page(url(__dirname, '../container.html'));
 
 ['material.blue.light', 'generic.light'].forEach((theme) => {

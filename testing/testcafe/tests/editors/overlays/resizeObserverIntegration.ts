@@ -6,7 +6,7 @@ import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
 import { setStyleAttribute } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Popup`
+fixture`Popup`
   .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if content dimension is changed during animation', async (t) => {

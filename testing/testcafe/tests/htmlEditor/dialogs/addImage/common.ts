@@ -5,7 +5,7 @@ import { BASE64_IMAGE_1 } from './images/base64';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 
-fixture.disablePageReloads`HtmlEditor - common`
+fixture`HtmlEditor - common`
   .page(url(__dirname, '../../../containerQuill.html'));
 
 test('Add button should be enabled after switch to url form', async (t) => {
@@ -23,9 +23,7 @@ test('Add button should be enabled after switch to url form', async (t) => {
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .eql(false)
 
-    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
-      paste: true,
-    })
+    .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1)
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 }).before(async () => {
   await createWidget('dxHtmlEditor', {

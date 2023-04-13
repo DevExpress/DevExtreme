@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-fixture.disablePageReloads`Grouping Panel`
+fixture`Grouping Panel`
   .page(url(__dirname, '../container.html'));
 
 test('Grouping Panel label should not overflow in a narrow grid (T1103925)', async (t) => {
