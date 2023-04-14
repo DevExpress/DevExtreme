@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import { testScreenshot } from '../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
@@ -266,6 +266,39 @@ test('Icon set', async (t) => {
         .append($('<div>').addClass(ICON_CLASS).addClass(`${ICON_CLASS}-${iconName}`))
         .append($('<div>').text(`${iconName}`))
         .append($('<div>').text(`${glyph.replace('\f', '\\f')}`));
+    }, {
+      dependencies: {
+        ICON_CLASS, id, iconName, glyph,
+      },
+    })();
+  }
+});
+
+test('SVG icon set', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t.debug();
+  await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const [iconName, glyph] of Object.entries(iconSet)) {
+    const id = `dx-${new Guid()}`;
+
+    await appendElementTo('#container', 'div', id, {
+      display: 'inline-flex',
+      padding: '3px',
+      border: '1px solid black',
+      alignItems: 'center',
+      flexDirection: 'column',
+      fontSize: '10px',
+    });
+
+    await ClientFunction(() => {
+      $(`#${id}`)
+        .append($(`<img src="../../../images/icons/${isMaterial() ? 'material' : 'generic'}/${iconName}.svg">`))
+        .append($('<div>').text(`${iconName}`));
     }, {
       dependencies: {
         ICON_CLASS, id, iconName, glyph,
