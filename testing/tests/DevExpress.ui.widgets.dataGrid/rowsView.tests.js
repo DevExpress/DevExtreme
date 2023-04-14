@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup =
-        '<style>\
+        '<style nonce="qunit-test">\
     .qunit-fixture-static {\
         position: static !important;\
         left: 0 !important;\

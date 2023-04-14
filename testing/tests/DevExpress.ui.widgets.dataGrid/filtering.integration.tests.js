@@ -5,8 +5,19 @@ QUnit.testStart(function() {
             </div>
         </div>
     `;
+
+    const getEmulatorStyles = () => {
+        // Chrome DevTools device emulation
+        // Erase differences in user agent stylesheet
+        if('chrome' in window && devices.real().deviceType !== 'desktop') {
+            return 'input[type=date] { padding: 1px 0; }';
+        }
+
+        return '';
+    };
+
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .fixed-height {
                 height: 400px;
             }
@@ -17,6 +28,7 @@ QUnit.testStart(function() {
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
+            ${getEmulatorStyles()}
         </style>
 
         <!--qunit-fixture-->
@@ -39,12 +51,6 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
 
 fx.off = true;
 

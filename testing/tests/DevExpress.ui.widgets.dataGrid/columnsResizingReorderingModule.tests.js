@@ -3,29 +3,53 @@ import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 QUnit.testStart(function() {
 
     const markup =
-'<style>\
+'<style nonce="qunit-test">\
     body {\
         padding: 0;\
         margin: 0;\
     }\
 </style>\
-<div style="padding: 0px 40px; margin: 0px 50px">\
+<div id="testWrapper">\
     <div id="testContainer"></div>\
 </div>\
 <div id="root">\
     <div id="container" class="dx-datagrid"></div>\
     <div id="container2" class="dx-datagrid"></div>\
 </div>\
-<div id="itemsContainer" style="font-size: 0"><div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div></div>\
-<div id="itemsContainerVertical"><div style="width:125px; height: 50px;" ></div><div style="width:125px; height: 50px;" ></div></div>\
+<div id="itemsContainer"><div></div><div></div></div>\
+<div id="itemsContainerVertical"><div></div><div></div></div>\
 \
 <div class="dx-swatch-1">\
     <div id="gridInSwatch">\
-    <div id="swatchitemsContainer" style="font-size: 0"><div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div></div>\
+    <div id="swatchitemsContainer"><div></div><div></div></div>\
     </div>\
 </div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#testWrapper').css({
+        padding: '0px 40px',
+        margin: '0px 50px'
+    });
+
+    $('#itemsContainer').css('font-size', 0);
+
+    $('#itemsContainer > div').css({
+        width: '125px',
+        display: 'inline-block'
+    });
+
+    $('#itemsContainerVertical > div').css({
+        width: '125px',
+        height: '50px'
+    });
+
+    $('#swatchitemsContainer').css('font-size', 0);
+
+    $('#swatchitemsContainer > div').css({
+        width: '125px',
+        display: 'inline-block'
+    });
 
     addShadowDomStyles($('#qunit-fixture'));
 });
@@ -4342,7 +4366,12 @@ QUnit.module('Headers reordering', {
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
-        $('#itemsContainer').html('<div style="width:125px; display: inline-block;" /><div style="width:125px; display: inline-block;" />');
+        $('#itemsContainer').html('<div /><div />');
+
+        $('#itemsContainer > div').css({
+            width: '125px',
+            display: 'inline-block'
+        });
 
         controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {
@@ -4448,7 +4477,12 @@ QUnit.module('Headers reordering', {
         const controller = this.createDraggingHeaderViewController();
         const draggingHeader = new TestDraggingHeader(this.component);
 
-        $('#itemsContainer').html('<div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div>');
+        $('#itemsContainer').html('<div></div><div></div>');
+
+        $('#itemsContainer > div').css({
+            width: '125px',
+            display: 'inline-block'
+        });
 
         controller.drop = function(parameters) {
             if(this.allowDrop(parameters)) {

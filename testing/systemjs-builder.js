@@ -247,7 +247,7 @@ const transpileTests = async(Builder) => {
     const builder = new Builder(root, config);
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
-    const listFiles = [].concat(helpersList, testsList).filter(name => name.includes('widgets.pivotGrid/pivotGrid.tests'));
+    const listFiles = [].concat(helpersList, testsList);
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
@@ -297,8 +297,7 @@ const updateBuilder = () => {
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
         'load.depMap[dep] = dep' +
         '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
-        '.replace("/node_modules/", "/../node_modules/")' +
-        '.replace("hogan-3.0.2.js", "hogan-3.0.2.amd.js");'
+        '.replace("/node_modules/", "/../node_modules/")'
     );
 
     patchBuilder(

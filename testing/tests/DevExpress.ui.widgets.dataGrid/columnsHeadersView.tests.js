@@ -14,7 +14,7 @@ import messageLocalization from 'localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 import 'ui/data_grid';
-import '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
+import 'hogan.js';
 setTemplateEngine('hogan');
 
 const SORT_INDEX_ICON_SELECTOR = '.dx-sort-index-icon';

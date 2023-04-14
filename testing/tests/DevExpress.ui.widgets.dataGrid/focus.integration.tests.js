@@ -6,7 +6,7 @@ QUnit.testStart(function() {
         </div>
     `;
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .fixed-height {
                 height: 400px;
             }

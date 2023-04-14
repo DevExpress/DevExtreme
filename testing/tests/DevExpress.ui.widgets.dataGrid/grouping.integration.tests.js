@@ -14,11 +14,12 @@ QUnit.testStart(function() {
     const markup = `
         <div id="container">
             <div id="dataGrid"></div>
-            <div id="dataGridWithStyle" style="width: 500px;"></div>
+            <div id="dataGridWithStyle"></div>
         </div>
     `;
 
     $('#qunit-fixture').html(markup);
+    $('#dataGridWithStyle').css('width', '500px');
 });
 
 

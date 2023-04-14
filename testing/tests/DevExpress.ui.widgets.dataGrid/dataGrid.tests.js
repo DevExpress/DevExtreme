@@ -9,7 +9,7 @@ QUnit.testStart(function() {
         </div>
     `;
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
@@ -23,9 +23,6 @@ QUnit.testStart(function() {
 
         ${gridMarkup}
 
-        <script id="jsrenderRow" type="text/x-jsrender">
-            <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>
-        </script>
         <script id="scriptTestTemplate1" type="text/html">
             <span id="template1">Template1</span>
         </script>
@@ -39,8 +36,7 @@ QUnit.testStart(function() {
     addShadowDomStyles($('#qunit-fixture'));
 });
 
-import '../../../node_modules/underscore/underscore-min.js';
-import '../../../node_modules/jsrender/jsrender.min.js';
+import 'underscore';
 
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
@@ -4232,27 +4228,6 @@ QUnit.module('templates', baseModuleConfig, () => {
         setTemplateEngine('default');
     });
 
-    // T474695
-    QUnit.test('jsrender row template should works', function(assert) {
-        // arrange, act
-        setTemplateEngine('jsrender');
-
-        const dataGrid = createDataGrid({
-            loadingTimeout: null,
-            dataSource: [{ value: 1 }, { value: 2 }],
-            rowTemplate: $('#jsrenderRow')
-        });
-
-        // assert
-        const $rows = $($(dataGrid.$element()).find('.jsrender-row'));
-
-        assert.equal($rows.length, 2);
-        assert.equal($rows.eq(0).text(), 'Row 1');
-        assert.equal($rows.eq(1).text(), 'Row 2');
-
-        setTemplateEngine('default');
-    });
-
     // TODO: deprecated, remove it in 15.1
     QUnit.test('test template in script outside container (get by selector)', function(assert) {
         // arrange
@@ -4734,7 +4709,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4782,7 +4757,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4830,7 +4805,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4878,7 +4853,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4928,7 +4903,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4989,7 +4964,7 @@ QUnit.module('templates', baseModuleConfig, () => {
             this.clock.tick(100);
 
             dataGrid.getView('columnHeadersView')._templatesCache = {};
-            sinon.stub(dataGrid, '_getTemplate', function(selector) {
+            sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
                 // assert
                 assert.strictEqual(selector, '#testTemplate', 'template name');
 

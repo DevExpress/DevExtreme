@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup =
-'<style>\
+'<style nonce="qunit-test">\
     body {\
         padding: 0;\
         margin: 0;\
@@ -9,15 +9,26 @@ QUnit.testStart(function() {
         height: 440px;\
     }\
 </style>\
-<div style="padding: 0px 40px; margin: 0px 50px">\
+<div id="testWrapper">\
     <div id="testContainer"></div>\
 </div>\
 <div id="root">\
     <div id="container" class="dx-datagrid dx-widget"></div>\
 </div>\
-<div id="itemsContainer"><div style="width:125px; display: inline-block;" ></div><div style="width:125px; display: inline-block;" ></div></div>';
+<div id="itemsContainer"><div></div><div></div></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#testWrapper').css({
+        padding: '0 40px',
+        margin: '0 50px'
+    });
+
+    $('#itemsContainer > div').css({
+        width: '125px',
+        display: 'inline-block'
+    });
+
     // $('body').append(markup);
     addShadowDomStyles($('#qunit-fixture'));
 });
@@ -1472,7 +1483,7 @@ QUnit.module('Synchronize columns', {
                 { caption: 'Column 1', width: '120px' },
                 {
                     caption: 'Column 2', width: '130px', cellTemplate: function(container, options) {
-                        $(container).append('<div style="width: 130px" />');
+                        $(container).append($('<div>').css('width', '130px'));
                         $(container).css('padding', 0);
                     }
                 }, { caption: 'Big Big Big Column Title' }, { caption: 'Column 4' }]),
@@ -1783,7 +1794,7 @@ QUnit.module('Synchronize columns', {
         const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true });
         const testElement = $('<div />').width(300).appendTo($('#container'));
 
-        const stub = sinon.stub(this.resizingController, '_correctColumnWidths', function() {
+        const stub = sinon.stub(this.resizingController, '_correctColumnWidths').callsFake(function() {
             const $tables = gridView.element().find('.dx-datagrid-table');
             assert.ok($tables.hasClass('dx-datagrid-table-fixed'), 'the best fit mode is disabled');
         });

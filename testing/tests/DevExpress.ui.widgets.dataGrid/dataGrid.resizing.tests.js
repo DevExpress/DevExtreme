@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .fixed-height {
                 height: 400px;
             }
@@ -15,11 +15,12 @@ QUnit.testStart(function() {
 
         <div id='container'>
             <div id="dataGrid"></div>
-            <div id="dataGridWithStyle" style="width: 500px;"></div>
+            <div id="dataGridWithStyle"></div>
         </div>
     `;
 
     $('#qunit-fixture').html(markup);
+    $('#dataGridWithStyle').css('width', '500px');
     addShadowDomStyles($('#qunit-fixture'));
 });
 
