@@ -171,6 +171,7 @@ const iconSet = {
   mention: '\f090',
   variable: '\f091',
   clearformat: '\f092',
+  to: '\f09a',
   fullscreen: '\f11a',
   hierarchy: '\f124',
   docfile: '\f111',

@@ -106,7 +106,8 @@
 .dx-icon-addcolumnright,
 .dx-icon-addtable,
 .dx-icon-removetable,
-.dx-icon-bell {
+.dx-icon-bell,
+.dx-icon-to {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -361,6 +362,7 @@ $icons: (
     "mention": "\f090",
     "variable": "\f091",
     "clearformat": "\f092",
+    "to": "\f09a",
     "fullscreen": "\f11a",
     "hierarchy": "\f124",
     "docfile": "\f111",
