@@ -30,7 +30,7 @@ import {
 
 import {
     ApplyChangesMode,
-    HeaderFilterSearch,
+    HeaderFilterSearchConfig,
     StateStoreType,
 } from '../common/grids';
 
@@ -320,7 +320,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        */
-      search?: HeaderFilterSearch;
+      search?: HeaderFilterSearchConfig;
       /**
        * @docid
        * @default 500

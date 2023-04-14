@@ -606,7 +606,7 @@ export type ColumnHeaderFilter = {
   /**
    * @docid GridBaseColumn.headerFilter.search
    */
-  search?: ColumnHeaderFilterSearch;
+  search?: ColumnHeaderFilterSearchConfig;
   /**
    * @docid GridBaseColumn.headerFilter.searchMode
    * @default 'contains'
@@ -624,9 +624,9 @@ export type ColumnHeaderFilter = {
  * @public
  * @docid
  * @namespace DevExpress.common.grids
- * @inherits HeaderFilterSearch
+ * @inherits HeaderFilterSearchConfig
  */
-export type ColumnHeaderFilterSearch = HeaderFilterSearch & {
+export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
   /**
    * @docid
    * @type getter|Array<getter>
@@ -1137,7 +1137,7 @@ export type HeaderFilter = {
   /**
    * @docid GridBaseOptions.headerFilter.search
    */
-  search?: HeaderFilterSearch;
+  search?: HeaderFilterSearchConfig;
   /**
    * @docid GridBaseOptions.headerFilter.searchTimeout
    * @default 500
@@ -1172,7 +1172,7 @@ export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'q
  * @docid
  * @namespace DevExpress.common.grids
  */
-export type HeaderFilterSearch = {
+export type HeaderFilterSearchConfig = {
   /**
    * @docid
    * @default {}

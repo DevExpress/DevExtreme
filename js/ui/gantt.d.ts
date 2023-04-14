@@ -44,7 +44,7 @@ import {
 } from '../common';
 
 import {
-    HeaderFilterSearch,
+    HeaderFilterSearchConfig,
 } from '../common/grids';
 
 export type GanttPdfExportDateRange = 'all' | 'visible';
@@ -1409,7 +1409,7 @@ export interface dxGanttHeaderFilter {
     /**
      * @docid
      */
-    search?: HeaderFilterSearch;
+    search?: HeaderFilterSearchConfig;
     /**
      * @docid
      * @default 500

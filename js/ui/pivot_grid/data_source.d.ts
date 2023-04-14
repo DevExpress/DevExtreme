@@ -23,7 +23,7 @@ import {
 
 import {
     FilterType,
-    HeaderFilterSearch,
+    HeaderFilterSearchConfig,
     SummaryType,
 } from '../../common/grids';
 
@@ -394,7 +394,7 @@ export interface PivotGridDataSourceField {
         /**
          * @docid PivotGridDataSourceOptions.fields.headerFilter.search
          */
-        search?: HeaderFilterSearch;
+        search?: HeaderFilterSearchConfig;
         width?: number;
     };
     /**
