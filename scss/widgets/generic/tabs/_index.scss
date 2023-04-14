@@ -90,7 +90,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
       }
 
       &:only-child {
-        box-shadow: $tab-selected-not-focused-left-right-shadow;
+        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-right-shadow, $tab-selected-not-focused-left-right-shadow);
       }
     }
   }
