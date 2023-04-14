@@ -75,6 +75,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   > .dx-tabpanel-tabs {
     .dx-tab {
       width: 140px;
+      padding: $generic-tabpanel-tabs-item-padding;
     }
   }
 
