@@ -2375,6 +2375,24 @@ QUnit.module('T9', moduleConfig, () => {
         assert.equal(keyboard.caret().start, 0, 'caret moved backward');
         assert.equal($input.val(), '_-_', 'chars was removed');
     });
+
+    QUnit.test('suggestion apply inserts text', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: 'LLLLL'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type('h')
+            .caret({ start: 0, end: 5 })
+            .beforeInput()
+            .input('Hello', 'insertText');
+
+        assert.strictEqual(textEditor.option('text'), 'Hello', 'text is inserted');
+    });
 });
 
 QUnit.module('states', {}, () => {

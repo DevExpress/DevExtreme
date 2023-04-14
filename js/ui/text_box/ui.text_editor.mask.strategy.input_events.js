@@ -70,10 +70,11 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
             this.editorCaret(currentCaret);
 
             this.editor.setForwardDirection();
+            const text = data ?? '';
             const hasValidChars = this._updateEditorMask({
                 start: this._prevCaret?.start,
-                length: 1,
-                text: data ?? ''
+                length: text.length || 1,
+                text
             });
 
             if(!hasValidChars) {
@@ -100,7 +101,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
             const { start, end } = this.editorCaret();
             const correction = updatedCharsCount - textLength;
 
-            if(updatedCharsCount > 1) {
+            if(updatedCharsCount > 1 && textLength === 1) {
                 this.editorCaret({ start: start + correction, end: end + correction });
             }
 
