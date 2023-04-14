@@ -276,7 +276,7 @@ test('Icon set', async (t) => {
 
 test('SVG icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await t.debug();
+
   await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
 
   await t
@@ -295,13 +295,15 @@ test('SVG icon set', async (t) => {
       fontSize: '10px',
     });
 
+    const isMaterialTheme = isMaterial();
+
     await ClientFunction(() => {
       $(`#${id}`)
-        .append($(`<img src="../../../images/icons/${isMaterial() ? 'material' : 'generic'}/${iconName}.svg">`))
+        .append($(`<img src="../../../images/icons/${isMaterialTheme ? 'material' : 'generic'}/${iconName}.svg">`))
         .append($('<div>').text(`${iconName}`));
     }, {
       dependencies: {
-        ICON_CLASS, id, iconName, glyph,
+        ICON_CLASS, id, iconName, glyph, isMaterialTheme,
       },
     })();
   }
