@@ -10,7 +10,7 @@ import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/module';
 import pivotGridUtils, { setFieldProperty } from '__internal/grids/pivot_grid/module_widget_utils';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import '../../../testing/content/orders.js';
+import '../../content/orders.js';
 import PivotGridTestSettings from '../../helpers/pivotGridTestSettings.js';
 
 function createDataSource(options) {

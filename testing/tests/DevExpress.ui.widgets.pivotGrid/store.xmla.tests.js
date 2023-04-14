@@ -12,7 +12,7 @@ define(function(require) {
     const devices = require('core/devices');
     const pivotGridUtils = require('__internal/grids/pivot_grid/module_widget_utils');
     const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/module_utils');
-    const XmlaStore = require('__internal/grids/pivot_grid/xmla_store/module').XmlaStore;
+    const { XmlaStore } = require('__internal/grids/pivot_grid/xmla_store/module');
 
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 

@@ -25,7 +25,6 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-// import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
 import hogan from 'hogan.js';
 
 window.Hogan = hogan;
