@@ -286,112 +286,128 @@ const View = ModuleItem.inherit({
 
 const MODULES_ORDER_MAX_INDEX = 1000000;
 
-const processModules = function (that, componentClass) {
-  const { modules } = componentClass;
-  const { modulesOrder } = componentClass;
-  const controllerTypes = componentClass.controllerTypes || {};
-  const viewTypes = componentClass.viewTypes || {};
-
-  if (!componentClass.controllerTypes) {
-    if (modulesOrder) {
-      modules.sort((module1, module2) => {
-        let orderIndex1 = modulesOrder.indexOf(module1.name);
-        let orderIndex2 = modulesOrder.indexOf(module2.name);
-
-        if (orderIndex1 < 0) {
-          orderIndex1 = MODULES_ORDER_MAX_INDEX;
+function getExtendedTypes(
+  types: Record<string, unknown>,
+  moduleExtenders: Record<string, unknown> = {},
+): Record<string, typeof ModuleItem> {
+  const extendTypes = { };
+  Object.entries(moduleExtenders)
+    .forEach(([name, extender]) => {
+      const currentType = types[name];
+      if (currentType) {
+        if (isFunction(extender)) {
+          extendTypes[name] = extender(currentType);
+        } else {
+          const classType = currentType as { inherit: (type: unknown) => unknown };
+          extendTypes[name] = classType.inherit(extender);
         }
-
-        if (orderIndex2 < 0) {
-          orderIndex2 = MODULES_ORDER_MAX_INDEX;
-        }
-
-        return orderIndex1 - orderIndex2;
-      });
-    }
-
-    each(modules, function () {
-      const { controllers } = this;
-      const moduleName = this.name;
-      const { views } = this;
-
-      controllers && each(controllers, (name, type) => {
-        if (controllerTypes[name]) {
-          throw errors.Error('E1001', moduleName, name);
-        } else if (!(type && type.subclassOf && type.subclassOf(Controller))) {
-          type.subclassOf(Controller);
-          throw errors.Error('E1002', moduleName, name);
-        }
-        controllerTypes[name] = type;
-      });
-      views && each(views, (name, type) => {
-        if (viewTypes[name]) {
-          throw errors.Error('E1003', moduleName, name);
-        } else if (!(type && type.subclassOf && type.subclassOf(View))) {
-          throw errors.Error('E1004', moduleName, name);
-        }
-        viewTypes[name] = type;
-      });
-    });
-
-    each(modules, function () {
-      const { extenders } = this;
-
-      if (extenders) {
-        extenders.controllers && each(extenders.controllers, (name, extender) => {
-          if (controllerTypes[name]) {
-            controllerTypes[name] = controllerTypes[name].inherit(extender);
-          }
-        });
-        extenders.views && each(extenders.views, (name, extender) => {
-          if (viewTypes[name]) {
-            viewTypes[name] = viewTypes[name].inherit(extender);
-          }
-        });
       }
     });
+  return extendTypes;
+}
 
-    componentClass.controllerTypes = controllerTypes;
-    componentClass.viewTypes = viewTypes;
-  }
-
-  const registerPublicMethods = function (that, name, moduleItem) {
-    const publicMethods = moduleItem.publicMethods();
-    if (publicMethods) {
-      each(publicMethods, (index, methodName) => {
-        if (moduleItem[methodName]) {
-          if (!that[methodName]) {
-            that[methodName] = function () {
-              return moduleItem[methodName].apply(moduleItem, arguments);
-            };
-          } else {
-            throw errors.Error('E1005', methodName);
-          }
+function registerPublicMethods(componentInstance, name: string, moduleItem): void {
+  const publicMethods = moduleItem.publicMethods();
+  if (publicMethods) {
+    each(publicMethods, (_, methodName) => {
+      if (moduleItem[methodName]) {
+        if (!componentInstance[methodName]) {
+          componentInstance[methodName] = (...args: unknown[]): unknown => moduleItem[methodName](...args);
         } else {
-          throw errors.Error('E1006', name, methodName);
+          throw errors.Error('E1005', methodName);
         }
-      });
-    }
-  };
+      } else {
+        throw errors.Error('E1006', name, methodName);
+      }
+    });
+  }
+}
+type ComponentInstanceType = Record<string, unknown>;
+type ModuleItemType = new(componentInstance: ComponentInstanceType) => { name: string };
+export function processModules(
+  componentInstance: ComponentInstanceType,
+  componentClass: { modules: [Module & { name: string }]; modulesOrder: any },
+): void {
+  const { modules } = componentClass;
+  const { modulesOrder } = componentClass;
 
-  const createModuleItems = function (moduleTypes) {
+  function createModuleItems(
+    moduleTypes: Record<string, ModuleItemType>,
+  ): unknown {
     const moduleItems = {};
 
     each(moduleTypes, (name, moduleType) => {
       // eslint-disable-next-line new-cap
-      const moduleItem = new moduleType(that);
+      const moduleItem = new moduleType(componentInstance);
       moduleItem.name = name;
-      registerPublicMethods(that, name, moduleItem);
+      registerPublicMethods(componentInstance, name, moduleItem);
 
       moduleItems[name] = moduleItem;
     });
 
     return moduleItems;
-  };
+  }
 
-  that._controllers = createModuleItems(controllerTypes);
-  that._views = createModuleItems(viewTypes);
-};
+  if (modulesOrder) {
+    modules.sort((module1, module2) => {
+      let orderIndex1 = modulesOrder.indexOf(module1.name);
+      let orderIndex2 = modulesOrder.indexOf(module2.name);
+
+      if (orderIndex1 < 0) {
+        orderIndex1 = MODULES_ORDER_MAX_INDEX;
+      }
+
+      if (orderIndex2 < 0) {
+        orderIndex2 = MODULES_ORDER_MAX_INDEX;
+      }
+
+      return orderIndex1 - orderIndex2;
+    });
+  }
+  const rootControllerTypes = {};
+  const rootViewTypes = {};
+  modules.forEach(({ name: moduleName, controllers = {}, views = {} }) => {
+    Object.entries(controllers)
+      .forEach(([name, type]) => {
+        if (rootControllerTypes[name]) {
+          throw errors.Error('E1001', moduleName, name);
+        } else if (!type?.subclassOf?.(Controller)) {
+          throw errors.Error('E1002', moduleName, name);
+        }
+        rootControllerTypes[name] = type;
+      });
+    Object.entries(views)
+      .forEach(([name, type]) => {
+        if (rootViewTypes[name]) {
+          throw errors.Error('E1003', moduleName, name);
+        } else if (!type?.subclassOf?.(View)) {
+          throw errors.Error('E1004', moduleName, name);
+        }
+        rootViewTypes[name] = type;
+      });
+  });
+  const moduleExtenders = modules
+    .filter(({ extenders }) => !!extenders);
+  const controllerTypes = moduleExtenders.reduce(
+    (types, { extenders }) => ({
+      ...types,
+      ...getExtendedTypes(types, extenders?.controllers),
+    }),
+    rootControllerTypes,
+  );
+  const viewTypes = moduleExtenders.reduce(
+    (types, { extenders }) => ({
+      ...types,
+      ...getExtendedTypes(types, extenders?.views),
+    }),
+    rootViewTypes,
+  );
+
+  // eslint-disable-next-line no-param-reassign
+  componentInstance._controllers = createModuleItems(controllerTypes);
+  // eslint-disable-next-line no-param-reassign
+  componentInstance._views = createModuleItems(viewTypes);
+}
 
 const callModuleItemsMethod = function (that, methodName, args) {
   args = args || [];
@@ -426,8 +442,6 @@ export default {
     }
     module.name = name;
     modules.push(module);
-    delete this.controllerTypes;
-    delete this.viewTypes;
   },
 
   registerModulesOrder(moduleNames) {
@@ -436,8 +450,6 @@ export default {
 
   unregisterModule(name) {
     this.modules = grep(this.modules, (module) => module.name !== name);
-    delete this.controllerTypes;
-    delete this.viewTypes;
   },
 
   processModules,
