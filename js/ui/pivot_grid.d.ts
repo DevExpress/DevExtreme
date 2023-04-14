@@ -30,6 +30,7 @@ import {
 
 import {
     ApplyChangesMode,
+    HeaderFilterSearchConfig,
     StateStoreType,
 } from '../common/grids';
 
@@ -303,8 +304,14 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        * @default false
+       * @deprecated
        */
       allowSearch?: boolean;
+      /**
+       * @docid
+       * @default true
+       */
+      allowSelectAll?: boolean;
       /**
        * @docid
        * @default 325
@@ -312,7 +319,12 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       height?: number;
       /**
        * @docid
+       */
+      search?: HeaderFilterSearchConfig;
+      /**
+       * @docid
        * @default 500
+       * @deprecated
        */
       searchTimeout?: number;
       /**

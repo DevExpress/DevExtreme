@@ -2582,8 +2582,13 @@ declare module DevExpress.common.grids {
   export type ColumnHeaderFilter = {
     /**
      * [descr:GridBaseColumn.headerFilter.allowSearch]
+     * @deprecated [depNote:GridBaseColumn.headerFilter.allowSearch]
      */
     allowSearch?: boolean;
+    /**
+     * [descr:GridBaseColumn.headerFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
     /**
      * [descr:GridBaseColumn.headerFilter.dataSource]
      */
@@ -2602,13 +2607,27 @@ declare module DevExpress.common.grids {
      */
     height?: number;
     /**
+     * [descr:GridBaseColumn.headerFilter.search]
+     */
+    search?: ColumnHeaderFilterSearchConfig;
+    /**
      * [descr:GridBaseColumn.headerFilter.searchMode]
+     * @deprecated [depNote:GridBaseColumn.headerFilter.searchMode]
      */
     searchMode?: SearchMode;
     /**
      * [descr:GridBaseColumn.headerFilter.width]
      */
     width?: number;
+  };
+  /**
+   * [descr:ColumnHeaderFilterSearchConfig]
+   */
+  export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
+    /**
+     * [descr:ColumnHeaderFilterSearchConfig.searchExpr]
+     */
+    searchExpr?: string | Function | Array<string | Function>;
   };
   export type ColumnLookup = {
     /**
@@ -3614,14 +3633,24 @@ declare module DevExpress.common.grids {
   export type HeaderFilter = {
     /**
      * [descr:GridBaseOptions.headerFilter.allowSearch]
+     * @deprecated [depNote:GridBaseOptions.headerFilter.allowSearch]
      */
     allowSearch?: boolean;
+    /**
+     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
     /**
      * [descr:GridBaseOptions.headerFilter.height]
      */
     height?: number;
     /**
+     * [descr:GridBaseOptions.headerFilter.search]
+     */
+    search?: HeaderFilterSearchConfig;
+    /**
      * [descr:GridBaseOptions.headerFilter.searchTimeout]
+     * @deprecated [depNote:GridBaseOptions.headerFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
@@ -3645,6 +3674,27 @@ declare module DevExpress.common.grids {
     | 'quarter'
     | 'second'
     | 'year';
+  /**
+   * [descr:HeaderFilterSearchConfig]
+   */
+  export type HeaderFilterSearchConfig = {
+    /**
+     * [descr:HeaderFilterSearchConfig.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:HeaderFilterSearchConfig.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:HeaderFilterSearchConfig.mode]
+     */
+    mode?: SearchMode;
+    /**
+     * [descr:HeaderFilterSearchConfig.timeout]
+     */
+    timeout?: number;
+  };
   export type HeaderFilterTexts = {
     /**
      * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -5529,7 +5579,19 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.headerFilter]
      */
-    headerFilter?: { allowSearch?: boolean; height?: number; width?: number };
+    headerFilter?: {
+      allowSearch?: boolean;
+      /**
+       * [descr:PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
+      height?: number;
+      /**
+       * [descr:PivotGridDataSourceOptions.fields.headerFilter.search]
+       */
+      search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+      width?: number;
+    };
     /**
      * [descr:PivotGridDataSourceOptions.fields.isMeasure]
      */
@@ -15425,14 +15487,24 @@ declare module DevExpress.ui {
   export interface dxGanttHeaderFilter {
     /**
      * [descr:dxGanttHeaderFilter.allowSearch]
+     * @deprecated [depNote:dxGanttHeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
+    /**
+     * [descr:dxGanttHeaderFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
     /**
      * [descr:dxGanttHeaderFilter.height]
      */
     height?: number;
     /**
+     * [descr:dxGanttHeaderFilter.search]
+     */
+    search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+    /**
      * [descr:dxGanttHeaderFilter.searchTimeout]
+     * @deprecated [depNote:dxGanttHeaderFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
@@ -18441,14 +18513,24 @@ declare module DevExpress.ui {
     headerFilter?: {
       /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
+       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
        */
       allowSearch?: boolean;
+      /**
+       * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
       /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.height]
        */
       height?: number;
       /**
+       * [descr:dxPivotGridFieldChooserOptions.headerFilter.search]
+       */
+      search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+      /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
+       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
        */
       searchTimeout?: number;
       /**
@@ -18689,14 +18771,24 @@ declare module DevExpress.ui {
     headerFilter?: {
       /**
        * [descr:dxPivotGridOptions.headerFilter.allowSearch]
+       * @deprecated [depNote:dxPivotGridOptions.headerFilter.allowSearch]
        */
       allowSearch?: boolean;
+      /**
+       * [descr:dxPivotGridOptions.headerFilter.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
       /**
        * [descr:dxPivotGridOptions.headerFilter.height]
        */
       height?: number;
       /**
+       * [descr:dxPivotGridOptions.headerFilter.search]
+       */
+      search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+      /**
        * [descr:dxPivotGridOptions.headerFilter.searchTimeout]
+       * @deprecated [depNote:dxPivotGridOptions.headerFilter.searchTimeout]
        */
       searchTimeout?: number;
       /**

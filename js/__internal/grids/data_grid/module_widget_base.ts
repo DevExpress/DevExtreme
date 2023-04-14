@@ -8,6 +8,7 @@ import { logger } from '@js/core/utils/console';
 import browser from '@js/core/utils/browser';
 import Widget from '@js/ui/widget/ui.widget';
 import { isMaterial } from '@js/ui/themes';
+import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import gridCore from './module_core';
 
 import './module_not_extended/column_headers';
@@ -144,6 +145,8 @@ const DataGrid = (Widget as any).inherit({
     const that = this;
 
     that.callBase();
+
+    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
 
     gridCore.processModules(that, gridCore);
 

@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { isMaterial } from '@js/ui/themes';
 import treeListCore from './module_core';
+import gridCoreUtils from '../grid_core/module_utils';
 
 import './module_not_extended/column_headers';
 import './module_columns_controller';
@@ -104,6 +105,10 @@ const TreeList = (Widget as any).inherit({
     const that = this;
 
     that.callBase();
+
+    if (!this.option('_disableDeprecationWarnings')) {
+      gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
+    }
 
     treeListCore.processModules(that, treeListCore);
 
