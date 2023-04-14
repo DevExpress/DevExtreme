@@ -96,15 +96,36 @@ export const columnHeadersModule = {
                     const that = this;
 
                     return function($container, options) {
-                        const $content = column.command ? $container : createCellContent(that, $container, options);
-                        const caption = column.command !== 'expand' && column.caption;
+                        const caption = column.command === 'empty' ? that._getEmptyHeaderText() : column.caption;
+                        const needCellContent = !column.command || (caption && column.command !== 'expand');
 
-                        if(caption) {
+                        if(needCellContent) {
+                            const $content = createCellContent(that, $container, options);
+
                             $content.text(caption);
                         } else if(column.command) {
                             $container.html('&nbsp;');
                         }
                     };
+                },
+
+                _getEmptyHeaderText: function() {
+                    const hasHiddenColumns = !!this.component.getView('columnChooserView').hasHiddenColumns();
+                    const hasGroupedColumns = !!this.component.getView('headerPanel').hasGroupedColumns();
+
+                    switch(true) {
+                        case (hasHiddenColumns && hasGroupedColumns):
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText');
+
+                        case hasGroupedColumns:
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
+
+                        case hasHiddenColumns:
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
+
+                        default:
+                            return '';
+                    }
                 },
 
                 _getHeaderTemplate: function(column) {
@@ -243,12 +264,11 @@ export const columnHeadersModule = {
                     }
                 },
 
-                _getRowVisibleColumns: function(rowIndex) {
-                    return this._columnsController.getVisibleColumns(rowIndex);
-                },
-
                 _renderRow: function($table, options) {
-                    options.columns = this._getRowVisibleColumns(options.row.rowIndex);
+                    const rowIndex = this.getRowCount() === 1 ? null : options.row.rowIndex;
+
+                    options.columns = this.getColumns(rowIndex);
+
                     this.callBase($table, options);
                 },
 
@@ -412,38 +432,13 @@ export const columnHeadersModule = {
                     return this.callBase.apply(this, arguments);
                 },
 
-                allowDragging: function(column, sourceLocation, draggingPanels) {
-                    let i;
-                    let draggableColumnCount = 0;
-
+                allowDragging: function(column) {
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
-                    const columns = this.getColumns(rowIndex === 0 ? 0 : null);
-                    const canHideColumn = column?.allowHiding && columns.length > 1;
-                    const allowDrag = function(column) {
-                        return column.allowReordering || column.allowGrouping || column.allowHiding;
-                    };
+                    const columns = this.getColumns(rowIndex);
 
-                    for(i = 0; i < columns.length; i++) {
-                        if(allowDrag(columns[i])) {
-                            draggableColumnCount++;
-                        }
-                    }
+                    const isReorderingEnabled = this.option('allowColumnReordering') || this._columnsController.isColumnOptionUsed('allowReordering');
 
-                    if(draggableColumnCount <= 1 && !canHideColumn) {
-                        return false;
-                    } else if(!draggingPanels) {
-                        return (this.option('allowColumnReordering') || this._columnsController.isColumnOptionUsed('allowReordering')) && column && column.allowReordering;
-                    }
-
-                    for(i = 0; i < draggingPanels.length; i++) {
-                        const draggingPanel = draggingPanels[i];
-
-                        if(draggingPanel && draggingPanel.allowDragging(column, sourceLocation)) {
-                            return true;
-                        }
-                    }
-
-                    return false;
+                    return isReorderingEnabled && column.allowReordering && columns.length > 1;
                 },
 
                 getBoundingRect: function() {

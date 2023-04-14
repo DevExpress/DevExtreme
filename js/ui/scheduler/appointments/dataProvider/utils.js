@@ -127,7 +127,7 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
     return exceptionString;
 };
 
-export const replaceWrongEndDate = (appointment, startDate, endDate, appointmentDuration, dataAccessors) => {
+export const replaceWrongEndDate = (rawAppointment, startDate, endDate, appointmentDuration, dataAccessors) => {
     const calculateAppointmentEndDate = (isAllDay, startDate) => {
         if(isAllDay) {
             return dateUtils.setToDayEnd(new Date(startDate));
@@ -137,8 +137,10 @@ export const replaceWrongEndDate = (appointment, startDate, endDate, appointment
     };
 
     if(_isEndDateWrong(startDate, endDate)) {
-        const calculatedEndDate = calculateAppointmentEndDate(appointment.allDay, startDate);
-        dataAccessors.setter.endDate(appointment, calculatedEndDate);
+        const isAllDay = ExpressionUtils.getField(dataAccessors, 'allDay', rawAppointment);
+
+        const calculatedEndDate = calculateAppointmentEndDate(isAllDay, startDate);
+        dataAccessors.setter.endDate(rawAppointment, calculatedEndDate);
     }
 };
 

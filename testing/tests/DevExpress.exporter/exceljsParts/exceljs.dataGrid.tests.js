@@ -276,6 +276,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             dataGrid.beginUpdate();
+            dataGrid.option('width', 300);
             dataGrid.columnOption('f1', 'visible', true);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
