@@ -12,7 +12,7 @@ define(function(require) {
     const devices = require('core/devices');
     const pivotGridUtils = require('__internal/grids/pivot_grid/module_widget_utils');
     const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/module_utils');
-    const XmlaStore = require('__internal/grids/pivot_grid/xmla_store/module');
+    const XmlaStore = require('__internal/grids/pivot_grid/xmla_store/module').XmlaStore;
 
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
@@ -787,7 +787,7 @@ define(function(require) {
 
         QUnit.test('T677334. Correct parse result with empty member value', function(assert) {
             const send = pivotGridUtils.sendRequest;
-            sinon.stub(pivotGridUtils, 'sendRequest', function() {
+            sinon.stub(pivotGridUtils, 'sendRequest').callsFake(function() {
                 const deferred = $.Deferred();
                 send.apply(this, arguments)
                     .then(function() {

@@ -5344,11 +5344,11 @@ QUnit.module('Apply summary mode', {
         const that = this;
         defaultEnvironment.beforeEach.apply(this, arguments);
 
-        sinon.stub(summaryDisplayModesModule, 'applyDisplaySummaryMode', function(descriptions, data) {
+        sinon.stub(summaryDisplayModesModule, 'applyDisplaySummaryMode').callsFake(function(descriptions, data) {
             that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
         });
 
-        sinon.stub(summaryDisplayModesModule, 'applyRunningTotal', function(descriptions, data) {
+        sinon.stub(summaryDisplayModesModule, 'applyRunningTotal').callsFake(function(descriptions, data) {
             that.applyRunningTotalPassedData = $.extend(true, {}, data);
         });
     },

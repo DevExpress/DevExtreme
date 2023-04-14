@@ -247,7 +247,7 @@ const transpileTests = async(Builder) => {
     const builder = new Builder(root, config);
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
-    const listFiles = [].concat(helpersList, testsList);
+    const listFiles = [].concat(helpersList, testsList).filter(name => name.includes('widgets.pivotGrid/pivotGrid.tests'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {

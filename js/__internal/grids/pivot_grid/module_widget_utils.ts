@@ -368,10 +368,22 @@ const getScrollbarWidth = (
 const calculateScrollbarWidth = callOnce(() => {
   const document = domAdapter.getDocument();
 
+  // TODO: use some built-in CSS class not to use inline styles
   document.body.insertAdjacentHTML(
     'beforeend',
-    '<div style=\'position: absolute; overflow: scroll; width: 100px; height: 100px; top: -9999px;\'></div>',
+    // TODO: rename ID
+    '<div id="name-it-well"></div>',
   );
+
+  const element = document.getElementById('name-it-well');
+
+  if (element != null) {
+    element.style.position = 'absolute';
+    element.style.overflow = 'scroll';
+    element.style.width = '100px';
+    element.style.height = '100px';
+    element.style.top = '-9999px';
+  }
 
   const scrollbar = document.body.lastElementChild;
   const scrollbarWidth = getScrollbarWidth(scrollbar);
