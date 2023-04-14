@@ -34,13 +34,26 @@ test('Items should have links if item.url is set', async (t) => {
       name: 'Items',
       items: [{
         id: '1-1',
-        name: 'Item_1',
-        icon: 'bookmark',
-        url: 'https://js.devexpress.com/',
+        name: 'Item 1',
       }, {
         id: '1-2',
-        name: 'Item_2',
         icon: 'more',
+      }, {
+        id: '1-3',
+        name: 'Item 2',
+        icon: 'bookmark',
+      }, {
+        id: '1-4',
+        name: 'Item 3',
+        url: 'https://js.devexpress.com/',
+      }, {
+        id: '1-5',
+        icon: 'more',
+        url: 'https://js.devexpress.com/',
+      }, {
+        id: '1-6',
+        name: 'Item 4',
+        icon: 'bookmark',
         url: 'https://js.devexpress.com/',
       }],
     }],
