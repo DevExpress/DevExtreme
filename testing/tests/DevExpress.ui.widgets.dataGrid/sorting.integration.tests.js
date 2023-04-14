@@ -70,6 +70,28 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(sortedColumns[0].sortOrder, 'asc', 'sortOrder after ungrouping');
     });
 
+    QUnit.test('Column should not reset sorting if it was sorted while being groupped (T1158098)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, name: 'test' }],
+            columns: ['id', 'name'],
+            loadingTimeout: null,
+        });
+
+        // act
+        dataGrid.columnOption('id', 'groupIndex', 0);
+        this.clock.tick(10);
+
+        dataGrid.columnOption('id', 'sortOrder', 'desc');
+        this.clock.tick(10);
+
+        dataGrid.columnOption('id', 'groupIndex', null);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.columnOption('id', 'sortOrder'), 'desc');
+    });
+
     QUnit.test('Apply sort/group dataSource options', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             commonColumnSettings: {

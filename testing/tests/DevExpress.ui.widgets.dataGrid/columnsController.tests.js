@@ -4900,7 +4900,7 @@ QUnit.module('Move Columns', { beforeEach: setupModule, afterEach: teardownModul
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns()[0].dataField, 'field1');
-        assert.strictEqual(this.columnsController.getVisibleColumns()[0].sortOrder, 'desc');
+        assert.strictEqual(this.columnsController.getVisibleColumns()[0].sortOrder, 'asc');
         assert.strictEqual(this.columnsController.getVisibleColumns()[0].groupIndex, undefined);
     });
 
@@ -4927,7 +4927,7 @@ QUnit.module('Move Columns', { beforeEach: setupModule, afterEach: teardownModul
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns()[1].dataField, 'field1');
-        assert.strictEqual(this.columnsController.getVisibleColumns()[1].sortOrder, 'desc');
+        assert.strictEqual(this.columnsController.getVisibleColumns()[1].sortOrder, 'asc');
         assert.strictEqual(this.columnsController.getVisibleColumns()[1].groupIndex, undefined);
     });
 
@@ -5646,13 +5646,12 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
         // assert
         assert.strictEqual(this.columnsController.getColumns()[0].groupIndex, 0, 'groupIndex');
         assert.strictEqual(this.columnsController.getColumns()[0].sortOrder, 'asc', 'sortOrder');
-        assert.strictEqual(this.columnsController.getColumns()[0].lastSortOrder, 'desc', 'sortOrder');
 
         // act
         this.columnsController.columnOption(0, 'groupIndex', -1);
 
         // assert
-        assert.strictEqual(this.columnsController.getColumns()[0].sortOrder, 'desc', 'sortOrder');
+        assert.strictEqual(this.columnsController.getColumns()[0].sortOrder, 'asc', 'sortOrder');
     });
 
     QUnit.test('Initial columns should not be changed on an attempt to manipulate columns at runtime', function(assert) {

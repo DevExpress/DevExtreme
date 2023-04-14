@@ -25,7 +25,7 @@ import { equalByValue } from '../../core/utils/common';
 import filterUtils from '../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
-const USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
+const USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', '_needResetSortingAfterUngrouping', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
 const IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true };
 const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
@@ -685,20 +685,18 @@ export const columnsControllerModule = {
 
                 if(groupIndex >= 0) {
                     if(!columnWasGrouped) {
-                        column.lastSortOrder = column.sortOrder;
+                        column._needResetSortingAfterUngrouping = !column.sortOrder;
                     }
                 } else {
                     const sortMode = that.option('sorting.mode');
-                    let sortOrder = column.lastSortOrder;
+                    const sortedByAnotherColumn = that._columns.some(col => col !== column && isDefined(col.sortIndex));
+                    const needToResetSorting =
+                        column._needResetSortingAfterUngrouping ||
+                        (sortMode === 'single' && sortedByAnotherColumn);
 
-                    if(sortMode === 'single') {
-                        const sortedByAnotherColumn = that._columns.some(col => col !== column && isDefined(col.sortIndex));
-                        if(sortedByAnotherColumn) {
-                            sortOrder = undefined;
-                        }
+                    if(needToResetSorting) {
+                        column.sortOrder = undefined;
                     }
-
-                    column.sortOrder = sortOrder;
                 }
             };
 
@@ -1793,6 +1791,7 @@ export const columnsControllerModule = {
                         }
                     }
 
+                    column._needResetSortingAfterUngrouping = undefined;
                     that.columnOption(column.index, options);
                 },
                 getSortDataSourceParameters: function(useLocalSelector) {
