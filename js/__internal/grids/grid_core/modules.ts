@@ -7,7 +7,6 @@ import { each } from '@js/core/utils/iterator';
 import messageLocalization from '@js/localization/message';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { Module } from './module_types';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
