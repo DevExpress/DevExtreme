@@ -491,7 +491,7 @@ export type ColumnChooser = {
   /**
    * @docid GridBaseOptions.columnChooser.search
    */
-  search?: ColumnChooserSearch;
+  search?: ColumnChooserSearchConfig;
   /**
    * @docid GridBaseOptions.columnChooser.searchTimeout
    * @default 500
@@ -501,7 +501,7 @@ export type ColumnChooser = {
   /**
    * @docid GridBaseOptions.columnChooser.selection
    */
-  selection?: ColumnChooserSelection;
+  selection?: ColumnChooserSelectionConfig;
   /**
    * @docid GridBaseOptions.columnChooser.title
    * @default "Column Chooser"
@@ -530,7 +530,7 @@ export type ColumnChooserMode = 'dragAndDrop' | 'select';
  * @docid
  * @namespace DevExpress.common.grids
  */
-export type ColumnChooserSearch = {
+export type ColumnChooserSearchConfig = {
   /**
    * @docid
    * @default {}
@@ -553,7 +553,7 @@ export type ColumnChooserSearch = {
  * @docid
  * @namespace DevExpress.common.grids
  */
-export type ColumnChooserSelection = {
+export type ColumnChooserSelectionConfig = {
   /**
    * @docid
    * @default false

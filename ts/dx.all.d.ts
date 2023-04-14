@@ -2481,7 +2481,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.search]
      */
-    search?: ColumnChooserSearch;
+    search?: ColumnChooserSearchConfig;
     /**
      * [descr:GridBaseOptions.columnChooser.searchTimeout]
      * @deprecated [depNote:GridBaseOptions.columnChooser.searchTimeout]
@@ -2490,7 +2490,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.selection]
      */
-    selection?: ColumnChooserSelection;
+    selection?: ColumnChooserSelectionConfig;
     /**
      * [descr:GridBaseOptions.columnChooser.title]
      */
@@ -2506,36 +2506,36 @@ declare module DevExpress.common.grids {
   };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
   /**
-   * [descr:ColumnChooserSearch]
+   * [descr:ColumnChooserSearchConfig]
    */
-  export type ColumnChooserSearch = {
+  export type ColumnChooserSearchConfig = {
     /**
-     * [descr:ColumnChooserSearch.editorOptions]
+     * [descr:ColumnChooserSearchConfig.editorOptions]
      */
     editorOptions?: any;
     /**
-     * [descr:ColumnChooserSearch.enabled]
+     * [descr:ColumnChooserSearchConfig.enabled]
      */
     enabled?: boolean;
     /**
-     * [descr:ColumnChooserSearch.timeout]
+     * [descr:ColumnChooserSearchConfig.timeout]
      */
     timeout?: number;
   };
   /**
-   * [descr:ColumnChooserSelection]
+   * [descr:ColumnChooserSelectionConfig]
    */
-  export type ColumnChooserSelection = {
+  export type ColumnChooserSelectionConfig = {
     /**
-     * [descr:ColumnChooserSelection.allowSelectAll]
+     * [descr:ColumnChooserSelectionConfig.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:ColumnChooserSelection.recursive]
+     * [descr:ColumnChooserSelectionConfig.recursive]
      */
     recursive?: boolean;
     /**
-     * [descr:ColumnChooserSelection.selectByClick]
+     * [descr:ColumnChooserSelectionConfig.selectByClick]
      */
     selectByClick?: boolean;
   };
