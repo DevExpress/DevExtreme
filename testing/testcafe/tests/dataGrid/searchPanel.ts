@@ -49,4 +49,6 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
       },
     },
   });
+}).after(async () => {
+  await changeTheme('generic.light');
 });
