@@ -16,7 +16,7 @@ import {
   addNamespace,
   createEvent,
   isCommandKeyPressed,
-} from '@js/core/../events/utils/index';
+} from '@js/events/utils/index';
 import pointerEvents from '@js/events/pointer';
 import { name as clickEventName } from '@js/events/click';
 import * as accessibility from '@js/ui/shared/accessibility';
@@ -2366,9 +2366,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     const lastVisibleIndex = visibleItems.length ? visibleItems.length - 1 : -1;
     const rowIndexOffset = dataController.getRowIndexOffset();
 
-    lastVisibleIndex >= 0
-      && visibleRowIndex > lastVisibleIndex
-      && this.setFocusedRowIndex(lastVisibleIndex + rowIndexOffset);
+    if (lastVisibleIndex >= 0 && visibleRowIndex > lastVisibleIndex) {
+      this.setFocusedRowIndex(lastVisibleIndex + rowIndexOffset);
+    }
   }
 }
 

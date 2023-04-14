@@ -18,7 +18,7 @@ export function isDataRow($row) {
 }
 
 export function isNotFocusedRow($row) {
-  return !$row || ($row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS));
+  return !$row || $row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS);
 }
 
 export function isEditorCell(that, $cell) {
@@ -39,13 +39,11 @@ export function isCellInHeaderRow($cell) {
 
 export function isFixedColumnIndexOffsetRequired(that, column) {
   const rtlEnabled = that.option('rtlEnabled');
-  let result = false;
+
   if (rtlEnabled) {
-    result = !(column.fixedPosition === 'right' || (isDefined(column.command) && !isDefined(column.fixedPosition)));
-  } else {
-    result = !(!isDefined(column.fixedPosition) || column.fixedPosition === 'left');
+    return !(column.fixedPosition === 'right' || (isDefined(column.command) && !isDefined(column.fixedPosition)));
   }
-  return result;
+  return !(!isDefined(column.fixedPosition) || column.fixedPosition === 'left');
 }
 
 export function shouldPreventScroll(that) {

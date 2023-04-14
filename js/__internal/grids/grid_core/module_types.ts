@@ -12,17 +12,22 @@ type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
   ? any
   : _PropertyType<O, K>;
 
+type GetOptionValueType = (<TPropertyName extends string>(
+  optionName: TPropertyName) =>
+  PropertyType<InternalGridOptions, TPropertyName>);
+
+type SetOptionValueType = (<TPropertyName extends string>(
+  optionName: TPropertyName,
+  optionValue: PropertyType<InternalGridOptions, TPropertyName>) => void);
+
+type SetOptionsType = ((options: InternalGridOptions) => void);
+
 export interface InternalGrid
   extends Omit<DataGrid<unknown, unknown>, 'option'> {
-  option: (<TPropertyName extends string>(
-    optionName: TPropertyName
-  ) => PropertyType<InternalGridOptions, TPropertyName>) &
-  (<TPropertyName extends string>(
-    optionName: TPropertyName,
-    optionValue: PropertyType<InternalGridOptions, TPropertyName>
-  ) => void) &
+  option: GetOptionValueType &
+  SetOptionValueType &
   (() => InternalGridOptions) &
-  ((options: InternalGridOptions) => void);
+  SetOptionsType;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
@@ -74,7 +79,7 @@ export interface ControllersPrivate {
   columnChooser: any;
   editorFactory: import('./editor_factory/module_types').EditorFactory;
   editing: any;
-  keyboardNavigation: import('./keyboard_navigation/module_controller').KeyboardNavigationController;
+  keyboardNavigation: import('./keyboard_navigation/module').KeyboardNavigationController;
   focus: any;
   columnsResizer: any;
   validating: any;
