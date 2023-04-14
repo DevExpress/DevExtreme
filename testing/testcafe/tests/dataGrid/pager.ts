@@ -1,4 +1,5 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -24,10 +25,9 @@ async function createDataGridWithPager(): Promise<any> {
   });
 }
 fixture.disablePageReloads`Pager`
-  .page(url(__dirname, '../container.html'))
-  .beforeEach(createDataGridWithPager);
+  .page(url(__dirname, '../container.html'));
 
-test('Full size pager', async (t) => {
+safeSizeTest('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
   await t
@@ -64,12 +64,11 @@ test('Full size pager', async (t) => {
     .eql('Page 7 of 10 (100 items)')
     .expect(await compareScreenshot(t, 'pager-full-allpages.png'))
     .ok();
-});
-test('Compact pager', async (t) => {
+}).before(async () => createDataGridWithPager());
+
+safeSizeTest('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
-  await t
-    .resizeWindow(350, 600);
   const pageSizeWidget = new SelectBox(pager.getPageSizeSelect() as any);
   const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
   await t
@@ -83,8 +82,9 @@ test('Compact pager', async (t) => {
     .eql('69')
     .expect(await compareScreenshot(t, 'pager-compact.png'))
     .ok();
-});
-test('Resize', async (t) => {
+}, [350, 600]).before(async () => createDataGridWithPager());
+
+safeSizeTest('Resize', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -106,8 +106,9 @@ test('Resize', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-});
-test('Resize without navigation buttons', async (t) => {
+}).before(async () => createDataGridWithPager());
+
+safeSizeTest('Resize without navigation buttons', async (t) => {
   const dataGrid = new DataGrid('#container');
   await dataGrid.option('pager.showNavigationButtons', false);
   const pagerElement = dataGrid.getPager().element;
@@ -130,43 +131,41 @@ test('Resize without navigation buttons', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-});
+}).before(async () => createDataGridWithPager());
 
 ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  test(`Compact pager in the ${theme} theme (T1057735)`, async (t) => {
+  safeSizeTest(`Compact pager in the ${theme} theme (T1057735)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const pagerElement = dataGrid.getPager().element;
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .resizeWindow(700, 600)
       .expect(await takeScreenshot(`compact-pager-in-the-${theme.replace(/\./g, '-')}-theme.png`, pagerElement))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    if (theme !== 'generic.light') {
+  }, [700, 600])
+    .before(async () => {
       await changeTheme(theme);
-    }
-
-    return createWidget('dxDataGrid', {
-      dataSource: [{ id: 1, name: 'test' }],
-      keyExpr: 'id',
-      paging: {
-        pageSize: 10,
-      },
-      pager: {
-        visible: true,
-        allowedPageSizes: [5, 10, 'all'],
-        showPageSizeSelector: true,
-        showInfo: true,
-        showNavigationButtons: true,
-        displayMode: 'compact',
-      },
+      await createWidget('dxDataGrid', {
+        dataSource: [{ id: 1, name: 'test' }],
+        keyExpr: 'id',
+        paging: {
+          pageSize: 10,
+        },
+        pager: {
+          visible: true,
+          allowedPageSizes: [5, 10, 'all'],
+          showPageSizeSelector: true,
+          showInfo: true,
+          showNavigationButtons: true,
+          displayMode: 'compact',
+        },
+      });
+    })
+    .after(async () => {
+      await changeTheme('generic.light');
     });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
 });
 
 test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work (T1090331)', async (t) => {
