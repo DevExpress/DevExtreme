@@ -58,6 +58,8 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
+          { componentFolder: "common", name: "common" },
+          { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
           { componentFolder: "treeList", name: "treeList", concurrency: 1 },
           { componentFolder: "dataGrid", name: "dataGrid (1/2)", indices: "1/2" },
           { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
