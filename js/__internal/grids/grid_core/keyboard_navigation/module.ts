@@ -1899,11 +1899,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const isEditResultDeferred = isDeferred(editResult);
     const isFastEditingStarted = this._isFastEditingStarted();
 
-    if (!isFastEditingStarted) {
-      return;
-    }
-
-    if (!isEditResultDeferred && !editResult) {
+    if (!isFastEditingStarted || (!isEditResultDeferred && !editResult)) {
       return;
     }
 
