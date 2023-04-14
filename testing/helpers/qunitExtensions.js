@@ -183,6 +183,7 @@
 
         const shadowContainer = document.createElement('div');
         const style = document.createElement('style');
+        style.setAttribute('nonce', 'qunit-extension');
 
         shadowContainer.className = 'shadow-container';
 
@@ -199,7 +200,7 @@
                 width: 1000px;
                 height: 1000px;
             }
-            
+
             :scope .shadow-container.qunit-fixture-visible {
                 position: fixed !important;
                 left: 0 !important;
@@ -251,7 +252,7 @@
             return;
         }
 
-        jQuery.fn.init = jQueryInit ?? jQuery.fn.init;
+        jQuery.fn.init = jQueryInit != null ? jQueryInit : jQuery.fn.init;
 
         clearShadowRootTree();
     });
