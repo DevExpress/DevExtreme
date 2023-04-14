@@ -20,6 +20,10 @@ import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
 
+import '../../../events/click';
+import '../../../events/core/emitter.feedback';
+import '../../../events/hover';
+
 const setDefaultOptionValue = (
   options: Record<string, unknown>,
   defaultValueGetter: (name: string) => unknown,
