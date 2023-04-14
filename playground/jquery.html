@@ -32,12 +32,39 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="container" style="box-sizing: border-box; width: 400px; height: 400px; padding: 8px;">
+        <div id="toolbar"></div>
+    </div>
+
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+            
+            const toolbarItems = [];
+
+            supportedWidgets.forEach((widgetName) => {
+                toolbarItems.push({
+                    location: 'before',
+                    widget: widgetName,
+                    options: {
+                        value: new Date(2021, 9, 17),
+                        stylingMode: 'contained',
+                        text: 1,
+                        items: [{ text: 1 }, { text: 2 }],
+                        showClearButton: true,
+                    },
+                });
+            });
+
+            toolbarItems.push({
+                location: 'after',
+                text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+            });
+            
+            $("#toolbar").dxToolbar({
+                multiline: true,
+                items: toolbarItems,
+                rtlEnabled: false,
             });
         });
     </script>
