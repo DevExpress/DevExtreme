@@ -1,11 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import {
-  appendElementTo, setClassAttribute,
+  appendElementTo,
 } from '../../helpers/domUtils';
 import Guid from '../../../../js/core/guid';
 
@@ -257,15 +257,18 @@ test('Icon set', async (t) => {
       border: '1px solid black',
       alignItems: 'center',
       flexDirection: 'column',
+      fontSize: '10px',
     });
-    await setClassAttribute(Selector(`#${id}`), `${ICON_CLASS}-${iconName}`);
 
     await ClientFunction(() => {
       $(`#${id}`)
-        .append($('<span>').text(`${iconName}`))
-        .append($('<span>').text(`${glyph.replace('\f', '\\f')}`));
+        .append($('<div>').addClass(ICON_CLASS).addClass(`${ICON_CLASS}-${iconName}`))
+        .append($('<div>').text(`${iconName}`))
+        .append($('<div>').text(`${glyph.replace('\f', '\\f')}`));
     }, {
-      dependencies: { id, iconName, glyph },
+      dependencies: {
+        ICON_CLASS, id, iconName, glyph,
+      },
     })();
   }
 });
