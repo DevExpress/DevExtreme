@@ -465,6 +465,7 @@ export type ColumnChooser = {
   /**
    * @docid GridBaseOptions.columnChooser.allowSearch
    * @default false
+   * @deprecated
    */
   allowSearch?: boolean;
   /**
@@ -488,10 +489,19 @@ export type ColumnChooser = {
    */
   mode?: ColumnChooserMode;
   /**
+   * @docid GridBaseOptions.columnChooser.search
+   */
+  search?: ColumnChooserSearchConfig;
+  /**
    * @docid GridBaseOptions.columnChooser.searchTimeout
    * @default 500
+   * @deprecated
    */
   searchTimeout?: number;
+  /**
+   * @docid GridBaseOptions.columnChooser.selection
+   */
+  selection?: ColumnChooserSelectionConfig;
   /**
    * @docid GridBaseOptions.columnChooser.title
    * @default "Column Chooser"
@@ -514,6 +524,52 @@ export type ColumnChooser = {
  * @namespace DevExpress.common.grids
  */
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.common.grids
+ */
+export type ColumnChooserSearchConfig = {
+  /**
+   * @docid
+   * @default {}
+   */
+  editorOptions?: any;
+  /**
+   * @docid
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid
+   * @default 500
+   */
+  timeout?: number;
+};
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.common.grids
+ */
+export type ColumnChooserSelectionConfig = {
+  /**
+   * @docid
+   * @default false
+   */
+  allowSelectAll?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  recursive?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  selectByClick?: boolean;
+};
 
 /**
  * @public

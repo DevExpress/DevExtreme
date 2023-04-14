@@ -28,7 +28,17 @@ QUnit.module('Column chooser', {
             columnChooser: {
                 enabled: true,
                 width: 300,
-                height: 350
+                height: 350,
+                search: {
+                    enabled: false,
+                    editorOptions: {},
+                    timeout: 500
+                },
+                selection: {
+                    allowSelectAll: false,
+                    recursive: false,
+                    selectItemByClick: false,
+                }
             }
         };
 
@@ -212,7 +222,7 @@ QUnit.module('Column chooser', {
         assert.equal(items.length, 2, 'treeView has 2 items');
 
         assert.ok(items[0].selected, '1st item selected');
-        assert.notOk(items[0].disabled, '1st item enabled');
+        assert.ok(items[0].disabled, '1st item is disabled');
         assert.ok($checkBoxElements.eq(0).hasClass('dx-state-disabled'), '1st item\'s checkbox disabled');
 
         assert.notOk(items[1].selected, '2nd item not selected');
@@ -269,31 +279,6 @@ QUnit.module('Column chooser', {
 
         // assert
         assert.deepEqual(this.columns[0], { caption: 'Column 1', index: 0, visible: false }, 'First column is hidden now');
-    });
-
-    QUnit.test('Prevent hiding the last column via column chooser when select mode is using', function(assert) {
-        // arrange
-        const testElement = $('#container');
-
-        this.options.columnChooser.mode = 'select';
-        $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true }]);
-        this.setTestElement(testElement);
-
-        this.renderColumnChooser();
-
-        // act
-        this.columnChooserView._popupContainer.option('visible', true);
-
-        const $columnChooser = $('body').children('.dx-datagrid-column-chooser');
-        const $treeViewItem = $columnChooser.find('.dx-checkbox').first();
-
-        // act
-        $($treeViewItem).trigger('dxclick');
-        this.clock.tick(500);
-
-        // assert
-        assert.deepEqual(this.columns[0], { caption: 'Column 1', index: 0, visible: true }, 'First column is stay visible');
-        assert.ok($columnChooser.find('.dx-checkbox').first().hasClass('dx-checkbox-checked'), 'The treeview\'s checkbox is stay checked');
     });
 
     QUnit.test('Show column via column chooser (select mode)', function(assert) {
@@ -523,8 +508,8 @@ QUnit.module('Column chooser', {
 
         this.setTestElement(testElement);
 
-        this.options.columnChooser.allowSearch = true;
-        this.options.columnChooser.searchTimeout = 300;
+        this.options.columnChooser.search.enabled = true;
+        this.options.columnChooser.search.timeout = 300;
 
         // act
         this.renderColumnChooser();
@@ -543,7 +528,7 @@ QUnit.module('Column chooser', {
 
         this.setTestElement($('#container'));
 
-        this.options.columnChooser.allowSearch = true;
+        this.options.columnChooser.search.enabled = true;
 
         // act
         this.renderColumnChooser();
@@ -858,10 +843,15 @@ QUnit.module('Column chooser', {
                 return;
             }
 
-            // assert
-            assert.equal(columnIndex, 0, 'column index');
             assert.strictEqual(optionName, 'visible', 'option name is \'visible\'');
-            assert.ok(!value, 'value of the option');
+
+            // assert
+            if(columnIndex === 0) {
+                assert.notOk(value, 'first column is hidden');
+            } else {
+                assert.ok(value, 'second column is visible');
+            }
+
             this.columnsChanged.fire({ optionNames: {}, changeTypes: {} });
         };
         columnChooserView._popupContainer.option('visible', true);
@@ -927,31 +917,30 @@ QUnit.module('Column chooser', {
 
     QUnit.test('CheckBox mode - check hidden band column', function(assert) {
         // arrange
-        const that = this;
         const $testElement = $('#container');
         const columnChooserView = this.columnChooserView;
 
         this.options.columnChooser.mode = 'select';
-        $.extend(this.columns, [{ caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true }, { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 }, { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }]);
+        $.extend(this.columns, [
+            { caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true },
+            { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 },
+            { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }
+        ]);
         this.setTestElement($testElement);
-
-        columnChooserView._columnsController.isParentColumnVisible = function(columnIndex) {
-            return that.columns[0].visible;
-        };
 
         // act
         this.renderColumnChooser();
+
         columnChooserView._popupContainer.option('visible', true);
 
         $(columnChooserView._popupContainer.$content().find('.dx-checkbox').first()).trigger('dxclick');
-
 
         // assert
         const $checkBoxElements = columnChooserView._popupContainer.$content().find('.dx-checkbox');
         assert.equal($checkBoxElements.length, 3, 'count checkbox');
         assert.ok($checkBoxElements.eq(0).hasClass('dx-checkbox-checked'), 'checkbox is checked');
         assert.ok($checkBoxElements.eq(1).hasClass('dx-checkbox-checked'), 'checkbox is checked');
-        assert.ok(!$checkBoxElements.eq(2).hasClass('dx-checkbox-checked'), 'checkbox isn\'t checked');
+        assert.notOk($checkBoxElements.eq(2).hasClass('dx-checkbox-checked'), 'checkbox isn\'t checked');
     });
 
     QUnit.test('CheckBox mode - Update a selection state when column visibility is changed via API', function(assert) {
@@ -1110,7 +1099,7 @@ QUnit.module('Column chooser', {
             { caption: 'Column 1', index: 0, visible: false },
             { caption: 'Column 2', index: 1, visible: false }
         ]);
-        this.options.columnChooser.allowSearch = true;
+        this.options.columnChooser.search.enabled = true;
         this.setTestElement($testElement);
         this.renderColumnChooser();
 
@@ -1129,7 +1118,7 @@ QUnit.module('Column chooser', {
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 0, 'hidden column count');
 
         // act
-        this.option('columnChooser.allowSearch', false);
+        this.option('columnChooser.search.enabled', false);
 
         // assert
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 2, 'hidden column count');

@@ -5773,7 +5773,8 @@ QUnit.module('column chooser reordering', {
             showColumnHeaders: true,
             commonColumnSettings: that.commonColumnSettings,
             columnChooser: {
-                enabled: true
+                enabled: true,
+                search: {}
             }
         };
 
@@ -6568,7 +6569,7 @@ QUnit.module('column chooser reordering', {
             this.controller._rowsView = {};
             this.controller._rowsView.setRowsOpacity = function() { };
             this.controller._columnHeadersView.element = function() { return $('<div />'); };
-            this.options.columnChooser.allowSearch = true;
+            this.options.columnChooser.search.enabled = true;
             this.columnsController.getChooserColumns = function() {
                 return [{ caption: 'Test1', index: 5, allowHiding: true, allowReordering: true }, { caption: 'Test2', index: 7, allowHiding: true, allowReordering: true }];
             };
