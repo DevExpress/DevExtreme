@@ -30,7 +30,6 @@ const CLICK_TIMEOUT = 300;
 
 const processItems = function(that, chooserColumns) {
     const items = [];
-
     const isSelectMode = that.isSelectMode();
     const isRecursive = that.option('columnChooser.selection.recursive');
 
@@ -218,7 +217,6 @@ const columnChooserMembers = {
     _renderTreeView: function($container, items) {
         const that = this;
         const columnChooser = this.option('columnChooser');
-
         const isSelectMode = this.isSelectMode();
 
         const searchEnabled = isDefined(columnChooser.allowSearch) ? columnChooser.allowSearch : columnChooser.search?.enabled;
