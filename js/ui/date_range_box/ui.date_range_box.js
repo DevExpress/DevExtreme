@@ -302,7 +302,7 @@ class DateRangeBox extends Widget {
                 break;
             case 'buttons':
                 this._cleanButtonContainers();
-                this._renderButtonContainers();
+                this._renderButtonsContainer();
                 break;
             case 'calendarOptions':
             case 'cancelButtonText':

@@ -249,7 +249,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(getButtons(this.$element).length, 0, 'drop down button was not rendered');
     });
 
-    QUnit.test('Drop button should not be rendered if buttons is [] and showDropDownButton is true', function(assert) {
+    QUnit.test('Drop down button should not be rendered if buttons is [] and showDropDownButton is true', function(assert) {
         this.reinit({
             showDropDownButton: true,
             buttons: []
@@ -258,7 +258,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(getButtons(this.$element).length, 0, 'drop down button was not rendered');
     });
 
-    QUnit.test('Drop button should not be rendered if buttons is ["dropDown"] and showDropDownButton is false', function(assert) {
+    QUnit.test('Drop down button should not be rendered if buttons is ["dropDown"] and showDropDownButton is false', function(assert) {
         this.reinit({
             showDropDownButton: false,
             buttons: ['dropDown']
@@ -267,7 +267,28 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(getButtons(this.$element).length, 0, 'drop down button was not rendered');
     });
 
-    QUnit.test('Drop button should be rendered if buttons is ["dropDown"]', function(assert) {
+    QUnit.test('Drop down button should be rendered if buttons option is changed in runtime', function(assert) {
+        this.reinit({
+            showDropDownButton: true,
+            buttons: []
+        });
+
+        this.instance.option('buttons', ['dropDown']);
+
+        assert.strictEqual(getButtons(this.$element).length, 1, 'drop down button was rendered');
+    });
+
+    QUnit.test('Drop down button should be rendered if showDropDownButton option is changed in runtime', function(assert) {
+        this.reinit({
+            showDropDownButton: false,
+        });
+
+        this.instance.option('showDropDownButton', true);
+
+        assert.strictEqual(getButtons(this.$element).length, 1, 'drop down button was rendered');
+    });
+
+    QUnit.test('Drop down button should be rendered if buttons is ["dropDown"]', function(assert) {
         this.reinit({
             buttons: ['dropDown']
         });
@@ -275,7 +296,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(getButtons(this.$element).length, 1, 'drop down button was rendered');
     });
 
-    QUnit.test('Drop button template should be rendered correctly', function(assert) {
+    QUnit.test('Drop down button template should be rendered correctly', function(assert) {
         const buttonTemplate = function(buttonData, contentElement) {
             assert.strictEqual(isRenderer(contentElement), !!config().useJQuery, 'contentElement is correct');
 
@@ -289,7 +310,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(getButtons(this.$element).text(), 'Template', 'template was rendered');
     });
 
-    QUnit.test('Drop button template should be changed correctly in runtime', function(assert) {
+    QUnit.test('Drop down button template should be changed correctly in runtime', function(assert) {
         const buttonTemplate = function(buttonData, contentElement) {
             assert.strictEqual(isRenderer(contentElement), !!config().useJQuery, 'contentElement is correct');
 
@@ -380,7 +401,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.deepEqual(this.instance.getButton('dropDown'), getButtons(this.$element).dxButton('instance'));
     });
 
-    QUnit.test('getButton("home") method should return instance of custom action button', function(assert) {
+    QUnit.test('getButton(name) method should return instance of custom action button by passed name', function(assert) {
         this.reinit({
             name: 'home',
             location: 'before',
