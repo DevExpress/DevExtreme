@@ -1,8 +1,9 @@
 @use "../../base/dateRangeBox";
+@use "sizes" as *;
 
 // adduse
 
-.dx-date-range-box-generic {
-  display: inline-flex;
+.dx-daterangebox-separator {
+  padding: 0 $generic-daterangebox-separator-horizontal-padding;
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-this-before-super */
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -7,12 +8,15 @@ import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
 import Widget from '../widget/ui.widget';
 import DateBox from '../date_box';
-
+import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
+import DropDownButton from '../drop_down_editor/ui.drop_down_button';
+import { FunctionTemplate } from '../../core/templates/function_template';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
+const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
 
 // STYLE dateRangeBox
 
@@ -42,6 +46,8 @@ class DateRangeBox extends Widget {
             displayFormat: null,
 
             dropDownOptions: {},
+
+            dropDownButtonTemplate: 'dropDownButton',
 
             endDate: null,
 
@@ -120,13 +126,35 @@ class DateRangeBox extends Widget {
         ]);
     }
 
+    _initTemplates() {
+        this._templateManager.addDefaultTemplates({
+            dropDownButton: new FunctionTemplate(function(options) {
+                const $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
+                $(options.container).append($icon);
+            })
+        });
+        this.callBase();
+    }
+
+    _getDefaultButtons() {
+        return [{ name: 'dropDown', Ctor: DropDownButton }];
+    }
+
     _initMarkup() {
         super._initMarkup();
-        this.$element().addClass(DATERANGEBOX_CLASS);
+        this.$element()
+            .addClass(DATERANGEBOX_CLASS)
+            // TODO: remove next classes after adding styles
+            .addClass('dx-texteditor')
+            .addClass('dx-editor-outlined')
+            .addClass('dx-datebox-date')
+            .addClass('dx-dropdowneditor');
 
         this._renderStartDateBox();
         this._renderSeparator();
         this._renderEndDateBox();
+
+        this._renderButtonsContainer();
     }
 
     _renderStartDateBox() {
@@ -152,6 +180,26 @@ class DateRangeBox extends Widget {
             .appendTo(this.$element());
 
         $icon.appendTo(this._$separator);
+    }
+
+    _renderButtonsContainer() {
+        this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
+
+        this._$beforeButtonsContainer = null;
+        this._$afterButtonsContainer = null;
+
+        const { buttons } = this.option();
+
+        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, this.$element());
+        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this.$element());
+    }
+
+    _updateButtons(names) {
+        this._buttonCollection.updateButtons(names);
+    }
+
+    _openHandler() {
+        this.getStartDateBox().open();
     }
 
     _getDateBoxConfig() {
@@ -201,15 +249,20 @@ class DateRangeBox extends Widget {
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,
             showDropDownButton: false,
-            value: this.option('value')[0]
+            value: this.option('value')[0],
+            label: '',
         };
     }
 
     _getEndDateBoxConfig() {
+        const options = this.option();
+
         return {
             ...this._getDateBoxConfig(),
-            showClearButton: true,
-            value: this.option('value')[1]
+            showClearButton: options.showClearButton,
+            showDropDownButton: false,
+            value: this.option('value')[1],
+            label: '',
         };
     }
 
@@ -221,7 +274,17 @@ class DateRangeBox extends Widget {
         return this._endDateBox;
     }
 
+    _cleanButtonContainers() {
+        this._$beforeButtonsContainer?.remove();
+        this._$afterButtonsContainer?.remove();
+        this._buttonCollection.clean();
+        this._$beforeButtonsContainer = null;
+        this._$afterButtonsContainer = null;
+    }
+
     _clean() {
+        this._cleanButtonContainers();
+
         this._$startDateBox?.remove();
         this._$endDateBox?.remove();
         this._$separator?.remove();
@@ -236,12 +299,22 @@ class DateRangeBox extends Widget {
             case 'acceptCustomValue':
             case 'applyButtonText':
             case 'applyValueMode':
+                break;
+            case 'buttons':
+                this._cleanButtonContainers();
+                this._renderButtonsContainer();
+                break;
             case 'calendarOptions':
             case 'cancelButtonText':
             case 'dateOutOfRangeMessage':
             case 'disabledDates':
             case 'displayFormat':
             case 'dropDownOptions':
+                break;
+            case 'dropDownButtonTemplate':
+            case 'showDropDownButton':
+                this._updateButtons(['dropDown']);
+                break;
             case 'endDate':
             case 'invalidDateMessage':
             case 'isValid':
@@ -253,7 +326,6 @@ class DateRangeBox extends Widget {
             case 'placeholder':
             case 'readOnly':
             case 'showClearButton':
-            case 'showDropDownButton':
             case 'spellcheck':
             case 'startDate':
             case 'stylingMode':
@@ -272,6 +344,10 @@ class DateRangeBox extends Widget {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    getButton(name) {
+        return this._buttonCollection.getButton(name);
     }
 }
 
