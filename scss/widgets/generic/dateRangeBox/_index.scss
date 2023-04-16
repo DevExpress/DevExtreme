@@ -24,7 +24,7 @@ $shadow-top: 0 (-$generic-base-border-width);
 .dx-daterangebox {
   &.dx-daterangebox-outlined {
     background: $texteditor-bg;
-    box-shadow: $shadow-bottom $texteditor-border-color;
+    box-shadow: $shadow-bottom $texteditor-border-color, $shadow-top $texteditor-border-color, $shadow-right $texteditor-border-color, $shadow-left $texteditor-border-color;
     border-radius: $texteditor-border-radius;
   }
 
