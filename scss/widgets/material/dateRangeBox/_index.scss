@@ -1,7 +1,70 @@
 @use "../../base/dateRangeBox";
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../sizes" as *;
 @use "sizes" as *;
 
 // adduse
+
+$shadow-left: 1px 0;
+$shadow-bottom: 0 1px;
+$shadow-right: (-1px) 0;
+$shadow-top: 0 (-1px);
+
+@mixin daterangebox-box-shadow-mixin($target-styling-mode-class, $background, $shadow-color, $border-radius) {
+  &.#{$target-styling-mode-class} {
+    background: $background;
+    box-shadow: $shadow-bottom $shadow-color, $shadow-top $shadow-color, $shadow-right $shadow-color, $shadow-left $shadow-color;
+    border-radius: $border-radius;
+  }
+}
+
+.dx-daterangebox {
+  height: 48px;
+
+  @include daterangebox-box-shadow-mixin('dx-daterangebox-outlined', transparent, $texteditor-border-color, $texteditor-input-border-radius);
+
+  &.dx-daterangebox-underlined {
+    background: transparent;
+    box-shadow: $shadow-bottom $texteditor-border-color;
+    border-radius: 0;
+  }
+
+  @include daterangebox-box-shadow-mixin('dx-daterangebox-filled', $texteditor-bg, $texteditor-border-color, $texteditor-input-border-radius);
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &.dx-daterangebox-filled,
+    &.dx-daterangebox-outlined {
+      box-shadow: $shadow-bottom $texteditor-focused-border-color, $shadow-top $texteditor-focused-border-color, $shadow-right $texteditor-focused-border-color, $shadow-left $texteditor-focused-border-color;
+    }
+
+    &.dx-daterangebox-underlined {
+      box-shadow: $shadow-bottom $texteditor-focused-border-color;
+    }
+
+    &.dx-daterangebox-filled {
+      background-color: transparent;
+    }
+  }
+
+  .dx-dropdowneditor-button,
+  .dx-dropdowneditor-icon {
+    width: $material-base-icon-size * 2;
+  }
+
+  .dx-datebox {
+    &.dx-editor-underlined {
+      &::after {
+        border: none;
+      }
+    }
+  }
+}
+
+.dx-start-datebox {
+  margin-left: $material-daterangebox-start-datebox-padding;
+}
 
 .dx-daterangebox-separator {
   padding: 0 $material-daterangebox-separator-horizontal-padding;
