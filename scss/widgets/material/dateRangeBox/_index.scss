@@ -1,13 +1,12 @@
 @use "../../base/dateRangeBox";
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
-@use "../sizes" as *;
 @use "sizes" as *;
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../colors" as *;
 
 // adduse
-
-$daterangebox-bg: $texteditor-bg;
-$daterangebox-border-color: $texteditor-border-color;
 
 $shadow-left: 1px 0;
 $shadow-bottom: 0 1px;
@@ -33,7 +32,11 @@ $shadow-top: 0 (-1px);
     border-radius: 0;
   }
 
-  @include daterangebox-box-shadow-mixin('dx-daterangebox-filled', $daterangebox-bg, $texteditor-border-color, $texteditor-input-border-radius);
+  &.dx-daterangebox-filled {
+    background: $texteditor-bg;
+    box-shadow: $shadow-bottom $texteditor-border-color;
+    border-radius: $texteditor-input-border-radius;
+  }
 
   &.dx-state-focused,
   &.dx-state-active {
