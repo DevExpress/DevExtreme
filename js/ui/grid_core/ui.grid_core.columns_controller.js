@@ -684,8 +684,8 @@ export const columnsControllerModule = {
                 const columnWasGrouped = prevGroupIndex >= 0;
 
                 if(groupIndex >= 0) {
-                    if(!columnWasGrouped) {
-                        column._needResetSortingAfterUngrouping = !column.sortOrder;
+                    if(!columnWasGrouped && !column.sortOrder) {
+                        column._needResetSortingAfterUngrouping = true;
                     }
                 } else {
                     const sortMode = that.option('sorting.mode');

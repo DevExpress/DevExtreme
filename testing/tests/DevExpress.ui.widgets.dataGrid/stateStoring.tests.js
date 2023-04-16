@@ -1077,7 +1077,7 @@ QUnit.module('State Storing with real controllers', {
     });
 
     QUnit.test('Save user state when grouping a column', function(assert) {
-    // arrange, act
+        // arrange, act
         let userState;
         let customSaveCallCount = 0;
 
@@ -1108,7 +1108,7 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
         assert.deepEqual(userState, {
-            columns: [{ groupIndex: 0, sortOrder: 'asc', lastSortOrder: 'asc', visibleIndex: 0, dataField: 'id', name: 'id', visible: true, sortIndex: 0, dataType: 'number' }],
+            columns: [{ groupIndex: 0, sortOrder: 'asc', visibleIndex: 0, dataField: 'id', name: 'id', visible: true, sortIndex: 0, dataType: 'number' }],
             pageIndex: 0,
             pageSize: 20,
             allowedPageSizes: [10, 20, 40],
