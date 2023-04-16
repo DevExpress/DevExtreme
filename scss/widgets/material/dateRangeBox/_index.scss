@@ -6,6 +6,9 @@
 
 // adduse
 
+$daterangebox-bg: $texteditor-bg;
+$daterangebox-border-color: $texteditor-border-color;
+
 $shadow-left: 1px 0;
 $shadow-bottom: 0 1px;
 $shadow-right: (-1px) 0;
@@ -30,7 +33,7 @@ $shadow-top: 0 (-1px);
     border-radius: 0;
   }
 
-  @include daterangebox-box-shadow-mixin('dx-daterangebox-filled', $texteditor-bg, $texteditor-border-color, $texteditor-input-border-radius);
+  @include daterangebox-box-shadow-mixin('dx-daterangebox-filled', $daterangebox-bg, $texteditor-border-color, $texteditor-input-border-radius);
 
   &.dx-state-focused,
   &.dx-state-active {
