@@ -23,7 +23,7 @@ QUnit.module('RangeSelector', {
         rendererModule.Renderer = function() { return renderer; };
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
-        sinon.stub(axisModule, 'Axis', function() {
+        sinon.stub(axisModule, 'Axis').callsFake(function() {
             return that.axis;
         });
 

@@ -61,7 +61,7 @@ QUnit.begin(function() {
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
 
-    sinon.stub(rendererModule, 'Renderer', function() {
+    sinon.stub(rendererModule, 'Renderer').callsFake(function() {
         return currentTest().renderer;
     });
 
@@ -274,7 +274,7 @@ QUnit.test('Handler is called inside the renderer lock', function(assert) {
 QUnit.test('Another handler is called if option is changed inside the handler', function(assert) {
     this.createWidget();
     let lock = false;
-    const spy = sinon.stub(this.widget, '_applyChanges', function(options) {
+    const spy = sinon.stub(this.widget, '_applyChanges').callsFake(function(options) {
         if(!lock) {
             lock = true;
             this.option('rtlEnabled', 'rtl-enabled');
@@ -292,7 +292,7 @@ QUnit.test('Another handler is called if option is changed inside the handler', 
 QUnit.test('Count the actual number of changes', function(assert) {
     const widget = this.createWidget();
     const counts = [];
-    const spy = sinon.stub(widget, '_applyChanges', function() {
+    const spy = sinon.stub(widget, '_applyChanges').callsFake(function() {
         counts.push(widget._changes.count());
     });
 
@@ -369,7 +369,7 @@ QUnit.test('Unknown option', function(assert) {
 QUnit.module('ElementAttr support', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        $('head').append($('<style type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
+        $('head').append($('<style nonce="qunit-test" type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
     },
     afterEach: function() {
         $('#size-style').remove();
@@ -947,8 +947,7 @@ QUnit.test('Doudle resize', function(assert) {
     assert.strictEqual(this.onRender.callCount, 1);
 });
 
-QUnit.module('ResizeObserver', {
-    ...environment,
+QUnit.module('ResizeObserver', Object.assign({}, environment, {
     beforeEach() {
         this.onApplySize = sinon.spy();
         environment.beforeEach.apply(this, arguments);
@@ -962,12 +961,11 @@ QUnit.module('ResizeObserver', {
         resizeObserverSingleton.unobserve.restore();
     },
     createWidget(options = {}) {
-        return environment.createWidget.call(this, {
-            redrawOnResize: true,
-            ...options
-        });
+        return environment.createWidget.call(this, Object.assign({
+            redrawOnResize: true
+        }, options));
     }
-});
+}));
 
 QUnit.test('Observe', function(assert) {
     this.createWidget();

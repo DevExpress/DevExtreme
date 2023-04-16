@@ -559,7 +559,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.eventsEngine = eventsEngine;
             this.rendererStub = { fake: 'fake', root: { element: document.createElement('div') } };
             this.$emptyStub = sinon.stub($.fn, 'empty');
-            this.$removeStub = sinon.stub($.fn, 'remove', function() { return this; });
+            this.$removeStub = sinon.stub($.fn, 'remove').callsFake(function() { return this; });
             this.$onStub = sinon.stub(this.eventsEngine, 'on');
             this.$offStub = sinon.stub(this.eventsEngine, 'off');
             this.$triggerStub = sinon.stub(this.eventsEngine, 'trigger');

@@ -179,11 +179,11 @@ exports.environment = {
         that.layoutManager.layoutElements = sinon.spy(function() {
             arguments[2]();
         });
-        this.StubLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+        this.StubLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
             return that.layoutManager;
         });
 
-        sinon.stub(scrollBarClassModule, 'ScrollBar', function() {
+        sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
             const ScrollBar = vizMocks.stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
@@ -210,11 +210,11 @@ exports.environment = {
             }, options.argumentAxis));
             return createChartInstance(options, this.$container);
         };
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         const family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
-        this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
+        this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily').callsFake(function() {
             family.pane = 'default';
             family.adjustSeriesDimensions = sinon.stub();
             family.adjustSeriesValues = sinon.stub();
@@ -222,14 +222,14 @@ exports.environment = {
             return family;
         });
         this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
-        this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair', function() {
+        this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair').callsFake(function() {
             return sinon.createStubInstance(Crosshair);
         });
 
         tooltipModule.DEBUG_set_tooltip(sinon.spy(function(parameters) {
             return that.tooltip;
         }));
-        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
+        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });
@@ -271,7 +271,7 @@ exports.environment = {
     },
 
     mockValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data, groupsData) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
             const categories = [];
             if(data) {
                 data.forEach(function(item) {

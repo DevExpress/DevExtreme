@@ -10,7 +10,6 @@ import translator2DModule from 'viz/translators/translator2d';
 import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
-import { isDefined } from '../../js/core/utils/type.js';
 import { Range } from 'viz/translators/range';
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
@@ -978,7 +977,7 @@ export const MockAxis = function(renderOptions) {
             this._options[typeSelector] = axisType || this._options[typeSelector];
         },
         getOptions: function() {
-            if(!isDefined(this._options)) {
+            if(!typeUtils.isDefined(this._options)) {
                 this._options = {
                     width: 1,
                     visible: true

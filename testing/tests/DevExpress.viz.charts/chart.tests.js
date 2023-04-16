@@ -65,10 +65,10 @@ const environment = {
         return chart;
     },
     _stubLayoutManager: function() {
-        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', LayoutManager);
+        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(LayoutManager);
     },
     _stubLegend: function() {
-        this.Legend = sinon.stub(legendModule, 'Legend', function() {
+        this.Legend = sinon.stub(legendModule, 'Legend').callsFake(function() {
             const legend = new Legend();
             legend.getTemplatesGroups = sinon.spy(function() {
                 return [];
@@ -80,12 +80,12 @@ const environment = {
         });
     },
     _stubTitle: function() {
-        this.Title = sinon.stub(titleModule, 'Title', function() {
+        this.Title = sinon.stub(titleModule, 'Title').callsFake(function() {
             return new ChartTitle();
         });
     },
     _stubAxis: function() {
-        this.Axis = sinon.stub(axisModule, 'Axis', function() {
+        this.Axis = sinon.stub(axisModule, 'Axis').callsFake(function() {
             const axis = new Axis();
             axis.updateOptions = sinon.spy(function(options) {
                 axis.name = options.name;
@@ -105,20 +105,20 @@ const environment = {
         });
     },
     _stubRange: function() {
-        sinon.stub(rangeModule, 'Range', function(opt) {
+        sinon.stub(rangeModule, 'Range').callsFake(function(opt) {
             const range = new Range();
             $.extend(range, opt);
             return range;
         });
     },
     _stubSeriesAndPoint: function() {
-        sinon.stub(seriesModule, 'Series', function() {
+        sinon.stub(seriesModule, 'Series').callsFake(function() {
             const series = new vizMocks.Series();
 
             return series;
         });
 
-        sinon.stub(pointModule, 'Point', function() {
+        sinon.stub(pointModule, 'Point').callsFake(function() {
             return new vizMocks.Point();
         });
     },

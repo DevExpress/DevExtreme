@@ -64,7 +64,7 @@ const environment = {
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.getMarkerCoords.returns({ x: 1, y: 2, width: 20, height: 10 });
@@ -1190,7 +1190,7 @@ QUnit.test('Show invisible series', function(assert) {
 QUnit.module('Polar bar series', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.highlight = sinon.stub(Color.prototype, 'highlight', function() { return this.baseColor + '-highlight'; });
+        this.highlight = sinon.stub(Color.prototype, 'highlight').callsFake(function() { return this.baseColor + '-highlight'; });
         this.options = {
             type: 'bar',
             widgetType: 'polar'
