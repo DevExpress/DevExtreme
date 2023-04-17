@@ -203,7 +203,8 @@ export default class MaskStrategy {
     _dropHandler() {
         this._clearDragTimer();
         this._dragTimer = setTimeout(() => {
-            this._editorOption('value', this._convertToValue(this._input().val()));
+            const value = this.editor._convertToValue(this._editorInput().val());
+            this._editorOption('value', value);
         });
     }
 
