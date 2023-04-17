@@ -128,35 +128,30 @@ export default class MaskStrategy {
 
         this.editor.setForwardDirection();
 
-        const hasValidChars = this._updateEditorMask({
+        this._updateEditorMask({
             start: this._prevCaret?.start ?? 0,
             length: text.length || 1,
             text
         });
-
-        if(!hasValidChars) {
-            this._editorCaret(this._prevCaret);
-        }
     }
 
     _updateEditorMask(args) {
         const textLength = args.text.length;
-        const updatedCharsCount = this.editor._handleChain(args);
+        const processedCharsCount = this.editor._handleChain(args);
 
         this.editor._displayMask();
 
         if(this.editor.isForwardDirection()) {
             const { start, end } = this._editorCaret();
-            const correction = updatedCharsCount - textLength;
+            const correction = processedCharsCount - textLength;
 
-            if(updatedCharsCount > 1 && textLength === 1) {
+            const hasSkippedStub = processedCharsCount > 1;
+            if(hasSkippedStub && textLength === 1) {
                 this._editorCaret({ start: start + correction, end: end + correction });
             }
 
             this.editor._adjustCaret();
         }
-
-        return !!updatedCharsCount;
     }
 
     _focusInHandler() {
