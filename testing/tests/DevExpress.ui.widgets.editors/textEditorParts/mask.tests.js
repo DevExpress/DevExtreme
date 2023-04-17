@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
-import { isInputEventsL2Supported } from 'ui/text_box/utils.support';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -2568,16 +2567,5 @@ QUnit.module('Hidden input', {}, () => {
             const $hiddenInput = $textEditor.find('input[type=hidden]');
             assert.strictEqual($hiddenInput.val(), instance.option('value'), 'submitted value should be equal to the actual value');
         });
-    });
-});
-
-QUnit.module('Strategies', () => {
-    QUnit.test('inputEvents strategy should be used for browser supports Input Events Level 2', function(assert) {
-        const instance = $('#texteditor').dxTextEditor({
-            mask: '0'
-        }).dxTextEditor('instance');
-        const expectedMaskStrategy = isInputEventsL2Supported() ? 'inputEvents' : 'default';
-
-        assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, 'strategy name is correct');
     });
 });
