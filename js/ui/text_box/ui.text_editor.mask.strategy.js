@@ -58,67 +58,84 @@ export default class MaskStrategy {
             return;
         }
 
-        const { inputType, data } = originalEvent;
-        const currentCaret = this._editorCaret();
+        const { inputType } = originalEvent;
 
         if(HISTORY_INPUT_TYPES.includes(inputType)) {
-            this._updateEditorMask({
-                start: currentCaret.start,
-                length: currentCaret.end - currentCaret.start,
-                text: ''
-            });
-            this._editorCaret(this._prevCaret);
+            this._handleHistoryInputEvent();
         } else if(DELETE_INPUT_TYPES.includes(inputType)) {
-            const length = (this._prevCaret.end - this._prevCaret.start) || 1;
-            this.editor.setBackwardDirection();
-            this._updateEditorMask({
-                start: currentCaret.start,
-                length,
-                text: getEmptyString(length)
-            });
-
-            const beforeAdjustCaret = this._editorCaret();
-            this.editor.setForwardDirection();
-            this.editor._adjustCaret();
-            const adjustedForwardCaret = this._editorCaret();
-            if(adjustedForwardCaret.start !== beforeAdjustCaret.start) {
-                this.editor.setBackwardDirection();
-                this.editor._adjustCaret();
-            }
+            this._handleBackwardDeleteInputEvent();
         } else {
+            const currentCaret = this._editorCaret();
+
             if(!currentCaret.end) {
                 return;
             }
 
-            const length = (this._prevCaret?.end - this._prevCaret?.start) || 1;
-            if(length > 1) {
-                this.editor.setBackwardDirection();
-                this._updateEditorMask({
-                    start: currentCaret.start,
-                    length,
-                    text: getEmptyString(length)
-                });
-            }
+            this._clearSelectedText();
 
             this._autoFillHandler(originalEvent);
 
             this._editorCaret(currentCaret);
 
-            this.editor.setForwardDirection();
-            const text = data ?? '';
-            const hasValidChars = this._updateEditorMask({
-                start: this._prevCaret?.start,
-                length: text.length || 1,
-                text
-            });
-
-            if(!hasValidChars) {
-                this._editorCaret(this._prevCaret);
-            }
+            this._handleInsertTextInputEvent(originalEvent.data);
         }
 
         if(this.editorOption('text') === this._previousText) {
             event.stopImmediatePropagation();
+        }
+    }
+
+    _handleHistoryInputEvent() {
+        const caret = this._editorCaret();
+
+        this._updateEditorMask({
+            start: caret.start,
+            length: caret.end - caret.start,
+            text: ''
+        });
+
+        this._editorCaret(this._prevCaret);
+    }
+
+    _handleBackwardDeleteInputEvent() {
+        this._clearSelectedText();
+
+        const caret = this._editorCaret();
+        this.editor.setForwardDirection();
+        this.editor._adjustCaret();
+
+        const adjustedForwardCaret = this._editorCaret();
+        if(adjustedForwardCaret.start !== caret.start) {
+            this.editor.setBackwardDirection();
+            this.editor._adjustCaret();
+        }
+    }
+
+    _clearSelectedText() {
+        const length = (this._prevCaret?.end - this._prevCaret?.start) || 1;
+        const caret = this._editorCaret();
+        this.editor.setBackwardDirection();
+        this._updateEditorMask({
+            start: caret.start,
+            length,
+            text: getEmptyString(length)
+        });
+    }
+
+    _handleInsertTextInputEvent(data) {
+        // NOTE: data has length > 1 when autosuggestion is applied.
+        const text = data ?? '';
+
+        this.editor.setForwardDirection();
+
+        const hasValidChars = this._updateEditorMask({
+            start: this._prevCaret?.start ?? 0,
+            length: text.length || 1,
+            text
+        });
+
+        if(!hasValidChars) {
+            this._editorCaret(this._prevCaret);
         }
     }
 
