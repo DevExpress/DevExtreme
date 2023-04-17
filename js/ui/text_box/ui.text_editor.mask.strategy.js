@@ -35,11 +35,11 @@ export default class BaseMaskStrategy {
             return;
         }
 
-        EventsEngine.on(this._editorInput(), addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
-            // NOTE: input is focused on caret changing in IE(T304159)
-            this._suppressCaretChanging(this._changeHandler, [e]);
-            this._changeHandler(e);
-        }).bind(this.editor));
+        const $input = this._editorInput();
+        const namespace = addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE);
+        EventsEngine.on($input, namespace, (e) => {
+            this.editor._changeHandler(e);
+        });
     }
 
     _beforeInputHandler() {
