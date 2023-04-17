@@ -1,9 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { Item } from '../../../../../js/ui/tab_panel.d';
+
+const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
@@ -161,6 +164,11 @@ test('TabPanel when its disabled item has focus', async (t) => {
     .hover(fourthItem.element);
 
   await testScreenshot(t, takeScreenshot, 'TabPanel when 4 item has hover state.png', { element: '#container' });
+
+  await t.hover(Selector(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`));
+  await testScreenshot(t, takeScreenshot, 'TabPanel when right navigation button has hover state.png', { element: '#container' });
+
+  await t.debug();
 
   await t
     .expect(compareResults.isValid())
