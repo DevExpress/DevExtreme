@@ -241,7 +241,7 @@ QUnit.test('First node should not has been focused when focusing on SelectAll it
     }
 });
 
-QUnit.test('SelectAll item should be focused when focusing a treeview if showCheckBoxesMode:selectAll', function(assert) {
+QUnit.test('SelectAll item should be focused when focusing a treeview if showCheckBoxesMode:selectAll (T1157890)', function(assert) {
     if(!isDesktopDevice()) {
         assert.ok(true, 'only on desktops');
         return;
@@ -274,6 +274,7 @@ QUnit.test('SelectAll item should be focused when focusing a treeview second tim
 
     try {
         $treeView.trigger('focusin');
+        $selectAllItem.trigger('focusout');
         $treeView.trigger('focusin');
         clock.tick(10);
 
