@@ -14,15 +14,15 @@ export default class BaseMaskStrategy {
         this.editor = editor;
     }
 
-    editorOption() {
+    _editorOption() {
         return this.editor.option(...arguments);
     }
 
-    editorInput() {
+    _editorInput() {
         return this.editor._input();
     }
 
-    editorCaret(newCaret) {
+    _editorCaret(newCaret) {
         if(!newCaret) {
             return this.editor._caret();
         }
@@ -30,41 +30,20 @@ export default class BaseMaskStrategy {
         this.editor._caret(newCaret);
     }
 
-    getHandler(handlerName) {
-        const handler = this[`_${handlerName}Handler`] || function() {};
-        return handler.bind(this);
-    }
-
-    attachEvents() {
-        const $input = this.editorInput();
-
-        this.getHandleEventNames().forEach((eventName) => {
-            const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
-
-            EventsEngine.on($input, subscriptionName, this.getEventHandler(eventName));
-        });
-
-        this._attachChangeEventHandlers();
-    }
-
-    getHandleEventNames() {
+    _getHandleEventNames() {
         return ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
     }
 
-    getEventHandler(eventName) {
+    _getEventHandler(eventName) {
         return this[`_${eventName}Handler`].bind(this);
     }
 
-    detachEvents() {
-        EventsEngine.off(this.editorInput(), `.${MASK_EVENT_NAMESPACE}`);
-    }
-
     _attachChangeEventHandlers() {
-        if(!this.editorOption('valueChangeEvent').split(' ').includes('change')) {
+        if(!this._editorOption('valueChangeEvent').split(' ').includes('change')) {
             return;
         }
 
-        EventsEngine.on(this.editorInput(), addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
+        EventsEngine.on(this._editorInput(), addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
             // NOTE: input is focused on caret changing in IE(T304159)
             this._suppressCaretChanging(this._changeHandler, [e]);
             this._changeHandler(e);
@@ -73,7 +52,7 @@ export default class BaseMaskStrategy {
 
     _beforeInputHandler() {
         this._previousText = this.editor.option('text');
-        this._prevCaret = this.editorCaret();
+        this._prevCaret = this._editorCaret();
     }
 
     _inputHandler(event) {
@@ -83,7 +62,7 @@ export default class BaseMaskStrategy {
         }
 
         const { inputType, data } = originalEvent;
-        const currentCaret = this.editorCaret();
+        const currentCaret = this._editorCaret();
 
         if(HISTORY_INPUT_TYPES.includes(inputType)) {
             this._updateEditorMask({
@@ -91,7 +70,7 @@ export default class BaseMaskStrategy {
                 length: currentCaret.end - currentCaret.start,
                 text: ''
             });
-            this.editorCaret(this._prevCaret);
+            this._editorCaret(this._prevCaret);
         } else if(DELETE_INPUT_TYPES.includes(inputType)) {
             const length = (this._prevCaret.end - this._prevCaret.start) || 1;
             this.editor.setBackwardDirection();
@@ -101,10 +80,10 @@ export default class BaseMaskStrategy {
                 text: this._getEmptyString(length)
             });
 
-            const beforeAdjustCaret = this.editorCaret();
+            const beforeAdjustCaret = this._editorCaret();
             this.editor.setForwardDirection();
             this.editor._adjustCaret();
-            const adjustedForwardCaret = this.editorCaret();
+            const adjustedForwardCaret = this._editorCaret();
             if(adjustedForwardCaret.start !== beforeAdjustCaret.start) {
                 this.editor.setBackwardDirection();
                 this.editor._adjustCaret();
@@ -126,7 +105,7 @@ export default class BaseMaskStrategy {
 
             this._autoFillHandler(originalEvent);
 
-            this.editorCaret(currentCaret);
+            this._editorCaret(currentCaret);
 
             this.editor.setForwardDirection();
             const text = data ?? '';
@@ -137,7 +116,7 @@ export default class BaseMaskStrategy {
             });
 
             if(!hasValidChars) {
-                this.editorCaret(this._prevCaret);
+                this._editorCaret(this._prevCaret);
             }
         }
 
@@ -157,11 +136,11 @@ export default class BaseMaskStrategy {
         this.editor._displayMask();
 
         if(this.editor.isForwardDirection()) {
-            const { start, end } = this.editorCaret();
+            const { start, end } = this._editorCaret();
             const correction = updatedCharsCount - textLength;
 
             if(updatedCharsCount > 1 && textLength === 1) {
-                this.editorCaret({ start: start + correction, end: end + correction });
+                this._editorCaret({ start: start + correction, end: end + correction });
             }
 
             this.editor._adjustCaret();
@@ -174,7 +153,7 @@ export default class BaseMaskStrategy {
         this.editor._showMaskPlaceholder();
         this.editor.setForwardDirection();
 
-        if(!this.editor._isValueEmpty() && this.editorOption('isValid')) {
+        if(!this.editor._isValueEmpty() && this._editorOption('isValid')) {
             this.editor._adjustCaret();
         } else {
             const caret = this.editor._maskRulesChain.first();
@@ -187,15 +166,15 @@ export default class BaseMaskStrategy {
     _focusOutHandler(event) {
         this.editor._changeHandler(event);
 
-        if(this.editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
-            this.editorOption('text', '');
+        if(this._editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
+            this._editorOption('text', '');
             this.editor._renderDisplayText('');
         }
     }
 
     _cutHandler(event) {
-        const caret = this.editorCaret();
-        const selectedText = this.editorInput().val().substring(caret.start, caret.end);
+        const caret = this._editorCaret();
+        const selectedText = this._editorInput().val().substring(caret.start, caret.end);
 
         this.editor._maskKeyHandler(event, () => getClipboardText(event, selectedText));
     }
@@ -223,7 +202,7 @@ export default class BaseMaskStrategy {
         }
 
         this._keyPressHandled = true;
-        const caret = this.editorCaret();
+        const caret = this._editorCaret();
 
         editor._maskKeyHandler(event, () => {
             const pastedText = getClipboardText(event);
@@ -238,7 +217,7 @@ export default class BaseMaskStrategy {
 
     _autoFillHandler(event) {
         const { editor } = this;
-        const inputVal = this.editorInput().val();
+        const inputVal = this._editorInput().val();
         this._inputHandlerTimer = setTimeout(() => {
             this._keyPressHandled = true;
 
@@ -265,14 +244,6 @@ export default class BaseMaskStrategy {
         return result;
     }
 
-    runWithoutEventProcessing(action) {
-        const keyPressHandled = this._keyPressHandled;
-
-        this._keyPressHandled = true;
-        action();
-        this._keyPressHandled = keyPressHandled;
-    }
-
     _backspaceHandler() { }
 
     _delHandler(event) {
@@ -281,6 +252,35 @@ export default class BaseMaskStrategy {
         this._keyPressHandled = true;
         editor._maskKeyHandler(event, () =>
             !editor._hasSelection() && editor._handleKey(EMPTY_CHAR));
+    }
+
+    getHandler(handlerName) {
+        const handler = this[`_${handlerName}Handler`] || function() {};
+        return handler.bind(this);
+    }
+
+    attachEvents() {
+        const $input = this._editorInput();
+
+        this.getHandleEventNames().forEach((eventName) => {
+            const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
+
+            EventsEngine.on($input, subscriptionName, this._getEventHandler(eventName));
+        });
+
+        this._attachChangeEventHandlers();
+    }
+
+    detachEvents() {
+        EventsEngine.off(this._editorInput(), `.${MASK_EVENT_NAMESPACE}`);
+    }
+
+    runWithoutEventProcessing(action) {
+        const keyPressHandled = this._keyPressHandled;
+
+        this._keyPressHandled = true;
+        action();
+        this._keyPressHandled = keyPressHandled;
     }
 
     clean() {
