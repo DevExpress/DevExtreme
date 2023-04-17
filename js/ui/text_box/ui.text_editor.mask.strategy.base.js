@@ -9,18 +9,9 @@ const EMPTY_CHAR = ' ';
 
 const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'];
 const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
-
 export default class BaseMaskStrategy {
     constructor(editor) {
         this.editor = editor;
-        this.DIRECTION = {
-            FORWARD: 'forward',
-            BACKWARD: 'backward'
-        };
-    }
-
-    _getStrategyName() {
-        return 'base';
     }
 
     editorOption() {
@@ -181,7 +172,7 @@ export default class BaseMaskStrategy {
 
     _focusInHandler() {
         this.editor._showMaskPlaceholder();
-        this.editor._direction(this.DIRECTION.FORWARD);
+        this.editor.setForwardDirection();
 
         if(!this.editor._isValueEmpty() && this.editorOption('isValid')) {
             this.editor._adjustCaret();
