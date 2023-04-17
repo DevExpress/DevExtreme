@@ -274,7 +274,6 @@ QUnit.test('SelectAll item should be focused when focusing a treeview second tim
 
     try {
         $treeView.trigger('focusin');
-        $selectAllItem.trigger('focusout');
         $treeView.trigger('focusin');
         clock.tick(10);
 
