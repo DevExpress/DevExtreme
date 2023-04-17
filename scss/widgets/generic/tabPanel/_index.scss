@@ -34,9 +34,12 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   $tabs-expanded: '.dx-tabs-expanded .dx-tab:not(.dx-state-focused, .dx-tab-selected)';
 
   .dx-tab,
-  #{$tabs-expanded}:last-of-type,
   #{$tabs-expanded}:only-child {
     box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
+  }
+
+  #{$tabs-expanded}:last-of-type {
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
   }
 
   #{$tabs-expanded}:first-of-type {
