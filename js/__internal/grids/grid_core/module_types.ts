@@ -1,8 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import {
   PropertyType as _PropertyType,
-  DeepPartial,
-  OmitInternal,
 } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
@@ -70,12 +68,11 @@ export interface OptionChangedArgs<T extends string = string> {
   handled: boolean;
 }
 
-export interface ControllersPrivate {
-  // @ts-expect-error
-  data: import('@js/ui/grid_core/ui.grid_core.data_controller').DataController;
+export interface Controllers {
+  data: any;
   columns: any;
   resizing: any;
-  adaptiveColumns: import('./adaptivity/module_types').AdaptiveColumnsController;
+  adaptiveColumns: any;
   columnChooser: any;
   editorFactory: import('./editor_factory/module_types').EditorFactory;
   editing: any;
@@ -89,27 +86,16 @@ export interface ControllersPrivate {
 }
 
 type ControllerTypes = {
-  [ P in keyof ControllersPrivate ]: new(component: any) => ControllersPrivate[P];
+  [ P in keyof Controllers ]: new(component: any) => Controllers[P];
 };
 
-export interface ViewsPrivate {
+export interface Views {
   headerPanel: any;
   rowsView: any;
   columnChooserView: any;
 }
-
-type MapOmitThis<T> = {
-  [P in keyof T]: OmitThisParameter<T[P]>;
-};
-
-export type Controllers = {
-  [P in keyof ControllersPrivate]: OmitInternal<
-  MapOmitThis<ControllersPrivate[P]>
-  >;
-};
-
-export type Views = {
-  [P in keyof ViewsPrivate]: OmitInternal<MapOmitThis<ViewsPrivate[P]>>;
+type ViewTypes = {
+  [ P in keyof Views ]: new(component: any) => Views[P];
 };
 
 type SilentOptionType = <TPropertyName extends string>(
@@ -214,13 +200,22 @@ export declare class View extends ModuleItem {
 
   focus(preventScroll?: boolean): void;
 }
+type ControllersExtender = {
+  [P in keyof Controllers]: ((Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>)
+  | Record<string, any>;
+};
+
+type ViewsExtender = {
+  [P in keyof Views]: ((Base: ModuleType<Views[P]>) => ModuleType<Views[P]>)
+  | Record<string, any>;
+};
 
 export interface Module {
   controllers?: Partial<ControllerTypes>;
-  views?: Partial<ViewsPrivate>;
+  views?: Partial<ViewTypes>;
   extenders?: {
-    controllers?: DeepPartial<ControllersPrivate>;
-    views?: DeepPartial<ViewsPrivate>;
+    controllers?: Partial<ControllersExtender>;
+    views?: Partial<ViewsExtender>;
   };
   defaultOptions?: () => InternalGridOptions;
 }
