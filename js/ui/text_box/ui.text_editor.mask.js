@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import caretUtils from './utils.caret';
-import { isInputEventsL2Supported } from './utils.support';
 import { each } from '../../core/utils/iterator';
 import { addNamespace, createEvent, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
@@ -13,7 +12,6 @@ import { isEmpty } from '../../core/utils/string';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { EmptyMaskRule, StubMaskRule, MaskRule } from './ui.text_editor.mask.rule';
 import TextEditorBase from './ui.text_editor.base';
-import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
 import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
 
 const stubCaret = function() {
@@ -112,10 +110,7 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        this._maskStrategy = isInputEventsL2Supported() ?
-            new InputEventsMaskStrategy(this) :
-            // FF, old Safari and desktop Chrome (https://bugs.chromium.org/p/chromium/issues/detail?id=947408)
-            new DefaultMaskStrategy(this);
+        this._maskStrategy = new InputEventsMaskStrategy(this);
     },
 
     _initMarkup: function() {
