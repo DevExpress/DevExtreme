@@ -217,6 +217,9 @@ export default class DropDownMenu extends Widget {
             showTitle: false,
             fullScreen: false,
             _fixWrapperPosition: true,
+            wrapperAttr: {
+                role: 'menu',
+            },
         });
     }
 
