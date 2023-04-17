@@ -491,6 +491,6 @@ QUnit.module('Popup integration', moduleConfig, () => {
 
         const popup = startDateBox._popup;
 
-        assert.deepEqual(popup.option('position.of'), this.$element);
+        assert.ok(this.$element.is(popup.option('position.of')));
     });
 });
