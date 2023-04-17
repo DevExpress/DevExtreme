@@ -150,9 +150,9 @@ export default class BaseMaskStrategy {
             this.editor._adjustCaret();
         } else {
             const caret = this.editor._maskRulesChain.first();
-            this._caretTimeout = setTimeout(function() {
-                this._caret({ start: caret, end: caret });
-            }.bind(this.editor), 0);
+            this._caretTimeout = setTimeout(() => {
+                this.editorCaret({ start: caret, end: caret });
+            }, 0);
         }
     }
 
@@ -174,9 +174,9 @@ export default class BaseMaskStrategy {
 
     _dropHandler() {
         this._clearDragTimer();
-        this._dragTimer = setTimeout((function() {
-            this.option('value', this._convertToValue(this._input().val()));
-        }).bind(this.editor));
+        this._dragTimer = setTimeout(() => {
+            this.editorOption('value', this._convertToValue(this._input().val()));
+        });
     }
 
     _clearDragTimer() {
@@ -278,7 +278,6 @@ export default class BaseMaskStrategy {
 
     clean() {
         this._clearDragTimer();
-        clearTimeout(this._backspaceHandlerTimeout);
         clearTimeout(this._caretTimeout);
         clearTimeout(this._inputHandlerTimer);
     }
