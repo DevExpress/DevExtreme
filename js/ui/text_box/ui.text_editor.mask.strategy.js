@@ -8,7 +8,7 @@ const BLUR_EVENT = 'blur beforedeactivate';
 const EMPTY_CHAR = ' ';
 const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'];
 const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
-const EVENT_NAMES = ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
+const EVENT_NAMES = ['focusIn', 'focusOut', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
 
 function getEmptyString(length) {
     return ' '.repeat(length);
@@ -183,10 +183,6 @@ export default class BaseMaskStrategy {
         clearTimeout(this._dragTimer);
     }
 
-    _keyDownHandler() {
-        this._keyPressHandled = false;
-    }
-
     _pasteHandler(event) {
         const { editor } = this;
 
@@ -194,7 +190,6 @@ export default class BaseMaskStrategy {
             return;
         }
 
-        this._keyPressHandled = true;
         const caret = this._editorCaret();
 
         editor._maskKeyHandler(event, () => {
@@ -212,11 +207,7 @@ export default class BaseMaskStrategy {
         const { editor } = this;
         const inputVal = this._editorInput().val();
         this._inputHandlerTimer = setTimeout(() => {
-            this._keyPressHandled = true;
-
             if(this._isAutoFill()) {
-                this._keyPressHandled = true;
-
                 editor._maskKeyHandler(event, () => {
                     editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
                 });
@@ -242,7 +233,6 @@ export default class BaseMaskStrategy {
     _delHandler(event) {
         const { editor } = this;
 
-        this._keyPressHandled = true;
         editor._maskKeyHandler(event, () =>
             !editor._hasSelection() && editor._handleKey(EMPTY_CHAR));
     }
@@ -266,14 +256,6 @@ export default class BaseMaskStrategy {
 
     detachEvents() {
         EventsEngine.off(this._editorInput(), `.${MASK_EVENT_NAMESPACE}`);
-    }
-
-    runWithoutEventProcessing(action) {
-        const keyPressHandled = this._keyPressHandled;
-
-        this._keyPressHandled = true;
-        action();
-        this._keyPressHandled = keyPressHandled;
     }
 
     clean() {

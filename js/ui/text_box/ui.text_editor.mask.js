@@ -378,9 +378,7 @@ const TextEditorMask = TextEditorBase.inherit({
         const previousText = this._input().val();
         const raiseInputEvent = () => {
             if(previousText !== this._input().val()) {
-                this._maskStrategy.runWithoutEventProcessing(
-                    () => eventsEngine.trigger(this._input(), 'input')
-                );
+                eventsEngine.trigger(this._input(), 'input');
             }
         };
 
