@@ -6,9 +6,9 @@ import { clipboardText as getClipboardText } from '../../core/utils/dom';
 const MASK_EVENT_NAMESPACE = 'dxMask';
 const BLUR_EVENT = 'blur beforedeactivate';
 const EMPTY_CHAR = ' ';
-
 const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'];
 const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
+const EVENT_NAMES = ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
 export default class BaseMaskStrategy {
     constructor(editor) {
         this.editor = editor;
@@ -28,10 +28,6 @@ export default class BaseMaskStrategy {
         }
 
         this.editor._caret(newCaret);
-    }
-
-    _getHandleEventNames() {
-        return ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
     }
 
     _getEventHandler(eventName) {
@@ -262,7 +258,7 @@ export default class BaseMaskStrategy {
     attachEvents() {
         const $input = this._editorInput();
 
-        this.getHandleEventNames().forEach((eventName) => {
+        EVENT_NAMES.forEach((eventName) => {
             const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
 
             EventsEngine.on($input, subscriptionName, this._getEventHandler(eventName));
