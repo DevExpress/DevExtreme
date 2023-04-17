@@ -5,12 +5,14 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import devices from 'core/devices';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const CHECKBOX_CHECKED_STATE_CLASS = 'dx-checkbox-checked';
 
 QUnit.module('Focusing');
 
@@ -236,6 +238,67 @@ QUnit.test('First node should not has been focused when focusing on SelectAll it
     } finally {
         clock.restore();
     }
+});
+
+QUnit.test('SelectAll item should be focused when focusing a treeview if showCheckBoxesMode:selectAll', function(assert) {
+    const $treeView = initTree({
+        items: [ { id: 1 } ],
+        showCheckBoxesMode: 'selectAll'
+    });
+
+    $treeView.trigger('focusin');
+
+    assert.ok($(`.${SELECT_ALL_ITEM_CLASS}`).hasClass(FOCUSED_STATE_CLASS));
+});
+
+QUnit.test('SelectAll item should be focused when focusing a treeview second time if showCheckBoxesMode:selectAll', function(assert) {
+    const $treeView = initTree({
+        items: [ { id: 1 } ],
+        showCheckBoxesMode: 'selectAll',
+    });
+
+    const $selectAllItem = $(`.${SELECT_ALL_ITEM_CLASS}`);
+
+    const clock = sinon.useFakeTimers();
+
+    try {
+        $treeView.trigger('focusin');
+        $selectAllItem.trigger('focusout');
+        $treeView.trigger('focusin');
+        clock.tick(10);
+
+        assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+    } finally {
+        clock.restore();
+    }
+});
+
+QUnit.test('First node should be focused when focusing a treeview if showCheckBoxesMode:normal', function(assert) {
+    const $treeView = initTree({
+        items: [ { id: 1 }, { id: 2 } ],
+        showCheckBoxesMode: 'normal',
+    });
+
+    const $firstItem = $(`.${NODE_CLASS}`).first();
+
+    $treeView.trigger('focusin');
+
+    assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS));
+});
+
+QUnit.test('SelectAll checkbox should be checked with space key', function(assert) {
+    const $treeView = initTree({
+        items: [ { id: 1 }],
+        showCheckBoxesMode: 'selectAll',
+    });
+
+    const $selectAllItem = $(`.${SELECT_ALL_ITEM_CLASS}`);
+
+    $selectAllItem.trigger('focusin');
+
+    keyboardMock($treeView).keyDown('space');
+
+    assert.ok($selectAllItem.hasClass(CHECKBOX_CHECKED_STATE_CLASS));
 });
 
 QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', function(assert) {

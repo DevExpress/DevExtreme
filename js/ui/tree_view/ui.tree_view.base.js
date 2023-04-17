@@ -80,8 +80,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             const $focusedElement = $(this.option('focusedElement'));
 
-
-            if(this._getActiveItem().hasClass(SELECT_ALL_ITEM_CLASS)) {
+            if($focusedElement.hasClass(SELECT_ALL_ITEM_CLASS)) {
                 this._onSelectAllCheckboxValueChanged({ value: !this._dataAdapter.isAllSelected() });
                 return;
             }
@@ -151,7 +150,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _activeStateUnit: ['.' + ITEM_CLASS, '.' + SELECT_ALL_ITEM_CLASS].join(','),
-    // _activeStateUnit: '.' + ITEM_CLASS,
 
     _widgetClass: function() {
         return WIDGET_CLASS;
@@ -1448,31 +1446,25 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _focusInHandler: function(e) {
         this._updateFocusState(e, true);
 
-        const $activeItem = this._getActiveItem();
+        const focusedElement = this.option('focusedElement');
 
-        const isSelectAllItem = $(e.target).hasClass(SELECT_ALL_ITEM_CLASS) || $activeItem.hasClass(SELECT_ALL_ITEM_CLASS);
-
-        if(this.option('focusedElement')) {
+        if(focusedElement) {
             clearTimeout(this._setFocusedItemTimeout);
 
-            // const element = isSelectAllItem ? getPublicElement(this._$selectAllItem) : $(this.option('focusedElement'));
-            const element = $activeItem;
-
-            this.option('activeElement', $activeItem);
-
             this._setFocusedItemTimeout = setTimeout(() => {
-                // this._setFocusedItem(element);
-                this._optionChanged({ name: 'focusedElement', value: element });
+                this._optionChanged({ name: 'focusedElement', value: focusedElement });
             });
 
             return;
         }
 
-        if(isSelectAllItem) {
-            this.option('focusedElement', getPublicElement($activeItem));
-        } else {
-            this.option('focusedElement', getPublicElement($activeItem.closest('.' + NODE_CLASS)));
-        }
+        const $activeItem = this._getActiveItem();
+
+        const isSelectAllItem = $activeItem.hasClass(SELECT_ALL_ITEM_CLASS);
+
+        const $itemToFocus = isSelectAllItem ? $activeItem : $activeItem.closest(`.${NODE_CLASS}`);
+
+        this.option('focusedElement', getPublicElement($itemToFocus));
     },
 
     _itemPointerDownHandler: function(e) {
