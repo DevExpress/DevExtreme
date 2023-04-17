@@ -149,7 +149,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return $(element);
     },
 
-    _activeStateUnit: ['.' + ITEM_CLASS, '.' + SELECT_ALL_ITEM_CLASS].join(','),
+    _activeStateUnit: [ `.${ITEM_CLASS}`, `.${SELECT_ALL_ITEM_CLASS}`].join(','),
 
     _widgetClass: function() {
         return WIDGET_CLASS;

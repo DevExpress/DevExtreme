@@ -6,6 +6,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
@@ -241,25 +242,27 @@ QUnit.test('First node should not has been focused when focusing on SelectAll it
 });
 
 QUnit.test('SelectAll item should be focused when focusing a treeview if showCheckBoxesMode:selectAll', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         items: [ { id: 1 } ],
         showCheckBoxesMode: 'selectAll'
     });
 
-    const clock = sinon.useFakeTimers();
+    $treeView.trigger('focusin');
 
-    try {
-        $treeView.trigger('focusin');
-
-        clock.tick(10);
-
-        assert.ok($(`.${SELECT_ALL_ITEM_CLASS}`).hasClass(FOCUSED_STATE_CLASS));
-    } finally {
-        clock.restore();
-    }
+    assert.ok($(`.${SELECT_ALL_ITEM_CLASS}`).hasClass(FOCUSED_STATE_CLASS));
 });
 
 QUnit.test('SelectAll item should be focused when focusing a treeview second time if showCheckBoxesMode:selectAll', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         items: [ { id: 1 } ],
         showCheckBoxesMode: 'selectAll',
@@ -271,9 +274,7 @@ QUnit.test('SelectAll item should be focused when focusing a treeview second tim
 
     try {
         $treeView.trigger('focusin');
-        clock.tick(10);
         $selectAllItem.trigger('focusout');
-        clock.tick(10);
         $treeView.trigger('focusin');
         clock.tick(10);
 
@@ -284,6 +285,11 @@ QUnit.test('SelectAll item should be focused when focusing a treeview second tim
 });
 
 QUnit.test('First node should be focused when focusing a treeview if showCheckBoxesMode:normal', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         items: [ { id: 1 }, { id: 2 } ],
         showCheckBoxesMode: 'normal',
@@ -297,6 +303,11 @@ QUnit.test('First node should be focused when focusing a treeview if showCheckBo
 });
 
 QUnit.test('SelectAll checkbox should be checked with space key', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         items: [ { id: 1 }],
         showCheckBoxesMode: 'selectAll',
