@@ -418,3 +418,43 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
 });
+
+QUnit.module('Behavior', moduleConfig, () => {
+    QUnit.test('Popup of startDateBox should open on attempt to open Popup of endDateBox', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        endDateBox.open();
+
+        assert.ok(startDateBox.option('opened'));
+    });
+});
+
+QUnit.module('Strategy', moduleConfig, () => {
+    [
+        {
+            optionName: 'selectionMode',
+            optionValue: 'range'
+        },
+        {
+            optionName: 'viewsCount',
+            optionValue: 2
+        },
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`Calendar should have ${optionName} option equals ${optionValue}`, function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            startDateBox.open();
+
+            assert.strictEqual(startDateBox._strategy.widgetOption(optionName), optionValue);
+        });
+    });
+
+    QUnit.test('Calendar should have "values" option equals to dateRangeBox "value"', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        startDateBox.open();
+
+        assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
+    });
+});
