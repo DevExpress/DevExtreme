@@ -114,12 +114,15 @@ export default class MaskStrategy {
     _clearSelectedText() {
         const length = (this._prevCaret?.end - this._prevCaret?.start) || 1;
         const caret = this._editorCaret();
-        this.editor.setBackwardDirection();
-        this._updateEditorMask({
-            start: caret.start,
-            length,
-            text: getEmptyString(length)
-        });
+
+        if(!this._isAutoFill()) {
+            this.editor.setBackwardDirection();
+            this._updateEditorMask({
+                start: caret.start,
+                length,
+                text: getEmptyString(length)
+            });
+        }
     }
 
     _handleInsertTextInputEvent(data) {
