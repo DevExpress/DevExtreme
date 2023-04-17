@@ -80,7 +80,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             const $focusedElement = $(this.option('focusedElement'));
 
-            if($focusedElement.hasClass(SELECT_ALL_ITEM_CLASS)) {
+            if(this._isSelectAllItem($focusedElement)) {
                 this._onSelectAllCheckboxValueChanged({ value: !this._dataAdapter.isAllSelected() });
                 return;
             }
@@ -591,6 +591,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._createSelectAllValueChangedAction();
             this._renderSelectAllItem($nodeContainer);
         }
+    },
+
+    _isSelectAllItem: function($item) {
+        return $item.hasClass(SELECT_ALL_ITEM_CLASS);
     },
 
     _isVirtualMode: function() {
@@ -1460,9 +1464,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const $activeItem = this._getActiveItem();
 
-        const isSelectAllItem = $activeItem.hasClass(SELECT_ALL_ITEM_CLASS);
-
-        const $itemToFocus = isSelectAllItem ? $activeItem : $activeItem.closest(`.${NODE_CLASS}`);
+        const $itemToFocus = this._isSelectAllItem($activeItem) ? $activeItem : $activeItem.closest(`.${NODE_CLASS}`);
 
         this.option('focusedElement', getPublicElement($itemToFocus));
     },
