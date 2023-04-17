@@ -35,7 +35,7 @@ export default class BaseMaskStrategy {
         this.editor._caret(newCaret);
     }
 
-    _attachChangeEventHandlers() {
+    _attachChangeEventHandler() {
         if(!this._editorOption('valueChangeEvent').split(' ').includes('change')) {
             return;
         }
@@ -165,6 +165,16 @@ export default class BaseMaskStrategy {
         }
     }
 
+    _delHandler(event) {
+        const { editor } = this;
+
+        editor._maskKeyHandler(event, () => {
+            if(!editor._hasSelection()) {
+                editor._handleKey(EMPTY_CHAR);
+            }
+        });
+    }
+
     _cutHandler(event) {
         const caret = this._editorCaret();
         const selectedText = this._editorInput().val().substring(caret.start, caret.end);
@@ -177,10 +187,6 @@ export default class BaseMaskStrategy {
         this._dragTimer = setTimeout(() => {
             this.editorOption('value', this._convertToValue(this._input().val()));
         });
-    }
-
-    _clearDragTimer() {
-        clearTimeout(this._dragTimer);
     }
 
     _pasteHandler(event) {
@@ -217,39 +223,36 @@ export default class BaseMaskStrategy {
     }
 
     _isAutoFill() {
-        const $input = this.editor._input();
-        let result = false;
+        const $input = this._editorInput();
 
         if(browser.webkit) {
             const input = $input.get(0);
-            result = input && input.matches(':-webkit-autofill');
+            return input?.matches(':-webkit-autofill') ?? false;
         }
 
-        return result;
+        return false;
     }
 
-    _delHandler(event) {
-        const { editor } = this;
-
-        editor._maskKeyHandler(event, () =>
-            !editor._hasSelection() && editor._handleKey(EMPTY_CHAR));
+    _clearDragTimer() {
+        clearTimeout(this._dragTimer);
     }
+
 
     getHandler(handlerName) {
-        const handler = this[`_${handlerName}Handler`] || function() {};
-        return handler.bind(this);
+        return () => {
+            this[`_${handlerName}Handler`]?.();
+        };
     }
 
     attachEvents() {
         const $input = this._editorInput();
 
         EVENT_NAMES.forEach((eventName) => {
-            const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
-
-            EventsEngine.on($input, subscriptionName, this.getHandler(eventName));
+            const namespace = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
+            EventsEngine.on($input, namespace, this.getHandler(eventName));
         });
 
-        this._attachChangeEventHandlers();
+        this._attachChangeEventHandler();
     }
 
     detachEvents() {
