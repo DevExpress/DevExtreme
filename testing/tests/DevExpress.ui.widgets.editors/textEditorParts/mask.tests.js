@@ -495,6 +495,227 @@ QUnit.module('typing', moduleConfig, () => {
         keyboard.caret(0);
         keyboard.type('1');
     });
+
+    QUnit.test('input event should be fired after input if mask is used', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '9'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('1');
+
+        assert.strictEqual(inputHandlerStub.callCount, 1, 'input event is fired');
+    });
+
+    QUnit.test('input event should not be fired if input text was not changed because of mask', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '9',
+            value: '1'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(1)
+            .type('1');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('input event should not be fired if input text was not changed but caret was moved after stub', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '++ 0',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('w');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('input event should not be fired if existing char was inputed', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onInput: inputHandlerStub,
+            mask: '0',
+            value: '1'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('1');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('caret should be moved after a new char even if it was before a stub on typing', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '(((((0',
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        for(let i = 1; i < 5; ++i) {
+            keyboard
+                .caret(i)
+                .type('2');
+
+            assert.strictEqual(keyboard.caret().start, 6, 'caret was moved after a new char');
+            assert.strictEqual(textEditor.option('text'), '(((((2', 'text is correct');
+        }
+    });
+
+    QUnit.test('caret should be moved after a new char even if all text was selected before type', function(assert) {
+        const mask = '+1 (000) 000 000';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret({ start: 0, end: mask.length })
+            .type('2');
+
+        assert.strictEqual(keyboard.caret().start, 5, 'caret was moved after a new char');
+        assert.strictEqual(textEditor.option('text'), '+1 (2__) ___ ___', 'text is correct');
+    });
+
+    QUnit.test('caret should be set before first empty char if incorrect char is inputed ', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (0)'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('w');
+
+        assert.strictEqual(keyboard.caret().start, 4, 'caret position is correct');
+        assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
+    });
+
+    QUnit.test('caret should be set before first empty char if incorrect char is inputed when all text is selected', function(assert) {
+        const mask = '+1 (0)';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret({ start: 0, end: mask.length })
+            .type('w');
+
+        assert.strictEqual(keyboard.caret().start, 4, 'caret position is correct');
+        assert.strictEqual(textEditor.option('text'), '+1 (_)', 'text is correct');
+    });
+
+    QUnit.test('ctrl+z should not raise an error if all text is selected', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('2')
+            .caret({ start: 0, end: 1 })
+            .beforeInput();
+
+        try {
+            keyboard.input(null, 'historyUndo');
+        } catch(e) {
+            assert.ok(false, `error is raised: ${e.message}`);
+        } finally {
+            assert.ok(true, 'no error is raised');
+        }
+    });
+
+    QUnit.test('ctrl+z should be ignored', function(assert) {
+        const inputHandlerStub = sinon.stub();
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0',
+            onInput: inputHandlerStub
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .type('2')
+            .caret({ start: 0, end: 1 })
+            .press('backspace')
+            .beforeInput();
+
+        inputHandlerStub.resetHistory();
+
+        keyboard.input(null, 'historyUndo');
+
+        assert.strictEqual(textEditor.option('text'), '_', 'text is not changed');
+        assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, 'caret position not changed');
+        assert.ok(inputHandlerStub.notCalled, 'input event was not raised');
+    });
+
+    QUnit.test('space should set caret before position available for input', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (0)',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type(' ');
+
+        assert.deepEqual(keyboard.caret(), { start: 4, end: 4 }, 'caret position is correct');
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {
@@ -628,6 +849,108 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         assert.equal($input.val(), 'x-x_', 'char removed');
     });
+
+    QUnit.test('backspace press should trigger input event', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '9',
+            value: '1',
+            onInput: inputHandlerStub
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual(inputHandlerStub.callCount, 1, 'input event was fired');
+    });
+
+    QUnit.test('backspace press should not trigger input event when caret is at 0 position', function(assert) {
+        const inputHandlerStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '9',
+            value: '1',
+            onInput: inputHandlerStub
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .press('backspace');
+
+        assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
+    });
+
+    QUnit.test('mask char should be rendered instead of deleted char after a backspace press', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '9',
+            value: '1',
+            valueChangeEvent: 'input'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual($input.val(), '_', 'input value is correct');
+        assert.strictEqual(textEditor.option('value'), '', 'textEditor value property is correct');
+        assert.strictEqual(textEditor.option('text'), '_', 'textEditor text property is correct');
+    });
+
+    QUnit.test('backspace should skip all consecutive stubs', function(assert) {
+        const mask = '000---';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(mask.length)
+            .press('backspace');
+
+        assert.strictEqual(keyboard.caret().start, 3, '3 stub chars were skipped');
+        assert.strictEqual(textEditor.option('text'), '___---', 'text is correct');
+    });
+
+    ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'].forEach((inputType) => {
+        QUnit.test(`backspace should not remove mask if it is an event with ${inputType} input type`, function(assert) {
+            const mask = '+1 (0)';
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask
+            });
+            const textEditor = $textEditor.dxTextEditor('instance');
+
+            const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input, true);
+            caretWorkaround($input);
+
+            keyboard.caret({ start: 0, end: mask.length });
+            $input.val(''); // NOTE: Emulates fast key press which clears input earlier than input event is raised.
+            keyboard
+                .beforeInput()
+                .input(null, inputType);
+
+            assert.strictEqual(textEditor.option('text'), '+1 (_)', 'mask is not removed');
+        });
+    });
 });
 
 QUnit.module('delete key', moduleConfig, () => {
@@ -672,6 +995,22 @@ QUnit.module('delete key', moduleConfig, () => {
 
         assert.equal($input.val(), '_- x', 'letter deleted');
     });
+
+    QUnit.skip('should skip consecutive stub chars', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0---0'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(1)
+            .press('del');
+
+        assert.deepEqual(keyboard.caret(), { start: 4, end: 4 }, 'caret is set after a stub');
+    });
 });
 
 QUnit.module('selection', moduleConfig, () => {
@@ -682,20 +1021,21 @@ QUnit.module('selection', moduleConfig, () => {
                 'X': 'x'
             }
         });
+        const textEditor = $textEditor.dxTextEditor('instance');
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
-
         caretWorkaround($input);
 
         keyboard
+            .caret(0)
             .type('x')
             .type('x')
             .caret({ start: 0, end: 2 });
 
         keyboard.type('x');
 
-        assert.equal($input.val(), 'x_', 'printed only one char');
+        assert.strictEqual(textEditor.option('text'), 'x_', 'only first char is typed, second is cleared');
     });
 
     QUnit.test('all selected chars should be deleted on backspace', function(assert) {
@@ -1656,6 +1996,23 @@ QUnit.module('paste', moduleConfig, () => {
 
         assert.equal($input.val(), '00', '\'v\' char from ctrl+V combination was ignored');
     });
+
+    QUnit.skip('digit stub should not be duplicated after paste if caret is placed before the stub', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '10000'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+
+        keyboard
+            .caret(0)
+            .paste('6');
+
+        assert.strictEqual(textEditor.option('text'), '16___', 'only pasted digit is added');
+    });
 });
 
 QUnit.module('drag text', moduleConfig, () => {
@@ -2017,6 +2374,24 @@ QUnit.module('T9', moduleConfig, () => {
 
         assert.equal(keyboard.caret().start, 0, 'caret moved backward');
         assert.equal($input.val(), '_-_', 'chars was removed');
+    });
+
+    QUnit.test('suggestion apply inserts text', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: 'LLLLL'
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type('h')
+            .caret({ start: 0, end: 5 })
+            .beforeInput()
+            .input('Hello', 'insertText');
+
+        assert.strictEqual(textEditor.option('text'), 'Hello', 'text is inserted');
     });
 });
 

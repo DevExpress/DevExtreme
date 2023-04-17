@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import DateRangeBox from 'ui/date_range_box';
+import config from 'core/config';
+
+import 'ui/date_range_box';
 
 QUnit.testStart(function() {
     const markup =
@@ -16,6 +18,8 @@ const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const ICON_CLASS = 'dx-icon';
 
+const stylingModes = ['outlined', 'underlined', 'filled'];
+
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
 const getEndDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getEndDateBox();
@@ -28,12 +32,18 @@ const getSeparatorElement = dateRangeBoxInstance => dateRangeBoxInstance._$separ
 
 const moduleConfig = {
     beforeEach: function() {
-        this.reinit = (options) => {
-            this.instance = this.$element.dxDateRangeBox(options).dxDateRangeBox('instance');
+        const init = (options) => {
+            this.$element = $('#dateRangeBox').dxDateRangeBox(options);
+            this.instance = this.$element.dxDateRangeBox('instance');
         };
 
-        this.$element = $('#dateRangeBox');
-        this.reinit({
+        this.reinit = (options) => {
+            this.instance.dispose();
+
+            init(options);
+        };
+
+        init({
             value: ['2023/01/05', '2023/02/14']
         });
     }
@@ -43,6 +53,45 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
     QUnit.test('DateRangeBox has expected class', function(assert) {
         assert.ok(this.$element.hasClass(DATERANGEBOX_CLASS));
     });
+
+    stylingModes.forEach((stylingMode) => {
+        QUnit.test(`DateRangeBox has "${stylingMode}" class if config().editorStylingMode is ${stylingMode}`, function(assert) {
+            config({ editorStylingMode: stylingMode });
+            this.reinit({});
+
+            assert.strictEqual(this.$element.hasClass(`${DATERANGEBOX_CLASS}-${stylingMode}`), true, `${stylingMode} class was added`);
+            const restStylingModes = stylingModes.filter((mode) => mode !== stylingMode);
+            restStylingModes.forEach(mode => {
+                assert.strictEqual(this.$element.hasClass(`${DATERANGEBOX_CLASS}-${mode}`), false, `${mode} class was not added`);
+            });
+
+            config({ editorStylingMode: null });
+        });
+
+        QUnit.test(`DateRangeBox has "${stylingMode}" class if styling mode is "${stylingMode}"`, function(assert) {
+            this.reinit({ stylingMode });
+
+            assert.strictEqual(this.$element.hasClass(`${DATERANGEBOX_CLASS}-${stylingMode}`), true, `${stylingMode} class was added`);
+            const restStylingModes = stylingModes.filter((mode) => mode !== stylingMode);
+            restStylingModes.forEach(mode => {
+                assert.strictEqual(this.$element.hasClass(`${DATERANGEBOX_CLASS}-${mode}`), false, `${mode} class was not added`);
+            });
+        });
+
+        stylingModes.forEach((newStylingMode) => {
+            QUnit.test(`DateRangeBox has "${newStylingMode}" class if styling mode value is changed to "${newStylingMode}"`, function(assert) {
+                this.instance.option('stylingMode', newStylingMode);
+
+                assert.strictEqual(this.$element.hasClass(`${DATERANGEBOX_CLASS}-${newStylingMode}`), true, `${stylingMode} class was changed to ${newStylingMode}`);
+
+                const restStylingModes = stylingModes.filter((mode) => mode !== newStylingMode);
+                restStylingModes.forEach(mode => {
+                    assert.strictEqual(this.$element.hasClass(`${DATERANGEBOX_CLASS}-${mode}`), false, `${mode} class was not added`);
+                });
+            });
+        });
+    });
+
 
     QUnit.test('StartDateBox has expected class', function(assert) {
         const $startDateBox = getStartDateBoxElement(this.instance);
