@@ -70,7 +70,7 @@ const dataGridWrapper = new DataGridWrapper('#dataGrid');
 if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Chrome DevTools device emulation
     // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
+    $('head').append($('<style nonce="qunit-test">').text('input[type=date] { padding: 1px 0; }'));
 }
 
 fx.off = true;
