@@ -6,7 +6,7 @@ import config from '../../core/config';
 import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
 import Widget from '../widget/ui.widget';
-import DateBox from '../date_box';
+import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import { FunctionTemplate } from '../../core/templates/function_template';
@@ -195,7 +195,7 @@ class DateRangeBox extends Widget {
             .addClass(START_DATEBOX_CLASS)
             .appendTo(this.$element());
 
-        this._startDateBox = this._createComponent(this._$startDateBox, DateBox, this._getStartDateBoxConfig());
+        this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
     }
 
     _renderEndDateBox() {
@@ -203,7 +203,7 @@ class DateRangeBox extends Widget {
             .addClass(END_DATEBOX_CLASS)
             .appendTo(this.$element());
 
-        this._endDateBox = this._createComponent(this._$endDateBox, DateBox, this._getEndDateBoxConfig());
+        this._endDateBox = this._createComponent(this._$endDateBox, MultiselectDateBox, this._getEndDateBoxConfig());
     }
 
     _renderSeparator() {
@@ -262,6 +262,8 @@ class DateRangeBox extends Widget {
             max: options.max,
             maxLength: options.maxLength,
             min: options.min,
+            openOnFieldClick: options.openOnFieldClick,
+            pickerType: 'calendar',
             placeholder: options.placeholder,
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
@@ -271,7 +273,8 @@ class DateRangeBox extends Widget {
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
             validationStatus: options.validationStatus,
-            valueChangeEvent: options.valueChangeEvent
+            valueChangeEvent: options.valueChangeEvent,
+            _dateRangeBoxInstance: this,
         };
     }
 
@@ -299,6 +302,12 @@ class DateRangeBox extends Widget {
 
         return {
             ...this._getDateBoxConfig(),
+            dropDownOptions: {
+                onShowing: (e) => {
+                    e.cancel = true;
+                    this.getStartDateBox().open();
+                }
+            },
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[1],
