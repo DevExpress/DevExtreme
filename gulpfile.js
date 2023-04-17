@@ -29,6 +29,7 @@ require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
 require('./build/gulp/renovation-testing-playground');
 require('./build/gulp/renovation-npm');
+require('./build/gulp/systemjs');
 
 if(!env.TEST_CI) {
     require('./build/gulp/create_timezones_data');
@@ -83,6 +84,7 @@ function createDefaultBatch(dev) {
     if(!env.BUILD_TESTCAFE) {
         tasks.push('discover-declarations');
     }
+    tasks.push('transpile-systemjs');
     return gulp.series(tasks);
 }
 
