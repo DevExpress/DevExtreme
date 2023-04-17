@@ -19,6 +19,7 @@ import {
 
 import {
     ApplyChangesMode,
+    HeaderFilterSearchConfig,
 } from '../common/grids';
 
 export {
@@ -83,9 +84,15 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     headerFilter?: {
       /**
        * @docid
-       * @default undefined
+       * @default false
+       * @deprecated
        */
       allowSearch?: boolean;
+      /**
+       * @docid
+       * @default true
+       */
+      allowSelectAll?: boolean;
       /**
        * @docid
        * @default 325
@@ -93,7 +100,12 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
       height?: number;
       /**
        * @docid
+       */
+      search?: HeaderFilterSearchConfig;
+      /**
+       * @docid
        * @default 500
+       * @deprecated
        */
       searchTimeout?: number;
       /**

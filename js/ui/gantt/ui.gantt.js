@@ -22,7 +22,7 @@ import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import { GanttTreeList } from './ui.gantt.treelist';
 import { GanttView } from './ui.gantt.view';
 import { GanttDataChangesProcessingHelper } from './ui.gantt.data_changes_processing_helper';
-
+import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 
 const window = getWindow();
 
@@ -43,6 +43,9 @@ const GANTT_NEW_TASK_CACHE_KEY = 'gantt_new_task_key';
 class Gantt extends Widget {
     _init() {
         super._init();
+
+        gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
+
         this._initGantt();
         this._isGanttRendered = false;
         this._initHelpers();

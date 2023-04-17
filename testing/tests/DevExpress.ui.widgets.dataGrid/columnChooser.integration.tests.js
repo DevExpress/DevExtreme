@@ -13,8 +13,68 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import messageLocalization from 'localization/message';
 
 QUnit.module('Column chooser', baseModuleConfig, () => {
+    QUnit.test('columns should be draggable when column chooser is open', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+            dataSource: []
+        });
+
+        // assert
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const $draggableColumns = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumns.length, 2, 'columns should be draggable');
+    });
+
+    QUnit.test('last column should be draggable to column chooser', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1' }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const $draggableColumns = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumns.length, 1, 'column should be draggable');
+    });
+
+    QUnit.test('columns should not be draggable if columnChooser.mode=select', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+            dataSource: [],
+            columnChooser: { mode: 'select' }
+        });
+
+        // assert
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const $draggableColumns = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumns.length, 0, 'columns should not be draggable');
+    });
+
     // T862537
-    QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
+    QUnit.test('column with allowHiding=false should not be draggable', function(assert) {
         // act
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -23,14 +83,17 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         });
 
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.strictEqual($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
 
         // act
         dataGrid.showColumnChooser();
 
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 1, 'one drag action for hiding column');
+        const $draggableColumn = $(dataGrid.$element()).find('.dx-datagrid-drag-action');
+
+        assert.strictEqual($draggableColumn.length, 1, 'column with no allowHiding=false should be draggable');
+        assert.strictEqual($draggableColumn.text(), 'Field 2');
     });
 
     // T1109671
@@ -128,5 +191,306 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.ok(!$overlayWrapper.find('.dx-checkbox').length, 'There aren\'t checkboxes in columnChooser');
     });
 
+    QUnit.test('ColumnChooser popup\'s position can be changed', function(assert) {
+        // arrange
+        let position = { my: 'left bottom', at: 'left bottom', of: '#dataGrid' };
 
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: { mode: 'select', position },
+            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        assert.propEqual(dataGrid.getView('columnChooserView')._popupContainer.option('position'), position);
+
+        // act
+        position = { my: 'right top', at: 'right top', of: '#dataGrid' };
+        dataGrid.option('columnChooser.position', position);
+        dataGrid.showColumnChooser();
+
+        // asert
+        assert.propEqual(dataGrid.getView('columnChooserView')._popupContainer.option('position'), position);
+    });
+
+    QUnit.test('Column chooser selection.allowSelectAll option should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: { allowSelectAll: true }
+            },
+            columns: [
+                {
+                    caption: 'band1',
+                    columns: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' }
+                    ]
+                },
+                { dataField: 'field3' },
+                { dataField: 'field4' },
+            ],
+            dataSource: []
+        });
+
+        const getSelectAllCheckbox = () => $('.dx-treeview-select-all-item').dxCheckBox('instance');
+        const getVisibleColumns = () => dataGrid.getVisibleColumns().filter(item => !item.command);
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+
+        assert.ok($('.dx-treeview-select-all-item').length, 'there is \'Select all\' checkbox');
+
+        // act
+        getSelectAllCheckbox().option('value', false);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(getVisibleColumns().length, 0, 'No column should be shown');
+
+        // act
+        getSelectAllCheckbox().option('value', true);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(getVisibleColumns().length, 4, 'All columns are shown');
+    });
+
+    QUnit.test('Column chooser selection.allowSelectAll option should work with column which has allowHiding=false', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: { allowSelectAll: true }
+            },
+            columns: [
+                {
+                    caption: 'band1',
+                    columns: [
+                        { dataField: 'field1' }, { dataField: 'field2' }
+                    ]
+                },
+                {
+                    caption: 'band2',
+                    columns: [
+                        { dataField: 'field3', allowHiding: false }
+                    ]
+                },
+                { dataField: 'field4' },
+                { dataField: 'field5', allowHiding: false }
+            ],
+            dataSource: []
+        });
+
+        const getSelectAllCheckbox = () => $('.dx-treeview-select-all-item').dxCheckBox('instance');
+        const getVisibleColumns = () => dataGrid.getVisibleColumns().filter(item => !item.command);
+
+        // act
+        dataGrid.showColumnChooser();
+
+        getSelectAllCheckbox().option('value', false);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(getVisibleColumns().length, 1, 'Only column without band column and with allowHiding=false is shown');
+        assert.strictEqual(getVisibleColumns()[0].dataField, 'field5');
+
+        // act
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+        const selectedNodes = treeView.getSelectedNodes();
+
+        // assert
+        assert.ok(selectedNodes.some(node => node.itemData.text === 'Field 3'), 'field2 is checked');
+        assert.ok(selectedNodes.some(node => node.itemData.text === 'Field 5'), 'field5 is checked');
+
+        // act
+        getSelectAllCheckbox().option('value', true);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(getVisibleColumns().length, 5, 'All columns are shown');
+    });
+
+    QUnit.test('Column chooser selection.recursive should work', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: { recursive: true }
+            },
+            columns: [{
+                caption: 'band1',
+                columns: [
+                    { dataField: 'field1' },
+                    { dataField: 'field2' }
+                ]
+            }, { dataField: 'field3' }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+        const items = $('.dx-item.dx-treeview-item');
+        const bandColumnItem = items[0];
+
+        treeView.unselectItem(bandColumnItem);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleColumns().length, 1, 'All columns under band column should be deselected');
+        assert.strictEqual(dataGrid.getVisibleColumns()[0].dataField, 'field3', 'All columns under band column should be deselected');
+
+        // act
+        treeView.selectItem(bandColumnItem);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleColumns().length, 3, 'All columns should be selected');
+    });
+
+    QUnit.test('Column chooser selection.recursive should work with column with allowHiding=false', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: { recursive: true }
+            },
+            columns: [{
+                caption: 'band1',
+                columns: [
+                    { dataField: 'field1' },
+                    { dataField: 'field2', allowHiding: false }
+                ]
+            }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+        const items = $('.dx-item.dx-treeview-item');
+        const bandColumnItem = items[0];
+
+        treeView.unselectItem(bandColumnItem);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleColumns().length, 1, 'Column with allowHiding=false should not be deselected');
+        assert.strictEqual(dataGrid.getVisibleColumns()[0].dataField, 'field2');
+    });
+
+    QUnit.test('Column chooser with enabled selectAll and recursion should work correctly when unselect all', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: {
+                    allowSelectAll: true,
+                    recursive: true
+                }
+            },
+            columns: [
+                'field1',
+                {
+                    caption: 'band1',
+                    columns: [
+                        { dataField: 'field2' },
+                        { dataField: 'field3', allowHiding: false }
+                    ]
+                }
+            ],
+            dataSource: []
+        });
+
+        const getSelectAllCheckbox = () => $('.dx-treeview-select-all-item').dxCheckBox('instance');
+        const getVisibleColumns = () => dataGrid.getVisibleColumns().filter(item => !item.command);
+
+        // act
+        dataGrid.showColumnChooser();
+
+        getSelectAllCheckbox().option('value', false);
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(getVisibleColumns().length, 1, 'Only column with allowHiding=false is shown');
+        assert.strictEqual(getVisibleColumns()[0].dataField, 'field3');
+
+        // act
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+        const nodes = treeView.getNodes();
+
+        // assert
+        const field1 = nodes[0];
+
+        assert.strictEqual(field1.selected, false, 'Field 1 column is unselected');
+
+        // assert
+        const band1 = nodes[1];
+        const field2 = band1.children[0];
+        const field3 = band1.children[1];
+
+        assert.strictEqual(band1.selected, undefined, 'Band column is in intermediate state');
+        assert.strictEqual(field2.selected, false, 'Field 2 column is unselected');
+        assert.strictEqual(field3.selected, true, 'Field 3 column is selected');
+    });
+
+    QUnit.test('Column chooser column with allowHiding=false should be disabled', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: { selectByClick: true }
+            },
+            columns: [
+                { dataField: 'field1' },
+                { dataField: 'field2' },
+                { dataField: 'field3', allowHiding: false },
+            ],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        const items = $('.dx-item.dx-treeview-item');
+
+        // assert
+        assert.ok(items.eq(2).hasClass('dx-state-disabled'), 'Column with allowHiding=false is disabled');
+    });
+
+    QUnit.test('Column chooser search.editorOptions option should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                search: {
+                    enabled: true,
+                    editorOptions: { placeholder: 'custom_placeholder' }
+                }
+            },
+            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        const textBox = $('.dx-textbox').dxTextBox('instance');
+
+        // assert
+        assert.strictEqual(textBox.option('placeholder'), 'custom_placeholder', 'Placeholder should be custom');
+    });
 });

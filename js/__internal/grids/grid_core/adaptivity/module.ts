@@ -764,7 +764,9 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
     $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
   },
 };
-const AdaptiveColumnsController = modules.ViewController.inherit(adaptiveColumnsControllerMembers) as any;
+const AdaptiveColumnsController = modules.ViewController.inherit(
+  adaptiveColumnsControllerMembers,
+);
 
 export const adaptivityModule: import('../module_types').Module = {
   defaultOptions() {

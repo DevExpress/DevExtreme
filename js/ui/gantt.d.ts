@@ -43,6 +43,10 @@ import {
     ToolbarItemLocation,
 } from '../common';
 
+import {
+    HeaderFilterSearchConfig,
+} from '../common/grids';
+
 export type GanttPdfExportDateRange = 'all' | 'visible';
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
 /** @public */
@@ -1388,8 +1392,14 @@ export interface dxGanttHeaderFilter {
     /**
      * @docid
      * @default false
+     * @deprecated
      */
     allowSearch?: boolean;
+    /**
+     * @docid
+     * @default true
+     */
+    allowSelectAll?: boolean;
     /**
      * @docid
      * @default 315 &for(Material)
@@ -1398,7 +1408,12 @@ export interface dxGanttHeaderFilter {
     height?: number;
     /**
      * @docid
+     */
+    search?: HeaderFilterSearchConfig;
+    /**
+     * @docid
      * @default 500
+     * @deprecated
      */
     searchTimeout?: number;
     /**

@@ -465,6 +465,7 @@ export type ColumnChooser = {
   /**
    * @docid GridBaseOptions.columnChooser.allowSearch
    * @default false
+   * @deprecated
    */
   allowSearch?: boolean;
   /**
@@ -488,10 +489,19 @@ export type ColumnChooser = {
    */
   mode?: ColumnChooserMode;
   /**
+   * @docid GridBaseOptions.columnChooser.search
+   */
+  search?: ColumnChooserSearchConfig;
+  /**
    * @docid GridBaseOptions.columnChooser.searchTimeout
    * @default 500
+   * @deprecated
    */
   searchTimeout?: number;
+  /**
+   * @docid GridBaseOptions.columnChooser.selection
+   */
+  selection?: ColumnChooserSelectionConfig;
   /**
    * @docid GridBaseOptions.columnChooser.title
    * @default "Column Chooser"
@@ -514,6 +524,52 @@ export type ColumnChooser = {
  * @namespace DevExpress.common.grids
  */
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.common.grids
+ */
+export type ColumnChooserSearchConfig = {
+  /**
+   * @docid
+   * @default {}
+   */
+  editorOptions?: any;
+  /**
+   * @docid
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid
+   * @default 500
+   */
+  timeout?: number;
+};
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.common.grids
+ */
+export type ColumnChooserSelectionConfig = {
+  /**
+   * @docid
+   * @default false
+   */
+  allowSelectAll?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  recursive?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  selectByClick?: boolean;
+};
 
 /**
  * @public
@@ -578,8 +634,14 @@ export type ColumnHeaderFilter = {
   /**
    * @docid GridBaseColumn.headerFilter.allowSearch
    * @default false
+   * @deprecated
    */
   allowSearch?: boolean;
+  /**
+   * @docid GridBaseColumn.headerFilter.allowSelectAll
+   * @default true
+   */
+  allowSelectAll?: boolean;
   /**
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field component:object
@@ -598,8 +660,13 @@ export type ColumnHeaderFilter = {
    */
   height?: number;
   /**
+   * @docid GridBaseColumn.headerFilter.search
+   */
+  search?: ColumnHeaderFilterSearchConfig;
+  /**
    * @docid GridBaseColumn.headerFilter.searchMode
    * @default 'contains'
+   * @deprecated
    */
   searchMode?: SearchMode;
   /**
@@ -607,6 +674,21 @@ export type ColumnHeaderFilter = {
    * @default undefined
    */
   width?: number;
+};
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.common.grids
+ * @inherits HeaderFilterSearchConfig
+ */
+export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
+  /**
+   * @docid
+   * @type getter|Array<getter>
+   * @default undefined
+   */
+  searchExpr?: string | Function | Array<string | Function>;
 };
 
 /**
@@ -1094,8 +1176,14 @@ export type HeaderFilter = {
   /**
    * @docid GridBaseOptions.headerFilter.allowSearch
    * @default false
+   * @deprecated
    */
   allowSearch?: boolean;
+  /**
+   * @docid GridBaseOptions.headerFilter.allowSelectAll
+   * @default true
+   */
+  allowSelectAll?: boolean;
   /**
    * @docid GridBaseOptions.headerFilter.height
    * @default 315 &for(Material)
@@ -1103,8 +1191,13 @@ export type HeaderFilter = {
    */
   height?: number;
   /**
+   * @docid GridBaseOptions.headerFilter.search
+   */
+  search?: HeaderFilterSearchConfig;
+  /**
    * @docid GridBaseOptions.headerFilter.searchTimeout
    * @default 500
+   * @deprecated
    */
   searchTimeout?: number;
   /**
@@ -1129,6 +1222,34 @@ export type HeaderFilter = {
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.common.grids
+ */
+export type HeaderFilterSearchConfig = {
+  /**
+   * @docid
+   * @default {}
+   */
+  editorOptions?: any;
+  /**
+   * @docid
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid
+   * @default 'contains'
+   */
+  mode?: SearchMode;
+  /**
+   * @docid
+   * @default 500
+   */
+  timeout?: number;
+};
 
 /**
  * @public

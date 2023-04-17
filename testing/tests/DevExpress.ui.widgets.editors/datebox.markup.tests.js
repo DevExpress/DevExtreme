@@ -8,9 +8,10 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 QUnit.testStart(function() {
     const markup =
         '<div id="dateBox"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 import 'generic_light.css!';

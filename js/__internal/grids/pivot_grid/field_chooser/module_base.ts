@@ -16,6 +16,7 @@ import {
 } from '@js/ui/grid_core/ui.grid_core.header_filter_core';
 import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
+import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import { Deferred } from '@js/core/utils/deferred';
 
 import { reverseSortOrder } from './utils';
@@ -28,9 +29,9 @@ import { dragAndDropItemRender } from './dom';
 const DIV = '<div>';
 
 const HeaderFilterView = HeaderFilterViewBase.inherit({
-  _getSearchExpr(options) {
+  _getSearchExpr(options, headerFilterOptions) {
     options.useDefaultSearchExpr = true;
-    return this.callBase(options);
+    return this.callBase(options, headerFilterOptions);
   },
 });
 
@@ -95,7 +96,14 @@ const FieldChooserBase = (Widget as any)
         headerFilter: {
           width: 252,
           height: 325,
-          searchTimeout: 500,
+          allowSelectAll: true,
+          showRelevantValues: false,
+          search: {
+            enabled: false,
+            timeout: 500,
+            editorOptions: {},
+            mode: 'contains',
+          },
           texts: {
             emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),
             ok: localizationMessage.format('dxDataGrid-headerFilterOK'),
@@ -112,6 +120,8 @@ const FieldChooserBase = (Widget as any)
       this._headerFilterView = new HeaderFilterView(this);
       this._refreshDataSource();
       this.subscribeToEvents();
+
+      gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
     },
 
     _refreshDataSource() {

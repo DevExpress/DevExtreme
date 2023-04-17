@@ -88,6 +88,12 @@
           }
         }
       }
+
+      &.dx-fa-button-without-icon {
+        .dx-fa-button-icon {
+          width: 0;
+        }
+      }
     }
 
     .dx-fa-button-icon,
@@ -155,7 +161,7 @@
           padding: $label-padding;
           margin-right: $label-offset;
           box-shadow: $speed-dial-action-label-shadow;
-          font-size: $font-size - 2;
+          font-size: $font-size;
         }
       }
 
