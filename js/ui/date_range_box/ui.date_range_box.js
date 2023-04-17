@@ -253,6 +253,7 @@ class DateRangeBox extends Widget {
             maxLength: options.maxLength,
             min: options.min,
             openOnFieldClick: options.openOnFieldClick,
+            pickerType: 'calendar',
             placeholder: options.placeholder,
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
