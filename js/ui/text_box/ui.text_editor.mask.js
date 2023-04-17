@@ -12,7 +12,7 @@ import { isEmpty } from '../../core/utils/string';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { EmptyMaskRule, StubMaskRule, MaskRule } from './ui.text_editor.mask.rule';
 import TextEditorBase from './ui.text_editor.base';
-import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
+import MaskStrategy from './ui.text_editor.mask.strategy';
 
 const stubCaret = function() {
     return {};
@@ -110,7 +110,7 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        this._maskStrategy = new InputEventsMaskStrategy(this);
+        this._maskStrategy = new MaskStrategy(this);
     },
 
     _initMarkup: function() {
