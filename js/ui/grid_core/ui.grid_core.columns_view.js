@@ -399,7 +399,6 @@ const columnsViewMembers = {
     _renderDelayedTemplatesCoreAsync: function(templates) {
         const that = this;
         if(templates.length) {
-            getWindow().clearTimeout(that._templateTimeout);
             that._templateTimeout = getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
