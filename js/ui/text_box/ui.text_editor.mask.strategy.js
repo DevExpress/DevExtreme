@@ -251,8 +251,8 @@ export default class MaskStrategy {
 
 
     getHandler(handlerName) {
-        return () => {
-            this[`_${handlerName}Handler`]?.();
+        return (args) => {
+            this[`_${handlerName}Handler`]?.(args);
         };
     }
 
