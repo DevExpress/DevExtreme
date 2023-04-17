@@ -26,6 +26,7 @@
     "noPropertyAccessFromIndexSignature": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "lib": ["ESNext", "DOM"],
     "strict": true,
     // TODO: set to true
     "noImplicitAny": false,
@@ -35,6 +36,7 @@
     "paths": {
       "@js/*": ["./*"],
     },
+    "types": [],
   },
   "tsc-alias": {
     "verbose": false,
