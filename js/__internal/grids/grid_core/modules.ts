@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
 import $ from '@js/core/renderer';
 import Class from '@js/core/class';
 import Callbacks from '@js/core/utils/callbacks';
@@ -7,6 +8,12 @@ import { each } from '@js/core/utils/iterator';
 import messageLocalization from '@js/localization/message';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
+import type {
+  Module, ModuleType,
+  Controller as ControllerType,
+  ViewController as ViewControllerType,
+  View as ViewType,
+} from './module_types';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
@@ -170,9 +177,9 @@ const ModuleItem = Class.inherit({
   },
 });
 
-const Controller = ModuleItem;
+const Controller: ModuleType<ControllerType> = ModuleItem as any;
 
-const ViewController = Controller.inherit({
+const ViewController: ModuleType<ViewControllerType> = Controller.inherit({
   getView(name) {
     return this.component._views[name];
   },
@@ -182,7 +189,7 @@ const ViewController = Controller.inherit({
   },
 });
 
-const View = ModuleItem.inherit({
+const View: ModuleType<ViewType> = ModuleItem.inherit({
   _isReady() {
     return this.component.isReady();
   },
@@ -282,7 +289,7 @@ const View = ModuleItem.inherit({
   focus(preventScroll) {
     this.element().get(0).focus({ preventScroll });
   },
-});
+}) as any;
 
 const MODULES_ORDER_MAX_INDEX = 1000000;
 
@@ -371,6 +378,7 @@ export function processModules(
       .forEach(([name, type]) => {
         if (rootControllerTypes[name]) {
           throw errors.Error('E1001', moduleName, name);
+          // @ts-expect-error
         } else if (!type?.subclassOf?.(Controller)) {
           throw errors.Error('E1002', moduleName, name);
         }
