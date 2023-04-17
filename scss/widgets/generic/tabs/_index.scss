@@ -231,7 +231,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
       }
     }
 
-    .dx-tab.dx-tab-selected.dx-disabled-focused-next-tab {
+    .dx-tab.dx-tab-selected.dx-focused-next-tab {
       &:not(.dx-state-focused) {
         @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-shadow, $tab-selected-not-focused-left-rtl-shadow);
       }

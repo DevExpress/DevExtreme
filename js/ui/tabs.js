@@ -41,7 +41,7 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-const FOCUSED_NEXT_TAB_CLASS = 'dx-disabled-focused-next-tab';
+const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
 
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
