@@ -17,6 +17,8 @@ const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
 
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
 const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
 // STYLE dateRangeBox
@@ -142,7 +144,6 @@ class DateRangeBox extends Widget {
     }
 
     _initMarkup() {
-        super._initMarkup();
         this.$element()
             .addClass(DATERANGEBOX_CLASS)
             // TODO: remove next classes after adding styles
@@ -158,6 +159,8 @@ class DateRangeBox extends Widget {
         this._renderEndDateBox();
 
         this._renderButtonsContainer();
+
+        super._initMarkup();
     }
 
     _getStylingModePrefix() {
@@ -229,13 +232,20 @@ class DateRangeBox extends Widget {
     }
 
     _openHandler() {
+        this.getStartDateBox().focus();
+        // TODO: toggle open state here after click was handled with checking active inputs
         this.getStartDateBox().open();
+    }
+
+    _focusInHandler(e) {
+        super._focusInHandler(e);
     }
 
     _getDateBoxConfig() {
         const options = this.option();
 
         return {
+            // TODO: pass type option clearly
             acceptCustomValue: options.acceptCustomValue,
             activeStateEnabled: false,
             applyValueMode: options.applyValueMode,
@@ -305,12 +315,20 @@ class DateRangeBox extends Widget {
         };
     }
 
-    getStartDateBox() {
-        return this._startDateBox;
+    _focusTarget() {
+        return this.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
-    getEndDateBox() {
-        return this._endDateBox;
+    _focusEventTarget() {
+        return this.element();
+    }
+
+    _focusClassTarget() {
+        return this.$element();
+    }
+
+    _toggleFocusClass(isFocused, $element) {
+        super._toggleFocusClass(isFocused, this._focusClassTarget($element));
     }
 
     _cleanButtonContainers() {
@@ -360,7 +378,9 @@ class DateRangeBox extends Widget {
             case 'label':
             case 'labelMode':
             case 'maxLength':
+                break;
             case 'opened':
+                break;
             case 'openOnFieldClick':
             case 'placeholder':
             case 'readOnly':
@@ -388,8 +408,24 @@ class DateRangeBox extends Widget {
         }
     }
 
+    getStartDateBox() {
+        return this._startDateBox;
+    }
+
+    getEndDateBox() {
+        return this._endDateBox;
+    }
+
     getButton(name) {
         return this._buttonCollection.getButton(name);
+    }
+
+    open() {
+        this.option('opened', true);
+    }
+
+    close() {
+        this.option('opened', false);
     }
 }
 
