@@ -82,7 +82,6 @@ const TextEditorMask = TextEditorBase.inherit({
         const that = this;
 
         const keyHandlerMap = {
-            backspace: that._maskStrategy.getHandler('backspace'),
             del: that._maskStrategy.getHandler('del'),
             enter: that._changeHandler
         };

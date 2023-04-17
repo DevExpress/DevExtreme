@@ -228,8 +228,6 @@ export default class BaseMaskStrategy {
         return result;
     }
 
-    _backspaceHandler() { }
-
     _delHandler(event) {
         const { editor } = this;
 
