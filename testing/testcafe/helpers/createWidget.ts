@@ -43,6 +43,7 @@ export type WidgetName =
 | 'dxToolbar'
 | 'dxTreeView'
 | 'dxDateBox'
+| 'dxDateRangeBox'
 | 'dxLookup'
 | 'dxOverlay'
 | 'dxList'
