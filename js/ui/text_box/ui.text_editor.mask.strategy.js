@@ -10,6 +10,10 @@ const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', '
 const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
 const EVENT_NAMES = ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
 
+function getEmptyString(length) {
+    return ' '.repeat(length);
+}
+
 export default class BaseMaskStrategy {
     constructor(editor) {
         this.editor = editor;
@@ -70,7 +74,7 @@ export default class BaseMaskStrategy {
             this._updateEditorMask({
                 start: currentCaret.start,
                 length,
-                text: this._getEmptyString(length)
+                text: getEmptyString(length)
             });
 
             const beforeAdjustCaret = this._editorCaret();
@@ -92,7 +96,7 @@ export default class BaseMaskStrategy {
                 this._updateEditorMask({
                     start: currentCaret.start,
                     length,
-                    text: this._getEmptyString(length)
+                    text: getEmptyString(length)
                 });
             }
 
@@ -116,10 +120,6 @@ export default class BaseMaskStrategy {
         if(this.editorOption('text') === this._previousText) {
             event.stopImmediatePropagation();
         }
-    }
-
-    _getEmptyString(length) {
-        return Array(length + 1).join(' ');
     }
 
     _updateEditorMask(args) {
