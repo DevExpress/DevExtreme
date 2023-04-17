@@ -646,11 +646,27 @@ QUnit.module('\'opened\' option', moduleConfig, () => {
 
 QUnit.module('aria accessibility', moduleConfig, () => {
     QUnit.test('aria role for widget', function(assert) {
-        assert.strictEqual(this.$element.attr('role'), 'menubar');
+        assert.strictEqual(this.$element.attr('role'), 'button');
     });
 
     QUnit.test('aria-haspopup for widget', function(assert) {
         assert.strictEqual(this.$element.attr('aria-haspopup'), 'true');
+    });
+
+    QUnit.test('aria role for widget after Popup opening', function(assert) {
+        this.instance.option({ items: [1, 2, 3] });
+
+        this.overflowMenu.click();
+
+        assert.strictEqual(this.$element.attr('role'), 'button');
+    });
+
+    QUnit.test('aria role for popup', function(assert) {
+        this.instance.option({ items: [1, 2, 3] });
+
+        this.overflowMenu.click();
+
+        assert.strictEqual($(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).attr('role'), 'menu', 'element has role menu');
     });
 
     QUnit.test('aria role for list items', function(assert) {
