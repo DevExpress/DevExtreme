@@ -48,7 +48,7 @@ export default class MaskStrategy {
     }
 
     _beforeInputHandler() {
-        this._previousText = this.editorOption('text');
+        this._previousText = this._editorOption('text');
         this._prevCaret = this._editorCaret();
     }
 
@@ -80,7 +80,7 @@ export default class MaskStrategy {
             this._handleInsertTextInputEvent(originalEvent.data);
         }
 
-        if(this.editorOption('text') === this._previousText) {
+        if(this._editorOption('text') === this._previousText) {
             event.stopImmediatePropagation();
         }
     }
@@ -163,7 +163,7 @@ export default class MaskStrategy {
         } else {
             const caret = this.editor._maskRulesChain.first();
             this._caretTimeout = setTimeout(() => {
-                this.editorCaret({ start: caret, end: caret });
+                this._editorCaret({ start: caret, end: caret });
             }, 0);
         }
     }
@@ -197,7 +197,7 @@ export default class MaskStrategy {
     _dropHandler() {
         this._clearDragTimer();
         this._dragTimer = setTimeout(() => {
-            this.editorOption('value', this._convertToValue(this._input().val()));
+            this._editorOption('value', this._convertToValue(this._input().val()));
         });
     }
 
