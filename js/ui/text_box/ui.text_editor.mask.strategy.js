@@ -128,11 +128,15 @@ export default class MaskStrategy {
 
         this.editor.setForwardDirection();
 
-        this._updateEditorMask({
+        const hasValidChars = this._updateEditorMask({
             start: this._prevCaret?.start ?? 0,
             length: text.length || 1,
             text
         });
+
+        if(!hasValidChars) {
+            this._editorCaret(this._prevCaret);
+        }
     }
 
     _updateEditorMask(args) {
@@ -152,6 +156,8 @@ export default class MaskStrategy {
 
             this.editor._adjustCaret();
         }
+
+        return !!processedCharsCount;
     }
 
     _focusInHandler() {
