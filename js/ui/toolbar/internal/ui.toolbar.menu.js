@@ -260,7 +260,8 @@ export default class DropDownMenu extends Widget {
             activeStateEnabled: true,
             onItemRendered: this.option('onItemRendered'),
             _areaTarget: this.$element(),
-            _itemAttributes: { role: 'menuitem' }
+            _itemAttributes: { role: 'menuitem' },
+            _listAttributes: { role: 'button' },
         });
     }
 
