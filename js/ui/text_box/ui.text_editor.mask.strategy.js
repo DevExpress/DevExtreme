@@ -210,7 +210,7 @@ export default class MaskStrategy {
     _pasteHandler(event) {
         const { editor } = this;
 
-        if(editor.editorOption('disabled')) {
+        if(this._editorOption('disabled')) {
             return;
         }
 
