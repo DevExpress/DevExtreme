@@ -420,3 +420,25 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
 });
+
+QUnit.module('Public methods', moduleConfig, () => {
+    QUnit.test('Open() method should set opened option value to true', function(assert) {
+        this.reinit({
+            opened: false,
+        });
+
+        this.instance.open();
+
+        assert.strictEqual(this.instance.option('opened'), true, 'opened option has correct value');
+    });
+
+    QUnit.test('Close() methos should set opened option value to false', function(assert) {
+        this.reinit({
+            opened: true,
+        });
+
+        this.instance.close();
+
+        assert.strictEqual(this.instance.option('opened'), false, 'opened option has correct value');
+    });
+});

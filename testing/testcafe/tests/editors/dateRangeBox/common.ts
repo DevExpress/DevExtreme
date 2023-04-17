@@ -21,7 +21,6 @@ stylingModes.forEach((stylingMode) => {
   test(`DateRangeBox styles, stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.debug();
     await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
 
     // TODO: add states
