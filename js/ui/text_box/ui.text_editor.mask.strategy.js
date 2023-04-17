@@ -11,7 +11,7 @@ const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
 const EVENT_NAMES = ['focusIn', 'focusOut', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
 
 function getEmptyString(length) {
-    return ' '.repeat(length);
+    return EMPTY_CHAR.repeat(length);
 }
 
 export default class MaskStrategy {
