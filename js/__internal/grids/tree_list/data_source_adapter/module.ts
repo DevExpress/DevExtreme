@@ -19,7 +19,7 @@ const DEFAULT_KEY_EXPRESSION = 'id';
 
 const isFullBranchFilterMode = (that) => that.option('filterMode') === 'fullBranch';
 
-let DataSourceAdapterTreeList = (DataSourceAdapter as any).inherit((function () {
+let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function () {
   const getChildKeys = function (that, keys) {
     const childKeys: any[] = [];
 

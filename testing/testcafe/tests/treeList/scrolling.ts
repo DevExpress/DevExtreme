@@ -2,6 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import TreeList from '../../model/treeList';
 
 const scrollWindowTo = async (position: object) => {
@@ -44,7 +45,7 @@ function generateData(rowCount): Record<string, unknown>[] {
 }
 
 // T1129106
-test('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async (t) => {
+safeSizeTest('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async (t) => {
   // arrange, act
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

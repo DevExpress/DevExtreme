@@ -1635,7 +1635,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             }
         });
         this.clock.tick(300);
-        window.grid = dataGrid;
 
         dataGrid.pageIndex(1);
         this.clock.tick(10);

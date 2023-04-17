@@ -23,6 +23,7 @@ import {
 
 import {
     FilterType,
+    HeaderFilterSearchConfig,
     SummaryType,
 } from '../../common/grids';
 
@@ -382,7 +383,20 @@ export interface PivotGridDataSourceField {
      * @docid PivotGridDataSourceOptions.fields.headerFilter
      * @public
      */
-    headerFilter?: { allowSearch?: boolean; height?: number; width?: number };
+    headerFilter?: {
+        allowSearch?: boolean;
+        /**
+         * @docid PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll
+         * @default true
+         */
+        allowSelectAll?: boolean;
+        height?: number;
+        /**
+         * @docid PivotGridDataSourceOptions.fields.headerFilter.search
+         */
+        search?: HeaderFilterSearchConfig;
+        width?: number;
+    };
     /**
      * @docid PivotGridDataSourceOptions.fields.isMeasure
      * @default undefined
