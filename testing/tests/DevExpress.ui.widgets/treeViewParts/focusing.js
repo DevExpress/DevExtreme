@@ -246,9 +246,17 @@ QUnit.test('SelectAll item should be focused when focusing a treeview if showChe
         showCheckBoxesMode: 'selectAll'
     });
 
-    $treeView.trigger('focusin');
+    const clock = sinon.useFakeTimers();
 
-    assert.ok($(`.${SELECT_ALL_ITEM_CLASS}`).hasClass(FOCUSED_STATE_CLASS));
+    try {
+        $treeView.trigger('focusin');
+
+        clock.tick(10);
+
+        assert.ok($(`.${SELECT_ALL_ITEM_CLASS}`).hasClass(FOCUSED_STATE_CLASS));
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test('SelectAll item should be focused when focusing a treeview second time if showCheckBoxesMode:selectAll', function(assert) {
