@@ -30,10 +30,6 @@ export default class BaseMaskStrategy {
         this.editor._caret(newCaret);
     }
 
-    _getEventHandler(eventName) {
-        return this[`_${eventName}Handler`].bind(this);
-    }
-
     _attachChangeEventHandlers() {
         if(!this._editorOption('valueChangeEvent').split(' ').includes('change')) {
             return;
@@ -261,7 +257,7 @@ export default class BaseMaskStrategy {
         EVENT_NAMES.forEach((eventName) => {
             const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
 
-            EventsEngine.on($input, subscriptionName, this._getEventHandler(eventName));
+            EventsEngine.on($input, subscriptionName, this.getHandler(eventName));
         });
 
         this._attachChangeEventHandlers();
