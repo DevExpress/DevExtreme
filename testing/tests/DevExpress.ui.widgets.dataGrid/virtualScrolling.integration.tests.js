@@ -2330,7 +2330,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             rowTemplate: function(container, options) {
                 const tr = $(`<tr><td>${options.data.id}</td></tr>`).css('height', `${rowHeight}px`);
-                const tbody = $(`<tbody class='dx-row'></tbody>`).append(tr);
+                const tbody = $('<tbody class="dx-row"></tbody>').append(tr);
                 $(container).append(tbody);
             }
         });
