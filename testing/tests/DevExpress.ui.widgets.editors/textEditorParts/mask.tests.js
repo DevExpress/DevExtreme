@@ -515,7 +515,7 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(inputHandlerStub.callCount, 1, 'input event is fired');
     });
 
-    QUnit.test('input event should not be fired if input text was not changed because of mask', function(assert) {
+    QUnit.test('input event should not be fired if inputed char was not applied because of mask', function(assert) {
         const inputHandlerStub = sinon.stub();
 
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -554,7 +554,7 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
 
-    QUnit.test('input event should not be fired if existing char was inputed', function(assert) {
+    QUnit.test('input event should not be fired if already existing char was inputed', function(assert) {
         const inputHandlerStub = sinon.stub();
 
         const $textEditor = $('#texteditor').dxTextEditor({
