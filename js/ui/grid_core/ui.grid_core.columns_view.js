@@ -1,7 +1,7 @@
 import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
 import pointerEvents from '../../events/pointer';
@@ -383,7 +383,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderDelayedTemplatesCoreAsync: function(templates) {
         const that = this;
         if(templates.length) {
-            getWindow().setTimeout(function() {
+            getWindow().clearTimeout(that._templateTimeout);
+            that._templateTimeout = getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }
@@ -466,6 +467,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             model: options,
             deferred: templateDeferred,
             onRendered: () => {
+                if(that.component._disposed) return;
                 templateDeferred.resolve();
             }
         };
@@ -1178,5 +1180,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         return false;
+    },
+    dispose: function() {
+        if(hasWindow()) {
+            getWindow().clearTimeout(this._templateTimeout);
+        }
     }
 });

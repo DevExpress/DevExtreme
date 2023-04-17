@@ -7803,5 +7803,48 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
         assert.strictEqual($cells.eq(0).text(), 'test3', 'first cell text of the third row');
         assert.strictEqual($cells.eq(1).text(), '3', 'second cell text of the third row');
     });
+
+    // T1138639
+    QUnit.test('Remove templateTimeout on dispose', function(assert) {
+        // arrange
+        assert.expect(1);
+
+        const items = [
+            { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', null], rowType: 'data', dataIndex: 0 }
+        ];
+        const renderAsync = true;
+        const templatesRenderAsynchronously = true;
+        const $testElement = $('#container');
+        const column = {
+            name: 'test',
+            command: 'edit',
+            type: 'buttons',
+            buttons: [{
+                template: '#testTemplate'
+            }]
+        };
+        const columns = [{ dataField: 'name' }, column];
+        const rowsView = this.createRowsView(items, null, columns, null, { renderAsync, templatesRenderAsynchronously });
+        let isTemplateRendered = false;
+        columns[1] = $.extend({}, columns[1], column);
+        rowsView.component._getTemplate = function() {
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        isTemplateRendered = true;
+                    }, 50);
+                }
+            };
+        };
+
+
+        // act
+        rowsView.render($testElement, { changeType: 'refresh' });
+        rowsView.dispose();
+        this.clock.tick(150);
+
+        // assert
+        assert.ok(!isTemplateRendered, 'should not render template after dispose');
+    });
 });
 
