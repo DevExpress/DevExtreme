@@ -9,6 +9,7 @@ const EMPTY_CHAR = ' ';
 const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'];
 const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
 const EVENT_NAMES = ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
+
 export default class BaseMaskStrategy {
     constructor(editor) {
         this.editor = editor;
@@ -43,7 +44,7 @@ export default class BaseMaskStrategy {
     }
 
     _beforeInputHandler() {
-        this._previousText = this.editor.option('text');
+        this._previousText = this.editorOption('text');
         this._prevCaret = this._editorCaret();
     }
 
@@ -112,7 +113,7 @@ export default class BaseMaskStrategy {
             }
         }
 
-        if(this.editor.option('text') === this._previousText) {
+        if(this.editorOption('text') === this._previousText) {
             event.stopImmediatePropagation();
         }
     }
@@ -189,7 +190,7 @@ export default class BaseMaskStrategy {
     _pasteHandler(event) {
         const { editor } = this;
 
-        if(editor.option('disabled')) {
+        if(editor.editorOption('disabled')) {
             return;
         }
 
