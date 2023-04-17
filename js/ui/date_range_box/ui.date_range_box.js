@@ -1,4 +1,3 @@
-/* eslint-disable no-this-before-super */
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -17,6 +16,8 @@ const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
+
+const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
 // STYLE dateRangeBox
 
@@ -61,7 +62,7 @@ class DateRangeBox extends Widget {
 
             label: '',
 
-            labelMode: 'static',
+            labelMode: 'static', // 'static' | 'floating' | 'hidden'
 
             max: undefined,
 
@@ -85,7 +86,7 @@ class DateRangeBox extends Widget {
 
             startDate: null,
 
-            stylingMode: config().editorStylingMode || 'outlined',
+            stylingMode: config().editorStylingMode || 'outlined', // 'outlined' | 'underlined' | 'filled'
 
             text: '',
 
@@ -146,15 +147,44 @@ class DateRangeBox extends Widget {
             .addClass(DATERANGEBOX_CLASS)
             // TODO: remove next classes after adding styles
             .addClass('dx-texteditor')
-            .addClass('dx-editor-outlined')
             .addClass('dx-datebox-date')
             .addClass('dx-dropdowneditor');
+
+        this._renderStylingMode();
+        // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
         this._renderStartDateBox();
         this._renderSeparator();
         this._renderEndDateBox();
 
         this._renderButtonsContainer();
+    }
+
+    _getStylingModePrefix() {
+        return `${DATERANGEBOX_CLASS}-`;
+    }
+
+    // TODO: extract this part from Editor to separate file and use it here
+    _renderStylingMode() {
+        const optionName = 'stylingMode';
+        const optionValue = this.option(optionName);
+        const prefix = this._getStylingModePrefix();
+
+        const allowedStylingClasses = ALLOWED_STYLING_MODES.map((mode) => {
+            return prefix + mode;
+        });
+
+        allowedStylingClasses.forEach(className => this.$element().removeClass(className));
+
+        let stylingModeClass = prefix + optionValue;
+
+        if(allowedStylingClasses.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            stylingModeClass = prefix + (platformOptionValue || defaultOptionValue);
+        }
+
+        this.$element().addClass(stylingModeClass);
     }
 
     _renderStartDateBox() {
@@ -227,7 +257,7 @@ class DateRangeBox extends Widget {
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
-            stylingMode: options.stylingMode,
+            stylingMode: 'underlined',
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
@@ -252,7 +282,7 @@ class DateRangeBox extends Widget {
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[0],
-            label: '',
+            label: 'Start Date', // TODO: for test purpose only. change value to ''
         };
     }
 
@@ -270,7 +300,7 @@ class DateRangeBox extends Widget {
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[1],
-            label: '',
+            label: 'End Date', // TODO: for test purpose only. change value to ''
         };
     }
 
@@ -336,7 +366,10 @@ class DateRangeBox extends Widget {
             case 'showClearButton':
             case 'spellcheck':
             case 'startDate':
+                break;
             case 'stylingMode':
+                this._renderStylingMode();
+                break;
             case 'text':
             case 'todayButtonText':
             case 'useHiddenSubmitElement':
