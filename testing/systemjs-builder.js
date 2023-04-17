@@ -1,5 +1,5 @@
-const path = require('path');
-const fs = require('fs');
+const path = require('node:path/posix');
+const fs = require('node:fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
 
