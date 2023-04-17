@@ -529,8 +529,8 @@ QUnit.module('typing', moduleConfig, () => {
         caretWorkaround($input);
 
         keyboard
-            .caret(1)
-            .type('1');
+            .caret(0)
+            .type('w');
 
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
