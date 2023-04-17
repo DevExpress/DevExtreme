@@ -14,7 +14,7 @@ function getEmptyString(length) {
     return ' '.repeat(length);
 }
 
-export default class BaseMaskStrategy {
+export default class MaskStrategy {
     constructor(editor) {
         this.editor = editor;
     }
