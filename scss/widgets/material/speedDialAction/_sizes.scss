@@ -1,4 +1,20 @@
 @use "../sizes" as *;
 
 // adduse
-$material-main-fa-button-size: 56px !default;
+
+$material-main-fa-button-label-padding: null !default;
+$material-main-fa-button-size: null !default;
+
+$material-fa-button-label-font-size: null !default;
+
+@if $size == "default" {
+  $material-main-fa-button-size: 56px !default;
+  $material-main-fa-button-label-padding: 0 24px 0 8px;
+  $material-fa-button-label-font-size: 14px;
+}
+
+@else if $size == "compact" {
+  $material-main-fa-button-size: 42px !default;
+  $material-main-fa-button-label-padding: 0 20px 0 8px;
+  $material-fa-button-label-font-size: 12px;
+}

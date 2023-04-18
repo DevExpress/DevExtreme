@@ -33,11 +33,11 @@ const createSeries = function(options, renderSettings) {
         },
         hoverStyle: {
             hatching: 'h-hatching',
-            lightening: true,
+            highlight: true,
         },
         selectionStyle: {
             hatching: 's-hatching',
-            lightening: true,
+            highlight: true,
         },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'

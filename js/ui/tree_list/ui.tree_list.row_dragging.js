@@ -1,4 +1,1 @@
-import gridCore from './ui.tree_list.core';
-import { rowDraggingModule } from '../grid_core/row_dragging/module';
-
-gridCore.registerModule('rowDragging', rowDraggingModule);
+import '../../__internal/grids/tree_list/module_not_extended/row_dragging';

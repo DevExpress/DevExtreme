@@ -104,6 +104,7 @@ jobs:
         CONSTEL: ${{ matrix.CONSTEL }}
         NORENOVATION: "false"
         GITHUBACTION: "true"
+        NO_CSP: "true"
         TARGET: "test"
       run: |
         chmod +x ./docker-ci.sh

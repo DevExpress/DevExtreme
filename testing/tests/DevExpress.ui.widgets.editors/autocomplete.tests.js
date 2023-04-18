@@ -19,7 +19,7 @@ QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
             <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="widthRootStyle"></div>\
             <div id="autocomplete"></div>\
         \
         <div id="autocomplete2"></div>\
@@ -41,6 +41,7 @@ QUnit.testStart(() => {
     </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -655,6 +656,46 @@ QUnit.module('dxAutocomplete', {
             assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event is not prevented');
             assert.notOk(this.keyboard.event.isPropagationStopped(), 'propogation is not stopped');
         });
+    });
+
+    QUnit.test('popup should be opened after press alt + arrow down', function(assert) {
+        const keyboard = this.keyboard;
+        const keyDownConfig = { key: KEY_DOWN, altKey: true };
+
+        keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+        assert.strictEqual(this.instance.option('opened'), true);
+    });
+
+    QUnit.test('popup should be closed after press alt + arrow up', function(assert) {
+        const keyboard = this.keyboard;
+        const keyDownConfig = { key: KEY_DOWN, altKey: true };
+        const keyUpConfig = { key: KEY_UP, altKey: true };
+
+        keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+        keyboard.keyDown(keyUpConfig.key, keyUpConfig);
+
+        assert.strictEqual(this.instance.option('opened'), false);
+    });
+
+    QUnit.test('should fire open/close events after open/close popup by keyboard', function(assert) {
+        assert.expect(2);
+
+        this.instance.option({
+            onOpened() {
+                assert.ok(true, 'event on open was fired');
+            },
+            onClosed() {
+                assert.ok(true, 'event on closed was fired');
+            }
+        });
+
+        const keyboard = this.keyboard;
+        const keyDownConfig = { key: KEY_DOWN, altKey: true };
+        const keyUpConfig = { key: KEY_UP, altKey: true };
+
+        keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+        keyboard.keyDown(keyUpConfig.key, keyUpConfig);
     });
 
     QUnit.testInActiveWindow('enter - prevent default', function(assert) {
@@ -1579,13 +1620,15 @@ QUnit.module('widget sizing render', {
     });
 
     QUnit.testInActiveWindow('filter is not reset', function(assert) {
-        const $fixture = $('#qunit-fixture');
-        const requiredCSS = $('<style>.dx-popup-content {padding: 0 !important;border: none !important;margin: 0 !important;</style>');
-        requiredCSS.appendTo($fixture);
-
         const $element = $('#widget').dxAutocomplete({
             items: ['Congo', 'Canada', 'Zimbabwe'],
             searchTimeout: 0
+        });
+
+        $element.find('.dx-popup-content').css({
+            padding: '0 !important',
+            border: 'none !important',
+            margin: '0 !important'
         });
 
         const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);

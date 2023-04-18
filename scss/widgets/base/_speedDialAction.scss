@@ -10,7 +10,6 @@
   $action-button-size,
   $icon-size,
   $font-size,
-  $label-height,
   $label-padding,
   $label-offset,
   $speed-dial-action-color,
@@ -85,8 +84,14 @@
 
           .dx-fa-button-icon,
           .dx-fa-button-icon-close {
-            padding: math.div($main-action-button-size - $icon-size, 2) 0 math.div($main-action-button-size - $icon-size, 2) 12px;
+            padding: math.div($main-action-button-size - $icon-size, 2) 0 math.div($main-action-button-size - $icon-size, 2) math.div($main-action-button-size - $icon-size, 2);
           }
+        }
+      }
+
+      &.dx-fa-button-without-icon {
+        .dx-fa-button-icon {
+          width: 0;
         }
       }
     }
@@ -155,10 +160,8 @@
           border-radius: 4px;
           padding: $label-padding;
           margin-right: $label-offset;
-          line-height: $label-height;
-          height: $label-height;
           box-shadow: $speed-dial-action-label-shadow;
-          font-size: $font-size - 2;
+          font-size: $font-size;
         }
       }
 

@@ -11,6 +11,7 @@
 @use "../checkBox/colors" as *;
 @use "../../base/list" as *;
 @use "../../base/list/mixins" as *;
+@use "../radioGroup/colors" as *;
 
 // adduse
 @use "../badge";
@@ -121,6 +122,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     }
 
     &.dx-list-select-decorator-enabled {
+      .dx-list-select-all,
       .dx-list-item {
         &.dx-state-hover {
           .dx-radiobutton-icon::before {
@@ -129,6 +131,20 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
         }
 
         &.dx-state-focused {
+          .dx-radiobutton {
+            .dx-radiobutton-icon::after {
+              background-color: color.change($base-text-color, $alpha: 0.1);
+              transform: scale(1);
+            }
+
+            &.dx-radiobutton-checked {
+              .dx-radiobutton-icon::after {
+                background-color: color.change($radiogroup-checked-bg, $alpha: 0.1);
+                transform: scale(1);
+              }
+            }
+          }
+
           .dx-checkbox {
             .dx-checkbox-icon::after {
               background-color: color.change($checkbox-border-color, $alpha: 0.1);

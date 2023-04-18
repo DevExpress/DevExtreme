@@ -35,16 +35,6 @@ function updateSelectAllState(e, filterValues) {
     }
 }
 
-function isSearchEnabled(that, options) {
-    const headerFilter = options.headerFilter;
-
-    if(headerFilter && isDefined(headerFilter.allowSearch)) {
-        return headerFilter.allowSearch;
-    }
-
-    return that.option('headerFilter.allowSearch');
-}
-
 export function updateHeaderFilterItemSelectionState(item, filterValuesMatch, isExcludeFilter) {
     if(filterValuesMatch ^ isExcludeFilter) {
         item.selected = true;
@@ -168,10 +158,16 @@ export const HeaderFilterView = modules.View.inherit({
         }
     },
 
-    _getSearchExpr: function(options) {
+    _getSearchExpr: function(options, headerFilterOptions) {
         const lookup = options.lookup;
         const useDefaultSearchExpr = options.useDefaultSearchExpr;
-        const headerFilterDataSource = options.headerFilter && options.headerFilter.dataSource;
+
+        const headerFilterDataSource = headerFilterOptions.dataSource;
+        const filterSearchExpr = headerFilterOptions.search.searchExpr;
+
+        if(filterSearchExpr) {
+            return filterSearchExpr;
+        }
 
         if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
             return DEFAULT_SEARCH_EXPRESSION;
@@ -200,9 +196,10 @@ export const HeaderFilterView = modules.View.inherit({
     _initializePopupContainer: function(options) {
         const that = this;
         const $element = that.element();
-        const headerFilterOptions = that.option('headerFilter');
-        const width = options.headerFilter && options.headerFilter.width || headerFilterOptions && headerFilterOptions.width;
-        const height = options.headerFilter && options.headerFilter.height || headerFilterOptions && headerFilterOptions.height;
+
+        const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
+        const { height, width } = headerFilterOptions;
+
         const dxPopupOptions = {
             width: width,
             height: height,
@@ -213,9 +210,8 @@ export const HeaderFilterView = modules.View.inherit({
             hideOnParentScroll: false, // T756320
             dragEnabled: false,
             hideOnOutsideClick: true,
+            wrapperAttr: { class: HEADER_FILTER_MENU_CLASS },
             focusStateEnabled: false,
-            copyRootClassesToWrapper: true,
-            _ignoreCopyRootClassesToWrapperDeprecation: true,
             toolbarItems: [
                 {
                     toolbar: 'bottom', location: 'after', widget: 'dxButton', options: {
@@ -235,7 +231,7 @@ export const HeaderFilterView = modules.View.inherit({
             resizeEnabled: true,
             onShowing: function(e) {
                 e.component.$content().parent().addClass('dx-dropdowneditor-overlay');
-                that._initializeListContainer(options);
+                that._initializeListContainer(options, headerFilterOptions);
                 options.onShowing && options.onShowing(e);
             },
             onShown: function() {
@@ -256,13 +252,15 @@ export const HeaderFilterView = modules.View.inherit({
         }
     },
 
-    _initializeListContainer: function(options) {
+    _initializeListContainer: function(options, headerFilterOptions) {
         const that = this;
         const $content = that._popupContainer.$content();
+        const needShowSelectAllCheckbox = !options.isFilterBuilder && headerFilterOptions.allowSelectAll;
         const widgetOptions = {
-            searchEnabled: isSearchEnabled(that, options),
-            searchTimeout: that.option('headerFilter.searchTimeout'),
-            searchMode: options.headerFilter && options.headerFilter.searchMode || '',
+            searchEnabled: headerFilterOptions.search.enabled,
+            searchTimeout: headerFilterOptions.search.timeout,
+            searchEditorOptions: headerFilterOptions.search.editorOptions,
+            searchMode: headerFilterOptions.search.mode || '',
             dataSource: options.dataSource,
             onContentReady: function() {
                 that.renderCompleted.fire();
@@ -279,7 +277,7 @@ export const HeaderFilterView = modules.View.inherit({
 
         function onOptionChanged(e) {
             // T835492, T833015
-            if(e.fullName === 'searchValue' && !options.isFilterBuilder && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
+            if(e.fullName === 'searchValue' && needShowSelectAllCheckbox && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
                 if(options.type === 'tree') {
                     e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
                 } else {
@@ -291,17 +289,17 @@ export const HeaderFilterView = modules.View.inherit({
         if(options.type === 'tree') {
             that._listContainer = that._createComponent($('<div>').appendTo($content),
                 TreeView, extend(widgetOptions, {
-                    showCheckBoxesMode: options.isFilterBuilder ? 'normal' : 'selectAll',
+                    showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
                     onOptionChanged: onOptionChanged,
                     keyExpr: 'id'
                 }));
         } else {
             that._listContainer = that._createComponent($('<div>').appendTo($content),
                 List, extend(widgetOptions, {
-                    searchExpr: that._getSearchExpr(options),
+                    searchExpr: that._getSearchExpr(options, headerFilterOptions),
                     pageLoadMode: 'scrollBottom',
                     showSelectionControls: true,
-                    selectionMode: options.isFilterBuilder ? 'multiple' : 'all',
+                    selectionMode: needShowSelectAllCheckbox ? 'all' : 'multiple',
                     onOptionChanged: onOptionChanged,
                     onSelectionChanged: function(e) {
                         const items = e.component.option('items');
@@ -358,6 +356,28 @@ export const HeaderFilterView = modules.View.inherit({
                     }
                 }));
         }
+    },
+
+    _normalizeHeaderFilterOptions(options) {
+        const generalHeaderFilter = this.option('headerFilter') || {};
+        const specificHeaderFilter = options.headerFilter || {};
+
+        const generalDeprecated = {
+            search: {
+                enabled: generalHeaderFilter.allowSearch,
+                timeout: generalHeaderFilter.searchTimeout,
+            }
+        };
+
+        const specificDeprecated = {
+            search: {
+                enabled: specificHeaderFilter.allowSearch,
+                mode: specificHeaderFilter.searchMode,
+                timeout: specificHeaderFilter.searchTimeout
+            }
+        };
+
+        return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
     },
 
     _renderCore: function() {

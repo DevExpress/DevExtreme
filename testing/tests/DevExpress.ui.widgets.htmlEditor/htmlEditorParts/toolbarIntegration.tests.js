@@ -619,7 +619,7 @@ export default function() {
             });
             const linkHref = $container.find('a').attr('href');
 
-            assert.strictEqual(linkHref, '')
+            assert.strictEqual(linkHref, '');
         });
 
         test('href should be empty on empty URL input submit (T1134100)', function(assert) {
@@ -671,6 +671,28 @@ export default function() {
 
             const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
 
+            assert.strictEqual(linkText, $textInput.val());
+        });
+
+        test('Add link dialog should contains info about link when cursor is placed on right border of link(T1157840)', function(assert) {
+            const linkText = 'text';
+            const linkAddress = 'http://devexpress.com';
+            const $htmlEditor = $('#htmlEditor');
+            const htmlEditor = $htmlEditor.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: `<a href="${linkAddress}">${linkText}</a>`,
+            }).dxHtmlEditor('instance');
+
+            htmlEditor.setSelection(linkText.length, 0);
+
+            const $linkFormatButton = $htmlEditor.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $formInputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+            const $linkAddressInput = $formInputs.first();
+            const $textInput = $formInputs.last();
+
+            assert.strictEqual(linkAddress, $linkAddressInput.val());
             assert.strictEqual(linkText, $textInput.val());
         });
 

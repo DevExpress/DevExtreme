@@ -109,7 +109,7 @@ const optionComparer = {
         assert.strictEqual(getPopupInstance(editor).option('contentTemplate'), null, 'popup contentTemplate is correct');
     },
     title: function(assert, editor) {
-        if(editor.NAME === 'dxDateBox') {
+        if(editor.NAME === 'dxDateBox' || editor.NAME === 'dxDateRangeBox') {
             skipTesting(assert);
             return;
         }
@@ -118,7 +118,7 @@ const optionComparer = {
         assert.strictEqual(getPopupInstance(editor).option('title'), '', 'popup title is correct');
     },
     showTitle: function(assert, editor) {
-        if(editor.NAME === 'dxDateBox') {
+        if(editor.NAME === 'dxDateBox' || editor.NAME === 'dxDateRangeBox') {
             skipTesting(assert);
             return;
         }

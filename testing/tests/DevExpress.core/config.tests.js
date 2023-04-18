@@ -88,3 +88,41 @@ QUnit.test('deprecated fields', function(assert) {
         errors.log = originalLog;
     }
 });
+
+QUnit.test('DevExpress.config.optionsParser works correct', function(assert) {
+    const optionsParser = DevExpress.config().optionsParser;
+
+    const testData = [
+        [
+            'dxTemplate: { "name": "title" }',
+            { 'dxTemplate': { 'name': 'title' } },
+        ],
+        [
+            `'dxTemplate': {
+               name: "title",
+               max-count: 123,
+               isOpen: true,
+               test: {
+                arr: ['a1', 'a2', true, 123],
+               },
+              }`,
+            { 'dxTemplate': { name: 'title', 'max-count': 123, isOpen: true, test: { arr: ['a1', 'a2', true, 123] } } },
+        ],
+        [
+            '"dxTemplate": { "name": "title" }',
+            { 'dxTemplate': { 'name': 'title' } }
+        ],
+        [
+            `{
+              "dxTemplate": {
+                "name": "title"
+               }
+              }`,
+            { 'dxTemplate': { 'name': 'title' } }
+        ]
+    ];
+
+    testData.forEach(([optionsString, etalon]) => {
+        assert.deepEqual(optionsParser(optionsString), etalon);
+    });
+});

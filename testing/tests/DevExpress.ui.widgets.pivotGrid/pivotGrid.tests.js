@@ -732,8 +732,10 @@ QUnit.module('dxPivotGrid', {
             dataSource: this.dataSource,
             allowFiltering: true,
             headerFilter: {
-                allowSearch: true,
-                searchTimeout: 300
+                search: {
+                    enabled: true,
+                    timeout: 300
+                }
             },
             fieldPanel: {
                 visible: true
@@ -830,7 +832,9 @@ QUnit.module('dxPivotGrid', {
             dataSource: this.dataSource,
             allowFiltering: true,
             headerFilter: {
-                allowSearch: true,
+                search: {
+                    enabled: true
+                }
             },
             fieldPanel: {
                 visible: true
@@ -844,7 +848,7 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok($('.dx-header-filter-menu').find('.dx-list-search').length, 'headerFilter has searchBox');
 
-        pivotGrid.option('headerFilter.allowSearch', false);
+        pivotGrid.option('headerFilter.search.enabled', false);
 
         $('#pivotGrid').find('.dx-header-filter').first().trigger('dxclick');
         this.clock.tick(500);
@@ -857,7 +861,9 @@ QUnit.module('dxPivotGrid', {
             dataSource: this.dataSource,
             allowFiltering: true,
             headerFilter: {
-                allowSearch: true,
+                search: {
+                    enabled: true
+                }
             },
             fieldChooser: {
                 enabled: true
@@ -875,7 +881,7 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok($('.dx-header-filter-menu').find('.dx-list-search').length, 'headerFilter has searchBox');
 
-        pivotGrid.option('headerFilter.allowSearch', false);
+        pivotGrid.option('headerFilter.search.enabled', false);
 
         $(fieldChooserPopup.content()).find('.dx-header-filter').first().trigger('dxclick');
         this.clock.tick(500);

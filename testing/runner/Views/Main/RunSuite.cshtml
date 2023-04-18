@@ -6,9 +6,10 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var npmModule = Model.NoRenovation
-        ? "transpiled"
-        : "transpiled-renovation";
+
+    var renovationPart = Model.NoRenovation ? "" : "-renovation";
+    var cspPart = Model.NoCsp ? "" : "-systemjs";
+    var npmModule = "transpiled" + renovationPart + cspPart;
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -17,13 +18,19 @@
         return Url.Content("~/artifacts/js/jquery.js");
     }
 
+    string GetTestUrl() {
+        return Model.NoCsp
+            ? Url.Content(Model.ScriptVirtualPath)
+            : Url.Content(Model.ScriptVirtualPath.Replace("/testing/", "/artifacts/transpiled-testing/"));
+    }
+
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
-
-                yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
-                yield return Url.Content("~/testing/helpers/argumentsValidator.js");
-                yield return Url.Content("~/testing/helpers/dataPatch.js");
+                var testingBasePath = Model.NoCsp ? "~/testing/" : "~/artifacts/transpiled-testing/";
+                yield return Url.Content(testingBasePath + "helpers/jQueryEventsPatch.js");
+                yield return Url.Content(testingBasePath + "helpers/argumentsValidator.js");
+                yield return Url.Content(testingBasePath + "helpers/dataPatch.js");
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
@@ -36,11 +43,14 @@
 }
 <!DOCTYPE html>
 <head>
+    @if(!Model.NoCsp) {
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-M5H5tE' 'nonce-TEiwcJ' 'nonce-IpCks6' 'nonce-Z27qXj'; style-src 'self' https://fonts.googleapis.com 'nonce-tYGMxb' 'nonce-qunit-extension'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://js.devexpress.com/" />
+    }
     <title>@Model.Title - QUnit test page</title>
     <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.css")" />
     <script src="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.js")"></script>
 
-    <script>
+    <script nonce="M5H5tE">
         window.ROOT_URL = "@Url.Content("~/")";
         window.farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration));
         window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
@@ -50,7 +60,7 @@
     </script>
     <script src="@Url.ContentWithCacheBuster("~/testing/helpers/qunitExtensions.js")"></script>
 
-    <style>
+    <style nonce="tYGMxb">
         #qunit-fixture.qunit-fixture-visible {
             position: fixed !important;
             left: 0 !important;
@@ -75,7 +85,7 @@
         }
     </style>
 
-    <script>
+    <script nonce="TEiwcJ">
         (function() {
             var doneCount = 0,
                 parentWindow = window.opener || window.parent;
@@ -120,6 +130,12 @@
                 tooltip: "Use norenovation components with old tests",
             });
 
+            QUnit.config.urlConfig.push({
+                id: "nocsp",
+                label: "No CSP",
+                tooltip: "Use noscp components without CSP checks",
+            });
+
             function notifyExtraDoneCall() {
                 var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
 
@@ -136,8 +152,13 @@
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
-    <script>
+    @if (Model.NoCsp) {
+        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+    } else {
+        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system-csp-production.js")"></script>
+    }
+
+    <script nonce="IpCks6">
         (function() {
             jQuery.noConflict();
 
@@ -151,12 +172,25 @@
                 }
             }
 
-            var baseURL = QUnit.urlParams.norenovation
-                ? '@Url.Content("~/artifacts/transpiled")'
-                : '@Url.Content("~/artifacts/transpiled-renovation")';
+            const cspMap = '@Model.NoCsp' !== 'True' ? {
+                'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+
+                'css': '@Url.Content("~/artifacts/css-systemjs/css.js")',
+                'generic_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.light.css")',
+                'material_blue_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.material.blue.light.css")',
+
+                'json': '@Url.Content("~/artifacts/css-systemjs/json.js")',
+            } : {};
+
+            const cspPackages = '@Model.NoCsp' !== 'True' ? {
+                '@@devextreme/runtime/inferno': {
+                    main: '../../../../artifacts/transpiled-systemjs/runtime/inferno/index.js',
+                    defaultExtension: 'js'
+                },
+            } : {};
 
             SystemJS.config({
-                baseURL: baseURL,
+                baseURL: "@Url.Content("~/artifacts/" + npmModule)",
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
@@ -166,13 +200,6 @@
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
-                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
-                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
-                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
-                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
-                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
-                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
-                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
                     '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
@@ -192,6 +219,15 @@
                     'devextreme-showdown': '@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")',
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
+                    // Inferno
+                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
+                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
+
                     // Global CSS
                     'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/artifacts/css/dx.material.blue.light.css")',
@@ -201,7 +237,8 @@
                     'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
                     'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
                     'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
-                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
+                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")',
+                    ...cspMap,
                 },
                 packages: {
                     '@@devextreme/runtime/common': {
@@ -253,6 +290,8 @@
                     'events': {
                         main: 'index'
                     },
+
+                    ...cspPackages,
                 },
                 packageConfigPaths: [
                     "@@devextreme/*/package.json",
@@ -278,8 +317,11 @@
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
 
-<script>
+<script nonce="Z27qXj">
     (function() {
+        // It is required to avoid calling eval in exceljs lib
+        window.regeneratorRuntime = null;
+
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
         var imports = integrationImportPaths.map(function(importPath) {
@@ -298,7 +340,7 @@
                 return;
             }
 
-            return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
+            return SystemJS.import("@GetTestUrl()");
         })
         .then(function() {
             QUnit.start();
@@ -309,6 +351,5 @@
                 throw err;
             });
         });
-
     })();
 </script>

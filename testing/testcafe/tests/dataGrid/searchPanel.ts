@@ -4,6 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { changeTheme } from '../../helpers/changeTheme';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { Themes } from './helpers/themes';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../container.html'));
@@ -27,7 +28,7 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [800, 800]).before(async () => {
-  await changeTheme('material.blue.light');
+  await changeTheme(Themes.materialBlue);
 
   return createWidget('dxDataGrid', {
     dataSource: [{ column1: 'first' }],
@@ -49,4 +50,4 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
       },
     },
   });
-});
+}).after(async () => { await changeTheme(Themes.genericLight); });

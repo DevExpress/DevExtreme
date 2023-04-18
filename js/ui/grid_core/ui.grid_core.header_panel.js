@@ -1,4 +1,3 @@
-// @ts-check
 
 import $ from '../../core/renderer';
 import Toolbar from '../toolbar';
@@ -217,7 +216,9 @@ const members = {
         return !!(this._toolbarOptions && this._toolbarOptions.visible);
     },
 
-    allowDragging: noop
+    allowDragging: noop,
+
+    hasGroupedColumns: noop,
 };
 
 const HeaderPanel = ColumnsView.inherit(members);

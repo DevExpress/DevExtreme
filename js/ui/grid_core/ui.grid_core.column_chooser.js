@@ -1,4 +1,3 @@
-// @ts-check
 
 import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
@@ -27,14 +26,12 @@ const COLUMN_CHOOSER_SELECT_CLASS = 'column-chooser-mode-select';
 const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
-const TREEVIEW_NODE_SELECTOR = '.dx-treeview-node';
-const CHECKBOX_SELECTOR = '.dx-checkbox';
-
 const CLICK_TIMEOUT = 300;
 
 const processItems = function(that, chooserColumns) {
     const items = [];
-    const isSelectMode = that.option('columnChooser.mode') === 'select';
+    const isSelectMode = that.isSelectMode();
+    const isRecursive = that.option('columnChooser.selection.recursive');
 
     if(chooserColumns.length) {
         each(chooserColumns, function(index, column) {
@@ -44,12 +41,13 @@ const processItems = function(that, chooserColumns) {
                 allowHiding: column.allowHiding,
                 expanded: true,
                 id: column.index,
-                disabled: false,
-                disableCheckBox: column.allowHiding === false,
+                disabled: column.allowHiding === false,
                 parentId: isDefined(column.ownerBand) ? column.ownerBand : null
             };
 
-            if(isSelectMode) {
+            const isRecursiveWithColumns = isRecursive && column.hasColumns;
+
+            if(isSelectMode && !isRecursiveWithColumns) {
                 item.selected = column.visible;
             }
 
@@ -96,8 +94,9 @@ const columnChooserControllerMembers = {
 
     getPosition: function() {
         const rowsView = this.getView('rowsView');
+        const position = this.option('columnChooser.position');
 
-        return {
+        return isDefined(position) ? position : {
             my: 'right bottom',
             at: 'right bottom',
             of: rowsView && rowsView.element(),
@@ -105,7 +104,7 @@ const columnChooserControllerMembers = {
             offset: '-2 -2',
             boundaryOffset: '2 2'
         };
-    }
+    },
 };
 const ColumnChooserController = modules.ViewController.inherit(columnChooserControllerMembers);
 
@@ -123,7 +122,7 @@ const columnChooserMembers = {
     _updateList: function(change) {
         let items;
         const $popupContent = this._popupContainer.$content();
-        const isSelectMode = this.option('columnChooser.mode') === 'select';
+        const isSelectMode = this.isSelectMode();
         const columnChooserList = this._columnChooserList;
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
@@ -159,7 +158,8 @@ const columnChooserMembers = {
 
     _initializePopupContainer: function() {
         const that = this;
-        const $element = that.element().addClass(that.addWidgetPrefix(COLUMN_CHOOSER_CLASS));
+        const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
+        const $element = that.element().addClass(columnChooserClass);
         const columnChooserOptions = that.option('columnChooser');
         const themeName = current();
         const isGenericTheme = isGeneric(themeName);
@@ -170,8 +170,7 @@ const columnChooserMembers = {
             showCloseButton: false,
             dragEnabled: true,
             resizeEnabled: true,
-            copyRootClassesToWrapper: true,
-            _ignoreCopyRootClassesToWrapperDeprecation: true,
+            wrapperAttr: { class: columnChooserClass },
             toolbarItems: [
                 { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' }
             ],
@@ -218,7 +217,11 @@ const columnChooserMembers = {
     _renderTreeView: function($container, items) {
         const that = this;
         const columnChooser = this.option('columnChooser');
-        const isSelectMode = columnChooser.mode === 'select';
+        const isSelectMode = this.isSelectMode();
+
+        const searchEnabled = isDefined(columnChooser.allowSearch) ? columnChooser.allowSearch : columnChooser.search?.enabled;
+        const searchTimeout = isDefined(columnChooser.searchTimeout) ? columnChooser.searchTimeout : columnChooser.search?.timeout;
+
         /**
          * @type {import('../tree_view').Options}
          */
@@ -231,31 +234,9 @@ const columnChooserMembers = {
             itemTemplate: 'item',
             showCheckBoxesMode: 'none',
             rootValue: null,
-            searchEnabled: columnChooser.allowSearch,
-            searchTimeout: columnChooser.searchTimeout,
-            onItemRendered: function(e) {
-                // @ts-expect-error
-                if(e.itemData.disableCheckBox) {
-                    // @ts-expect-error
-                    const $treeViewNode = $(e.itemElement).closest(TREEVIEW_NODE_SELECTOR);
-                    let $checkBox;
-
-                    if($treeViewNode.length) {
-
-                        $checkBox = $treeViewNode.find(CHECKBOX_SELECTOR);
-
-                        if($checkBox.length) {
-                            /**
-                             * @type {import('../check_box').default}
-                             */
-                            // @ts-expect-error
-                            const checkBoxInstance = $checkBox.data('dxCheckBox');
-
-                            checkBoxInstance && checkBoxInstance.option('disabled', true);
-                        }
-                    }
-                }
-            }
+            searchEnabled: searchEnabled,
+            searchTimeout: searchTimeout,
+            searchEditorOptions: columnChooser.search?.editorOptions,
         };
 
         const scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
@@ -319,30 +300,78 @@ const columnChooserMembers = {
 
     _prepareSelectModeConfig: function() {
         const that = this;
-        const selectionChangedHandler = function(e) {
-            const visibleColumns = that._columnsController.getVisibleColumns().filter(function(item) { return !item.command; });
-            const isLastColumnUnselected = visibleColumns.length === 1 && !e.itemData.selected;
+        const selectionOptions = this.option('columnChooser.selection') || {};
 
-            if(isLastColumnUnselected) {
-                e.component.selectItem(e.itemElement);
-            } else {
-                setTimeout(function() {
-                    that._columnsController.columnOption(e.itemData.id, 'visible', e.itemData.selected);
-                }, CLICK_TIMEOUT);
+        const getFlatNodes = (nodes) => {
+            const addNodesToArray = (nodes, flatNodesArray) => {
+                return nodes.reduce((result, node) => {
+                    result.push(node);
+
+                    if(node.children.length) {
+                        addNodesToArray(node.children, result);
+                    }
+
+                    return result;
+                }, flatNodesArray);
+            };
+
+            return addNodesToArray(nodes, []);
+        };
+
+        const updateSelection = (e, nodes) => {
+            nodes
+                .filter(node => node.itemData.allowHiding === false)
+                .forEach(node => e.component.selectItem(node.key));
+        };
+
+        const updateColumnVisibility = (nodes) => {
+            nodes.forEach(node => {
+                const columnIndex = node.itemData.id;
+                const isVisible = node.selected !== false;
+                that._columnsController.columnOption(columnIndex, 'visible', isVisible);
+            });
+        };
+
+        let updateColumnVisibilityTimeout;
+        let isUpdatingSelection = false;
+
+        const selectionChangedHandler = e => {
+            if(isUpdatingSelection) {
+                return;
             }
+
+            const nodes = getFlatNodes(e.component.getNodes());
+
+            isUpdatingSelection = true;
+            e.component.beginUpdate();
+
+            updateSelection(e, nodes);
+
+            isUpdatingSelection = false;
+            e.component.endUpdate();
+
+            clearTimeout(updateColumnVisibilityTimeout);
+            updateColumnVisibilityTimeout = setTimeout(() => {
+                that.component.beginUpdate();
+
+                updateColumnVisibility(nodes);
+
+                that.component.endUpdate();
+            }, CLICK_TIMEOUT);
         };
 
         return {
-            selectNodesRecursive: false,
-            showCheckBoxesMode: 'normal',
-            onItemSelectionChanged: selectionChangedHandler
+            selectByClick: selectionOptions.selectByClick,
+            selectNodesRecursive: selectionOptions.recursive,
+            showCheckBoxesMode: selectionOptions.allowSelectAll ? 'selectAll' : 'normal',
+            onSelectionChanged: selectionChangedHandler
         };
     },
 
     _columnOptionChanged: function(e) {
         const changeTypes = e.changeTypes;
         const optionNames = e.optionNames;
-        const isSelectMode = this.option('columnChooser.mode') === 'select';
+        const isSelectMode = this.isSelectMode();
 
         this.callBase(e);
 
@@ -375,7 +404,7 @@ const columnChooserMembers = {
     getColumnElements: function() {
         const result = [];
         let $node;
-        const isSelectMode = this.option('columnChooser.mode') === 'select';
+        const isSelectMode = this.isSelectMode();
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const $content = this._popupContainer && this._popupContainer.$content();
         const $nodes = $content && $content.find('.dx-treeview-node');
@@ -400,10 +429,17 @@ const columnChooserMembers = {
         return this._columnsController.getChooserColumns();
     },
 
-    allowDragging: function(column, sourceLocation) {
-        const columnVisible = column && column.allowHiding && (sourceLocation !== 'columnChooser' || !column.visible && this._columnsController.isParentColumnVisible(column.index));
+    allowDragging: function(column) {
+        const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
+        const isColumnHidden = !column.visible && column.allowHiding;
 
-        return this.isColumnChooserVisible() && columnVisible;
+        return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
+    },
+
+    allowColumnHeaderDragging: function(column) {
+        const isDragMode = !this.isSelectMode();
+
+        return isDragMode && this.isColumnChooserVisible() && column.allowHiding;
     },
 
     getBoundingRect: function() {
@@ -455,6 +491,17 @@ const columnChooserMembers = {
         return popupContainer && popupContainer.option('visible');
     },
 
+    isSelectMode: function() {
+        return this.option('columnChooser.mode') === 'select';
+    },
+
+    hasHiddenColumns: function() {
+        const isEnabled = this.option('columnChooser.enabled');
+        const hiddenColumns = this.getColumns().filter(column => !column.visible);
+
+        return isEnabled && hiddenColumns.length;
+    },
+
     publicMethods: function() {
         return ['showColumnChooser', 'hideColumnChooser'];
     }
@@ -469,8 +516,17 @@ export const columnChooserModule = {
         return {
             columnChooser: {
                 enabled: false,
-                allowSearch: false,
-                searchTimeout: 500,
+                search: {
+                    enabled: false,
+                    timeout: 500,
+                    editorOptions: {},
+                },
+                selection: {
+                    allowSelectAll: false,
+                    selectByClick: false,
+                    recursive: false,
+                },
+                position: undefined,
                 mode: 'dragAndDrop',
                 width: 250,
                 height: 260,
@@ -551,13 +607,24 @@ export const columnChooserModule = {
 
                     return that.callBase() || columnChooserEnabled;
                 }
+            },
+
+            columnHeadersView: {
+                allowDragging: function(column) {
+                    const columnChooserView = this.component.getView('columnChooserView');
+
+                    const isDragMode = !columnChooserView.isSelectMode();
+                    const isColumnChooserVisible = columnChooserView.isColumnChooserVisible();
+
+                    return (isDragMode && isColumnChooserVisible && column.allowHiding) || this.callBase(column);
+                },
             }
         },
         controllers: {
             columns: {
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
-                    const columnChooserMode = this.option('columnChooser.mode');
-                    const isMoveColumnDisallowed = columnChooserMode === 'select' && targetLocation === 'columnChooser';
+                    const isSelectMode = this.option('columnChooser.mode') === 'select';
+                    const isMoveColumnDisallowed = isSelectMode && targetLocation === 'columnChooser';
 
                     return isMoveColumnDisallowed ? false : this.callBase(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation);
                 }

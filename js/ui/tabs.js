@@ -41,6 +41,8 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
+const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
+
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
 const BUTTON_NEXT_ICON = 'chevronnext';
@@ -425,6 +427,10 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _toggleFocusedNextClass(index, isNextTabFocused) {
+        this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextTabFocused);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -446,10 +452,18 @@ const Tabs = CollectionWidget.inherit({
             case 'badgeExpr':
                 this._invalidate();
                 break;
-            case 'focusedElement':
+            case 'focusedElement': {
+                const { selectedIndex } = this.option();
+                const currentIndex = $(args.value).index();
+
+                if(currentIndex !== selectedIndex) {
+                    this._toggleFocusedNextClass(selectedIndex, currentIndex === selectedIndex + 1);
+                }
+
                 this.callBase(args);
                 this._scrollToItem(args.value);
                 break;
+            }
             default:
                 this.callBase(args);
         }

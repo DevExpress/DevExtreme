@@ -43,7 +43,7 @@ QUnit.testStart(function() {
             </div>\
         </div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="lookupOptions">\
             <div data-options="dxTemplate: { name: \'customTitle\' }">testTitle</div>\
             <div data-options="dxTemplate: { name: \'testGroupTemplate\' }">testGroupTemplate</div>\
@@ -61,6 +61,7 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
     addShadowDomStyles($('#qunit-fixture'));
 });
 
@@ -1135,9 +1136,10 @@ QUnit.module('Lookup', {
                 dropDownOptions: {
                     onShowing: (e) => {
                         const $overlayContent = e.component.$content().parent();
-                        $overlayContent.attr("role", "custom-role");
+                        $overlayContent.attr('role', 'custom-role');
                     }
-            }}).dxLookup('instance');
+                }
+            }).dxLookup('instance');
 
             this.togglePopup();
 
