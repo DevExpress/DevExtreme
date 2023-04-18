@@ -256,7 +256,7 @@ QUnit.module('ExportController', {
         assert.deepEqual(items[0].values, ['Test string value', new Date('2016/1/23')], 'values of item');
     });
 
-    QUnit.test('Get actual columns when visible of column is changed before calling 'ready' method', function(assert) {
+    QUnit.test('Get actual columns when visible of column is changed before calling \'ready\' method', function(assert) {
         $('#container').width(280);
         this.setupModules({
             showColumnHeaders: true,
@@ -2313,7 +2313,7 @@ QUnit.module('Export menu', {
         assert.equal($exportButton.attr('title'), 'Export all data to Excel', 'hint of button');
     });
 
-    QUnit.test('Export menu elements doesn't leak', function(assert) {
+    QUnit.test('Export menu elements doesn\'t leak', function(assert) {
         this.setupModules({
             'export': {
                 enabled: true,
