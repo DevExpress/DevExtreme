@@ -245,10 +245,10 @@ const transpileCss = async(Builder) => {
 
 const transpileTesting = async(Builder) => {
     const builder = new Builder(root, config);
-    // const contentList = getFileList(path.join(root, 'testing/content'));
-    // const helpersList = getFileList(path.join(root, 'testing/helpers'));
+    const contentList = getFileList(path.join(root, 'testing/content'));
+    const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
-    const listFiles = [].concat(testsList).filter(name => name.includes('ui.widgets.dataGrid/columnsResizingReorderingModule.tests'));
+    const listFiles = [].concat(contentList, helpersList, testsList);
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
