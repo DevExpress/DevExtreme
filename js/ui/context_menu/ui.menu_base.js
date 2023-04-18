@@ -165,7 +165,20 @@ class MenuBase extends HierarchicalCollectionWidget {
         return extend(super._supportedKeys(), {
             space: selectItem,
             pageUp: noop,
-            pageDown: noop
+            pageDown: noop,
+            enter: function(e) {
+                const $itemElement = $(this.option('focusedElement'));
+                if(!$itemElement.length) {
+                    return;
+                }
+                this._enterKeyHandler(e);
+
+                const itemData = this._getItemData($itemElement);
+                if(itemData.url) {
+                    const link = $itemElement.get(0).getElementsByClassName(DX_ITEM_URL_CLASS)[0];
+                    link && link.click();
+                }
+            },
         });
     }
 

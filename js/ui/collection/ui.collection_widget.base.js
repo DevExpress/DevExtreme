@@ -54,28 +54,9 @@ const CollectionWidget = Widget.inherit({
     _activeStateUnit: '.' + ITEM_CLASS,
 
     _supportedKeys: function() {
-        const enter = function(e) {
-            const $itemElement = $(this.option('focusedElement'));
-
-            if(!$itemElement.length) {
-                return;
-            }
-
-            const itemData = this._getItemData($itemElement);
-            if(itemData?.onClick) {
-                this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
-                    event: e
-                });
-            }
-
-            this._itemClickHandler(extend({}, e, {
-                target: $itemElement.get(0),
-                currentTarget: $itemElement.get(0)
-            }));
-        };
         const space = function(e) {
             e.preventDefault();
-            enter.call(this, e);
+            this._enterKeyHandler.call(this, e);
         };
         const move = function(location, e) {
             if(!isCommandKeyPressed(e)) {
@@ -86,7 +67,7 @@ const CollectionWidget = Widget.inherit({
         };
         return extend(this.callBase(), {
             space: space,
-            enter: enter,
+            enter: this._enterKeyHandler,
             leftArrow: move.bind(this, FOCUS_LEFT),
             rightArrow: move.bind(this, FOCUS_RIGHT),
             upArrow: move.bind(this, FOCUS_UP),
@@ -96,6 +77,26 @@ const CollectionWidget = Widget.inherit({
             home: move.bind(this, FOCUS_FIRST),
             end: move.bind(this, FOCUS_LAST)
         });
+    },
+
+    _enterKeyHandler: function(e) {
+        const $itemElement = $(this.option('focusedElement'));
+
+        if(!$itemElement.length) {
+            return;
+        }
+
+        const itemData = this._getItemData($itemElement);
+        if(itemData?.onClick) {
+            this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
+                event: e
+            });
+        }
+
+        this._itemClickHandler(extend({}, e, {
+            target: $itemElement.get(0),
+            currentTarget: $itemElement.get(0)
+        }));
     },
 
     _getDefaultOptions: function() {
