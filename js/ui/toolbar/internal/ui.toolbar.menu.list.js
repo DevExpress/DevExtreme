@@ -47,6 +47,17 @@ export default class ToolbarMenuList extends ListBase {
     _renderItems() {
         super._renderItems.apply(this, arguments);
         this._updateSections();
+        this._updateRole();
+    }
+
+    _updateRole() {
+        const $sections = this.$element().find(`.${TOOLBAR_MENU_SECTION_CLASS}`);
+
+        const $emptySections = $sections.filter(':empty');
+        const $notEmptySections = $sections.not(':empty');
+
+        $emptySections.removeAttr('role');
+        $notEmptySections.attr('role', 'menu');
     }
 
     _updateSections() {
