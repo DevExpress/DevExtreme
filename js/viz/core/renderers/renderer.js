@@ -691,7 +691,11 @@ function removeExtraAttrs(html) {
 function parseHTML(text) {
     const items = [];
     const div = domAdapter.createElement('div');
-    div.innerHTML = text.replace(/\r/g, '').replace(/\n/g, '<br/>');
+    div.innerHTML = text.replace(/\r/g, '').replace(/\n/g, '<br/>').replace(/style=/g, 'data-style=');
+    div.querySelectorAll('[data-style]').forEach((element) => {
+        element.style = element.getAttribute('data-style');
+        element.removeAttribute('data-style');
+    });
     orderHtmlTree(items, 0, div, {}, '');
     adjustLineHeights(items);
     return items;
