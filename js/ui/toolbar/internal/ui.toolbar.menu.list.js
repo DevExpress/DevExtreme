@@ -8,6 +8,7 @@ const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const TOOLBAR_MENU_CUSTOM_CLASS = 'dx-toolbar-menu-custom';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 export default class ToolbarMenuList extends ListBase {
     _init() {
@@ -19,6 +20,7 @@ export default class ToolbarMenuList extends ListBase {
     _initMarkup() {
         this._renderSections();
         super._initMarkup();
+        this._setMenuRole();
     }
 
     _getSections() {
@@ -47,17 +49,12 @@ export default class ToolbarMenuList extends ListBase {
     _renderItems() {
         super._renderItems.apply(this, arguments);
         this._updateSections();
-        this._updateRole();
     }
 
-    _updateRole() {
-        const $sections = this.$element().find(`.${TOOLBAR_MENU_SECTION_CLASS}`);
+    _setMenuRole() {
+        const $menuContainer = this.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
 
-        const $emptySections = $sections.filter(':empty');
-        const $notEmptySections = $sections.not(':empty');
-
-        $emptySections.removeAttr('role');
-        $notEmptySections.attr('role', 'menu');
+        $menuContainer.attr('role', 'menu');
     }
 
     _updateSections() {

@@ -297,7 +297,6 @@ export default class DropDownMenu extends Widget {
                 } else {
                     this._setListDataSource();
                 }
-                this._list?._updateRole();
                 break;
             case 'itemTemplate':
                 this._list?.option(name, this._getTemplate(value));

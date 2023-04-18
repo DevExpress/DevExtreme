@@ -31,7 +31,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
-const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 
 const moduleConfig = {
@@ -662,30 +662,12 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual(this.$element.attr('role'), 'button');
     });
 
-    QUnit.test('aria role for list sections (T1157065)', function(assert) {
-        this.instance.option({ items: [
-            { location: 'before' },
-            { location: 'center' },
-            { location: 'after' },
-            { location: 'after' },
-        ] });
+    QUnit.test('aria role for section container (T1157065)', function(assert) {
+        this.instance.option({ items: [1, 2, 3] });
 
         this.overflowMenu.click();
 
-        const $sections = this.overflowMenu.$list().find(`.${TOOLBAR_MENU_SECTION_CLASS}`);
-        const filledSectionIndices = [0, 1, 2];
-
-        filledSectionIndices.forEach((index) => {
-            assert.strictEqual($($sections[index]).attr('role'), 'menu', `section ${index} has role menu`);
-        });
-
-        assert.strictEqual($($sections[3]).attr('role'), undefined, 'section 3 has no role menu');
-
-        this.instance.option('items[3].location', 'menu');
-        assert.strictEqual($($sections[3]).attr('role'), 'menu', 'section 3 has role menu when item location was changed in runtime');
-
-        this.instance.option('items[0].location', 'center');
-        assert.strictEqual($($sections[0]).attr('role'), undefined, 'section 0 has no role menu when item location was changed in runtime');
+        assert.strictEqual(this.overflowMenu.$popupContent().find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('role'), 'menu');
     });
 
     QUnit.test('aria role for list items', function(assert) {
