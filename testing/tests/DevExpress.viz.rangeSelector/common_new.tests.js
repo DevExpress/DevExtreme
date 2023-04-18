@@ -10,9 +10,14 @@ const StubAxis = vizMocks.stubClass(axisModule.Axis);
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="test-container" style="width: 400px; height: 300px;"></div>';
+        '<div id="test-container"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#test-container').css({
+        width: '400px',
+        height: '300px'
+    });
 });
 
 QUnit.module('RangeSelector', {
