@@ -31,6 +31,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
+const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 
 
 const moduleConfig = {
@@ -653,7 +654,7 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual(this.$element.attr('aria-haspopup'), 'true');
     });
 
-    QUnit.test('aria role for widget after Popup opening', function(assert) {
+    QUnit.test('aria role for widget after Popup opening (T1157065)', function(assert) {
         this.instance.option({ items: [1, 2, 3] });
 
         this.overflowMenu.click();
@@ -661,12 +662,28 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual(this.$element.attr('role'), 'button');
     });
 
-    QUnit.test('aria role for popup', function(assert) {
-        this.instance.option({ items: [1, 2, 3] });
+    QUnit.test('aria role for list sections (T1157065)', function(assert) {
+        this.instance.option({ items: [
+            { location: 'before' },
+            { location: 'center' },
+            { location: 'after' },
+            { location: 'after' },
+        ] });
 
         this.overflowMenu.click();
 
-        assert.strictEqual($(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).attr('role'), 'menu', 'element has role menu');
+        const $sections = this.overflowMenu.$list().find(`.${TOOLBAR_MENU_SECTION_CLASS}`);
+        const filledSectionIndices = [0, 1, 2];
+
+        filledSectionIndices.forEach((index) => {
+            assert.strictEqual($($sections[index]).attr('role'), 'menu', `section ${index} has role menu`);
+        });
+
+        assert.strictEqual($($sections[3]).attr('role'), undefined, 'section 3 has no role menu');
+
+        this.instance.option('items[3].location', 'menu');
+
+        assert.strictEqual($($sections[3]).attr('role'), 'menu', 'section 3 has role menu when item location was changed in runtime');
     });
 
     QUnit.test('aria role for list items', function(assert) {
