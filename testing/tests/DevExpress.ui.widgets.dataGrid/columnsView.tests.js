@@ -2,13 +2,6 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-QUnit.testStart(function() {
-    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
-    $('#qunit-fixture').html(markup);
-
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 import 'ui/data_grid';
 
@@ -20,6 +13,12 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+QUnit.testStart(function() {
+    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
+    $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('API methods', {
     beforeEach: function() {

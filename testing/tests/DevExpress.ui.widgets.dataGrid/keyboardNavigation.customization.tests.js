@@ -1,12 +1,3 @@
-QUnit.testStart(function() {
-    const markup = `
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
 import $ from 'jquery';
 
 import 'generic_light.css!';
@@ -23,6 +14,15 @@ import {
     focusCell,
     dataGridWrapper,
     getTextSelection } from '../../helpers/grid/keyboardNavigationHelper.js';
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Customize keyboard navigation', {
     setupModule: function() {

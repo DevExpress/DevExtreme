@@ -25,10 +25,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').addClass('dx-viewport');
 
     const markup =
-        '<div class="dx-widget">\
-            <div id="container" class="dx-datagrid"></div>\
-        </div>\
-        <div id="containerIE" class="dx-datagrid"></div>';
+        `<div class="dx-widget">
+            <div id="container" class="dx-datagrid"></div>
+        </div>
+        <div id="containerIE" class="dx-datagrid"></div>`;
 
     $('#qunit-fixture').html(markup);
 

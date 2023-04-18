@@ -14,11 +14,11 @@ const FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + '-checkbox';
 
 QUnit.testStart(function() {
     const markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
+    `<div>
+        <div class="dx-datagrid">
+            <div id="container"></div>
+        </div>
+    </div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -145,7 +145,7 @@ QUnit.module('Filter Panel', {
         this.initFilterPanelView();
 
         // assert
-        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Equals \'1\'', 'check filter text');
+        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Equals '1'', 'check filter text');
     });
 
     // T651579
@@ -156,7 +156,7 @@ QUnit.module('Filter Panel', {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Equals \'1\'', 'check filter text');
+        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Equals '1'', 'check filter text');
     });
 
     QUnit.test('filter value with column witout caption contains empty string', function(assert) {
@@ -166,7 +166,7 @@ QUnit.module('Filter Panel', {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[] Equals \'1\'', 'check filter text');
+        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[] Equals '1'', 'check filter text');
     });
 
     QUnit.test('can customize hints', function(assert) {
@@ -209,7 +209,7 @@ QUnit.module('Filter Panel', {
         // act
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.deepEqual(result, '[Field] Equals \'1\'');
+            assert.deepEqual(result, '[Field] Equals '1'');
         });
     });
 
@@ -223,7 +223,7 @@ QUnit.module('Filter Panel', {
         // act
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, [{ name: 'anyof', caption: 'Any of' }]).done(function(result) {
-            assert.equal(result, '[Field] Any of(\'1\', \'2\')');
+            assert.equal(result, '[Field] Any of('1', '2')');
         });
     });
 
@@ -260,7 +260,7 @@ QUnit.module('Filter Panel', {
         // act
         assert.expect(3);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
-            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(result, '[Field] Is any of('Text 1', 'Text 2')');
             assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
             assert.deepEqual(loadingFilters, [[['key', '=', 1], 'or', ['key', '=', 2]]]);
@@ -298,7 +298,7 @@ QUnit.module('Filter Panel', {
         // act
         assert.expect(3);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
-            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(result, '[Field] Is any of('Text 1', 'Text 2')');
             assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
             assert.deepEqual(loadingFilters, [undefined]);
@@ -340,7 +340,7 @@ QUnit.module('Filter Panel', {
             // act
             assert.expect(2);
             this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
-                assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+                assert.equal(result, '[Field] Is any of('Text 1', 'Text 2')');
                 assert.equal(errors.log.callCount, 0, 'no warnings');
             }).always(() => {
                 errors.log.restore();
@@ -382,7 +382,7 @@ QUnit.module('Filter Panel', {
             // act
             assert.expect(key ? 2 : 4);
             this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
-                assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+                assert.equal(result, '[Field] Is any of('Text 1', 'Text 2')');
                 if(!key) {
                     assert.equal(errors.log.callCount, 2, 'four warnings');
                     errors.log.getCalls().forEach(call => {
@@ -423,7 +423,7 @@ QUnit.module('Filter Panel', {
         // act
         assert.expect(2);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
-            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(result, '[Field] Is any of('Text 1', 'Text 2')');
             assert.deepEqual(lookupDataSource[0], { key: 1, text: 'Text 1' }, 'lookup dataSource item is not changed');
         });
     });
@@ -461,7 +461,7 @@ QUnit.module('Filter Panel', {
         // act
         assert.expect(2);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
-            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(result, '[Field] Is any of('Text 1', 'Text 2')');
             assert.equal(spy.callCount, 1);
         });
     });
@@ -484,7 +484,7 @@ QUnit.module('Filter Panel', {
             customizeText: function(fieldInfo) { return 'CustomText'; }
         }]).done(function(result) {
             // assert
-            assert.equal(result, '[Field] Any of(\'CustomText\')');
+            assert.equal(result, '[Field] Any of('CustomText')');
         });
     });
 
@@ -512,10 +512,10 @@ QUnit.module('Filter Panel', {
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '');
         deferred.resolve('Two hundred');
-        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Custom(\'Two hundred\')');
+        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Custom('Two hundred')');
     });
 
-    QUnit.test('custom operation target = \'filterPanel\'', function(assert) {
+    QUnit.test('custom operation target = 'filterPanel'', function(assert) {
         // arrange
         const filter = ['field', 'customOperation', 2];
         this.initFilterPanelView();
@@ -531,7 +531,7 @@ QUnit.module('Filter Panel', {
                 return 'two';
             }
         }]).done(function(result) {
-            assert.equal(result, '[Field] Custom \'two\'');
+            assert.equal(result, '[Field] Custom 'two'');
         });
     });
 
@@ -543,7 +543,7 @@ QUnit.module('Filter Panel', {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, '[Field] Is between(\'1\', \'2\')');
+            assert.equal(result, '[Field] Is between('1', '2')');
         });
     });
 
@@ -556,7 +556,7 @@ QUnit.module('Filter Panel', {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, '[Field] Is between(\'11/12/2012\', \'03/23/2013\')');
+            assert.equal(result, '[Field] Is between('11/12/2012', '03/23/2013')');
         });
     });
 
@@ -581,7 +581,7 @@ QUnit.module('Filter Panel', {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, '[Field] Equals \'1\' And [Field] Equals \'2\'');
+            assert.equal(result, '[Field] Equals '1' And [Field] Equals '2'');
         });
     });
 
@@ -593,7 +593,7 @@ QUnit.module('Filter Panel', {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, '[Field] Equals \'1\' And [Field] Equals \'2\' And ([Field] Equals \'3\' Or [Field] Equals \'4\')');
+            assert.equal(result, '[Field] Equals '1' And [Field] Equals '2' And ([Field] Equals '3' Or [Field] Equals '4')');
         });
     });
 
@@ -606,7 +606,7 @@ QUnit.module('Filter Panel', {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.deepEqual(result, 'Not ([Field] Equals \'1\' And [Field] Equals \'2\')');
+            assert.deepEqual(result, 'Not ([Field] Equals '1' And [Field] Equals '2')');
         });
     });
 
@@ -694,7 +694,7 @@ QUnit.module('Filter Panel', {
     });
 
     // T636976
-    QUnit.test('Will not throw \'Cannot set property paginate of undefined\' if dataSource is not set', function(assert) {
+    QUnit.test('Will not throw 'Cannot set property paginate of undefined' if dataSource is not set', function(assert) {
         this.initFilterPanelView({
             filterPanel: {
                 visible: true
@@ -748,6 +748,6 @@ QUnit.module('Filter Panel', {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[State ID] Equals \'Tuscaloosa\'', 'filterPanel text');
+        assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[State ID] Equals 'Tuscaloosa'', 'filterPanel text');
     });
 });

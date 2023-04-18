@@ -1,16 +1,5 @@
 import $ from 'jquery';
 
-QUnit.testStart(function() {
-    const markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -19,6 +8,17 @@ import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
 import messageLocalization from 'localization/message';
 import { prepareItems } from 'ui/grid_core/ui.grid_core.export';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('ExportController', {
     beforeEach: function() {
@@ -256,7 +256,7 @@ QUnit.module('ExportController', {
         assert.deepEqual(items[0].values, ['Test string value', new Date('2016/1/23')], 'values of item');
     });
 
-    QUnit.test('Get actual columns when visible of column is changed before calling \'ready\' method', function(assert) {
+    QUnit.test('Get actual columns when visible of column is changed before calling 'ready' method', function(assert) {
         $('#container').width(280);
         this.setupModules({
             showColumnHeaders: true,
@@ -1288,7 +1288,7 @@ QUnit.module('ExportController', {
         this.clock.tick(10);
 
         // assert, act
-        assert.equal(dataProvider.getCellData(0, 2).value, 'Max: 93% \n Min: 1');
+        assert.equal(dataProvider.getCellData(0, 2).value, 'Max: 93% n Min: 1');
     });
 
     QUnit.test('Check summary for a column in a group row', function(assert) {
@@ -2313,7 +2313,7 @@ QUnit.module('Export menu', {
         assert.equal($exportButton.attr('title'), 'Export all data to Excel', 'hint of button');
     });
 
-    QUnit.test('Export menu elements doesn\'t leak', function(assert) {
+    QUnit.test('Export menu elements doesn't leak', function(assert) {
         this.setupModules({
             'export': {
                 enabled: true,

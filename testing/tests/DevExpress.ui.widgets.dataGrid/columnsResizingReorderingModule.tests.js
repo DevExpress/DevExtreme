@@ -1,71 +1,5 @@
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-QUnit.testStart(function() {
-
-    const markup =
-        `<style nonce="qunit-test">
-            body {
-                padding: 0;
-                margin: 0;
-            }
-
-            #testWrapper {
-                padding: 0px 40px;
-                margin: 0px 50px;
-            }
-
-            #itemsContainer {
-                font-size: 0;
-            }
-
-            #itemsContainer .itemsContainer__child {
-                width: 125px;
-                display: inline-block;
-            }
-
-            #itemsContainerVertical .itemsContainerVertical__child {
-                width: 125px;
-                height: 50px;
-            }
-
-            #swatchItemsContainer {
-                font-size: 0;
-            }
-
-            #swatchItemsContainer .swatchItemsContainer__child {
-                width: 125px;
-                display: inline-block;
-            }
-        </style>
-        <div id="testWrapper">
-            <div id="testContainer"></div>
-        </div>
-        <div id="root">
-            <div id="container" class="dx-datagrid"></div>
-            <div id="container2" class="dx-datagrid"></div>
-        </div>
-        <div id="itemsContainer">
-            <div class="itemsContainer__child"></div>
-            <div class="itemsContainer__child"></div>
-        </div>
-        <div id="itemsContainerVertical">
-            <div class="itemsContainerVertical__child"></div>
-            <div class="itemsContainerVertical__child"></div>
-        </div>
-
-        <div class="dx-swatch-1">
-            <div id="gridInSwatch">
-            <div id="swatchItemsContainer">
-                <div class="swatchItemsContainer__child"></div>
-                <div class="swatchItemsContainer__child"></div>
-            </div>
-            </div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -84,7 +18,6 @@ const setupDataGridModules = dataGridMocks.setupDataGridModules;
 const MockDataController = dataGridMocks.MockDataController;
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockEditingController = dataGridMocks.MockEditingController;
-
 
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import dragEvents from 'events/drag';
@@ -119,6 +52,65 @@ const TestDraggingHeader2 = columnsResizingReordering.DraggingHeaderView.inherit
     dropHeader: function(args) {
         args.event.data.that.callDropCounter++;
     }
+});
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            #testWrapper {
+                padding: 0px 40px;
+                margin: 0px 50px;
+            }
+            #itemsContainer {
+                font-size: 0;
+            }
+            #itemsContainer .itemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+            #itemsContainerVertical .itemsContainerVertical__child {
+                width: 125px;
+                height: 50px;
+            }
+            #swatchItemsContainer {
+                font-size: 0;
+            }
+            #swatchItemsContainer .swatchItemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+        </style>
+        <div id="testWrapper">
+            <div id="testContainer"></div>
+        </div>
+        <div id="root">
+            <div id="container" class="dx-datagrid"></div>
+            <div id="container2" class="dx-datagrid"></div>
+        </div>
+        <div id="itemsContainer">
+            <div class="itemsContainer__child"></div>
+            <div class="itemsContainer__child"></div>
+        </div>
+        <div id="itemsContainerVertical">
+            <div class="itemsContainerVertical__child"></div>
+            <div class="itemsContainerVertical__child"></div>
+        </div>
+
+        <div class="dx-swatch-1">
+            <div id="gridInSwatch">
+            <div id="swatchItemsContainer">
+                <div class="swatchItemsContainer__child"></div>
+                <div class="swatchItemsContainer__child"></div>
+            </div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 // ColumnsSeparator module///

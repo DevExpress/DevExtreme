@@ -1,3 +1,29 @@
+import $ from 'jquery';
+import devices from 'core/devices';
+import fx from 'animation/fx';
+import pointerEvents from 'events/pointer';
+import themes from 'ui/themes';
+import typeUtils from 'core/utils/type';
+import { DataSource } from 'data/data_source/data_source';
+import SelectBox from 'ui/select_box';
+import config from 'core/config';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import commonUtils from 'core/utils/common';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import 'ui/drop_down_box';
+import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { generateItems } from '../../helpers/dataGridMocks.js';
+import { getOuterHeight } from 'core/utils/size';
+import { getEmulatorStyles } from '../../helpers/stylesHelper';
+
+const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
+fx.off = true;
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -18,6 +44,7 @@ QUnit.testStart(function() {
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
+            ${getEmulatorStyles()}
         </style>
 
         <!--qunit-fixture-->
@@ -30,46 +57,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
 });
-
-import $ from 'jquery';
-import devices from 'core/devices';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
-import themes from 'ui/themes';
-import typeUtils from 'core/utils/type';
-import { DataSource } from 'data/data_source/data_source';
-import SelectBox from 'ui/select_box';
-import config from 'core/config';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import pointerMock from '../../helpers/pointerMock.js';
-import commonUtils from 'core/utils/common';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import 'ui/drop_down_box';
-import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import { generateItems } from '../../helpers/dataGridMocks.js';
-import { getOuterHeight } from 'core/utils/size';
-
-const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
-
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
-fx.off = true;
-
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Accessibility columns id should not set for columns editors (T710132)', function(assert) {

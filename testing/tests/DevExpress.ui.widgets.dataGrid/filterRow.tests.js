@@ -1,17 +1,3 @@
-QUnit.testStart(function() {
-    viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
-    const markup =
-'<div>\
-    <div id="container">\
-        <div class="dx-datagrid"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -36,9 +22,21 @@ const device = devices.real();
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
-
 setTemplateEngine('hogan');
 
+QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass('dx-viewport'));
+
+    const markup =
+        `<div>
+            <div id="container">
+                <div class="dx-datagrid"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Filter Row', {
     beforeEach: function() {

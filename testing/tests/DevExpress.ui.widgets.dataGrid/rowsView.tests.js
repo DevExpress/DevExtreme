@@ -1,29 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-        '<style nonce="qunit-test">\
-    .qunit-fixture-static {\
-        position: static !important;\
-        left: 0 !important;\
-        top: 0 !important;\
-    }\
-    .dx-scrollable-native-ios .dx-scrollable-content {\
-            padding: 0 !important;\
-    }\
-    .cross-browser-border-width-getting table {\
-        border-collapse: separate !important;\
-    }\
-</style>\
-<div class="dx-widget">\
-    <div class="dx-datagrid dx-gridbase-container">\
-        <div id="container"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -116,6 +90,32 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
     this.dataGrid = mockDataGrid;
     return mockDataGrid.rowsView;
 }
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: static !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+            .cross-browser-border-width-getting table {
+                border-collapse: separate !important;
+            }
+        </style>
+        <div class="dx-widget">
+            <div class="dx-datagrid dx-gridbase-container">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Rows view', {
     beforeEach: function() {

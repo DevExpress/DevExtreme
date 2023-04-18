@@ -2,27 +2,23 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
 QUnit.testStart(function() {
-    const markup =
-'\
-<style nonce="qunit-test">\
-    .qunit-fixture-static {\
-         position: absolute !important;\
-         left: 0 !important;\
-         top: 0 !important;\
-        ;\
-    }\
-\
-     .dx-scrollable-native-ios .dx-scrollable-content {\
-         padding: 0 !important;\
-        ;\
-    }\
-\
-</style>\
-<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
+    const markup = `
+        <style nonce="qunit-test">
+            .qunit-fixture-static {
+                 position: absolute !important;
+                 left: 0 !important;
+                 top: 0 !important;
+            }
+             .dx-scrollable-native-ios .dx-scrollable-content {
+                 padding: 0 !important;
+            }
+        </style>
+        <div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>
+    `;
 
     $('#qunit-fixture').html(markup);
 });
@@ -647,21 +643,21 @@ QUnit.module('Editor Factory', {
         assert.strictEqual(value, undefined);
 
         // act
-        $container.find('.dx-list-item:contains(\'False\')').trigger('dxclick');
+        $container.find('.dx-list-item:contains('False')').trigger('dxclick');
 
         // assert
         assert.strictEqual($container.find(TEXTEDITOR_INPUT_SELECTOR).val(), 'False', 'text after change to false');
         assert.strictEqual(value, false, 'value after change to false');
 
         // act
-        $container.find('.dx-list-item:contains(\'True\')').trigger('dxclick');
+        $container.find('.dx-list-item:contains('True')').trigger('dxclick');
 
         // assert
         assert.strictEqual($container.find(TEXTEDITOR_INPUT_SELECTOR).val(), 'True', 'text after change to true');
         assert.strictEqual(value, true, 'value after change to true');
 
         // act
-        $container.find('.dx-list-item:contains(\'[All]\')').trigger('dxclick');
+        $container.find('.dx-list-item:contains('[All]')').trigger('dxclick');
 
         // assert
         assert.strictEqual($container.find(TEXTEDITOR_INPUT_SELECTOR).val(), '[All]', 'text after change to null');
@@ -1097,7 +1093,7 @@ QUnit.module('Editor Factory - RTL', {
 
         const editor = $container.dxTextBox('instance');
 
-        assert.ok(editor.option('rtlEnabled'), 'textbox created with correct \'rtlEnabled\' option');
+        assert.ok(editor.option('rtlEnabled'), 'textbox created with correct 'rtlEnabled' option');
     });
 
     QUnit.test('Create Boolean editor with RTL', function(assert) {
@@ -1116,7 +1112,7 @@ QUnit.module('Editor Factory - RTL', {
 
         const editor = $container.dxCheckBox('instance');
 
-        assert.ok(editor.option('rtlEnabled'), 'checkbox created with correct \'rtlEnabled\' option');
+        assert.ok(editor.option('rtlEnabled'), 'checkbox created with correct 'rtlEnabled' option');
     });
 
     QUnit.test('Create date editor with RTL', function(assert) {
@@ -1136,7 +1132,7 @@ QUnit.module('Editor Factory - RTL', {
 
         const editor = $container.dxDateBox('instance');
 
-        assert.ok(editor.option('rtlEnabled'), 'date editor created with correct \'rtlEnabled\' option');
+        assert.ok(editor.option('rtlEnabled'), 'date editor created with correct 'rtlEnabled' option');
     });
 
     QUnit.test('Create Boolean editor with RTL when filtering', function(assert) {
@@ -1159,7 +1155,7 @@ QUnit.module('Editor Factory - RTL', {
 
         const editor = $container.dxSelectBox('instance');
 
-        assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct \'rtlEnabled\' option');
+        assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct 'rtlEnabled' option');
     });
 
     QUnit.test('Create lookup editor with RTL', function(assert) {
@@ -1183,7 +1179,7 @@ QUnit.module('Editor Factory - RTL', {
 
         const editor = $container.dxSelectBox('instance');
 
-        assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct \'rtlEnabled\' option');
+        assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct 'rtlEnabled' option');
     });
 
     QUnit.test('Create lookup editor with RTL when filtering', function(assert) {
@@ -1208,7 +1204,7 @@ QUnit.module('Editor Factory - RTL', {
 
         const editor = $container.dxSelectBox('instance');
 
-        assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct \'rtlEnabled\' option');
+        assert.ok(editor.option('rtlEnabled'), 'selectbox created with correct 'rtlEnabled' option');
     });
 
     QUnit.test('dxTextArea editor inserts new line by Enter and ends edit by Ctrl + Enter ', function(assert) {
@@ -1456,7 +1452,7 @@ QUnit.module('Focus', {
     });
 
     // T327148
-    QUnit.testInActiveWindow('Focus on a filtering cell after editing cell in \'batch\' mode', function(assert) {
+    QUnit.testInActiveWindow('Focus on a filtering cell after editing cell in 'batch' mode', function(assert) {
         const that = this;
         let $cell;
         const $testElement = $('#container');

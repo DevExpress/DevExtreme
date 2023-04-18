@@ -1,3 +1,24 @@
+import $ from 'jquery';
+import typeUtils from 'core/utils/type';
+import devices from 'core/devices';
+import pointerEvents from 'events/pointer';
+import fx from 'animation/fx';
+import commonUtils from 'core/utils/common';
+import { keyboard } from 'events/short';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import ArrayStore from 'data/array_store';
+import DataGrid from 'ui/data_grid';
+import { getEmulatorStyles } from '../../helpers/stylesHelper';
+
+const DX_STATE_HOVER_CLASS = 'dx-state-hover';
+const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
+fx.off = true;
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -17,6 +38,7 @@ QUnit.testStart(function() {
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
+            ${getEmulatorStyles()}
         </style>
 
         <!--qunit-fixture-->
@@ -25,34 +47,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
 });
-
-import $ from 'jquery';
-import typeUtils from 'core/utils/type';
-import devices from 'core/devices';
-import pointerEvents from 'events/pointer';
-import fx from 'animation/fx';
-import commonUtils from 'core/utils/common';
-import { keyboard } from 'events/short';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import ArrayStore from 'data/array_store';
-import DataGrid from 'ui/data_grid';
-
-const DX_STATE_HOVER_CLASS = 'dx-state-hover';
-const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
-fx.off = true;
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Correct background color of focused grouped row when RTL', function(assert) {
