@@ -538,7 +538,22 @@ QUnit.module('API methods', {
 
         this.option('cellHintEnabled', true);
         const $table = $(this.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content"><div>Test</div></div></td></tr>')));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    this.columnsView._createColGroup(this.columns),
+                    `<tr class="dx-row dx-master-detail-row">
+                        <td>
+                            <div id="content">
+                                <div>Test</div>
+                            </div>
+                        </td>
+                    </tr>`
+                )
+            )
+        );
+
         $container.find('#content').css('overflow', 'hidden');
 
         $container.find('#content > div').css({

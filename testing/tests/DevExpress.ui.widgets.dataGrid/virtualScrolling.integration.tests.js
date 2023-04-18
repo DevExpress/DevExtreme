@@ -15,7 +15,6 @@ import translator from 'animation/translator';
 import dataUtils from 'core/element_data';
 import ODataStore from 'data/odata/store';
 
-
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
@@ -2329,7 +2328,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 2
             },
             rowTemplate: function(container, options) {
-                const tr = $(`<tr><td>${options.data.id}</td></tr>`).css('height', `${rowHeight}px`);
+                const tr = $(`
+                    <tr>
+                        <td>${options.data.id}</td>
+                    </tr>
+                `).css('height', `${rowHeight}px`);
 
                 const tbody = $('<tbody class="dx-row"></tbody>').append(tr);
                 $(container).append(tbody);
@@ -2375,7 +2378,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 2
             },
             dataRowTemplate: function(container, options) {
-                const tr = $(`<tr><td>${options.data.id}</td></tr>`).css('height', `${rowHeight}px`);
+                const tr = $(`
+                    <tr>
+                        <td>${options.data.id}</td>
+                    </tr>
+                `).css('height', `${rowHeight}px`);
+
                 $(container).append(tr);
             }
         });
@@ -2424,8 +2432,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         render({ container, model, onRendered }) {
                             const data = model.data;
 
-                            const markup = $(`<tr><td>${data.id}</td></tr>`)
-                                .css('height', `${rowHeight}px`);
+                            const markup = $(`
+                                <tr>
+                                    <td>${data.id}</td>
+                                </tr>
+                            `).css('height', `${rowHeight}px`);
 
                             commonUtils.deferUpdate(function() {
                                 container.append(markup);

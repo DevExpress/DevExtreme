@@ -742,23 +742,23 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('indicator should be shown on dragging between groups', function(assert) {
-        $('#sortable').width(1700).html('').append('<div id="group1" group="group1" class="group">\
-            <div class="test-container">\
-                <div class="test-item">1</div>\
-                <div class="test-item">2</div>\
-                <div class="test-item">3</div>\
-                <div class="test-item">4</div>\
-            </div>\
-        </div>');
+        $('#sortable').width(1700).html('').append(`<div id="group1" group="group1" class="group">
+            <div class="test-container">
+                <div class="test-item">1</div>
+                <div class="test-item">2</div>
+                <div class="test-item">3</div>
+                <div class="test-item">4</div>
+            </div>
+        </div>`);
 
-        $('#sortable').append('<div id="group2" group="group2" class="group">\
-            <div class="test-container">\
-                <div class="test-item">2-1</div>\
-                <div class="test-item">2-2</div>\
-                <div class="test-item">2-3</div>\
-                <div class="test-item">2-4</div>\
-            </div>\
-        </div>');
+        $('#sortable').append(`<div id="group2" group="group2" class="group">
+            <div class="test-container">
+                <div class="test-item">2-1</div>
+                <div class="test-item">2-2</div>
+                <div class="test-item">2-3</div>
+                <div class="test-item">2-4</div>
+            </div>
+        </div>`);
 
         const $sortable = $('#sortable').dxSortableOld({
             itemSelector: '.test-item',
@@ -782,20 +782,20 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('dragging to empty group', function(assert) {
-        $('#sortable').width(1700).html('').append('<div id="group1" group="group1" class="group">\
-            <div class="test-container">\
-                <div class="test-item">1</div>\
-                <div class="test-item">2</div>\
-                <div class="test-item">3</div>\
-                <div class="test-item">4</div>\
-            </div>\
-        </div>');
+        $('#sortable').width(1700).html('').append(`<div id="group1" group="group1" class="group">
+            <div class="test-container">
+                <div class="test-item">1</div>
+                <div class="test-item">2</div>
+                <div class="test-item">3</div>
+                <div class="test-item">4</div>
+            </div>
+        </div>`);
 
         $('#sortable #group1 .test-item').css('display', 'inline-block');
 
-        $('#sortable').append('<div id="group2" group="group2" class="group">\
-            <div class="test-container"></div>\
-        </div>');
+        $('#sortable').append(`<div id="group2" group="group2" class="group">
+            <div class="test-container"></div>
+        </div>`);
 
         const $sortable = $('#sortable').dxSortableOld({
             itemSelector: '.test-item',

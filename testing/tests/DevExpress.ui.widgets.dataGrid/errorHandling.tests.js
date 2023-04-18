@@ -246,7 +246,17 @@ QUnit.module('Error handling', {
         };
 
         that.options.rowTemplate = function(container) {
-            $(container).append('<tr class="dx-row"><td><table><tbody><tr></tr></tbody></table></td></tr>');
+            $(container).append(`
+                <tr class="dx-row">
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            `);
         };
 
         that.rowsView.render($testElement);
