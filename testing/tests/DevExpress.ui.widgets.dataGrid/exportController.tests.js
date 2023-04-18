@@ -1288,7 +1288,7 @@ QUnit.module('ExportController', {
         this.clock.tick(10);
 
         // assert, act
-        assert.equal(dataProvider.getCellData(0, 2).value, 'Max: 93% n Min: 1');
+        assert.equal(dataProvider.getCellData(0, 2).value, 'Max: 93% \n Min: 1');
     });
 
     QUnit.test('Check summary for a column in a group row', function(assert) {
