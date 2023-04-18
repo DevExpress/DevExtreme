@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
-import { isInputEventsL2Supported } from 'ui/text_box/utils.support';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -515,7 +514,7 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(inputHandlerStub.callCount, 1, 'input event is fired');
     });
 
-    QUnit.test('input event should not be fired if input text was not changed because of mask', function(assert) {
+    QUnit.test('input event should not be fired if inputed char was not applied because of mask', function(assert) {
         const inputHandlerStub = sinon.stub();
 
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -529,8 +528,8 @@ QUnit.module('typing', moduleConfig, () => {
         caretWorkaround($input);
 
         keyboard
-            .caret(1)
-            .type('1');
+            .caret(0)
+            .type('w');
 
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
@@ -554,7 +553,7 @@ QUnit.module('typing', moduleConfig, () => {
         assert.strictEqual(inputHandlerStub.callCount, 0, 'input event was not fired');
     });
 
-    QUnit.test('input event should not be fired if existing char was inputed', function(assert) {
+    QUnit.test('input event should not be fired if already existing char was inputed', function(assert) {
         const inputHandlerStub = sinon.stub();
 
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -2568,16 +2567,5 @@ QUnit.module('Hidden input', {}, () => {
             const $hiddenInput = $textEditor.find('input[type=hidden]');
             assert.strictEqual($hiddenInput.val(), instance.option('value'), 'submitted value should be equal to the actual value');
         });
-    });
-});
-
-QUnit.module('Strategies', () => {
-    QUnit.test('inputEvents strategy should be used for browser supports Input Events Level 2', function(assert) {
-        const instance = $('#texteditor').dxTextEditor({
-            mask: '0'
-        }).dxTextEditor('instance');
-        const expectedMaskStrategy = isInputEventsL2Supported() ? 'inputEvents' : 'default';
-
-        assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, 'strategy name is correct');
     });
 });

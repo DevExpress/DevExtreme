@@ -482,3 +482,15 @@ QUnit.module('Public methods', moduleConfig, () => {
         assert.strictEqual(this.instance.option('opened'), false, 'opened option has correct value');
     });
 });
+
+QUnit.module('Popup integration', moduleConfig, () => {
+    QUnit.test('Popup should be positioned relatively DateRangeBox root element', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        startDateBox.open();
+
+        const popup = startDateBox._popup;
+
+        assert.ok(this.$element.is(popup.option('position.of')));
+    });
+});
