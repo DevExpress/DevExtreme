@@ -1,22 +1,23 @@
 QUnit.testStart(function() {
     const markup =
-        '<style nonce="qunit-test">\
-    .qunit-fixture-static {\
-        position: absolute !important;\
-        left: 0 !important;\
-        top: 0 !important;\
-    }\
-</style>\
-<div>\
-    <div id="container" class="dx-widget">\
-        <div class="dx-datagrid">\
-        </div>\
-    </div>\
-</div>';
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            #container {
+                width: 400px;
+            }
+        </style>
+        <div>
+            <div id="container" class="dx-widget">
+                <div class="dx-datagrid">
+                </div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
-    $('#container').css('width', '400px');
-    // $('body').append(markup);
     addShadowDomStyles($('#qunit-fixture'));
 });
 

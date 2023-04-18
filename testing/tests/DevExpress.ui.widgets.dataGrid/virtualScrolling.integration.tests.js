@@ -2330,6 +2330,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             rowTemplate: function(container, options) {
                 const tr = $(`<tr><td>${options.data.id}</td></tr>`).css('height', `${rowHeight}px`);
+
                 const tbody = $('<tbody class="dx-row"></tbody>').append(tr);
                 $(container).append(tbody);
             }
@@ -2422,7 +2423,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     rowTemplate: {
                         render({ container, model, onRendered }) {
                             const data = model.data;
-                            const markup = $(`<tr><td>${data.id}</td></tr>`).css('height', `${rowHeight}px`);
+
+                            const markup = $(`<tr><td>${data.id}</td></tr>`)
+                                .css('height', `${rowHeight}px`);
 
                             commonUtils.deferUpdate(function() {
                                 container.append(markup);

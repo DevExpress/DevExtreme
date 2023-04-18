@@ -4,6 +4,9 @@ QUnit.testStart(function() {
             .fixed-height {
                 height: 400px;
             }
+            #dataGridWithStyle {
+                width: 500px;
+            }
             .qunit-fixture-auto-height {
                 position: static !important;
                 height: auto !important;
@@ -20,7 +23,6 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    $('#dataGridWithStyle').css('width', '500px');
     addShadowDomStyles($('#qunit-fixture'));
 });
 

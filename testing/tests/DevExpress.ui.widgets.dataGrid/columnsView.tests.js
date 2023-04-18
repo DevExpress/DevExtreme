@@ -170,8 +170,18 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+        const $table = $(that.columnsView._createTable()).append(
+            $(`
+                <tr class="dx-row">
+                    <td>Test</td>
+                    <td>Test Test Test Test Test</td>
+                </tr>
+            `)
+        );
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append($table)
+        );
 
         // act
         const firstCellElement = $table.find('td').first();

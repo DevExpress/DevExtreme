@@ -1,39 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<style nonce="qunit-test">\
-    body {\
-        padding: 0;\
-        margin: 0;\
-    }\
-    .gridWithHeight {\
-        height: 440px;\
-    }\
-</style>\
-<div id="testWrapper">\
-    <div id="testContainer"></div>\
-</div>\
-<div id="root">\
-    <div id="container" class="dx-datagrid dx-widget"></div>\
-</div>\
-<div id="itemsContainer"><div></div><div></div></div>';
-
-    $('#qunit-fixture').html(markup);
-
-    $('#testWrapper').css({
-        padding: '0 40px',
-        margin: '0 50px'
-    });
-
-    $('#itemsContainer > div').css({
-        width: '125px',
-        display: 'inline-block'
-    });
-
-    // $('body').append(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
-
 import devices from 'core/devices';
 import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';
@@ -72,6 +36,40 @@ function createGridView(options, userOptions) {
 
     return this._views.gridView;
 }
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .gridWithHeight {
+                height: 440px;
+            }
+            #testWrapper {
+                padding: 0 40px;
+                margin: 0 50px;
+            }
+            #itemsContainer .itemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+        </style>
+        <div id="testWrapper">
+            <div id="testContainer"></div>
+        </div>
+        <div id="root">
+            <div id="container" class="dx-datagrid dx-widget"></div>
+        </div>
+        <div id="itemsContainer">
+            <div class="itemsContainer__child"></div>
+            <div class="itemsContainer__child"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 // Grid view module///
 QUnit.module('Grid view', {

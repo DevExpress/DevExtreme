@@ -3,54 +3,66 @@ import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 QUnit.testStart(function() {
 
     const markup =
-'<style nonce="qunit-test">\
-    body {\
-        padding: 0;\
-        margin: 0;\
-    }\
-</style>\
-<div id="testWrapper">\
-    <div id="testContainer"></div>\
-</div>\
-<div id="root">\
-    <div id="container" class="dx-datagrid"></div>\
-    <div id="container2" class="dx-datagrid"></div>\
-</div>\
-<div id="itemsContainer"><div></div><div></div></div>\
-<div id="itemsContainerVertical"><div></div><div></div></div>\
-\
-<div class="dx-swatch-1">\
-    <div id="gridInSwatch">\
-    <div id="swatchitemsContainer"><div></div><div></div></div>\
-    </div>\
-</div>';
+        `<style nonce="qunit-test">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            #testWrapper {
+                padding: 0px 40px;
+                margin: 0px 50px;
+            }
+
+            #itemsContainer {
+                font-size: 0;
+            }
+
+            #itemsContainer .itemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+
+            #itemsContainerVertical .itemsContainerVertical__child {
+                width: 125px;
+                height: 50px;
+            }
+
+            #swatchItemsContainer {
+                font-size: 0;
+            }
+
+            #swatchItemsContainer .swatchItemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+        </style>
+        <div id="testWrapper">
+            <div id="testContainer"></div>
+        </div>
+        <div id="root">
+            <div id="container" class="dx-datagrid"></div>
+            <div id="container2" class="dx-datagrid"></div>
+        </div>
+        <div id="itemsContainer">
+            <div class="itemsContainer__child"></div>
+            <div class="itemsContainer__child"></div>
+        </div>
+        <div id="itemsContainerVertical">
+            <div class="itemsContainerVertical__child"></div>
+            <div class="itemsContainerVertical__child"></div>
+        </div>
+
+        <div class="dx-swatch-1">
+            <div id="gridInSwatch">
+            <div id="swatchItemsContainer">
+                <div class="swatchItemsContainer__child"></div>
+                <div class="swatchItemsContainer__child"></div>
+            </div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
-
-    $('#testWrapper').css({
-        padding: '0px 40px',
-        margin: '0px 50px'
-    });
-
-    $('#itemsContainer').css('font-size', 0);
-
-    $('#itemsContainer > div').css({
-        width: '125px',
-        display: 'inline-block'
-    });
-
-    $('#itemsContainerVertical > div').css({
-        width: '125px',
-        height: '50px'
-    });
-
-    $('#swatchitemsContainer').css('font-size', 0);
-
-    $('#swatchitemsContainer > div').css({
-        width: '125px',
-        display: 'inline-block'
-    });
-
     addShadowDomStyles($('#qunit-fixture'));
 });
 
@@ -6666,7 +6678,7 @@ QUnit.module('Headers reordering inside color swatch', {
 
         that.draggingPanels = [new MockDraggingPanel({
             $element: $('<div/>'),
-            columnElements: $('#swatchitemsContainer').children(),
+            columnElements: $('#swatchItemsContainer').children(),
             columns: [{ allowReordering: true }, { allowReordering: true }],
             offset: {
                 left: -10000,
@@ -6676,7 +6688,7 @@ QUnit.module('Headers reordering inside color swatch', {
             location: 'headers'
         }), new MockDraggingPanel({
             $element: $('<div/>'),
-            columnElements: $('#swatchitemsContainer').children(),
+            columnElements: $('#swatchItemsContainer').children(),
             columns: [{ allowReordering: true }, { allowReordering: true }],
             offset: {
                 left: -10000,
