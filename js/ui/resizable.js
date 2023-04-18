@@ -84,14 +84,15 @@ const Resizable = DOMComponent.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        this._initialOffset = this.$element().offset();
-        this._locationDelta = { top: 0, left: 0 };
         this._renderHandles();
     },
 
     _render: function() {
         this.callBase();
         this._renderActions();
+
+        this._initialOffset = this.$element().offset();
+        this._locationDelta = { top: 0, left: 0 };
     },
 
     _renderActions: function() {
