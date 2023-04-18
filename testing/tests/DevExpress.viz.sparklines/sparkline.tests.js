@@ -278,7 +278,7 @@ QUnit.begin(function() {
 
     // T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
-        const container = $('<div style="width: 100px">').appendTo(this.$container);
+        const container = $('<div>').css('width', '100px').appendTo(this.$container);
 
         this.createSparkline({ dataSource: [1], pointSize: 0 }, container);
 
