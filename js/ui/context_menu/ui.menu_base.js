@@ -181,12 +181,8 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _getLinkContainer(iconContainer, textContainer, { linkAttr, url }) {
-        if(iconContainer) {
-            iconContainer.addClass(DX_ICON_WITH_URL_CLASS);
-        }
-        if(textContainer) {
-            textContainer.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
-        }
+        iconContainer?.addClass(DX_ICON_WITH_URL_CLASS);
+        textContainer?.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
         const linkAttributes = isObject(linkAttr) ? linkAttr : {};
         return $('<a>')
             .addClass(DX_ITEM_URL_CLASS)
@@ -217,8 +213,8 @@ class MenuBase extends HierarchicalCollectionWidget {
     _getTextContainer(itemData) {
         const { text } = itemData;
         const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
-        const itemContent = isPlainObject(itemData) ? text : String(itemData);
-        return text && $itemContainer.text(itemContent);
+        const itemText = isPlainObject(itemData) ? text : String(itemData);
+        return text && $itemContainer.text(itemText);
     }
 
     _getItemExtraPropNames() {
