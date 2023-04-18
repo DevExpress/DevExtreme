@@ -682,8 +682,10 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual($($sections[3]).attr('role'), undefined, 'section 3 has no role menu');
 
         this.instance.option('items[3].location', 'menu');
-
         assert.strictEqual($($sections[3]).attr('role'), 'menu', 'section 3 has role menu when item location was changed in runtime');
+
+        this.instance.option('items[0].location', 'center');
+        assert.strictEqual($($sections[0]).attr('role'), undefined, 'section 0 has no role menu when item location was changed in runtime');
     });
 
     QUnit.test('aria role for list items', function(assert) {
