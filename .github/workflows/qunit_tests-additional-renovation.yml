@@ -83,7 +83,7 @@ jobs:
           { MOBILE_UA: "ios10", CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "ui.grid", NO_HEADLESS: true, NO_CSP: true, name: 'ui.grid-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "ui.scheduler", NO_HEADLESS: true, NO_CSP: true, name: 'ui.scheduler-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "viz", NO_CSP: true, name: 'viz-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "viz", name: 'viz-iOS10' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-android6' },
@@ -92,7 +92,7 @@ jobs:
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true, NO_CSP: true, name: 'ui.grid-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true, NO_CSP: true, name: 'ui.scheduler-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", NO_CSP: true, name: 'viz-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", name: 'viz-android6' },
           { SHADOW_DOM: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(3/3)-shadowdom' },
@@ -108,7 +108,7 @@ jobs:
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(2/2)", NO_CSP: true, name: 'ui.grid(2/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(1/2)", NO_CSP: true, name: 'ui.scheduler(1/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(2/2)", NO_CSP: true, name: 'ui.scheduler(2/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", NO_CSP: true, name: 'viz-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", name: 'viz-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' }
         ]
 
