@@ -583,6 +583,7 @@ export type ColumnCustomizeTextArg = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -600,6 +601,7 @@ export type ColumnFixing = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -815,6 +817,7 @@ export interface DragStartEventInfo<TRowData = any> {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export interface EditingBase<TRowData = any, TKey = any> {
@@ -898,6 +901,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export interface EditingTextsBase {
@@ -997,6 +1001,7 @@ export interface FilterPanelCustomizeTextArg<TComponent> {
 }
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1019,6 +1024,7 @@ export type FilterPanelTexts = {
 };
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
@@ -1049,6 +1055,7 @@ export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowDa
 }
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1101,6 +1108,7 @@ export type FilterRow = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1169,6 +1177,7 @@ export type FilterRowOperationDescriptions = {
 export type FilterType = 'exclude' | 'include';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1252,6 +1261,7 @@ export type HeaderFilterSearchConfig = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2280,6 +2290,7 @@ export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
 export type GroupExpandMode = 'buttonClick' | 'rowClick';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2314,6 +2325,7 @@ export type KeyDownInfo = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2380,6 +2392,7 @@ export interface NewRowInfo<TRowData = any> {
 export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2439,6 +2452,7 @@ export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
 export type PagerPageSize = 'all' | 'auto';
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export interface PagingBase {
@@ -2467,6 +2481,7 @@ export interface PagingBase {
 export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = {
@@ -2742,6 +2757,7 @@ export interface SavingInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export interface ScrollingBase {
@@ -2798,6 +2814,7 @@ export interface ScrollingBase {
 }
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2847,6 +2864,7 @@ export type SearchPanel = {
 export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 
 /**
+ * @docid
  * @namespace DevExpress.common.grids
  */
 export interface SelectionBase {
@@ -2881,6 +2899,7 @@ export interface SelectionChangedInfo<TRowData = any, TKey = any> {
 export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLongTap';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -2925,6 +2944,7 @@ export type StartEditAction = 'click' | 'dblClick';
 export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */

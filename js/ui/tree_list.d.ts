@@ -810,7 +810,10 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = GridBaseOptions<dxTr
  */
 export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
@@ -854,6 +857,9 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
  */
 export type dxTreeListEditingTexts = EditingTexts;
 
+/**
+ * @docid
+ */
 export interface EditingTexts extends EditingTextsBase {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
@@ -870,6 +876,9 @@ export interface EditingTexts extends EditingTextsBase {
  */
 export type dxTreeListPaging = Paging;
 
+/**
+ * @docid
+ */
 export interface Paging extends PagingBase {
     /**
      * @docid dxTreeListOptions.paging.enabled
@@ -886,7 +895,10 @@ export interface Paging extends PagingBase {
  */
 export type dxTreeListScrolling = Scrolling;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
@@ -903,7 +915,10 @@ export interface Scrolling extends ScrollingBase {
  */
 export type dxTreeListSelection = Selection;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive

@@ -144,7 +144,10 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      */
     width?: number | string | (() => number | string);
 }
-/** @namespace DevExpress.ui */
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide

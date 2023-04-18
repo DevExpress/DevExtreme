@@ -103,7 +103,10 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
      */
     valueIndicator?: GaugeIndicator;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
@@ -134,7 +137,10 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
       end?: number;
     } | number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxLinearGaugeOptions.scale.horizontalOrientation
@@ -161,7 +167,10 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
      */
     verticalOrientation?: VerticalAlignment;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxLinearGaugeOptions.scale.label.indentFromTick

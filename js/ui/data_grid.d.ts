@@ -1018,7 +1018,10 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = GridBaseOptions<dxDa
     toolbar?: Toolbar;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type Export = {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
@@ -1043,7 +1046,10 @@ export type Export = {
   texts?: ExportTexts;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
@@ -1068,7 +1074,10 @@ export type FilterPanel<TRowData = any, TKey = any> = ComponentFilterPanel<dxDat
 /** @public */
 export type FilterPanelCustomizeTextArg = ComponentFilterPanelCustomizeTextArg<dxDataGrid>;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type GroupPanel = {
   /**
    * @docid dxDataGridOptions.groupPanel.allowColumnDragging
@@ -1088,7 +1097,10 @@ export type GroupPanel = {
   visible?: boolean | Mode;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type Grouping = {
   /**
    * @docid dxDataGridOptions.grouping.allowCollapsing
@@ -1118,7 +1130,10 @@ export type Grouping = {
   texts?: GroupingTexts;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type GroupingTexts = {
   /**
    * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
@@ -1147,7 +1162,10 @@ export type GroupingTexts = {
   ungroupAll?: string;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type MasterDetail<TRowData = any, TKey = any> = {
   /**
    * @docid dxDataGridOptions.masterDetail.autoExpandAll
@@ -1168,6 +1186,9 @@ export type MasterDetail<TRowData = any, TKey = any> = {
   template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData<TRowData, TKey>) => any);
 };
 
+/**
+ * @docid
+ */
 export interface dxDataGridSortByGroupSummaryInfoItem {
     /**
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.groupColumn
@@ -1200,7 +1221,10 @@ export type CustomSummaryInfo<TRowData = any, TKey = any> = {
 /** @public */
 export type RowDragging<TRowData = any, TKey = any> = ComponentRowDragging<dxDataGrid, TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type Summary<TRowData = any, TKey = any> = {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
@@ -1242,7 +1266,10 @@ export type SummaryItemTextInfo = {
   readonly valueText: string;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type SummaryGroupItem = {
     /**
      * @docid dxDataGridOptions.summary.groupItems.alignByColumn
@@ -1295,7 +1322,10 @@ export type SummaryGroupItem = {
     valueFormat?: Format;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type SummaryTotalItem = {
   /**
    * @docid dxDataGridOptions.summary.totalItems.alignment
@@ -1348,7 +1378,10 @@ export type SummaryTotalItem = {
   valueFormat?: Format;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type SummaryTexts = {
     /**
      * @docid dxDataGridOptions.summary.texts.avg
@@ -1453,7 +1486,10 @@ export type Toolbar = {
  */
 export type dxDataGridEditing<TRowData, TKey = any> = Editing<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
@@ -1499,7 +1535,10 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
  */
 export type dxDataGridScrolling = Scrolling;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type Scrolling = ScrollingBase & {
     /**
      * @docid dxDataGridOptions.scrolling.mode
