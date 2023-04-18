@@ -123,7 +123,6 @@ export default class DropDownMenu extends Widget {
     _render() {
         super._render();
         this.setAria({
-            'role': 'menubar',
             'haspopup': true,
             'expanded': this.option('opened')
         });
@@ -258,7 +257,8 @@ export default class DropDownMenu extends Widget {
             activeStateEnabled: true,
             onItemRendered: this.option('onItemRendered'),
             _areaTarget: this.$element(),
-            _itemAttributes: { role: 'menuitem' }
+            _itemAttributes: { role: 'menuitem' },
+            _listAttributes: { role: 'button' },
         });
     }
 
