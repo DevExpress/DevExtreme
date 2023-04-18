@@ -11,7 +11,7 @@ import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import ArrayStore from 'data/array_store';
 import DataGrid from 'ui/data_grid';
-import { getEmulatorStyles } from '../../helpers/stylesHelper';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';

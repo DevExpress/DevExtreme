@@ -7,7 +7,7 @@ import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getHeight, getWidth } from 'core/utils/size';
-import { getEmulatorStyles } from '../../helpers/stylesHelper';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 

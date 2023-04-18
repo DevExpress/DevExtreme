@@ -16,7 +16,7 @@ import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
-import { getEmulatorStyles } from '../../helpers/stylesHelper';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
