@@ -31,6 +31,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 
 const moduleConfig = {
@@ -646,11 +647,27 @@ QUnit.module('\'opened\' option', moduleConfig, () => {
 
 QUnit.module('aria accessibility', moduleConfig, () => {
     QUnit.test('aria role for widget', function(assert) {
-        assert.strictEqual(this.$element.attr('role'), 'menubar');
+        assert.strictEqual(this.$element.attr('role'), 'button');
     });
 
     QUnit.test('aria-haspopup for widget', function(assert) {
         assert.strictEqual(this.$element.attr('aria-haspopup'), 'true');
+    });
+
+    QUnit.test('aria role for widget after Popup opening (T1157065)', function(assert) {
+        this.instance.option({ items: [1, 2, 3] });
+
+        this.overflowMenu.click();
+
+        assert.strictEqual(this.$element.attr('role'), 'button');
+    });
+
+    QUnit.test('aria role for section container (T1157065)', function(assert) {
+        this.instance.option({ items: [1, 2, 3] });
+
+        this.overflowMenu.click();
+
+        assert.strictEqual(this.overflowMenu.$popupContent().find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('role'), 'menu');
     });
 
     QUnit.test('aria role for list items', function(assert) {
