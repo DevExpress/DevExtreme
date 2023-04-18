@@ -388,6 +388,7 @@ export function processModules(
       .forEach(([name, type]) => {
         if (rootViewTypes[name]) {
           throw errors.Error('E1003', moduleName, name);
+          // @ts-expect-error
         } else if (!type?.subclassOf?.(View)) {
           throw errors.Error('E1004', moduleName, name);
         }
