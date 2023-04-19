@@ -1,7 +1,6 @@
 import { extend } from '@js/core/utils/extend';
 import { Deferred } from '@js/core/utils/deferred';
 import { equalByValue } from '@js/core/utils/common';
-// @ts-expect-error
 import { dataControllerModule } from '@js/ui/grid_core/ui.grid_core.data_controller';
 import treeListCore from '../module_core';
 import dataSourceAdapterProvider from '../data_source_adapter/module';

@@ -1,5 +1,4 @@
 import $ from '@js/core/renderer';
-// @ts-expect-error
 import { rowsModule } from '@js/ui/grid_core/ui.grid_core.rows';
 import treeListCore from '../module_core';
 
