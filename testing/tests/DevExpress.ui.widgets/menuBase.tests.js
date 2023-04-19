@@ -1062,7 +1062,8 @@ QUnit.module('Keyboard navigation', () => {
     QUnit.test('Url in item should be clicked by enter button if item.url is set', function(assert) {
         const clickSpy = sinon.spy();
         const menuBase = createMenu({
-            items: [{ text: 'Item text', url: 'http://some_url' }]
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+            focusStateEnabled: true
         });
 
         const menuItem = menuBase.element
@@ -1080,7 +1081,8 @@ QUnit.module('Keyboard navigation', () => {
 
     QUnit.test('Error should not be raised if item.url and item.template are set and item clicked by enter button', function(assert) {
         const menuBase = createMenu({
-            items: [{ text: 'Item text', url: 'http://some_url', template: '<div>Custom Item</div>' }]
+            items: [{ text: 'Item text', url: 'http://some_url', template: '<div>Custom Item</div>' }],
+            focusStateEnabled: true
         });
 
         try {
