@@ -31,6 +31,7 @@ function run_test_impl {
     [ -n "$SHADOW_DOM" ] && url="$url&shadowDom=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
+    [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 
     if [ -n "$TZ" ]; then
         sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime

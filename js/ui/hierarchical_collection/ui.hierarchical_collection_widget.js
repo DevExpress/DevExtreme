@@ -77,23 +77,21 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getItemExtraPropNames: noop,
 
     _initDynamicTemplates: function() {
-        const that = this;
-
         const fields = ['text', 'html', 'items', 'icon'].concat(this._getItemExtraPropNames());
 
         this._templateManager.addDefaultTemplates({
-            item: new BindableTemplate(function($container, itemData) {
-                $container
-                    .html(itemData.html)
-                    .append(this._getIconContainer(itemData))
-                    .append(this._getTextContainer(itemData))
-                    .append(this._getPopoutContainer(itemData));
-                that._addContentClasses(itemData, $container.parent());
-            }.bind(this), fields, this.option('integrationOptions.watchMethod'), {
+            item: new BindableTemplate(this._addContent.bind(this), fields, this.option('integrationOptions.watchMethod'), {
                 'text': this._displayGetter,
                 'items': this._itemsGetter
             })
         });
+    },
+
+    _addContent: function($container, itemData) {
+        $container
+            .html(itemData.html)
+            .append(this._getIconContainer(itemData))
+            .append(this._getTextContainer(itemData));
     },
 
     _getIconContainer: function(itemData) {
@@ -103,10 +101,6 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getTextContainer: function(itemData) {
         return $('<span>').text(itemData.text);
     },
-
-    _getPopoutContainer: noop,
-
-    _addContentClasses: noop,
 
     _initAccessors: function() {
         const that = this;

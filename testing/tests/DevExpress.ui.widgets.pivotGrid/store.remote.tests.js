@@ -6,7 +6,7 @@ import pivotGridUtils from '__internal/grids/pivot_grid/module_widget_utils';
 import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
 
-import '../../../testing/content/orders.js';
+import '../../content/orders.js';
 
 function getCustomArrayStore(data) {
     const arrayStore = new ArrayStore(data);

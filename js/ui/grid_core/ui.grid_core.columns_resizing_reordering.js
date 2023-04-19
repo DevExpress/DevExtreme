@@ -1149,7 +1149,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
                     const $columnElement = $(columnElement);
                     const column = columns[index];
 
-                    if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
+                    if(column && draggingPanel.allowDragging(column)) {
                         $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                         eventsEngine.on($columnElement, addNamespace(dragEventStart, MODULE_NAMESPACE), that.createAction(function(args) {
                             const e = args.event;

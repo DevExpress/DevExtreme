@@ -163,7 +163,10 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      */
     width?: number | string | (() => number | string);
 }
-/** @namespace DevExpress.ui */
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxPopoverAnimation extends dxPopupAnimation {
     /**
      * @docid dxPopoverOptions.animation.hide

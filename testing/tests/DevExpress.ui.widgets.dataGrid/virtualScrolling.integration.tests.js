@@ -15,7 +15,6 @@ import translator from 'animation/translator';
 import dataUtils from 'core/element_data';
 import ODataStore from 'data/odata/store';
 
-
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
@@ -41,7 +40,7 @@ const generateDataSource = function(count) {
 
 QUnit.testStart(function() {
     const markup = `
-        <style>\
+        <style nonce="qunit-test">\
             .qunit-fixture-static {\
                 position: absolute !important;\
                 left: 0 !important;\
@@ -2329,7 +2328,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 2
             },
             rowTemplate: function(container, options) {
-                $(container).append(`<tbody class='dx-row'><tr style="height: ${rowHeight}px"><td>${options.data.id}</td></tr></tbody>`);
+                const tr = $(`<tr><td>${options.data.id}</td></tr>`).css('height', `${rowHeight}px`);
+                const tbody = $('<tbody class="dx-row"></tbody>').append(tr);
+                $(container).append(tbody);
             }
         });
 
@@ -2372,7 +2373,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 2
             },
             dataRowTemplate: function(container, options) {
-                $(container).append(`<tr style="height: ${rowHeight}px"><td>${options.data.id}</td></tr>`);
+                const tr = $(`<tr><td>${options.data.id}</td></tr>`)
+                    .css('height', `${rowHeight}px`);
+
+                $(container).append(tr);
             }
         });
 
@@ -2419,7 +2423,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     rowTemplate: {
                         render({ container, model, onRendered }) {
                             const data = model.data;
-                            const markup = `<tr style="height: ${rowHeight}px"><td>${data.id}</td></tr>`;
+
+                            const markup = $(`<tr><td>${data.id}</td></tr>`)
+                                .css('height', `${rowHeight}px`);
 
                             commonUtils.deferUpdate(function() {
                                 container.append(markup);
@@ -6422,7 +6428,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 },
                 customizeColumns: (columns) => {
                     columns[2].cellTemplate = (container, options) => {
-                        $(container).append(`<div style="height: ${cellHeight}px">${options.data.id}</div>`);
+                        const div = $(`<div>${options.data.id}</div>`).css('height', `${cellHeight}px`);
+                        $(container).append(div);
                     };
                 }
             });

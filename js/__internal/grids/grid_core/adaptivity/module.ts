@@ -17,6 +17,8 @@ import { isElementInDom } from '@js/core/utils/dom';
 import messageLocalization from '@js/localization/message';
 import gridCoreUtils from '../module_utils';
 import modules from '../modules';
+import type { KeyboardNavigationController } from '../keyboard_navigation/module';
+import type { ModuleType } from '../module_types';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -764,8 +766,48 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
     $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
   },
 };
-const AdaptiveColumnsController = modules.ViewController.inherit(adaptiveColumnsControllerMembers) as any;
+const AdaptiveColumnsController = modules.ViewController.inherit(
+  adaptiveColumnsControllerMembers,
+);
 
+const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class AdaptivityKeyboardNavigationExtender extends Base {
+  _isCellValid($cell, isClick?) {
+    return (
+      super._isCellValid($cell, isClick)
+        && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS))
+        && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS)
+    );
+  }
+
+  _processNextCellInMasterDetail($nextCell, $cell) {
+    super._processNextCellInMasterDetail($nextCell, $cell);
+
+    const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
+    const isEditing = this._editingController.isEditing();
+
+    if (
+      isEditing
+        && $nextCell
+        && isCellOrBatchMode
+        && !this._isInsideEditForm($nextCell)
+    ) {
+      eventsEngine.off($nextCell, 'focus', focusCellHandler);
+      eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
+
+      // @ts-expect-error
+      eventsEngine.trigger($cell, 'focus');
+    }
+  }
+
+  _isCellElement($cell) {
+    return super._isCellElement($cell) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
+  }
+
+  init() {
+    super.init();
+    this._adaptiveController = this.getController('adaptiveColumns');
+  }
+};
 export const adaptivityModule: import('../module_types').Module = {
   defaultOptions() {
     return {
@@ -1195,37 +1237,7 @@ export const adaptivityModule: import('../module_types').Module = {
           return this.callBase(column) && !column.adaptiveHidden;
         },
       },
-      keyboardNavigation: {
-        _isCellValid($cell) {
-          return this.callBase.apply(this, arguments)
-                        && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS))
-                        && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
-        },
-
-        _processNextCellInMasterDetail($nextCell, $cell) {
-          this.callBase($nextCell);
-
-          const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
-          const isEditing = this._editingController.isEditing();
-
-          if (isEditing && $nextCell && isCellOrBatchMode && !this._isInsideEditForm($nextCell)) {
-            eventsEngine.off($nextCell, 'focus', focusCellHandler);
-            eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
-
-            // @ts-expect-error
-            eventsEngine.trigger($cell, 'focus');
-          }
-        },
-
-        _isCellElement($cell) {
-          return this.callBase.apply(this, arguments) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
-        },
-
-        init() {
-          this.callBase();
-          this._adaptiveController = this.getController('adaptiveColumns');
-        },
-      },
+      keyboardNavigation,
     },
   },
 };

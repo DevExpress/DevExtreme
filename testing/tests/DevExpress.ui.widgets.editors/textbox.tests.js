@@ -13,10 +13,11 @@ QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture">\
             <div id="textbox"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="widthRootStyle"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
     addShadowDomStyles($('#qunit-fixture'));
 });
 
@@ -310,13 +311,20 @@ QUnit.module('label integration', {
             this.textBox = this.$textBox.dxTextBox('instance');
         };
 
+        const that = this;
+
         class TextEditorLabelMock extends TextEditorLabel {
+            constructor(args) {
+                super(args);
+                that.labelArgs = args;
+                that.labelMock = this;
+            }
+
             updateMaxWidth = sinon.stub();
             updateBeforeWidth = sinon.stub();
         }
 
-        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return this.labelMock = new TextEditorLabelMock(args); };
-        TextBox.mockTextEditorLabel(this.TextEditorLabelMock);
+        TextBox.mockTextEditorLabel(TextEditorLabelMock);
     },
     afterEach: function() {
         Object.values(this.labelMock, (stub) => {

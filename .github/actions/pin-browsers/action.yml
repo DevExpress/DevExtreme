@@ -1,20 +1,22 @@
 name: "Pin Browsers"
-description: "Fill CHROME_VERSION,  FIREFOX_VERSION variables below to enable this action"
+description: "Install and setup Chrome and Firefox"
+
+inputs:
+  chrome-version:
+    description: "Chrome version to install"
+    default: "110.0.5481.177-1"
+  firefox-version:
+    description: "Firefox version to install"
+    default: "latest"
 
 runs:
   using: composite
   steps:
-    - shell: bash
-
+    - name: "Setup Chrome"
+      shell: bash
       env:
-        # List of browser versions
-        # Chrome:  https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
-        # Firefox: https://www.ubuntuupdates.org/package/ubuntu_mozilla_security/focal/main/base/firefox
-        CHROME_VERSION:  "110.0.5481.177-1"
-        FIREFOX_VERSION: "112.0+build2-0ubuntu0.20.04.1"
-
+        CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
-
         if [ -n "$CHROME_VERSION" ]; then
           curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb" > /tmp/chrome.deb
           sudo dpkg -i /tmp/chrome.deb
@@ -23,12 +25,16 @@ runs:
         else
           echo "Skip Chrome upgrade"
         fi
-
-        if [ -n "$FIREFOX_VERSION" ]; then
-          curl -L "http://ppa.launchpad.net/ubuntu-mozilla-security/ppa/ubuntu/pool/main/f/firefox/firefox_${FIREFOX_VERSION}_amd64.deb" > /tmp/firefox.deb
-          sudo dpkg -i /tmp/firefox.deb
-          unlink /tmp/firefox.deb
-          firefox --version
-        else
-          echo "Skip Firefox upgrade"
-        fi
+    - shell: bash
+      run: |
+        echo Installed chromium version: ${{ inputs.chrome-version }}
+        google-chrome-stable --version
+    - name: "Setup Firefox"
+      id: setup-firefox
+      uses: browser-actions/setup-firefox@v1
+      with:
+        firefox-version: ${{ inputs.firefox-version }}
+    - shell: bash
+      run: |
+        echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
+        firefox --version

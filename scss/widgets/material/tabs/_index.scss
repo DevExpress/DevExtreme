@@ -13,7 +13,8 @@
 @use "../badge";
 
 
-$material-tabs-background: darken($base-bg, 4%);
+$material-tabs-background: $base-bg;
+$material-tabs-nav-button-background: color.change($button-default-hover-bg, $alpha: 0.08);
 
 .dx-tabs {
   padding: 0;
@@ -39,9 +40,13 @@ $material-tabs-background: darken($base-bg, 4%);
   box-shadow: none;
 
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
-    @include dx-button-flat-color-styling($base-icon-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+    @include dx-button-flat-color-styling($base-icon-color, $material-tabs-nav-button-background, $material-tabs-nav-button-background, $material-tabs-nav-button-background);
 
     border-radius: 0;
+
+    .dx-inkripple-wave {
+      background-color: $material-tabs-nav-button-background;
+    }
   }
 
   .dx-button-content {
@@ -98,6 +103,35 @@ $material-tabs-background: darken($base-bg, 4%);
       background-color: $tabs-selected-tab-bottom-border-color;
     }
   }
+
+  &.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
+  }
+
+  &.dx-state-disabled {
+    color: $tabs-tab-disabled-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-disabled-color;
+    }
+  }
+
+  &.dx-state-disabled.dx-tab-selected {
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      left: 0;
+      right: 0;
+      background-color: $tabs-disabled-tab-bottom-border-color;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-active .dx-inkripple-wave {
+    background-color: $tabs-active-tab-bg-color;
+  }
 }
 
 .dx-tab-content,
@@ -106,14 +140,4 @@ $material-tabs-background: darken($base-bg, 4%);
   text-transform: uppercase;
   line-height: $material-tab-text-line-height;
   font-weight: 500;
-}
-
-.dx-state-disabled {
-  &.dx-tabs {
-    opacity: 1;
-  }
-
-  .dx-tab-content {
-    opacity: 0.3;
-  }
 }
