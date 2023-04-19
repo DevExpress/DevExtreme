@@ -132,7 +132,7 @@ QUnit.module('Navigator', {
 }, () => {
     QUnit.test('Navigator links must prevent default click browser action', function(assert) {
         const $window = $(window);
-        const brick = $('<div style=\'height:50000px;\'></div>');
+        const brick = $('<div></div>');
         const immediateClick = (element) => {
             const event = document.createEvent('MouseEvent');
 
@@ -142,6 +142,7 @@ QUnit.module('Navigator', {
         let actualScrollTop;
         try {
             brick.appendTo('#qunit-fixture');
+            brick.css('height', '50000px');
             brick.insertBefore(this.$element);
             $window.scrollTop(50000);
             actualScrollTop = $window.scrollTop();

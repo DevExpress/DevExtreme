@@ -590,7 +590,7 @@ QUnit.module('basics', {}, () => {
 
         kb.type('11');
 
-        sinon.stub(instance, '_inputIsInvalid', () => true);
+        sinon.stub(instance, '_inputIsInvalid').callsFake(() => true);
 
         try {
             const $clearButton = $element.find(`.${CLEAR_BUTTON_CLASS}`);

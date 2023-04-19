@@ -44,13 +44,23 @@ QUnit.testStart(() => {
                 </div>\
             </div>\
             \
-            <div style="position: fixed; right: 0; bottom: 0; width: 500px; height: 500px;">\
+            <div id="selectBoxWithoutScrollWrapper">\
                 <div id="selectBoxWithoutScroll"></div>\
             </div>\
-            <div id="test-container" style="overflow-hidden"></div>\
+            <div id="test-container"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#selectBoxWithoutScrollWrapper').css({
+        position: 'fixed',
+        right: 0,
+        bottom: 0,
+        width: '500px',
+        height: '500px'
+    });
+
+    $('#test-container').css('overflow', 'hidden');
 });
 
 const POPUP_CONTENT_CLASS = 'dx-popup-content';

@@ -11,7 +11,6 @@ import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { move } from '../../animation/translator';
 import Scrollable from '../scroll_view/ui.scrollable';
-import { when } from '../../core/utils/deferred';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -165,14 +164,13 @@ const baseFixedColumns = {
 
                 $fixedTable = this._createTable(fixedColumns);
                 this._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
-                when(this._updateContent($fixedTable, change)).done(() => {
-                    this._isFixedTableRendering = false;
-                });
+                this._updateContent($fixedTable, change, true);
 
                 if(columnIndices) {
                     change.columnIndices = columnIndices;
                 }
 
+                this._isFixedTableRendering = false;
             }
         } else {
             this._fixedTableElement && this._fixedTableElement.parent().remove();
@@ -245,10 +243,10 @@ const baseFixedColumns = {
         return $cell;
     },
 
-    _wrapTableInScrollContainer: function() {
+    _wrapTableInScrollContainer: function($table, isFixedTableRendering) {
         const $scrollContainer = this.callBase.apply(this, arguments);
 
-        if(this._isFixedTableRendering) {
+        if(this._isFixedTableRendering || isFixedTableRendering) {
             $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS));
         }
 
@@ -348,14 +346,15 @@ const baseFixedColumns = {
         return normalizeColumnWidths(fixedColumns, result, fixedWidths);
     },
 
-    getTableElement: function() {
-        const tableElement = this._isFixedTableRendering ? this._fixedTableElement : this.callBase();
+    getTableElement: function(isFixedTableRendering) {
+        isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
+        const tableElement = isFixedTableRendering ? this._fixedTableElement : this.callBase();
 
         return tableElement;
     },
 
-    setTableElement: function(tableElement) {
-        if(this._isFixedTableRendering) {
+    setTableElement: function(tableElement, isFixedTableRendering) {
+        if(this._isFixedTableRendering || isFixedTableRendering) {
             this._fixedTableElement = tableElement.addClass(POINTER_EVENTS_NONE_CLASS);
         } else {
             this.callBase(tableElement);
@@ -474,7 +473,6 @@ const baseFixedColumns = {
     },
 
     synchronizeRows: function() {
-        const that = this;
         const rowHeights = [];
         const fixedRowHeights = [];
         let rowIndex;
@@ -482,36 +480,37 @@ const baseFixedColumns = {
         let $fixedRowElements;
         let $contentElement;
 
+        this.waitAsyncTemplates(true).done(() => {
+            if(this._isFixedColumns && this._tableElement && this._fixedTableElement) {
+                const heightTable = this._getClientHeight(this._tableElement.get(0));
+                const heightFixedTable = this._getClientHeight(this._fixedTableElement.get(0));
+                $rowElements = this._getRowElements(this._tableElement);
+                $fixedRowElements = this._getRowElements(this._fixedTableElement);
+                $contentElement = this._findContentElement();
 
-        if(that._isFixedColumns && that._tableElement && that._fixedTableElement) {
-            const heightTable = that._getClientHeight(that._tableElement.get(0));
-            const heightFixedTable = that._getClientHeight(that._fixedTableElement.get(0));
-            $rowElements = that._getRowElements(that._tableElement);
-            $fixedRowElements = that._getRowElements(that._fixedTableElement);
-            $contentElement = that._findContentElement();
+                if(heightTable !== heightFixedTable) {
+                    $contentElement && $contentElement.css('height', heightTable);
+                    $rowElements.css('height', '');
+                    $fixedRowElements.css('height', '');
 
-            if(heightTable !== heightFixedTable) {
-                $contentElement && $contentElement.css('height', heightTable);
-                $rowElements.css('height', '');
-                $fixedRowElements.css('height', '');
-
-                for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
-                    rowHeights.push(that._getClientHeight($rowElements.get(rowIndex)));
-                    fixedRowHeights.push(that._getClientHeight($fixedRowElements.get(rowIndex)));
-                }
-                for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
-                    const rowHeight = rowHeights[rowIndex];
-                    const fixedRowHeight = fixedRowHeights[rowIndex];
-                    if(rowHeight > fixedRowHeight) {
-                        $fixedRowElements.eq(rowIndex).css('height', rowHeight);
-                    } else if(rowHeight < fixedRowHeight) {
-                        $rowElements.eq(rowIndex).css('height', fixedRowHeight);
+                    for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
+                        rowHeights.push(this._getClientHeight($rowElements.get(rowIndex)));
+                        fixedRowHeights.push(this._getClientHeight($fixedRowElements.get(rowIndex)));
                     }
-                }
+                    for(rowIndex = 0; rowIndex < $rowElements.length; rowIndex++) {
+                        const rowHeight = rowHeights[rowIndex];
+                        const fixedRowHeight = fixedRowHeights[rowIndex];
+                        if(rowHeight > fixedRowHeight) {
+                            $fixedRowElements.eq(rowIndex).css('height', rowHeight);
+                        } else if(rowHeight < fixedRowHeight) {
+                            $rowElements.eq(rowIndex).css('height', fixedRowHeight);
+                        }
+                    }
 
-                $contentElement && $contentElement.css('height', '');
+                    $contentElement && $contentElement.css('height', '');
+                }
             }
-        }
+        });
     },
 
     setScrollerSpacing: function(width) {
@@ -645,13 +644,15 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         return browser.mozilla ? 60 : 0;
     },
 
-    _findContentElement: function() {
+    _findContentElement: function(isFixedTableRendering) {
         let $content;
         let scrollTop;
         const contentClass = this.addWidgetPrefix(CONTENT_CLASS);
         const element = this.element();
 
-        if(element && this._isFixedTableRendering) {
+        isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
+
+        if(element && isFixedTableRendering) {
             $content = element.children('.' + contentClass);
 
             const scrollable = this.getScrollable();
@@ -717,8 +718,8 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this._updateFixedTablePosition(scrollTop);
     },
 
-    _renderContent: function(contentElement, tableElement) {
-        if(this._isFixedTableRendering) {
+    _renderContent: function(contentElement, tableElement, isFixedTableRendering) {
+        if(this._isFixedTableRendering || isFixedTableRendering) {
             return contentElement
                 .empty()
                 .addClass(this.addWidgetPrefix(CONTENT_CLASS) + ' ' + this.addWidgetPrefix(CONTENT_FIXED_CLASS))
@@ -801,15 +802,19 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _renderCore: function(change) {
         this._detachHoverEvents();
 
-        this.callBase(change);
+        const deferred = this.callBase(change);
 
         const isFixedColumns = this._isFixedColumns;
 
         this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
         if(this.option('hoverStateEnabled') && isFixedColumns) {
-            this._attachHoverEvents();
+            deferred.done(() => {
+                this._attachHoverEvents();
+            });
         }
+
+        return deferred;
     },
 
     setRowsOpacity: function(columnIndex, value) {

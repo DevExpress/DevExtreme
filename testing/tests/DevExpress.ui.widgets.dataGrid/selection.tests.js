@@ -3944,6 +3944,47 @@ QUnit.module('Selection with views', {
             assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
         });
     });
+
+    // T1141405
+    QUnit.test('The Select All state should be updated after all async templates have rendered (React)', function(assert) {
+        // arrange
+        const clock = sinon.useFakeTimers();
+
+        try {
+            const d = $.Deferred();
+            const $testElement = $('#container');
+
+            this.options.loadingTimeout = 30;
+            this.options.renderAsync = false;
+            this.options.templatesRenderAsynchronously = true;
+            this.setup();
+            this.columnHeadersView._templateDeferreds.add(d);
+            sinon.spy(this.columnHeadersView, '_updateSelectAllValue');
+
+            // act
+            this.columnHeadersView.render($testElement);
+
+            // assert
+            assert.strictEqual(this.columnHeadersView._updateSelectAllValue.callCount, 0, 'select all state isn\'t updated');
+
+            // act
+            clock.tick(30);
+
+            // assert
+            assert.strictEqual(this.columnHeadersView._updateSelectAllValue.callCount, 0, 'select all state isn\'t updated');
+
+            // act
+            this.columnHeadersView._templateDeferreds.delete(d);
+            d.resolve();
+
+            // assert
+            const $selectAllCheckbox = $('.dx-header-row .dx-command-select').find('.dx-checkbox');
+            assert.strictEqual(this.columnHeadersView._updateSelectAllValue.callCount, 1, 'select all state is updated');
+            assert.strictEqual($selectAllCheckbox.dxCheckBox('option', 'visible'), true, 'select all checkbox is visible');
+        } finally {
+            clock.restore();
+        }
+    });
 });
 
 QUnit.module('Deferred selection', {

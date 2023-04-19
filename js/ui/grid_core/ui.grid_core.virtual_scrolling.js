@@ -430,7 +430,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         renderDelayedTemplates: function(e) {
-            this.waitAsyncTemplates(e).done(() => {
+            this.waitAsyncTemplates().done(() => {
                 this._updateContentPosition(true);
             });
             this.callBase.apply(this, arguments);
@@ -439,7 +439,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         _renderCore: function(e) {
             const startRenderTime = new Date();
 
-            this.callBase.apply(this, arguments);
+            const deferred = this.callBase.apply(this, arguments);
 
             const dataSource = this._dataController._dataSource;
 
@@ -453,6 +453,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                     dataSource._renderTime = (new Date() - startRenderTime);
                 }
             }
+            return deferred;
         },
 
         _getRowElements: function(tableElement) {
@@ -485,7 +486,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             const contentTable = contentElement.children().first();
             if(changeType === 'append' || changeType === 'prepend') {
-                this.waitAsyncTemplates(change).done(() => {
+                this.waitAsyncTemplates().done(() => {
                     const $tBodies = this._getBodies(tableElement);
                     if($tBodies.length === 1) {
                         this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
@@ -1427,11 +1428,16 @@ export const virtualScrollingModule = {
 
                             const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
 
-                            if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
+                            const needToUpdateItems = !(loadingItemsStarted
+                                || this._isLoading && checkLoading
+                                || checkLoadedParamsOnly);
+
+                            if(needToUpdateItems) {
+                                const noPendingChangesInEditing = !this.getController('editing')?.getChanges()?.length;
                                 this.updateItems({
                                     repaintChangesOnly: true,
                                     needUpdateDimensions: true,
-                                    useProcessedItemsCache: true,
+                                    useProcessedItemsCache: noPendingChangesInEditing,
                                     cancelEmptyChanges: true
                                 });
                             }

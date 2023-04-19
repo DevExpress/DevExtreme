@@ -47,9 +47,10 @@ const allowReordering = function(that) {
 
 const TrackerView = modules.View.inherit({
     _renderCore: function() {
-        this.callBase();
+        const deferred = this.callBase();
         this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
         this.hide();
+        return deferred;
     },
 
     _unsubscribeFromCallback: function() {
@@ -116,10 +117,11 @@ const SeparatorView = modules.View.inherit({
     _renderSeparator: function() { },
 
     _renderCore: function(options) {
-        this.callBase(options);
+        const deferred = this.callBase(options);
         this._isShown = true;
         this._renderSeparator();
         this.hide();
+        return deferred;
     },
 
     show: function() {

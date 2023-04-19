@@ -1355,7 +1355,7 @@ QUnit.module('Headers', {
     });
 
     QUnit.test('Check correct work getColumnsWidth without columns', function(assert) {
-    // act
+        // act
         this.columnHeadersView.render($('#container'));
         // assert
         assert.deepEqual(this.columnHeadersView.getColumnWidths(), [], 'empty column widths');
@@ -2960,7 +2960,7 @@ QUnit.module('Render templates with renderAsync', {
         [true, false].forEach((renderAsync) => {
             QUnit.test(`Render column with headerCellTemplate when renderAsync = ${renderAsync} and templatesRenderAsynchronously=${templatesRenderAsynchronously}`, function(assert) {
                 // arrange
-                assert.expect(1);
+                assert.expect(3);
 
                 const $testElement = $('#container');
                 const options = {
@@ -2991,8 +2991,45 @@ QUnit.module('Render templates with renderAsync', {
 
                 // act
                 this.columnHeadersView.render($testElement);
+
+                // assert
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
                 this.clock.tick(50);
+
+                // assert
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
             });
         });
+    });
+    // T1139245 - DataGrid - It is not possible to reorder columns when headerCellRender is used in React
+    QUnit.test('The renderCompleted should raise then content has rendered', function(assert) {
+        const $testElement = $('#container');
+        const options = {
+            columns: [{
+                dataField: 'name',
+                headerCellTemplate: '#testTemplate'
+            }],
+            renderAsync: false,
+            templatesRenderAsynchronously: true
+        };
+
+        this.setupDataGrid(options);
+        this._getTemplate = function() {
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 50);
+                }
+            };
+        };
+        let renderCompletedCall = false;
+        this.columnHeadersView.renderCompleted.add(() => { renderCompletedCall = true; });
+
+        // act
+        this.columnHeadersView.render($testElement);
+        assert.ok(!renderCompletedCall, 'renderCompleted isnt fired because template isnt rendered');
+        this.clock.tick(50);
+        assert.ok(renderCompletedCall, 'renderCompleted fired after template is rendered');
     });
 });

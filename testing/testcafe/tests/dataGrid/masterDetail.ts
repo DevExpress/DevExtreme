@@ -118,3 +118,37 @@ safeSizeTest('pageSizeSelector has correct layout inside masterDetail', async (t
       },
     },
   }));
+
+// T1159578
+safeSizeTest('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid('#container');
+
+  // assert
+  await takeScreenshot('T1159578-master-detail-with-renderAsync-1.png', dataGrid.element);
+
+  // act
+  await t.click(dataGrid.getDataRow(16).getCommandCell(0).element);
+
+  // assert
+  await takeScreenshot('T1159578-master-detail-with-renderAsync-2.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800])
+  .before(() => createWidget('dxDataGrid', {
+    dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
+    keyExpr: 'id',
+    showBorders: true,
+    height: 700,
+    renderAsync: true,
+    masterDetail: {
+      enabled: true,
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+  }));

@@ -8,10 +8,11 @@ QUnit.testStart(function() {
         '<div id="qunit-fixture">\
             <div id="numberbox"></div>\
             <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="widthRootStyle"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 import './numberBoxParts/common.tests.js';
