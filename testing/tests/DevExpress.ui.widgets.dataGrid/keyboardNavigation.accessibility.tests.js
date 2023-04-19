@@ -1,12 +1,3 @@
-QUnit.testStart(function() {
-    const markup = `
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
 import $ from 'jquery';
 
 import 'generic_light.css!';
@@ -22,6 +13,15 @@ import {
     dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 import fx from 'animation/fx';
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Keyboard navigation accessibility', {
     setupModule: function() {

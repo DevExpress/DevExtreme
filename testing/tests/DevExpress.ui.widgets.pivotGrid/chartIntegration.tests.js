@@ -7,7 +7,7 @@ import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/mod
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 /* global orders */
-import '../../../testing/content/orders.js';
+import '../../content/orders.js';
 
 import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
 import 'ui/pivot_grid/ui.pivot_grid';
