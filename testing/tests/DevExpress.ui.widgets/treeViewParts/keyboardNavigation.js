@@ -8,6 +8,8 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+
 QUnit.module('keyboard navigation', {
     beforeEach: function() {
         fx.off = true;
@@ -32,7 +34,7 @@ QUnit.test('node is focused after focusing on element', function(assert) {
     $treeView.focusin();
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
+    assert.ok($firstNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 }),
 
 
@@ -52,12 +54,12 @@ QUnit.test('down arrow move focus to the next element', function(assert) {
     $firstItem.trigger('dxpointerdown');
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
+    assert.ok($firstNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 
     keyboard.keyDown('down');
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'next item was focused after \'down\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'next item was focused after \'down\' was pressed');
 }),
 
 QUnit.test('down arrow move focus to the next element for virtual mode & slow DS', function(assert) {
@@ -78,11 +80,156 @@ QUnit.test('down arrow move focus to the next element for virtual mode & slow DS
 
     $firstItem.trigger('dxpointerdown');
 
-    assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
+    assert.ok($firstNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 
     keyboard.keyDown('down');
 
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'next item was focused after \'down\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'next item was focused after \'down\' was pressed');
+}),
+
+QUnit.test('focus should change from selectAll item to first item on down key pressed', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' } ]
+    });
+
+    $treeView.focusin();
+    keyboardMock($treeView).keyDown('down');
+
+    const $firstItem = $(`.${internals.NODE_CLASS}`).eq(0);
+    assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS));
+}),
+
+QUnit.test('focus should change from first item to selectAll item on up key pressed', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' } ]
+    });
+
+    $treeView.focusin();
+    const $firstItem = $(`.${internals.NODE_CLASS}`).eq(0);
+    $firstItem.trigger('dxpointerdown');
+    keyboardMock($treeView).keyDown('up');
+
+    const $selectAllItem = $(`.${internals.SELECT_ALL_ITEM_CLASS}`);
+    assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+}),
+
+QUnit.test('focus should change from selectAll item to last item on up key pressed', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' }, { id: '2' } ]
+    });
+
+    $treeView.focusin();
+    keyboardMock($treeView).keyDown('up');
+
+    const $lastNode = $(`.${internals.NODE_CLASS}`).eq(1);
+    assert.ok($lastNode.hasClass(FOCUSED_STATE_CLASS));
+}),
+
+QUnit.test('focus should change from last item to selectAll item on down key pressed', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' }, { id: '2' } ]
+    });
+
+    $treeView.focusin();
+    const $lastNode = $(`.${internals.NODE_CLASS}`).eq(1);
+    $lastNode.trigger('dxpointerdown');
+    keyboardMock($treeView).keyDown('down');
+
+    const $selectAllItem = $(`.${internals.SELECT_ALL_ITEM_CLASS}`);
+    assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+}),
+
+QUnit.test('selectAll item should be checked when navigating up from first item with shift key', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' } ]
+    });
+
+    $treeView.focusin();
+    const $firstNode = $(`.${internals.NODE_CLASS}`).eq(0);
+    $firstNode.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
+
+    const $selectAllItem = $(`.${internals.SELECT_ALL_ITEM_CLASS}`);
+    assert.strictEqual($selectAllItem.dxCheckBox('instance').option('value'), true);
+}),
+
+QUnit.test('first checkbox item should be checked when navigating down with shift key from selectAll item', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' } ]
+    });
+
+    $treeView.focusin();
+    $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
+
+    const $firstNode = $(`.${internals.NODE_CLASS}`).eq(0);
+    assert.strictEqual($firstNode.find('.dx-checkbox').dxCheckBox('instance').option('value'), true);
+}),
+
+QUnit.test('focus should be changed from item to selectAll when navigating with home key', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' }, { id: '2' } ]
+    });
+
+    $treeView.focusin();
+    const $lastNode = $(`.${internals.NODE_CLASS}`).eq(1);
+    $lastNode.trigger('dxpointerdown');
+    keyboardMock($treeView).keyDown('Home');
+
+    const $selectAllItem = $(`.${internals.SELECT_ALL_ITEM_CLASS}`);
+    assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+}),
+
+QUnit.test('focus should be changed from selectAll item to last item when navigating with end key', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' }, { id: '2' } ]
+    });
+
+    $treeView.focusin();
+    keyboardMock($treeView).keyDown('End');
+
+    const $lastNode = $(`.${internals.NODE_CLASS}`).eq(1);
+    assert.ok($lastNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
+}),
+
+QUnit.test('all items should be selected when navigating from selectAll item with shift+end', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' }, { id: '2' } ]
+    });
+
+    $treeView.focusin();
+    const $selectAllItem = $(`.${internals.SELECT_ALL_ITEM_CLASS}`);
+    $selectAllItem.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'End', shiftKey: true }));
+
+    const $firstNode = $(`.${internals.NODE_CLASS}`).eq(0);
+    const $lastNode = $(`.${internals.NODE_CLASS}`).eq(1);
+    assert.strictEqual($firstNode.find('.dx-checkbox').dxCheckBox('instance').option('value'), true);
+    assert.strictEqual($lastNode.find('.dx-checkbox').dxCheckBox('instance').option('value'), true);
+}),
+
+QUnit.test('selectAll item should not be checked when navigating with shift+home', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { id: '1' }, { id: '2' } ]
+    });
+
+    $treeView.focusin();
+    const $firstNode = $(`.${internals.NODE_CLASS}`).eq(0);
+    $firstNode.trigger('dxpointerdown');
+
+    $treeView.trigger($.Event('keydown', { key: 'Home', shiftKey: true }));
+
+    const $selectAllItem = $(`.${internals.SELECT_ALL_ITEM_CLASS}`);
+    assert.strictEqual($selectAllItem.dxCheckBox('instance').option('value'), false);
 }),
 
 QUnit.test('\'home\' key pressing move focus to the first element', function(assert) {
@@ -100,12 +247,12 @@ QUnit.test('\'home\' key pressing move focus to the first element', function(ass
 
     $firstItem.trigger('dxpointerdown');
 
-    assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
+    assert.ok($firstNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 
     keyboard.keyDown('home');
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'first item was focused after \'home\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'first item was focused after \'home\' was pressed');
 }),
 
 QUnit.test('\'shift+home\' key pressing extends selection up to the top-most node', function(assert) {
@@ -157,12 +304,12 @@ QUnit.test('\'end\' key pressing move focus to the last element', function(asser
 
     $firstItem.trigger('dxpointerdown');
 
-    assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
+    assert.ok($firstNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 
     keyboard.keyDown('end');
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'last item was focused after \'end\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'last item was focused after \'end\' was pressed');
 }),
 
 QUnit.test('\'shift+end\' key pressing extends selection up to the last node', function(assert) {
@@ -212,11 +359,11 @@ QUnit.test('up arrow move focus to the previous element', function(assert) {
 
     $firstItem.trigger('dxpointerdown');
 
-    assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
+    assert.ok($firstNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 
     keyboard.keyDown('up');
 
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'previous item was focused after \'up\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'previous item was focused after \'up\' was pressed');
 }),
 
 QUnit.test('down arrow move focus on item with the same level', function(assert) {
@@ -238,7 +385,7 @@ QUnit.test('down arrow move focus on item with the same level', function(assert)
 
     $firstItem.trigger('dxpointerdown');
     keyboard.keyDown('down');
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'next item with the same level was focused after \'down\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'next item with the same level was focused after \'down\' was pressed');
 }),
 
 QUnit.test('\'shiftDown\' key test', function(assert) {
@@ -289,7 +436,7 @@ QUnit.test('up arrow move focus on item with same level', function(assert) {
     $firstItem.trigger('dxpointerdown');
     keyboard.keyDown('up');
 
-    assert.ok($secondNode.hasClass('dx-state-focused'), 'previous item was focused after \'up\' was pressed');
+    assert.ok($secondNode.hasClass(FOCUSED_STATE_CLASS), 'previous item was focused after \'up\' was pressed');
 }),
 
 QUnit.test('\'shiftUp\' key test', function(assert) {
@@ -395,7 +542,7 @@ QUnit.test('left arrow focus parent node-container', function(assert) {
 
     $childItem.trigger('dxpointerdown');
     keyboard.keyDown('left');
-    assert.ok($parentNode.hasClass('dx-state-focused'), 'parent item take focus');
+    assert.ok($parentNode.hasClass(FOCUSED_STATE_CLASS), 'parent item take focus');
 }),
 
 QUnit.test('right arrow focus child node, if parent\'s container is expanded', function(assert) {
@@ -417,7 +564,7 @@ QUnit.test('right arrow focus child node, if parent\'s container is expanded', f
 
     const $childNode = $treeView.find('.dx-treeview-node').eq(1);
 
-    assert.ok($childNode.hasClass('dx-state-focused'), 'child item take focus');
+    assert.ok($childNode.hasClass(FOCUSED_STATE_CLASS), 'child item take focus');
 }),
 
 QUnit.test('\'asterisk\' key test', function(assert) {
@@ -465,7 +612,7 @@ QUnit.test('\'asterisk\' key test', function(assert) {
     assert.equal(expandFired, 3, 'onItemExpanded was fired desired number of times');
 
     const $parentNode = $treeView.find('.dx-treeview-node').eq(0);
-    assert.ok($parentNode.hasClass('dx-state-focused'));
+    assert.ok($parentNode.hasClass(FOCUSED_STATE_CLASS));
 }),
 
 QUnit.test('\'minus\' key test', function(assert) {
@@ -606,7 +753,7 @@ QUnit.test('focus remains on parent node if it\'s root after left arrow pressing
     $parentItem.trigger('dxpointerdown');
     keyboard.keyDown('left');
 
-    assert.ok($parentNode.hasClass('dx-state-focused'), 'parent item take focus');
+    assert.ok($parentNode.hasClass(FOCUSED_STATE_CLASS), 'parent item take focus');
 });
 
 QUnit.test('\'enter\' key pressing fire onItemClick', function(assert) {
@@ -790,15 +937,15 @@ QUnit.test('treeview should not lose focus when parent item is disabled (T303800
     let $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=\'21\']');
 
     $focusedNode.find('.dx-treeview-item').trigger('dxpointerdown');
-    assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
+    assert.ok($focusedNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused');
 
     keyboard.keyDown('left');
     $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=\'1\']');
-    assert.ok($focusedNode.hasClass('dx-state-focused'), 'first item was focused');
+    assert.ok($focusedNode.hasClass(FOCUSED_STATE_CLASS), 'first item was focused');
 
     keyboard.keyDown('right');
     $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=\'21\']');
-    assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
+    assert.ok($focusedNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused');
 });
 
 QUnit.testInActiveWindow('First list item should be focused on the \'tab\' key press when the search editor is focused', function(assert) {
@@ -826,7 +973,7 @@ QUnit.testInActiveWindow('First list item should be focused on the \'tab\' key p
     $searchEditor.trigger($.Event('keydown', { key: 'Tab' }));
     this.clock.tick(10);
 
-    assert.ok($treeView.find('.' + internals.NODE_CLASS).first().hasClass('dx-state-focused'), 'first node is focused');
-    assert.ok($treeView.hasClass('dx-state-focused'), 'treeview is focused');
-    assert.ok($treeView.find('.dx-scrollable-content').hasClass('dx-state-focused'), 'scrollable is focused');
+    assert.ok($treeView.find('.' + internals.NODE_CLASS).first().hasClass(FOCUSED_STATE_CLASS), 'first node is focused');
+    assert.ok($treeView.hasClass(FOCUSED_STATE_CLASS), 'treeview is focused');
+    assert.ok($treeView.find('.dx-scrollable-content').hasClass(FOCUSED_STATE_CLASS), 'scrollable is focused');
 });

@@ -19,6 +19,7 @@ window.internals = {
     OPENED_NODE_CONTAINER_CLASS: 'dx-treeview-node-container-opened',
     NODE_CLASS: 'dx-treeview-node',
     ITEM_CLASS: 'dx-treeview-item',
+    SELECT_ALL_ITEM_CLASS: 'dx-treeview-select-all-item',
     ITEM_WITH_CHECKBOX_CLASS: 'dx-treeview-item-with-checkbox',
     IS_LEAF: 'dx-treeview-node-is-leaf',
     TOGGLE_ITEM_VISIBILITY_CLASS: 'dx-treeview-toggle-item-visibility',
