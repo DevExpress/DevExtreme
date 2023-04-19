@@ -19,6 +19,7 @@ import {
     normalizeLoadResult,
     mapDataRespectingGrouping
 } from './utils';
+import { isCompareOptions } from '../../core/utils/data';
 
 export const DataSource = Class.inherit({
     /**
@@ -169,7 +170,7 @@ export const DataSource = Class.inherit({
 
     _extractLoadOptions(options) {
         const result = {};
-        let names = ['sort', 'filter', 'select', 'group', 'requireTotalCount'];
+        let names = ['sort', 'filter', 'localeSensitive', 'compareOptions', 'select', 'group', 'requireTotalCount'];
         const customNames = this._store._customLoadOptions();
 
         if(customNames) {
@@ -242,7 +243,6 @@ export const DataSource = Class.inherit({
         if(newFilter === undefined) {
             return this._storeLoadOptions.filter;
         }
-
         this._storeLoadOptions.filter = newFilter;
         this.pageIndex(0);
     },
@@ -523,6 +523,20 @@ export const DataSource = Class.inherit({
         return this._operationManager.cancelAll();
     },
 
+    _addCompareOptionsToFilter(options) {
+        const filter = this._storeLoadOptions.filter;
+
+        if(!isCompareOptions(filter?.[0]) && options.compareOptions) {
+            this._storeLoadOptions.filter = [
+                {
+                    type: 'compareOptions',
+                    ...options.compareOptions
+                },
+                ...filter ? ['and', filter] : [],
+            ];
+        }
+    },
+
     _addSearchOptions(storeLoadOptions) {
         if(this._disposed) {
             return;
@@ -539,6 +553,9 @@ export const DataSource = Class.inherit({
 
     _createStoreLoadOptions() {
         const result = extend({}, this._storeLoadOptions);
+
+        this._addCompareOptionsToFilter(result);
+
         this._addSearchOptions(result);
 
         if(this._paginate) {
