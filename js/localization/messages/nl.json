@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Waarde moet een nummer zijn",
         "dxNumberBox-noDataText": "Geen gegevens",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Kolom Kiezer",
         "dxDataGrid-columnChooserEmptyText": "Sleep hier een kolomkop om hem te verbergen",
         "dxDataGrid-groupContinuesMessage": "Gaat verder op de volgende pagina",

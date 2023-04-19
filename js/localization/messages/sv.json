@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Värdet måste vara ett nummer",
         "dxNumberBox-noDataText": "Inget data",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Kolumnväljare",
         "dxDataGrid-columnChooserEmptyText": "Dra en kolumn hit för att dölja den",
         "dxDataGrid-groupContinuesMessage": "Fortsätter på nästa sida",
