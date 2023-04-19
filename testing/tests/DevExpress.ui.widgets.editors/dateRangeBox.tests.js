@@ -466,6 +466,20 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             assert.strictEqual(this.instance.option('value')[dateBox === 'startDateBox' ? 0 : 1], newValue);
         });
+
+        QUnit.test(`DateRangeBox should not update value on ${dateBox} value change if the value is the same`, function(assert) {
+            const isStartDateBox = dateBox === 'startDateBox';
+            const newValue = isStartDateBox ? '2023/01/05' : '2023/02/14';
+            const onValueChangedHandler = sinon.stub();
+            const dateBox = isStartDateBox
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            this.instance.option('onValueChanged', onValueChangedHandler);
+            dateBox.option('value', newValue);
+
+            assert.strictEqual(onValueChangedHandler.callCount, 0);
+        });
     });
 
     QUnit.module('onValueChanged event', {
