@@ -171,6 +171,7 @@
 
         "dxPager-infoText": "Page {0} sur {1} ({2} élements)",
         "dxPager-pagesCountText": "sur",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Tous",
 
         "dxPivotGrid-grandTotal": "Total général",

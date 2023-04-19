@@ -149,6 +149,7 @@
         "dxTreeList-editingAddRowToNode": "Ekle",
         "dxPager-infoText": "Sayfa {0} / {1} ({2} veri)",
         "dxPager-pagesCountText": "arasında",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Tümü",
         "dxPivotGrid-grandTotal": "Genel Toplam",
         "dxPivotGrid-total": "{0} Toplam",

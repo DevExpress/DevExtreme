@@ -152,6 +152,7 @@
         "dxTreeList-editingAddRowToNode": "Añadir",
         "dxPager-infoText": "Página {0} de {1} ({2} ítems)",
         "dxPager-pagesCountText": "de",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Todos",
         "dxPivotGrid-grandTotal": "Gran Total",
         "dxPivotGrid-total": "{0} Total",
