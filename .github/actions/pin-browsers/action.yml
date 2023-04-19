@@ -4,10 +4,10 @@ description: "Install and setup Chrome and Firefox"
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "110.0"
+    default: "latest"
   firefox-version:
     description: "Firefox version to install"
-    default: "112.0"
+    default: "latest"
 
 runs:
   using: composite
