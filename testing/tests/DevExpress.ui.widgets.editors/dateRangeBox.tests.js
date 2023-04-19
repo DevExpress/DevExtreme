@@ -431,6 +431,30 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.ok(startDateBox.option('opened'));
     });
 
+    ['startDateBox', 'endDateBox'].forEach((dateBox) => {
+        QUnit.test(`${dateBox} should update value on DateRangeBox value change`, function(assert) {
+            const newValue = ['2023/04/18', '2023/05/03'];
+            const dateBox = dateBox === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            this.instance.option('value', newValue);
+
+            assert.strictEqual(dateBox.option('value'), newValue[dateBox === 'startDateBox' ? 0 : 1]);
+        });
+
+        QUnit.test(`DateRangeBox should update value on ${dateBox} value change`, function(assert) {
+            const newValue = '2023/07/07';
+            const dateBox = dateBox === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            dateBox.option('value', newValue);
+
+            assert.strictEqual(this.instance.option('value')[dateBox === 'startDateBox' ? 0 : 1], newValue);
+        });
+    });
+
     QUnit.module('onValueChanged event', {
         beforeEach: function() {
             this.onValueChangedHandler = sinon.stub();
