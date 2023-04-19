@@ -1,8 +1,6 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
-  OneWay,
   Effect,
   InternalState, RefObject, Ref,
 } from '@devextreme-generator/declarations';
@@ -19,7 +17,6 @@ const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
-const PAGER_PAGES_SMALL_PAGE_INDEX_DESCRIPTION = 'Page index';
 
 export const viewFunction = ({
   pageIndexRef,
@@ -49,17 +46,11 @@ export const viewFunction = ({
     />
   </div>
 );
-
-@ComponentBindings()
-export class PagerSmallProps {
-  @OneWay() inputAttr = { 'aria-label': PAGER_PAGES_SMALL_PAGE_INDEX_DESCRIPTION };
-}
-
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallPropsType = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'> & PagerSmallProps;
+type PagerSmallProps = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' | 'inputAttr'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent<PagerSmallPropsType, 'pageIndexChange'>() {
+export class PagesSmall extends JSXComponent<PagerSmallProps, 'pageIndexChange'>() {
   @Ref() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {
