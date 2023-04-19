@@ -4958,6 +4958,51 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-data-row').get(-1), lastRowElement, 'rows are re-render');
     });
 
+    QUnit.test('No exceptions on initial loading and rendering data when there are async templates and virtual scrolling is enabled', function(assert) {
+        let getTemplateStub;
+
+        try {
+            // arrange
+            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate', function(selector) {
+                return {
+                    render: function(options) {
+                        setTimeout(() => {
+                            options.deferred && options.deferred.resolve();
+                        }, 100);
+                    }
+                };
+            });
+
+            const dataGrid = createDataGrid({
+                renderAsync: false,
+                templatesRenderAsynchronously: true,
+                dataSource: generateItems(100),
+                height: 700,
+                scrolling: {
+                    mode: 'virtual'
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    renderAsync: true,
+                    cellTemplate: '#testTemplate'
+                }]
+            });
+            this.clock.tick(50);
+
+            // act
+            dataGrid.dispose();
+            this.clock.tick(200);
+
+            // assert
+            assert.ok(true, 'no exceptions');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        } finally {
+            getTemplateStub.restore();
+        }
+    });
+
     [true, false].forEach((renderAsync) => {
         // T1150306
         QUnit.test(`Headers should display correctly when there are a fixed command column, headerCellTemplate is set and renderAsync = ${renderAsync} (react)`, function(assert) {

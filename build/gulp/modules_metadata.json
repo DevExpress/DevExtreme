@@ -320,6 +320,12 @@
     }
   },
   {
+    "name": "ui/date_range_box",
+    "exports": {
+      "default": { "path": "ui.dxDateRangeBox", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/defer_rendering",
     "exports": {
       "default": { "path": "ui.dxDeferRendering", "isWidget": true }

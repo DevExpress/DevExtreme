@@ -658,7 +658,9 @@ export const selectionModule = {
           this.callBase(e);
 
           if (!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
-            this._updateSelectAllValue();
+            this.waitAsyncTemplates().done(() => {
+              this._updateSelectAllValue();
+            });
           }
         },
 

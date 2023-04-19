@@ -591,7 +591,7 @@ QUnit.test('\'Expanded aria\' attr should be added when all items were rendered'
 
     let $firstNode = this.$element.find('.dx-treeview-node').first();
 
-    assert.strictEqual($firstNode.attr('aria-expanded'), 'false');
+    assert.strictEqual($firstNode.attr('aria-expanded'), undefined);
 
     this.clock.tick(300);
 
@@ -611,7 +611,7 @@ QUnit.test('\'Expanded aria\' attr should not be added when item does not contai
     this.clock.tick(300);
 
     const $firstNode = this.$element.find('.dx-treeview-node').first();
-    assert.strictEqual($firstNode.attr('aria-expanded'), 'false');
+    assert.strictEqual($firstNode.attr('aria-expanded'), undefined);
 });
 
 QUnit.test('Expanded event should be fired when item contain children', function(assert) {

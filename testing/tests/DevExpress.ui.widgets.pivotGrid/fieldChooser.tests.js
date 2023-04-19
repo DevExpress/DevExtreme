@@ -1981,8 +1981,10 @@ QUnit.module('Base Field chooser', {
 
         this.setup(dataSourceOptions, {
             headerFilter: {
-                allowSearch: true,
-                searchTimeout: 300
+                search: {
+                    enabled: true,
+                    timeout: 300
+                }
             }
         });
 
@@ -2008,7 +2010,9 @@ QUnit.module('Base Field chooser', {
         const fields = [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true,
                 headerFilter: {
-                    allowSearch: false
+                    search: {
+                        enabled: false
+                    }
                 }
             }
         ];
@@ -2021,7 +2025,9 @@ QUnit.module('Base Field chooser', {
 
         this.setup(dataSourceOptions, {
             headerFilter: {
-                allowSearch: true
+                search: {
+                    enabled: true
+                }
             }
         });
 

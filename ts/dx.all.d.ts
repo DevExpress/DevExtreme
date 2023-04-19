@@ -97,6 +97,12 @@ declare global {
     dxDateBox(options: string): any;
     dxDateBox(options: string, ...params: any[]): any;
 
+    dxDateRangeBox(): JQuery;
+    dxDateRangeBox(options: 'instance'): DevExpress.ui.dxDateRangeBox;
+    dxDateRangeBox(options: DevExpress.ui.dxDateRangeBox.Properties): JQuery;
+    dxDateRangeBox(options: string): any;
+    dxDateRangeBox(options: string, ...params: any[]): any;
+
     dxDeferRendering(): JQuery;
     dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
     dxDeferRendering(
@@ -2459,6 +2465,7 @@ declare module DevExpress.common.grids {
   export type ColumnChooser = {
     /**
      * [descr:GridBaseOptions.columnChooser.allowSearch]
+     * @deprecated [depNote:GridBaseOptions.columnChooser.allowSearch]
      */
     allowSearch?: boolean;
     /**
@@ -2478,9 +2485,18 @@ declare module DevExpress.common.grids {
      */
     mode?: ColumnChooserMode;
     /**
+     * [descr:GridBaseOptions.columnChooser.search]
+     */
+    search?: ColumnChooserSearchConfig;
+    /**
      * [descr:GridBaseOptions.columnChooser.searchTimeout]
+     * @deprecated [depNote:GridBaseOptions.columnChooser.searchTimeout]
      */
     searchTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.selection]
+     */
+    selection?: ColumnChooserSelectionConfig;
     /**
      * [descr:GridBaseOptions.columnChooser.title]
      */
@@ -2495,6 +2511,40 @@ declare module DevExpress.common.grids {
     sortOrder?: SortOrder;
   };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
+  /**
+   * [descr:ColumnChooserSearchConfig]
+   */
+  export type ColumnChooserSearchConfig = {
+    /**
+     * [descr:ColumnChooserSearchConfig.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:ColumnChooserSearchConfig.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:ColumnChooserSearchConfig.timeout]
+     */
+    timeout?: number;
+  };
+  /**
+   * [descr:ColumnChooserSelectionConfig]
+   */
+  export type ColumnChooserSelectionConfig = {
+    /**
+     * [descr:ColumnChooserSelectionConfig.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
+    /**
+     * [descr:ColumnChooserSelectionConfig.recursive]
+     */
+    recursive?: boolean;
+    /**
+     * [descr:ColumnChooserSelectionConfig.selectByClick]
+     */
+    selectByClick?: boolean;
+  };
   export type ColumnCustomizeTextArg = {
     value?: any;
     valueText?: string;
@@ -2532,8 +2582,13 @@ declare module DevExpress.common.grids {
   export type ColumnHeaderFilter = {
     /**
      * [descr:GridBaseColumn.headerFilter.allowSearch]
+     * @deprecated [depNote:GridBaseColumn.headerFilter.allowSearch]
      */
     allowSearch?: boolean;
+    /**
+     * [descr:GridBaseColumn.headerFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
     /**
      * [descr:GridBaseColumn.headerFilter.dataSource]
      */
@@ -2552,13 +2607,27 @@ declare module DevExpress.common.grids {
      */
     height?: number;
     /**
+     * [descr:GridBaseColumn.headerFilter.search]
+     */
+    search?: ColumnHeaderFilterSearchConfig;
+    /**
      * [descr:GridBaseColumn.headerFilter.searchMode]
+     * @deprecated [depNote:GridBaseColumn.headerFilter.searchMode]
      */
     searchMode?: SearchMode;
     /**
      * [descr:GridBaseColumn.headerFilter.width]
      */
     width?: number;
+  };
+  /**
+   * [descr:ColumnHeaderFilterSearchConfig]
+   */
+  export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
+    /**
+     * [descr:ColumnHeaderFilterSearchConfig.searchExpr]
+     */
+    searchExpr?: string | Function | Array<string | Function>;
   };
   export type ColumnLookup = {
     /**
@@ -3564,14 +3633,24 @@ declare module DevExpress.common.grids {
   export type HeaderFilter = {
     /**
      * [descr:GridBaseOptions.headerFilter.allowSearch]
+     * @deprecated [depNote:GridBaseOptions.headerFilter.allowSearch]
      */
     allowSearch?: boolean;
+    /**
+     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
     /**
      * [descr:GridBaseOptions.headerFilter.height]
      */
     height?: number;
     /**
+     * [descr:GridBaseOptions.headerFilter.search]
+     */
+    search?: HeaderFilterSearchConfig;
+    /**
      * [descr:GridBaseOptions.headerFilter.searchTimeout]
+     * @deprecated [depNote:GridBaseOptions.headerFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
@@ -3595,6 +3674,27 @@ declare module DevExpress.common.grids {
     | 'quarter'
     | 'second'
     | 'year';
+  /**
+   * [descr:HeaderFilterSearchConfig]
+   */
+  export type HeaderFilterSearchConfig = {
+    /**
+     * [descr:HeaderFilterSearchConfig.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:HeaderFilterSearchConfig.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:HeaderFilterSearchConfig.mode]
+     */
+    mode?: SearchMode;
+    /**
+     * [descr:HeaderFilterSearchConfig.timeout]
+     */
+    timeout?: number;
+  };
   export type HeaderFilterTexts = {
     /**
      * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -5479,7 +5579,19 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.headerFilter]
      */
-    headerFilter?: { allowSearch?: boolean; height?: number; width?: number };
+    headerFilter?: {
+      allowSearch?: boolean;
+      /**
+       * [descr:PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
+      height?: number;
+      /**
+       * [descr:PivotGridDataSourceOptions.fields.headerFilter.search]
+       */
+      search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+      width?: number;
+    };
     /**
      * [descr:PivotGridDataSourceOptions.fields.isMeasure]
      */
@@ -7351,6 +7463,86 @@ declare module DevExpress.ui {
      * [descr:DataExpressionMixinOptions.valueExpr]
      */
     valueExpr?: string | ((item: any) => string | number | boolean);
+  }
+  /**
+   * [descr:DateBoxBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export class DateBoxBase<
+    TProperties = DevExpress.ui.dxDateBox.Properties
+  > extends dxDropDownEditor<TProperties> {
+    /**
+     * [descr:DateBoxBase.close()]
+     */
+    close(): void;
+    /**
+     * [descr:DateBoxBase.open()]
+     */
+    open(): void;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface DateBoxBaseOptions<TComponent>
+    extends dxDropDownEditorOptions<TComponent> {
+    /**
+     * [descr:DateBoxBaseOptions.applyButtonText]
+     */
+    applyButtonText?: string;
+    /**
+     * [descr:DateBoxBaseOptions.calendarOptions]
+     */
+    calendarOptions?: dxCalendarOptions;
+    /**
+     * [descr:DateBoxBaseOptions.cancelButtonText]
+     */
+    cancelButtonText?: string;
+    /**
+     * [descr:DateBoxBaseOptions.dateOutOfRangeMessage]
+     */
+    dateOutOfRangeMessage?: string;
+    /**
+     * [descr:DateBoxBaseOptions.dateSerializationFormat]
+     */
+    dateSerializationFormat?: string;
+    /**
+     * [descr:DateBoxBaseOptions.disabledDates]
+     */
+    disabledDates?:
+      | Array<Date>
+      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
+    /**
+     * [descr:DateBoxBaseOptions.displayFormat]
+     */
+    displayFormat?: Format;
+    /**
+     * [descr:DateBoxBaseOptions.invalidDateMessage]
+     */
+    invalidDateMessage?: string;
+    /**
+     * [descr:DateBoxBaseOptions.max]
+     */
+    max?: Date | number | string;
+    /**
+     * [descr:DateBoxBaseOptions.min]
+     */
+    min?: Date | number | string;
+    /**
+     * [descr:DateBoxBaseOptions.placeholder]
+     */
+    placeholder?: string;
+    /**
+     * [descr:DateBoxBaseOptions.todayButtonText]
+     */
+    todayButtonText?: string;
+    /**
+     * [descr:DateBoxBaseOptions.useMaskBehavior]
+     */
+    useMaskBehavior?: boolean;
+    /**
+     * [descr:DateBoxBaseOptions.dropDownOptions]
+     */
+    dropDownOptions?: DevExpress.ui.dxPopup.Properties;
   }
   /**
    * [descr:DraggableBase]
@@ -10304,16 +10496,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateBox]
    */
-  export class dxDateBox extends dxDropDownEditor<dxDateBoxOptions> {
-    /**
-     * [descr:dxDateBox.close()]
-     */
-    close(): void;
-    /**
-     * [descr:dxDateBox.open()]
-     */
-    open(): void;
-  }
+  export class dxDateBox extends DateBoxBase<DevExpress.ui.dxDateBox.Properties> {}
   module dxDateBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<
       dxDateBox,
@@ -10384,90 +10567,113 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
+  export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * [descr:dxDateBoxOptions.adaptivityEnabled]
      */
     adaptivityEnabled?: boolean;
     /**
-     * [descr:dxDateBoxOptions.applyButtonText]
-     */
-    applyButtonText?: string;
-    /**
-     * [descr:dxDateBoxOptions.calendarOptions]
-     */
-    calendarOptions?: dxCalendarOptions;
-    /**
-     * [descr:dxDateBoxOptions.cancelButtonText]
-     */
-    cancelButtonText?: string;
-    /**
-     * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
-     */
-    dateOutOfRangeMessage?: string;
-    /**
-     * [descr:dxDateBoxOptions.dateSerializationFormat]
-     */
-    dateSerializationFormat?: string;
-    /**
-     * [descr:dxDateBoxOptions.disabledDates]
-     */
-    disabledDates?:
-      | Array<Date>
-      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
-    /**
-     * [descr:dxDateBoxOptions.displayFormat]
-     */
-    displayFormat?: Format;
-    /**
      * [descr:dxDateBoxOptions.interval]
      */
     interval?: number;
-    /**
-     * [descr:dxDateBoxOptions.invalidDateMessage]
-     */
-    invalidDateMessage?: string;
-    /**
-     * [descr:dxDateBoxOptions.max]
-     */
-    max?: Date | number | string;
-    /**
-     * [descr:dxDateBoxOptions.min]
-     */
-    min?: Date | number | string;
     /**
      * [descr:dxDateBoxOptions.pickerType]
      */
     pickerType?: DevExpress.ui.dxDateBox.DatePickerType;
     /**
-     * [descr:dxDateBoxOptions.placeholder]
-     */
-    placeholder?: string;
-    /**
      * [descr:dxDateBoxOptions.showAnalogClock]
      */
     showAnalogClock?: boolean;
-    /**
-     * [descr:dxDateBoxOptions.todayButtonText]
-     */
-    todayButtonText?: string;
     /**
      * [descr:dxDateBoxOptions.type]
      */
     type?: DevExpress.ui.dxDateBox.DateType;
     /**
-     * [descr:dxDateBoxOptions.useMaskBehavior]
-     */
-    useMaskBehavior?: boolean;
-    /**
      * [descr:dxDateBoxOptions.value]
      */
     value?: Date | number | string;
-
-    /**
-     * [descr:dxDateBoxOptions.dropDownOptions]
-     */
-    dropDownOptions?: DevExpress.ui.dxPopup.Properties;
+  }
+  /**
+   * [descr:dxDateRangeBox]
+   */
+  export class dxDateRangeBox extends DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties> {}
+  module dxDateRangeBox {
+    export type ChangeEvent = DevExpress.events.NativeEventInfo<dxDateRangeBox>;
+    export type ClosedEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
+    export type ContentReadyEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
+    export type CopyEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      ClipboardEvent
+    >;
+    export type CutEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      ClipboardEvent
+    >;
+    export type DateRangePickerType = 'calendar' | 'native';
+    export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
+    export type DropDownButtonTemplateData =
+      DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
+    export type EnterKeyEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      KeyboardEvent
+    >;
+    export type FocusInEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      FocusEvent
+    >;
+    export type FocusOutEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      FocusEvent
+    >;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxDateRangeBox>;
+    export type InputEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      UIEvent & { target: HTMLInputElement }
+    >;
+    export type KeyDownEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      KeyboardEvent
+    >;
+    export type KeyPressEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      KeyboardEvent
+    >;
+    export type KeyUpEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      KeyboardEvent
+    >;
+    export type OpenedEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
+    export type OptionChangedEvent =
+      DevExpress.events.EventInfo<dxDateRangeBox> &
+        DevExpress.events.ChangedOptionInfo;
+    export type PasteEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      ClipboardEvent
+    >;
+    export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+      /**
+       * [descr:dxDateRangeBoxOptions.endDate]
+       */
+      endDate?: Date | number | string;
+      /**
+       * [descr:dxDateRangeBoxOptions.pickerType]
+       */
+      pickerType?: DateRangePickerType;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDate]
+       */
+      startDate?: Date | number | string;
+      /**
+       * [descr:dxDateRangeBoxOptions.value]
+       */
+      value?: Array<Date | number | string>;
+    };
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxDateRangeBox,
+      KeyboardEvent | MouseEvent | PointerEvent | Event
+    > &
+      DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
    * [descr:dxDeferRendering]
@@ -15281,14 +15487,24 @@ declare module DevExpress.ui {
   export interface dxGanttHeaderFilter {
     /**
      * [descr:dxGanttHeaderFilter.allowSearch]
+     * @deprecated [depNote:dxGanttHeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
+    /**
+     * [descr:dxGanttHeaderFilter.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
     /**
      * [descr:dxGanttHeaderFilter.height]
      */
     height?: number;
     /**
+     * [descr:dxGanttHeaderFilter.search]
+     */
+    search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+    /**
      * [descr:dxGanttHeaderFilter.searchTimeout]
+     * @deprecated [depNote:dxGanttHeaderFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
@@ -18297,14 +18513,24 @@ declare module DevExpress.ui {
     headerFilter?: {
       /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
+       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
        */
       allowSearch?: boolean;
+      /**
+       * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
       /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.height]
        */
       height?: number;
       /**
+       * [descr:dxPivotGridFieldChooserOptions.headerFilter.search]
+       */
+      search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+      /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
+       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
        */
       searchTimeout?: number;
       /**
@@ -18545,14 +18771,24 @@ declare module DevExpress.ui {
     headerFilter?: {
       /**
        * [descr:dxPivotGridOptions.headerFilter.allowSearch]
+       * @deprecated [depNote:dxPivotGridOptions.headerFilter.allowSearch]
        */
       allowSearch?: boolean;
+      /**
+       * [descr:dxPivotGridOptions.headerFilter.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
       /**
        * [descr:dxPivotGridOptions.headerFilter.height]
        */
       height?: number;
       /**
+       * [descr:dxPivotGridOptions.headerFilter.search]
+       */
+      search?: DevExpress.common.grids.HeaderFilterSearchConfig;
+      /**
        * [descr:dxPivotGridOptions.headerFilter.searchTimeout]
+       * @deprecated [depNote:dxPivotGridOptions.headerFilter.searchTimeout]
        */
       searchTimeout?: number;
       /**

@@ -645,12 +645,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             .attr(DATA_ITEM_ID, this._encodeString(node.internalFields.key))
             .prependTo($nodeContainer);
 
-        this.setAria({
+        const attrs = {
             'role': 'treeitem',
             'label': this._displayGetter(node.internalFields.item) || '',
-            'expanded': node.internalFields.expanded || false,
             'level': this._getLevel($nodeContainer)
-        }, $node);
+        };
+
+        const hasChildNodes = !!node?.internalFields?.childrenKeys?.length;
+
+        if(hasChildNodes) {
+            attrs.expanded = node.internalFields.expanded || false;
+        }
+
+        this.setAria(attrs, $node);
 
         return $node;
     },
@@ -1138,6 +1145,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             tabIndex: 1,
+            elementAttr: { 'aria-label': 'Select All' },
             text: this.option('selectAllText'),
             onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
@@ -1165,6 +1173,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             value: node.internalFields.selected,
             onValueChanged: this._changeCheckboxValue.bind(this),
             focusStateEnabled: false,
+            elementAttr: { 'aria-label': 'Check State' },
             disabled: this._disabledGetter(node)
         });
     },
