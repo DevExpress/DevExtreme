@@ -5,7 +5,6 @@ import 'ui/data_grid';
 
 import 'generic_light.css!';
 
-
 QUnit.testStart(function() {
     const markup =
         '<div id="dataGrid"></div>';

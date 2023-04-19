@@ -1,21 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-        `<style>
-            .qunit-fixture-static {
-                position: static !important;
-                left: 0 !important;
-                top: 0 !important;
-            }
-        </style>
-        <div class="dx-widget" id="grid">
-            <div class="dx-datagrid dx-gridbase-container" id="container">
-            </div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -90,6 +72,24 @@ const processOptionsForCompare = function(options, ignoreOptionNames) {
 
     return result;
 };
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: static !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+        </style>
+        <div class="dx-widget" id="grid">
+            <div class="dx-datagrid dx-gridbase-container" id="container">
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Drag and Drop rows', moduleConfig, () => {
 

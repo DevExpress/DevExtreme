@@ -238,3 +238,11 @@
 .dx-pivotgrid-drag-action {
   touch-action: pinch-zoom;
 }
+
+.dx-pivotgrid-scrollbar-measure-element {
+  position: absolute;
+  top: -9999px;
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+}

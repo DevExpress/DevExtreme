@@ -41,6 +41,10 @@ const DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text';
 const DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon';
 const DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
 
+const DX_ITEM_URL_CLASS = 'dx-item-url';
+const DX_MENU_ITEM_TEXT_URL_CLASS = `${DX_MENU_ITEM_TEXT_CLASS}-with-url`;
+const DX_ICON_WITH_URL_CLASS = `${DX_ICON_CLASS}-with-url`;
+
 const TestComponent = MenuBase.inherit({
     NAME: 'TestComponent',
     _itemDataKey: function() {
@@ -339,7 +343,7 @@ QUnit.module('Menu rendering', () => {
             const menuBase = createMenu({
                 items: [{ text: 'Item text', url }]
             });
-            const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+            const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
             assert.strictEqual(content.tagName, 'A');
             assert.strictEqual(content.getAttribute('href'), url);
@@ -351,11 +355,32 @@ QUnit.module('Menu rendering', () => {
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: '/some_url' }]
         });
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.tagName, 'A');
         assert.strictEqual(content.getAttribute('href'), '/some_url');
         assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('item should contain correct classes if item.url is set', function(assert) {
+        const url = 'http://some_url';
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children();
+
+        assert.ok(content.hasClass(DX_ITEM_URL_CLASS));
+        assert.ok(content.children().hasClass(DX_MENU_ITEM_TEXT_URL_CLASS));
+    });
+
+    QUnit.test('item icon should be rendered as link if item.url is set', function(assert) {
+        const menuBase = createMenu({
+            items: [{ icon: 'save', url: '/some_url' }]
+        });
+
+        const icon = menuBase.element.find(`.${DX_ITEM_URL_CLASS}`).children();
+
+        assert.ok(icon.hasClass(DX_ICON_WITH_URL_CLASS));
     });
 
     QUnit.test('should update item link after update item option with new url', function(assert) {
@@ -365,7 +390,7 @@ QUnit.module('Menu rendering', () => {
 
         menuBase.instance.option('items', [{ text: 'Item text', url: 'http://some_new_url' }]);
 
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.getAttribute('href'), 'http://some_new_url');
     });
@@ -377,7 +402,7 @@ QUnit.module('Menu rendering', () => {
 
         menuBase.instance.option('items[0].url', 'http://some_new_url');
 
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.getAttribute('href'), 'http://some_new_url');
     });
@@ -386,7 +411,7 @@ QUnit.module('Menu rendering', () => {
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
         });
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.tagName, 'A');
         assert.strictEqual(content.getAttribute('href'), 'http://some_url');
@@ -413,7 +438,7 @@ QUnit.module('Menu rendering', () => {
 
         menuBase.instance.option('items', [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_self' } }]);
 
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.getAttribute('href'), 'http://some_url');
         assert.strictEqual(content.getAttribute('target'), '_self');
@@ -426,7 +451,7 @@ QUnit.module('Menu rendering', () => {
 
         menuBase.instance.option('items[0].linkAttr', { target: '_self' });
 
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.getAttribute('href'), 'http://some_url');
         assert.strictEqual(content.getAttribute('target'), '_self');
@@ -446,7 +471,7 @@ QUnit.module('Menu rendering', () => {
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { href: '/extra_url' } }]
         });
-        const content = menuBase.element.find(`.${DX_MENU_ITEM_TEXT_CLASS}`).children()[0];
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
 
         assert.strictEqual(content.tagName, 'A');
         assert.strictEqual(content.getAttribute('href'), 'http://some_url');

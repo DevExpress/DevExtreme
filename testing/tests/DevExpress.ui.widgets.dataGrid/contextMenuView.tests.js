@@ -1,19 +1,5 @@
 import $ from 'jquery';
 
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-        <div id="container"  class="dx-datagrid">\
-            <table id="columnHeaders"><tr class="dx-row"><td></td><td></td></tr></table>\
-            <table id="rows"><tr class="dx-row"><td></td><td></td></tr></table>\
-        </div>\
-        <div id="secondContainer"  class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
 import 'ui/data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
@@ -22,6 +8,18 @@ const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockDataController = dataGridMocks.MockDataController;
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container"  class="dx-datagrid">
+                <table id="columnHeaders"><tr class="dx-row"><td></td><td></td></tr></table>
+                <table id="rows"><tr class="dx-row"><td></td><td></td></tr></table>
+            </div>
+            <div id="secondContainer"  class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Context menu', {
     beforeEach: function() {

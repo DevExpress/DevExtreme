@@ -1157,7 +1157,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         rowsView._templatesCache = {};
         const originalProcessTemplate = dataGrid.getView('rowsView')._processTemplate;
-        sinon.stub(rowsView, '_processTemplate', function(template, templateOptions) {
+        sinon.stub(rowsView, '_processTemplate').callsFake(function(template, templateOptions) {
             if(templateOptions.rowType === 'detail') {
                 return {
                     render: function(options) {

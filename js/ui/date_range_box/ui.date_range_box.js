@@ -1,4 +1,3 @@
-/* eslint-disable no-this-before-super */
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -7,7 +6,7 @@ import config from '../../core/config';
 import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
 import Widget from '../widget/ui.widget';
-import DateBox from '../date_box';
+import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import { FunctionTemplate } from '../../core/templates/function_template';
@@ -17,6 +16,10 @@ const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
+
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
 // STYLE dateRangeBox
 
@@ -61,7 +64,7 @@ class DateRangeBox extends Widget {
 
             label: '',
 
-            labelMode: 'static',
+            labelMode: 'static', // 'static' | 'floating' | 'hidden'
 
             max: undefined,
 
@@ -85,7 +88,7 @@ class DateRangeBox extends Widget {
 
             startDate: null,
 
-            stylingMode: config().editorStylingMode || 'outlined',
+            stylingMode: config().editorStylingMode || 'outlined', // 'outlined' | 'underlined' | 'filled'
 
             text: '',
 
@@ -141,20 +144,50 @@ class DateRangeBox extends Widget {
     }
 
     _initMarkup() {
-        super._initMarkup();
         this.$element()
             .addClass(DATERANGEBOX_CLASS)
             // TODO: remove next classes after adding styles
             .addClass('dx-texteditor')
-            .addClass('dx-editor-outlined')
             .addClass('dx-datebox-date')
             .addClass('dx-dropdowneditor');
+
+        this._renderStylingMode();
+        // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
         this._renderStartDateBox();
         this._renderSeparator();
         this._renderEndDateBox();
 
         this._renderButtonsContainer();
+
+        super._initMarkup();
+    }
+
+    _getStylingModePrefix() {
+        return `${DATERANGEBOX_CLASS}-`;
+    }
+
+    // TODO: extract this part from Editor to separate file and use it here
+    _renderStylingMode() {
+        const optionName = 'stylingMode';
+        const optionValue = this.option(optionName);
+        const prefix = this._getStylingModePrefix();
+
+        const allowedStylingClasses = ALLOWED_STYLING_MODES.map((mode) => {
+            return prefix + mode;
+        });
+
+        allowedStylingClasses.forEach(className => this.$element().removeClass(className));
+
+        let stylingModeClass = prefix + optionValue;
+
+        if(allowedStylingClasses.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            stylingModeClass = prefix + (platformOptionValue || defaultOptionValue);
+        }
+
+        this.$element().addClass(stylingModeClass);
     }
 
     _renderStartDateBox() {
@@ -162,7 +195,7 @@ class DateRangeBox extends Widget {
             .addClass(START_DATEBOX_CLASS)
             .appendTo(this.$element());
 
-        this._startDateBox = this._createComponent(this._$startDateBox, DateBox, this._getStartDateBoxConfig());
+        this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
     }
 
     _renderEndDateBox() {
@@ -170,7 +203,7 @@ class DateRangeBox extends Widget {
             .addClass(END_DATEBOX_CLASS)
             .appendTo(this.$element());
 
-        this._endDateBox = this._createComponent(this._$endDateBox, DateBox, this._getEndDateBoxConfig());
+        this._endDateBox = this._createComponent(this._$endDateBox, MultiselectDateBox, this._getEndDateBoxConfig());
     }
 
     _renderSeparator() {
@@ -199,13 +232,20 @@ class DateRangeBox extends Widget {
     }
 
     _openHandler() {
+        this.getStartDateBox().focus();
+        // TODO: toggle open state here after click was handled with checking active inputs
         this.getStartDateBox().open();
+    }
+
+    _focusInHandler(e) {
+        super._focusInHandler(e);
     }
 
     _getDateBoxConfig() {
         const options = this.option();
 
         return {
+            // TODO: pass type option clearly
             acceptCustomValue: options.acceptCustomValue,
             activeStateEnabled: false,
             applyValueMode: options.applyValueMode,
@@ -222,16 +262,19 @@ class DateRangeBox extends Widget {
             max: options.max,
             maxLength: options.maxLength,
             min: options.min,
+            openOnFieldClick: options.openOnFieldClick,
+            pickerType: 'calendar',
             placeholder: options.placeholder,
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
-            stylingMode: options.stylingMode,
+            stylingMode: 'underlined',
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
             validationStatus: options.validationStatus,
-            valueChangeEvent: options.valueChangeEvent
+            valueChangeEvent: options.valueChangeEvent,
+            _dateRangeBoxInstance: this,
         };
     }
 
@@ -250,7 +293,7 @@ class DateRangeBox extends Widget {
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[0],
-            label: '',
+            label: 'Start Date', // TODO: for test purpose only. change value to ''
         };
     }
 
@@ -259,19 +302,33 @@ class DateRangeBox extends Widget {
 
         return {
             ...this._getDateBoxConfig(),
+            dropDownOptions: {
+                onShowing: (e) => {
+                    e.cancel = true;
+                    this.getStartDateBox().open();
+                }
+            },
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[1],
-            label: '',
+            label: 'End Date', // TODO: for test purpose only. change value to ''
         };
     }
 
-    getStartDateBox() {
-        return this._startDateBox;
+    _focusTarget() {
+        return this.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
-    getEndDateBox() {
-        return this._endDateBox;
+    _focusEventTarget() {
+        return this.element();
+    }
+
+    _focusClassTarget() {
+        return this.$element();
+    }
+
+    _toggleFocusClass(isFocused, $element) {
+        super._toggleFocusClass(isFocused, this._focusClassTarget($element));
     }
 
     _cleanButtonContainers() {
@@ -321,14 +378,19 @@ class DateRangeBox extends Widget {
             case 'label':
             case 'labelMode':
             case 'maxLength':
+                break;
             case 'opened':
+                break;
             case 'openOnFieldClick':
             case 'placeholder':
             case 'readOnly':
             case 'showClearButton':
             case 'spellcheck':
             case 'startDate':
+                break;
             case 'stylingMode':
+                this._renderStylingMode();
+                break;
             case 'text':
             case 'todayButtonText':
             case 'useHiddenSubmitElement':
@@ -346,8 +408,24 @@ class DateRangeBox extends Widget {
         }
     }
 
+    getStartDateBox() {
+        return this._startDateBox;
+    }
+
+    getEndDateBox() {
+        return this._endDateBox;
+    }
+
     getButton(name) {
         return this._buttonCollection.getButton(name);
+    }
+
+    open() {
+        this.option('opened', true);
+    }
+
+    close() {
+        this.option('opened', false);
     }
 }
 

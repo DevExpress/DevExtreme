@@ -1,3 +1,13 @@
+import $ from 'jquery';
+import typeUtils from 'core/utils/type';
+import browser from 'core/utils/browser';
+import { DataSource } from 'data/data_source/data_source';
+import config from 'core/config';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -15,16 +25,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
-import $ from 'jquery';
-import typeUtils from 'core/utils/type';
-import browser from 'core/utils/browser';
-import { DataSource } from 'data/data_source/data_source';
-import config from 'core/config';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 QUnit.module('Adaptive columns', baseModuleConfig, () => {
     QUnit.test('Form item of adaptive detail row is rendered with the underscore template', function(assert) {

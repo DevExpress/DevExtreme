@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup =
-'<style>\
+'<style nonce="qunit-test">\
     table {table-layout: fixed;}/*T428108*/\
     .dx-scrollable-content {\
         padding: 0 !important;\

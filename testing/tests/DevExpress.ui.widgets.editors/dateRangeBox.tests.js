@@ -149,7 +149,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             readOnly: false,
             rtlEnabled: false,
             spellcheck: false,
-            stylingMode: 'outlined',
+            stylingMode: 'underlined',
             useMaskBehavior: false,
             validationMessageMode: 'auto',
             validationMessagePosition: 'auto',
@@ -169,6 +169,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 opened: false,
                 showClearButton: false,
                 showDropDownButton: false,
+                label: 'Start Date',
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -183,6 +184,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             const expectedOptions = {
                 ...expectedDateBoxOptions,
                 showClearButton: false,
+                label: 'End Date',
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -416,5 +418,79 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         const $homeButton = getButtonsContainers(this.$element).find(`.${BUTTON_CLASS}`);
 
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
+    });
+});
+
+QUnit.module('Behavior', moduleConfig, () => {
+    QUnit.test('Popup of startDateBox should open on attempt to open Popup of endDateBox', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        endDateBox.open();
+
+        assert.ok(startDateBox.option('opened'));
+    });
+});
+
+QUnit.module('Strategy', moduleConfig, () => {
+    [
+        {
+            optionName: 'selectionMode',
+            optionValue: 'range'
+        },
+        {
+            optionName: 'viewsCount',
+            optionValue: 2
+        },
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`Calendar should have ${optionName} option equals ${optionValue}`, function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            startDateBox.open();
+
+            assert.strictEqual(startDateBox._strategy.widgetOption(optionName), optionValue);
+        });
+    });
+
+    QUnit.test('Calendar should have "values" option equals to dateRangeBox "value"', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        startDateBox.open();
+
+        assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
+    });
+});
+
+QUnit.module('Public methods', moduleConfig, () => {
+    QUnit.test('Open() method should set opened option value to true', function(assert) {
+        this.reinit({
+            opened: false,
+        });
+
+        this.instance.open();
+
+        assert.strictEqual(this.instance.option('opened'), true, 'opened option has correct value');
+    });
+
+    QUnit.test('Close() methos should set opened option value to false', function(assert) {
+        this.reinit({
+            opened: true,
+        });
+
+        this.instance.close();
+
+        assert.strictEqual(this.instance.option('opened'), false, 'opened option has correct value');
+    });
+});
+
+QUnit.module('Popup integration', moduleConfig, () => {
+    QUnit.test('Popup should be positioned relatively DateRangeBox root element', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        startDateBox.open();
+
+        const popup = startDateBox._popup;
+
+        assert.ok(this.$element.is(popup.option('position.of')));
     });
 });
