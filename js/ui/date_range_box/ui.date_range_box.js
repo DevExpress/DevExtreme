@@ -350,7 +350,7 @@ class DateRangeBox extends Widget {
     }
 
     _optionChanged(args) {
-        const { name } = args;
+        const { name, value } = args;
 
         switch(name) {
             case 'acceptCustomValue':
@@ -380,6 +380,7 @@ class DateRangeBox extends Widget {
             case 'maxLength':
                 break;
             case 'opened':
+                this.getStartDateBox().option('opened', value);
                 break;
             case 'openOnFieldClick':
             case 'placeholder':

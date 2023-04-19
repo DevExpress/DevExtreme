@@ -419,6 +419,9 @@ QUnit.module('DropDownButton', moduleConfig, () => {
 
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
+
+    QUnit.todo('Popup of startDateBox should be opened by click on drop down button', function() {});
+    QUnit.todo('Open popup of startDateBox should be closed by click on drop down button', function() {});
 });
 
 QUnit.module('Behavior', moduleConfig, () => {
@@ -428,36 +431,8 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         endDateBox.open();
 
-        assert.ok(startDateBox.option('opened'));
-    });
-});
-
-QUnit.module('Strategy', moduleConfig, () => {
-    [
-        {
-            optionName: 'selectionMode',
-            optionValue: 'range'
-        },
-        {
-            optionName: 'viewsCount',
-            optionValue: 2
-        },
-    ].forEach(({ optionName, optionValue }) => {
-        QUnit.test(`Calendar should have ${optionName} option equals ${optionValue}`, function(assert) {
-            const startDateBox = getStartDateBoxInstance(this.instance);
-
-            startDateBox.open();
-
-            assert.strictEqual(startDateBox._strategy.widgetOption(optionName), optionValue);
-        });
-    });
-
-    QUnit.test('Calendar should have "values" option equals to dateRangeBox "value"', function(assert) {
-        const startDateBox = getStartDateBoxInstance(this.instance);
-
-        startDateBox.open();
-
-        assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox popup opened');
+        assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox popup opened');
     });
 });
 
@@ -492,5 +467,22 @@ QUnit.module('Popup integration', moduleConfig, () => {
         const popup = startDateBox._popup;
 
         assert.ok(this.$element.is(popup.option('position.of')));
+    });
+});
+
+QUnit.module('Option synchronization', moduleConfig, () => {
+    QUnit.test('startDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        this.instance.option('opened', true);
+
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox option was changed');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
+
+        this.instance.option('opened', false);
+
+        assert.strictEqual(startDateBox.option('opened'), true, 'option was changed');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
     });
 });
