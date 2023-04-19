@@ -56,7 +56,7 @@ const CollectionWidget = Widget.inherit({
     _supportedKeys: function() {
         const space = function(e) {
             e.preventDefault();
-            this._enterKeyHandler.call(this, e);
+            this._enterKeyHandler(e);
         };
         const move = function(location, e) {
             if(!isCommandKeyPressed(e)) {

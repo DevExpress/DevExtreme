@@ -1059,7 +1059,7 @@ QUnit.module('Keyboard navigation', () => {
         this.clock.restore();
     });
 
-    QUnit.test('Url in item should be clicked by enter button if item.url is set', function(assert) {
+    QUnit.test('Url in item should be clicked by enter key press if item.url is set', function(assert) {
         const clickSpy = sinon.spy();
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url' }],
@@ -1079,7 +1079,7 @@ QUnit.module('Keyboard navigation', () => {
         assert.ok(clickSpy.calledOnce);
     });
 
-    QUnit.test('Error should not be raised if item.url and item.template are set and item clicked by enter button', function(assert) {
+    QUnit.test('Error should not be raised if item.url and item.template are set and enter is pressed', function(assert) {
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url', template: '<div>Custom Item</div>' }],
             focusStateEnabled: true
@@ -1091,7 +1091,7 @@ QUnit.module('Keyboard navigation', () => {
                 .keyDown('enter');
             assert.ok(true, 'There is no error');
         } catch(e) {
-            assert.ok(false, 'There is error');
+            assert.ok(false, `Error is raised: ${e.message}`);
         }
     });
 });

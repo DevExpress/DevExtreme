@@ -176,7 +176,7 @@ class MenuBase extends HierarchicalCollectionWidget {
                 const itemData = this._getItemData($itemElement);
                 if(itemData.url) {
                     const link = $itemElement.get(0).getElementsByClassName(DX_ITEM_URL_CLASS)[0];
-                    link && link.click();
+                    link?.click();
                 }
             },
         });
