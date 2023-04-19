@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 
+import 'ui/date_range_box';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

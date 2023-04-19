@@ -431,8 +431,9 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         endDateBox.open();
 
-        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox popup opened');
-        assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox popup opened');
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
+        // TODO: investigate this behavior
+        assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
     });
 });
 
@@ -482,7 +483,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
         this.instance.option('opened', false);
 
-        assert.strictEqual(startDateBox.option('opened'), true, 'option was changed');
+        assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox option was changed');
         assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
     });
 });
