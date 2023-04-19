@@ -6,6 +6,7 @@ import fx from 'animation/fx';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
+import { isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import config from 'core/config';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -88,6 +89,11 @@ QUnit.test('down arrow move focus to the next element for virtual mode & slow DS
 }),
 
 QUnit.test('focus should change from selectAll item to first item on down key pressed', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' } ]
@@ -101,6 +107,11 @@ QUnit.test('focus should change from selectAll item to first item on down key pr
 }),
 
 QUnit.test('focus should change from first item to selectAll item on up key pressed', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' } ]
@@ -116,6 +127,11 @@ QUnit.test('focus should change from first item to selectAll item on up key pres
 }),
 
 QUnit.test('focus should change from selectAll item to last item on up key pressed', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' }, { id: '2' } ]
@@ -129,6 +145,11 @@ QUnit.test('focus should change from selectAll item to last item on up key press
 }),
 
 QUnit.test('focus should change from last item to selectAll item on down key pressed', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' }, { id: '2' } ]
@@ -144,6 +165,11 @@ QUnit.test('focus should change from last item to selectAll item on down key pre
 }),
 
 QUnit.test('selectAll item should be checked when navigating up from first item with shift key', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' } ]
@@ -159,6 +185,11 @@ QUnit.test('selectAll item should be checked when navigating up from first item 
 }),
 
 QUnit.test('first checkbox item should be checked when navigating down with shift key from selectAll item', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' } ]
@@ -172,6 +203,11 @@ QUnit.test('first checkbox item should be checked when navigating down with shif
 }),
 
 QUnit.test('focus should be changed from item to selectAll when navigating with home key', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' }, { id: '2' } ]
@@ -187,6 +223,11 @@ QUnit.test('focus should be changed from item to selectAll when navigating with 
 }),
 
 QUnit.test('focus should be changed from selectAll item to last item when navigating with end key', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' }, { id: '2' } ]
@@ -199,7 +240,12 @@ QUnit.test('focus should be changed from selectAll item to last item when naviga
     assert.ok($lastNode.hasClass(FOCUSED_STATE_CLASS), 'item was focused ');
 }),
 
-QUnit.test('all items should be selected when navigating from selectAll item with shift+end', function(assert) {
+QUnit.test('all items should be checked when navigating from selectAll item with shift+end', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' }, { id: '2' } ]
@@ -217,6 +263,11 @@ QUnit.test('all items should be selected when navigating from selectAll item wit
 }),
 
 QUnit.test('selectAll item should not be checked when navigating with shift+home', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         items: [ { id: '1' }, { id: '2' } ]
