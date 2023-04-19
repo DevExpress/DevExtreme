@@ -173,6 +173,7 @@
 
         "dxPager-infoText": "Puslapis {0} iš {1} ({2} elementai)",
         "dxPager-pagesCountText": "apie",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Viskas",
         "dxPager-page": "Puslapis {0}",
         "dxPager-prevPage": "Ankstesnis puslapis",
