@@ -431,59 +431,67 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.ok(startDateBox.option('opened'));
     });
 
-    QUnit.test('StartDateBox should update value on DateRangeBox value change', function(assert) {
-        const newValue = ['2023/04/18', '2023/05/03'];
-        const startDateBox = getStartDateBoxInstance(this.instance);
+    QUnit.module('onValueChanged event', {
+        beforeEach: function() {
+            this.onValueChangedHandler = sinon.stub();
+            this.instance.option('onValueChanged', this.onValueChangedHandler);
+        }
+    }, () => {
+        QUnit.test('should be called after value change', function(assert) {
+            this.instance.option('value', ['2023/04/19', null]);
 
-        this.instance.option('value', newValue);
-
-        assert.strictEqual(startDateBox.option('value'), newValue[0]);
-    });
-
-    QUnit.test('EndDateBox should update value on DateRangeBox value change', function(assert) {
-        const newValue = ['2023/04/18', '2023/05/03'];
-        const endDateBox = getEndDateBoxInstance(this.instance);
-
-        this.instance.option('value', newValue);
-
-        assert.strictEqual(endDateBox.option('value'), newValue[1]);
-    });
-
-    ['startDateBox', 'endDateBox'].forEach((dateBox) => {
-        QUnit.test(`DateRangeBox should update value on ${dateBox} value change`, function(assert) {
-            const newValue = '2023/07/07';
-            const dateBox = dateBox === 'startDateBox'
-                ? getStartDateBoxInstance(this.instance)
-                : getEndDateBoxInstance(this.instance);
-
-            dateBox.option('value', newValue);
-
-            assert.strictEqual(this.instance.option('value')[dateBox === 'startDateBox' ? 0 : 1], newValue);
+            assert.ok(this.onValueChangedHandler.calledOnce);
         });
-    });
 
-    QUnit.test('onValueChanged event should be called after value change', function(assert) {
-        const onValueChangedHandler = sinon.stub();
+        QUnit.test('onValueChanged event should have correct arguments', function(assert) {
+            const oldValue = this.instance.option('value');
+            const newValue = ['2023/04/19', null];
 
-        this.instance.option('onValueChanged', onValueChangedHandler);
-        this.instance.option('value', ['2023/04/19', null]);
+            this.instance.option('value', newValue);
 
-        assert.ok(onValueChangedHandler.calledOnce);
-    });
+            const { previousValue, value, element, component } = this.onValueChangedHandler.getCall(0).args[0];
+            assert.deepEqual(previousValue, oldValue);
+            assert.deepEqual(value, newValue);
+            assert.ok($(element).is(this.$element));
+            assert.strictEqual(component, this.instance);
+        });
 
-    QUnit.test('onValueChanged event should have correct argument', function(assert) {
-        const oldValue = this.instance.option('value');
-        const newValue = ['2023/04/19', null];
-        const onValueChangedHandler = sinon.stub();
+        [
+            {
+                newValue: ['2022/01/05', '2022/02/14'],
+                scenario: 'with new startDate and endDate'
+            },
+            {
+                newValue: ['2022/01/05', '2023/02/14'],
+                scenario: 'with new startDate'
+            },
+            {
+                newValue: ['2023/01/05', '2022/02/14'],
+                scenario: 'with new endDate'
+            },
+        ].forEach(({ newValue, scenario }) => {
+            QUnit.test(`should be called after updateValue call ${scenario}`, function(assert) {
+                this.instance.updateValue(newValue);
 
-        this.instance.option('onValueChanged', onValueChangedHandler);
-        this.instance.option('value', newValue);
+                assert.ok(this.onValueChangedHandler.calledOnce);
+            });
+        });
 
-        const { previousValue, value, element, component } = onValueChangedHandler.getCall(0).args[0];
-        assert.deepEqual(previousValue, oldValue);
-        assert.deepEqual(value, newValue);
-        assert.strictEqual(element, this.$element.get(0));
-        assert.strictEqual(component, this.instance);
+        QUnit.test('should not be called after updateValue call with the same values', function(assert) {
+            this.instance.updateValue(['2023/01/05', '2023/02/14']);
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test('should not be called when values are null and updateValue called with null values', function(assert) {
+            this.reinit({
+                value: [null, null],
+                onValueChanged: this.onValueChangedHandler
+            });
+            this.instance.updateValue([null, null]);
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
     });
 });
 

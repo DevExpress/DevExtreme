@@ -317,10 +317,6 @@ class DateRangeBox extends Widget {
             cancelButtonText: options.cancelButtonText,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
-            onValueChanged: ({ value }) => {
-                const newValue = [value, this.option('value')[1]];
-                this._updateValue(newValue);
-            },
             opened: options.opened,
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,
@@ -341,10 +337,6 @@ class DateRangeBox extends Widget {
                     this.getStartDateBox().open();
                 }
             },
-            onValueChanged: ({ value }) => {
-                const newValue = [this.option('value')[0], value];
-                this._updateValue(newValue);
-            },
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[1],
@@ -364,28 +356,12 @@ class DateRangeBox extends Widget {
         return dateUtils.sameDate(this._getDate(date1), this._getDate(date2));
     }
 
-    _updateValue(newValue) {
+    updateValue(newValue) {
         const [newStartDate, newEndDate] = newValue;
         const [oldStartDate, oldEndDate] = this.option('value');
 
         if(!this._isSameDates(newStartDate, oldStartDate) || !this._isSameDates(newEndDate, oldEndDate)) {
             this.option('value', newValue);
-        }
-    }
-
-    _updateDateBoxesValue(newValue) {
-        const startDateBox = this.getStartDateBox();
-        const endDateBox = this.getEndDateBox();
-        const [newStartDate, newEndDate] = newValue;
-        const oldStartDate = startDateBox.option('value');
-        const oldEndDate = endDateBox.option('value');
-
-        if(!this._isSameDates(newStartDate, oldStartDate)) {
-            startDateBox.option('value', newStartDate);
-        }
-
-        if(!this._isSameDates(newEndDate, oldEndDate)) {
-            endDateBox.option('value', newEndDate);
         }
     }
 
@@ -477,10 +453,10 @@ class DateRangeBox extends Widget {
             case 'validationMessageMode':
             case 'validationMessagePosition':
             case 'validationStatus':
+                break;
             case 'value':
                 this._raiseValueChangeAction(value, previousValue);
                 this._saveValueChangeEvent(undefined);
-                this._updateDateBoxesValue(value);
                 break;
             case 'valueChangeEvent':
                 break;
