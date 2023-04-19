@@ -166,6 +166,7 @@
 
         "dxPager-infoText": "Pagina {0} van {1} ({2} items)",
         "dxPager-pagesCountText": "van",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Alle",
 
         "dxPivotGrid-grandTotal": "Eindtotaal",

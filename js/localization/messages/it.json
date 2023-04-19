@@ -171,6 +171,7 @@
 
         "dxPager-infoText": "Pagina {0} di {1} ({2} elementi)",
         "dxPager-pagesCountText": "di",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Tutti",
         "dxPager-page": "Pagina {0}",
         "dxPager-prevPage": "Pagina precedente",
