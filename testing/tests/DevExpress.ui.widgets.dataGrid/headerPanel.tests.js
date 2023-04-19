@@ -1,13 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container"  class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -16,6 +6,15 @@ import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import devices from 'core/devices';
 import typeUtils from 'core/utils/type';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container"  class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Header panel', {
     beforeEach: function() {

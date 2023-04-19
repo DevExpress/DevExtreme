@@ -1,12 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container" class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -75,6 +66,15 @@ const scrollTo = function(that, location) {
     scrollable.scrollTo(location);
     $(scrollable.container()).trigger('scroll');
 };
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Focused row', getModuleConfig(true), () => {
     QUnit.testInActiveWindow('TabIndex should set for the [focusedRowIndex; focusedColumnIndex] cell', function(assert) {

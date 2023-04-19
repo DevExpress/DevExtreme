@@ -9,11 +9,11 @@ const HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + '-empty';
 
 QUnit.testStart(function() {
     const markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
+    `<div>
+        <div class="dx-datagrid">
+            <div id="container"></div>
+        </div>
+    </div>`;
 
     $('#qunit-fixture').html(markup);
 });

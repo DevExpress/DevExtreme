@@ -1,13 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container" class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
 import 'ui/data_grid';
 import 'data/odata/store';
 
@@ -68,6 +58,15 @@ const setupSelectionModule = function() {
 const teardownSelectionModule = function() {
     teardownModule.apply(this);
 };
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardownSelectionModule }, () => {
 

@@ -11,51 +11,58 @@ const HORIZONTAL_WIDTH_SMALL = 900;
 
 QUnit.testStart(function() {
     const markup =
-        '<style>\
-            .test-item {\
-                border: 1px solid black;\
-                height: 10px;\
-                width: 200px;\
-            }\
-            .test-container {\
-                border: 1px solid black;\
-            }\
-            .hidden-source {\
-                display: none;\
-            }\
-            .group {\
-                border: 1px solid red;\
-            }\
-            .horizontal .test-item {\
-                display: inline-block;\
-            }\
-            #qunit-fixture {\
-                left: 0;\
-                top: 0;\
-            }\
-        </style>\
-        <div id="sortable" style="height: 300px; width: 300px" class="test-items">\
-            <div class="test-container">\
-                <div class="test-item">1</div>\
-                <div class="test-item">2</div>\
-                <div class="test-item">3</div>\
-                <div class="test-item">4</div>\
-            </div>\
-        </div>\
-        \
-        <div class="dx-swatch-1">\
-            <div id="swatchSortable" style="height: 300px; width: 300px" class="test-items">\
-                <div class="test-container">\
-                    <div class="test-item">1</div>\
-                    <div class="test-item">2</div>\
-                    <div class="test-item">3</div>\
-                    <div class="test-item">4</div>\
-                </div>\
-            </div>\
-        </div>';
+        `<style nonce="qunit-test">
+            .test-item {
+                border: 1px solid black;
+                height: 10px;
+                width: 200px;
+            }
+            .test-container {
+                border: 1px solid black;
+            }
+            .hidden-source {
+                display: none;
+            }
+            .group {
+                border: 1px solid red;
+            }
+            .horizontal .test-item {
+                display: inline-block;
+            }
+            #qunit-fixture {
+                left: 0;
+                top: 0;
+            }
+            #sortable {
+                height: 300px;
+                width: 300px;
+            }
+            #swatchSortable {
+                height: 300px;
+                width: 300px;
+            }
+        </style>
+        <div id="sortable" class="test-items">
+            <div class="test-container">
+                <div class="test-item">1</div>
+                <div class="test-item">2</div>
+                <div class="test-item">3</div>
+                <div class="test-item">4</div>
+            </div>
+        </div>
+
+        <div class="dx-swatch-1">
+            <div id="swatchSortable" class="test-items">
+                <div class="test-container">
+                    <div class="test-item">1</div>
+                    <div class="test-item">2</div>
+                    <div class="test-item">3</div>
+                    <div class="test-item">4</div>
+                </div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
-
 });
 
 function createHorizontalMarkUp(width, addItems, createTable) {
@@ -735,23 +742,23 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('indicator should be shown on dragging between groups', function(assert) {
-        $('#sortable').width(1700).html('').append('<div group="group1" class="group">\
-                                            <div class="test-container">\
-                                                <div class="test-item" style="display: inline-block;">1</div>\
-                                                <div class="test-item" style="display: inline-block;">2</div>\
-                                                <div class="test-item" style="display: inline-block;">3</div>\
-                                                <div class="test-item" style="display: inline-block;">4</div>\
-                                            </div>\
-                                        </div>');
+        $('#sortable').width(1700).html('').append(`<div id="group1" group="group1" class="group">
+            <div class="test-container">
+                <div class="test-item">1</div>
+                <div class="test-item">2</div>
+                <div class="test-item">3</div>
+                <div class="test-item">4</div>
+            </div>
+        </div>`);
 
-        $('#sortable').append('<div group="group2" class="group">\
-                                            <div class="test-container">\
-                                                <div class="test-item" style="display: inline-block;">2-1</div>\
-                                                <div class="test-item" style="display: inline-block;">2-2</div>\
-                                                <div class="test-item" style="display: inline-block;">2-3</div>\
-                                                <div class="test-item" style="display: inline-block;">2-4</div>\
-                                            </div>\
-                                        </div>');
+        $('#sortable').append(`<div id="group2" group="group2" class="group">
+            <div class="test-container">
+                <div class="test-item">2-1</div>
+                <div class="test-item">2-2</div>
+                <div class="test-item">2-3</div>
+                <div class="test-item">2-4</div>
+            </div>
+        </div>`);
 
         const $sortable = $('#sortable').dxSortableOld({
             itemSelector: '.test-item',
@@ -775,18 +782,20 @@ QUnit.module('\'useIndicator\' option', () => {
     });
 
     QUnit.test('dragging to empty group', function(assert) {
-        $('#sortable').width(1700).html('').append('<div group="group1" class="group">\
-                                            <div class="test-container">\
-                                                <div class="test-item" style="display: inline-block;">1</div>\
-                                                <div class="test-item" style="display: inline-block;">2</div>\
-                                                <div class="test-item" style="display: inline-block;">3</div>\
-                                                <div class="test-item" style="display: inline-block;">4</div>\
-                                            </div>\
-                                        </div>');
+        $('#sortable').width(1700).html('').append(`<div id="group1" group="group1" class="group">
+            <div class="test-container">
+                <div class="test-item">1</div>
+                <div class="test-item">2</div>
+                <div class="test-item">3</div>
+                <div class="test-item">4</div>
+            </div>
+        </div>`);
 
-        $('#sortable').append('<div group="group2" class="group">\
-                                            <div class="test-container" style="height: 30px;"></div>\
-                                        </div>');
+        $('#sortable #group1 .test-item').css('display', 'inline-block');
+
+        $('#sortable').append(`<div id="group2" group="group2" class="group">
+            <div class="test-container"></div>
+        </div>`);
 
         const $sortable = $('#sortable').dxSortableOld({
             itemSelector: '.test-item',
@@ -983,18 +992,29 @@ QUnit.module('\'useIndicator\' option', () => {
 
     QUnit.test('Indicator should not be shown on dragging to the same item at another sortable', function(assert) {
         $('#sortable').css('display', 'none');
-        $('<div id=\'sortable1\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div><div class=\'test-item\'>3</div></div></div>')
-            .insertAfter('#sortable')
-            .css({
-                width: '3000px',
-                height: '200px'
-            });
-        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div><div class=\'test-item\'>3</div></div></div>')
-            .insertAfter('#sortable1')
-            .css({
-                width: '3000px',
-                height: '200px'
-            });
+        $(`
+            <div id="sortable1">
+                <div id="second-group" group="groupFilter" class="group horizontal">
+                    <div class="test-container">
+                        <div class="test-item">1</div>
+                        <div class="test-item">2</div>
+                        <div class="test-item">3</div>
+                    </div>
+                </div>
+            </div>
+        `).insertAfter('#sortable');
+
+        $(`
+            <div id="sortable2">
+                <div id="second-group" group="groupFilter" class="group horizontal">
+                    <div class="test-container">
+                        <div class="test-item">1</div>
+                        <div class="test-item">2</div>
+                        <div class="test-item">3</div>
+                    </div>
+                </div>
+            </div>
+        `).insertAfter('#sortable1');
 
         const sortableDown = $('#sortable1').dxSortableOld({
             selector: '#sortable1',
@@ -1146,13 +1166,12 @@ QUnit.module('sortable when source item is hidden', {
         const $sortable = $('#sortable');
         const $container = $sortable.find('.test-container').remove();
 
-        $('<div id=\'first-group\' group=\'first\' class=\'group\'>').css({
+        $('<div id="first-group" group="first" class="group">').css({
             height: 150
         }).append($container).appendTo($sortable);
 
-        $('<div id=\'second-group\' group=\'second\' class=\'group\'>').css({
-            height: 150
-        }).append($('<div class=\'test-container\'>')).appendTo($sortable);
+        $('<div id="second-group" group="second" class="group">')
+            .append($('<div class="test-container">')).appendTo($sortable);
 
         this.createSortable({
             groupSelector: '.group'
@@ -1192,11 +1211,18 @@ QUnit.module('sortable when source item is hidden', {
         const $sortable = $('#sortable');
         const $container = $sortable.find('.test-container').remove();
 
-        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+        $('<div id="first-group" group="first" class="group">')
             .append($container).appendTo($sortable);
 
-        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
-            .insertAfter($sortable);
+        $(`
+            <div id="sortable2">
+                <div id="second-group" group="second" class="group">
+                    <div class="test-container"></div>
+                </div>
+            </div>
+        `).insertAfter($sortable);
+
+        $('#second-group').css('height', '150px');
 
         this.createSortable({
             groupSelector: '.group',
@@ -1244,10 +1270,16 @@ QUnit.module('sortable when source item is hidden', {
         const $sortable = $('#sortable');
         const $container = $sortable.find('.test-container').remove();
 
-        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+        $('<div id="first-group" group="first" class="group">')
             .append($container).appendTo($sortable);
 
-        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
+        $(`
+            <div id="sortable2">
+                <div id="second-group" group="second" class="group">
+                    <div class="test-container"></div>
+                </div>
+            </div>
+        `)
             .insertAfter($sortable);
 
         this.createSortable({
@@ -1282,11 +1314,21 @@ QUnit.module('sortable when source item is hidden', {
         const $sortable = $('#sortable');
         const $container = $sortable.find('.test-container').remove();
 
-        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
-            .append($container).appendTo($sortable);
+        $('<div id="first-group" group="first" class="group">')
+            .append($container)
+            .appendTo($sortable);
 
-        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>10</div><div class=\'test-item\'>11</div><div class=\'test-item\'>12</div></div></div>')
-            .insertAfter($sortable);
+        $(`
+            <div id="sortable2">
+                <div id="second-group" group="second" class="group horizontal">
+                    <div class="test-container">
+                        <div class="test-item">10</div>
+                        <div class="test-item">11</div>
+                        <div class="test-item">12</div>
+                    </div>
+                </div>
+            </div>
+        `).insertAfter($sortable);
 
         this.createSortable({
             groupSelector: '.group',
@@ -1338,11 +1380,19 @@ QUnit.module('sortable when source item is hidden', {
         const $sortable = $('#sortable');
         const $container = $sortable.find('.test-container').remove();
 
-        $('<div id=\'first-group\' group=\'first\' class=\'group\'>')
+        $('<div id="first-group" group="first" class="group">')
             .append($container).appendTo($sortable);
 
-        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'second\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>10</div><div class=\'test-item\'>11</div><div class=\'test-item\'>12</div></div></div>')
-            .insertAfter($sortable);
+        $(`
+            <div id="sortable2">
+                <div id="second-group" group="second" class="group horizontal">
+                    <div class="test-container">
+                        <div class="test-item">10</div>
+                        <div class="test-item">11</div>
+                        <div class="test-item">12</div>
+                    </div>
+                </div>
+        `).insertAfter($sortable);
 
         this.createSortable({
             groupSelector: '.group',
@@ -1380,7 +1430,16 @@ QUnit.module('sortable when source item is hidden', {
     });
 
     QUnit.test('dragging between different sortables positioned one on another', function(assert) {
-        $('<div id=\'sortable1\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'><div class=\'test-item\'>1</div><div class=\'test-item\'>2</div></div></div>')
+        $(`
+            <div id="sortable1">
+                <div id="second-group" group="groupFilter" class="group horizontal">
+                    <div class="test-container">
+                        <div class="test-item">1</div>
+                        <div class="test-item">2</div>
+                    </div>
+                </div>
+            </div>
+        `)
             .insertAfter('#sortable')
             .css({
                 position: 'absolute',
@@ -1390,7 +1449,12 @@ QUnit.module('sortable when source item is hidden', {
                 height: '150px'
             });
 
-        $('<div id=\'sortable2\'><div id=\'second-group\' group=\'groupFilter\' class=\'group horizontal\' style=\'height: 150px\'><div class=\'test-container\'></div></div>')
+        $(`
+            <div id="sortable2">
+                <div id="second-group" group="groupFilter" class="group horizontal">
+                <div class="test-container"></div>
+            </div>
+        `)
             .insertAfter('#sortable1')
             .css({
                 position: 'absolute',
@@ -1399,6 +1463,8 @@ QUnit.module('sortable when source item is hidden', {
                 width: '300px',
                 height: '150px'
             });
+
+        $('#sortable2 #second-group').css('height', '150px');
 
         const sortableDown = this.createSortable({
             selector: '#sortable1',

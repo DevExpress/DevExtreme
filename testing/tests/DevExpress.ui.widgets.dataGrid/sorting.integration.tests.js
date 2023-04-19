@@ -1,5 +1,6 @@
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
+
 QUnit.testStart(function() {
     const markup = `
         <div id="container">
@@ -9,7 +10,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Only one column should be sorted after ungrouping when sorting.mode is \'single\' (T933738)', function(assert) {

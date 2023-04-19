@@ -2,27 +2,23 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
 QUnit.testStart(function() {
-    const markup =
-'\
-<style>\
-    .qunit-fixture-static {\
-         position: absolute !important;\
-         left: 0 !important;\
-         top: 0 !important;\
-        ;\
-    }\
-\
-     .dx-scrollable-native-ios .dx-scrollable-content {\
-         padding: 0 !important;\
-        ;\
-    }\
-\
-</style>\
-<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
+    const markup = `
+        <style nonce="qunit-test">
+            .qunit-fixture-static {
+                 position: absolute !important;
+                 left: 0 !important;
+                 top: 0 !important;
+            }
+             .dx-scrollable-native-ios .dx-scrollable-content {
+                 padding: 0 !important;
+            }
+        </style>
+        <div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>
+    `;
 
     $('#qunit-fixture').html(markup);
 });

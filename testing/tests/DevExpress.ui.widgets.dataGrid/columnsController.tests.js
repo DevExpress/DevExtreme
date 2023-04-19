@@ -18,10 +18,6 @@ import 'localization/globalize/currency';
 import 'localization/globalize/number';
 import { locale } from 'localization/core';
 
-QUnit.testDone(function() {
-    ajaxMock.clear();
-});
-
 const createMockDataSource = function(items, loadOptions) {
     loadOptions = loadOptions || {};
     return {
@@ -118,6 +114,10 @@ const teardownModule = function() {
     executeAsyncMock.teardown();
     this.dispose();
 };
+
+QUnit.testDone(function() {
+    ajaxMock.clear();
+});
 
 QUnit.module('initialization from options', { beforeEach: setupModule, afterEach: teardownModule }, () => {
 

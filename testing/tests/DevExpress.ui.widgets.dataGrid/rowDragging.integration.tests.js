@@ -1,3 +1,10 @@
+import $ from 'jquery';
+import DataGrid from 'ui/data_grid';
+import pointerMock from '../../helpers/pointerMock.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import CustomStore from 'data/custom_store';
+import { generateItems } from '../../helpers/dataGridMocks.js';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -7,14 +14,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(gridMarkup);
 });
-
-import $ from 'jquery';
-import DataGrid from 'ui/data_grid';
-import pointerMock from '../../helpers/pointerMock.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import CustomStore from 'data/custom_store';
-import { generateItems } from '../../helpers/dataGridMocks.js';
-
 
 QUnit.module('Row dragging', baseModuleConfig, () => {
 
