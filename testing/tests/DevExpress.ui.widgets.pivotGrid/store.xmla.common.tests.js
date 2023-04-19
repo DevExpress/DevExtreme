@@ -18,7 +18,7 @@ const stubsEnvironment = {
         this.store = new XmlaStore(this.dataSource);
         that.sendDeferred = $.Deferred();
 
-        that.sendRequest = sinon.stub(pivotGridUtils, 'sendRequest', function() {
+        that.sendRequest = sinon.stub(pivotGridUtils, 'sendRequest').callsFake(function() {
             return that.sendDeferred;
         });
     },

@@ -1,16 +1,5 @@
 import $ from 'jquery';
 
-QUnit.testStart(function() {
-    const markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -19,6 +8,17 @@ import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
 import messageLocalization from 'localization/message';
 import { prepareItems } from 'ui/grid_core/ui.grid_core.export';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('ExportController', {
     beforeEach: function() {
