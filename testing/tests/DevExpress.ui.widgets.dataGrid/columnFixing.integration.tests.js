@@ -1,14 +1,3 @@
-QUnit.testStart(function() {
-    const gridMarkup = `
-        <div id='container'>
-            <div id="dataGrid"></div>
-        </div>
-    `;
-
-    $('#qunit-fixture').html(gridMarkup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import { DataSource } from 'data/data_source/data_source';
@@ -20,6 +9,17 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/radio_group';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
+QUnit.testStart(function() {
+    const gridMarkup = `
+        <div id='container'>
+            <div id="dataGrid"></div>
+        </div>
+    `;
+
+    $('#qunit-fixture').html(gridMarkup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('The "Select All" cell should not have the "dx-col-fixed" class (T1120812)', function(assert) {

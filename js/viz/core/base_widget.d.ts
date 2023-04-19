@@ -179,7 +179,10 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      */
     width?: number | string | (() => number | string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseWidgetExport {
     /**
      * @docid BaseWidgetOptions.export.backgroundColor
@@ -225,7 +228,10 @@ export interface BaseWidgetExport {
      */
     svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseWidgetLoadingIndicator {
     /**
      * @docid BaseWidgetOptions.loadingIndicator.backgroundColor
@@ -259,7 +265,10 @@ export interface BaseWidgetLoadingIndicator {
      */
     text?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseWidgetMargin {
     /**
      * @docid BaseWidgetOptions.margin.bottom
@@ -286,7 +295,10 @@ export interface BaseWidgetMargin {
      */
     top?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseWidgetSize {
     /**
      * @docid BaseWidgetOptions.size.height
@@ -301,7 +313,10 @@ export interface BaseWidgetSize {
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
@@ -410,7 +425,10 @@ export interface BaseWidgetTitle {
      */
     wordWrap?: WordWrap;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.arrowLength

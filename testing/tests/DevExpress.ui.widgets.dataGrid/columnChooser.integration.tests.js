@@ -1,3 +1,7 @@
+import $ from 'jquery';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import messageLocalization from 'localization/message';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -7,10 +11,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(gridMarkup);
 });
-
-import $ from 'jquery';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import messageLocalization from 'localization/message';
 
 QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('columns should be draggable when column chooser is open', function(assert) {

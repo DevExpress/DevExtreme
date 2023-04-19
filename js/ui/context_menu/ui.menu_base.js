@@ -28,6 +28,9 @@ const DX_MENU_ITEM_POPOUT_CONTAINER_CLASS = DX_MENU_ITEM_POPOUT_CLASS + '-contai
 const DX_MENU_ITEM_CAPTION_CLASS = ITEM_CLASS + '-text';
 const SINGLE_SELECTION_MODE = 'single';
 const DEFAULT_DELAY = { 'show': 50, 'hide': 300 };
+const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
+const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
+const DX_ITEM_URL_CLASS = 'dx-item-url';
 
 
 class MenuBase extends HierarchicalCollectionWidget {
@@ -177,19 +180,41 @@ class MenuBase extends HierarchicalCollectionWidget {
         this._initActions();
     }
 
-    _getTextContainer(itemData) {
-        const { text, url, linkAttr } = itemData;
-        const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
-        const itemContent = isPlainObject(itemData) ? text : String(itemData);
-        if(url && text) {
-            const linkAttributes = isObject(linkAttr) ? linkAttr : {};
-            $('<a>')
-                .attr({ ...linkAttributes, href: url })
-                .text(itemContent)
-                .appendTo($itemContainer);
-            return $itemContainer;
+    _getLinkContainer(iconContainer, textContainer, { linkAttr, url }) {
+        iconContainer?.addClass(DX_ICON_WITH_URL_CLASS);
+        textContainer?.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
+        const linkAttributes = isObject(linkAttr) ? linkAttr : {};
+        return $('<a>')
+            .addClass(DX_ITEM_URL_CLASS)
+            .attr({ ...linkAttributes, href: url })
+            .append(iconContainer)
+            .append(textContainer);
+    }
+
+    _addContent($container, itemData) {
+        const { html, url } = itemData;
+
+        const iconContainer = this._getIconContainer(itemData);
+        const textContainer = this._getTextContainer(itemData);
+
+        $container.html(html);
+        if(url) {
+            const link = this._getLinkContainer(iconContainer, textContainer, itemData);
+            $container.append(link);
+        } else {
+            $container
+                .append(iconContainer)
+                .append(textContainer);
         }
-        return text && $itemContainer.text(itemContent);
+        $container.append(this._getPopoutContainer(itemData));
+        this._addContentClasses(itemData, $container.parent());
+    }
+
+    _getTextContainer(itemData) {
+        const { text } = itemData;
+        const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
+        const itemText = isPlainObject(itemData) ? text : String(itemData);
+        return text && $itemContainer.text(itemText);
     }
 
     _getItemExtraPropNames() {
