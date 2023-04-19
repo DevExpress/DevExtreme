@@ -57,6 +57,18 @@
         @include dx-overflow(ellipsis);
       }
 
+      .dx-menu-item-text-with-url {
+        vertical-align: baseline;
+      }
+
+      .dx-icon-with-url {
+        vertical-align: top;
+      }
+
+      .dx-item-url {
+        vertical-align: middle;
+      }
+
       .dx-menu-item-popout-container {
         position: absolute;
         top: 0;
