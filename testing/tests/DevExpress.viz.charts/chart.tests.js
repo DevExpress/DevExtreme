@@ -65,7 +65,9 @@ const environment = {
         return chart;
     },
     _stubLayoutManager: function() {
-        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(LayoutManager);
+        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
+            return new LayoutManager(arguments);
+        });
     },
     _stubLegend: function() {
         this.Legend = sinon.stub(legendModule, 'Legend').callsFake(function() {
