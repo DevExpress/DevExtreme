@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Az érték szám kell legyen",
         "dxNumberBox-noDataText": "Nincs adat",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Oszlopválasztó",
         "dxDataGrid-columnChooserEmptyText": "Húzza ide az oszlopot az elrejtéshez",
         "dxDataGrid-groupContinuesMessage": "A következő oldalon folytatódik",

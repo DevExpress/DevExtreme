@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Vertė turi būti skaičius",
         "dxNumberBox-noDataText": "Nėra duomenų",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Stulpelio pasirinkimas",
         "dxDataGrid-columnChooserEmptyText": "Vilkite stulpelį čia, kad jį paslėptumėte",
         "dxDataGrid-groupContinuesMessage": "Tęsiamas kitame puslapyje",

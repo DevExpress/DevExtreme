@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Verdien må være et tall",
         "dxNumberBox-noDataText": "Ingen data",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Kollonnevelger",
         "dxDataGrid-columnChooserEmptyText": "Dra kolonnen hit for å skjule den",
         "dxDataGrid-groupContinuesMessage": "Fortsetter på neste side",

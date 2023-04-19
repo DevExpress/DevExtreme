@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "值必須是一個數字",
         "dxNumberBox-noDataText": "無資料",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "欄選擇器",
         "dxDataGrid-columnChooserEmptyText": "在這裡拖動一列隱藏它",
         "dxDataGrid-groupContinuesMessage": "下一頁接續",
