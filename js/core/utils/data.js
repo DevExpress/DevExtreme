@@ -181,7 +181,15 @@ export const compileSetter = function(expr) {
     };
 };
 
-export const toComparable = function(value, caseSensitive) {
+export const toComparable = function(value, caseSensitive, options) {
+    options = options || {};
+
+    const customConverter = options.toComparable;
+
+    if(isFunction(customConverter)) {
+        return customConverter(value);
+    }
+
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -191,8 +199,16 @@ export const toComparable = function(value, caseSensitive) {
     }
 
     if(!caseSensitive && typeof value === 'string') {
-        return value.toLowerCase();
+        if(options.ignoreAccent) {
+            value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        return options.localeSensitive ? value.toLocaleLowerCase(options.localeSensitive) : value.toLowerCase();
     }
 
     return value;
+};
+
+export const isCompareOptions = function(value) {
+    return value?.type === 'compareOptions';
 };

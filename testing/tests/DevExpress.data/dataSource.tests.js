@@ -1440,6 +1440,59 @@ QUnit.test('filter', function(assert) {
     });
 });
 
+QUnit.test('filter with compareOptions', function(assert) {
+    const data = [
+        { id: 'istanbul' },
+        { id: 'İstanbul' },
+        { id: 'izmir' },
+        { id: 'İzmir' },
+        { id: 'İZMİR' },
+        { id: 'Iğdır' },
+        { id: 'ığdır' },
+        { id: 'YASİN' },
+        { id: 'Québec' },
+        { id: 'quebec' },
+        { id: 'Paris' },
+    ];
+
+    let source = new DataSource({
+        store: data,
+        compareOptions: {
+            localeSensitive: 'tr',
+            localeSortingOptions: {
+                caseFirst: 'upper',
+            }
+        },
+        sort: ['id'],
+    });
+
+    source.filter('id', 'contains', 'is');
+
+    source.load().done(function(r) {
+        assert.deepEqual(r, [
+            { 'id': 'İstanbul' },
+            { 'id': 'istanbul' },
+            { 'id': 'Paris' }
+        ]);
+    });
+
+    source = new DataSource({
+        store: data,
+        compareOptions: {
+            ignoreAccent: true
+        }
+    });
+
+    source.filter('id', 'contains', 'que');
+
+    source.load().done(function(r) {
+        assert.deepEqual(r, [
+            { 'id': 'Québec' },
+            { 'id': 'quebec' },
+        ]);
+    });
+});
+
 QUnit.test('group', function(assert) {
     const data = [
         { g: 1 },

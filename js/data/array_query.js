@@ -98,9 +98,15 @@ const MapIterator = WrappedIterator.inherit({
     }
 });
 
-const defaultCompare = function(xValue, yValue) {
-    xValue = toComparable(xValue);
-    yValue = toComparable(yValue);
+const defaultCompare = function(xValue, yValue, options) {
+    if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.localeSensitive || options?.localeSortingOptions)) {
+
+        /* eslint-disable-next-line */
+        return new Intl.Collator(options.localeSensitive, options.localeSortingOptions).compare(xValue, yValue);
+    }
+
+    xValue = toComparable(xValue, false, options);
+    yValue = toComparable(yValue, false, options);
 
     if(xValue === null && yValue !== null) {
         return -1;
@@ -130,13 +136,16 @@ const defaultCompare = function(xValue, yValue) {
 };
 
 const SortIterator = Iterator.inherit({
-
     ctor: function(iter, getter, desc, compare) {
+        this.compareOptions = iter.compareOptions;
+
         if(!(iter instanceof MapIterator)) {
             iter = new MapIterator(iter, this._wrap);
+            iter.compareOptions = this.compareOptions;
         }
         this.iter = iter;
-        this.rules = [{ getter: getter, desc: desc, compare: compare }];
+
+        this.rules = [{ getter: getter, desc: desc, compare: compare, compareOptions: this.compareOptions }];
     },
 
     thenBy: function(getter, desc, compare) {
@@ -213,7 +222,7 @@ const SortIterator = Iterator.inherit({
             const rule = this.rules[i];
             const xValue = rule.getter(x);
             const yValue = rule.getter(y);
-            const compare = rule.compare || defaultCompare;
+            const compare = rule.compare || ((xValue, yValue) => defaultCompare(xValue, yValue, rule.compareOptions));
             const compareResult = compare(xValue, yValue);
 
             if(compareResult) {
@@ -227,6 +236,11 @@ const SortIterator = Iterator.inherit({
 
 
 const compileCriteria = (function() {
+    let compareOptions = {};
+
+    const toTunedComparable = function(value) {
+        return toComparable(value, false, compareOptions);
+    };
 
     const compileGroup = function(crit) {
         const ops = [];
@@ -240,7 +254,7 @@ const compileCriteria = (function() {
                     throw new errors.Error('E4019');
                 }
 
-                ops.push(compileCriteria(this));
+                ops.push(compileCriteria(this, compareOptions));
 
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
@@ -264,7 +278,9 @@ const compileCriteria = (function() {
     };
 
     const toString = function(value) {
-        return isDefined(value) ? value.toString() : '';
+        return isDefined(value) ?
+            compareOptions?.localeSensitive ? value.toLocaleString(compareOptions.localeSensitive) : value.toString()
+            : '';
     };
 
     const compileBinary = function(crit) {
@@ -273,10 +289,10 @@ const compileCriteria = (function() {
         const op = crit[1];
         let value = crit[2];
 
-        value = toComparable(value);
+        value = toTunedComparable(value);
 
         const compare = (obj, operatorFn) => {
-            obj = toComparable(getter(obj));
+            obj = toTunedComparable(getter(obj));
             return (value == null || obj == null) && value !== obj ? false : operatorFn(obj, value);
         };
 
@@ -294,10 +310,10 @@ const compileCriteria = (function() {
             case '<=':
                 return (obj) => compare(obj, (a, b) => a <= b);
             case 'startswith':
-                return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === 0; };
+                return function(obj) { return toTunedComparable(toString(getter(obj))).indexOf(value) === 0; };
             case 'endswith':
                 return function(obj) {
-                    const getterValue = toComparable(toString(getter(obj)));
+                    const getterValue = toTunedComparable(toString(getter(obj)));
                     const searchValue = toString(value);
 
                     if(getterValue.length < searchValue.length) {
@@ -308,9 +324,9 @@ const compileCriteria = (function() {
                     return index !== -1 && index === getterValue.length - value.length;
                 };
             case 'contains':
-                return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) > -1; };
+                return function(obj) { return toTunedComparable(toString(getter(obj))).indexOf(value) > -1; };
             case 'notcontains':
-                return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === -1; };
+                return function(obj) { return toTunedComparable(toString(getter(obj))).indexOf(value) === -1; };
         }
 
         throw errors.Error('E4003', op);
@@ -318,7 +334,7 @@ const compileCriteria = (function() {
 
     function compileEquals(getter, value, negate) {
         return function(obj) {
-            obj = toComparable(getter(obj));
+            obj = toTunedComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
@@ -334,7 +350,7 @@ const compileCriteria = (function() {
 
     function compileUnary(crit) {
         const op = crit[0];
-        const criteria = compileCriteria(crit[1]);
+        const criteria = compileCriteria(crit[1], compareOptions);
 
         if(op === '!') {
             return function(obj) { return !criteria(obj); };
@@ -343,7 +359,9 @@ const compileCriteria = (function() {
         throw errors.Error('E4003', op);
     }
 
-    return function(crit) {
+    return function(crit, options) {
+        compareOptions = options || {};
+
         if(isFunction(crit)) {
             return crit;
         }
@@ -362,7 +380,8 @@ const FilterIterator = WrappedIterator.inherit({
 
     ctor: function(iter, criteria) {
         this.callBase(iter);
-        this.criteria = compileCriteria(criteria);
+        this.compareOptions = iter.compareOptions;
+        this.criteria = compileCriteria(criteria, this.compareOptions);
     },
 
     next: function() {
@@ -583,6 +602,10 @@ const arrayQueryImpl = function(iter, queryOptions) {
             }
 
             return d.promise();
+        },
+
+        setCompareOptions(options) {
+            iter.compareOptions = options;
         },
 
         sortBy: function(getter, desc, compare) {
