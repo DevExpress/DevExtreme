@@ -171,7 +171,6 @@ const iconSet = {
   mention: '\f090',
   variable: '\f091',
   clearformat: '\f092',
-  to: '\f09a',
   fullscreen: '\f11a',
   hierarchy: '\f124',
   docfile: '\f111',
@@ -235,6 +234,21 @@ const iconSet = {
   imgarlock: '\f156',
   imgarunlock: '\f157',
   bell: '\f158',
+  sun: '\f159',
+  send: '\f160', // material only
+  pin_map: '\f161', // material only
+  photo_outline: '\f162', // material only
+  panel_right: '\f163',
+  panel_left: '\f164',
+  options_gear: '\f165', // material only
+  moon: '\f166',
+  login: '\f167',
+  eye_open: '\f168',
+  eye_close: '\f169',
+  expand_form: '\f170',
+  description: '\f171',
+  bell_outline: '\f172', // material only
+  to: '\f173',
 };
 
 fixture.disablePageReloads`Icons`
@@ -258,7 +272,7 @@ test('Icon set', async (t) => {
       border: '1px solid black',
       alignItems: 'center',
       flexDirection: 'column',
-      fontSize: '10px',
+      fontSize: '10px ',
     });
 
     await ClientFunction(() => {
