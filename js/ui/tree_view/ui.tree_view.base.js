@@ -35,6 +35,8 @@ const IS_LEAF = `${NODE_CLASS}-is-leaf`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
 const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
 const ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS = `${ITEM_CLASS}-with-custom-expander-icon`;
+const CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS = `${WIDGET_CLASS}-custom-expander-icon-item-container`;
+
 const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
@@ -645,12 +647,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             .attr(DATA_ITEM_ID, this._encodeString(node.internalFields.key))
             .prependTo($nodeContainer);
 
-        this.setAria({
+        const attrs = {
             'role': 'treeitem',
             'label': this._displayGetter(node.internalFields.item) || '',
-            'expanded': node.internalFields.expanded || false,
             'level': this._getLevel($nodeContainer)
-        }, $node);
+        };
+
+        const hasChildNodes = !!node?.internalFields?.childrenKeys?.length;
+
+        if(hasChildNodes) {
+            attrs.expanded = node.internalFields.expanded || false;
+        }
+
+        this.setAria(attrs, $node);
 
         return $node;
     },
@@ -690,6 +699,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._hasCustomExpanderIcons()) {
             $node.addClass(ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS);
+            $nodeContainer.addClass(CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS);
         }
 
         showCheckBox && this._renderCheckBox($node, node);

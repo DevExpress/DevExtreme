@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Vertė turi būti skaičius",
         "dxNumberBox-noDataText": "Nėra duomenų",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Stulpelio pasirinkimas",
         "dxDataGrid-columnChooserEmptyText": "Vilkite stulpelį čia, kad jį paslėptumėte",
         "dxDataGrid-groupContinuesMessage": "Tęsiamas kitame puslapyje",
@@ -173,6 +176,7 @@
 
         "dxPager-infoText": "Puslapis {0} iš {1} ({2} elementai)",
         "dxPager-pagesCountText": "apie",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Viskas",
         "dxPager-page": "Puslapis {0}",
         "dxPager-prevPage": "Ankstesnis puslapis",
@@ -257,6 +261,7 @@
 
         "dxCalendar-todayButtonText": "Šiandien",
         "dxCalendar-ariaWidgetName": "Kalendorius",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "Raudonas",
         "dxColorView-ariaGreen": "Žalias",

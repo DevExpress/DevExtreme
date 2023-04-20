@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "El valor ha de ser un número",
         "dxNumberBox-noDataText": "No hi ha dades",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Escollidor de columnes",
         "dxDataGrid-columnChooserEmptyText": "Arrossegueu una columna aquí per amagar -la",
         "dxDataGrid-groupContinuesMessage": "Continua a la pàgina següent",
@@ -173,6 +176,7 @@
 
         "dxPager-infoText": "Pàgina {0} de {1} ({2} ítems)",
         "dxPager-pagesCountText": "de",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Tota",
         "dxPager-page": "Pàgina {0}",
         "dxPager-prevPage": "Pàgina anterior",
@@ -257,6 +261,7 @@
 
         "dxCalendar-todayButtonText": "Avui",
         "dxCalendar-ariaWidgetName": "Calendari",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "Vermell",
         "dxColorView-ariaGreen": "Verd",

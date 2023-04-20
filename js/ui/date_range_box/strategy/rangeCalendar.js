@@ -8,6 +8,12 @@ class DateRangeBoxCalendarStrategy extends DateBoxCalendarStrategy {
         this.dateRangeBox = dateBox.option('_dateRangeBoxInstance');
     }
 
+    popupConfig(popupConfig) {
+        return extend(true, super.popupConfig(popupConfig), {
+            position: { of: this.dateRangeBox.$element() },
+        });
+    }
+
     _getWidgetOptions() {
         return extend(super._getWidgetOptions(), {
             values: this.dateRangeBox.option('value'),

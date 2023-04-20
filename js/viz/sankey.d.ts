@@ -517,7 +517,10 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      */
     weightField?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip

@@ -516,7 +516,10 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     valueField?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate

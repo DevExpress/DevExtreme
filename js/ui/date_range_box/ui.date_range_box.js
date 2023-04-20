@@ -10,6 +10,8 @@ import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import { FunctionTemplate } from '../../core/templates/function_template';
+import dateSerialization from '../../core/utils/date_serialization';
+import dateUtils from '../../core/utils/date';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
@@ -72,6 +74,8 @@ class DateRangeBox extends Widget {
 
             min: undefined,
 
+            onValueChanged: null,
+
             opened: false,
 
             openOnFieldClick: false,
@@ -127,6 +131,31 @@ class DateRangeBox extends Widget {
                 }
             }
         ]);
+    }
+
+    _createValueChangeAction() {
+        this._valueChangeAction = this._createActionByOption('onValueChanged', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+    }
+
+    _raiseValueChangeAction(value, previousValue) {
+        if(!this._valueChangeAction) {
+            this._createValueChangeAction();
+        }
+        this._valueChangeAction(this._valueChangeArgs(value, previousValue));
+    }
+
+    _valueChangeArgs(value, previousValue) {
+        return {
+            value: value,
+            previousValue: previousValue,
+            event: this._valueChangeEventInstance
+        };
+    }
+
+    _saveValueChangeEvent(e) {
+        this._valueChangeEventInstance = e;
     }
 
     _initTemplates() {
@@ -288,6 +317,10 @@ class DateRangeBox extends Widget {
             cancelButtonText: options.cancelButtonText,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
+            onValueChanged: ({ value }) => {
+                const newValue = [value, this.option('value')[1]];
+                this.updateValue(newValue);
+            },
             opened: options.opened,
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,
@@ -308,11 +341,52 @@ class DateRangeBox extends Widget {
                     this.getStartDateBox().open();
                 }
             },
+            onValueChanged: ({ value }) => {
+                const newValue = [this.option('value')[0], value];
+                this.updateValue(newValue);
+            },
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[1],
             label: 'End Date', // TODO: for test purpose only. change value to ''
         };
+    }
+
+    _getDate(value) {
+        return dateSerialization.deserializeDate(value);
+    }
+
+    _isSameDates(date1, date2) {
+        if(!date1 && !date2) {
+            return true;
+        }
+
+        return dateUtils.sameDate(this._getDate(date1), this._getDate(date2));
+    }
+
+    updateValue(newValue) {
+        const [newStartDate, newEndDate] = newValue;
+        const [oldStartDate, oldEndDate] = this.option('value');
+
+        if(!this._isSameDates(newStartDate, oldStartDate) || !this._isSameDates(newEndDate, oldEndDate)) {
+            this.option('value', newValue);
+        }
+    }
+
+    _updateDateBoxesValue(newValue) {
+        const startDateBox = this.getStartDateBox();
+        const endDateBox = this.getEndDateBox();
+        const [newStartDate, newEndDate] = newValue;
+        const oldStartDate = startDateBox.option('value');
+        const oldEndDate = endDateBox.option('value');
+
+        if(!this._isSameDates(newStartDate, oldStartDate)) {
+            startDateBox.option('value', newStartDate);
+        }
+
+        if(!this._isSameDates(newEndDate, oldEndDate)) {
+            endDateBox.option('value', newEndDate);
+        }
     }
 
     _focusTarget() {
@@ -350,7 +424,7 @@ class DateRangeBox extends Widget {
     }
 
     _optionChanged(args) {
-        const { name } = args;
+        const { name, value, previousValue } = args;
 
         switch(name) {
             case 'acceptCustomValue':
@@ -379,7 +453,11 @@ class DateRangeBox extends Widget {
             case 'labelMode':
             case 'maxLength':
                 break;
+            case 'onValueChanged':
+                this._createValueChangeAction();
+                break;
             case 'opened':
+                this.getStartDateBox().option('opened', value);
                 break;
             case 'openOnFieldClick':
             case 'placeholder':
@@ -400,7 +478,12 @@ class DateRangeBox extends Widget {
             case 'validationMessageMode':
             case 'validationMessagePosition':
             case 'validationStatus':
+                break;
             case 'value':
+                this._raiseValueChangeAction(value, previousValue);
+                this._saveValueChangeEvent(undefined);
+                this._updateDateBoxesValue(value);
+                break;
             case 'valueChangeEvent':
                 break;
             default:

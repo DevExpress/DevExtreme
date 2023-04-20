@@ -307,7 +307,10 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     values?: Array<number>;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxBarGaugeLegend extends BaseLegend {
     /**
      * @docid dxBarGaugeOptions.legend.customizeHint
@@ -348,7 +351,10 @@ export interface dxBarGaugeLegend extends BaseLegend {
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
      * @docid dxBarGaugeOptions.loadingIndicator.enabled
@@ -356,7 +362,10 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
      */
     enabled?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate

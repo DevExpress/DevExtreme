@@ -14,7 +14,7 @@ import messageLocalization from 'localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 import 'ui/data_grid';
-import '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
+import 'hogan.js';
 setTemplateEngine('hogan');
 
 const SORT_INDEX_ICON_SELECTOR = '.dx-sort-index-icon';
@@ -25,10 +25,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').addClass('dx-viewport');
 
     const markup =
-        '<div class="dx-widget">\
-            <div id="container" class="dx-datagrid"></div>\
-        </div>\
-        <div id="containerIE" class="dx-datagrid"></div>';
+        `<div class="dx-widget">
+            <div id="container" class="dx-datagrid"></div>
+        </div>
+        <div id="containerIE" class="dx-datagrid"></div>`;
 
     $('#qunit-fixture').html(markup);
 

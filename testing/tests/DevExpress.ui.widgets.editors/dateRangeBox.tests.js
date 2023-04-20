@@ -419,6 +419,9 @@ QUnit.module('DropDownButton', moduleConfig, () => {
 
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
+
+    // QUnit.todo('Popup of startDateBox should be opened by click on drop down button', function() {});
+    // QUnit.todo('Open popup of startDateBox should be closed by click on drop down button', function() {});
 });
 
 QUnit.module('Behavior', moduleConfig, () => {
@@ -428,7 +431,124 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         endDateBox.open();
 
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
+        // TODO: investigate this behavior
+        assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
         assert.ok(startDateBox.option('opened'));
+    });
+
+    ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+        QUnit.test(`${dateBoxName} should update value on DateRangeBox value change`, function(assert) {
+            const newValue = ['2023/04/18', '2023/05/03'];
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            this.instance.option('value', newValue);
+
+            assert.strictEqual(dateBox.option('value'), newValue[dateBoxName === 'startDateBox' ? 0 : 1]);
+        });
+
+        QUnit.test(`${dateBoxName} should not update value on DateRangeBox value change if value is the same date`, function(assert) {
+            const newValue = ['2023/01/05', '2023/02/14'];
+            const onValueChangedHandler = sinon.stub();
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            dateBox.option('onValueChanged', onValueChangedHandler);
+            this.instance.option('value', newValue);
+
+            assert.strictEqual(onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test(`DateRangeBox should update value on ${dateBoxName} value change`, function(assert) {
+            const newValue = '2023/07/07';
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            dateBox.option('value', newValue);
+
+            assert.strictEqual(this.instance.option('value')[dateBoxName === 'startDateBox' ? 0 : 1], newValue);
+        });
+
+        QUnit.test(`DateRangeBox should not update value on ${dateBoxName} value change if the value is the same`, function(assert) {
+            const isStartDateBox = dateBoxName === 'startDateBox';
+            const newValue = isStartDateBox ? '2023/01/05' : '2023/02/14';
+            const onValueChangedHandler = sinon.stub();
+            const dateBox = isStartDateBox
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            this.instance.option('onValueChanged', onValueChangedHandler);
+            dateBox.option('value', newValue);
+
+            assert.strictEqual(onValueChangedHandler.callCount, 0);
+        });
+    });
+
+    QUnit.module('onValueChanged event', {
+        beforeEach: function() {
+            this.onValueChangedHandler = sinon.stub();
+            this.instance.option('onValueChanged', this.onValueChangedHandler);
+        }
+    }, () => {
+        QUnit.test('should be called after value change', function(assert) {
+            this.instance.option('value', ['2023/04/19', null]);
+
+            assert.ok(this.onValueChangedHandler.calledOnce);
+        });
+
+        QUnit.test('onValueChanged event should have correct arguments', function(assert) {
+            const oldValue = this.instance.option('value');
+            const newValue = ['2023/04/19', null];
+
+            this.instance.option('value', newValue);
+
+            const { previousValue, value, element, component } = this.onValueChangedHandler.getCall(0).args[0];
+            assert.deepEqual(previousValue, oldValue);
+            assert.deepEqual(value, newValue);
+            assert.ok($(element).is(this.$element));
+            assert.strictEqual(component, this.instance);
+        });
+
+        [
+            {
+                newValue: ['2022/01/05', '2022/02/14'],
+                scenario: 'with new startDate and endDate'
+            },
+            {
+                newValue: ['2022/01/05', '2023/02/14'],
+                scenario: 'with new startDate'
+            },
+            {
+                newValue: ['2023/01/05', '2022/02/14'],
+                scenario: 'with new endDate'
+            },
+        ].forEach(({ newValue, scenario }) => {
+            QUnit.test(`should be called after updateValue call ${scenario}`, function(assert) {
+                this.instance.updateValue(newValue);
+
+                assert.ok(this.onValueChangedHandler.calledOnce);
+            });
+        });
+
+        QUnit.test('should not be called after updateValue call with the same values', function(assert) {
+            this.instance.updateValue(['2023/01/05', '2023/02/14']);
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test('should not be called when values are null and updateValue called with null values', function(assert) {
+            this.reinit({
+                value: [null, null],
+                onValueChanged: this.onValueChangedHandler
+            });
+            this.instance.updateValue([null, null]);
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
     });
 });
 
@@ -480,5 +600,34 @@ QUnit.module('Public methods', moduleConfig, () => {
         this.instance.close();
 
         assert.strictEqual(this.instance.option('opened'), false, 'opened option has correct value');
+    });
+});
+
+QUnit.module('Popup integration', moduleConfig, () => {
+    QUnit.test('Popup should be positioned relatively DateRangeBox root element', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        startDateBox.open();
+
+        const popup = startDateBox._popup;
+
+        assert.ok(this.$element.is(popup.option('position.of')));
+    });
+});
+
+QUnit.module('Option synchronization', moduleConfig, () => {
+    QUnit.test('startDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        this.instance.option('opened', true);
+
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox option was changed');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
+
+        this.instance.option('opened', false);
+
+        assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox option was changed');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
     });
 });
