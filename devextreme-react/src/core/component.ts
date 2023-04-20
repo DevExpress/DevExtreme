@@ -18,6 +18,15 @@ class Component<P> extends ComponentBase<P> {
     this._createExtensions();
   }
 
+  public componentWillUnmount(): void {
+    super.componentWillUnmount();
+    this.clearExtensions();
+  }
+
+  public clearExtensions(): void {
+    this._extensionCreators = [];
+  }
+
   protected renderChildren(): Record<string, unknown>[] | null | undefined {
     return React.Children.map(
       this.props.children,
