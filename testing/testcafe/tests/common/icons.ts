@@ -256,7 +256,7 @@ fixture.disablePageReloads`Icons`
 
 test('Icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await t.debug();
+
   await testScreenshot(t, takeScreenshot, 'Icon set.png');
 
   await t
