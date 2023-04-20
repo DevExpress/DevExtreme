@@ -183,7 +183,7 @@
         "dxPager-nextPage": "Pàgina següent",
         "dxPager-ariaLabel": "Navegació de pàgina",
         "dxPager-ariaPageSize": "Page size",
-        "dxPager-ariaPageIndex": "Page index",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Total Imal",
         "dxPivotGrid-total": "{0} total",

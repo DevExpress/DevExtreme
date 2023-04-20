@@ -183,7 +183,7 @@
         "dxPager-nextPage": "Nächste Seite",
         "dxPager-ariaLabel": "Seitennavigation",
         "dxPager-ariaPageSize": "Page size",
-        "dxPager-ariaPageIndex": "Page index",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Gesamt",
         "dxPivotGrid-total": "{0} Gesamt",

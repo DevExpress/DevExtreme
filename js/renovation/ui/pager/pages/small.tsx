@@ -51,7 +51,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class PagerSmallProps {
-  @OneWay() inputAttr = { 'aria-label': messageLocalization.format('dxPager-ariaPageIndex') };
+  @OneWay() inputAttr = { 'aria-label': messageLocalization.format('dxPager-ariaPageNumber') };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
