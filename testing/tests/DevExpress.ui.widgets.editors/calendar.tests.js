@@ -3791,6 +3791,16 @@ QUnit.module('Aria accessibility', {
         const calendar = this.$element.dxCalendar().dxCalendar('instance');
         const $navigatorNext = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS));
 
+        const expectedLabel = `
+            Calendar.
+            To navigate between views, press Control, and then Left Arrow or Right Arrow.
+            To zoom in on a view, press Control, and then Down Arrow.
+            To zoom out, press Control, and then Up Arrow.
+        `
+            .replace(/(\r\n|\n|\r)/gm, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
         ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
             calendar.option({ zoomLevel });
             $navigatorNext.trigger('dxclick');
@@ -3802,7 +3812,7 @@ QUnit.module('Aria accessibility', {
                 const label = tableElement.getAttribute('aria-label');
 
                 assert.strictEqual(role, 'grid', `zoomLevel: ${zoomLevel}, role is correct`);
-                assert.equal(label, 'Calendar', `zoomLevel: ${zoomLevel}, label is correct`);
+                assert.strictEqual(label, expectedLabel, 'label is correct');
             });
         });
     });
