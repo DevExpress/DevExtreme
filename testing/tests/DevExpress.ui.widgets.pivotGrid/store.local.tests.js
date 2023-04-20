@@ -1,4 +1,4 @@
-import '../../../testing/content/orders.js';
+import '../../content/orders.js';
 import 'data/odata/store';
 
 import $ from 'jquery';

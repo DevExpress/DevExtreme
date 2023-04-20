@@ -1,29 +1,8 @@
-QUnit.testStart(function() {
-    const markup =
-        '<style>\
-    .qunit-fixture-static {\
-        position: absolute !important;\
-        left: 0 !important;\
-        top: 0 !important;\
-    }\
-</style>\
-<div>\
-    <div id="container" class="dx-widget" style="width: 400px;">\
-        <div class="dx-datagrid">\
-        </div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
+import hogan from 'hogan.js';
 
 window.Hogan = hogan;
 
@@ -65,6 +44,28 @@ const setScrollerSpacing = function(rowsView) {
 };
 
 setTemplateEngine('hogan');
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            #container {
+                width: 400px;
+            }
+        </style>
+        <div>
+            <div id="container" class="dx-widget">
+                <div class="dx-datagrid">
+                </div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Fixed columns', {
     beforeEach: function() {
