@@ -236,18 +236,18 @@ const iconSet = {
   bell: '\f158',
   sun: '\f159',
   send: '\f160', // material only
-  pin_map: '\f161', // material only
-  photo_outline: '\f162', // material only
-  panel_right: '\f163',
-  panel_left: '\f164',
-  options_gear: '\f165', // material only
+  pinmap: '\f161', // material only
+  photooutline: '\f162', // material only
+  panelright: '\f163',
+  panelleft: '\f164',
+  optionsgear: '\f165', // material only
   moon: '\f166',
   login: '\f167',
-  eye_open: '\f168',
-  eye_close: '\f169',
-  expand_form: '\f170',
+  eyeopen: '\f168',
+  eyeclose: '\f169',
+  expandform: '\f170',
   description: '\f171',
-  bell_outline: '\f172', // material only
+  belloutline: '\f172', // material only
   to: '\f173',
 };
 
@@ -256,7 +256,7 @@ fixture.disablePageReloads`Icons`
 
 test('Icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
+  await t.debug();
   await testScreenshot(t, takeScreenshot, 'Icon set.png');
 
   await t
