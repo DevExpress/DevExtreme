@@ -62,12 +62,13 @@ const generatedTs = [
 ];
 
 const bundlesSrc = ['js/bundles/**/*.js'];
+const babelTsOutputSrc = ['artifacts/dist_ts/__internal/**/*.js'];
 
 const TS_COMPILER_CONFIG = {
     tsconfigAbsPath: path.resolve(__dirname, '../../js/__internal/tsconfig.json'),
     aliasAbsPath: path.resolve(__dirname, '../../js'),
-    clearFilePattern: 'dist_ts',
-    normalizeTsAliasFilePath: (filePath) => filePath.replace(/\/dist_ts\//, '/js/'),
+    clearFilePattern: 'artifacts/dist_ts',
+    normalizeTsAliasFilePath: (filePath) => filePath.replace(/\/artifacts\/dist_ts\//, '/js/'),
     messages: {
         createDirErr: 'Cannot create directory',
         createFileErr: 'Cannot create file',
@@ -122,7 +123,7 @@ function transpile(src, dist, pipes = [], isEsm = false) {
     };
     task.displayName = `transpile JS: ${dist}`;
 
-    const babelTSTask = () => gulp.src(['dist_ts/__internal/**/*.js'])
+    const babelTSTask = () => gulp.src(babelTsOutputSrc)
         .pipe(
             isEsm
                 ? babel(transpileConfig.esm)
@@ -264,7 +265,7 @@ gulp.task('compile-ts-watch', async() => {
 
     const babelTsWatch = async() => {
         return gulp
-            .src(['*.*'])
+            .src(babelTsOutputSrc)
             .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_PATH))
             .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH))
@@ -272,7 +273,7 @@ gulp.task('compile-ts-watch', async() => {
     };
     babelTsWatch.displayName = 'TS babel watch';
 
-    return gulp.watch(['dist_ts/__internal/**/*.*'], babelTsWatch);
+    return gulp.watch(babelTsOutputSrc, babelTsWatch);
 });
 
 gulp.task('transpile-watch', gulp.series(

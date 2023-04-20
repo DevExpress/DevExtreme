@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../dist_ts",
+    "outDir": "../../artifacts/dist_ts",
     "module": "es6",
     "target": "es6",
     "baseUrl": "../",
@@ -40,8 +40,6 @@
     },
     "types": []
   },
-//  "include": ["./__internal/**/*.ts"],
-//  "exclude": ["./**/*.js"],
   "tsc-alias": {
     "verbose": false,
     "resolveFullPaths": false,

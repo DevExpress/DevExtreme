@@ -21,5 +21,4 @@ yarn.lock
 RawLog.txt
 .DS_Store
 testing/CompletedSuites.txt
-dist_ts
 
