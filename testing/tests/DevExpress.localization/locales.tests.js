@@ -63,11 +63,13 @@ const compareLocales = function(first, second, assert) {
         'dxGantt-quarter'
     ];
 
+    const missingBaseTranslationKeys = ['dxCalendar-ariaHotKeysInfo'];
+
     $.each(firstLocaleMessages, function(name, value) {
         const otherLocalValue = secondLocaleMessages[name];
 
         if(value === otherLocalValue) {
-            if($.inArray(name, knownMatchingKeys) !== -1) {
+            if(knownMatchingKeys.includes(name) || missingBaseTranslationKeys.includes(name)) {
                 assert.ok(true, name + ' is known to match in this locales');
             } else {
                 assert.ok(false, name + ' is present in ' + first + ', but not in ' + second);
