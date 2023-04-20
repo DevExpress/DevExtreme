@@ -18,7 +18,7 @@ const through2 = require('through2');
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
-const { ifEsmPackage } = require('./utils');
+const { ifEsmPackage, writeFilePipe, replaceArtifactPath } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
@@ -59,8 +59,8 @@ const generatedTs = [
 ];
 
 const bundlesSrc = ['js/bundles/**/*.js'];
-const babelTsOutputSrc = ['artifacts/dist_ts/__internal/**/*.js'];
 
+const TS_OUTPUT_SRC = ['artifacts/dist_ts/__internal/**/*.js'];
 const TS_COMPILER_CONFIG = {
     tsconfigAbsPath: path.resolve(__dirname, '../../js/__internal/tsconfig.json'),
     aliasAbsPath: path.resolve(__dirname, '../../js'),
@@ -120,7 +120,7 @@ function transpile(src, dist, pipes = [], isEsm = false) {
     };
     task.displayName = `transpile JS: ${dist}`;
 
-    const babelTSTask = () => gulp.src(babelTsOutputSrc)
+    const babelTSTask = () => gulp.src(TS_OUTPUT_SRC)
         .pipe(
             isEsm
                 ? babel(transpileConfig.esm)
@@ -260,17 +260,14 @@ gulp.task('compile-ts-watch', async() => {
     const compiler = createTsCompiler(TS_COMPILER_CONFIG);
     await compiler.watchTsAsync();
 
-    const babelTsWatch = async() => {
-        return gulp
-            .src(babelTsOutputSrc)
-            .pipe(babel(transpileConfig.cjs))
-            .pipe(gulp.dest(ctx.TRANSPILED_PATH))
-            .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH))
-            .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
-    };
-    babelTsWatch.displayName = 'TS babel watch';
-
-    return gulp.watch(babelTsOutputSrc, babelTsWatch);
+    gulp.watch(TS_OUTPUT_SRC)
+        .on('change', (path) => {
+            gulp.src(path)
+                .pipe(babel(transpileConfig.tsCjs))
+                .pipe(writeFilePipe((filePath) => replaceArtifactPath(filePath, ctx.TS_OUT_PATH, ctx.TRANSPILED_PATH)))
+                .pipe(writeFilePipe((filePath) => replaceArtifactPath(filePath, ctx.TS_OUT_PATH, ctx.TRANSPILED_RENOVATION_PATH)))
+                .pipe(writeFilePipe((filePath) => replaceArtifactPath(filePath, ctx.TS_OUT_PATH, ctx.TRANSPILED_PROD_RENOVATION_PATH)));
+        });
 });
 
 gulp.task('transpile-watch', gulp.series(

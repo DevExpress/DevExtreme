@@ -1,13 +1,14 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
 const del = require('del');
 const { glob } = require('glob');
 
 const tsCompiler = require('typescript');
 const tscAlias = require('tsc-alias');
+const createFileChangeManager = require('./file-change-manager');
 const { logError, logInfo } = require('./logger');
+const { writeFileAsync } = require('../utils');
 
 const createTsCompiler = (compilerConfig) => {
     // --- private ---
@@ -16,32 +17,6 @@ const createTsCompiler = (compilerConfig) => {
         tsConfigFile: compilerConfig.tsconfigAbsPath,
         tsBaseDir: path.dirname(compilerConfig.tsconfigAbsPath),
         aliasRoot: compilerConfig.aliasAbsPath,
-    };
-
-    const errorHandler = (errorPrefix) =>
-        (error) => {
-            if(error) {
-                console.error(`${errorPrefix}: ${error}`);
-            }
-        };
-
-    const getWriteFileOverride = (aliasTranspileFunc) => async(filePath, fileData) => {
-        const normalizedFilePath = compilerConfig.normalizeTsAliasFilePath(filePath);
-        const resolvedFileData = aliasTranspileFunc(normalizedFilePath, fileData);
-        await writeFileAsync(filePath, resolvedFileData);
-    };
-
-    const writeFileAsync = async(filePath, fileData) => {
-        await fs.promises.mkdir(
-            path.dirname(filePath),
-            { recursive: true },
-            errorHandler(compilerConfig.messages.createDirErr)
-        );
-        await fs.promises.writeFile(
-            filePath,
-            fileData,
-            errorHandler(compilerConfig.messages.createFileErr)
-        );
     };
 
     const createAliasTranspileAsync = async(outDir) => {
@@ -80,6 +55,12 @@ const createTsCompiler = (compilerConfig) => {
         return configFilePath;
     };
 
+    const getWriteFileOverride = (aliasTranspileFunc) => async(filePath, fileData) => {
+        const normalizedFilePath = compilerConfig.normalizeTsAliasFilePath(filePath);
+        const resolvedFileData = aliasTranspileFunc(normalizedFilePath, fileData);
+        await writeFileAsync(filePath, resolvedFileData);
+    };
+
     // --- public ---
     const compileTsAsync = async(fileNamePattern) => {
         const fileNames = glob.sync(fileNamePattern);
@@ -112,6 +93,7 @@ const createTsCompiler = (compilerConfig) => {
         const reportWatchStatusChanged = (diagnostic) => {
             console.info(logInfo(diagnostic.messageText));
         };
+        const changeManager = createFileChangeManager();
 
         const host = tsCompiler.createWatchCompilerHost(
             configFilePath,
@@ -122,8 +104,21 @@ const createTsCompiler = (compilerConfig) => {
             reportWatchStatusChanged
         );
 
+        const origPostProgramCreate = host.afterProgramCreate;
         const aliasTranspileFunc = await createAliasTranspileAsync(absolutePaths.aliasRoot);
-        host.writeFile = getWriteFileOverride(aliasTranspileFunc);
+        const writeFile = getWriteFileOverride(aliasTranspileFunc);
+
+        host.writeFile = async(filePath, fileData) => {
+            const isChanged = changeManager.checkFileChanged(filePath, fileData);
+            if(isChanged) {
+                await writeFile(filePath, fileData);
+            }
+        };
+
+        host.afterProgramCreate = program => {
+            changeManager.clearUntouchedFiles();
+            origPostProgramCreate(program);
+        };
 
         tsCompiler.createWatchProgram(host);
     };
