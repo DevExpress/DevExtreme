@@ -10,10 +10,11 @@ import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        `<div id="widget"></div>
+        <div id="widthRootStyle"></div>`;
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
