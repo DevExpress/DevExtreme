@@ -465,6 +465,14 @@ const DropDownList = DropDownEditor.inherit({
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
     },
 
+    _setAriaLabelToList() {
+        const { items } = this.option();
+
+        const label = items?.length ? 'List' : this.option('noDataText');
+
+        this.setAria('label', label, this._$list);
+    },
+
     _renderList: function() {
         this._listId = 'dx-' + new Guid()._value;
 
@@ -473,13 +481,7 @@ const DropDownList = DropDownEditor.inherit({
 
         this._list = this._createComponent($list, List, this._listConfig());
         this._refreshList();
-
-        const { items } = this.option();
-
-        if(items?.length) {
-            this.setAria('label', 'List', $list);
-        }
-
+        this._setAriaLabelToList();
         this._setAriaTargetForList();
         this._list.option('_listAttributes', { 'role': 'combobox' });
 
@@ -879,10 +881,12 @@ const DropDownList = DropDownEditor.inherit({
             case 'items':
                 if(!this.option('dataSource')) {
                     this._processDataSourceChanging();
+                    this._setAriaLabelToList();
                 }
                 break;
             case 'dataSource':
                 this._processDataSourceChanging();
+                this._setAriaLabelToList();
                 break;
             case 'valueExpr':
                 this._renderValue();

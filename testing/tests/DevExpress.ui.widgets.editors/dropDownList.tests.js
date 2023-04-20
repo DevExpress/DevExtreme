@@ -1711,19 +1711,28 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual($input.attr('role'), 'combobox', 'input.role');
     });
 
-    QUnit.test('list aria-label should be equal "List"', function(assert) {
-        $('#dropDownList').dxDropDownList({
-            items: [1, 2, 3],
-            opened: true,
-        });
+    QUnit.test('list aria-label should be set correctly if items changes in runtime', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
 
-        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List', 'aria-label is set correctly');
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+
+        instance.option('items', [1, 2, 3]);
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+
+        instance.option('items', []);
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
     });
 
-    QUnit.test('list aria-label should be equal "No data to display", if it has not items', function(assert) {
-        $('#dropDownList').dxDropDownList({ opened: true });
+    QUnit.test('list aria-label should be set correctly if dataSource changes in runtime', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
 
-        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display', 'aria-label is set correctly');
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+
+        instance.option('dataSource', [1, 2, 3]);
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+
+        instance.option('dataSource', []);
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
     });
 });
 
