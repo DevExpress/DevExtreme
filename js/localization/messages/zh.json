@@ -258,6 +258,7 @@
 
         "dxCalendar-todayButtonText": "今天",
         "dxCalendar-ariaWidgetName": "日历",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "红色",
         "dxColorView-ariaGreen": "绿色",
