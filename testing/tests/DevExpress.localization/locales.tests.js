@@ -54,12 +54,12 @@ QUnit.module('Locales of DevExtreme', {
 
                 if(localValue) {
                     if(localValue.includes('TODO')) {
-                        assert.ok(false, `${textConstantName} is localized in ${locale} locale as "!TODO!". Please, change it to the english text`);
+                        assert.ok(false, `The ${textConstantName} key is localized as "!TODO!" in the ${locale} locale. Please provide a valid translation for this key.`);
                     } else {
-                        assert.ok(true, `${textConstantName} is localized in ${locale} locale.`);
+                        assert.ok(true, `${textConstantName} is localized in the ${locale} locale.`);
                     }
                 } else {
-                    assert.ok(false, `${textConstantName} is present in english, but not in ${locale} locale. Run the "build:community-localization" script to fix it`);
+                    assert.ok(false, `The ${locale} locale is missing the ${textConstantName} key. Run the "build:community-localization" script to fix this.`);
                 }
             });
         });
