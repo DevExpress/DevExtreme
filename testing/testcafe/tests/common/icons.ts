@@ -272,7 +272,7 @@ test('Icon set', async (t) => {
       border: '1px solid black',
       alignItems: 'center',
       flexDirection: 'column',
-      fontSize: '10px ',
+      fontSize: '10px',
     });
 
     await ClientFunction(() => {
