@@ -53,7 +53,7 @@ QUnit.module('Locales of DevExtreme', {
                 const localValue = localeMessages[textConstantName];
 
                 if(localValue) {
-                    if(localValue.includes('TODO')) {
+                    if(localValue.startsWith('!TODO')) {
                         assert.ok(false, `The ${textConstantName} key is localized as "!TODO!" in the ${locale} locale. Please provide a valid translation for this key.`);
                     } else {
                         assert.ok(true, `${textConstantName} is localized in the ${locale} locale.`);
