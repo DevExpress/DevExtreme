@@ -81,8 +81,8 @@ const createTsCompiler = (compilerConfig) => {
     };
 
     // --- public ---
-    const compileTsAsync = async(fileNamePatterns) => {
-        const fileNames = await glob(fileNamePatterns);
+    const compileTsAsync = async(fileNamePattern) => {
+        const fileNames = glob.sync(fileNamePattern);
         const configFilePath = getTsConfigPath();
         const { config } = tsCompiler.readConfigFile(configFilePath, tsCompiler.sys.readFile);
         const { options } = tsCompiler.parseJsonConfigFileContent(config, tsCompiler.sys, absolutePaths.tsBaseDir);

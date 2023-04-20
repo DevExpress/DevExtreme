@@ -42,10 +42,7 @@ const esmTranspileSrc = src.concat([
     '!**/*.json'
 ]);
 
-const srcTs = [
-    'js/__internal/**/*.ts',
-];
-
+const srcTsPattern = 'js/__internal/**/*.ts';
 
 const srcDir = path.join(process.cwd(), './js');
 const generatedTs = [
@@ -215,7 +212,7 @@ gulp.task('transpile', (done) => {
     const compiler = createTsCompiler(TS_COMPILER_CONFIG);
     gulp.series(
         'bundler-config',
-        transpileTs(compiler, srcTs),
+        transpileTs(compiler, srcTsPattern),
         transpileDefault(),
         transpileRenovation(),
         transpileRenovationProd(),
