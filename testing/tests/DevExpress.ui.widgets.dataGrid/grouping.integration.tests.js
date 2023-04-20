@@ -12,9 +12,14 @@ const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 QUnit.testStart(function() {
     const markup = `
+        <style nonce="qunit-test">
+            #dataGridWithStyle {
+                width: 500px;
+            }
+        </style>
         <div id="container">
             <div id="dataGrid"></div>
-            <div id="dataGridWithStyle" style="width: 500px;"></div>
+            <div id="dataGridWithStyle"></div>
         </div>
     `;
 

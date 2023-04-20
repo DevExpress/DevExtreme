@@ -1,13 +1,3 @@
-QUnit.testStart(function() {
-    const markup = `
-    <style>[tabindex]{background-color:yellow!important;}</style>
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import $ from 'jquery';
@@ -26,6 +16,20 @@ import {
 import devices from 'core/devices';
 
 const device = devices.real();
+
+QUnit.testStart(function() {
+    const markup = `
+        <style nonce="qunit-test">
+            [tabindex] {
+                background-color: yellow !important;
+            }
+        </style>
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Real DataController and ColumnsController', {
     setupModule: function() {
@@ -274,11 +278,11 @@ QUnit.module('Real DataController and ColumnsController', {
                 'name',
                 {
                     dataField: 'phone',
-                    editCellTemplate: cell => $(cell).append($(`
-                        <input class='input1' style='display: none' />
-                        <input class='input2' />
-                        <input class='input3' style='display: none' />
-                    `))
+                    editCellTemplate: cell => $(cell).append(
+                        $('<input class="input1" />').css('display', 'none'),
+                        $('<input class="input2" />'),
+                        $('<input class="input3" />').css('display', 'none')
+                    )
                 },
                 'room'
             ]

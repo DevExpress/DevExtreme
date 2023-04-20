@@ -2551,6 +2551,9 @@ declare module DevExpress.common.grids {
     target?: string;
     groupInterval?: string | number;
   };
+  /**
+   * [descr:ColumnFixing]
+   */
   export type ColumnFixing = {
     /**
      * [descr:GridBaseOptions.columnFixing.enabled]
@@ -2561,6 +2564,9 @@ declare module DevExpress.common.grids {
      */
     texts?: ColumnFixingTexts;
   };
+  /**
+   * [descr:ColumnFixingTexts]
+   */
   export type ColumnFixingTexts = {
     /**
      * [descr:GridBaseOptions.columnFixing.texts.fix]
@@ -2720,6 +2726,7 @@ declare module DevExpress.common.grids {
     readonly fromData?: any;
   }
   /**
+   * [descr:EditingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface EditingBase<TRowData = any, TKey = any> {
@@ -2773,6 +2780,7 @@ declare module DevExpress.common.grids {
     useIcons?: boolean;
   }
   /**
+   * [descr:EditingTextsBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface EditingTextsBase {
@@ -2840,6 +2848,7 @@ declare module DevExpress.common.grids {
     | 'anyof'
     | 'noneof';
   /**
+   * [descr:FilterPanel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface FilterPanel<
@@ -2872,6 +2881,9 @@ declare module DevExpress.common.grids {
     readonly filterValue: any;
     readonly text: string;
   }
+  /**
+   * [descr:FilterPanelTexts]
+   */
   export type FilterPanelTexts = {
     /**
      * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
@@ -2886,6 +2898,9 @@ declare module DevExpress.common.grids {
      */
     filterEnabledHint?: string;
   };
+  /**
+   * [descr:FilterRow]
+   */
   export type FilterRow = {
     /**
      * [descr:GridBaseOptions.filterRow.applyFilter]
@@ -2924,6 +2939,9 @@ declare module DevExpress.common.grids {
      */
     visible?: boolean;
   };
+  /**
+   * [descr:FilterRowOperationDescriptions]
+   */
   export type FilterRowOperationDescriptions = {
     /**
      * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
@@ -3630,6 +3648,9 @@ declare module DevExpress.common.grids {
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
+  /**
+   * [descr:HeaderFilter]
+   */
   export type HeaderFilter = {
     /**
      * [descr:GridBaseOptions.headerFilter.allowSearch]
@@ -3695,6 +3716,9 @@ declare module DevExpress.common.grids {
      */
     timeout?: number;
   };
+  /**
+   * [descr:HeaderFilterTexts]
+   */
   export type HeaderFilterTexts = {
     /**
      * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -3709,6 +3733,9 @@ declare module DevExpress.common.grids {
      */
     ok?: string;
   };
+  /**
+   * [descr:KeyboardNavigation]
+   */
   export type KeyboardNavigation = {
     /**
      * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
@@ -3733,6 +3760,9 @@ declare module DevExpress.common.grids {
   export type KeyDownInfo = {
     handled: boolean;
   };
+  /**
+   * [descr:LoadPanel]
+   */
   export type LoadPanel = {
     /**
      * [descr:GridBaseOptions.loadPanel.enabled]
@@ -3785,6 +3815,9 @@ declare module DevExpress.common.grids {
     | 'pageTop'
     | 'viewportBottom'
     | 'viewportTop';
+  /**
+   * [descr:Pager]
+   */
   export type Pager = {
     /**
      * [descr:GridBaseOptions.pager.allowedPageSizes]
@@ -3822,6 +3855,7 @@ declare module DevExpress.common.grids {
   export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
   export type PagerPageSize = 'all' | 'auto';
   /**
+   * [descr:PagingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface PagingBase {
@@ -3839,6 +3873,7 @@ declare module DevExpress.common.grids {
     pageSize?: number;
   }
   /**
+   * [descr:RowDragging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type RowDragging<
@@ -4077,6 +4112,7 @@ declare module DevExpress.common.grids {
     cancel: boolean;
   }
   /**
+   * [descr:ScrollingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ScrollingBase {
@@ -4113,6 +4149,9 @@ declare module DevExpress.common.grids {
      */
     renderAsync?: boolean;
   }
+  /**
+   * [descr:SearchPanel]
+   */
   export type SearchPanel = {
     /**
      * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
@@ -4156,6 +4195,7 @@ declare module DevExpress.common.grids {
     | 'notcontains'
     | 'startswith';
   /**
+   * [descr:SelectionBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface SelectionBase {
@@ -4182,6 +4222,9 @@ declare module DevExpress.common.grids {
     | 'none'
     | 'onClick'
     | 'onLongTap';
+  /**
+   * [descr:Sorting]
+   */
   export type Sorting = {
     /**
      * [descr:GridBaseOptions.sorting.ascendingText]
@@ -4206,6 +4249,9 @@ declare module DevExpress.common.grids {
   };
   export type StartEditAction = 'click' | 'dblClick';
   export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
+  /**
+   * [descr:StateStoring]
+   */
   export type StateStoring = {
     /**
      * [descr:GridBaseOptions.stateStoring.customLoad]
@@ -9268,6 +9314,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
     /**
+     * [descr:dxDataGridSortByGroupSummaryInfoItem]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface dxDataGridSortByGroupSummaryInfoItem {
@@ -9470,6 +9517,9 @@ declare module DevExpress.ui {
       ToolbarItem: ToolbarItem;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
     };
+    /**
+     * [descr:Export]
+     */
     export type Export = {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
@@ -9497,6 +9547,9 @@ declare module DevExpress.ui {
         selectedRowsOnly: boolean;
         format: DataGridExportFormat | string;
       };
+    /**
+     * [descr:ExportTexts]
+     */
     export type ExportTexts = {
       /**
        * [descr:dxDataGridOptions.export.texts.exportAll]
@@ -9592,6 +9645,9 @@ declare module DevExpress.ui {
        */
       isContinuationOnNextPage?: boolean;
     };
+    /**
+     * [descr:Grouping]
+     */
     export type Grouping = {
       /**
        * [descr:dxDataGridOptions.grouping.allowCollapsing]
@@ -9614,6 +9670,9 @@ declare module DevExpress.ui {
        */
       texts?: GroupingTexts;
     };
+    /**
+     * [descr:GroupingTexts]
+     */
     export type GroupingTexts = {
       /**
        * [descr:dxDataGridOptions.grouping.texts.groupByThisColumn]
@@ -9640,6 +9699,9 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type GroupKey = any[];
+    /**
+     * [descr:GroupPanel]
+     */
     export type GroupPanel = {
       /**
        * [descr:dxDataGridOptions.groupPanel.allowColumnDragging]
@@ -9671,6 +9733,9 @@ declare module DevExpress.ui {
       KeyboardEvent
     > &
       DevExpress.common.grids.KeyDownInfo;
+    /**
+     * [descr:MasterDetail]
+     */
     export type MasterDetail<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.masterDetail.autoExpandAll]
@@ -9956,6 +10021,9 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
+    /**
+     * [descr:Summary]
+     */
     export type Summary<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
@@ -9984,6 +10052,9 @@ declare module DevExpress.ui {
        */
       totalItems?: Array<SummaryTotalItem>;
     };
+    /**
+     * [descr:SummaryGroupItem]
+     */
     export type SummaryGroupItem = {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.alignByColumn]
@@ -10030,6 +10101,9 @@ declare module DevExpress.ui {
       readonly value?: string | number | Date;
       readonly valueText: string;
     };
+    /**
+     * [descr:SummaryTexts]
+     */
     export type SummaryTexts = {
       /**
        * [descr:dxDataGridOptions.summary.texts.avg]
@@ -10068,6 +10142,9 @@ declare module DevExpress.ui {
        */
       sumOtherColumn?: string;
     };
+    /**
+     * [descr:SummaryTotalItem]
+     */
     export type SummaryTotalItem = {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
@@ -17161,6 +17238,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxLoadPanel>;
   }
   /**
+   * [descr:dxLoadPanelAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLoadPanelAnimation extends dxOverlayAnimation {
@@ -18226,6 +18304,7 @@ declare module DevExpress.ui {
     toggle(showing: boolean): DevExpress.core.utils.DxPromise<boolean>;
   }
   /**
+   * [descr:dxOverlayAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxOverlayAnimation {
@@ -19167,6 +19246,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxPopup.TitleRenderedInfo;
   }
   /**
+   * [descr:dxPopoverAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPopoverAnimation extends dxPopupAnimation {
@@ -19319,6 +19399,7 @@ declare module DevExpress.ui {
     export type ToolbarLocation = 'bottom' | 'top';
   }
   /**
+   * [descr:dxPopupAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPopupAnimation extends dxOverlayAnimation {
@@ -22583,6 +22664,7 @@ declare module DevExpress.ui {
     export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
   }
   /**
+   * [descr:dxToastAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxToastAnimation extends dxOverlayAnimation {
@@ -23247,6 +23329,7 @@ declare module DevExpress.ui {
         readonly column: Column<TRowData, TKey>;
       };
     /**
+     * [descr:EditingTexts]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface EditingTexts
@@ -23465,6 +23548,7 @@ declare module DevExpress.ui {
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     /**
+     * [descr:Paging]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface Paging extends DevExpress.common.grids.PagingBase {
@@ -23709,6 +23793,9 @@ declare module DevExpress.ui {
        */
       mode?: DevExpress.common.ScrollMode;
     }
+    /**
+     * [descr:Selection]
+     */
     export interface Selection extends DevExpress.common.grids.SelectionBase {
       /**
        * [descr:dxTreeListOptions.selection.recursive]
@@ -25494,6 +25581,7 @@ declare module DevExpress.viz {
     }
   }
   /**
+   * [descr:BaseChartAdaptiveLayout]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseChartAdaptiveLayout {
@@ -25530,6 +25618,7 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
+   * [descr:BaseChartLegend]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseChartLegend extends DevExpress.common.charts.BaseLegend {
@@ -25674,6 +25763,7 @@ declare module DevExpress.viz {
     tooltip?: BaseChartTooltip;
   }
   /**
+   * [descr:BaseChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseChartTooltip extends BaseWidgetTooltip {
@@ -25744,6 +25834,7 @@ declare module DevExpress.viz {
     }
   }
   /**
+   * [descr:BaseGaugeAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeAnimation {
@@ -25761,6 +25852,7 @@ declare module DevExpress.viz {
     enabled?: boolean;
   }
   /**
+   * [descr:BaseGaugeLoadingIndicator]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeLoadingIndicator
@@ -25823,6 +25915,7 @@ declare module DevExpress.viz {
     value?: number;
   }
   /**
+   * [descr:BaseGaugeRangeContainer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeRangeContainer {
@@ -25861,6 +25954,7 @@ declare module DevExpress.viz {
     }>;
   }
   /**
+   * [descr:BaseGaugeScale]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeScale {
@@ -25952,6 +26046,7 @@ declare module DevExpress.viz {
     tickInterval?: number;
   }
   /**
+   * [descr:BaseGaugeScaleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeScaleLabel {
@@ -25984,6 +26079,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
+   * [descr:BaseGaugeTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeTooltip extends BaseWidgetTooltip {
@@ -26247,6 +26343,7 @@ declare module DevExpress.viz {
     tooltip?: BaseSparklineTooltip;
   }
   /**
+   * [descr:BaseSparklineTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseSparklineTooltip extends BaseWidgetTooltip {
@@ -26502,6 +26599,7 @@ declare module DevExpress.viz {
     y?: number;
   }
   /**
+   * [descr:BaseWidgetExport]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetExport {
@@ -26538,6 +26636,7 @@ declare module DevExpress.viz {
     ) => PromiseLike<void>;
   }
   /**
+   * [descr:BaseWidgetLoadingIndicator]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetLoadingIndicator {
@@ -26563,6 +26662,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:BaseWidgetMargin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetMargin {
@@ -26670,6 +26770,7 @@ declare module DevExpress.viz {
     width?: number | string | (() => number | string);
   }
   /**
+   * [descr:BaseWidgetSize]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetSize {
@@ -26683,6 +26784,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:BaseWidgetTitle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetTitle {
@@ -26766,6 +26868,7 @@ declare module DevExpress.viz {
     wordWrap?: DevExpress.common.charts.WordWrap;
   }
   /**
+   * [descr:BaseWidgetTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetTooltip {
@@ -27149,6 +27252,7 @@ declare module DevExpress.viz {
       TooltipInfo;
   }
   /**
+   * [descr:dxBarGaugeLegend]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBarGaugeLegend
@@ -27186,6 +27290,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
+   * [descr:dxBarGaugeLoadingIndicator]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBarGaugeLoadingIndicator
@@ -27324,6 +27429,7 @@ declare module DevExpress.viz {
     values?: Array<number>;
   }
   /**
+   * [descr:dxBarGaugeTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
@@ -27554,6 +27660,7 @@ declare module DevExpress.viz {
     name?: string;
   }
   /**
+   * [descr:dxChartArgumentAxis]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
@@ -27692,6 +27799,7 @@ declare module DevExpress.viz {
     workdaysOnly?: boolean;
   }
   /**
+   * [descr:dxChartArgumentAxisConstantLines]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisConstantLines
@@ -27714,6 +27822,7 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
+   * [descr:dxChartArgumentAxisConstantLinesLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisConstantLinesLabel
@@ -27732,6 +27841,7 @@ declare module DevExpress.viz {
     verticalAlignment?: DevExpress.common.VerticalAlignment;
   }
   /**
+   * [descr:dxChartArgumentAxisConstantLineStyle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisConstantLineStyle
@@ -27742,6 +27852,7 @@ declare module DevExpress.viz {
     label?: dxChartArgumentAxisConstantLineStyleLabel;
   }
   /**
+   * [descr:dxChartArgumentAxisConstantLineStyleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisConstantLineStyleLabel
@@ -27756,6 +27867,7 @@ declare module DevExpress.viz {
     verticalAlignment?: DevExpress.common.VerticalAlignment;
   }
   /**
+   * [descr:dxChartArgumentAxisLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisLabel
@@ -27780,6 +27892,7 @@ declare module DevExpress.viz {
     format?: DevExpress.ui.Format;
   }
   /**
+   * [descr:dxChartArgumentAxisStrips]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisStrips
@@ -27802,6 +27915,7 @@ declare module DevExpress.viz {
     startValue?: number | Date | string;
   }
   /**
+   * [descr:dxChartArgumentAxisStripsLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisStripsLabel
@@ -27812,6 +27926,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:dxChartArgumentAxisTitle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartArgumentAxisTitle
@@ -27855,6 +27970,7 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
+   * [descr:dxChartCommonAxisSettings]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettings {
@@ -28045,6 +28161,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxChartCommonAxisSettingsConstantLineStyle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettingsConstantLineStyle {
@@ -28074,6 +28191,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxChartCommonAxisSettingsConstantLineStyleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
@@ -28091,6 +28209,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
+   * [descr:dxChartCommonAxisSettingsLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettingsLabel {
@@ -28151,6 +28270,7 @@ declare module DevExpress.viz {
     wordWrap?: DevExpress.common.charts.WordWrap;
   }
   /**
+   * [descr:dxChartCommonAxisSettingsStripStyle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettingsStripStyle {
@@ -28168,6 +28288,7 @@ declare module DevExpress.viz {
     paddingTopBottom?: number;
   }
   /**
+   * [descr:dxChartCommonAxisSettingsStripStyleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettingsStripStyleLabel {
@@ -28185,6 +28306,7 @@ declare module DevExpress.viz {
     verticalAlignment?: DevExpress.common.VerticalAlignment;
   }
   /**
+   * [descr:dxChartCommonAxisSettingsTitle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonAxisSettingsTitle {
@@ -28210,6 +28332,7 @@ declare module DevExpress.viz {
     wordWrap?: DevExpress.common.charts.WordWrap;
   }
   /**
+   * [descr:dxChartCommonPaneSettings]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonPaneSettings {
@@ -28260,6 +28383,7 @@ declare module DevExpress.viz {
     };
   }
   /**
+   * [descr:dxChartCommonSeriesSettings]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartCommonSeriesSettings
@@ -28362,6 +28486,7 @@ declare module DevExpress.viz {
     type?: DevExpress.common.charts.SeriesType;
   }
   /**
+   * [descr:dxChartLegend]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartLegend extends BaseChartLegend {
@@ -28812,6 +28937,7 @@ declare module DevExpress.viz {
     };
   }
   /**
+   * [descr:dxChartPanes]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartPanes extends dxChartCommonPaneSettings {
@@ -30786,6 +30912,7 @@ declare module DevExpress.viz {
     customizeText?: (pointInfo: any) => string;
   }
   /**
+   * [descr:dxChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartTooltip extends BaseChartTooltip {
@@ -30795,6 +30922,7 @@ declare module DevExpress.viz {
     location?: DevExpress.viz.dxChart.ChartTooltipLocation;
   }
   /**
+   * [descr:dxChartValueAxis]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxis extends dxChartCommonAxisSettings {
@@ -30924,6 +31052,7 @@ declare module DevExpress.viz {
       | Array<number | string | Date>;
   }
   /**
+   * [descr:dxChartValueAxisConstantLines]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisConstantLines
@@ -30946,6 +31075,7 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
+   * [descr:dxChartValueAxisConstantLinesLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisConstantLinesLabel
@@ -30964,6 +31094,7 @@ declare module DevExpress.viz {
     verticalAlignment?: DevExpress.common.VerticalAlignment;
   }
   /**
+   * [descr:dxChartValueAxisConstantLineStyle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisConstantLineStyle
@@ -30974,6 +31105,7 @@ declare module DevExpress.viz {
     label?: dxChartValueAxisConstantLineStyleLabel;
   }
   /**
+   * [descr:dxChartValueAxisConstantLineStyleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisConstantLineStyleLabel
@@ -30988,6 +31120,7 @@ declare module DevExpress.viz {
     verticalAlignment?: DevExpress.common.VerticalAlignment;
   }
   /**
+   * [descr:dxChartValueAxisLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisLabel
@@ -31012,6 +31145,7 @@ declare module DevExpress.viz {
     format?: DevExpress.ui.Format;
   }
   /**
+   * [descr:dxChartValueAxisStrips]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisStrips
@@ -31034,6 +31168,7 @@ declare module DevExpress.viz {
     startValue?: number | Date | string;
   }
   /**
+   * [descr:dxChartValueAxisStripsLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisStripsLabel
@@ -31044,6 +31179,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:dxChartValueAxisTitle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartValueAxisTitle
@@ -31132,6 +31268,7 @@ declare module DevExpress.viz {
     valueIndicator?: GaugeIndicator;
   }
   /**
+   * [descr:dxCircularGaugeRangeContainer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxCircularGaugeRangeContainer
@@ -31146,6 +31283,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxCircularGaugeScale]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxCircularGaugeScale extends BaseGaugeScale {
@@ -31159,6 +31297,7 @@ declare module DevExpress.viz {
     orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
   }
   /**
+   * [descr:dxCircularGaugeScaleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
@@ -31273,6 +31412,7 @@ declare module DevExpress.viz {
     value?: number;
   }
   /**
+   * [descr:dxFunnelLegend]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFunnelLegend extends DevExpress.common.charts.BaseLegend {
@@ -31625,6 +31765,7 @@ declare module DevExpress.viz {
     valueField?: string;
   }
   /**
+   * [descr:dxFunnelTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFunnelTooltip extends BaseWidgetTooltip {
@@ -31714,6 +31855,7 @@ declare module DevExpress.viz {
     valueIndicator?: GaugeIndicator;
   }
   /**
+   * [descr:dxLinearGaugeRangeContainer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -31742,6 +31884,7 @@ declare module DevExpress.viz {
       | number;
   }
   /**
+   * [descr:dxLinearGaugeScale]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLinearGaugeScale extends BaseGaugeScale {
@@ -31763,6 +31906,7 @@ declare module DevExpress.viz {
     verticalOrientation?: DevExpress.common.VerticalAlignment;
   }
   /**
+   * [descr:dxLinearGaugeScaleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
@@ -31830,6 +31974,7 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseChart.TooltipInfo;
   }
   /**
+   * [descr:dxPieChartAdaptiveLayout]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
@@ -31891,6 +32036,7 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
+   * [descr:dxPieChartLegend]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPieChartLegend extends BaseChartLegend {
@@ -32437,6 +32583,7 @@ declare module DevExpress.viz {
       };
   }
   /**
+   * [descr:dxPolarChartAdaptiveLayout]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
@@ -32461,6 +32608,7 @@ declare module DevExpress.viz {
     name?: string;
   }
   /**
+   * [descr:dxPolarChartArgumentAxis]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxis
@@ -32543,6 +32691,7 @@ declare module DevExpress.viz {
     type?: DevExpress.common.charts.AxisScaleType;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisConstantLines]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisConstantLines
@@ -32565,6 +32714,7 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisConstantLinesLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisConstantLinesLabel
@@ -32575,6 +32725,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisLabel
@@ -32599,6 +32750,7 @@ declare module DevExpress.viz {
     format?: DevExpress.ui.Format;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisMinorTick]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisMinorTick
@@ -32609,6 +32761,7 @@ declare module DevExpress.viz {
     shift?: number;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisStrips]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisStrips
@@ -32631,6 +32784,7 @@ declare module DevExpress.viz {
     startValue?: number | Date | string;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisStripsLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisStripsLabel
@@ -32641,6 +32795,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:dxPolarChartArgumentAxisTick]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartArgumentAxisTick
@@ -32688,6 +32843,7 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettings]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettings {
@@ -32787,6 +32943,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsConstantLineStyle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
@@ -32808,6 +32965,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsConstantLineStyleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
@@ -32821,6 +32979,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsLabel {
@@ -32842,6 +33001,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsMinorTick]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsMinorTick {
@@ -32867,6 +33027,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsStripStyle]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsStripStyle {
@@ -32876,6 +33037,7 @@ declare module DevExpress.viz {
     label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsStripStyleLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
@@ -32885,6 +33047,7 @@ declare module DevExpress.viz {
     font?: Font;
   }
   /**
+   * [descr:dxPolarChartCommonAxisSettingsTick]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonAxisSettingsTick {
@@ -32910,6 +33073,7 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
+   * [descr:dxPolarChartCommonSeriesSettings]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartCommonSeriesSettings
@@ -32940,6 +33104,7 @@ declare module DevExpress.viz {
     type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
   }
   /**
+   * [descr:dxPolarChartLegend]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartLegend extends BaseChartLegend {
@@ -33727,6 +33892,7 @@ declare module DevExpress.viz {
     position?: DevExpress.common.charts.RelativePosition;
   }
   /**
+   * [descr:dxPolarChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartTooltip extends BaseChartTooltip {
@@ -33736,6 +33902,7 @@ declare module DevExpress.viz {
     shared?: boolean;
   }
   /**
+   * [descr:dxPolarChartValueAxis]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxis
@@ -33834,6 +34001,7 @@ declare module DevExpress.viz {
       | Array<number | string | Date>;
   }
   /**
+   * [descr:dxPolarChartValueAxisConstantLines]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxisConstantLines
@@ -33856,6 +34024,7 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
+   * [descr:dxPolarChartValueAxisConstantLinesLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxisConstantLinesLabel
@@ -33866,6 +34035,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:dxPolarChartValueAxisLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxisLabel
@@ -33890,6 +34060,7 @@ declare module DevExpress.viz {
     format?: DevExpress.ui.Format;
   }
   /**
+   * [descr:dxPolarChartValueAxisStrips]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxisStrips
@@ -33912,6 +34083,7 @@ declare module DevExpress.viz {
     startValue?: number | Date | string;
   }
   /**
+   * [descr:dxPolarChartValueAxisStripsLabel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxisStripsLabel
@@ -33922,6 +34094,7 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
+   * [descr:dxPolarChartValueAxisTick]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartValueAxisTick
@@ -35005,6 +35178,7 @@ declare module DevExpress.viz {
     weightField?: string;
   }
   /**
+   * [descr:dxSankeyTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSankeyTooltip extends BaseWidgetTooltip {
@@ -35663,6 +35837,7 @@ declare module DevExpress.viz {
     valueField?: string;
   }
   /**
+   * [descr:dxTreeMapTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTreeMapTooltip extends BaseWidgetTooltip {
@@ -35835,6 +36010,7 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
+   * [descr:dxVectorMapLegends]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxVectorMapLegends
@@ -36230,6 +36406,7 @@ declare module DevExpress.viz {
     ) => dxVectorMapAnnotationConfig;
   }
   /**
+   * [descr:dxVectorMapTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxVectorMapTooltip extends BaseWidgetTooltip {

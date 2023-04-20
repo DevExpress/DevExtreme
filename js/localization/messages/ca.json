@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "El valor ha de ser un número",
         "dxNumberBox-noDataText": "No hi ha dades",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "Escollidor de columnes",
         "dxDataGrid-columnChooserEmptyText": "Arrossegueu una columna aquí per amagar -la",
         "dxDataGrid-groupContinuesMessage": "Continua a la pàgina següent",
@@ -173,6 +176,7 @@
 
         "dxPager-infoText": "Pàgina {0} de {1} ({2} ítems)",
         "dxPager-pagesCountText": "de",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Tota",
         "dxPager-page": "Pàgina {0}",
         "dxPager-prevPage": "Pàgina anterior",

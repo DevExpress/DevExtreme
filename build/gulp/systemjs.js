@@ -24,8 +24,8 @@ gulp.task('transpile-systemjs-modules-renovation', (callback) => {
         .on('close', code => code ? callback(new Error(code)) : callback());
 });
 
-gulp.task('transpile-systemjs-tests', (callback) => {
-    spawn('node', [path.resolve(root, 'testing/systemjs-builder.js'), '--transpile=tests'], { stdio: 'inherit' })
+gulp.task('transpile-systemjs-testing', (callback) => {
+    spawn('node', [path.resolve(root, 'testing/systemjs-builder.js'), '--transpile=testing'], { stdio: 'inherit' })
         .on('error', callback)
         .on('close', code => code ? callback(new Error(code)) : callback());
 });
@@ -41,7 +41,7 @@ gulp.task('transpile-systemjs', gulp.series(
     gulp.parallel(
         'transpile-systemjs-modules',
         'transpile-systemjs-modules-renovation',
-        'transpile-systemjs-tests',
+        'transpile-systemjs-testing',
         'transpile-systemjs-css'
     )
 ));
