@@ -338,17 +338,36 @@ QUnit.module('Aria accessibility', {
         this.$element.remove();
     }
 }, () => {
-    QUnit.test('role for calendar widget', function(assert) {
+    QUnit.test('table should have a role "grid"', function(assert) {
         this.$element.dxCalendar();
 
         const $tables = this.$element.find('table');
 
         $tables.each((index, tableElement) => {
             const role = tableElement.getAttribute('role');
-            const label = tableElement.getAttribute('aria-label');
 
             assert.strictEqual(role, 'grid', 'role is correct');
-            assert.equal(label, 'Calendar', 'label is correct');
+        });
+    });
+
+    QUnit.test('table should have an aria-label describing specific hotkeys (T1158729)', function(assert) {
+        this.$element.dxCalendar();
+
+        const $tables = this.$element.find('table');
+
+        $tables.each((index, tableElement) => {
+            const label = tableElement.getAttribute('aria-label');
+            const expectedLabel = `
+                Calendar.
+                To navigate between views, press Control, and then Left Arrow or Right Arrow.
+                To zoom in on a view, press Control, and then Down Arrow.
+                To zoom out, press Control, and then Up Arrow.
+            `
+                .replace(/(\r\n|\n|\r)/gm, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            assert.strictEqual(label, expectedLabel, 'label is correct');
         });
     });
 });
