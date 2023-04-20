@@ -1711,10 +1711,19 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual($input.attr('role'), 'combobox', 'input.role');
     });
 
-    QUnit.test('list aria-label should be set', function(assert) {
+    QUnit.test('list aria-label should be equal "List"', function(assert) {
+        $('#dropDownList').dxDropDownList({
+            items: [1, 2, 3],
+            opened: true,
+        });
+
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List', 'aria-label is set correctly');
+    });
+
+    QUnit.test('list aria-label should be equal "No data to display", if it has not items', function(assert) {
         $('#dropDownList').dxDropDownList({ opened: true });
 
-        assert.equal($(`.${LIST_CLASS}`).attr('aria-label'), 'List', 'aria-label is set correctly');
+        assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display', 'aria-label is set correctly');
     });
 });
 

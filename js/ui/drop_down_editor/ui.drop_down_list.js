@@ -474,7 +474,9 @@ const DropDownList = DropDownEditor.inherit({
         this._list = this._createComponent($list, List, this._listConfig());
         this._refreshList();
 
-        if(this.option('items').length) {
+        const { items } = this.option();
+
+        if(items?.length) {
             this.setAria('label', 'List', $list);
         }
 
