@@ -773,6 +773,18 @@ describe('mapWidget', () => {
         }],
         props: [],
         firedEvents: [],
+      },
+      {
+        name: 'optionThatConflictsWithComponent',
+        isSubscribable: true,
+        isDeprecated: false,
+        types: [{
+          type: 'ComplexOption1',
+          acceptableValues: [],
+          isCustomType: true,
+        }],
+        props: [],
+        firedEvents: [],
       }],
     };
 
@@ -817,6 +829,13 @@ describe('mapWidget', () => {
       templates: [],
       types: [],
       module: '',
+    },
+    {
+      name: 'ComplexOption1',
+      props: [],
+      templates: [],
+      types: [],
+      module: 'complex/option/module',
     }];
 
     it('should process subscribable options', () => {
@@ -880,6 +899,47 @@ describe('mapWidget', () => {
       expect(component.nestedComponents?.[0].optionName).toBe('widgetComplexOption1');
       expect(component.nestedComponents?.[1].className).toBe('ComplexOption2');
       expect(component.nestedComponents?.[1].optionName).toBe('widgetComplexOption2');
+    });
+    it('should resolve name conflicts in complex options', () => {
+      const { component, customTypeImports } = mapWidget(
+        { ...widgetWithCustomTypes, complexOptions },
+        '',
+        '',
+        '',
+        customTypesWithModules,
+        '',
+        {
+          generateCustomTypes: true,
+        },
+      );
+      expect(component.nestedComponents?.length).toBe(2);
+      expect(component.nestedComponents?.[0].className).toBe('ComplexOption1');
+      expect(customTypeImports!['devextreme/complex/option/module']).toEqual(['ComplexOption1 as ComplexOption1Aliased']);
+    });
+
+    it('should resolve name conflicts in complex options with overrides if present', () => {
+      const importOverridesMetadata: ImportOverridesMetadata = {
+        nameConflictsResolutionNamespaces: {
+          ComplexOption1: 'NamespaceForNestedComponentNamesConflict',
+        },
+      };
+
+      const { component, customTypeImports, wildcardTypeImports } = mapWidget(
+        { ...widgetWithCustomTypes, complexOptions },
+        '',
+        '',
+        '',
+        customTypesWithModules,
+        '',
+        {
+          generateCustomTypes: true,
+          importOverridesMetadata,
+        },
+      );
+      expect(component.nestedComponents?.length).toBe(2);
+      expect(component.nestedComponents?.[0].className).toBe('ComplexOption1');
+      expect(customTypeImports!['devextreme/complex/option/module']).toBeUndefined();
+      expect(wildcardTypeImports).toEqual({ 'devextreme/complex/option/module': 'NamespaceForNestedComponentNamesConflict' });
     });
 
     it('should process custom types', () => {
@@ -945,7 +1005,6 @@ describe('mapWidget', () => {
       expect(resultOptions.option4.type).toEqual('NoConflictNamespace.CustomTypeWithNameConflict');
       expect(resultOptions.option5.type).toEqual('CustomTypeWithDefaultImport');
       expect(resultOptions.option6.type).toEqual('CustomGenericType<any>');
-
       expect(customTypeImports!['devextreme/custom/type/module']).toEqual(['CustomTypeWithModule']);
       expect(customTypeImports!['overridden/module']).toEqual(['CustomTypeWithoutModule']);
       expect(defaultTypeImports).toEqual({ CustomTypeWithDefaultImport: 'module/with/default/import' });

@@ -89,14 +89,18 @@ export function convertToBaseType(type: string): BaseTypes {
 }
 
 export function createCustomTypeResolver(
-  importOverridesMetadata: ImportOverridesMetadata, widgetCustomTypesCollector: Set<string>,
+  importOverridesMetadata: ImportOverridesMetadata,
+  widgetCustomTypesCollector: Set<string>,
+  resolveNameConflicts: (string) => string = (typeName) => typeName,
 ): TypeResolver {
   return (typeDescriptor: ITypeDescr) => {
     const resolvedType = importOverridesMetadata.typeResolutions?.[typeDescriptor.type]
       || typeDescriptor.type;
     widgetCustomTypesCollector.add(resolvedType);
-    const resultingType = importOverridesMetadata.nameConflictsResolutionNamespaces?.[resolvedType]
-      ? `${importOverridesMetadata.nameConflictsResolutionNamespaces[resolvedType]}.${resolvedType}` : resolvedType;
+    const resultingType = resolveNameConflicts(
+      importOverridesMetadata.nameConflictsResolutionNamespaces?.[resolvedType]
+        ? `${importOverridesMetadata.nameConflictsResolutionNamespaces[resolvedType]}.${resolvedType}` : resolvedType,
+    );
     return importOverridesMetadata.genericTypes?.[resultingType] ? `${resultingType}<any>` : resultingType;
   };
 }
@@ -191,18 +195,22 @@ export function mapOption(prop: IProp, typeResolver?: TypeResolver): IOption {
     };
 }
 
+function getWidgetComponentNames(rawWidgetName: string, widgetName: string, props: IComplexProp[]) {
+  const nameClassMap: Record<string, string> = {};
+  nameClassMap[rawWidgetName] = widgetName;
+  props.forEach((p) => {
+    nameClassMap[p.name] = uppercaseFirst(p.name);
+  });
+  return nameClassMap;
+}
+
 export function extractNestedComponents(
   props: IComplexProp[],
   rawWidgetName: string,
   widgetName: string,
   typeResolver?: TypeResolver,
 ): INestedComponent[] {
-  const nameClassMap: Record<string, string> = {};
-  nameClassMap[rawWidgetName] = widgetName;
-  props.forEach((p) => {
-    nameClassMap[p.name] = uppercaseFirst(p.name);
-  });
-
+  const nameClassMap = getWidgetComponentNames(rawWidgetName, widgetName, props);
   return props.map((p) => ({
     className: nameClassMap[p.name],
     owners: p.owners.map((o) => nameClassMap[o]),
@@ -305,8 +313,29 @@ export function mapWidget(
   const widgetCustomTypes = new Set<string>();
   const { importOverridesMetadata, generateCustomTypes } = typeGenerationOptions || {};
 
+  const generatedComponentNames = Object.values(
+    getWidgetComponentNames(raw.name, name, raw.complexOptions || []),
+  );
+
+  const typeAliases: Record<string, string> = {};
+  const resolveGeneratedComponentNamesConflict = (typeName: string) => {
+    if (generatedComponentNames.includes(typeName)) {
+      const aliasedTypeName = `${typeName}Aliased`;
+      typeAliases[typeName] = aliasedTypeName;
+      return aliasedTypeName;
+    }
+    return typeName;
+  };
+  const getTypeImportStatement = (typeName: string) => (
+    typeAliases[typeName] ? `${typeName} as ${typeAliases[typeName]}` : typeName
+  );
+
   const typeResolver = generateCustomTypes
-    ? createCustomTypeResolver(importOverridesMetadata || {}, widgetCustomTypes) : undefined;
+    ? createCustomTypeResolver(
+      importOverridesMetadata || {},
+      widgetCustomTypes,
+      resolveGeneratedComponentNamesConflict,
+    ) : undefined;
 
   const subscribableOptions: ISubscribableOption[] = collectSubscribableRecursively(raw.options)
     .map((option) => mapSubscribableOption(option, typeResolver));
@@ -342,7 +371,10 @@ export function mapWidget(
       if (moduleImportNamespace) {
         wildcardTypeImports[module] = moduleImportNamespace;
       } else {
-        customTypeImports[module] = [...(customTypeImports[module] || []), t];
+        customTypeImports[module] = [
+          ...(customTypeImports[module] || []),
+          getTypeImportStatement(t),
+        ];
       }
     }
   });
