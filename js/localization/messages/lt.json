@@ -182,6 +182,8 @@
         "dxPager-prevPage": "Ankstesnis puslapis",
         "dxPager-nextPage": "Kitas puslapis",
         "dxPager-ariaLabel": "Puslapio naršymas",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageIndex": "Page index",
 
         "dxPivotGrid-grandTotal": "Iš viso",
         "dxPivotGrid-total": "{0} iš viso",

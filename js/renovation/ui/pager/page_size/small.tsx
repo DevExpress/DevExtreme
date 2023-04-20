@@ -9,13 +9,12 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
+import messageLocalization from '../../../../localization/message';
 import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types';
 import { getElementMinWidth } from '../utils/get_element_width';
 import { InternalPagerProps } from '../common/pager_props';
-
-const PAGER_PAGE_SIZE_SMALL_DESCRIPTION = 'Page size';
 
 export const viewFunction = ({
   width,
@@ -40,7 +39,7 @@ export class PageSizeSmallProps {
 
   @OneWay() pageSizes!: FullPageSize[];
 
-  @OneWay() inputAttr = { 'aria-label': PAGER_PAGE_SIZE_SMALL_DESCRIPTION };
+  @OneWay() inputAttr = { 'aria-label': messageLocalization.format('dxPager-ariaPageSize') };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias

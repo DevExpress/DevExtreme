@@ -182,6 +182,8 @@
         "dxPager-prevPage": "Previous Page",
         "dxPager-nextPage": "Next Page",
         "dxPager-ariaLabel": "Page Navigation",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageIndex": "Page index",
 
         "dxPivotGrid-grandTotal": "合计",
         "dxPivotGrid-total": "{0} 总计",
