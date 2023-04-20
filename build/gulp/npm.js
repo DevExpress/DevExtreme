@@ -12,7 +12,7 @@ const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, isEsmPackage } = require('./utils');
+const { packageDir, stringSrc, isEsmPackage } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
@@ -109,7 +109,10 @@ const sources = (src, dist, distGlob) => (() => merge(
 
     gulp
         .src('README.md')
-        .pipe(gulp.dest(dist))
+        .pipe(gulp.dest(dist)),
+
+    stringSrc('.npmignore', 'dist/js\ndist/ts')
+        .pipe(gulp.dest(`${dist}/`))
 ));
 
 const packagePath = `${resultPath}/${packageDir}`;
