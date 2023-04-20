@@ -1,27 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<style>\
-    body {\
-        padding: 0;\
-        margin: 0;\
-    }\
-    .gridWithHeight {\
-        height: 440px;\
-    }\
-</style>\
-<div style="padding: 0px 40px; margin: 0px 50px">\
-    <div id="testContainer"></div>\
-</div>\
-<div id="root">\
-    <div id="container" class="dx-datagrid dx-widget"></div>\
-</div>\
-<div id="itemsContainer"><div style="width:125px; display: inline-block;" ></div><div style="width:125px; display: inline-block;" ></div></div>';
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-});
-
-
 import devices from 'core/devices';
 import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';
@@ -59,6 +35,39 @@ function createGridView(options, userOptions) {
 
     return this._views.gridView;
 }
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .gridWithHeight {
+                height: 440px;
+            }
+            #testWrapper {
+                padding: 0 40px;
+                margin: 0 50px;
+            }
+            #itemsContainer .itemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+        </style>
+        <div id="testWrapper">
+            <div id="testContainer"></div>
+        </div>
+        <div id="root">
+            <div id="container" class="dx-datagrid dx-widget"></div>
+        </div>
+        <div id="itemsContainer">
+            <div class="itemsContainer__child"></div>
+            <div class="itemsContainer__child"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 // Grid view module///
 QUnit.module('Grid view', {
@@ -1470,7 +1479,7 @@ QUnit.module('Synchronize columns', {
                 { caption: 'Column 1', width: '120px' },
                 {
                     caption: 'Column 2', width: '130px', cellTemplate: function(container, options) {
-                        $(container).append('<div style="width: 130px" />');
+                        $(container).append($('<div>').css('width', '130px'));
                         $(container).css('padding', 0);
                     }
                 }, { caption: 'Big Big Big Column Title' }, { caption: 'Column 4' }]),
@@ -1781,7 +1790,7 @@ QUnit.module('Synchronize columns', {
         const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true });
         const testElement = $('<div />').width(300).appendTo($('#container'));
 
-        const stub = sinon.stub(this.resizingController, '_correctColumnWidths', function() {
+        const stub = sinon.stub(this.resizingController, '_correctColumnWidths').callsFake(function() {
             const $tables = gridView.element().find('.dx-datagrid-table');
             assert.ok($tables.hasClass('dx-datagrid-table-fixed'), 'the best fit mode is disabled');
         });

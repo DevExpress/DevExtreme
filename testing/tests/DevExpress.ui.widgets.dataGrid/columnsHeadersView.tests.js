@@ -12,7 +12,7 @@ import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
 
 import 'ui/data_grid';
-import '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
+import 'hogan.js';
 setTemplateEngine('hogan');
 
 const SORT_INDEX_ICON_SELECTOR = '.dx-sort-index-icon';
@@ -21,10 +21,10 @@ const SORT_INDEX_INDICATOR_SELECTOR = '.dx-sort-index-indicator';
 $('body').addClass('dx-viewport');
 QUnit.testStart(function() {
     const markup =
-        '<div class="dx-widget">\
-            <div id="container" class="dx-datagrid"></div>\
-        </div>\
-        <div id="containerIE" class="dx-datagrid"></div>';
+        `<div class="dx-widget">
+            <div id="container" class="dx-datagrid"></div>
+        </div>
+        <div id="containerIE" class="dx-datagrid"></div>`;
 
     $('#qunit-fixture').html(markup);
 });

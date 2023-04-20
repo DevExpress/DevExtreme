@@ -1,3 +1,18 @@
+import $ from 'jquery';
+import { EdmLiteral } from 'data/odata/utils';
+import commonUtils from 'core/utils/common';
+import devices from 'core/devices';
+import ArrayStore from 'data/array_store';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
+import fx from 'animation/fx';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
+
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
+fx.off = true;
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -5,8 +20,9 @@ QUnit.testStart(function() {
             </div>
         </div>
     `;
+
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .fixed-height {
                 height: 400px;
             }
@@ -17,6 +33,7 @@ QUnit.testStart(function() {
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
+            ${getEmulatorStyles()}
         </style>
 
         <!--qunit-fixture-->
@@ -25,28 +42,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    // $(gridMarkup).appendTo('body');
 });
-
-import $ from 'jquery';
-import { EdmLiteral } from 'data/odata/utils';
-import commonUtils from 'core/utils/common';
-import devices from 'core/devices';
-import ArrayStore from 'data/array_store';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
-import fx from 'animation/fx';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
-fx.off = true;
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('DataGrid - Should hide filter row menu after losing it\'s focus', function(assert) {

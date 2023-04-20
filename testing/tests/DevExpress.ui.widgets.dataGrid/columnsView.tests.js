@@ -1,11 +1,6 @@
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
-QUnit.testStart(function() {
-    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 import 'ui/data_grid';
 
@@ -17,6 +12,10 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+QUnit.testStart(function() {
+    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('API methods', {
     beforeEach: function() {
@@ -167,8 +166,18 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+        const $table = $(that.columnsView._createTable()).append(
+            $(`
+                <tr class="dx-row">
+                    <td>Test</td>
+                    <td>Test Test Test Test Test</td>
+                </tr>
+            `)
+        );
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append($table)
+        );
 
         // act
         const firstCellElement = $table.find('td').first();
@@ -197,7 +206,20 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 2', width: 100 });
 
         const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    that.columnsView._createColGroup(that.columns),
+                    $(`
+                        <tr class = "dx-row">
+                            <td>Test</td>
+                            <td>Test Test Test Test Test</td>
+                        </tr>
+                    `)
+                )
+            )
+        );
 
         // act
         const firstCellElement = $table.find('td').first();
@@ -513,7 +535,28 @@ QUnit.module('API methods', {
 
         this.option('cellHintEnabled', true);
         const $table = $(this.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    this.columnsView._createColGroup(this.columns),
+                    `<tr class="dx-row dx-master-detail-row">
+                        <td>
+                            <div id="content">
+                                <div>Test</div>
+                            </div>
+                        </td>
+                    </tr>`
+                )
+            )
+        );
+
+        $container.find('#content').css('overflow', 'hidden');
+
+        $container.find('#content > div').css({
+            width: '600px',
+            height: '30px'
+        });
 
         // act
         $('#content').trigger('mousemove');

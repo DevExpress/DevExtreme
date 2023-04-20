@@ -1,33 +1,3 @@
-QUnit.testStart(function() {
-    const gridMarkup = `
-        <div id='container'>
-            <div id="dataGrid">
-            </div>
-        </div>
-    `;
-    const markup = `
-        <style>
-            .fixed-height {
-                height: 400px;
-            }
-            .qunit-fixture-auto-height {
-                position: static !important;
-                height: auto !important;
-            }
-            .dx-scrollable-native-ios .dx-scrollable-content {
-                padding: 0 !important;
-            }
-        </style>
-
-        <!--qunit-fixture-->
-
-        ${gridMarkup}
-    `;
-
-    $('#qunit-fixture').html(markup);
-    // $(gridMarkup).appendTo('body');
-});
-
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
@@ -36,14 +6,9 @@ import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getHeight, getWidth } from 'core/utils/size';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
 
 function checkScrollWorks(dataGrid, scrollBy = 10, isHorizontal = false) {
     const scrollable = dataGrid.getScrollable();
@@ -73,6 +38,36 @@ function checkHeaderRowScrollPadding(dataGrid) {
 
     return headerPadding === scrollbarWidth;
 }
+
+QUnit.testStart(function() {
+    const gridMarkup = `
+        <div id='container'>
+            <div id="dataGrid">
+            </div>
+        </div>
+    `;
+    const markup = `
+        <style nonce="qunit-test">
+            .fixed-height {
+                height: 400px;
+            }
+            .qunit-fixture-auto-height {
+                position: static !important;
+                height: auto !important;
+            }
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+            ${getEmulatorStyles()}
+        </style>
+
+        <!--qunit-fixture-->
+
+        ${gridMarkup}
+    `;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
     [true, false].forEach(nativeScrolling => {

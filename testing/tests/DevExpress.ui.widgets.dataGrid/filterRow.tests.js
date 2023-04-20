@@ -1,21 +1,10 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container">\
-        <div class="dx-datagrid"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
 import ArrayStore from 'data/array_store';
 
-import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
+import hogan from 'hogan.js';
 
 window.Hogan = hogan;
 
@@ -36,6 +25,18 @@ viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
 setTemplateEngine('hogan');
 
+QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass('dx-viewport'));
+
+    const markup =
+        `<div>
+            <div id="container">
+                <div class="dx-datagrid"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Filter Row', {
     beforeEach: function() {

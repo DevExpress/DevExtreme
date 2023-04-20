@@ -1,14 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-        '<div class="dx-widget">\
-            <div class="dx-datagrid">\
-                <div id="container"></div>\
-                <div id="container2"></div>\
-            </div>\
-        </div>';
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 import 'ui/data_grid';
 
@@ -62,6 +51,17 @@ function setupDataGrid(that, $dataGridContainer) {
     dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating',
         'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
+
+QUnit.testStart(function() {
+    const markup =
+        '<div class="dx-widget">\
+            <div class="dx-datagrid">\
+                <div id="container"></div>\
+                <div id="container2"></div>\
+            </div>\
+        </div>';
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('AdaptiveColumns', {
     beforeEach: function() {

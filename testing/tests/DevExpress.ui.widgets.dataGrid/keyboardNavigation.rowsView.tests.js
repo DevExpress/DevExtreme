@@ -1,12 +1,3 @@
-QUnit.testStart(function() {
-    const markup = `
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import $ from 'jquery';
@@ -25,6 +16,15 @@ import {
     CLICK_EVENT,
     setupModules
 } from '../../helpers/grid/keyboardNavigationHelper.js';
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Rows view', {
     beforeEach: function() {
