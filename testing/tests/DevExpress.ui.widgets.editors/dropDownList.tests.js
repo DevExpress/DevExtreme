@@ -1710,6 +1710,12 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
         assert.strictEqual($input.attr('role'), 'combobox', 'input.role');
     });
+
+    QUnit.test('list aria-label should be set', function(assert) {
+        $('#dropDownList').dxDropDownList({ opened: true });
+
+        assert.equal($(`.${LIST_CLASS}`).attr('aria-label'), 'List', 'aria-label is set correctly');
+    });
 });
 
 QUnit.module('dropdownlist with groups', {
