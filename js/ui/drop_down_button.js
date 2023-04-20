@@ -632,6 +632,7 @@ const DropDownButton = Widget.inherit({
             case 'splitButton':
                 this._updateArrowClass();
                 this._renderButtonGroup();
+                this._setAriaHasPopup();
                 break;
             case 'displayExpr':
                 this._compileDisplayGetter();
