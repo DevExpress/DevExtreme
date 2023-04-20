@@ -69,7 +69,7 @@ export interface OptionChangedArgs<T extends string = string> {
 }
 
 export interface Controllers {
-  data: any;
+  data: import('./data_controller/module').DataController;
   columns: any;
   resizing: any;
   adaptiveColumns: any;
@@ -133,7 +133,7 @@ declare class ModuleItem {
 
   callbackNames(): string[];
 
-  callbackFlags(): any | undefined;
+  callbackFlags(name?: string): any | undefined;
 
   publicMethods(): string[];
 
