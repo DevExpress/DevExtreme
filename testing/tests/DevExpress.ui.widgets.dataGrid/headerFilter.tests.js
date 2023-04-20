@@ -18,14 +18,6 @@ import messageLocalization from 'localization/message';
 import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
 
-function getListOrTreeView() {
-    const $popupContent = this.headerFilterView.getPopupContainer().$content();
-    const list = $popupContent.find('.dx-list');
-    const treeView = $popupContent.find('.dx-treeview');
-
-    return list.length ? list.dxList('instance') : treeView.dxTreeView('instance');
-}
-
 QUnit.testStart(function() {
     const markup =
         `<div>
@@ -2827,7 +2819,7 @@ QUnit.module('Header Filter with real columnsController', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.headerFilter.search.enabled = true;
+        that.options.headerFilter.allowSearch = true;
         that.options.remoteOperations = { sorting: true, filtering: true, paging: true };
 
         that.setupDataGrid();
