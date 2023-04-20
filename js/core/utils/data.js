@@ -200,7 +200,7 @@ export const toComparable = function(value, caseSensitive, options) {
 
     if(!caseSensitive && typeof value === 'string') {
         if(options.ignoreAccent) {
-            value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            value = value.normalize('NFD').replace(/[\u0300-\u0302\u030b\u030f\u0316\u0317\u032d]/g, '');
         }
 
         return options.localeSensitive ? value.toLocaleLowerCase(options.localeSensitive) : value.toLowerCase();
