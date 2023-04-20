@@ -1,4 +1,5 @@
 import 'underscore';
+import 'jsrender';
 
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
@@ -57,6 +58,9 @@ QUnit.testStart(function() {
 
         ${gridMarkup}
 
+        <script id="jsrenderRow" type="text/x-jsrender">
+            <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>
+        </script>
         <script id="scriptTestTemplate1" type="text/html">
             <span id="template1">Template1</span>
         </script>
