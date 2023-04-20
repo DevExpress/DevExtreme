@@ -1,96 +1,67 @@
-const $ = require('jquery');
 const messageLocalization = require('localization/message');
 const localization = require('localization');
-const de = require('localization/messages/de.json!');
-const ja = require('localization/messages/ja.json!');
-const ru = require('localization/messages/ru.json!');
 
-localization.loadMessages(de);
-localization.loadMessages(ja);
-localization.loadMessages(ru);
+const dictionaries = {};
+dictionaries['ar'] = require('localization/messages/ar.json!');
+dictionaries['ca'] = require('localization/messages/ca.json!');
+dictionaries['cs'] = require('localization/messages/cs.json!');
+dictionaries['de'] = require('localization/messages/de.json!');
+dictionaries['el'] = require('localization/messages/el.json!');
+dictionaries['en'] = require('localization/messages/en.json!');
+dictionaries['es'] = require('localization/messages/es.json!');
+dictionaries['fi'] = require('localization/messages/fi.json!');
+dictionaries['fr'] = require('localization/messages/fr.json!');
+dictionaries['hu'] = require('localization/messages/hu.json!');
+dictionaries['it'] = require('localization/messages/it.json!');
+dictionaries['ja'] = require('localization/messages/ja.json!');
+dictionaries['lt'] = require('localization/messages/lt.json!');
+dictionaries['nb'] = require('localization/messages/nb.json!');
+dictionaries['nl'] = require('localization/messages/nl.json!');
+dictionaries['pt'] = require('localization/messages/pt.json!');
+dictionaries['ro'] = require('localization/messages/ro.json!');
+dictionaries['ru'] = require('localization/messages/ru.json!');
+dictionaries['sl'] = require('localization/messages/sl.json!');
+dictionaries['sv'] = require('localization/messages/sv.json!');
+dictionaries['tr'] = require('localization/messages/tr.json!');
+dictionaries['vi'] = require('localization/messages/vi.json!');
+dictionaries['zh-tw'] = require('localization/messages/zh-tw.json!');
+dictionaries['zh'] = require('localization/messages/zh.json!');
 
-QUnit.module('Locales of DevExtreme');
+const LOCALES = [
+    'ar', 'ca', 'cs', 'de', 'el',
+    'es', 'fi', 'fr', 'hu', 'it',
+    'ja', 'lt', 'nb', 'nl', 'pt',
+    'ro', 'ru', 'sl', 'sv', 'tr',
+    'vi', 'zh-tw', 'zh'
+];
 
-QUnit.test('Four locales should be linked', function(assert) {
-    const result = messageLocalization.getMessagesByLocales();
-    assert.ok(result['en'], 'Default (English)');
-    assert.ok(result['ru'], 'Russian');
-    assert.ok(result['de'], 'Deutch (German)');
-    assert.ok(result['ja'], 'Japan');
+LOCALES.forEach(locale => {
+    localization.loadMessages(dictionaries[locale]);
 });
 
-const compareLocales = function(first, second, assert) {
-    const cultures = messageLocalization.getMessagesByLocales();
-    const firstLocaleMessages = cultures[first];
-    const secondLocaleMessages = cultures[second];
-    const knownMatchingKeys = [
-        'OK',
-        'dxDataGrid-editingConfirmDeleteTitle',
-        'dxFileUploader-kb',
-        'dxFileUploader-Mb',
-        'dxFileUploader-Gb',
-        'dxDataGrid-summaryMin',
-        'dxDataGrid-summaryMax',
-        'dxDataGrid-summaryAvg',
-        'dxDataGrid-trueText',
-        'dxDataGrid-falseText',
-        'dxDataGrid-headerFilterOK',
-        'dxForm-optionalMark',
-        'dxScheduler-switcherAgenda',
-        'dxPivotGrid-dataNotAvailable',
-        'dxFilterBuilder-and',
-        'dxFilterBuilder-or',
-        'dxFilterBuilder-notAnd',
-        'dxFilterBuilder-notOr',
-        'dxHtmlEditor-dialogImageUrlField',
-        'dxHtmlEditor-dialogLinkUrlField',
-        'dxHtmlEditor-dialogLinkTextField',
-        'dxHtmlEditor-horizontal',
-        'dxDiagram-uiExport',
-        'dxDiagram-uiLayout',
-        'dxDiagram-uiText',
-        'dxDiagram-unitIn',
-        'dxDiagram-unitCm',
-        'dxDiagram-unitPx',
-        'dxDiagram-dialogButtonOK',
-        'dxDiagram-categoryGeneral',
-        'dxDiagram-commandConnectorLineOrthogonal',
-        'dxDiagram-shapeOr',
-        'dxDiagram-shapeText',
-        'dxDiagram-shapeEllipse',
-        'dxDiagram-shapeContainerDefaultText',
-        'dxFileManager-listDetailsColumnCaptionName',
-        'dxGantt-quarter'
-    ];
+QUnit.module('Locales of DevExtreme', {
+    before() {
+        this.cultures = messageLocalization.getMessagesByLocales();
+        this.textConstantNames = Object.keys(this.cultures['en']);
+    }
+}, () => {
+    LOCALES.forEach(locale => {
+        QUnit.test(locale, function(assert) {
+            const localeMessages = this.cultures[locale];
 
-    const missingBaseTranslationKeys = ['dxCalendar-ariaHotKeysInfo'];
+            this.textConstantNames.forEach((textConstantName) => {
+                const localValue = localeMessages[textConstantName];
 
-    $.each(firstLocaleMessages, function(name, value) {
-        const otherLocalValue = secondLocaleMessages[name];
-
-        if(value === otherLocalValue) {
-            if(knownMatchingKeys.includes(name) || missingBaseTranslationKeys.includes(name)) {
-                assert.ok(true, name + ' is known to match in this locales');
-            } else {
-                assert.ok(false, name + ' is present in ' + first + ', but not in ' + second);
-            }
-        } else {
-            if(otherLocalValue === '!TODO!') {
-                assert.ok(true, name + ' is marked for translation');
-            } else {
-                assert.ok(true, name + ' is translated');
-            }
-        }
+                if(localValue) {
+                    if(localValue === '!TODO!') {
+                        assert.ok(false, `The ${textConstantName} key is localized as "!TODO!" in the ${locale} locale. Please provide a valid translation for this key.`);
+                    } else {
+                        assert.ok(true, `${textConstantName} is localized in the ${locale} locale.`);
+                    }
+                } else {
+                    assert.ok(false, `The ${locale} locale is missing the ${textConstantName} key. Run the "build:community-localization" script to fix this.`);
+                }
+            });
+        });
     });
-};
-
-
-QUnit.test('en and ru', function(assert) {
-    compareLocales('en', 'ru', assert);
-});
-QUnit.test('en and de', function(assert) {
-    compareLocales('en', 'de', assert);
-});
-QUnit.test('en and ja', function(assert) {
-    compareLocales('en', 'ja', assert);
 });
