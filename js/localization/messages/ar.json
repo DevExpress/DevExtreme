@@ -83,6 +83,9 @@
         "dxNumberBox-invalidValueMessage": "يجب أن تكون القيمة رقمًا",
         "dxNumberBox-noDataText": "لايوجد بيانات",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
         "dxDataGrid-columnChooserTitle": "منتقي العمود",
         "dxDataGrid-columnChooserEmptyText": "اسحب العمود هنا لإخفائه",
         "dxDataGrid-groupContinuesMessage": "يستمر في الصفحة التالية",
@@ -173,6 +176,7 @@
 
         "dxPager-infoText": "الصفحة {0} من {1} ({2} من العناصر)",
         "dxPager-pagesCountText": "من",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "الكل",
         "dxPager-page": "Page {0}",
         "dxPager-prevPage": "Previous Page",

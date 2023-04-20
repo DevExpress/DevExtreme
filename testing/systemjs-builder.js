@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path/posix');
 const fs = require('fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
@@ -243,15 +243,16 @@ const transpileCss = async(Builder) => {
     }
 };
 
-const transpileTests = async(Builder) => {
+const transpileTesting = async(Builder) => {
     const builder = new Builder(root, config);
+    const contentList = getFileList(path.join(root, 'testing/content'));
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
-    const listFiles = [].concat(helpersList, testsList);
+    const listFiles = [].concat(contentList, helpersList, testsList);
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
+        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
         const sourceCode = fs.readFileSync(filePath).toString();
 
         if(/System(JS)?\./.test(sourceCode)) {
@@ -323,7 +324,7 @@ const updateBuilder = () => {
         case 'builder': return updateBuilder();
         case 'modules': return await transpileModules(Builder);
         case 'modules-renovation': return await transpileRenovationModules(Builder);
-        case 'tests': return await transpileTests(Builder);
+        case 'testing': return await transpileTesting(Builder);
         case 'css': return await transpileCss(Builder);
     }
 })();

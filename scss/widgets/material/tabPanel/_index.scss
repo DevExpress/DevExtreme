@@ -11,8 +11,7 @@
 .dx-tabpanel {
   .dx-tabs {
     display: block;
-    border-bottom: none;
-    background-color: $tabs-tab-bg;
+    border-bottom: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
       border-top: none;
@@ -21,32 +20,13 @@
 
   .dx-tab {
     min-width: 72px;
-
-    &:not(.dx-tab-selected):not(.dx-state-hover) {
-      background: none;
-    }
-
-    &.dx-state-focused.dx-state-disabled {
-      color: $tabs-tab-selected-color;
-
-      .dx-icon {
-        color: $tabs-tab-icon-selected-color;
-      }
-
-      &::before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        height: 2px;
-        left: 0;
-        right: 0;
-        opacity: 0.3;
-        background-color: $tabs-selected-tab-bottom-border-color;
-      }
-    }
   }
 
   .dx-tabs-wrapper {
     display: block;
+  }
+
+  .dx-tabs-nav-button {
+    height: 100%;
   }
 }

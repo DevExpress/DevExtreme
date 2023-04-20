@@ -182,15 +182,20 @@
                 }
             }
 
-            const cspMap = '@Model.NoCsp' !== 'True' ? {
-                'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+            const cspMap = '@Model.NoCsp' !== 'True'
+                ? {
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
 
-                'css': '@Url.Content("~/artifacts/css-systemjs/css.js")',
-                'generic_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.light.css")',
-                'material_blue_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.material.blue.light.css")',
+                    'css': '@Url.Content("~/artifacts/css-systemjs/css.js")',
+                    'generic_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.light.css")',
+                    'material_blue_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.material.blue.light.css")',
 
-                'json': '@Url.Content("~/artifacts/css-systemjs/json.js")',
-            } : {};
+                    'json': '@Url.Content("~/artifacts/css-systemjs/json.js")',
+                    'hogan.js': '@Url.Content("~/node_modules/hogan.js/dist/hogan-3.0.2.amd.js")'
+                }
+                : {
+                    'hogan.js': '@Url.Content("~/node_modules/hogan.js/dist/hogan-3.0.2.js")'
+                };
 
             const cspPackages = '@Model.NoCsp' !== 'True' ? {
                 '@@devextreme/runtime/inferno': {
@@ -211,6 +216,7 @@
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    'underscore': '@Url.Content("~/node_modules/underscore/underscore-min.js")',
                     '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
                     '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',

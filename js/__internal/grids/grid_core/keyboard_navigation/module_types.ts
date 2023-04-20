@@ -19,6 +19,7 @@ interface State {
   _selectionController: Controllers['selection'];
   _editingController: Controllers['editing'];
   _headerPanel: Views['headerPanel'];
+  _rowsView: Views['rowsView'];
   _columnsController: Controllers['columns'];
   _editorFactory: Controllers['editorFactory'];
   _adaptiveController: Controllers['adaptiveColumns'];

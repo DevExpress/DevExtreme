@@ -706,7 +706,10 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
@@ -777,7 +780,10 @@ export interface dxVectorMapLegends extends BaseLegend {
       layer?: string;
     };
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
