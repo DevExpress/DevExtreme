@@ -1383,7 +1383,7 @@ export class DataController extends ControllerWithDataMixin {
     return d;
   }
 
-  getKeyByRowIndex(rowIndex, byLoaded) {
+  getKeyByRowIndex(rowIndex, byLoaded?) {
     const item = this.items(byLoaded)[rowIndex];
     if (item) {
       return item.key;
