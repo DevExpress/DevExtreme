@@ -252,6 +252,13 @@ const transpileTests = async(Builder) => {
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
         const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
+        const sourceCode = fs.readFileSync(filePath).toString();
+
+        if(/System(JS)?\./.test(sourceCode)) {
+            fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
+            continue;
+        }
+
         try {
             await builder.buildStatic(
                 `[${filePath}]`,
@@ -263,8 +270,7 @@ const transpileTests = async(Builder) => {
                 }
             );
         } catch(error) {
-            const file = fs.readFileSync(filePath);
-            const { code } = await babel.transform(file.toString(), {
+            const { code } = await babel.transform(sourceCode, {
                 plugins: ['@babel/plugin-transform-modules-systemjs']
             });
 
@@ -297,8 +303,7 @@ const updateBuilder = () => {
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
         'load.depMap[dep] = dep' +
         '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
-        '.replace("/node_modules/", "/../node_modules/")' +
-        '.replace("hogan-3.0.2.js", "hogan-3.0.2.amd.js");'
+        '.replace("/node_modules/", "/../node_modules/")'
     );
 
     patchBuilder(
