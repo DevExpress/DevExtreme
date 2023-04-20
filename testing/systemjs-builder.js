@@ -252,7 +252,14 @@ const transpileTesting = async(Builder) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
+        const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
+        const sourceCode = fs.readFileSync(filePath).toString();
+
+        if(/System(JS)?\./.test(sourceCode)) {
+            fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
+            continue;
+        }
+
         try {
             await builder.buildStatic(
                 `[${filePath}]`,
@@ -264,8 +271,7 @@ const transpileTesting = async(Builder) => {
                 }
             );
         } catch(error) {
-            const file = fs.readFileSync(filePath);
-            const { code } = await babel.transform(file.toString(), {
+            const { code } = await babel.transform(sourceCode, {
                 plugins: ['@babel/plugin-transform-modules-systemjs']
             });
 
