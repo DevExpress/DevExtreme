@@ -108,7 +108,6 @@ QUnit.testStart(function() {
         </div>`;
 
     $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 // ColumnsSeparator module///
