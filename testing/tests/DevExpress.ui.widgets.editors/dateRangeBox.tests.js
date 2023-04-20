@@ -657,13 +657,13 @@ QUnit.module('Dimensions', moduleConfig, () => {
                 const dateBox = dateBoxName === 'startDateBox'
                     ? getStartDateBoxInstance(this.instance)
                     : getEndDateBoxInstance(this.instance);
-                const width = $(dateBox.$element()).width();
+                const initialWidth = $(dateBox.$element()).width();
 
                 this.instance.option('value', [null, null]);
 
                 const newWidth = $(dateBox.$element()).width();
 
-                assert.strictEqual(width, newWidth);
+                assert.strictEqual(initialWidth, newWidth);
             });
         });
     });
