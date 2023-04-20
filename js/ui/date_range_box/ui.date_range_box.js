@@ -457,6 +457,7 @@ class DateRangeBox extends Widget {
                 this._createValueChangeAction();
                 break;
             case 'opened':
+                this.getStartDateBox().option('opened', value);
                 break;
             case 'openOnFieldClick':
             case 'placeholder':

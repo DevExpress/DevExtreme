@@ -419,6 +419,9 @@ QUnit.module('DropDownButton', moduleConfig, () => {
 
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
+
+    // QUnit.todo('Popup of startDateBox should be opened by click on drop down button', function() {});
+    // QUnit.todo('Open popup of startDateBox should be closed by click on drop down button', function() {});
 });
 
 QUnit.module('Behavior', moduleConfig, () => {
@@ -428,6 +431,9 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         endDateBox.open();
 
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
+        // TODO: investigate this behavior
+        assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
         assert.ok(startDateBox.option('opened'));
     });
 
@@ -606,5 +612,22 @@ QUnit.module('Popup integration', moduleConfig, () => {
         const popup = startDateBox._popup;
 
         assert.ok(this.$element.is(popup.option('position.of')));
+    });
+});
+
+QUnit.module('Option synchronization', moduleConfig, () => {
+    QUnit.test('startDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        this.instance.option('opened', true);
+
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox option was changed');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
+
+        this.instance.option('opened', false);
+
+        assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox option was changed');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
     });
 });
