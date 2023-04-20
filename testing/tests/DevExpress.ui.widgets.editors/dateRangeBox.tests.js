@@ -420,8 +420,8 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
 
-    QUnit.todo('Popup of startDateBox should be opened by click on drop down button', function() {});
-    QUnit.todo('Open popup of startDateBox should be closed by click on drop down button', function() {});
+    // QUnit.todo('Popup of startDateBox should be opened by click on drop down button', function() {});
+    // QUnit.todo('Open popup of startDateBox should be closed by click on drop down button', function() {});
 });
 
 QUnit.module('Behavior', moduleConfig, () => {
