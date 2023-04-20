@@ -5,6 +5,7 @@ import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import createRequestMock from '../../helpers/apiRequestMock';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1006,6 +1007,32 @@ fixture`Remote Scrolling`
     await t.maximizeWindow();
   });
 
+const generateData = (count) => {
+  const groupCount = count / 100;
+  const items: any = [];
+  const padLength = groupCount.toString().length;
+  let Id = 0;
+
+  for (let i = 1; i <= groupCount; i += 1) {
+    for (let j = 1; j <= 5; j += 1) {
+      for (let k = 1; k <= 100; k += 1) {
+        Id += 1;
+
+        items.push({
+          Id,
+          ProductSubcategoryName: `Subcategory${i.toString().padStart(padLength, '0')}`,
+          StoreName: `Store${i.toString().padStart(padLength, '0')}`,
+          ProductCategoryName: `Category${i.toString().padStart(padLength, '0')}-${j.toString().padStart(3, '0')}`,
+          ProductName: `Product${i.toString().padStart(padLength, '0')}`,
+        });
+      }
+    }
+  }
+  return items;
+};
+
+const apiRequestMock = createRequestMock(generateData(100000));
+
 test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
@@ -1015,16 +1042,10 @@ test('Scroll to the bottom after expand several group', async (t) => {
   };
 
   // act
-  await t.wait(200);
   await t.expect(dataGrid.hasScrollable()).ok();
   await scrollToBottom();
-  await scrollToBottom();
-  await scrollToBottom();
-  await dataGrid.apiExpandRow(['Contoso York Store']);
-  await t.wait(200);
-  await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
-  await t.wait(200);
-  await scrollToBottom();
+  await dataGrid.apiExpandRow(['Store1000']);
+  await dataGrid.apiExpandRow(['Store1000', 'Category1000-001']);
   await scrollToBottom();
   await dataGrid.scrollBy({ y: -1 });
   await t.expect(dataGrid.isReady()).ok();
@@ -1035,52 +1056,57 @@ test('Scroll to the bottom after expand several group', async (t) => {
   if (!visibleRows.length) {
     await t
       .expect(visibleRows[0].key)
-      .within(897075, 932043);
+      .within(499593, 499594);
   }
 })
-  .before(async () => createWidget('dxDataGrid', () => ({
-    width: 1000,
-    height: 440,
-    dataSource: (window as any).DevExpress.data.AspNet.createStore({
-      key: 'Id',
-      loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales',
-    }),
-    remoteOperations: { groupPaging: true },
-    scrolling: {
-      mode: 'virtual',
-      useNative: false,
-    },
-    grouping: {
-      autoExpandAll: false,
-    },
-    groupPanel: {
-      visible: true,
-    },
-    showBorders: true,
-    columns: [{
-      dataField: 'Id',
-      dataType: 'number',
-      width: 75,
-    }, {
-      caption: 'Subcategory',
-      dataField: 'ProductSubcategoryName',
-      width: 150,
-    }, {
-      caption: 'Store',
-      dataField: 'StoreName',
-      groupIndex: 0,
-      width: 150,
-    }, {
-      caption: 'Category',
-      dataField: 'ProductCategoryName',
-      groupIndex: 1,
-      width: 120,
-    }, {
-      caption: 'Product',
-      dataField: 'ProductName',
-    }],
-    loadingTimeout: 0,
-  })));
+  .before(async (t) => {
+    await t.addRequestHooks(apiRequestMock);
+    return createWidget('dxDataGrid', () => ({
+      width: 1000,
+      height: 440,
+      dataSource: (window as any).DevExpress.data.AspNet.createStore({
+        key: 'Id',
+        loadUrl: 'https://api/data',
+      }),
+      remoteOperations: { groupPaging: true },
+      scrolling: {
+        mode: 'virtual',
+        useNative: false,
+      },
+      grouping: {
+        autoExpandAll: false,
+      },
+      groupPanel: {
+        visible: true,
+      },
+      showBorders: true,
+      columns: [{
+        dataField: 'Id',
+        dataType: 'number',
+        width: 75,
+      }, {
+        caption: 'Subcategory',
+        dataField: 'ProductSubcategoryName',
+        width: 150,
+      }, {
+        caption: 'Store',
+        dataField: 'StoreName',
+        groupIndex: 0,
+        width: 150,
+      }, {
+        caption: 'Category',
+        dataField: 'ProductCategoryName',
+        groupIndex: 1,
+        width: 120,
+      }, {
+        caption: 'Product',
+        dataField: 'ProductName',
+      }],
+      loadingTimeout: 0,
+    }));
+  }).after(async (t) => {
+    await t.removeRequestHooks(apiRequestMock);
+  });
 
 test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
   const dataGrid = new DataGrid('#container');
