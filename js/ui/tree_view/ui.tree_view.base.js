@@ -35,7 +35,7 @@ const IS_LEAF = `${NODE_CLASS}-is-leaf`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
 const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
 const ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS = `${ITEM_CLASS}-with-custom-expander-icon`;
-const RTL_CUSTOM_EXPANDER_ICON_CONTAINER_OFFSET_CLASS = `${WIDGET_CLASS}-rtl-custom-expander-icon-container-offset`;
+const CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_OFFSET_CLASS = `${WIDGET_CLASS}-custom-expander-icon-item-container`;
 
 const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
@@ -699,9 +699,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._hasCustomExpanderIcons()) {
             $node.addClass(ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS);
-            if(this.option('rtlEnabled')) {
-                $nodeContainer.addClass(RTL_CUSTOM_EXPANDER_ICON_CONTAINER_OFFSET_CLASS);
-            }
+            $nodeContainer.addClass(CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_OFFSET_CLASS);
         }
 
         showCheckBox && this._renderCheckBox($node, node);
