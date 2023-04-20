@@ -35,7 +35,7 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
       overflow: visible;
     }
 
-    .dx-treeview-node-container:has(.dx-treeview-item-with-custom-expander-icon) {
+    .dx-treeview-rtl-custom-expander-icon-container-offset {
       padding-right: -$generic-treeview-toggle-item-visibility-offset;
     }
   }
