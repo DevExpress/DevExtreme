@@ -55,7 +55,7 @@ export class PagerSmallProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallPropsType = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'> & PagerSmallProps;
+export type PagerSmallPropsType = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'> & PagerSmallProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesSmall extends JSXComponent<PagerSmallPropsType, 'pageIndexChange'>() {

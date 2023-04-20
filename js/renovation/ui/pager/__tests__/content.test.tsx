@@ -12,6 +12,8 @@ import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 import messageLocalization from '../../../../localization/message';
+import { PageSizeSmall, PageSizeSmallProps, PageSizeSmallPropsType } from '../page_size/small';
+import { PagesSmall, PagerSmallProps, PagerSmallPropsType } from '../pages/small';
 
 let mockInstance: Record<string, AbstractFunction> = {};
 
@@ -236,7 +238,7 @@ describe('PagerContent', () => {
       } as PagerContentProps);
       component.widgetRootElementRef = createTestRef(rootElement);
       component.keyboardAction.registerKeyboardAction(element, action);
-      expect(registerKeyboardAction).toBeCalledWith(
+      expect(registerKeyboardAction).toHaveBeenCalledWith(
         'pager',
         {
           option: expect.any(Function),
@@ -349,12 +351,21 @@ describe('PagerContent', () => {
       expect(component.pageIndexSelectorVisible).toBe(true);
     });
 
-    it('aria', () => {
-      (messageLocalization.format as jest.Mock).mockReturnValue('Page Navigation');
-      const component = new PagerContent(new PagerContentProps());
+    it('Renders aria attributes', () => {
+      const message = 'Localization';
+      (messageLocalization.format as jest.Mock).mockReturnValue(message);
+      const pagerContent = new PagerContent(new PagerContentProps());
 
-      expect(component.aria).toEqual({ role: 'navigation', label: 'Page Navigation' });
-      expect(messageLocalization.format).toBeCalledWith('dxPager-ariaLabel');
+      expect(pagerContent.aria).toEqual({ role: 'navigation', label: message });
+      expect(messageLocalization.format).toHaveBeenCalledWith('dxPager-ariaLabel');
+
+      const pagesSmall = new PagesSmall(new PagerSmallProps() as PagerSmallPropsType);
+      expect(pagesSmall.props.inputAttr['aria-label']).toBe(message);
+      expect(messageLocalization.format).toHaveBeenCalledWith('dxPager-ariaPageNumber');
+
+      const pageSizeSmall = new PageSizeSmall(new PageSizeSmallProps() as PageSizeSmallPropsType);
+      expect(pageSizeSmall.props.inputAttr['aria-label']).toBe(message);
+      expect(messageLocalization.format).toHaveBeenCalledWith('dxPager-ariaPageSize');
     });
 
     describe('className', () => {

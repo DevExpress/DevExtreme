@@ -43,7 +43,7 @@ export class PageSizeSmallProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeSmallPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeSmallProps;
+export type PageSizeSmallPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeSmallProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall
