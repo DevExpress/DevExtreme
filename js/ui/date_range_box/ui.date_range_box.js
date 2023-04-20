@@ -317,6 +317,10 @@ class DateRangeBox extends Widget {
             cancelButtonText: options.cancelButtonText,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
+            onValueChanged: ({ value }) => {
+                const newValue = [value, this.option('value')[1]];
+                this.updateValue(newValue);
+            },
             opened: options.opened,
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,
@@ -336,6 +340,10 @@ class DateRangeBox extends Widget {
                     e.cancel = true;
                     this.getStartDateBox().open();
                 }
+            },
+            onValueChanged: ({ value }) => {
+                const newValue = [this.option('value')[0], value];
+                this.updateValue(newValue);
             },
             showClearButton: options.showClearButton,
             showDropDownButton: false,
@@ -362,6 +370,22 @@ class DateRangeBox extends Widget {
 
         if(!this._isSameDates(newStartDate, oldStartDate) || !this._isSameDates(newEndDate, oldEndDate)) {
             this.option('value', newValue);
+        }
+    }
+
+    _updateDateBoxesValue(newValue) {
+        const startDateBox = this.getStartDateBox();
+        const endDateBox = this.getEndDateBox();
+        const [newStartDate, newEndDate] = newValue;
+        const oldStartDate = startDateBox.option('value');
+        const oldEndDate = endDateBox.option('value');
+
+        if(!this._isSameDates(newStartDate, oldStartDate)) {
+            startDateBox.option('value', newStartDate);
+        }
+
+        if(!this._isSameDates(newEndDate, oldEndDate)) {
+            endDateBox.option('value', newEndDate);
         }
     }
 
@@ -457,6 +481,7 @@ class DateRangeBox extends Widget {
             case 'value':
                 this._raiseValueChangeAction(value, previousValue);
                 this._saveValueChangeEvent(undefined);
+                this._updateDateBoxesValue(value);
                 break;
             case 'valueChangeEvent':
                 break;

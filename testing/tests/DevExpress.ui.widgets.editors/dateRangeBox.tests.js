@@ -431,6 +431,57 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.ok(startDateBox.option('opened'));
     });
 
+    ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+        QUnit.test(`${dateBoxName} should update value on DateRangeBox value change`, function(assert) {
+            const newValue = ['2023/04/18', '2023/05/03'];
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            this.instance.option('value', newValue);
+
+            assert.strictEqual(dateBox.option('value'), newValue[dateBoxName === 'startDateBox' ? 0 : 1]);
+        });
+
+        QUnit.test(`${dateBoxName} should not update value on DateRangeBox value change if value is the same date`, function(assert) {
+            const newValue = ['2023/01/05', '2023/02/14'];
+            const onValueChangedHandler = sinon.stub();
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            dateBox.option('onValueChanged', onValueChangedHandler);
+            this.instance.option('value', newValue);
+
+            assert.strictEqual(onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test(`DateRangeBox should update value on ${dateBoxName} value change`, function(assert) {
+            const newValue = '2023/07/07';
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            dateBox.option('value', newValue);
+
+            assert.strictEqual(this.instance.option('value')[dateBoxName === 'startDateBox' ? 0 : 1], newValue);
+        });
+
+        QUnit.test(`DateRangeBox should not update value on ${dateBoxName} value change if the value is the same`, function(assert) {
+            const isStartDateBox = dateBoxName === 'startDateBox';
+            const newValue = isStartDateBox ? '2023/01/05' : '2023/02/14';
+            const onValueChangedHandler = sinon.stub();
+            const dateBox = isStartDateBox
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            this.instance.option('onValueChanged', onValueChangedHandler);
+            dateBox.option('value', newValue);
+
+            assert.strictEqual(onValueChangedHandler.callCount, 0);
+        });
+    });
+
     QUnit.module('onValueChanged event', {
         beforeEach: function() {
             this.onValueChangedHandler = sinon.stub();
