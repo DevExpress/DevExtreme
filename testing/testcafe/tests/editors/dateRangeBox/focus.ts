@@ -87,3 +87,8 @@ test('DateRangeBox & Start DateBox should have focus class after click on drop d
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2023/01/05', '2023/02/14'],
 }));
+
+// TODO: end date box should be focused after select start date
+// TODO: end date box should be focused after select end date
+// eslint-disable-next-line max-len
+// TODO: start date should be focused when endDateBox is focused and dateRangeBox open by click on dropdownbutton
