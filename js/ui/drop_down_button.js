@@ -472,10 +472,7 @@ const DropDownButton = Widget.inherit({
     },
 
     _setAriaExpanded(value) {
-        this.setAria({
-            expanded: value,
-            owns: value ? this._popupContentId : undefined,
-        }, this._getPopupButton());
+        this.setAria({ expanded: value }, this._getPopupButton());
     },
 
     _setAriaOwns(value) {
