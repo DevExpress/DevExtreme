@@ -23,6 +23,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
+const SEPARATOR_ICON_NAME = 'to';
+
 // STYLE dateRangeBox
 
 class DateRangeBox extends Widget {
@@ -236,7 +238,9 @@ class DateRangeBox extends Widget {
     }
 
     _renderSeparator() {
-        const $icon = getImageContainer(this.option('rtlEnabled') ? 'arrowleft' : 'arrowright');
+        // TODO: request design for rtl mode and research rtl mode appearance
+        // TODO: add transform: scale(-1, 1) for mirror of the icon in rtl mode
+        const $icon = getImageContainer(SEPARATOR_ICON_NAME);
         this._$separator = $('<div>')
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
             .appendTo(this.$element());
