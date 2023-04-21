@@ -182,8 +182,8 @@
         "dxPager-prevPage": "前のページ",
         "dxPager-nextPage": "次のページ",
         "dxPager-ariaLabel": "ページ ナビゲーション",
-        "dxPager-ariaPageSize": "Page size",
-        "dxPager-ariaPageNumber": "Page number",
+        "dxPager-ariaPageSize": "ページ サイズ",
+        "dxPager-ariaPageNumber": "ページ番号",
 
         "dxPivotGrid-grandTotal": "総計",
         "dxPivotGrid-total": "{0} 合計",
