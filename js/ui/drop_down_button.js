@@ -395,7 +395,7 @@ const DropDownButton = Widget.inherit({
         };
     },
 
-    _upDownKeyHandler() {
+    _upDownKeyHandler(e) {
         if(this._popup && this._popup.option('visible') && this._list) {
             this._list.focus();
         } else {
@@ -490,10 +490,10 @@ const DropDownButton = Widget.inherit({
 
         this._$buttonElements = this._buttonGroup.$element().find('.dx-button');
 
-        this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
-        this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
-        this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
-        this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
+        this._buttonGroup._buttonsCollection.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
+        this._buttonGroup._buttonsCollection.registerKeyHandler('tab', this._tabHandler.bind(this));
+        this._buttonGroup._buttonsCollection.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
+        this._buttonGroup._buttonsCollection.registerKeyHandler('escape', this._escHandler.bind(this));
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
 
