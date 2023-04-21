@@ -463,23 +463,21 @@ const DropDownButton = Widget.inherit({
         this._setAriaExpanded(true);
     },
 
+    _getPopupButton() {
+        const { splitButton } = this.option();
+
+        return splitButton ? this._$buttonElements.eq(1) : this._$buttonElements.eq(0);
+    },
+
     _setAriaExpanded(value) {
-        this._ariaExpandedElements.forEach((ariaElement) => {
-            this.setAria({
-                expanded: value,
-                owns: value ? this._popupContentId : undefined,
-            },
-            $(ariaElement));
-        });
+        this.setAria({
+            expanded: value,
+            owns: value ? this._popupContentId : undefined,
+        }, this._getPopupButton());
     },
 
     _setAriaHasPopup() {
-        const { splitButton } = this.option();
-
-        const $buttons = this._buttonGroup.$element().find('.dx-button');
-        const $button = splitButton ? $buttons.eq(1) : $buttons.eq(0);
-
-        this.setAria('haspopup', 'listbox', $button);
+        this.setAria('haspopup', 'listbox', this._getPopupButton());
     },
 
     _renderButtonGroup() {
@@ -490,9 +488,7 @@ const DropDownButton = Widget.inherit({
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
-        const buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
-
-        this._ariaExpandedElements = [ ...buttonElements, this.$element() ];
+        this._$buttonElements = this._buttonGroup.$element().find('.dx-button');
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -632,7 +628,6 @@ const DropDownButton = Widget.inherit({
             case 'splitButton':
                 this._updateArrowClass();
                 this._renderButtonGroup();
-                this._setAriaHasPopup();
                 break;
             case 'displayExpr':
                 this._compileDisplayGetter();
