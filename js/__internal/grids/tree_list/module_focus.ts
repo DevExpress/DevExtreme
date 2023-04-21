@@ -1,6 +1,5 @@
 import { extend } from '@js/core/utils/extend';
 import { Deferred } from '@js/core/utils/deferred';
-// @ts-expect-error
 import { focusModule } from '@js/ui/grid_core/ui.grid_core.focus';
 import core from './module_core';
 
