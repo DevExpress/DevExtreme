@@ -89,6 +89,14 @@ test('DateRangeBox & Start DateBox should have focus class after click on drop d
 }));
 
 test('DateRangeBox & EndDateBox should have focus class after select start date and end date in calendar', async (t) => {
+  await t
+    .click(Selector('body'));
+
+  await createWidget('dxDateRangeBox', {
+    value: [null, null],
+    opened: true,
+  });
+
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
@@ -98,9 +106,6 @@ test('DateRangeBox & EndDateBox should have focus class after select start date 
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
-
-  await t
-    .click(Selector('body'));
 
   await t
     .click(dateRangeBox.getCalendarCell(20))
@@ -119,10 +124,7 @@ test('DateRangeBox & EndDateBox should have focus class after select start date 
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .ok();
-}).before(async () => createWidget('dxDateRangeBox', {
-  value: [null, null],
-  opened: true,
-}));
+});
 
 test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
