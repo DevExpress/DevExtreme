@@ -105,9 +105,9 @@ test('DateRangeBox & EndDateBox should have focus class after select start date 
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
-    .notOk()
+    .ok()
     .expect(dateRangeBox.getEndDateBox().isFocused)
-    .ok();
+    .notOk();
 
   await t
     .click(dateRangeBox.getCalendarCell(20))
