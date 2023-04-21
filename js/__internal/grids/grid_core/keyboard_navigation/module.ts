@@ -772,7 +772,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const column = columnsController.getVisibleColumns(null, true)[columnIndex];
     const $row = $cell.parent();
     const rowIndex = this._getRowIndex($row);
-    const row = this._dataController.items()[rowIndex];
+    const row = this._dataController.items()[rowIndex] as any;
     const editingController = this._editingController;
 
     if (column && column.allowEditing) {
@@ -910,7 +910,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       const item = this._dataController.items()[rowIndex];
 
       if (key !== undefined && item && item.data && !item.data.isContinuation) {
-        this._dataController.changeRowExpand(key);
+        (this._dataController as any).changeRowExpand(key);
       }
     } else {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
@@ -1638,7 +1638,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _isLastRow(rowIndex) {
-    const dataController = this._dataController;
+    const dataController = this._dataController as any;
     const visibleItems = dataController
       .items()
       .filter((item) => item.visible !== false);

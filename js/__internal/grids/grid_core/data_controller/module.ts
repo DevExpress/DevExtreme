@@ -211,6 +211,8 @@ export class DataController extends ControllerWithDataMixin {
     if (name === 'dataErrorOccurred') {
       return { stopOnFalse: true };
     }
+
+    return undefined;
   }
 
   publicMethods() {
@@ -929,6 +931,8 @@ export class DataController extends ControllerWithDataMixin {
       if (row) {
         return `${row.rowType},${JSON.stringify(row.key)}`;
       }
+
+      return undefined;
     }
 
     const isItemEquals = (item1, item2) => {
@@ -1380,7 +1384,7 @@ export class DataController extends ControllerWithDataMixin {
     return d;
   }
 
-  getKeyByRowIndex(rowIndex, byLoaded) {
+  getKeyByRowIndex(rowIndex, byLoaded?) {
     const item = this.items(byLoaded)[rowIndex];
     if (item) {
       return item.key;

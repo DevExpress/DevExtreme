@@ -93,7 +93,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   _isItemModified(item, cellOptions) {
     const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
     const rowIndex = this._dataController.getRowIndexByKey(cellOptions.key);
-    const row = this._dataController.items()[rowIndex + 1];
+    const row = this._dataController.items()[rowIndex + 1] as any;
 
     return row && row.modifiedValues && isDefined(row.modifiedValues[columnIndex]);
   },
@@ -340,11 +340,11 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     if (this._isRowEditMode()) {
       const editRowKey = this.option('editing.editRowKey');
-      if (equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
+      if (equalByValue(editRowKey, (this._dataController as any).adaptiveExpandedKey())) {
         return true;
       }
     } else {
-      const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
+      const rowIndex = this._dataController.getRowIndexByKey((this._dataController as any).adaptiveExpandedKey()) + 1;
       const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
 
       return this._editingController.isEditCell(rowIndex, columnIndex);
@@ -589,7 +589,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
   toggleExpandAdaptiveDetailRow(key, alwaysExpanded) {
     if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
-      this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
+      (this.getController('data') as any).toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   },
 
@@ -626,7 +626,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   },
 
   hasAdaptiveDetailRowExpanded() {
-    return isDefined(this._dataController.adaptiveExpandedKey());
+    return isDefined((this._dataController as any).adaptiveExpandedKey());
   },
 
   updateForm(hiddenColumns) {
@@ -728,7 +728,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   },
 
   isAdaptiveDetailRowExpanded(key) {
-    return this._dataController.adaptiveExpandedKey() && equalByValue(this._dataController.adaptiveExpandedKey(), key);
+    const dataController = this._dataController as any;
+    return dataController.adaptiveExpandedKey() && equalByValue(dataController.adaptiveExpandedKey(), key);
   },
 
   expandAdaptiveDetailRow(key) {
