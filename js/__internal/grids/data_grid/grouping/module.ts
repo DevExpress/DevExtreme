@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
 import { registerKeyboardAction } from '@js/ui/grid_core/ui.grid_core.accessibility';
 import { getHeight } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
@@ -20,6 +21,11 @@ const DATAGRID_GROUP_PANEL_CONTAINER_CLASS = 'dx-toolbar-item';
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
+
+export interface GroupingDataControllerExtension {
+  isRowExpanded(key): boolean;
+  changeRowExpand(key, isRowClick?): any;
+}
 
 const GroupingDataSourceAdapterExtender = (function () {
   return {
@@ -348,6 +354,21 @@ const onGroupingMenuItemClick = function (column, params) {
   }
 };
 
+const isGroupPanelVisible = (groupPanelOptions): boolean => {
+  const visible = groupPanelOptions?.visible;
+
+  return visible === 'auto'
+    ? devices.current().deviceType === 'desktop'
+    : !!visible;
+};
+
+const allowDragging = (groupPanelOptions, column): boolean => {
+  const isVisible = isGroupPanelVisible(groupPanelOptions);
+  const canDrag = groupPanelOptions?.allowColumnDragging && column.allowGrouping;
+
+  return isVisible && !!canDrag;
+};
+
 export const GroupingHeaderPanelExtender = (function () {
   return {
     _getToolbarItems() {
@@ -399,19 +420,8 @@ export const GroupingHeaderPanelExtender = (function () {
       event.preventDefault();
     },
 
-    _isGroupPanelVisible() {
-      const groupPanelOptions = this.option('groupPanel');
-      let isVisible;
-
-      if (groupPanelOptions) {
-        isVisible = groupPanelOptions.visible;
-
-        if (isVisible === 'auto') {
-          isVisible = devices.current().deviceType === 'desktop';
-        }
-      }
-
-      return isVisible;
+    _isGroupPanelVisible(): boolean {
+      return isGroupPanelVisible(this.option('groupPanel'));
     },
 
     _renderGroupPanelItems($groupPanel, groupColumns) {
@@ -471,10 +481,10 @@ export const GroupingHeaderPanelExtender = (function () {
       }
     },
 
-    allowDragging(column) {
+    allowDragging(column): boolean {
       const groupPanelOptions = this.option('groupPanel');
 
-      return this._isGroupPanelVisible() && groupPanelOptions.allowColumnDragging && column && column.allowGrouping;
+      return allowDragging(groupPanelOptions, column);
     },
 
     getColumnElements() {
@@ -537,6 +547,10 @@ export const GroupingHeaderPanelExtender = (function () {
 
     isVisible() {
       return this.callBase() || this._isGroupPanelVisible();
+    },
+
+    hasGroupedColumns(): boolean {
+      return this._isGroupPanelVisible() && !!this.getColumns().length;
     },
 
     optionChanged(args) {
@@ -634,6 +648,12 @@ const columnHeadersViewExtender = (function () {
         }
       }
       return items;
+    },
+
+    allowDragging(column): boolean {
+      const groupPanelOptions = this.option('groupPanel');
+
+      return allowDragging(groupPanelOptions, column) || this.callBase(column);
     },
   };
 }());

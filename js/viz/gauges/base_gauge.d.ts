@@ -116,7 +116,10 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      */
     value?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseGaugeAnimation {
     /**
      * @docid BaseGaugeOptions.animation.duration
@@ -137,7 +140,10 @@ export interface BaseGaugeAnimation {
      */
     enabled?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
      * @docid BaseGaugeOptions.loadingIndicator.enabled
@@ -145,7 +151,10 @@ export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
      */
     enabled?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseGaugeRangeContainer {
     /**
      * @docid BaseGaugeOptions.rangeContainer.backgroundColor
@@ -192,7 +201,10 @@ export interface BaseGaugeRangeContainer {
       startValue?: number;
     }>;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseGaugeScale {
     /**
      * @docid BaseGaugeOptions.scale.allowDecimals
@@ -315,7 +327,10 @@ export interface BaseGaugeScale {
      */
     tickInterval?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseGaugeScaleLabel {
     /**
      * @docid BaseGaugeOptions.scale.label.customizeText
@@ -354,7 +369,10 @@ export interface BaseGaugeScaleLabel {
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.contentTemplate

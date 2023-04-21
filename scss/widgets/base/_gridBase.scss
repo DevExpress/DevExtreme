@@ -229,6 +229,10 @@
 
     &.dx-#{$widget-name}-column-chooser-mode-select {
       .dx-#{$widget-name}-column-chooser-plain {
+        .dx-treeview-select-all-item {
+          padding-left: 4px;
+        }
+
         .dx-treeview-node {
           padding-left: 0;
 

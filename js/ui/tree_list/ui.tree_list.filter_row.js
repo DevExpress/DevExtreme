@@ -1,4 +1,1 @@
-import core from './ui.tree_list.core';
-import { filterRowModule } from '../grid_core/ui.grid_core.filter_row';
-
-core.registerModule('filterRow', filterRowModule);
+import '../../__internal/grids/tree_list/module_not_extended/filter_row';

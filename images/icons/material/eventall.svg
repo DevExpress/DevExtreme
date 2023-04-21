@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 26.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="_x31_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
-<path id="_x32_" d="M16,1v2H8V1H6v2H5C3.9,3,3,3.9,3,5l0,14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-1V1H16z M19,19
-	H5V8h14V19z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>eventall</title>
+<path d="M16 1v2h-8v-2h-2v2h-1c-1.109 0-1.991 0.9-1.991 2l-0.009 14c0 1.1 0.891 2 2 2h14c1.1 0 2-0.9 2-2v-14c0-1.1-0.9-2-2-2h-1v-2h-2zM19 19h-14v-11h14v11z"></path>
 </svg>

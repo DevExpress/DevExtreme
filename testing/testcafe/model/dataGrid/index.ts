@@ -22,6 +22,7 @@ export const CLASS = {
   headerPanel: 'header-panel',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
+  columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterPanel: 'filter-panel',
   filterRow: 'filter-row',
@@ -36,8 +37,6 @@ export const CLASS = {
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
-
-  columnChooser: 'column-chooser',
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',

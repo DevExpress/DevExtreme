@@ -106,7 +106,8 @@
 .dx-icon-addcolumnright,
 .dx-icon-addtable,
 .dx-icon-removetable,
-.dx-icon-bell {
+.dx-icon-bell,
+.dx-icon-to {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -424,6 +425,21 @@ $icons: (
     "imgarlock": "\f156",
     "imgarunlock": "\f157",
     "bell": "\f158",
+    "sun": '\f159',
+    "send": '\f160',
+    "pinmap": '\f161',
+    "photooutline": '\f162',
+    "panelright": '\f163',
+    "panelleft": '\f164',
+    "optionsgear": '\f165',
+    "moon": '\f166',
+    "login": '\f167',
+    "eyeopen": '\f168',
+    "eyeclose": '\f169',
+    "expandform": '\f170',
+    "description": '\f171',
+    "belloutline": '\f172',
+    "to": '\f173',
 );
 
 // stylelint-enable

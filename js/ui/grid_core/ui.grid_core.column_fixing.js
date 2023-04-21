@@ -810,8 +810,11 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
         if(this.option('hoverStateEnabled') && isFixedColumns) {
-            this._attachHoverEvents();
+            deferred.done(() => {
+                this._attachHoverEvents();
+            });
         }
+
         return deferred;
     },
 

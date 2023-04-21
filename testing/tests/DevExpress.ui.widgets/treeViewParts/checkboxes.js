@@ -4,6 +4,9 @@ import { Deferred } from 'core/utils/deferred';
 import CustomStore from 'data/custom_store';
 import $ from 'jquery';
 
+const SELECT_ALL_CHECKBOX_CLASS = 'dx-treeview-select-all-item';
+const CHECKBOX_CLASS = 'dx-checkbox';
+
 QUnit.module('Checkboxes');
 
 QUnit.test('Set intermediate state for parent if at least a one child is selected', function(assert) {
@@ -15,7 +18,7 @@ QUnit.test('Set intermediate state for parent if at least a one child is selecte
         showCheckBoxesMode: 'normal'
     });
 
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
     $(checkboxes[4]).trigger('dxclick');
 
     assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
@@ -36,7 +39,7 @@ QUnit.test('selectNodesRecursive = false', function(assert) {
         showCheckBoxesMode: 'normal'
     });
 
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
     $(checkboxes[4]).trigger('dxclick');
 
     assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
@@ -56,7 +59,7 @@ QUnit.test('Remove intermediate state from parent if all children are unselected
         showCheckBoxesMode: 'normal'
     });
 
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
     $(checkboxes[4]).trigger('dxclick');
     $(checkboxes[3]).trigger('dxclick');
     $(checkboxes[4]).trigger('dxclick');
@@ -84,7 +87,7 @@ QUnit.test('Parent node should be selected if all children are selected', functi
         showCheckBoxesMode: 'normal'
     });
 
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
     $(checkboxes[4]).trigger('dxclick');
     $(checkboxes[3]).trigger('dxclick');
 
@@ -104,7 +107,7 @@ QUnit.test('All children should be selected/unselected after click on parent nod
         showCheckBoxesMode: 'normal'
     });
 
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
 
     $(checkboxes[2]).trigger('dxclick');
 
@@ -129,7 +132,7 @@ QUnit.test('Regression: incorrect parent state', function(assert) {
         showCheckBoxesMode: 'normal'
     });
 
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
 
     $(checkboxes[3]).trigger('dxclick');
     $(checkboxes[4]).trigger('dxclick');
@@ -170,7 +173,7 @@ QUnit.test('T173381', function(assert) {
         ],
         showCheckBoxesMode: 'normal'
     });
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
 
     $(checkboxes[2]).trigger('dxclick');
     assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
@@ -205,7 +208,7 @@ QUnit.test('T195986', function(assert) {
         ],
         showCheckBoxesMode: 'normal'
     });
-    const checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
     $(checkboxes[3]).trigger('dxclick');
     assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
 
@@ -218,7 +221,7 @@ const clickByItemCheckbox = (wrapper, item) => wrapper.getElement()
     .eq(0).trigger('dxclick');
 
 const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
-    .find('.dx-treeview-select-all-item')
+    .find(`.${SELECT_ALL_CHECKBOX_CLASS}`)
     .eq(0).trigger('dxclick');
 
 ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
@@ -275,6 +278,28 @@ const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
             });
         });
     });
+});
+
+QUnit.test('selectAll checkbox should have aria-label="Select All" attribute', function(assert) {
+    initTree({
+        items: [ { text: 'item' } ],
+        showCheckBoxesMode: 'selectAll'
+    });
+
+    const $selectAllCheckbox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+
+    assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'Select All');
+});
+
+QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
+    initTree({
+        items: [ { text: 'item' } ],
+        showCheckBoxesMode: 'normal'
+    });
+
+    const $checkbox = $(`.${CHECKBOX_CLASS}`);
+
+    assert.strictEqual($checkbox.attr('aria-label'), 'Check State');
 });
 
 QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
@@ -384,7 +409,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
     $icon.trigger('dxclick');
     assert.equal(treeView.option('items').length, 5);
 
-    const $checkbox = treeView.$element().find('.dx-checkbox');
+    const $checkbox = treeView.$element().find(`.${CHECKBOX_CLASS}`);
     $($checkbox.eq(1)).trigger('dxclick');
     const nodes = treeView.getNodes();
     assert.ok(nodes[0].items[0].selected, 'item was selected');

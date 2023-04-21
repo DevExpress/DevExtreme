@@ -1,3 +1,9 @@
+import $ from 'jquery';
+import commonUtils from 'core/utils/common';
+import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getWidth } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -9,13 +15,6 @@ QUnit.testStart(function() {
     // $('body').html(gridMarkup);
     addShadowDomStyles($('#qunit-fixture'));
 });
-
-import $ from 'jquery';
-import commonUtils from 'core/utils/common';
-import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import { getWidth } from 'core/utils/size';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
-
 
 QUnit.module('Column Resizing', baseModuleConfig, () => {
     QUnit.test('Resize columns', function(assert) {

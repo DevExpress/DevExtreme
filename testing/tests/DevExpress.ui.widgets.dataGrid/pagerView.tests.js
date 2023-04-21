@@ -1,16 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -22,6 +9,18 @@ import { createEvent } from 'events/utils/index';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import Pager from 'ui/pager';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Pager', {
     beforeEach: function() {

@@ -1,20 +1,20 @@
 import $ from 'jquery';
 
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
 import 'ui/data_grid';
 
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>
+    `;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Error handling', {
     beforeEach: function() {
@@ -246,7 +246,8 @@ QUnit.module('Error handling', {
         };
 
         that.options.rowTemplate = function(container) {
-            $(container).append('<tr class = \'dx-row\'><td><table><tbody><tr></tr></tbody></table></td></tr>');
+            const innerTable = '<table><tbody><tr></tr></tbody></table>';
+            $(container).append(`<tr class="dx-row"><td>${innerTable}</td></tr>`);
         };
 
         that.rowsView.render($testElement);

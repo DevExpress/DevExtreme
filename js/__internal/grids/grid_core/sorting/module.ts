@@ -106,7 +106,6 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
 const HeaderPanelSortingExtender = extend({}, sortingMixin, {
   _createGroupPanelItem($rootElement, groupColumn) {
     const that = this;
-    // @ts-expect-error
     const $item = that.callBase(...arguments);
 
     eventsEngine.on($item, addNamespace(clickEventName, 'dxDataGridHeaderPanel'), that.createAction(() => {

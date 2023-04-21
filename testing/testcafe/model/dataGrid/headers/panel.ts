@@ -7,6 +7,7 @@ const CLASS = {
   saveButton: 'save-button',
   cancelButton: 'cancel-button',
   exportButton: 'export-button',
+  columnChooserButton: 'column-chooser-button',
   dropDownMenuButton: 'dx-dropdownmenu-button',
 };
 
@@ -32,6 +33,10 @@ export default class HeaderPanel extends FocusableElement {
 
   getExportButton(): Selector {
     return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.exportButton)}`);
+  }
+
+  getColumnChooserButton(): Selector {
+    return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.columnChooserButton)}`);
   }
 
   getDropDownMenuButton(): Selector {

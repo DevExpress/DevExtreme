@@ -4,7 +4,7 @@ let focused;
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             focused = require('ui/widget/selectors').focused;
-            root.keyboardMock = module.exports = factory(require('jquery'), require('inferno'),);
+            root.keyboardMock = module.exports = factory(require('jquery'), require('inferno'));
         });
     } else {
         focused = DevExpress.require('ui/widget/selectors').focused;

@@ -1,14 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container" class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -18,6 +7,16 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import summaryModule from 'ui/data_grid/ui.data_grid.summary';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 function getFooterOptions(cellsByColumns, cellsCount) {
     const cells = [];

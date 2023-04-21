@@ -254,7 +254,7 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation) {
+  combineFilters(filters, operation?) {
     let resultFilter: any[] = [];
 
     operation = operation || 'and';
@@ -300,7 +300,7 @@ export default {
 
   equalFilterParameters,
 
-  proxyMethod(instance, methodName, defaultResult) {
+  proxyMethod(instance, methodName, defaultResult?) {
     if (!instance[methodName]) {
       instance[methodName] = function () {
         const dataSource = this._dataSource;
@@ -695,5 +695,45 @@ export default {
     };
 
     return lookupDataSource;
+  },
+
+  logHeaderFilterDeprecatedWarningIfNeed(component) {
+    const since = '23.1';
+    const logWarning = component._logDeprecatedOptionWarning.bind(component);
+
+    if (isDefined(component.option('headerFilter.allowSearch'))) {
+      logWarning('headerFilter.allowSearch', { since, alias: 'headerFilter.search.enabled' });
+    }
+
+    if (isDefined(component.option('headerFilter.searchTimeout'))) {
+      logWarning('headerFilter.searchTimeout', { since, alias: 'headerFilter.search.timeout' });
+    }
+
+    const specificName = component.NAME === 'dxPivotGrid' ? 'dataSource.fields' : 'columns';
+    const columns = component.option(specificName);
+
+    if (!Array.isArray(columns)) {
+      return;
+    }
+
+    const logSpecificDeprecatedWarningIfNeed = (columns) => {
+      columns.forEach((column) => {
+        const headerFilter = column.headerFilter || {};
+
+        if (isDefined(headerFilter.allowSearch)) {
+          logWarning(`${specificName}[].headerFilter.allowSearch`, { since, alias: `${specificName}[].headerFilter.search.enabled` });
+        }
+
+        if (isDefined(headerFilter.searchMode)) {
+          logWarning(`${specificName}[].headerFilter.searchMode`, { since, alias: `${specificName}[].headerFilter.search.mode` });
+        }
+
+        if (column.columns?.length) {
+          logSpecificDeprecatedWarningIfNeed(column.columns);
+        }
+      });
+    };
+
+    logSpecificDeprecatedWarningIfNeed(columns);
   },
 };

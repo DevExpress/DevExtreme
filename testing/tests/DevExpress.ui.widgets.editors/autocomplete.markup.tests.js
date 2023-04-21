@@ -7,10 +7,11 @@ QUnit.testStart(function() {
     const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
             <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="widthRootStyle"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const WIDGET_CLASS = 'dx-autocomplete';

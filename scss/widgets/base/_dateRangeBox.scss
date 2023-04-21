@@ -1,0 +1,15 @@
+// adduse
+
+.dx-daterangebox {
+  display: flex;
+}
+
+.dx-start-datebox,
+.dx-end-datebox {
+  width: 50%;
+}
+
+.dx-daterangebox-separator {
+  display: flex;
+  align-items: center;
+}

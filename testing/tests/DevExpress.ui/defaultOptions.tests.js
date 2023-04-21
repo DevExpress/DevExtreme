@@ -15,6 +15,7 @@ const Button = require('ui/button');
 const ColorBox = require('ui/color_box');
 const DataGrid = require('ui/data_grid');
 const DateBox = require('ui/date_box');
+const DateRangeBox = require('ui/date_range_box');
 const FakeDialogComponent = require('ui/dialog').FakeDialogComponent;
 const DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor');
 const DropDownBox = require('ui/drop_down_box');
@@ -162,6 +163,29 @@ testComponentDefaults(DateBox,
     {
         useMaskBehavior: false,
         adaptivityEnabled: false
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    {},
+    {
+        stylingMode: 'outlined',
+        labelMode: 'static',
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    {},
+    {
+        stylingMode: 'filled',
+        labelMode: 'floating',
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
     }
 );
 
