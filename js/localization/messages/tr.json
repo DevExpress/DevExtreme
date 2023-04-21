@@ -179,6 +179,8 @@
         "dxPager-prevPage": "Previous Page",
         "dxPager-nextPage": "Next Page",
         "dxPager-ariaLabel": "Page Navigation",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Genel Toplam",
         "dxPivotGrid-total": "{0} Toplam",

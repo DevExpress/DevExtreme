@@ -179,6 +179,8 @@
         "dxPager-prevPage": "Предыдущая страница",
         "dxPager-nextPage": "Следующая страница",
         "dxPager-ariaLabel": "Навигация по страницам",
+        "dxPager-ariaPageSize": "Размер страницы",
+        "dxPager-ariaPageNumber": "Номер страницы",
 
         "dxPivotGrid-grandTotal": "Итого",
         "dxPivotGrid-total": "{0} Всего",
