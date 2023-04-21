@@ -26,6 +26,7 @@ test('Item collection should be updated after direct option changing (T817436)',
   const dropDownButton2 = new DropDownButton('#dropDownButton2');
 
   await t.click(dropDownButton1.element);
+
   const list1 = await dropDownButton1.getList();
   await t.click(dropDownButton2.element);
   const list2 = await dropDownButton2.getList();
