@@ -143,6 +143,8 @@ const ModuleItem = Class.inherit({
     }
     this._actions[actionName] = this.component._createActionByOption(actionName, config);
     this._actionConfigs[actionName] = config;
+
+    return undefined;
   },
 
   executeAction(actionName, options) {

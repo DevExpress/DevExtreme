@@ -1,4 +1,5 @@
 import Callbacks from '@js/core/utils/callbacks';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { map, each } from '@js/core/utils/iterator';
@@ -721,7 +722,6 @@ const DataController = Class.inherit((function () {
         });
       }
 
-      // @ts-expect-error
       that._stateStoringController = new stateStoring.StateStoringController(options.component).init();
 
       that._columnsInfo = [];

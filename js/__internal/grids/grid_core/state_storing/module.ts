@@ -1,4 +1,3 @@
-// @ts-expect-error
 import { getKeyHash, equalByValue } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
 import { extend } from '@js/core/utils/extend';

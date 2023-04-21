@@ -1,6 +1,5 @@
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import Store from '@js/data/abstract_store';
-// @ts-expect-error
 import { executeAsync } from '@js/core/utils/common';
 import {
   isFunction, isNumeric, isDefined, isString, isPlainObject,
@@ -8,6 +7,7 @@ import {
 import { extend } from '@js/core/utils/extend';
 import { normalizeIndexes } from '@js/core/utils/array';
 import { each } from '@js/core/utils/iterator';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';

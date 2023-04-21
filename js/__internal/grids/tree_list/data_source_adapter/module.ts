@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import { createObjectWithChanges } from '@js/data/array_utils';
 import ArrayStore from '@js/data/array_store';
 import query from '@js/data/query';
+// @ts-expect-error
 import { Deferred, when } from '@js/core/utils/deferred';
 import storeHelper from '@js/data/store_helper';
 import DataSourceAdapter from '@js/ui/grid_core/ui.grid_core.data_source_adapter';

@@ -279,6 +279,8 @@ export default {
     if (resultFilter.length) {
       return resultFilter;
     }
+
+    return undefined;
   },
 
   checkChanges(changes, changeNames) {
@@ -350,6 +352,8 @@ export default {
         return 'shortDate';
       case 'datetime':
         return 'shortDateShortTime';
+      default:
+        return undefined;
     }
   },
 

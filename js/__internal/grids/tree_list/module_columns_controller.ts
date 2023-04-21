@@ -1,5 +1,4 @@
 import { isDefined } from '@js/core/utils/type';
-// @ts-expect-error
 import { columnsControllerModule } from '@js/ui/grid_core/ui.grid_core.columns_controller';
 import treeListCore from './module_core';
 
