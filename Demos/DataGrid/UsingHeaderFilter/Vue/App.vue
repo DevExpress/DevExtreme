@@ -1,27 +1,25 @@
 <template>
   <div>
-    <DxTreeList
+    <DxDataGrid
       id="employees"
       :data-source="employees"
       :column-auto-width="true"
       :show-row-lines="true"
       :show-borders="true"
-      :expanded-row-keys="expandedRowKeys"
       key-expr="ID"
-      parent-id-expr="Head_ID"
     >
       <DxHeaderFilter
         :visible="true"
       />
-      <DxSelection
-        mode="single"
+
+      <DxColumn
+        data-field="FirstName"
       />
       <DxColumn
-        data-field="Full_Name"
+        data-field="LastName"
       />
       <DxColumn
-        data-field="Title"
-        caption="Position"
+        data-field="Position"
       >
         <DxHeaderFilter
           :allow-select-all="false"
@@ -43,29 +41,28 @@
         </DxHeaderFilter>
       </DxColumn>
       <DxColumn
-        data-field="Mobile_Phone"
+        data-field="HomePhone"
       />
       <DxColumn
-        data-field="Hire_Date"
+        data-field="HireDate"
         data-type="date"
       />
-    </DxTreeList>
+    </DxDataGrid>
   </div>
 </template>
 <script>
 import {
-  DxTreeList, DxHeaderFilter, DxSearch, DxSelection, DxColumn,
-} from 'devextreme-vue/tree-list';
+  DxDataGrid, DxHeaderFilter, DxSearch, DxColumn,
+} from 'devextreme-vue/data-grid';
 import { employees } from './data.js';
 
 export default {
   components: {
-    DxTreeList, DxHeaderFilter, DxSearch, DxSelection, DxColumn,
+    DxDataGrid, DxHeaderFilter, DxSearch, DxColumn,
   },
   data() {
     return {
       employees,
-      expandedRowKeys: [1],
     };
   },
 };
