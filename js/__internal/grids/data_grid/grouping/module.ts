@@ -128,6 +128,8 @@ const GroupingDataSourceAdapterExtender = (function () {
           }
         }
       }
+
+      return undefined;
     },
     _customizeRemoteOperations(options, operationTypes) {
       const { remoteOperations } = options;

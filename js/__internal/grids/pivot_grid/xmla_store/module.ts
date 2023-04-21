@@ -10,6 +10,7 @@ import {
   isFunction, isNumeric, isDefined, isString,
 } from '@js/core/utils/type';
 import { map, each } from '@js/core/utils/iterator';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import { getLanguageId } from '@js/localization/language_codes';
 
@@ -828,7 +829,7 @@ const XmlaStore = Class.inherit((function () {
     const errorElement = $(([] as any).slice.call(faultElement.length ? faultElement : faultElementNS)).find('Error');
 
     if (errorElement.length) {
-      const description = errorElement.attr('Description');
+      const description = (errorElement.attr as any)('Description');
       const error = new errors.Error('E4000', description);
       errors.log('E4000', description);
       return error;

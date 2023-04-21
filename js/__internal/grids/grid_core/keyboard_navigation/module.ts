@@ -1,3 +1,4 @@
+// @ts-expect-error
 import { Deferred, when } from '@js/core/utils/deferred';
 import { focused } from '@js/ui/widget/selectors';
 import { noop } from '@js/core//utils/common';
@@ -1184,7 +1185,7 @@ export class KeyboardNavigationController extends modules.ViewController {
         activeElementSelector
           += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';
       }
-      element = this.component.$element().find(activeElementSelector).first();
+      element = (this.component.$element() as any).find(activeElementSelector).first();
     }
 
     element && this._focusElement($(element), isHighlighted);
@@ -2471,6 +2472,8 @@ export const keyboardNavigationModule = {
               keyboardController.setCellFocusType();
               return true;
             }
+
+            return undefined;
           };
 
           const $cell = GridCoreKeyboardNavigationDom.getCellToFocus(cellElements, columnIndex);

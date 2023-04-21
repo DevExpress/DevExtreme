@@ -292,8 +292,8 @@ const FieldChooser = FieldChooserBase.inherit({
   },
 
   _getContextMenuArgs(dxEvent) {
-    const targetFieldElement = $(dxEvent.target).closest(`.${CLASSES.area.field}`);
-    const targetGroupElement = $(dxEvent.target).closest(`.${CLASSES.area.fieldList}`);
+    const targetFieldElement = $(dxEvent.target).closest(`.${CLASSES.area.field}`) as any;
+    const targetGroupElement = $(dxEvent.target).closest(`.${CLASSES.area.fieldList}`) as any;
     let field;
     let area;
 

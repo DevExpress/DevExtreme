@@ -1,4 +1,5 @@
 import Callbacks from '@js/core/utils/callbacks';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { map, each } from '@js/core/utils/iterator';

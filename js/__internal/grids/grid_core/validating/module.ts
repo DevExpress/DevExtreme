@@ -4,7 +4,6 @@ import {
 import $ from '@js/core/renderer';
 import eventsEngine from '@js/events/core/events_engine';
 import { createObjectWithChanges } from '@js/data/array_utils';
-// @ts-expect-error
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
@@ -250,9 +249,7 @@ const ValidatingController = modules.Controller.inherit((function () {
           const validationResult = ValidationEngine.validateGroup(validationData);
           // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
           when(validationResult.complete || validationResult).done((validationResult) => {
-            // @ts-expect-error
             validationData.isValid = validationResult.isValid;
-            // @ts-expect-error
             validationData.brokenRules = validationResult.brokenRules;
           });
         } else if (!validationData.brokenRules || !validationData.brokenRules.length) {
@@ -1022,7 +1019,7 @@ export const validatingModule = {
       },
       editorFactory: (function () {
         const getWidthOfVisibleCells = function (that, element) {
-          const rowIndex = $(element).closest('tr').index();
+          const rowIndex = ($(element).closest('tr') as any).index();
           const $cellElements = $(that._rowsView.getRowElement(rowIndex)).first().children().filter(':not(.dx-hidden-cell)');
 
           return that._rowsView._getWidths($cellElements).reduce((w1, w2) => w1 + w2, 0);
@@ -1452,9 +1449,8 @@ export const validatingModule = {
         _restoreErrorRow(contentTable) {
           const editingController = this.getController('editing');
           editingController && editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
-            const rowOptions = $(item).data('options');
+            const rowOptions = ($(item) as any).data('options');
             if (rowOptions) {
-              // @ts-expect-error
               const change = editingController.getChangeByKey(rowOptions.key);
               change && editingController._showErrorRow(change);
             }

@@ -34,7 +34,8 @@ function getDefaultItem($sourceItem: dxElementWrapper): dxElementWrapper {
 
 function getItemArray($sourceItem: dxElementWrapper, target: string): dxElementWrapper {
   const isAreaBox = $sourceItem.hasClass(CLASSES.area.box);
-  const isTreeList = $sourceItem.attr(ATTRIBUTES.treeViewItem);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isTreeList = ($sourceItem as any).attr(ATTRIBUTES.treeViewItem);
 
   if (isAreaBox) {
     return getAreaBoxItemArray($sourceItem, target);

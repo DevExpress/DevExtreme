@@ -93,7 +93,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   _isItemModified(item, cellOptions) {
     const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
     const rowIndex = this._dataController.getRowIndexByKey(cellOptions.key);
-    const row = this._dataController.items()[rowIndex + 1] as any;
+    const row = this._dataController.items()[rowIndex + 1];
 
     return row && row.modifiedValues && isDefined(row.modifiedValues[columnIndex]);
   },
@@ -340,11 +340,11 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     if (this._isRowEditMode()) {
       const editRowKey = this.option('editing.editRowKey');
-      if (equalByValue(editRowKey, (this._dataController as any).adaptiveExpandedKey())) {
+      if (equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
         return true;
       }
     } else {
-      const rowIndex = this._dataController.getRowIndexByKey((this._dataController as any).adaptiveExpandedKey()) + 1;
+      const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
       const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
 
       return this._editingController.isEditCell(rowIndex, columnIndex);
@@ -372,6 +372,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         return i;
       }
     }
+
+    return undefined;
   },
 
   _hideAdaptiveColumn(resultWidths, visibleColumns) {
@@ -589,7 +591,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
   toggleExpandAdaptiveDetailRow(key, alwaysExpanded) {
     if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
-      (this.getController('data') as any).toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
+      this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   },
 
@@ -626,7 +628,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   },
 
   hasAdaptiveDetailRowExpanded() {
-    return isDefined((this._dataController as any).adaptiveExpandedKey());
+    return isDefined(this._dataController.adaptiveExpandedKey());
   },
 
   updateForm(hiddenColumns) {
@@ -728,7 +730,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   },
 
   isAdaptiveDetailRowExpanded(key) {
-    const dataController = this._dataController as any;
+    const dataController = this._dataController;
     return dataController.adaptiveExpandedKey() && equalByValue(dataController.adaptiveExpandedKey(), key);
   },
 
@@ -801,7 +803,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
   }
 };
 export const adaptivityModule: import('../module_types').Module = {
-  defaultOptions() {
+  defaultOptions(): any {
     return {
       columnHidingEnabled: false,
       onAdaptiveDetailRowPreparing: null,
@@ -976,7 +978,6 @@ export const adaptivityModule: import('../module_types').Module = {
           if (!this._adaptiveController.isFormOrPopupEditMode() && this._adaptiveController.hasHiddenColumns()) {
             const items = this._dataController.items();
             const item = items[rowIndex];
-            // @ts-expect-error
             const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
 
             this._isForceRowAdaptiveExpand = !this._adaptiveController.hasAdaptiveDetailRowExpanded();
@@ -1048,7 +1049,6 @@ export const adaptivityModule: import('../module_types').Module = {
           const expandedKey = this._dataController._adaptiveExpandedKey;
 
           if (expandedKey) {
-            // @ts-expect-error
             const rowIndex = gridCoreUtils.getIndexByKey(expandedKey, this._dataController.items());
             if (rowIndex > -1) {
               rowIndices.unshift(rowIndex);
@@ -1131,7 +1131,6 @@ export const adaptivityModule: import('../module_types').Module = {
             return items;
           }
 
-          // @ts-expect-error
           const expandRowIndex = gridCoreUtils.getIndexByKey(this._adaptiveExpandedKey, items);
           const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
 
@@ -1176,9 +1175,7 @@ export const adaptivityModule: import('../module_types').Module = {
         toggleExpandAdaptiveDetailRow(key, alwaysExpanded) {
           const that = this;
 
-          // @ts-expect-error
           let oldExpandLoadedRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items);
-          // @ts-expect-error
           let newExpandLoadedRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
 
           if (oldExpandLoadedRowIndex >= 0 && oldExpandLoadedRowIndex === newExpandLoadedRowIndex && !alwaysExpanded) {
