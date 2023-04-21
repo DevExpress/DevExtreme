@@ -182,6 +182,8 @@
         "dxPager-prevPage": "Pagina precedente",
         "dxPager-nextPage": "Pagina successiva",
         "dxPager-ariaLabel": "Navigazione pagine",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Totale",
         "dxPivotGrid-total": "{0} Totale",
