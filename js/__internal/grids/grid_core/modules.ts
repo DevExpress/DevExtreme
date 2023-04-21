@@ -2,7 +2,6 @@
 import $ from '@js/core/renderer';
 import Class from '@js/core/class';
 import Callbacks from '@js/core/utils/callbacks';
-// @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { isFunction } from '@js/core/utils/type';
 import { each } from '@js/core/utils/iterator';

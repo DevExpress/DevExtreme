@@ -4,7 +4,6 @@ import {
 import $ from '@js/core/renderer';
 import eventsEngine from '@js/events/core/events_engine';
 import { createObjectWithChanges } from '@js/data/array_utils';
-// @ts-expect-error
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
