@@ -310,6 +310,7 @@ class DateRangeBox extends Widget {
     _getStartDateBoxConfig() {
         // NOTE: delete part of options if we deside to use new Popup
         const options = this.option();
+
         return {
             ...this._getDateBoxConfig(),
             applyButtonText: options.applyButtonText,
@@ -322,6 +323,12 @@ class DateRangeBox extends Widget {
                 this.updateValue(newValue);
             },
             opened: options.opened,
+            onOpened: () => {
+                this.option('opened', true);
+            },
+            onClosed: () => {
+                this.option('opened', false);
+            },
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,
             showDropDownButton: false,

@@ -3,6 +3,7 @@ import config from 'core/config';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
+import fx from 'animation/fx';
 
 import 'generic_light.css!';
 
@@ -27,6 +28,8 @@ const getButtons = $element => $element.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`
 
 const moduleConfig = {
     beforeEach: function() {
+        fx.off = true;
+
         const init = (options) => {
             this.$element = $('#dateRangeBox').dxDateRangeBox(options);
             this.instance = this.$element.dxDateRangeBox('instance');
@@ -41,6 +44,9 @@ const moduleConfig = {
         init({
             value: ['2023/01/05', '2023/02/14']
         });
+    },
+    afterEach: function() {
+        fx.off = false;
     }
 };
 
@@ -431,10 +437,31 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         endDateBox.open();
 
-        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
         // TODO: investigate this behavior
         assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
-        assert.ok(startDateBox.option('opened'));
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
+
+        startDateBox.close();
+
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        // TODO: investigate this behavior
+        assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
+        assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should open if dateRangeBox opened option is true on initialization', function(assert) {
+        this.reinit({
+            value: [null, null],
+            opened: true,
+        });
+
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox opened option has correct value');
+        assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
     });
 
     ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
@@ -589,7 +616,9 @@ QUnit.module('Public methods', moduleConfig, () => {
 
         this.instance.open();
 
-        assert.strictEqual(this.instance.option('opened'), true, 'opened option has correct value');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox opened option has correct value');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox opened option has correct value');
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox opened option has correct value');
     });
 
     QUnit.test('Close() methos should set opened option value to false', function(assert) {
@@ -599,7 +628,9 @@ QUnit.module('Public methods', moduleConfig, () => {
 
         this.instance.close();
 
-        assert.strictEqual(this.instance.option('opened'), false, 'opened option has correct value');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox opened option has correct value');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox opened option has correct value');
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox opened option has correct value');
     });
 });
 
