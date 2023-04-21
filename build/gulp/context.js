@@ -18,6 +18,7 @@ module.exports = {
     uglify: argv.uglify,
     RESULT_JS_PATH: 'artifacts/js',
     RESULT_NPM_PATH: 'artifacts/npm',
+    TS_OUT_PATH: 'artifacts/dist_ts',
     TRANSPILED_PATH: 'artifacts/transpiled',
     TRANSPILED_PROD_RENOVATION_PATH: 'artifacts/transpiled-renovation-npm',
     TRANSPILED_RENOVATION_PATH: 'artifacts/transpiled-renovation',

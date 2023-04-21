@@ -1,6 +1,5 @@
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import Store from '@js/data/abstract_store';
-// @ts-expect-error
 import { executeAsync } from '@js/core/utils/common';
 import {
   isFunction, isNumeric, isDefined, isString, isPlainObject,
