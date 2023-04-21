@@ -14,7 +14,9 @@ $(() => {
     },
     headerFilter: {
       visible: true,
-      allowSearch: true,
+      search: {
+        enabled: true,
+      },
     },
     wordWrapEnabled: true,
     showBorders: true,

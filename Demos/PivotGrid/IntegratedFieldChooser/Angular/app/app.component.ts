@@ -29,7 +29,9 @@ export class AppComponent {
           dataField: '[Product].[Subcategory]',
           area: 'row',
           headerFilter: {
-            allowSearch: true,
+            search: {
+              enabled: true,
+            },
           },
         },
         { dataField: '[Ship Date].[Calendar Year]', area: 'column' },

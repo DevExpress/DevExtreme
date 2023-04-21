@@ -10,11 +10,12 @@
       :data-source="dataSource"
     >
       <DxHeaderFilter
-        :allow-search="allowSearch"
         :show-relevant-values="showRelevantValues"
         :width="300"
         :height="400"
-      />
+      >
+        <DxSearch :enabled="searchEnabled"/>
+      </DxHeaderFilter>
       <DxFieldChooser
         :allow-search="true"
       />
@@ -27,7 +28,7 @@
       <div class="options-container">
         <div class="option">
           <DxCheckBox
-            v-model:value="allowSearch"
+            v-model:value="searchEnabled"
             text="Allow Search"
           />
         </div>
@@ -43,7 +44,7 @@
 </template>
 <script>
 import {
-  DxPivotGrid, DxHeaderFilter, DxFieldChooser, DxFieldPanel,
+  DxPivotGrid, DxHeaderFilter, DxSearch, DxFieldChooser, DxFieldPanel,
 } from 'devextreme-vue/pivot-grid';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 
@@ -54,13 +55,14 @@ export default {
   components: {
     DxPivotGrid,
     DxHeaderFilter,
+    DxSearch,
     DxFieldChooser,
     DxFieldPanel,
     DxCheckBox,
   },
   data() {
     return {
-      allowSearch: true,
+      searchEnabled: true,
       showRelevantValues: true,
       dataSource: new PivotGridDataSource({
         fields: [

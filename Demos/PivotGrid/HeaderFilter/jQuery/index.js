@@ -6,7 +6,9 @@ $(() => {
     height: 570,
     showBorders: true,
     headerFilter: {
-      allowSearch: true,
+      search: {
+        enabled: true,
+      },
       showRelevantValues: true,
       width: 300,
       height: 400,
@@ -47,7 +49,7 @@ $(() => {
     text: 'Allow Search',
     value: true,
     onValueChanged(data) {
-      salesPivotGrid.option('headerFilter.allowSearch', data.value);
+      salesPivotGrid.option('headerFilter.search.enabled', data.value);
     },
   });
 

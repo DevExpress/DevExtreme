@@ -13,6 +13,8 @@
     [showFilterFields]="false"
   ></dxo-field-panel>
   <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
-  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+  <dxo-header-filter>
+    <dxo-search [enabled]="true"></dxo-search>
+  </dxo-header-filter>
   <dxo-scrolling mode="virtual"></dxo-scrolling>
 </dx-pivot-grid>

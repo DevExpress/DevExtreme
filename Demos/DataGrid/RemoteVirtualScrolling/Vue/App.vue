@@ -13,8 +13,11 @@
     <DxPaging :page-size="100"/>
     <DxHeaderFilter
       :visible="true"
-      :allow-search="true"
-    />
+    >
+      <DxSearch
+        :enabled="true"
+      />
+    </DxHeaderFilter>
 
     <DxColumn
       data-field="Id"
@@ -53,7 +56,7 @@
 </template>
 <script>
 import {
-  DxDataGrid, DxScrolling, DxPaging, DxColumn, DxHeaderFilter,
+  DxDataGrid, DxScrolling, DxPaging, DxColumn, DxHeaderFilter, DxSearch,
 } from 'devextreme-vue/data-grid';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -64,6 +67,7 @@ export default {
     DxScrolling,
     DxPaging,
     DxHeaderFilter,
+    DxSearch,
   },
   data() {
     return {

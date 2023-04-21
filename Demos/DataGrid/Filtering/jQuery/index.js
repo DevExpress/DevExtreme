@@ -84,7 +84,9 @@ $(() => {
       caption: 'City',
       dataField: 'CustomerStoreCity',
       headerFilter: {
-        allowSearch: true,
+        search: {
+          enabled: true,
+        },
       },
     }],
   }).dxDataGrid('instance');

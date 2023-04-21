@@ -115,7 +115,9 @@ export default {
         dataField: 'region',
         area: 'row',
         headerFilter: {
-          allowSearch: true,
+          search: {
+            enabled: true,
+          },
         },
       }, {
         caption: 'City',
@@ -123,7 +125,9 @@ export default {
         width: 150,
         area: 'row',
         headerFilter: {
-          allowSearch: true,
+          search: {
+            enabled: true,
+          },
         },
         selector(data) {
           return `${data.city} (${data.country})`;

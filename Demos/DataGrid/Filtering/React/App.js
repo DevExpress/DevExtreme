@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, FilterRow, HeaderFilter, SearchPanel,
+  Column, FilterRow, HeaderFilter, Search, SearchPanel,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -98,7 +98,9 @@ class App extends React.Component {
           <Column dataField="Employee" />
           <Column dataField="CustomerStoreCity"
             caption="City">
-            <HeaderFilter allowSearch={true} />
+            <HeaderFilter>
+              <Search enabled={true} />
+            </HeaderFilter>
           </Column>
         </DataGrid>
         <div className="options">

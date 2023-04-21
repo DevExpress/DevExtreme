@@ -12,7 +12,9 @@ $(() => {
       allowSearch: true,
     },
     headerFilter: {
-      allowSearch: true,
+      search: {
+        enabled: true,
+      },
     },
     scrolling: {
       mode: 'virtual',

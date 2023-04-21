@@ -45,7 +45,9 @@
   </dxi-column>
   <dxi-column dataField="Employee"></dxi-column>
   <dxi-column dataField="CustomerStoreCity" caption="City">
-    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+    <dxo-header-filter>
+      <dxo-search [enabled]="true"></dxo-search>
+    </dxo-header-filter>
   </dxi-column>
 </dx-data-grid>
 <div class="options">

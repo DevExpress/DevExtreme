@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   pivotGridDataSource: any;
 
-  allowSearch = true;
+  searchEnabled = true;
 
   showRelevantValues = true;
 

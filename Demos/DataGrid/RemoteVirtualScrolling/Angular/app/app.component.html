@@ -7,7 +7,9 @@
 >
   <dxo-scrolling mode="virtual" rowRenderingMode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="100"></dxo-paging>
-  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-header-filter [visible]="true" [allowSearch]="true">
+    <dxo-search [enabled]="true"></dxo-search>
+  </dxo-header-filter>
 
   <dxi-column dataField="Id" width="75"></dxi-column>
   <dxi-column dataField="StoreName" caption="Store" width="150"></dxi-column>

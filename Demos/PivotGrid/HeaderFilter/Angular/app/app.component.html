@@ -8,11 +8,12 @@
   [dataSource]="pivotGridDataSource"
 >
   <dxo-header-filter
-    [allowSearch]="allowSearch"
     [showRelevantValues]="showRelevantValues"
     [width]="300"
     [height]="400"
-  ></dxo-header-filter>
+  >
+    <dxo-search [enabled]="searchEnabled"></dxo-search>
+  </dxo-header-filter>
 
   <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
 
@@ -23,7 +24,10 @@
   <div class="caption">Options</div>
   <div class="options-container">
     <div class="option">
-      <dx-check-box text="Allow Search" [(value)]="allowSearch"></dx-check-box>
+      <dx-check-box
+        text="Allow Search"
+        [(value)]="searchEnabled"
+      ></dx-check-box>
     </div>
     <div class="option">
       <dx-check-box

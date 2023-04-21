@@ -43,7 +43,9 @@ export class AppComponent {
         dataField: 'region',
         area: 'row',
         headerFilter: {
-          allowSearch: true,
+          search: {
+            enabled: true,
+          },
         },
       }, {
         caption: 'City',
@@ -51,7 +53,9 @@ export class AppComponent {
         width: 150,
         area: 'row',
         headerFilter: {
-          allowSearch: true,
+          search: {
+            enabled: true,
+          },
         },
         selector(data: Sale) {
           return `${data.city} (${data.country})`;

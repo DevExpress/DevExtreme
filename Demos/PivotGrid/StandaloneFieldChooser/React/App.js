@@ -151,7 +151,9 @@ const dataSource = new PivotGridDataSource({
     dataField: 'region',
     area: 'row',
     headerFilter: {
-      allowSearch: true,
+      search: {
+        enabled: true,
+      },
     },
   }, {
     caption: 'City',
@@ -159,7 +161,9 @@ const dataSource = new PivotGridDataSource({
     width: 150,
     area: 'row',
     headerFilter: {
-      allowSearch: true,
+      search: {
+        enabled: true,
+      },
     },
     selector(data) {
       return `${data.city} (${data.country})`;

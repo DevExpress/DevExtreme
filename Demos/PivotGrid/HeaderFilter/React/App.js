@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  PivotGrid, HeaderFilter, FieldChooser, FieldPanel,
+  PivotGrid, HeaderFilter, Search, FieldChooser, FieldPanel,
 } from 'devextreme-react/pivot-grid';
 import { CheckBox } from 'devextreme-react/check-box';
 
@@ -37,16 +37,16 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      allowSearch: true,
+      searchEnabled: true,
       showRelevantValues: true,
     };
 
-    this.onAllowSearchChanged = this.onAllowSearchChanged.bind(this);
+    this.onSearchEnabledChanged = this.onSearchEnabledChanged.bind(this);
     this.onShowRelevantValuesChanged = this.onShowRelevantValuesChanged.bind(this);
   }
 
   render() {
-    const { allowSearch, showRelevantValues } = this.state;
+    const { searchEnabled, showRelevantValues } = this.state;
 
     return (
       <div>
@@ -60,11 +60,12 @@ class App extends React.Component {
           dataSource={dataSource}
         >
           <HeaderFilter
-            allowSearch={allowSearch}
             showRelevantValues={showRelevantValues}
             width={300}
             height={400}
-          />
+          >
+            <Search enabled={searchEnabled} />
+          </HeaderFilter>
           <FieldChooser allowSearch={true} />
           <FieldPanel visible={true} />
         </PivotGrid>
@@ -73,9 +74,9 @@ class App extends React.Component {
           <div className="options-container">
             <div className="option">
               <CheckBox
-                value={allowSearch}
+                value={searchEnabled}
                 text="Allow Search"
-                onValueChanged={this.onAllowSearchChanged}
+                onValueChanged={this.onSearchEnabledChanged}
               />
             </div>
             <div className="option">
@@ -91,9 +92,9 @@ class App extends React.Component {
     );
   }
 
-  onAllowSearchChanged(data) {
+  onSearchEnabledChanged(data) {
     this.setState({
-      allowSearch: data.value,
+      searchEnabled: data.value,
     });
   }
 
