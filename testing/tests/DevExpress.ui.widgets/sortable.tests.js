@@ -40,6 +40,32 @@ QUnit.testStart(function() {
                 position: relative;
                 background: grey;
             }
+            #items3 {
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #itemsHorizontal {
+                width: 250px;
+                height: 300px;
+            }
+            #itemsWithContentTemplate {
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #scroll {
+                height: 250px;
+                width: 300px;
+                overflow: auto;
+                background: grey;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
         </style>
         <div id="container">
             <div id="items">
@@ -53,18 +79,18 @@ QUnit.testStart(function() {
                 <div id="item6" class="draggable colored-item">item6</div>
             </div>
         </div>
-        <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
-        <div id="itemsHorizontal" style="width: 250px; height: 300px;">
+        <div id="items3"></div>
+        <div id="itemsHorizontal">
             <div style="width: 30px; height: 300px; display: inline-block;">item1</div><div style="width: 30px; height: 300px; display: inline-block;">item2</div><div style="width: 30px; height: 300px; display: inline-block;">item3</div>
         </div>
-        <div id="itemsWithContentTemplate" style="width: 300px; height: 250px; position: relative; background: grey;">
+        <div id="itemsWithContentTemplate">
             <div data-options="dxTemplate:{ name:'content' }">
                 <div id="item11" class="draggable colored-item">item1</div>
                 <div id="item12" class="draggable colored-item">item2</div>
                 <div id="item13" class="draggable colored-item">item3</div>
             </div>
         </div>
-        <div id="scroll" style="height: 250px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+        <div id="scroll">
             <div id="itemsWithScroll">
                 <div id="item21" class="draggable colored-item" style="height: 50px;">item1
                 </div><div id="item22" class="draggable colored-item" style="height: 50px;">item2
