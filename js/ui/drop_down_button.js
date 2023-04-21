@@ -433,6 +433,7 @@ const DropDownButton = Widget.inherit({
         this.option('opened', false);
 
         this._setAriaExpanded(false);
+        this._setAriaOwns(false);
     },
 
     _popupOptionChanged: function(args) {
@@ -461,6 +462,7 @@ const DropDownButton = Widget.inherit({
     _popupShowingHandler() {
         this.option('opened', true);
         this._setAriaExpanded(true);
+        this._setAriaOwns(true);
     },
 
     _getPopupButton() {
@@ -474,6 +476,10 @@ const DropDownButton = Widget.inherit({
             expanded: value,
             owns: value ? this._popupContentId : undefined,
         }, this._getPopupButton());
+    },
+
+    _setAriaOwns(value) {
+        this.setAria({ owns: value ? this._popupContentId : undefined }, this.$element());
     },
 
     _setAriaHasPopup() {
@@ -497,7 +503,10 @@ const DropDownButton = Widget.inherit({
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
 
-        this._setAriaExpanded(this.option('opened'));
+        const { opened } = this.option();
+
+        this._setAriaExpanded(opened);
+        this._setAriaOwns(opened);
         this._setAriaHasPopup();
     },
 

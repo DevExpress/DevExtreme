@@ -2605,7 +2605,6 @@ QUnit.module('Accessibility', {
         assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
-
     QUnit.test('check aria-expanded attr for visible dropdown', function(assert) {
         this.createInstance({ opened: true });
 
@@ -2649,6 +2648,18 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), undefined);
         assert.strictEqual(this.getButtons().eq(1).attr('aria-expanded'), 'false');
+    });
+
+    QUnit.test('check aria-owns attr for element', function(assert) {
+        const instance = this.createInstance();
+
+        assert.strictEqual(this.$element.attr('aria-owns'), undefined);
+
+        instance.open();
+
+        const popupId = $(`.${POPUP_CONTENT_CLASS}`).attr('id');
+
+        assert.strictEqual(this.$element.attr('aria-owns'), popupId);
     });
 
     [true, false].forEach(splitButton => {
