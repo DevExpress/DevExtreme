@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import { isString, isNumeric, isBoolean, isDefined, isObject } from '../../core/utils/type';
+import { isString, isNumeric, isBoolean, isDefined, isObject, isEmptyObject } from '../../core/utils/type';
 import { throttleChanges } from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
@@ -170,7 +170,7 @@ export const DataSource = Class.inherit({
 
     _extractLoadOptions(options) {
         const result = {};
-        let names = ['sort', 'filter', 'localeSensitive', 'compareOptions', 'select', 'group', 'requireTotalCount'];
+        let names = ['sort', 'filter', 'compareOptions', 'select', 'group', 'requireTotalCount'];
         const customNames = this._store._customLoadOptions();
 
         if(customNames) {
@@ -497,6 +497,10 @@ export const DataSource = Class.inherit({
     _createLoadOperation(deferred) {
         const operationId = this._operationManager.add(deferred);
         const storeLoadOptions = this._createStoreLoadOptions();
+
+        if(this._store && !isEmptyObject(storeLoadOptions?.compareOptions)) {
+            this._store._compareOptions = { ...this._store._compareOptions, ...storeLoadOptions.compareOptions };
+        }
 
         deferred.always(() => this._operationManager.remove(operationId));
 
