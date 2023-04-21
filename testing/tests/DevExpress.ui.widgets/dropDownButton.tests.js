@@ -2640,6 +2640,17 @@ QUnit.module('Accessibility', {
         assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
+    QUnit.test('check aria-expanded attr if splitButton=true', function(assert) {
+        const instance = this.createInstance();
+
+        assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), 'false');
+
+        instance.option({ splitButton: true });
+
+        assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), undefined);
+        assert.strictEqual(this.getButtons().eq(1).attr('aria-expanded'), 'false');
+    });
+
     [true, false].forEach(splitButton => {
         QUnit.test(`check aria-haspopup attr for button if splitButton=${splitButton}`, function(assert) {
             this.createInstance({ splitButton });
