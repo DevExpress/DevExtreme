@@ -2376,9 +2376,7 @@ QUnit.module('keyboard navigation', {
         listKeyboard.press('esc');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-
-        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
-        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('esc on button group should close the popup', function(assert) {
@@ -2401,9 +2399,7 @@ QUnit.module('keyboard navigation', {
         listKeyboard.press('left');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-
-        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
-        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('right on list should close the popup', function(assert) {
@@ -2416,9 +2412,7 @@ QUnit.module('keyboard navigation', {
         listKeyboard.press('right');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-
-        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
-        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('down arrow on toggle button should open the popup', function(assert) {
@@ -2607,8 +2601,8 @@ QUnit.module('Accessibility', {
 
         const buttonElements = this.getButtons();
 
-        assert.ok(buttonElements.eq(0).attr('aria-expanded'));
-        assert.ok(this.$element.attr('aria-expanded'));
+        assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
 
@@ -2618,7 +2612,7 @@ QUnit.module('Accessibility', {
         const buttonElements = this.getButtons();
 
         assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'true');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     QUnit.test('check aria-expanded attr for visible dropdown if splitButton is true', function(assert) {
@@ -2628,9 +2622,9 @@ QUnit.module('Accessibility', {
 
         const buttonElements = this.getButtons();
 
-        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'true');
+        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), undefined);
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'true');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     QUnit.test('check aria-expanded attr if splitButton is true after dropdown was closed', function(assert) {
@@ -2641,9 +2635,9 @@ QUnit.module('Accessibility', {
         instance.open();
         instance.close();
 
-        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'false');
+        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), undefined);
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'false');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     [true, false].forEach(splitButton => {
