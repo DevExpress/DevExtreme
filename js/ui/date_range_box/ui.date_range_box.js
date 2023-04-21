@@ -261,9 +261,13 @@ class DateRangeBox extends Widget {
     }
 
     _openHandler() {
+        this._toggleOpenState();
+    }
+
+    _toggleOpenState() {
         this.getStartDateBox().focus();
-        // TODO: toggle open state here after click was handled with checking active inputs
-        this.getStartDateBox().open();
+
+        this.option('opened', !this.option('opened'));
     }
 
     _focusInHandler(e) {

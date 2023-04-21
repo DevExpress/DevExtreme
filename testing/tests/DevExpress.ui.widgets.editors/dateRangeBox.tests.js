@@ -9,7 +9,7 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="dateRangeBox"></div>';
+        '<div id="dateRangeBox"></div><div id="dateRangeBox2"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -426,8 +426,54 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.deepEqual(this.instance.getButton('home'), $homeButton.dxButton('instance'));
     });
 
-    // QUnit.todo('Popup of startDateBox should be opened by click on drop down button', function() {});
-    // QUnit.todo('Open popup of startDateBox should be closed by click on drop down button', function() {});
+    QUnit.test('Popup of startDateBox should be opened by click on drop down button', function(assert) {
+        this.reinit({
+            opened: false,
+        });
+
+        getButtons(this.$element).eq(0).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Open popup of startDateBox should be closed by click on drop down button twice', function(assert) {
+        this.reinit({
+            opened: false,
+        });
+
+        getButtons(this.$element).eq(0).trigger('dxclick');
+        getButtons(this.$element).eq(0).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox is closed');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should be opened by second click on drop down button if startDateBox was closed by option', function(assert) {
+        this.reinit({
+            opened: false,
+        });
+
+        getButtons(this.$element).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is opened');
+
+        this.instance.getStartDateBox().option('opened', false);
+
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is opened');
+
+        getButtons(this.$element).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is opened');
+    });
 });
 
 QUnit.module('Behavior', moduleConfig, () => {
