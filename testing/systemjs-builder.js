@@ -243,6 +243,32 @@ const transpileCss = async(Builder) => {
     }
 };
 
+const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) => {
+    await builder.buildStatic(
+        `[${sourcePath}]`,
+        destPath,
+        {
+            minify: false,
+            sourceMaps: true,
+            encodeNames: false
+        }
+    );
+};
+
+const transpileWithBabel = async(sourceCode, destPath) => {
+    const { code } = await babel.transform(sourceCode, {
+        plugins: ['@babel/plugin-transform-modules-systemjs'],
+    });
+
+    const destDir = path.dirname(destPath);
+
+    if(!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir, { recursive: true });
+    }
+
+    fs.writeFileSync(destPath, code);
+};
+
 const transpileTesting = async(Builder) => {
     const builder = new Builder(root, config);
     const contentList = getFileList(path.join(root, 'testing/content'));
@@ -260,29 +286,18 @@ const transpileTesting = async(Builder) => {
             continue;
         }
 
-        try {
-            await builder.buildStatic(
-                `[${filePath}]`,
-                destPath,
-                {
-                    minify: false,
-                    sourceMaps: true,
-                    encodeNames: false
-                }
-            );
-        } catch(error) {
-            const { code } = await babel.transform(sourceCode, {
-                plugins: ['@babel/plugin-transform-modules-systemjs']
-            });
-
-            const destDir = path.dirname(destPath);
-            if(!fs.existsSync(destDir)) {
-                fs.mkdirSync(destDir, { recursive: true });
+        if(
+            filePath.includes('ui.widgets/fileManagerParts') ||
+            filePath.includes('ui.widgets.htmlEditor/htmlEditorParts')
+        ) {
+            await transpileWithBabel(sourceCode, destPath);
+        } else {
+            try {
+                await transpileWithBuilder(builder, filePath, destPath);
+            } catch(error) {
+                await transpileWithBabel(sourceCode, destPath);
             }
-
-            fs.writeFileSync(destPath, code);
         }
-
     }
 };
 
