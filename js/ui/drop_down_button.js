@@ -473,6 +473,15 @@ const DropDownButton = Widget.inherit({
         });
     },
 
+    _setAriaHasPopup() {
+        const { splitButton } = this.option();
+
+        const $buttons = this._buttonGroup.$element().find('.dx-button');
+        const $button = splitButton ? $buttons.eq(1) : $buttons.eq(0);
+
+        this.setAria('haspopup', 'listbox', $button);
+    },
+
     _renderButtonGroup() {
         const $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
         if(!this._buttonGroup) {
@@ -493,6 +502,7 @@ const DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
 
         this._setAriaExpanded(this.option('opened'));
+        this._setAriaHasPopup();
     },
 
     _updateArrowClass() {
@@ -622,6 +632,7 @@ const DropDownButton = Widget.inherit({
             case 'splitButton':
                 this._updateArrowClass();
                 this._renderButtonGroup();
+                this._setAriaHasPopup();
                 break;
             case 'displayExpr':
                 this._compileDisplayGetter();

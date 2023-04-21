@@ -2645,4 +2645,31 @@ QUnit.module('Accessibility', {
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'false');
         assert.strictEqual(this.$element.attr('aria-expanded'), 'false');
     });
+
+    [true, false].forEach(splitButton => {
+        QUnit.test(`check aria-haspopup attr for button if splitButton=${splitButton}`, function(assert) {
+            this.createInstance({ splitButton });
+
+            const $buttonElements = this.getButtons();
+            const $button = splitButton ? $buttonElements.eq(1) : $buttonElements.eq(0);
+
+            assert.strictEqual($button.attr('aria-haspopup'), 'listbox');
+        });
+    });
+
+    QUnit.test('check aria-haspopup attr for button if splitButton was changed in runtime', function(assert) {
+        const instance = this.createInstance();
+
+        const $button = this.getButtons().eq(0);
+
+        assert.strictEqual($button.attr('aria-haspopup'), 'listbox');
+
+        instance.option('splitButton', true);
+
+        const $firstButton = this.getButtons().eq(0);
+        const $secondButton = this.getButtons().eq(1);
+
+        assert.strictEqual($firstButton.attr('aria-haspopup'), undefined);
+        assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
+    });
 });
