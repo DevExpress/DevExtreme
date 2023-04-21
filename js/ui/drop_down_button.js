@@ -395,7 +395,7 @@ const DropDownButton = Widget.inherit({
         };
     },
 
-    _upDownKeyHandler(e) {
+    _upDownKeyHandler() {
         if(this._popup && this._popup.option('visible') && this._list) {
             this._list.focus();
         } else {

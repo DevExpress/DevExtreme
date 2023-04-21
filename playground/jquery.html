@@ -34,21 +34,10 @@
 <body>
     <div id="button"></div>
     <script>
-        $(() => {
-            const downloads = [
-                'Download Trial For Visual Studio',
-                'Download Trial For All Platforms',
-                'Package Managers',
-            ];
-
-            $('#button').dxDropDownButton({
-                text: 'Download Trial',
-                icon: 'save',
-                dropDownOptions: {
-                    width: 230,
-                },
-                items: downloads,
-                splitButton: true,
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
