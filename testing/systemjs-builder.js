@@ -243,7 +243,7 @@ const transpileCss = async(Builder) => {
     }
 };
 
-const transpileWithBuilder = async (builder, sourcePath, destPath, sourceCode) => {
+const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) => {
     await builder.buildStatic(
         `[${sourcePath}]`,
         destPath,
@@ -255,7 +255,7 @@ const transpileWithBuilder = async (builder, sourcePath, destPath, sourceCode) =
     );
 };
 
-const transpileWithBabel = async (sourceCode, destPath) => {
+const transpileWithBabel = async(sourceCode, destPath) => {
     const { code } = await babel.transform(sourceCode, {
         plugins: ['@babel/plugin-transform-modules-systemjs'],
     });
