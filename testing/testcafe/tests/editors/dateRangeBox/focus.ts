@@ -2,6 +2,7 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DateRangeBox from '../../../model/dateRangeBox';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateRangeBox focus state`
   .page(url(__dirname, '../../container.html'));
@@ -89,14 +90,6 @@ test('DateRangeBox & Start DateBox should have focus class after click on drop d
 }));
 
 test('DateRangeBox & EndDateBox should have focus class after select start date and end date in calendar', async (t) => {
-  await t
-    .click(Selector('body'));
-
-  await createWidget('dxDateRangeBox', {
-    value: [null, null],
-    opened: true,
-  });
-
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
@@ -124,6 +117,15 @@ test('DateRangeBox & EndDateBox should have focus class after select start date 
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .ok();
+}).before(async (t) => {
+  await setStyleAttribute(Selector('body'), 'min-height: 100px;');
+  await t
+    .click(Selector('body'));
+
+  return createWidget('dxDateRangeBox', {
+    value: [null, null],
+    opened: true,
+  });
 });
 
 test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async (t) => {
