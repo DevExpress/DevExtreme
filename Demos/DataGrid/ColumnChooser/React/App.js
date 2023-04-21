@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  TreeList, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection,
-} from 'devextreme-react/tree-list';
+  DataGrid, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection,
+} from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';
 import { employees } from './data.js';
@@ -13,8 +13,6 @@ const columnChooserModes = [{
   key: 'select',
   name: 'Select',
 }];
-
-const expandedRowKeys = [1, 5];
 
 const searchEditorOptions = { placeholder: 'Search column' };
 
@@ -46,26 +44,28 @@ class App extends React.Component {
 
     return (
       <div>
-        <TreeList
+        <DataGrid
           id="employees"
           dataSource={employees}
           columnAutoWidth={true}
           showRowLines={true}
           showBorders={true}
-          defaultExpandedRowKeys={expandedRowKeys}
           keyExpr="ID"
-          parentIdExpr="Head_ID"
         >
-          <Column dataField="Title" caption="Position" />
-          <Column dataField="Full_Name" allowHiding={false} />
-          <Column dataField="City" />
-          <Column dataField="State" />
+          <Column dataField='FirstName' allowHiding={false} />
+          <Column dataField='LastName' />
+          <Column dataField='Position' />
+          <Column dataField='City' />
+          <Column dataField='State' />
+
           <Column caption="Contacts">
-            <Column dataField="Mobile_Phone" allowHiding={false} />
+            <Column dataField="MobilePhone" allowHiding={false} />
             <Column dataField="Email" />
-            <Column visible={false} dataField="Skype" />
+            <Column dataField="Skype" visible={false} />
           </Column>
-          <Column dataField="Hire_Date" dataType="date" />
+
+          <Column dataField="HireDate" dataType="date" />
+
           <ColumnChooser enabled={true} mode={mode}>
             <ColumnChooserSearch
               enabled={searchEnabled}
@@ -76,7 +76,7 @@ class App extends React.Component {
               selectByClick={selectByClick}
               recursive={recursive} />
           </ColumnChooser>
-        </TreeList>
+        </DataGrid>
         <div className="options">
           <div className="caption">Options</div>
           <div className="option">

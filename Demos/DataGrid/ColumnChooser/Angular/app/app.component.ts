@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxTreeListModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxDataGridModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
 
@@ -49,7 +49,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTreeListModule,
+    DxDataGridModule,
     DxSelectBoxModule,
     DxCheckBoxModule,
   ],

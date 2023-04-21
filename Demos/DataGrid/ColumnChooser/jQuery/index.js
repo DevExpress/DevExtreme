@@ -1,53 +1,48 @@
-$(() => {
-  const columnChooserModes = [{
-    key: 'dragAndDrop',
-    name: 'Drag and drop',
-  }, {
-    key: 'select',
-    name: 'Select',
-  }];
+const columnChooserModes = [{
+  key: 'dragAndDrop',
+  name: 'Drag and drop',
+}, {
+  key: 'select',
+  name: 'Select',
+}];
 
-  const treeList = $('#employees').dxTreeList({
+$(() => {
+  const dataGrid = $('#employees').dxDataGrid({
     dataSource: employees,
     keyExpr: 'ID',
-    parentIdExpr: 'Head_ID',
     columns: [{
-      dataField: 'Title',
-      caption: 'Position',
-    }, {
-      dataField: 'Full_Name',
+      dataField: 'FirstName',
       allowHiding: false,
-    }, 'City', 'State', {
+    }, 'LastName', 'Position', 'City', 'State', {
       caption: 'Contacts',
       columns: [{
-        dataField: 'Mobile_Phone',
+        dataField: 'MobilePhone',
         allowHiding: false,
       }, 'Email', {
         dataField: 'Skype',
         visible: false,
       }],
     }, {
-      dataField: 'Hire_Date',
+      dataField: 'HireDate',
       dataType: 'date',
     }],
     columnAutoWidth: true,
     showRowLines: true,
     showBorders: true,
     columnChooser: {
-      mode: columnChooserModes[1].key,
       enabled: true,
+      mode: columnChooserModes[1].key,
       search: {
         enabled: true,
         editorOptions: { placeholder: 'Search column' },
       },
       selection: {
+        recursive: true,
         selectByClick: true,
         allowSelectAll: true,
-        recursive: true,
       },
     },
-    expandedRowKeys: [1, 5],
-  }).dxTreeList('instance');
+  }).dxDataGrid('instance');
 
   $('#columnChooserMode').dxSelectBox({
     items: columnChooserModes,
@@ -55,7 +50,7 @@ $(() => {
     valueExpr: 'key',
     displayExpr: 'name',
     onValueChanged(data) {
-      treeList.option('columnChooser.mode', data.value);
+      dataGrid.option('columnChooser.mode', data.value);
 
       const isDragMode = columnChooserModes[0].key === data.value;
 
@@ -69,7 +64,7 @@ $(() => {
     text: 'Search enabled',
     value: true,
     onValueChanged(data) {
-      treeList.option('columnChooser.search.enabled', data.value);
+      dataGrid.option('columnChooser.search.enabled', data.value);
     },
   });
 
@@ -77,7 +72,7 @@ $(() => {
     text: 'Allow select all',
     value: true,
     onValueChanged(data) {
-      treeList.option('columnChooser.selection.allowSelectAll', data.value);
+      dataGrid.option('columnChooser.selection.allowSelectAll', data.value);
     },
   });
 
@@ -85,7 +80,7 @@ $(() => {
     text: 'Select by click',
     value: true,
     onValueChanged(data) {
-      treeList.option('columnChooser.selection.selectByClick', data.value);
+      dataGrid.option('columnChooser.selection.selectByClick', data.value);
     },
   });
 
@@ -93,7 +88,7 @@ $(() => {
     text: 'Recursive',
     value: true,
     onValueChanged(data) {
-      treeList.option('columnChooser.selection.recursive', data.value);
+      dataGrid.option('columnChooser.selection.recursive', data.value);
     },
   });
 });

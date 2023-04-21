@@ -1,22 +1,22 @@
 <template>
   <div>
-    <DxTreeList
+    <DxDataGrid
       id="employees"
       :data-source="employees"
       :column-auto-width="true"
       :show-row-lines="true"
       :show-borders="true"
-      :expanded-row-keys="expandedRowKeys"
       key-expr="ID"
-      parent-id-expr="Head_ID"
     >
       <DxColumn
-        data-field="Title"
-        caption="Position"
+        data-field="FirstName"
+        :allow-hiding="false"
       />
       <DxColumn
-        :allow-hiding="false"
-        data-field="Full_Name"
+        data-field="LastName"
+      />
+      <DxColumn
+        data-field="Position"
       />
       <DxColumn
         data-field="City"
@@ -24,25 +24,26 @@
       <DxColumn
         data-field="State"
       />
-      <DxColumn
-        caption="Contacts"
-      >
+
+      <DxColumn caption="Contacts">
         <DxColumn
+          data-field="MobilePhone"
           :allow-hiding="false"
-          data-field="Mobile_Phone"
         />
         <DxColumn
           data-field="Email"
         />
         <DxColumn
-          :visible="false"
           data-field="Skype"
+          :visible="false"
         />
       </DxColumn>
+
       <DxColumn
-        data-field="Hire_Date"
+        data-field="HireDate"
         data-type="date"
       />
+
       <DxColumnChooser
         :enabled="true"
         :mode="mode"
@@ -57,7 +58,7 @@
           :recursive="recursive"
         />
       </DxColumnChooser>
-    </DxTreeList>
+    </DxDataGrid>
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
@@ -101,15 +102,15 @@
 </template>
 <script>
 import {
-  DxTreeList, DxColumn, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
-} from 'devextreme-vue/tree-list';
+  DxDataGrid, DxColumn, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
+} from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { employees } from './data.js';
 
 export default {
   components: {
-    DxTreeList,
+    DxDataGrid,
     DxColumn,
     DxColumnChooser,
     DxColumnChooserSearch,
@@ -132,7 +133,6 @@ export default {
       allowSelectAll: true,
       selectByClick: true,
       recursive: true,
-      expandedRowKeys: [1, 5],
     };
   },
 };

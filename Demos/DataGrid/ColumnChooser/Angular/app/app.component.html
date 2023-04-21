@@ -1,4 +1,4 @@
-<dx-tree-list
+<dx-data-grid
   id="employees"
   [dataSource]="employees"
   keyExpr="ID"
@@ -6,7 +6,6 @@
   [showRowLines]="true"
   [showBorders]="true"
   [columnAutoWidth]="true"
-  [expandedRowKeys]="[1, 5]"
 >
   <dxo-column-chooser
     #columnChooser
@@ -25,8 +24,9 @@
     ></dxo-selection>
   </dxo-column-chooser>
 
-  <dxi-column dataField="Title" caption="Position"></dxi-column>
-  <dxi-column dataField="Full_Name" [allowHiding]="false"></dxi-column>
+  <dxi-column dataField="FirstName" [allowHiding]="false"></dxi-column>
+  <dxi-column dataField="LastName" [allowHiding]="false"></dxi-column>
+  <dxi-column dataField="Position"></dxi-column>
   <dxi-column dataField="City"></dxi-column>
   <dxi-column dataField="State"></dxi-column>
   <dxi-column caption="Contacts">
@@ -34,8 +34,8 @@
     <dxi-column dataField="Email"></dxi-column>
     <dxi-column dataField="Skype" [visible]="false"></dxi-column>
   </dxi-column>
-  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
-</dx-tree-list>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+</dx-data-grid>
 
 <div class="options">
   <div class="caption">Options</div>
