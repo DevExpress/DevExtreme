@@ -631,3 +631,40 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
     });
 });
+
+QUnit.module('Dimensions', moduleConfig, () => {
+    [undefined, 700].forEach((width) => {
+        QUnit.test(`startDateBox and endDateBox should have equal width (dateRangeBox width = ${width})`, function(assert) {
+            this.reinit({
+                value: ['2023/01/05', '2023/02/14'],
+                width,
+            });
+
+            const startDateBoxWidth = $(getStartDateBoxInstance(this.instance).$element()).width();
+            const endDateBoxWidth = $(getEndDateBoxInstance(this.instance).$element()).width();
+
+            assert.strictEqual(startDateBoxWidth, endDateBoxWidth);
+        });
+
+        ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+            QUnit.test(`${dateBoxName} with clear button should not change width after clear value (dateRangeBox width = ${width})`, function(assert) {
+                this.reinit({
+                    value: ['2023/01/05', '2023/02/14'],
+                    showClearButton: true,
+                    width,
+                });
+
+                const dateBox = dateBoxName === 'startDateBox'
+                    ? getStartDateBoxInstance(this.instance)
+                    : getEndDateBoxInstance(this.instance);
+                const initialWidth = $(dateBox.$element()).width();
+
+                this.instance.option('value', [null, null]);
+
+                const newWidth = $(dateBox.$element()).width();
+
+                assert.strictEqual(initialWidth, newWidth);
+            });
+        });
+    });
+});
