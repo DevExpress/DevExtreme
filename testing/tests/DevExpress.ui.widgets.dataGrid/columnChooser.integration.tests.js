@@ -493,4 +493,37 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // assert
         assert.strictEqual(textBox.option('placeholder'), 'custom_placeholder', 'Placeholder should be custom');
     });
+
+    QUnit.test('Changing columnChooser.selection.recursive via option() should work properly', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: {
+                    recursive: true
+                },
+            },
+            columns: [{
+                caption: 'band1',
+                columns: [{ dataField: 'field1' }, { dataField: 'field2', visible: false }]
+            }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        dataGrid.option('columnChooser.selection.recursive', false);
+
+        dataGrid.showColumnChooser();
+
+        // assert
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+        const selectedNodes = treeView.getSelectedNodes();
+
+        assert.strictEqual(selectedNodes.length, 2);
+        assert.ok(selectedNodes.filter(node => node.text === 'band1'), 'band column is selected');
+        assert.ok(selectedNodes.filter(node => node.text === 'field1'), 'field1 column is selected');
+    });
 });
