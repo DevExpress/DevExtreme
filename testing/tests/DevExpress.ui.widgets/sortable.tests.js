@@ -66,6 +66,50 @@ QUnit.testStart(function() {
                 left: 0;
                 top: 0;
             }
+            #bothScrolls {
+                height: 600px;
+                width: 300px;
+                overflow: auto;
+                background: grey;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            #itemsWithBothScrolls {
+                overflow: visible;
+                width: 600px;
+            }
+            #bothScrolls2 {
+                height: 300px;
+                width: 300px;
+                overflow: auto;
+                background: grey;
+                position: absolute;
+                left: 500px;
+                top: 500px;
+            }
+            #itemsWithBothScrolls2 {
+                overflow: visible;
+                width: 600px;
+            }
+            #parentSortable {
+                display: inline-block;
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: grey;
+            }
+            #nestedSortable {
+                display: inline-block;
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
         </style>
         <div id="container">
             <div id="items">
@@ -104,8 +148,8 @@ QUnit.testStart(function() {
                 </div><div id="item32" class="draggable colored-item" style="height: 50px;">item10</div>
             </div>
         </div>
-        <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0px; top: 0px;">
-            <div id="itemsWithBothScrolls" style="overflow: visible; width: 600px;">
+        <div id="bothScrolls">
+            <div id="itemsWithBothScrolls">
                 <div id="item40" class="draggable colored-item" style="height: 50px; width: 600px;">item0</div>
                 <div id="item41" class="draggable colored-item" style="height: 50px; width: 600px;">item1</div>
                 <div id="item42" class="draggable colored-item" style="height: 50px; width: 600px;">item2</div>
@@ -118,8 +162,8 @@ QUnit.testStart(function() {
                 <div id="item49" class="draggable colored-item" style="height: 50px; width: 600px;">item9</div>
             </div>
         </div>
-        <div id="bothScrolls2" style="height: 300px; width: 300px; overflow: auto; background: grey; position: absolute; left: 500px; top: 500px;">
-            <div id="itemsWithBothScrolls2" style="overflow: visible; width: 600px;">
+        <div id="bothScrolls2">
+            <div id="itemsWithBothScrolls2">
                 <div id="item50" class="draggable colored-item" style="height: 50px; width: 600px;">item0</div>
                 <div id="item51" class="draggable colored-item" style="height: 50px; width: 600px;">item1</div>
                 <div id="item52" class="draggable colored-item" style="height: 50px; width: 600px;">item2</div>
@@ -132,11 +176,11 @@ QUnit.testStart(function() {
                 <div id="item59" class="draggable colored-item" style="height: 50px; width: 600px;">item9</div>
             </div>
         </div>
-        <div id="parentSortable" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: absolute; top: 0; left: 0; background: grey;">
+        <div id="parentSortable">
             <div id="item1" class="draggable colored-item">item1</div>
             <div id="item2" class="draggable colored-item">item2</div>
 
-            <div id="nestedSortable" class="subgroup" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+            <div id="nestedSortable" class="subgroup">
                 <div id="item3" class="draggable colored-item">item3</div>
                 <div id="item4" class="draggable colored-item">item4</div>
             </div>
