@@ -46,7 +46,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^3.2.4",
     "jasmine": "2.99.0",
-    "karma": "^6.4.1",
+    "karma": "^6.4.2",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.2",
     "karma-junit-reporter": "^1.2.0",
