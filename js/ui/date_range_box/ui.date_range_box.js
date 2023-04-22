@@ -64,9 +64,9 @@ class DateRangeBox extends Widget {
 
             isValid: true,
 
-            startDateLabel: '',
+            startDateLabel: 'Start Date', // default value was ''
 
-            endDateLabel: '',
+            endDateLabel: 'End Date', // default value was ''
 
             startDatePlaceholder: '',
 
@@ -83,8 +83,6 @@ class DateRangeBox extends Widget {
             opened: false,
 
             openOnFieldClick: false,
-
-            placeholder: '',
 
             readOnly: false,
 
