@@ -34,7 +34,7 @@ class DateRangeBox extends Widget {
 
             applyButtonText: messageLocalization.format('OK'),
 
-            applyValueMode: 'useButtons',
+            applyValueMode: 'instantly',
 
             buttons: undefined,
 
@@ -72,15 +72,13 @@ class DateRangeBox extends Widget {
 
             endDatePlaceholder: '',
 
-            labelMode: 'static', // 'static' | 'floating' | 'hidden'
+            labelMode: 'static',
 
             max: undefined,
 
             maxLength: null,
 
             min: undefined,
-
-            onValueChanged: null,
 
             opened: false,
 
@@ -98,7 +96,7 @@ class DateRangeBox extends Widget {
 
             startDate: null,
 
-            stylingMode: config().editorStylingMode || 'outlined', // 'outlined' | 'underlined' | 'filled'
+            stylingMode: config().editorStylingMode || 'outlined',
 
             text: '',
 
@@ -121,6 +119,12 @@ class DateRangeBox extends Widget {
             value: [null, null],
 
             valueChangeEvent: 'change',
+
+            onValueChanged: null,
+
+            onOpened: null,
+
+            onClosed: null,
         });
     }
 
@@ -137,6 +141,32 @@ class DateRangeBox extends Widget {
                 }
             }
         ]);
+    }
+
+    _createOpenAction() {
+        this._openAction = this._createActionByOption('onOpened', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+    }
+
+    _raiseOpenAction() {
+        if(!this._openAction) {
+            this._createOpenAction();
+        }
+        this._openAction();
+    }
+
+    _createCloseAction() {
+        this._closeAction = this._createActionByOption('onClosed', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+    }
+
+    _raiseCloseAction() {
+        if(!this._closeAction) {
+            this._createCloseAction();
+        }
+        this._closeAction();
     }
 
     _createValueChangeAction() {
@@ -333,9 +363,13 @@ class DateRangeBox extends Widget {
             opened: options.opened,
             onOpened: () => {
                 this.option('opened', true);
+
+                this._raiseOpenAction();
             },
             onClosed: () => {
                 this.option('opened', false);
+
+                this._raiseCloseAction();
             },
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,

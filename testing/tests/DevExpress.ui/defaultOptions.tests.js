@@ -171,10 +171,14 @@ testComponentDefaults(DateRangeBox,
     {
         stylingMode: 'outlined',
         labelMode: 'static',
+        applyValueMode: 'instantly',
         startDateLabel: '',
         endDateLabel: '',
         startDatePlaceholder: '',
         endDatePlaceholder: '',
+        onValueChanged: null,
+        onOpened: null,
+        onClosed: null,
     }
 );
 
