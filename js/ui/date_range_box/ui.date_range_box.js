@@ -520,6 +520,9 @@ class DateRangeBox extends Widget {
             case 'opened':
                 this.getStartDateBox().option('opened', value);
                 break;
+            case 'onOpened':
+            case 'onClosed':
+                break;
             case 'openOnFieldClick':
             case 'readOnly':
             case 'showClearButton':
