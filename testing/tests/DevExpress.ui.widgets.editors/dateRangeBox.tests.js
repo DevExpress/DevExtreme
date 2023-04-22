@@ -105,14 +105,16 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 height: undefined,
                 hoverStateEnabled: true,
                 isValid: true,
-                label: '',
+                startDateLabel: '',
+                endDateLabel: '',
+                startDatePlaceholder: '',
+                endDatePlaceholder: '',
                 labelMode: 'static',
                 max: undefined,
                 maxLength: null,
                 min: undefined,
                 opened: false,
                 openOnFieldClick: false,
-                placeholder: '',
                 readOnly: false,
                 rtlEnabled: false,
                 showClearButton: false,
@@ -133,7 +135,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(value, this.instance.option(key), `${key} default value is correct`);
+                assert.deepEqual(this.instance.option(key), value, `${key} default value is correct`);
             });
         });
 
@@ -175,7 +177,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 opened: false,
                 showClearButton: false,
                 showDropDownButton: false,
-                label: 'Start Date',
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -190,7 +191,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             const expectedOptions = {
                 ...expectedDateBoxOptions,
                 showClearButton: false,
-                label: 'End Date',
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -693,7 +693,7 @@ QUnit.module('Popup integration', moduleConfig, () => {
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
-    QUnit.test('startDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
+    QUnit.test('StartDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
         const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -706,6 +706,53 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
         assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox option was changed');
         assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox option was not changed');
+    });
+
+    QUnit.test('DateRangeBox startDateLabel, endDateLabel options should be passed in label option of startDateBox and endDateBox respectively', function(assert) {
+        const customStartDateLabel = 'Start Date Label';
+        const customEndDateLabel = 'End Date Label';
+
+        this.reinit({
+            startDateLabel: customStartDateLabel,
+            endDateLabel: customEndDateLabel,
+        });
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        assert.strictEqual(startDateBox.option('label'), customStartDateLabel, 'startDateBox label option has correct value');
+        assert.strictEqual(endDateBox.option('label'), customEndDateLabel, 'endDateBox label option has correct value');
+    });
+
+    QUnit.test('startDateBox label should be changed after change startDateLabel option value of dateRangeBox in runtime', function(assert) {
+        this.reinit({});
+
+        this.instance.option('startDateLabel', 'text');
+
+        assert.strictEqual(this.instance.getStartDateBox().option('label'), 'text', 'startDateBox label option value has been changed');
+    });
+
+    QUnit.test('endDateBox label should be changed after change endDateLabel option value of dateRangeBox in runtime', function(assert) {
+        this.reinit({});
+
+        this.instance.option('endDateLabel', 'text');
+
+        assert.strictEqual(this.instance.getEndDateBox().option('label'), 'text', 'endDateLabel label option value has been changed');
+    });
+
+    QUnit.test('startDateBox placeholder should be changed after change startDatePlaceholder option value of dateRangeBox in runtime', function(assert) {
+        this.reinit({});
+
+        this.instance.option('startDatePlaceholder', 'text');
+
+        assert.strictEqual(this.instance.getStartDateBox().option('placeholder'), 'text', 'startDateBox placeholder option value has been changed');
+    });
+
+    QUnit.test('endDateBox placeholder should be changed after change endDatePlaceholder option value of dateRangeBox in runtime', function(assert) {
+        this.reinit({});
+
+        this.instance.option('endDatePlaceholder', 'text');
+
+        assert.strictEqual(this.instance.getEndDateBox().option('placeholder'), 'text', 'endDateBox placeholder option value has been changed');
     });
 });
 
