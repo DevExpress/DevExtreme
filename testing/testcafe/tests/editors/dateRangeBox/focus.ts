@@ -37,7 +37,7 @@ test('DateRangeBox & DateBoxes should have focus class if inputs are focused by 
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2023/01/05', '2023/02/14'],
+  value: ['2022/09/17', '2022/10/24'],
 }));
 
 test('DateRangeBox & DateBoxes should have focus class if inputs are focused by click', async (t) => {
@@ -70,7 +70,7 @@ test('DateRangeBox & DateBoxes should have focus class if inputs are focused by 
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2023/01/05', '2023/02/14'],
+  value: ['2022/09/17', '2022/10/24'],
 }));
 
 test('DateRangeBox & Start DateBox should have focus class after click on drop down button', async (t) => {
@@ -85,10 +85,62 @@ test('DateRangeBox & Start DateBox should have focus class after click on drop d
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2023/01/05', '2023/02/14'],
+  value: ['2022/09/17', '2022/10/24'],
 }));
 
-// TODO: end date box should be focused after select start date
-// TODO: end date box should be focused after select end date
-// eslint-disable-next-line max-len
-// TODO: start date should be focused when endDateBox is focused and dateRangeBox open by click on dropdownbutton
+test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().element);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .click(dateRangeBox.dropDownButton);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2022/09/17', '2022/10/24'],
+}));
+
+// TODO: support this scenario
+test.skip('DateRangeBox & StartDateBox should be focused if dateRangeBox open by keyboard, alt+down', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .pressKey('alt+down');
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2022/09/17', '2022/10/24'],
+}));

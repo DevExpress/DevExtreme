@@ -35,7 +35,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
             return;
         }
 
-        this._widget.option('values', [this.dateRangeBox.getStartDateBox().option('value'), this.dateRangeBox.getEndDateBox().option('value')]);
+        this._widget.option('values', this.dateRangeBox.option('value'));
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
