@@ -18,6 +18,7 @@ const WIDGET_CLASS = 'dx-widget';
 const BUTTON_CLASS = 'dx-button';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -679,6 +680,20 @@ QUnit.module('Public methods', moduleConfig, () => {
         assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox opened option has correct value');
         assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox opened option has correct value');
         assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox opened option has correct value');
+    });
+
+    QUnit.test('Field() method should return startDateBox and endDateBox input elements', function(assert) {
+        const field = this.instance.field();
+
+        assert.strictEqual(field.length, 2, 'field method return two inputs');
+        assert.strictEqual(isRenderer(field[0]), !!config().useJQuery, 'startDateBox fieldElement is correct');
+        assert.strictEqual(isRenderer(field[1]), !!config().useJQuery, 'endDateBox fieldElement is correct');
+
+        const $startDateBox = this.instance.getStartDateBox().$element();
+        const $endDateBox = this.instance.getEndDateBox().$element();
+
+        assert.strictEqual($(field[0]).is($startDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'startDateBox field is correct');
+        assert.strictEqual($(field[1]).is($endDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'startDateBox field is correct');
     });
 });
 
