@@ -83,6 +83,13 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
         assert.strictEqual(endDateBoxValue, dateRangeBoxValue[1]);
     });
 
+    QUnit.test('StartDateBox & endDateBox inputs should have the same default value of tabIndex attribute', function(assert) {
+        this.reinit({});
+
+        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '0', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '0', 'endDateBox input tabIndex value');
+    });
+
     QUnit.module('Default options (temporary module)', () => {
         QUnit.test('DateRangeBox has expected defaults', function(assert) {
             this.reinit({});
@@ -132,6 +139,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 value: [null, null],
                 valueChangeEvent: 'change',
                 width: undefined,
+                tabIndex: 0,
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -163,6 +171,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             validationMessagePosition: 'auto',
             validationStatus: 'valid',
             valueChangeEvent: 'change',
+            tabIndex: 0,
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -753,6 +762,23 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         this.instance.option('endDatePlaceholder', 'text');
 
         assert.strictEqual(this.instance.getEndDateBox().option('placeholder'), 'text', 'endDateBox placeholder option value has been changed');
+    });
+
+    QUnit.test('StartDateBox & endDateBox inputs should have the same value of tabIndex attribute after initialization', function(assert) {
+        this.reinit({
+            tabIndex: '2'
+        });
+
+        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
+    });
+
+    QUnit.test('StartDateBox & endDateBox inputs should have the same value of tabIndex attribute if tabIndex option was changed in runtime', function(assert) {
+        this.reinit({});
+        this.instance.option('tabIndex', 3);
+
+        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '3', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '3', 'endDateBox input tabIndex value');
     });
 });
 

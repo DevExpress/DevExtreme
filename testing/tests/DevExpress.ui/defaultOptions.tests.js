@@ -175,6 +175,10 @@ testComponentDefaults(DateRangeBox,
         endDateLabel: '',
         startDatePlaceholder: '',
         endDatePlaceholder: '',
+        tabIndex: 0,
+        onValueChanged: null,
+        onOpened: null,
+        onClosed: null,
     }
 );
 
