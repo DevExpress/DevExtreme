@@ -66,7 +66,13 @@ class DateRangeBox extends Widget {
 
             isValid: true,
 
-            label: '',
+            startDateLabel: 'Start Date', // default value was ''
+
+            endDateLabel: 'End Date', // default value was ''
+
+            startDatePlaceholder: '',
+
+            endDatePlaceholder: '',
 
             labelMode: 'static', // 'static' | 'floating' | 'hidden'
 
@@ -81,8 +87,6 @@ class DateRangeBox extends Widget {
             opened: false,
 
             openOnFieldClick: false,
-
-            placeholder: '',
 
             readOnly: false,
 
@@ -294,14 +298,12 @@ class DateRangeBox extends Widget {
             hoverStateEnabled: false,
             invalidDateMessage: options.invalidDateMessage,
             isValid: options.isValid,
-            label: options.label,
             labelMode: options.labelMode,
             max: options.max,
             maxLength: options.maxLength,
             min: options.min,
             openOnFieldClick: options.openOnFieldClick,
             pickerType: 'calendar',
-            placeholder: options.placeholder,
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
@@ -341,7 +343,8 @@ class DateRangeBox extends Widget {
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[0],
-            label: 'Start Date', // TODO: for test purpose only. change value to ''
+            label: options.startDateLabel,
+            placeholder: options.startDatePlaceholder,
         };
     }
 
@@ -363,7 +366,8 @@ class DateRangeBox extends Widget {
             showClearButton: options.showClearButton,
             showDropDownButton: false,
             value: this.option('value')[1],
-            label: 'End Date', // TODO: for test purpose only. change value to ''
+            label: options.endDateLabel,
+            placeholder: options.endDatePlaceholder,
         };
     }
 
@@ -464,7 +468,19 @@ class DateRangeBox extends Widget {
             case 'endDate':
             case 'invalidDateMessage':
             case 'isValid':
-            case 'label':
+                break;
+            case 'startDateLabel':
+                this.getStartDateBox().option('label', value);
+                break;
+            case 'endDateLabel':
+                this.getEndDateBox().option('label', value);
+                break;
+            case 'startDatePlaceholder':
+                this.getStartDateBox().option('placeholder', value);
+                break;
+            case 'endDatePlaceholder':
+                this.getEndDateBox().option('placeholder', value);
+                break;
             case 'labelMode':
             case 'maxLength':
                 break;
@@ -475,7 +491,6 @@ class DateRangeBox extends Widget {
                 this.getStartDateBox().option('opened', value);
                 break;
             case 'openOnFieldClick':
-            case 'placeholder':
             case 'readOnly':
             case 'showClearButton':
             case 'spellcheck':
