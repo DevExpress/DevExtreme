@@ -78,7 +78,22 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         }
     },
 
+    _focusTarget: function() {
+        if(this.option('searchEnabled')) {
+            return this._itemContainer(true);
+        }
+        return this._itemContainer();
+    },
+
     _itemContainer: function(isSearchMode) {
+        const WIDGET_CLASS = 'dx-treeview';
+        const NODE_CLASS = `${WIDGET_CLASS}-node`;
+        const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
+
+        if(this._selectAllEnabled()) {
+            return this.$element().find(`.${NODE_CONTAINER_CLASS}`).eq(0);
+        }
+
         if(this._scrollable && isSearchMode) {
             return $(this._scrollable.content());
         }
