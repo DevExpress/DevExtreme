@@ -19,6 +19,7 @@ const BUTTON_CLASS = 'dx-button';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -686,14 +687,29 @@ QUnit.module('Public methods', moduleConfig, () => {
         const field = this.instance.field();
 
         assert.strictEqual(field.length, 2, 'field method return two inputs');
-        assert.strictEqual(isRenderer(field[0]), !!config().useJQuery, 'startDateBox fieldElement is correct');
-        assert.strictEqual(isRenderer(field[1]), !!config().useJQuery, 'endDateBox fieldElement is correct');
+        assert.strictEqual(isRenderer(field[0]), !!config().useJQuery, 'field[0] contains correct fieldElement');
+        assert.strictEqual(isRenderer(field[1]), !!config().useJQuery, 'field[1] contains correct fieldElement');
 
         const $startDateBox = this.instance.getStartDateBox().$element();
         const $endDateBox = this.instance.getEndDateBox().$element();
 
-        assert.strictEqual($(field[0]).is($startDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'startDateBox field is correct');
-        assert.strictEqual($(field[1]).is($endDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'startDateBox field is correct');
+        assert.strictEqual($(field[0]).is($startDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'field[0] contains startDateBox input');
+        assert.strictEqual($(field[1]).is($endDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'field[1] contains endDateBox input');
+    });
+
+    QUnit.test('Content() method should return null if dateRangeBox is closed', function(assert) {
+        assert.strictEqual(this.instance.content(), null, 'content returns right value');
+    });
+
+    QUnit.test('Content() method should return popup content of startDateBox if dateRangeBox is opened', function(assert) {
+        this.instance.open();
+
+        const startDateBox = this.instance.getStartDateBox();
+
+        const $popupContent = $(this.instance.content());
+
+        assert.strictEqual($popupContent.is($(startDateBox.content())), true, 'content returns right element');
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
     });
 });
 

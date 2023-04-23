@@ -542,6 +542,10 @@ class DateRangeBox extends Widget {
         this.option('opened', false);
     }
 
+    content() {
+        return this.getStartDateBox().content();
+    }
+
     field() {
         return [getPublicElement(this.getStartDateBox()._input()), getPublicElement(this.getEndDateBox()._input())];
     }
