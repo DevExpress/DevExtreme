@@ -18,6 +18,8 @@ const WIDGET_CLASS = 'dx-widget';
 const BUTTON_CLASS = 'dx-button';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -98,7 +100,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 acceptCustomValue: true,
                 activeStateEnabled: true,
                 applyButtonText: 'OK',
-                applyValueMode: 'useButtons',
+                applyValueMode: 'instantly',
                 buttons: undefined,
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
@@ -150,7 +152,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
         const expectedDateBoxOptions = {
             acceptCustomValue: true,
             activeStateEnabled: false,
-            applyValueMode: 'useButtons',
+            applyValueMode: 'instantly',
             displayFormat: null,
             elementAttr: {},
             focusStateEnabled: true,
@@ -571,7 +573,9 @@ QUnit.module('Behavior', moduleConfig, () => {
             assert.strictEqual(onValueChangedHandler.callCount, 0);
         });
     });
+});
 
+QUnit.module('Events', moduleConfig, () => {
     QUnit.module('onValueChanged event', {
         beforeEach: function() {
             this.onValueChangedHandler = sinon.stub();
@@ -634,6 +638,69 @@ QUnit.module('Behavior', moduleConfig, () => {
             assert.strictEqual(this.onValueChangedHandler.callCount, 0);
         });
     });
+
+    QUnit.module('onOpened & onClosed events', {
+        beforeEach: function() {
+            this.onOpenedHandler = sinon.stub();
+            this.onClosedHandler = sinon.stub();
+
+            this.reinit({
+                onOpened: this.onOpenedHandler,
+                onClosed: this.onClosedHandler,
+            });
+        }
+    }, () => {
+        QUnit.test('should be called after change opened option', function(assert) {
+            this.instance.option('opened', true);
+
+            assert.strictEqual(this.onOpenedHandler.callCount, 1, 'onOpenHandler callCount');
+            assert.strictEqual(this.onClosedHandler.callCount, 0, 'onCloseHandler callCount');
+
+            this.onOpenedHandler.reset();
+            this.instance.option('opened', false);
+
+            assert.strictEqual(this.onOpenedHandler.callCount, 0, 'onOpenHandler callCount');
+            assert.strictEqual(this.onClosedHandler.callCount, 1, 'onCloseHandler callCount');
+        });
+
+        QUnit.test('DateRangeBox opened option value should be changed before call opened & closed actions', function(assert) {
+            assert.expect(2);
+
+            this.reinit({
+                opened: false,
+                onOpened: () => {
+                    assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox has correct opened value');
+                },
+                onClosed: () => {
+                    assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox has correct opened value');
+                }
+            });
+
+            this.instance.getStartDateBox().option('opened', true);
+            this.instance.getStartDateBox().option('opened', false);
+        });
+
+        QUnit.test('should be called with a new handlers after value change in runtime', function(assert) {
+            this.reinit({
+                onOpened: () => {},
+                onClosed: () => {}
+            });
+
+            this.instance.option('onOpened', this.onOpenedHandler);
+            this.instance.option('onClosed', this.onClosedHandler);
+
+            this.instance.option('opened', true);
+
+            assert.strictEqual(this.onOpenedHandler.callCount, 1, 'onOpenHandler callCount');
+            assert.strictEqual(this.onClosedHandler.callCount, 0, 'onCloseHandler callCount');
+
+            this.onOpenedHandler.reset();
+            this.instance.option('opened', false);
+
+            assert.strictEqual(this.onOpenedHandler.callCount, 0, 'onOpenHandler callCount');
+            assert.strictEqual(this.onClosedHandler.callCount, 1, 'onCloseHandler callCount');
+        });
+    });
 });
 
 QUnit.module('Strategy', moduleConfig, () => {
@@ -688,6 +755,35 @@ QUnit.module('Public methods', moduleConfig, () => {
         assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox opened option has correct value');
         assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox opened option has correct value');
         assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox opened option has correct value');
+    });
+
+    QUnit.test('Field() method should return startDateBox and endDateBox input elements', function(assert) {
+        const field = this.instance.field();
+
+        assert.strictEqual(field.length, 2, 'field method return two inputs');
+        assert.strictEqual(isRenderer(field[0]), !!config().useJQuery, 'field[0] contains correct fieldElement');
+        assert.strictEqual(isRenderer(field[1]), !!config().useJQuery, 'field[1] contains correct fieldElement');
+
+        const $startDateBox = this.instance.getStartDateBox().$element();
+        const $endDateBox = this.instance.getEndDateBox().$element();
+
+        assert.strictEqual($(field[0]).is($startDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'field[0] contains startDateBox input');
+        assert.strictEqual($(field[1]).is($endDateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)), true, 'field[1] contains endDateBox input');
+    });
+
+    QUnit.test('Content() method should return null if dateRangeBox is closed', function(assert) {
+        assert.strictEqual(this.instance.content(), null, 'content returns right value');
+    });
+
+    QUnit.test('Content() method should return popup content of startDateBox if dateRangeBox is opened', function(assert) {
+        this.instance.open();
+
+        const startDateBox = this.instance.getStartDateBox();
+
+        const $popupContent = $(this.instance.content());
+
+        assert.strictEqual($popupContent.is($(startDateBox.content())), true, 'content returns right element');
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
     });
 });
 

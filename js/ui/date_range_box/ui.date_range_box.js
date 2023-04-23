@@ -12,6 +12,7 @@ import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import dateSerialization from '../../core/utils/date_serialization';
 import dateUtils from '../../core/utils/date';
+import { getPublicElement } from '../../core/element';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
@@ -36,7 +37,7 @@ class DateRangeBox extends Widget {
 
             applyButtonText: messageLocalization.format('OK'),
 
-            applyValueMode: 'useButtons',
+            applyValueMode: 'instantly',
 
             buttons: undefined,
 
@@ -74,15 +75,13 @@ class DateRangeBox extends Widget {
 
             endDatePlaceholder: '',
 
-            labelMode: 'static', // 'static' | 'floating' | 'hidden'
+            labelMode: 'static',
 
             max: undefined,
 
             maxLength: null,
 
             min: undefined,
-
-            onValueChanged: null,
 
             opened: false,
 
@@ -98,7 +97,7 @@ class DateRangeBox extends Widget {
 
             startDate: null,
 
-            stylingMode: config().editorStylingMode || 'outlined', // 'outlined' | 'underlined' | 'filled'
+            stylingMode: config().editorStylingMode || 'outlined',
 
             text: '',
 
@@ -121,6 +120,12 @@ class DateRangeBox extends Widget {
             value: [null, null],
 
             valueChangeEvent: 'change',
+
+            onValueChanged: null,
+
+            onOpened: null,
+
+            onClosed: null,
         });
     }
 
@@ -137,6 +142,32 @@ class DateRangeBox extends Widget {
                 }
             }
         ]);
+    }
+
+    _createOpenAction() {
+        this._openAction = this._createActionByOption('onOpened', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+    }
+
+    _raiseOpenAction() {
+        if(!this._openAction) {
+            this._createOpenAction();
+        }
+        this._openAction();
+    }
+
+    _createCloseAction() {
+        this._closeAction = this._createActionByOption('onClosed', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+    }
+
+    _raiseCloseAction() {
+        if(!this._closeAction) {
+            this._createCloseAction();
+        }
+        this._closeAction();
     }
 
     _createValueChangeAction() {
@@ -335,9 +366,13 @@ class DateRangeBox extends Widget {
             opened: options.opened,
             onOpened: () => {
                 this.option('opened', true);
+
+                this._raiseOpenAction();
             },
             onClosed: () => {
                 this.option('opened', false);
+
+                this._raiseCloseAction();
             },
             todayButtonText: options.todayButtonText,
             showClearButton: options.showClearButton,
@@ -490,6 +525,9 @@ class DateRangeBox extends Widget {
             case 'opened':
                 this.getStartDateBox().option('opened', value);
                 break;
+            case 'onOpened':
+            case 'onClosed':
+                break;
             case 'openOnFieldClick':
             case 'readOnly':
             case 'showClearButton':
@@ -539,6 +577,14 @@ class DateRangeBox extends Widget {
 
     close() {
         this.option('opened', false);
+    }
+
+    content() {
+        return this.getStartDateBox().content();
+    }
+
+    field() {
+        return [getPublicElement(this.getStartDateBox()._input()), getPublicElement(this.getEndDateBox()._input())];
     }
 }
 
