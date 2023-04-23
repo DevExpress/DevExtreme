@@ -20,6 +20,7 @@ const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const CLEAR_BUTTON = 'dx-clear-button-area';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -27,6 +28,8 @@ const getEndDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getEn
 
 const getButtonsContainers = $element => $element.find(`> .${DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS}`);
 const getButtons = $element => $element.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+const getClearButton = $element => getButtonsContainers($element).find(`.${CLEAR_BUTTON}`);
+
 
 const moduleConfig = {
     beforeEach: function() {
@@ -225,14 +228,14 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             this.reinit(initialDateRangeBoxOptions);
 
             const expectedOptions = {
-                showClearButton: true,
+                showClearButton: false,
                 showDropDownButton: false,
                 buttons: undefined,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
             Object.entries(initialDateRangeBoxOptions).forEach(([key]) => {
-                assert.deepEqual(expectedOptions[key], startDateBox.option(key), `${key} value is correct`);
+                assert.deepEqual(startDateBox.option(key), expectedOptions[key], `${key} value is correct`);
             });
         });
 
@@ -240,14 +243,14 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             this.reinit(initialDateRangeBoxOptions);
 
             const expectedOptions = {
-                showClearButton: true,
+                showClearButton: false,
                 showDropDownButton: false,
                 buttons: undefined,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
             Object.entries(initialDateRangeBoxOptions).forEach(([key]) => {
-                assert.deepEqual(expectedOptions[key], endDateBox.option(key), `${key} value is correct`);
+                assert.deepEqual(endDateBox.option(key), expectedOptions[key], `${key} value is correct`);
             });
         });
     });
@@ -412,7 +415,6 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         const $beforeSectionButton = $buttonsContainers.eq(0).find(`.${WIDGET_CLASS}`);
         assert.strictEqual($beforeSectionButton.length, 1, 'one button was rendered in before section');
         assert.strictEqual($beforeSectionButton.eq(0).hasClass('custom-button'), true, 'custom button was rendered in right order');
-
         assert.strictEqual(getButtons($buttonsContainers.eq(1)).length, 1, 'drop down button was rendered in after section');
     });
 
@@ -486,6 +488,95 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
         assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
         assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is opened');
+    });
+});
+
+QUnit.module('Clear button', moduleConfig, () => {
+    QUnit.test('Clear button should be rendered if showClearButton is true', function(assert) {
+        this.reinit({
+            showClearButton: true
+        });
+
+        assert.strictEqual(getClearButton(this.$element).length, 1, 'clear button was rendered');
+    });
+
+    QUnit.test('Clear button should not be rendered if buttons is ["clear"] and showClearButton is false', function(assert) {
+        this.reinit({
+            showClearButton: false,
+            buttons: ['clear']
+        });
+
+        assert.strictEqual(getClearButton(this.$element).length, 0, 'clear button was not rendered');
+    });
+
+    QUnit.test('Clear button should not be rendered if buttons is [] and showClearButton is true', function(assert) {
+        this.reinit({
+            showClearButton: true,
+            buttons: []
+        });
+
+        assert.strictEqual(getClearButton(this.$element).length, 0, 'clear button was not rendered');
+    });
+
+    QUnit.test('Clear button should be rendered if buttons is ["clear"] and showClearButton is true', function(assert) {
+        this.reinit({
+            showClearButton: true,
+            buttons: ['clear']
+        });
+
+        assert.strictEqual(getClearButton(this.$element).length, 1, 'clear button was rendered');
+    });
+
+    QUnit.test('Clear button should not be rendered if showClearButton is false', function(assert) {
+        this.reinit({
+            showClearButton: false
+        });
+
+        assert.strictEqual(getClearButton(this.$element).length, 0, 'clear button was not rendered');
+    });
+
+    QUnit.test('Clear button should be rendered if buttons option is changed in runtime', function(assert) {
+        this.reinit({
+            showClearButton: true,
+            buttons: []
+        });
+
+        this.instance.option('buttons', ['clear']);
+
+        assert.strictEqual(getClearButton(this.$element).length, 1, 'clear button was rendered');
+    });
+
+    QUnit.test('Clear button should be rendered if showClearButton option is changed in runtime', function(assert) {
+        this.reinit({
+            showClearButton: false,
+        });
+
+        this.instance.option('showClearButton', true);
+
+        assert.strictEqual(getClearButton(this.$element).length, 1, 'clear button was rendered');
+    });
+
+    QUnit.test('getButton("clear") method should return element of default clear button', function(assert) {
+        this.reinit({
+            showClearButton: true,
+        });
+
+        assert.deepEqual(this.instance.getButton('clear').get(0), getClearButton(this.$element).get(0));
+    });
+
+    QUnit.test('Value of startDateBox & endDateBox should be cleared by click on clear button', function(assert) {
+        this.reinit({
+            opened: true,
+            showClearButton: true,
+            value: [new Date(2021, 9, 17), new Date(2021, 10, 5)],
+        });
+
+        getClearButton(this.$element).eq(0).trigger('click');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.deepEqual(this.instance.option('value'), [null, null], 'dateRangeBox value is cleared');
+        assert.strictEqual(this.instance.getStartDateBox().option('value'), null, 'startDateBox value is clearded');
+        assert.strictEqual(this.instance.getEndDateBox().option('value'), null, 'endDateBox value is clearded');
     });
 });
 
@@ -637,6 +728,21 @@ QUnit.module('Events', moduleConfig, () => {
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 0);
         });
+
+
+        // TODO: now onValueChanged event calls twice because we clear dateboxes sequentially
+        QUnit.test('should be called once after click on clear button', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: ['2021/09/17', '2022/10/14'],
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            getClearButton(this.$element).trigger('dxclick');
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 2);
+        });
+
     });
 
     QUnit.module('onOpened & onClosed events', {

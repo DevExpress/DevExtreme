@@ -9,6 +9,7 @@ import Widget from '../widget/ui.widget';
 import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
+import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import dateSerialization from '../../core/utils/date_serialization';
 import dateUtils from '../../core/utils/date';
@@ -206,7 +207,10 @@ class DateRangeBox extends Widget {
     }
 
     _getDefaultButtons() {
-        return [{ name: 'dropDown', Ctor: DropDownButton }];
+        return [
+            { name: 'clear', Ctor: ClearButton },
+            { name: 'dropDown', Ctor: DropDownButton }
+        ];
     }
 
     _initMarkup() {
@@ -309,6 +313,15 @@ class DateRangeBox extends Widget {
         this.option('opened', !this.option('opened'));
     }
 
+    _clearValueHandler(e) {
+        this.getEndDateBox()._clearValueHandler(e);
+        this.getStartDateBox()._clearValueHandler(e);
+    }
+
+    _isClearButtonVisible() {
+        return this.option('showClearButton') && !this.option('readOnly');
+    }
+
     _focusInHandler(e) {
         super._focusInHandler(e);
     }
@@ -375,7 +388,7 @@ class DateRangeBox extends Widget {
                 this._raiseCloseAction();
             },
             todayButtonText: options.todayButtonText,
-            showClearButton: options.showClearButton,
+            showClearButton: false,
             showDropDownButton: false,
             value: this.option('value')[0],
             label: options.startDateLabel,
@@ -398,7 +411,7 @@ class DateRangeBox extends Widget {
                 const newValue = [this.option('value')[0], value];
                 this.updateValue(newValue);
             },
-            showClearButton: options.showClearButton,
+            showClearButton: false,
             showDropDownButton: false,
             value: this.option('value')[1],
             label: options.endDateLabel,
@@ -500,6 +513,9 @@ class DateRangeBox extends Widget {
             case 'showDropDownButton':
                 this._updateButtons(['dropDown']);
                 break;
+            case 'showClearButton':
+                this._updateButtons(['clear']);
+                break;
             case 'endDate':
             case 'invalidDateMessage':
             case 'isValid':
@@ -530,7 +546,6 @@ class DateRangeBox extends Widget {
                 break;
             case 'openOnFieldClick':
             case 'readOnly':
-            case 'showClearButton':
             case 'spellcheck':
             case 'startDate':
                 break;
@@ -585,6 +600,12 @@ class DateRangeBox extends Widget {
 
     field() {
         return [getPublicElement(this.getStartDateBox()._input()), getPublicElement(this.getEndDateBox()._input())];
+    }
+
+    reset() {
+        // TODO: add test
+        this.getEndDateBox().reset();
+        this.getStartDateBox().reset();
     }
 }
 
