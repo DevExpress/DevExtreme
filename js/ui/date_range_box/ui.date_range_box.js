@@ -12,6 +12,7 @@ import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import dateSerialization from '../../core/utils/date_serialization';
 import dateUtils from '../../core/utils/date';
+import { getPublicElement } from '../../core/element';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
@@ -576,6 +577,14 @@ class DateRangeBox extends Widget {
 
     close() {
         this.option('opened', false);
+    }
+
+    content() {
+        return this.getStartDateBox().content();
+    }
+
+    field() {
+        return [getPublicElement(this.getStartDateBox()._input()), getPublicElement(this.getEndDateBox()._input())];
     }
 }
 
