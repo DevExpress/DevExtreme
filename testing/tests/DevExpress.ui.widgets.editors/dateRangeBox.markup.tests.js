@@ -17,6 +17,8 @@ const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const ICON_CLASS = 'dx-icon';
+const CLEAR_BUTTON = 'dx-clear-button-area';
+const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
@@ -29,6 +31,8 @@ const getStartDateBoxElement = dateRangeBoxInstance => getStartDateBoxInstance(d
 const getEndDateBoxElement = dateRangeBoxInstance => getEndDateBoxInstance(dateRangeBoxInstance).$element();
 
 const getSeparatorElement = dateRangeBoxInstance => dateRangeBoxInstance._$separator;
+
+const getClearButton = $element => $element.find(`> .${DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS}`).find(`.${CLEAR_BUTTON}`);
 
 const moduleConfig = {
     beforeEach: function() {
@@ -116,6 +120,17 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
         const $icon = $separator.find(`.${ICON_CLASS}`);
 
         assert.strictEqual($icon.length, 1);
+    });
+
+    QUnit.test('Clear button is not rendered if dateRangeBox readOnly is true', function(assert) {
+        this.reinit({
+            showClearButton: true,
+            readOnly: true,
+        });
+
+        const $clearButton = getClearButton(this.$element);
+
+        assert.strictEqual($clearButton.length, 0, 'clear button was rendered');
     });
 });
 

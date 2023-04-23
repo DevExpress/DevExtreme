@@ -37,7 +37,7 @@ test('DateRangeBox & DateBoxes should have focus class if inputs are focused by 
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2022/09/17', '2022/10/24'],
+  value: ['2021/09/17', '2021/10/24'],
 }));
 
 test('DateRangeBox & DateBoxes should have focus class if inputs are focused by click', async (t) => {
@@ -70,7 +70,7 @@ test('DateRangeBox & DateBoxes should have focus class if inputs are focused by 
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2022/09/17', '2022/10/24'],
+  value: ['2021/09/17', '2021/10/24'],
 }));
 
 test('DateRangeBox & Start DateBox should have focus class after click on drop down button', async (t) => {
@@ -85,7 +85,7 @@ test('DateRangeBox & Start DateBox should have focus class after click on drop d
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2022/09/17', '2022/10/24'],
+  value: ['2021/09/17', '2021/10/24'],
 }));
 
 test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async (t) => {
@@ -113,7 +113,36 @@ test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by clic
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2022/09/17', '2022/10/24'],
+  value: ['2021/09/17', '2021/10/24'],
+}));
+
+test('DateRangeBox & StartDateBox should be focused after click on clear button', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().element);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .click(dateRangeBox.clearButton);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  showClearButton: true,
+  value: ['2021/09/17', '2021/10/24'],
 }));
 
 // TODO: support this scenario
@@ -142,5 +171,5 @@ test.skip('DateRangeBox & StartDateBox should be focused if dateRangeBox open by
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2022/09/17', '2022/10/24'],
+  value: ['2021/09/17', '2021/10/24'],
 }));
