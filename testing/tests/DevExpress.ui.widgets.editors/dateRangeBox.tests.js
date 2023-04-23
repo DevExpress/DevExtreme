@@ -186,6 +186,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 opened: false,
                 showClearButton: false,
                 showDropDownButton: false,
+                label: 'Start Date',
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -200,6 +201,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             const expectedOptions = {
                 ...expectedDateBoxOptions,
                 showClearButton: false,
+                label: 'End Date',
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
