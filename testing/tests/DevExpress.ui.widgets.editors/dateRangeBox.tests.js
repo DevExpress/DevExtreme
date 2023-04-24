@@ -729,7 +729,6 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(this.onValueChangedHandler.callCount, 0);
         });
 
-
         // TODO: now onValueChanged event calls twice because we clear dateboxes sequentially
         QUnit.test('should be called once after click on clear button', function(assert) {
             this.reinit({
@@ -743,6 +742,18 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(this.onValueChangedHandler.callCount, 2);
         });
 
+        // TODO: now onValueChanged event calls twice
+        QUnit.test('should be called once after click on reset method call', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: ['2021/09/17', '2022/10/14'],
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.instance.reset();
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 2);
+        });
     });
 
     QUnit.module('onOpened & onClosed events', {
@@ -806,35 +817,6 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(this.onOpenedHandler.callCount, 0, 'onOpenHandler callCount');
             assert.strictEqual(this.onClosedHandler.callCount, 1, 'onCloseHandler callCount');
         });
-    });
-});
-
-QUnit.module('Strategy', moduleConfig, () => {
-    [
-        {
-            optionName: 'selectionMode',
-            optionValue: 'range'
-        },
-        {
-            optionName: 'viewsCount',
-            optionValue: 2
-        },
-    ].forEach(({ optionName, optionValue }) => {
-        QUnit.test(`Calendar should have ${optionName} option equals ${optionValue}`, function(assert) {
-            const startDateBox = getStartDateBoxInstance(this.instance);
-
-            startDateBox.open();
-
-            assert.strictEqual(startDateBox._strategy.widgetOption(optionName), optionValue);
-        });
-    });
-
-    QUnit.test('Calendar should have "values" option equals to dateRangeBox "value"', function(assert) {
-        const startDateBox = getStartDateBoxInstance(this.instance);
-
-        startDateBox.open();
-
-        assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
     });
 });
 

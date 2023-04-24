@@ -13,7 +13,6 @@ import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import dateSerialization from '../../core/utils/date_serialization';
 import dateUtils from '../../core/utils/date';
-import { getPublicElement } from '../../core/element';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
@@ -599,7 +598,7 @@ class DateRangeBox extends Widget {
     }
 
     field() {
-        return [getPublicElement(this.getStartDateBox()._input()), getPublicElement(this.getEndDateBox()._input())];
+        return [this.getStartDateBox().field(), this.getEndDateBox().field()];
     }
 
     reset() {
