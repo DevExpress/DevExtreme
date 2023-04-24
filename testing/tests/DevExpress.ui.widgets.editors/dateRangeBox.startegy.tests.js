@@ -151,7 +151,6 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
         });
     });
 
-
     QUnit.test('DateRangeBox should not be closed after select start date in calendar', function(assert) {
         this.reinit({
             applyValueMode: 'instantly',
@@ -177,6 +176,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
 
             this.instance.open();
 
+            assert.deepEqual(this.instance.option('value'), [null, null], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), null, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
             assert.deepEqual(this.getCalendar().option('values'), [null, null], 'calendar value is correct');
@@ -189,6 +189,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
             const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
             (cellElement === 'td' ? $endDateCell : $endDateCell.find(cellElement)).trigger('dxclick');
 
+            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
@@ -212,6 +213,43 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
         $endDateCell.trigger('dxclick');
 
         assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+    });
+
+    [
+        { field: 'startDate', index: 0 },
+        { field: 'endDate', index: 1 },
+    ].forEach(({ field, index }) => {
+        QUnit.test(`StartDate value should be choosed first after opening by click on ${field} field if openOnFieldClick is true`, function(assert) {
+            this.reinit({
+                applyValueMode: 'instantly',
+                value: [null, null],
+                openOnFieldClick: true,
+            });
+
+            $(this.instance.field()[index]).trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $startDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, null], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $endDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+
+            assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        });
     });
 
     QUnit.testInActiveWindow('DateRangeBox & End DateBox should have focus class after select end date', function(assert) {
