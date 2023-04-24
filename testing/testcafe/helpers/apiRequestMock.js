@@ -1,128 +1,91 @@
 import { RequestMock } from 'testcafe';
-import arrayQuery from '../../../js/data/query';
-import { normalizeSortingInfo } from '../../../js/data/utils';
+import asyncForEach from './asyncForEach';
 import { extend } from '../../../js/core/utils/extend';
-import url from 'url';
+import ArrayStore from '../../../js/data/array_store';
+import storeHelper from '../../../js/data/store_helper';
+const queryByOptions = storeHelper.queryByOptions;
+import { URL } from 'url';
 
-export default function createRequestMock(data) {
-    const processData = async(data, options) => {
-        const result = {};
+const summarize = async(query, summaries) => {
+    const result = [];
+    await asyncForEach(summaries, async(summary) => {
+        result.push(await query[summary.summaryType](summary.selector));
+    });
+    return result;
+};
 
-        let query = arrayQuery(data);
-        options = options || {};
+const MockStore = ArrayStore.inherit({
+    _loadImpl: function(options) {
+        const query = this.createQuery();
 
-        const filter = options.filter;
-        const requireTotalCount = options.requireTotalCount;
+        return queryByOptions(query, options).enumerate().then(async(data) => {
+            let result = { data };
 
-        if(filter) {
-            query = query.filter(filter);
-        }
-
-        if(requireTotalCount) {
-            result.totalCount = await query.count();
-        }
-
-        let sort = options.sort;
-        const select = options.select;
-        let group = options.group;
-        const skip = options.skip;
-        const take = options.take;
-        const totalSummary = options.totalSummary ?? [];
-        const groupSummary = options.groupSummary ?? [];
-        const requireGroupCount = options.requireGroupCount;
-
-        if(totalSummary.length > 0) {
-            result.summary = [];
-            await Promise.all(totalSummary.map(async(s) => {
-                result.summary.push(await query[s.summaryType](s.selector));
-            }));
-        }
-
-        if(group) {
-            group = normalizeSortingInfo(group);
-            group.keepInitialKeyOrder = !!options.group.keepInitialKeyOrder;
-        }
-
-        if(sort || group) {
-            sort = normalizeSortingInfo(sort || []);
-            if(group && !group.keepInitialKeyOrder) {
-                const filteredGroup = [];
-                group.forEach((g) => {
-                    const collision = sort.filter((s) => {
-                        g.selector === s.selector;
-                    });
-
-                    if(collision.length < 1) {
-                        filteredGroup.push(g);
-                    }
-                });
-                sort = filteredGroup.concat(sort);
+            if(options.requireTotalCount) {
+                result.totalCount = await queryByOptions(query, options, true).count();
             }
-            sort.forEach((sort, index) => {
-                query = query[index ? 'thenBy' : 'sortBy'](sort.selector, sort.desc, sort.compare);
-            });
-        }
 
-        if(select) {
-            query = query.select(select);
-        }
+            if(options.requireGroupCount) {
+                result.groupCount = await queryByOptions(query, {
+                    filter: options.filter,
+                    group: options.group
+                }).count();
+            }
 
-        if(group) {
-            const multiLevelGroup = async(query, groupInfo, groupSummary) => {
-                query = query.groupBy(groupInfo[0].selector);
+            if(options.totalSummary) {
+                result = extend({}, result, {
+                    summary: await summarize(queryByOptions(query, options, true), options.totalSummary)
+                });
+            }
 
-                if(groupSummary.length > 0 || requireGroupCount) {
-                    const groupedData = await Promise.all(query.toArray().map(async(g) => {
-                        const groupQuery = arrayQuery([...g.items]);
-                        const summary = [];
-                        await Promise.all(groupSummary.map(async(s) => {
-                            summary.push(await groupQuery[s.summaryType](s.selector));
-                        }));
-                        return extend({}, g, {
-                            count: groupInfo.length > 1 ? undefined : g.items.length,
-                            items: groupInfo.length > 1 ? g.items : null,
-                            summary: summary.length > 1 ? summary : undefined
-                        });
-                    }));
-                    query = arrayQuery(groupedData);
-                }
+            if(options.group) {
+                let level = 0;
+                const postProcessGroup = async(groupedData) => {
+                    level += 1;
+                    const result = [];
+                    await asyncForEach(groupedData, async(groupItem) => {
+                        if(options.groupSummary) {
+                            const filter = [options.group[level - 1].selector, groupItem.key];
+                            groupItem = extend({}, groupItem, {
+                                summary: await summarize(queryByOptions(query, { filter }), options.groupSummary)
+                            });
+                        }
 
-                if(groupInfo.length > 1) {
-                    query = query.select(function(g) {
-                        return extend({}, g, {
-                            items: multiLevelGroup(arrayQuery(g.items), groupInfo.slice(1), groupSummary).toArray()
-                        });
+                        if(options.group.length > 1 && !(options.requireGroupCount || options.group.length === level)) {
+                            result.push(extend({}, groupItem, {
+                                items: await postProcessGroup(groupItem.items)
+                            }));
+                        } else {
+                            result.push(extend({}, groupItem, {
+                                items: null,
+                                count: groupItem.items.length
+                            }));
+                        }
                     });
-                }
+                    return result;
+                };
 
-                return query;
-            };
+                result.data = await postProcessGroup(result.data);
+            }
 
-            query = await multiLevelGroup(query, group, groupSummary);
-        }
+            return result;
+        });
+    },
+});
 
-        if(requireGroupCount) {
-            result.groupCount = await query.count();
-        }
-
-        if(take || skip) {
-            query = query.slice(skip || 0, take);
-        }
-
-        result.data = query.toArray();
-
-        return result;
-    };
+export default function createRequestMock(data, key = 'ID') {
+    const store = new MockStore({ key, data });
 
     return RequestMock()
         .onRequestTo(/\/api\/data/)
         .respond(async(request, result) => {
-            const parsedUrl = url.parse(request.url, true);
+            const url = new URL(request.url);
+            const params = Object.fromEntries(url.searchParams);
             const loadOptions = {};
-            Object.keys(parsedUrl.query).forEach(key => {
-                loadOptions[key] = JSON.parse(parsedUrl.query[key]);
+            Object.keys(params).forEach(key => {
+                loadOptions[key] = JSON.parse(params[key]);
             });
-            const responseData = await processData(data, loadOptions);
+            const responseData = await store.load(loadOptions);
 
             result.setBody(responseData);
             result.headers['access-control-allow-origin'] = '*';
