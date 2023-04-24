@@ -1097,6 +1097,7 @@ testModule('visibility', moduleConfig, () => {
         });
 
         test('showing promise should be rejected if showing is cancelled', function(assert) {
+            const done = assert.async();
             const overlay = $('#overlay').dxOverlay({
                 onShowing: (e) => {
                     e.cancel = true;
@@ -1107,13 +1108,16 @@ testModule('visibility', moduleConfig, () => {
                 .show()
                 .then(() => {
                     assert.notOk(true, 'showing promise is resolved');
+                    done();
                 })
                 .catch(() => {
                     assert.ok(true, 'showing promise is rejected');
+                    done();
                 });
         });
 
         test('hiding promise should be rejected if hiding is cancelled', function(assert) {
+            const done = assert.async();
             const overlay = $('#overlay').dxOverlay({
                 onHiding: (e) => {
                     e.cancel = true;
@@ -1125,9 +1129,11 @@ testModule('visibility', moduleConfig, () => {
                 .hide()
                 .then(() => {
                     assert.notOk(true, 'hiding promise is resolved');
+                    done();
                 })
                 .catch(() => {
                     assert.ok(true, 'hiding promise is rejected');
+                    done();
                 });
         });
     });
