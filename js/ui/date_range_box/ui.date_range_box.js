@@ -306,6 +306,10 @@ class DateRangeBox extends Widget {
         this._toggleOpenState();
     }
 
+    _shouldCallOpenHandler() {
+        return true;
+    }
+
     _toggleOpenState() {
         this.getStartDateBox().focus();
 
@@ -403,7 +407,11 @@ class DateRangeBox extends Widget {
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
+                    this.getStartDateBox().focus();
                     this.getStartDateBox().open();
+
+                    // TODO: datebox doesn't clear opened state after prevent of opening
+                    this.getEndDateBox().option('opened', false);
                 }
             },
             onValueChanged: ({ value }) => {

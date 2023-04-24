@@ -21,6 +21,11 @@ export default class DropDownButton extends TextEditorButton {
         const { editor } = this;
 
         instance.option('onClick', (e) => {
+            if(editor._shouldCallOpenHandler?.()) {
+                editor._openHandler(e);
+                return;
+            }
+
             !editor.option('openOnFieldClick') && editor._openHandler(e);
         });
 

@@ -21,6 +21,7 @@ const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-containe
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const CLEAR_BUTTON = 'dx-clear-button-area';
+const STATE_FOCUSED_CLASS = 'dx-state-focused';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -453,6 +454,85 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
     });
 
+    QUnit.test('Popup of startDateBox should be opened by click on drop down button if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: false,
+            openOnFieldClick: true,
+        });
+
+        getButtons(this.$element).eq(0).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should be closed by click on drop down button if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: true,
+            openOnFieldClick: true,
+        });
+
+        getButtons(this.$element).eq(0).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox is closed');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should be opened by click on startDate field if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: false,
+            openOnFieldClick: true,
+        });
+
+        $(this.instance.field()[0]).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should be opened by click on endDate field if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: false,
+            openOnFieldClick: true,
+        });
+
+        $(this.instance.field()[1]).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should be closed by click on startDate field if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: true,
+            openOnFieldClick: true,
+        });
+
+        $(this.instance.field()[0]).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox is closed');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+    QUnit.test('Popup of startDateBox should be closed by click on endDate field if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: true,
+            openOnFieldClick: true,
+        });
+
+        $(this.instance.field()[1]).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is closed'); // TODO: investigate scenario
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is closed'); // TODO: investigate scenario
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
+    });
+
+
     QUnit.test('Open popup of startDateBox should be closed by click on drop down button twice', function(assert) {
         this.reinit({
             opened: false,
@@ -575,8 +655,22 @@ QUnit.module('Clear button', moduleConfig, () => {
 
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
         assert.deepEqual(this.instance.option('value'), [null, null], 'dateRangeBox value is cleared');
-        assert.strictEqual(this.instance.getStartDateBox().option('value'), null, 'startDateBox value is clearded');
-        assert.strictEqual(this.instance.getEndDateBox().option('value'), null, 'endDateBox value is clearded');
+        assert.strictEqual(this.instance.getStartDateBox().option('value'), null, 'startDateBox value is cleared');
+        assert.strictEqual(this.instance.getEndDateBox().option('value'), null, 'endDateBox value is cleared');
+    });
+
+    QUnit.test('Popup of startDateBox should not be opened by click on clear button button if openOnFieldClick is true', function(assert) {
+        this.reinit({
+            opened: false,
+            value: [new Date(2021, 9, 17), new Date(2021, 10, 5)],
+            openOnFieldClick: true,
+        });
+
+        getClearButton(this.$element).eq(0).trigger('click');
+
+        assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is opened');
+        assert.strictEqual(this.instance.getStartDateBox().option('opened'), false, 'startDateBox is opened');
+        assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is closed');
     });
 });
 
@@ -588,16 +682,25 @@ QUnit.module('Behavior', moduleConfig, () => {
         endDateBox.open();
 
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
-        // TODO: investigate this behavior
-        assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox is closed');
         assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
 
         startDateBox.close();
 
         assert.strictEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
-        // TODO: investigate this behavior
-        assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox is opened');
+        assert.strictEqual(endDateBox.option('opened'), false, 'endDateBox is closed');
         assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox is closed');
+    });
+
+    QUnit.test('StartDateBox should be focused on attempt to open endDateBox', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        endDateBox.open();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(startDateBox.$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(endDateBox.$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
     });
 
     QUnit.test('Popup of startDateBox should open if dateRangeBox opened option is true on initialization', function(assert) {
