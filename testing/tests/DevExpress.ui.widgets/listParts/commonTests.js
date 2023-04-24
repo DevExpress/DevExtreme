@@ -31,6 +31,8 @@ const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
 const LIST_SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
+const LIST_SELECT_RADIOBUTTON_CLASS = 'dx-list-select-radiobutton';
+const LIST_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const LIST_CONTEXT_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
 const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
@@ -3481,7 +3483,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const keyboard = keyboardMock($element);
-        const $selectAllCheckBox = $element.find('.dx-list-select-all-checkbox');
+        const $selectAllCheckBox = $element.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
         const $selectAllItem = $element.find('.dx-list-select-all');
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
 
@@ -3907,6 +3909,41 @@ QUnit.module('Search', () => {
         assert.equal(searchBoxInstance._input().val(), 'test', 'Search input has the correct value');
         clock.restore();
     });
+});
+
+QUnit.test('SelectAll checkbox should have aria-label="Select All" attribute', function(assert) {
+    $('#list').dxList({
+        selectionMode: 'all',
+        showSelectionControls: true
+    });
+
+    const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+    assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'Select All');
+});
+
+QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
+    $('#list').dxList({
+        items: ['text 1', 'text 2'],
+        selectionMode: 'multiple',
+        showSelectionControls: true
+    });
+
+    const $checkboxes = $(`.${LIST_SELECT_CHECKBOX_CLASS}`);
+
+    assert.strictEqual($checkboxes.attr('aria-label'), 'Check State');
+});
+
+QUnit.test('radio buttons should have aria-label="Check State" attribute', function(assert) {
+    $('#list').dxList({
+        items: ['text 1', 'text 2'],
+        selectionMode: 'single',
+        showSelectionControls: true
+    });
+
+    const $radioButtons = $(`.${LIST_SELECT_RADIOBUTTON_CLASS}`);
+
+    assert.strictEqual($radioButtons.attr('aria-label'), 'Check State');
 });
 
 let helper;
