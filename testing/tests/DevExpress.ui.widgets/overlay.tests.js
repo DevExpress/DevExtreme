@@ -1095,6 +1095,41 @@ testModule('visibility', moduleConfig, () => {
             overlay.show();
             assert.strictEqual(isVisible(), true, 'showing is not cancelled');
         });
+
+        test('showing promise should be rejected if showing is cancelled', function(assert) {
+            const overlay = $('#overlay').dxOverlay({
+                onShowing: (e) => {
+                    e.cancel = true;
+                },
+            }).dxOverlay('instance');
+
+            overlay
+                .show()
+                .then(() => {
+                    assert.ok(false, 'showing promise is resolved');
+                })
+                .catch(() => {
+                    assert.ok(true, 'showing promise is rejected');
+                });
+        });
+
+        test('hiding promise should be rejected if hiding is cancelled', function(assert) {
+            const overlay = $('#overlay').dxOverlay({
+                onHiding: (e) => {
+                    e.cancel = true;
+                },
+                visible: true
+            }).dxOverlay('instance');
+
+            overlay
+                .hide()
+                .then(() => {
+                    assert.ok(false, 'hiding promise is resolved');
+                })
+                .catch(() => {
+                    assert.ok(true, 'hiding promise is rejected');
+                });
+        });
     });
 });
 
