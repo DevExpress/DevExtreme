@@ -2216,6 +2216,78 @@ QUnit.module('Options', {
 
                 assert.ok(selectedRange.length < 240);
             });
+
+            [
+                [null, null],
+                [new Date(2021, 9, 17), null],
+                [null, new Date(2021, 10, 25)],
+                [new Date(2021, 9, 17), new Date(2021, 10, 25)]
+            ].forEach((values) => {
+                QUnit.test(`Click by cell should change startDate value if _allowChangeSelectionOrder is true and _currentSelection is startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'startDate',
+                    });
+
+                    let $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                    let startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+
+                    $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+                });
+
+                QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    let $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(25);
+                    let endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+
+                    $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+                });
+
+                QUnit.test(`Click by cell should change endDate then startDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate then startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    const $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+
+                    this.calendar.option('_currentSelection', 'startDate');
+
+                    const $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(10);
+                    const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, endCellDate]);
+                });
+            });
         });
     });
 

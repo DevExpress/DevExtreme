@@ -22,7 +22,9 @@ class RangeCalendarStrategy extends CalendarStrategy {
             values: this.dateRangeBox.option('value'),
             selectionMode: 'range',
             viewsCount: 2,
-            width: 260
+            width: 260,
+            _allowChangeSelectionOrder: true,
+            _currentSelection: 'startDate',
         });
     }
 
@@ -39,19 +41,23 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
-        this.tryUpdateValue(event, 0, value, previousValue);
-        this.tryUpdateValue(event, 1, value, previousValue);
-    }
+        // this.tryUpdateValue(event, 0, value, previousValue);
+        // this.tryUpdateValue(event, 1, value, previousValue);
 
-    tryUpdateValue(event, index, value, previousValue) {
-        if(this.getDateRangeBox()._isSameDates(value[index], previousValue[index])) {
-            return;
-        }
-
-        if(this.dateBox.option('applyValueMode') === 'instantly') {
-            this.dateBoxValue(this.getValue()[index], event);
+        if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
+            this.dateRangeBox.updateValue(value);
         }
     }
+
+    // tryUpdateValue(event, index, value, previousValue) {
+    //     if(this.getDateRangeBox()._isSameDates(value[index], previousValue[index])) {
+    //         return;
+    //     }
+
+    //     if(this.dateBox.option('applyValueMode') === 'instantly') {
+    //         this.dateBoxValue(this.getValue()[index], event);
+    //     }
+    // }
 
     dateBoxValue() {
         if(arguments.length) {
@@ -63,14 +69,16 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     _cellClickHandler({ value, event }) {
         if(this.dateBox.option('applyValueMode') === 'instantly') {
-            if(this.isStartDateSelected(event)) {
+            if(this._widget.option('_currentSelection') === 'startDate') {
                 this.setActiveStartDateBox();
                 this.dateBoxValue(value, event);
                 this.getDateRangeBox().getEndDateBox().focus();
-                this.setActiveEndDateBox();
+                this._widget.option('_currentSelection', 'endDate');
             } else {
+                this.setActiveEndDateBox();
                 this.dateBoxValue(value, event);
                 this.getDateRangeBox().close();
+                this._widget.option('_currentSelection', 'startDate');
             }
         }
     }

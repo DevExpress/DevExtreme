@@ -28,12 +28,22 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         this.skipNavigate();
         this._updateCurrentDate(selectedValue);
         this._currentDateChanged = true;
-        if(!startDate || endDate) {
-            this.dateValue([selectedValue, null], e);
+
+        if(this.calendar.option('_allowChangeSelectionOrder') === true) {
+            if(this.calendar.option('_currentSelection') === 'startDate') {
+                this.dateValue([selectedValue, endDate], e);
+            } else {
+                this.dateValue([startDate, selectedValue], e);
+            }
         } else {
-            this.dateValue(startDate < selectedValue ? [startDate, selectedValue] : [selectedValue, startDate], e);
+            if(!startDate || endDate) {
+                this.dateValue([selectedValue, null], e);
+            } else {
+                this.dateValue(startDate < selectedValue ? [startDate, selectedValue] : [selectedValue, startDate], e);
+            }
         }
     }
+
 
     updateAriaSelected(value, previousValue) {
         value ??= this._getValues();
