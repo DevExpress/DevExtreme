@@ -234,15 +234,6 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     }
   }
 
-  &:not(.dx-calendar-other-view) {
-    &.dx-calendar-range-date {
-      background-color: color.change($calendar-cell-selected-bg, $alpha: 0.08);
-      box-shadow: inset 0 2px $calendar-bg, inset 0 -2px $calendar-bg;
-      font-weight: normal;
-      border-radius: 0;
-    }
-  }
-
   &.dx-calendar-range-date:not(.dx-calendar-other-view) {
     background-color: color.change($calendar-cell-selected-bg, $alpha: 0.08);
     box-shadow: inset 0 2px $calendar-bg, inset 0 -2px $calendar-bg;
