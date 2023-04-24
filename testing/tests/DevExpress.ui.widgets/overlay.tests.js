@@ -1106,7 +1106,7 @@ testModule('visibility', moduleConfig, () => {
             overlay
                 .show()
                 .then(() => {
-                    assert.ok(false, 'showing promise is resolved');
+                    assert.notOk(true, 'showing promise is resolved');
                 })
                 .catch(() => {
                     assert.ok(true, 'showing promise is rejected');
@@ -1124,7 +1124,7 @@ testModule('visibility', moduleConfig, () => {
             overlay
                 .hide()
                 .then(() => {
-                    assert.ok(false, 'hiding promise is resolved');
+                    assert.notOk(true, 'hiding promise is resolved');
                 })
                 .catch(() => {
                     assert.ok(true, 'hiding promise is rejected');
