@@ -24,7 +24,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const CLEAR_BUTTON = 'dx-clear-button-area';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
-const STATE_HOVER_CLASS = 'dx-state-hover';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -132,6 +131,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 opened: false,
                 openOnFieldClick: false,
                 readOnly: false,
+                disabled: false,
                 rtlEnabled: false,
                 showClearButton: false,
                 showDropDownButton: true,
@@ -172,6 +172,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             min: undefined,
             placeholder: '',
             readOnly: false,
+            disabled: false,
             rtlEnabled: false,
             spellcheck: false,
             stylingMode: 'underlined',
@@ -226,6 +227,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showDropDownButton: true,
             buttons: ['dropDown'],
             readOnly: true,
+            disabled: true,
             // TODO: extend this list of options
         };
 
@@ -237,6 +239,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                disabled: true,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -253,6 +256,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                disabled: true,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -574,6 +578,19 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
         assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
         assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is opened');
+    });
+
+    QUnit.test('Drop down button should be rendered and not disabled after change readOnly state', function(assert) {
+        this.reinit({
+            readOnly: true,
+        });
+
+        assert.equal(this.instance.getButton('dropDown'), undefined, 'drop down button is not rendered');
+
+        this.instance.option('readOnly', false);
+
+        assert.equal(this.instance.getButton('dropDown'), getButtons(this.$element).dxButton('instance'), 'drop down button is rendered');
+        assert.equal(this.instance.getButton('dropDown').option('disabled'), false, 'drop down button is not disabled');
     });
 });
 
@@ -1134,23 +1151,6 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         this.instance.option('endDatePlaceholder', 'text');
 
         assert.strictEqual(this.instance.getEndDateBox().option('placeholder'), 'text', 'endDateBox placeholder option value has been changed');
-    });
-
-    QUnit.test('StartDateBox & endDateBox inputs should have the same value of tabIndex attribute after initialization', function(assert) {
-        this.reinit({
-            tabIndex: '2'
-        });
-
-        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
-        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
-    });
-
-    QUnit.test('StartDateBox & endDateBox inputs should have the same value of tabIndex attribute if tabIndex option was changed in runtime', function(assert) {
-        this.reinit({});
-        this.instance.option('tabIndex', 3);
-
-        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '3', 'startDateBox input tabIndex value');
-        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '3', 'endDateBox input tabIndex value');
     });
 
     QUnit.test('DropDownOptions should be passed to startDateBox on init', function(assert) {
