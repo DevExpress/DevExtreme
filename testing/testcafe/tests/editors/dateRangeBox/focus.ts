@@ -40,6 +40,7 @@ test('DateRangeBox & DateBoxes should have focus class if inputs are focused by 
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox & DateBoxes should have focus class if inputs are focused by click', async (t) => {
@@ -73,6 +74,7 @@ test('DateRangeBox & DateBoxes should have focus class if inputs are focused by 
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox & Start DateBox should have focus class after click on drop down button', async (t) => {
@@ -88,6 +90,7 @@ test('DateRangeBox & Start DateBox should have focus class after click on drop d
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async (t) => {
@@ -116,6 +119,7 @@ test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by clic
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox & StartDateBox should be focused after click on clear button', async (t) => {
@@ -145,6 +149,7 @@ test('DateRangeBox & StartDateBox should be focused after click on clear button'
 }).before(async () => createWidget('dxDateRangeBox', {
   showClearButton: true,
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox & StartDateBox should be focused if startDateBox open by keyboard, alt+down, alt+up', async (t) => {
@@ -190,6 +195,7 @@ test('DateRangeBox & StartDateBox should be focused if startDateBox open by keyb
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox & StartDateBox should be focused if endDateBox open and close by keyboard, alt+down, alt+up', async (t) => {
@@ -235,4 +241,5 @@ test('DateRangeBox & StartDateBox should be focused if endDateBox open and close
     .notOk();
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));

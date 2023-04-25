@@ -34,6 +34,7 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
     .eql(false);
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 test('DateRangeBox should be opened and close by press alt+down and alt+up respectively when endDateBox is focused', async (t) => {
@@ -61,6 +62,7 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
     .eql(false);
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
 }));
 
 [
@@ -92,6 +94,7 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
       .eql([expectedStartDate, new Date(initialValue[1])]);
   }).before(async () => createWidget('dxDateRangeBox', {
     value: initialValue,
+    openOnFieldClick: false,
   }));
 
   test('DateRangeBox should allow to select endDate value in calendar after select startDate', async (t) => {
@@ -122,5 +125,6 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
       .eql([expectedStartDate, expectedEndDate]);
   }).before(async () => createWidget('dxDateRangeBox', {
     value: initialValue,
+    openOnFieldClick: false,
   }));
 });
