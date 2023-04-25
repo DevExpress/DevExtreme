@@ -10,11 +10,17 @@ import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="menuContainer1" style="width: 100%; height: 100%"></div>\
-        <div id="menuContainer3" style="width: 100%; height: 100%"></div>\
-        <div id="menuContainer2" style="width: 100%; height: 100%"></div>\
-        <div id="menu"></div>\
-        <div class="dx-viewport"></div>';
+        `<style nonce="qunit-test">
+            #menuContainer1, #menuContainer2, #menuContainer3 {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <div id="menuContainer1"></div>
+        <div id="menuContainer3"></div>
+        <div id="menuContainer2"></div>
+        <div id="menu"></div>
+        <div class="dx-viewport"></div>`;
 
     $('#qunit-fixture').html(markup);
 });
