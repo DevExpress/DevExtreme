@@ -5,6 +5,7 @@ import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'generic_light.css!';
 
@@ -772,6 +773,30 @@ QUnit.module('Behavior', moduleConfig, () => {
             assert.strictEqual(onValueChangedHandler.callCount, 0);
         });
     });
+
+    QUnit.test('DateRangeBox element should be invisible if "visible" is set to false on init', function(assert) {
+        this.reinit({
+            visible: false
+        });
+
+        assert.strictEqual(this.$element.css('display'), 'none');
+    });
+
+    QUnit.test('DateRangeBox element should be invisible if "visible" is set to false on runtime change', function(assert) {
+        this.instance.option('visible', false);
+
+        assert.strictEqual(this.$element.css('display'), 'none');
+    });
+
+    QUnit.test('DateRangeBox element should be visible if "visible" is true on runtime change', function(assert) {
+        this.reinit({
+            visible: false
+        });
+
+        this.instance.option('visible', true);
+
+        assert.notStrictEqual(this.$element.css('display'), 'none');
+    });
 });
 
 QUnit.module('Events', moduleConfig, () => {
@@ -1127,6 +1152,112 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '3', 'startDateBox input tabIndex value');
         assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '3', 'endDateBox input tabIndex value');
     });
+
+    QUnit.test('DropDownOptions should be passed to startDateBox on init', function(assert) {
+        this.reinit({
+            dropDownOptions: {
+                width: 800,
+            }
+        });
+
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        assert.strictEqual(startDateBox.option('dropDownOptions.width'), 800);
+    });
+
+    QUnit.test('DropDownOptions should be passed to startDateBox on runtime change', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        this.instance.option('dropDownOptions', { width: 800 });
+
+        assert.strictEqual(startDateBox.option('dropDownOptions.width'), 800);
+    });
+
+    [
+        {
+            optionName: 'dateSerializationFormat',
+            optionValue: 'yyyy-MM-dd',
+        }, {
+            optionName: 'height',
+            optionValue: 200,
+        }, {
+            optionName: 'useMaskBehavior',
+            optionValue: true,
+        }, {
+            optionName: 'valueChangeEvent',
+            optionValue: 'keyDown',
+        },
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
+            const initOptions = {};
+            initOptions[optionName] = optionValue;
+            this.reinit(initOptions);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option(optionName), optionValue);
+            assert.strictEqual(endDateBox.option(optionName), optionValue);
+        });
+
+        QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on runtime change`, function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            this.instance.option(optionName, optionValue);
+
+            assert.strictEqual(startDateBox.option(optionName), optionValue);
+            assert.strictEqual(endDateBox.option(optionName), optionValue);
+        });
+    });
+
+    ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+        QUnit.test(`value should change on keyup in ${dateBoxName} if valueChangeEvent is set to keyup on init`, function(assert) {
+            assert.expect(1);
+
+            this.reinit({
+                value: ['2023/02/23', '2023/03/24'],
+                valueChangeEvent: 'keyup',
+                onValueChanged: () => {
+                    assert.ok(true);
+                }
+            });
+
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            const $input = $(dateBox.field());
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .caret({ start: 0, end: 1 })
+                .type('1');
+        });
+
+        QUnit.test(`value should change on keyup in ${dateBoxName} if valueChangeEvent is set to keyup on runtime`, function(assert) {
+            assert.expect(1);
+
+            this.reinit({
+                value: ['2023/02/23', '2023/03/24'],
+                onValueChanged: () => {
+                    assert.ok(true);
+                }
+            });
+            this.instance.option('valueChangeEvent', 'keyup');
+
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            const $input = $(dateBox.field());
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .caret({ start: 0, end: 1 })
+                .type('1');
+        });
+    });
 });
 
 QUnit.module('Dimensions', moduleConfig, () => {
@@ -1163,5 +1294,18 @@ QUnit.module('Dimensions', moduleConfig, () => {
                 assert.strictEqual(initialWidth, newWidth);
             });
         });
+    });
+
+    QUnit.test('StartDateBox and EndDateBox should increase width on x/2 when DateRangeBox increase width on x', function(assert) {
+        this.reinit({
+            width: 300,
+        });
+
+        const initialDateBoxWidth = $(getStartDateBoxInstance(this.instance).$element()).width();
+
+        this.instance.option('width', 320);
+
+        assert.strictEqual($(this.instance.getStartDateBox().$element()).width(), initialDateBoxWidth + 10);
+        assert.strictEqual($(this.instance.getEndDateBox().$element()).width(), initialDateBoxWidth + 10);
     });
 });
