@@ -342,6 +342,7 @@ class DateRangeBox extends Widget {
             displayFormat: options.displayFormat,
             elementAttr: options.elementAttr,
             focusStateEnabled: options.focusStateEnabled,
+            height: options.height,
             hoverStateEnabled: false,
             invalidDateMessage: options.invalidDateMessage,
             isValid: options.isValid,
@@ -509,12 +510,22 @@ class DateRangeBox extends Widget {
                 this._cleanButtonContainers();
                 this._renderButtonsContainer();
                 break;
+            case 'dateSerializationFormat':
+            case 'useMaskBehavior':
+            case 'valueChangeEvent':
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
+                break;
             case 'calendarOptions':
             case 'cancelButtonText':
             case 'dateOutOfRangeMessage':
             case 'disabledDates':
             case 'displayFormat':
-            case 'dropDownOptions':
+                break;
+            case 'height':
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
+                super._optionChanged(args);
                 break;
             case 'dropDownButtonTemplate':
             case 'showDropDownButton':
@@ -546,7 +557,8 @@ class DateRangeBox extends Widget {
                 this._createValueChangeAction();
                 break;
             case 'opened':
-                this.getStartDateBox().option('opened', value);
+            case 'dropDownOptions':
+                this.getStartDateBox().option(name, value);
                 break;
             case 'onOpened':
             case 'onClosed':
@@ -562,7 +574,6 @@ class DateRangeBox extends Widget {
             case 'text':
             case 'todayButtonText':
             case 'useHiddenSubmitElement':
-            case 'useMaskBehavior':
             case 'validationError':
             case 'validationErrors':
             case 'validationMessageMode':
@@ -573,8 +584,6 @@ class DateRangeBox extends Widget {
                 this._raiseValueChangeAction(value, previousValue);
                 this._saveValueChangeEvent(undefined);
                 this._updateDateBoxesValue(value);
-                break;
-            case 'valueChangeEvent':
                 break;
             default:
                 super._optionChanged(args);
