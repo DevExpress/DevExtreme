@@ -27,11 +27,21 @@ import {
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '\
-            <div id="scrollable" style="height: 50px; width: 50px;">\
-                <div class="content1" style="height: 100px; width: 100px;"></div>\
-                <div class="content2"></div>\
-            </div>';
+        const markup = `
+            <style nonce="qunit-test">
+                #scrollable {
+                    height: 50px;
+                    width: 50px;
+                }
+                #scrollable .content1 {
+                    height: 100px;
+                    width: 100px;
+                }
+            </style>
+            <div id="scrollable">
+                <div class="content1"></div>
+                <div class="content2"></div>
+            </div>`;
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
@@ -301,11 +311,21 @@ QUnit.test('reset unused position after change direction (both)', function(asser
 QUnit.module('Hoverable interaction',
     {
         beforeEach: function() {
-            const markup = '\
-            <div id="scrollable" style="height: 50px; width: 50px;">\
-                <div class="content1" style="height: 100px; width: 100px;"></div>\
-                <div class="content2"></div>\
-            </div>';
+            const markup = `
+            <style nonce="qunit-test">
+                #scrollable {
+                    height: 50px;
+                    width: 50px;
+                }
+                #scrollable .content1 {
+                    height: 100px;
+                    width: 100px;
+                }
+            </style>
+            <div id="scrollable">
+                <div class="content1"></div>
+                <div class="content2"></div>
+            </div>`;
             $('#qunit-fixture').html(markup);
         }
     },
@@ -817,11 +837,21 @@ QUnit.testInActiveWindow('scrollable should not reset active element outside (B2
 
 QUnit.module('visibility events integration', {
     beforeEach: function() {
-        const markup = '\
-        <div id="scrollable" style="height: 50px; width: 50px;">\
-            <div class="content1" style="height: 100px; width: 100px;"></div>\
-            <div class="content2"></div>\
-        </div>';
+        const markup = `
+        <style nonce="qunit-test">
+            #scrollable {
+                height: 50px;
+                width: 50px;
+            }
+            #scrollable .content1 {
+                height: 100px;
+                width: 100px;
+            }
+        </style>
+        <div id="scrollable">
+            <div class="content1"></div>
+            <div class="content2"></div>
+        </div>`;
         $('#qunit-fixture').html(markup);
     }
 });
