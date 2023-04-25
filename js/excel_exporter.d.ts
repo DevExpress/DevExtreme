@@ -164,6 +164,7 @@ export interface ExcelExportBaseProps {
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.excelExporter
  * @inherits ExcelExportBaseProps
  */
