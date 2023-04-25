@@ -28,6 +28,7 @@ const POPUP_CLASS = 'dx-popup';
 const FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
+const LIST_CLASS = 'dx-list';
 
 QUnit.testStart(() => {
     const markup =
@@ -2671,5 +2672,22 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual($firstButton.attr('aria-haspopup'), undefined);
         assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
+    });
+
+    ['items', 'dataSource'].forEach(dataSource => {
+        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource}`, function(assert) {
+            const instance = this.createInstance({
+                [dataSource]: [],
+                opened: true,
+            });
+
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+        });
     });
 });
