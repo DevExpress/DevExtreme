@@ -4,6 +4,7 @@ import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
 import fx from 'animation/fx';
+import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'generic_light.css!';
@@ -23,6 +24,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const CLEAR_BUTTON = 'dx-clear-button-area';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
+const STATE_HOVER_CLASS = 'dx-state-hover';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -223,6 +225,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showClearButton: true,
             showDropDownButton: true,
             buttons: ['dropDown'],
+            readOnly: true,
             // TODO: extend this list of options
         };
 
@@ -233,6 +236,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showClearButton: false,
                 showDropDownButton: false,
                 buttons: undefined,
+                readOnly: true,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -248,6 +252,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showClearButton: false,
                 showDropDownButton: false,
                 buttons: undefined,
+                readOnly: true,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -693,7 +698,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox is closed');
     });
 
-    QUnit.test('StartDateBox should be focused on attempt to open endDateBox', function(assert) {
+    QUnit.testInActiveWindow('StartDateBox should be focused on attempt to open endDateBox', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
         const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -881,6 +886,59 @@ QUnit.module('Events', moduleConfig, () => {
             this.instance.reset();
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 2);
+        });
+
+        QUnit.test('hover class should be added on hover event if dateRangeBox has readonly state', function(assert) {
+            this.reinit({
+                hoverStateEnabled: true,
+                value: ['2021/09/17', '2022/10/14'],
+                readOnly: true
+            });
+
+            this.$element.trigger(hoverEvents.start);
+
+            assert.strictEqual(this.$element.hasClass('dx-state-hover'), true, 'dateRangeBox element has hover class');
+        });
+
+        QUnit.test('keybord events should be attached if readonly is false', function(assert) {
+            const keyboardHandledStub = sinon.stub();
+
+            this.reinit({
+                onKeyboardHandled: keyboardHandledStub,
+                readOnly: false
+            });
+
+            $(this.instance.field()[0]).trigger($.Event('keydown'));
+
+            assert.strictEqual(keyboardHandledStub.callCount, 1, 'keyboard events are attached');
+        });
+
+        QUnit.test('keybord events should be detached if readonly is true', function(assert) {
+            const keyboardHandledStub = sinon.stub();
+
+            this.reinit({
+                onKeyboardHandled: keyboardHandledStub,
+                readOnly: true
+            });
+
+            $(this.instance.field()[0]).trigger($.Event('keydown'));
+
+            assert.strictEqual(keyboardHandledStub.callCount, 0, 'keyboard events are detached');
+        });
+
+        QUnit.test('keybord events should be detached if readonly was changed in runtime', function(assert) {
+            const keyboardHandledStub = sinon.stub();
+
+            this.reinit({
+                onKeyboardHandled: keyboardHandledStub,
+                readOnly: false
+            });
+
+            this.instance.option('readOnly', true);
+
+            $(this.instance.field()[0]).trigger($.Event('keydown'));
+
+            assert.strictEqual(keyboardHandledStub.callCount, 0, 'keyboard events are detached');
         });
     });
 

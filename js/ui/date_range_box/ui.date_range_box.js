@@ -11,14 +11,15 @@ import TextEditorButtonCollection from '../text_box/texteditor_button_collection
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import dateSerialization from '../../core/utils/date_serialization';
-import dateUtils from '../../core/utils/date';
+import { isSameDates, isSameDateArrays } from './ui.date_range.utils';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
+
+const READONLY_STATE_CLASS = 'dx-state-readonly';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -220,6 +221,7 @@ class DateRangeBox extends Widget {
             .addClass('dx-datebox-date')
             .addClass('dx-dropdowneditor');
 
+        this._toggleReadOnlyState();
         this._renderStylingMode();
         // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
@@ -230,6 +232,19 @@ class DateRangeBox extends Widget {
         this._renderButtonsContainer();
 
         super._initMarkup();
+    }
+
+    _attachKeyboardEvents() {
+        if(!this.option('readOnly')) {
+            super._attachKeyboardEvents();
+        }
+    }
+
+    _toggleReadOnlyState() {
+        const { readOnly } = this.option();
+
+        this.$element().toggleClass(READONLY_STATE_CLASS, !!readOnly);
+        // TODO: should we add area readonly here?
     }
 
     _getStylingModePrefix() {
@@ -427,23 +442,8 @@ class DateRangeBox extends Widget {
         };
     }
 
-    _getDate(value) {
-        return dateSerialization.deserializeDate(value);
-    }
-
-    _isSameDates(date1, date2) {
-        if(!date1 && !date2) {
-            return true;
-        }
-
-        return dateUtils.sameDate(this._getDate(date1), this._getDate(date2));
-    }
-
     updateValue(newValue) {
-        const [newStartDate, newEndDate] = newValue;
-        const [oldStartDate, oldEndDate] = this.option('value');
-
-        if(!this._isSameDates(newStartDate, oldStartDate) || !this._isSameDates(newEndDate, oldEndDate)) {
+        if(!isSameDateArrays(newValue, this.option('value'))) {
             this.option('value', newValue);
         }
     }
@@ -455,11 +455,11 @@ class DateRangeBox extends Widget {
         const oldStartDate = startDateBox.option('value');
         const oldEndDate = endDateBox.option('value');
 
-        if(!this._isSameDates(newStartDate, oldStartDate)) {
+        if(!isSameDates(newStartDate, oldStartDate)) {
             startDateBox.option('value', newStartDate);
         }
 
-        if(!this._isSameDates(newEndDate, oldEndDate)) {
+        if(!isSameDates(newEndDate, oldEndDate)) {
             endDateBox.option('value', newEndDate);
         }
     }
@@ -564,7 +564,11 @@ class DateRangeBox extends Widget {
             case 'onClosed':
                 break;
             case 'openOnFieldClick':
+                break;
             case 'readOnly':
+                this._toggleReadOnlyState();
+                this._refreshFocusState();
+                break;
             case 'spellcheck':
             case 'startDate':
                 break;

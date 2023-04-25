@@ -44,7 +44,7 @@ QUnit.module('Tabs width', () => {
         }
 
         setContainerWidth(width) {
-            this.$container[0].setAttribute('style', `width:${width}px`);
+            this.$container[0].style = `width: ${width}px`;
         }
 
         createTabPanel(options) {
