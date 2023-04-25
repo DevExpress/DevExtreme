@@ -13,7 +13,7 @@ import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
-        `<style>
+        `<style nonce="qunit-test">
             .draggable {
                 height: 30px;
             }
@@ -23,84 +23,192 @@ QUnit.testStart(function() {
             div.qunit-fixture-absolute {
                 position: absolute !important;
             }
+            .colored-item:nth-child(3n + 1) {
+                background: yellow;
+            }
+            .colored-item:nth-child(3n + 2) {
+                background: red;
+            }
+            .colored-item:nth-child(3n) {
+                background: blue;
+            }
+            #items {
+                display: inline-block;
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #items3 {
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #itemsHorizontal {
+                width: 250px;
+                height: 300px;
+            }
+            #itemsWithContentTemplate {
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #scroll {
+                height: 250px;
+                width: 300px;
+                overflow: auto;
+                background: grey;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            #bothScrolls {
+                height: 600px;
+                width: 300px;
+                overflow: auto;
+                background: grey;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            #itemsWithBothScrolls {
+                overflow: visible;
+                width: 600px;
+            }
+            #bothScrolls2 {
+                height: 300px;
+                width: 300px;
+                overflow: auto;
+                background: grey;
+                position: absolute;
+                left: 500px;
+                top: 500px;
+            }
+            #itemsWithBothScrolls2 {
+                overflow: visible;
+                width: 600px;
+            }
+            #parentSortable {
+                display: inline-block;
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: grey;
+            }
+            #nestedSortable {
+                display: inline-block;
+                vertical-align: top;
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #itemsHorizontal .item {
+                width: 30px;
+                height: 300px;
+                display: inline-block;
+            }
+            #itemsWithScroll .draggable {
+                height: 50px;
+            }
+            #bothScrolls .draggable,
+            #bothScrolls2 .draggable {
+                height: 50px;
+                width: 600px;
+            }
         </style>
         <div id="container">
-            <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-                <div id="item1" class="draggable" style="background: yellow;">item1</div>
-                <div id="item2" class="draggable" style="background: red;">item2</div>
-                <div id="item3" class="draggable" style="background: blue;">item3</div>
+            <div id="items">
+                <div id="item1" class="draggable colored-item">item1</div>
+                <div id="item2" class="draggable colored-item">item2</div>
+                <div id="item3" class="draggable colored-item">item3</div>
             </div>
-            <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-                <div id="item4" class="draggable" style="background: yellow;">item4</div>
-                <div id="item5" class="draggable" style="background: red;">item5</div>
-                <div id="item6" class="draggable" style="background: blue;">item6</div>
+            <div id="items2">
+                <div id="item4" class="draggable colored-item">item4</div>
+                <div id="item5" class="draggable colored-item">item5</div>
+                <div id="item6" class="draggable colored-item">item6</div>
             </div>
         </div>
-        <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
-        <div id="itemsHorizontal" style="width: 250px; height: 300px;">
-            <div style="width: 30px; height: 300px; display: inline-block;">item1</div><div style="width: 30px; height: 300px; display: inline-block;">item2</div><div style="width: 30px; height: 300px; display: inline-block;">item3</div>
+        <div id="items3"></div>
+        <div id="itemsHorizontal">
+            <div class="item">item1</div><div class="item">item2</div><div class="item">item3</div>
         </div>
-        <div id="itemsWithContentTemplate" style="width: 300px; height: 250px; position: relative; background: grey;">
+        <div id="itemsWithContentTemplate">
             <div data-options="dxTemplate:{ name:'content' }">
-                <div id="item11" class="draggable" style="background: yellow;">item1</div>
-                <div id="item12" class="draggable" style="background: red;">item2</div>
-                <div id="item13" class="draggable" style="background: blue;">item3</div>
+                <div id="item11" class="draggable colored-item">item1</div>
+                <div id="item12" class="draggable colored-item">item2</div>
+                <div id="item13" class="draggable colored-item">item3</div>
             </div>
         </div>
-        <div id="scroll" style="height: 250px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+        <div id="scroll">
             <div id="itemsWithScroll">
-                <div id="item21" class="draggable" style="height: 50px; background: yellow;">item1
-                </div><div id="item22" class="draggable" style="height: 50px; background: red;">item2
-                </div><div id="item23" class="draggable" style="height: 50px; background: blue;">item3
-                </div><div id="item24" class="draggable" style="height: 50px; background: yellow;">item4
-                </div><div id="item25" class="draggable" style="height: 50px; background: red;">item5
-                </div><div id="item26" class="draggable" style="height: 50px; background: blue;">item6
-                </div><div id="item27" class="draggable" style="height: 50px; background: yellow;">item7
-                </div><div id="item28" class="draggable" style="height: 50px; background: red;">item8
-                </div><div id="item31" class="draggable" style="height: 50px; background: yellow;">item9
-                </div><div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
+                <div id="item21" class="draggable colored-item">item1
+                </div><div id="item22" class="draggable colored-item">item2
+                </div><div id="item23" class="draggable colored-item">item3
+                </div><div id="item24" class="draggable colored-item">item4
+                </div><div id="item25" class="draggable colored-item">item5
+                </div><div id="item26" class="draggable colored-item">item6
+                </div><div id="item27" class="draggable colored-item">item7
+                </div><div id="item28" class="draggable colored-item">item8
+                </div><div id="item31" class="draggable colored-item">item9
+                </div><div id="item32" class="draggable colored-item">item10</div>
             </div>
         </div>
-        <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0px; top: 0px;">
-            <div id="itemsWithBothScrolls" style="overflow: visible; width: 600px;">
-                <div id="item40" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
-                <div id="item41" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
-                <div id="item42" class="draggable" style="height: 50px; background: red; width: 600px;">item2</div>
-                <div id="item43" class="draggable" style="height: 50px; background: blue; width: 600px;">item3</div>
-                <div id="item44" class="draggable" style="height: 50px; background: yellow; width: 600px;">item4</div>
-                <div id="item45" class="draggable" style="height: 50px; background: red; width: 600px;">item5</div>
-                <div id="item46" class="draggable" style="height: 50px; background: blue; width: 600px;">item6</div>
-                <div id="item47" class="draggable" style="height: 50px; background: yellow; width: 600px;">item7</div>
-                <div id="item48" class="draggable" style="height: 50px; background: red; width: 600px;">item8</div>
-                <div id="item49" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
+        <div id="bothScrolls">
+            <div id="itemsWithBothScrolls">
+                <div id="item40" class="draggable colored-item">item0</div>
+                <div id="item41" class="draggable colored-item">item1</div>
+                <div id="item42" class="draggable colored-item">item2</div>
+                <div id="item43" class="draggable colored-item">item3</div>
+                <div id="item44" class="draggable colored-item">item4</div>
+                <div id="item45" class="draggable colored-item">item5</div>
+                <div id="item46" class="draggable colored-item">item6</div>
+                <div id="item47" class="draggable colored-item">item7</div>
+                <div id="item48" class="draggable colored-item">item8</div>
+                <div id="item49" class="draggable colored-item">item9</div>
             </div>
         </div>
-        <div id="bothScrolls2" style="height: 300px; width: 300px; overflow: auto; background: grey; position: absolute; left: 500px; top: 500px;">
-            <div id="itemsWithBothScrolls2" style="overflow: visible; width: 600px;">
-                <div id="item50" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
-                <div id="item51" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
-                <div id="item52" class="draggable" style="height: 50px; background: red; width: 600px;">item2</div>
-                <div id="item53" class="draggable" style="height: 50px; background: blue; width: 600px;">item3</div>
-                <div id="item54" class="draggable" style="height: 50px; background: yellow; width: 600px;">item4</div>
-                <div id="item55" class="draggable" style="height: 50px; background: red; width: 600px;">item5</div>
-                <div id="item56" class="draggable" style="height: 50px; background: blue; width: 600px;">item6</div>
-                <div id="item57" class="draggable" style="height: 50px; background: yellow; width: 600px;">item7</div>
-                <div id="item58" class="draggable" style="height: 50px; background: red; width: 600px;">item8</div>
-                <div id="item59" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
+        <div id="bothScrolls2">
+            <div id="itemsWithBothScrolls2">
+                <div id="item50" class="draggable colored-item">item0</div>
+                <div id="item51" class="draggable colored-item">item1</div>
+                <div id="item52" class="draggable colored-item">item2</div>
+                <div id="item53" class="draggable colored-item">item3</div>
+                <div id="item54" class="draggable colored-item">item4</div>
+                <div id="item55" class="draggable colored-item">item5</div>
+                <div id="item56" class="draggable colored-item">item6</div>
+                <div id="item57" class="draggable colored-item">item7</div>
+                <div id="item58" class="draggable colored-item">item8</div>
+                <div id="item59" class="draggable colored-item">item9</div>
             </div>
         </div>
-        <div id="parentSortable" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: absolute; top: 0; left: 0; background: grey;">
-            <div id="item1" class="draggable" style="background: yellow;">item1</div>
-            <div id="item2" class="draggable" style="background: red;">item2</div>
+        <div id="parentSortable">
+            <div id="item1" class="draggable colored-item">item1</div>
+            <div id="item2" class="draggable colored-item">item2</div>
 
-            <div id="nestedSortable" class="subgroup" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-                <div id="item3" class="draggable" style="background: blue;">item3</div>
-                <div id="item4" class="draggable" style="background: green;">item4</div>
+            <div id="nestedSortable" class="subgroup">
+                <div id="item3" class="draggable colored-item">item3</div>
+                <div id="item4" class="draggable colored-item">item4</div>
             </div>
         </div>
         `;
 
     $('#qunit-fixture').html(markup);
+    $('#items2').css({
+        display: 'inline-block',
+        verticalAlign: 'top',
+        width: '300px',
+        height: '250px',
+        position: 'relative',
+        background: 'grey'
+    });
     fx.off = true;
 });
 
@@ -613,7 +721,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
         assert.equal($placeholder.get(0).style.transform, 'translate(0px, 60px)', 'placeholder position');
     });
 
-    QUnit.test('Initial placeholder if dropFeedbackMode is indicate and itemOrientation is horiontal', function(assert) {
+    QUnit.test('Initial placeholder if dropFeedbackMode is indicate and itemOrientation is horizontal', function(assert) {
         // arrange
         this.$element = $('#itemsHorizontal');
 
@@ -1028,10 +1136,10 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
         $items.eq(1).hide();
         $items.eq(2).hide();
-        $('#items').append(`
-        <div id="item4" class="draggable">item4</div>
-        <div id="item5" class="draggable" style="display: none;">item5</div>
-    `);
+        $('#items').append(
+            $('<div id="item4" class="draggable">item4</div>'),
+            $('<div id="item5" class="draggable">item5</div>').css('display', 'none')
+        );
 
         this.createSortable({
             filter: '.draggable',
@@ -1567,8 +1675,8 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         // assert
         assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove is called');
         assert.strictEqual($(sortable1.element()).children('#item1').length, 1, 'item isn\'t removed');
-        assert.strictEqual($(sortable1.element()).children('#item1').attr('class'), 'draggable', 'source item hasn\'t dx-sortable-source class');
-        assert.strictEqual($(sortable2.element()).children('#item1').attr('class'), 'draggable', 'cloned source item hasn\'t dx-sortable-source class');
+        assert.strictEqual($(sortable1.element()).children('#item1').attr('class'), 'draggable colored-item', 'source item hasn\'t dx-sortable-source class');
+        assert.strictEqual($(sortable2.element()).children('#item1').attr('class'), 'draggable colored-item', 'cloned source item hasn\'t dx-sortable-source class');
     });
 
     QUnit.test('onRemove - not add item without moveItemOnDrop', function(assert) {
@@ -1592,7 +1700,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         // assert
         assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove is called');
         assert.strictEqual($(sortable1.element()).children('#item1').length, 1, 'item isn\'t removed');
-        assert.strictEqual($(sortable1.element()).children('#item1').attr('class'), 'draggable', 'source item hasn\'t dx-sortable-source class');
+        assert.strictEqual($(sortable1.element()).children('#item1').attr('class'), 'draggable colored-item', 'source item hasn\'t dx-sortable-source class');
         assert.strictEqual($(sortable2.element()).children('#item1').length, 0, 'source item is not added to second sortable');
     });
 
@@ -2451,7 +2559,13 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         let items1;
         let items2;
 
-        $('#items3').append('<div id=\'item7\' class=\'draggable\' style=\'width: 300px; height: 30px; background: blue;\'>item7</div>');
+        $('#items3').append(
+            $('<div id="item7" class="draggable">item7</div>').css({
+                width: '300px',
+                height: '30px',
+                background: 'blue',
+            })
+        );
 
         const sortable1 = this.createSortable({
             dropFeedbackMode: 'push',
@@ -2554,7 +2668,7 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
             this.clock.reset();
 
             animationFrame.requestAnimationFrame = this.originalRAF;
-            $('#qunit-fixture').children().show();
+            $('#qunit-fixture > div').show();
 
             $('#qunit-fixture').removeClass('qunit-fixture-visible');
             this.sortableInstance && this.sortableInstance.dispose();
@@ -2709,7 +2823,13 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
 
     const generateItemElements = function($container, itemCount) {
         for(let i = 1; i <= itemCount; i++) {
-            $container.append(`<div class="draggable" style="height: auto; border: 1px solid black; padding: 5px;">${i}</div>`);
+            $container.append(
+                $(`<div class="draggable">${i}</div>`).css({
+                    height: 'auto',
+                    border: '1px solid black',
+                    padding: '5px'
+                })
+            );
         }
     };
 
