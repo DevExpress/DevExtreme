@@ -12,7 +12,7 @@ const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, isEsmPackage } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
@@ -116,6 +116,14 @@ const packagePath = `${resultPath}/${packageDir}`;
 
 gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath, distGlobs)));
 
+gulp.task('npm-dist', () => gulp
+    .src([
+        `${packagePath}/dist/**/*`,
+        'build/package.json'
+    ])
+    .pipe(gulp.dest(`${resultPath}/${packageDistDir}`))
+);
+
 const scssDir = `${resultPath}/${packageDir}/scss`;
 
 gulp.task('npm-sass', gulp.series(
@@ -136,4 +144,4 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'ts-check-public-modules', 'npm-sass'));
+gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass'));

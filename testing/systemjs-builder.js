@@ -278,7 +278,7 @@ const transpileTesting = async(Builder) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
+        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
         const sourceCode = fs.readFileSync(filePath).toString();
 
         if(/System(JS)?\./.test(sourceCode)) {
