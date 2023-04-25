@@ -1,6 +1,7 @@
 import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import { extend } from '../../../core/utils/extend';
+import { isSameDateArrays } from '../ui.date_range.utils';
 
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
@@ -20,6 +21,26 @@ class RangeCalendarStrategy extends CalendarStrategy {
         });
     }
 
+    supportedKeys() {
+        const supportedKeys = {
+            ...super.supportedKeys(),
+            rightArrow: () => {
+                if(this.dateRangeBox.option('opened')) {
+                    return true;
+                }
+            },
+            leftArrow: () => {
+                if(this.dateRangeBox.option('opened')) {
+                    return true;
+                }
+            }
+        };
+
+        delete supportedKeys.enter;
+
+        return supportedKeys;
+    }
+
     _getWidgetOptions() {
         return extend(super._getWidgetOptions(), {
             values: this.dateRangeBox.option('value'),
@@ -29,6 +50,12 @@ class RangeCalendarStrategy extends CalendarStrategy {
             _allowChangeSelectionOrder: true,
             _currentSelection: 'startDate',
         });
+    }
+
+    getKeyboardListener() {
+        return this.dateRangeBox.getStartDateBox()
+            ? this.dateRangeBox.getStartDateBox()._strategy._widget
+            : this._widget;
     }
 
     getValue() {
@@ -44,23 +71,36 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
-        // this.tryUpdateValue(event, 0, value, previousValue);
-        // this.tryUpdateValue(event, 1, value, previousValue);
+        if(isSameDateArrays(value, previousValue)) {
+            return;
+        }
 
         if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
-            this.dateRangeBox.updateValue(value);
+            if(event) {
+                if(this._widget.option('_currentSelection') === 'startDate') {
+                    this.dateRangeBox.updateValue(value);
+                    this.getDateRangeBox().getEndDateBox().focus();
+                    this._widget.option('_currentSelection', 'endDate');
+                    this._widget._view.option('contouredDate', value[1]);
+                } else {
+                    this.setActiveEndDateBox();
+                    this.dateRangeBox.updateValue(value);
+                    this.getDateRangeBox().close();
+                    this._widget.option('_currentSelection', 'startDate');
+                }
+            } else {
+                this.dateRangeBox.updateValue(value);
+            }
         }
     }
 
-    // tryUpdateValue(event, index, value, previousValue) {
-    //     if(this.getDateRangeBox()._isSameDates(value[index], previousValue[index])) {
-    //         return;
-    //     }
-
-    //     if(this.dateBox.option('applyValueMode') === 'instantly') {
-    //         this.dateBoxValue(this.getValue()[index], event);
-    //     }
-    // }
+    _closeDropDownByEnter() {
+        if(this._widget.option('_currentSelection') === 'startDate') {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     dateBoxValue() {
         if(arguments.length) {
@@ -70,21 +110,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         }
     }
 
-    _cellClickHandler({ value, event }) {
-        if(this.dateBox.option('applyValueMode') === 'instantly') {
-            if(this._widget.option('_currentSelection') === 'startDate') {
-                this.setActiveStartDateBox();
-                this.dateBoxValue(value, event);
-                this.getDateRangeBox().getEndDateBox().focus();
-                this._widget.option('_currentSelection', 'endDate');
-            } else {
-                this.setActiveEndDateBox();
-                this.dateBoxValue(value, event);
-                this.getDateRangeBox().close();
-                this._widget.option('_currentSelection', 'startDate');
-            }
-        }
-    }
+    _cellClickHandler() { }
 
     setActiveStartDateBox() {
         this.dateBox = this.dateRangeBox.getStartDateBox();
