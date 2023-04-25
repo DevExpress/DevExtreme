@@ -6,6 +6,7 @@ import { isRenderer } from 'core/utils/type';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import Popup from 'ui/popup/ui.popup';
 
 import 'generic_light.css!';
 
@@ -112,6 +113,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
                 dateSerializationFormat: undefined,
+                deferRendering: true,
                 disabledDates: null,
                 displayFormat: null,
                 dropDownOptions: {},
@@ -161,6 +163,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             activeStateEnabled: false,
             applyValueMode: 'instantly',
             displayFormat: null,
+            deferRendering: true,
             elementAttr: {},
             focusStateEnabled: true,
             hoverStateEnabled: false,
@@ -226,6 +229,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showDropDownButton: true,
             buttons: ['dropDown'],
             readOnly: true,
+            deferRendering: false,
             // TODO: extend this list of options
         };
 
@@ -237,6 +241,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                deferRendering: false,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -253,6 +258,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                deferRendering: true,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -1257,6 +1263,32 @@ QUnit.module('Option synchronization', moduleConfig, () => {
                 .caret({ start: 0, end: 1 })
                 .type('1');
         });
+    });
+
+    QUnit.test('StartDateBox & EndDateBox popups should not be rendered by default', function(assert) {
+        assert.strictEqual(this.instance.getStartDateBox()._popup, undefined, 'startDateBox popup is not rendered by default');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered by default');
+    });
+
+    QUnit.test('Only startDateBox should be rendered if deferRendering is false', function(assert) {
+        this.reinit({
+            deferRendering: false,
+        });
+
+        assert.strictEqual(this.instance.getStartDateBox()._popup instanceof Popup, true, 'startDateBox popup is rendered');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered');
+    });
+
+    QUnit.test('Only startDateBox should be rendered if deferRendering was changed in runtime', function(assert) {
+        this.reinit({});
+
+        assert.strictEqual(this.instance.getStartDateBox()._popup, undefined, 'startDateBox popup is not rendered by default');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered by default');
+
+        this.instance.option('deferRendering', false);
+
+        assert.strictEqual(this.instance.getStartDateBox()._popup instanceof Popup, true, 'startDateBox popup is rendered');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered');
     });
 });
 

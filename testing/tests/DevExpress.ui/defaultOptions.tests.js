@@ -169,6 +169,7 @@ testComponentDefaults(DateBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
+        deferRendering: true,
         stylingMode: 'outlined',
         labelMode: 'static',
         applyValueMode: 'instantly',
