@@ -87,6 +87,12 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
       opacity: $button-disabled-icon-opacity;
     }
 
+    &.dx-button-mode-contained {
+      .dx-icon {
+        color: $button-disabled-text-color;
+      }
+    }
+
     .dx-button-text {
       color: $button-disabled-text-color;
     }
