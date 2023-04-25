@@ -236,7 +236,7 @@ const Toast = Overlay.inherit({
     },
 
     _show: function() {
-        return this.callBase.apply(this, arguments).done((function() {
+        return this.callBase.apply(this, arguments).always((function() {
             clearTimeout(this._hideTimeout);
 
             this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
