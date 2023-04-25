@@ -21,24 +21,80 @@ $('body').css({
 
 QUnit.testStart(function() {
     const markup =
-        '<style>.fixedPosition.dx-draggable-dragging { position: fixed; }</style>\
-        <div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
-            <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>\
-            <div style="width: 100px; height: 100px; background: grey;" id="draggableWithHandle">\
-                <div id="handle" style="width: 30px; height: 30px; background: grey;"></div>\
-            </div>\
-        </div>\
-        <div id="items" style="width: 300px; height: 250px; position: relative; background: grey;">\
-            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"></div>\
-            <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>\
-            <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>\
-        </div>\
-        <div id="other"></div>\
-        <div id="scrollable" style="display: none; width: 250px; height: 250px; overflow: auto; position: absolute; left: 0; top: 0;">\
-            <div id="scrollable-container" style="width: 500px; height: 500px;">\
-                <div id="scrollableItem" class="draggable" style="width: 30px; height: 50px; background: black;"></div>\
-            </div>\
-        </div>';
+        `<style nonce="qunit-test">
+            .fixedPosition.dx-draggable-dragging {
+                position: fixed;
+            }
+            #area {
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: green;
+            }
+            #draggable {
+                width: 30px;
+                height: 50px;
+                background: yellow;
+            }
+            #draggableWithHandle {
+                width: 100px;
+                height: 100px;
+                background: grey;
+            }
+            #handle {
+                width: 30px;
+                height: 30px;
+                background: grey;
+            }
+            #items {
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #items .draggable {
+                width: 30px;
+                height: 50px;
+            }
+            #item1 { background: yellow; }
+            #item2 { background: red; }
+            #item3 { background: blue; }
+            #scrollable {
+                display: none;
+                width: 250px;
+                height: 250px;
+                overflow: auto;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            #scrollable-container {
+                width: 500px;
+                height: 500px;
+            }
+            #scrollableItem {
+                width: 30px;
+                height: 50px;
+                background: black;
+            }
+        </style>
+        <div id="area">
+            <div id="draggable"></div>
+            <div id="draggableWithHandle">
+                <div id="handle"></div>
+            </div>
+        </div>
+        <div id="items">
+            <div id="item1" class="draggable"></div>
+            <div id="item2" class="draggable"></div>
+            <div id="item3" class="draggable"></div>
+        </div>
+        <div id="other"></div>
+        <div id="scrollable">
+            <div id="scrollable-container">
+                <div id="scrollableItem" class="draggable"></div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
 });

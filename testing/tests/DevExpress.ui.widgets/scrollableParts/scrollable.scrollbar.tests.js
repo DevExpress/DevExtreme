@@ -33,24 +33,51 @@ const SCROLLBAR_MIN_HEIGHT = 15;
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '\
-        <div id="scrollable" style="height: 50px; width: 50px;">\
-            <div class="content1" style="height: 100px; width: 100px;"></div>\
-            <div class="content2"></div>\
-        </div>\
-        <div id="scrollable1" style="height: 100px;">\
-            <div id="scrollable2" style="height: 50px;">\
-                    <div class="innerContent"></div>\
-            </div>\
-            <div style="height: 100px;"></div>\
-        </div>\
-        <div id="scaledContainer" style="transform:scale(0.2, 0.5)">\
-            <div style="height: 500px; width: 500px;">\
-                <div id="scaledScrollable">\
-                    <div id="scaledContent" style="height: 992px; width: 992px;"></div>\
-                </div>\
-            </div>\
-        </div>';
+        const markup = `
+        <style nonce="qunit-test">
+            #scrollable {
+                height: 50px;
+                width: 50px;
+            }
+            #scrollable .content1 {
+                height: 100px;
+                width: 100px;
+            }
+            #scrollable1, #scrollable1Content {
+                height: 100px;
+            }
+            #scrollable2 {
+                height: 50px;
+            }
+            #scaledContainer {
+                transform: scale(0.2, 0.5);
+            }
+            #scaledContainerContent {
+                height: 500px;
+                width: 500px;
+            }
+            #scaledContent {
+                height: 992px;
+                width: 992px;
+            }
+        </style>
+        <div id="scrollable">
+            <div class="content1"></div>
+            <div class="content2"></div>
+        </div>
+        <div id="scrollable1">
+            <div id="scrollable2">
+                <div class="innerContent"></div>
+            </div>
+            <div id="scrollable1Content"></div>
+        </div>
+        <div id="scaledContainer">
+            <div id="scaledContainerContent">
+                <div id="scaledScrollable">
+                    <div id="scaledContent"></div>
+                </div>
+            </div>
+        </div>`;
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
