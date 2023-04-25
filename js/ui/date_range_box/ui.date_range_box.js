@@ -11,8 +11,7 @@ import TextEditorButtonCollection from '../text_box/texteditor_button_collection
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import dateSerialization from '../../core/utils/date_serialization';
-import dateUtils from '../../core/utils/date';
+import { isSameDates, isSameDateArrays } from './ui.date_range.utils';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
@@ -426,23 +425,8 @@ class DateRangeBox extends Widget {
         };
     }
 
-    _getDate(value) {
-        return dateSerialization.deserializeDate(value);
-    }
-
-    _isSameDates(date1, date2) {
-        if(!date1 && !date2) {
-            return true;
-        }
-
-        return dateUtils.sameDate(this._getDate(date1), this._getDate(date2));
-    }
-
     updateValue(newValue) {
-        const [newStartDate, newEndDate] = newValue;
-        const [oldStartDate, oldEndDate] = this.option('value');
-
-        if(!this._isSameDates(newStartDate, oldStartDate) || !this._isSameDates(newEndDate, oldEndDate)) {
+        if(!isSameDateArrays(newValue, this.option('value'))) {
             this.option('value', newValue);
         }
     }
@@ -454,11 +438,11 @@ class DateRangeBox extends Widget {
         const oldStartDate = startDateBox.option('value');
         const oldEndDate = endDateBox.option('value');
 
-        if(!this._isSameDates(newStartDate, oldStartDate)) {
+        if(!isSameDates(newStartDate, oldStartDate)) {
             startDateBox.option('value', newStartDate);
         }
 
-        if(!this._isSameDates(newEndDate, oldEndDate)) {
+        if(!isSameDates(newEndDate, oldEndDate)) {
             endDateBox.option('value', newEndDate);
         }
     }
