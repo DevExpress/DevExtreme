@@ -162,7 +162,7 @@ QUnit.module('general', moduleConfig, () => {
                 if(hidingCallCount === 0) {
                     e.cancel = true;
                 }
-                ++hidingCallCount;
+                hidingCallCount += 1;
             }
         });
         this.instance.show();
