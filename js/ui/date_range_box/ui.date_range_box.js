@@ -19,6 +19,8 @@ const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
 
+const READONLY_STATE_CLASS = 'dx-state-readonly';
+
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
@@ -219,6 +221,7 @@ class DateRangeBox extends Widget {
             .addClass('dx-datebox-date')
             .addClass('dx-dropdowneditor');
 
+        this._toggleReadOnlyState();
         this._renderStylingMode();
         // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
@@ -229,6 +232,19 @@ class DateRangeBox extends Widget {
         this._renderButtonsContainer();
 
         super._initMarkup();
+    }
+
+    _attachKeyboardEvents() {
+        if(!this.option('readOnly')) {
+            super._attachKeyboardEvents();
+        }
+    }
+
+    _toggleReadOnlyState() {
+        const { readOnly } = this.option();
+
+        this.$element().toggleClass(READONLY_STATE_CLASS, !!readOnly);
+        // TODO: should we add area readonly here?
     }
 
     _getStylingModePrefix() {
@@ -536,7 +552,11 @@ class DateRangeBox extends Widget {
             case 'onClosed':
                 break;
             case 'openOnFieldClick':
+                break;
             case 'readOnly':
+                this._toggleReadOnlyState();
+                this._refreshFocusState();
+                break;
             case 'spellcheck':
             case 'startDate':
                 break;
