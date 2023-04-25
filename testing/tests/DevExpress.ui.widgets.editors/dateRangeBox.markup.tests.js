@@ -19,6 +19,8 @@ const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const ICON_CLASS = 'dx-icon';
 const CLEAR_BUTTON = 'dx-clear-button-area';
 const DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const READONLY_STATE_CLASS = 'dx-state-readonly';
+const STATE_FOCUSED_CLASS = 'dx-state-focused';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
@@ -96,6 +98,41 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
         });
     });
 
+    QUnit.test('DateRangeBox has not readonly state class if readonly option value is false', function(assert) {
+        this.reinit({
+            readOnly: false,
+        });
+
+        assert.strictEqual(this.$element.hasClass(READONLY_STATE_CLASS), false, 'readonly class was not added');
+    });
+
+    QUnit.test('DateRangeBox has readonly state class if readonly option value is true', function(assert) {
+        this.reinit({
+            readOnly: true,
+        });
+
+        assert.strictEqual(this.$element.hasClass(READONLY_STATE_CLASS), true, 'readonly class was added');
+    });
+
+    QUnit.test('DateRangeBox has readonly state class if readonly option value is changed in runtime', function(assert) {
+        assert.strictEqual(this.$element.hasClass(READONLY_STATE_CLASS), false, 'readonly class was not added on init');
+
+        this.instance.option('readOnly', true);
+
+        assert.strictEqual(this.$element.hasClass(READONLY_STATE_CLASS), true, 'readonly class was added');
+    });
+
+    QUnit.test('DateRangeBox should lose focus state if readonly option value is changed in runtime', function(assert) {
+        this.instance.focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.$element.hasClass(READONLY_STATE_CLASS), false, 'readonly class was not added on init');
+
+        this.instance.option('readOnly', true);
+
+        assert.strictEqual(this.$element.hasClass(READONLY_STATE_CLASS), true, 'readonly class was added');
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox does not have focus state class');
+    });
 
     QUnit.test('StartDateBox has expected class', function(assert) {
         const $startDateBox = getStartDateBoxElement(this.instance);
