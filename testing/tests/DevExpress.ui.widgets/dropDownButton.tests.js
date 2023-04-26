@@ -2389,6 +2389,24 @@ QUnit.module('keyboard navigation', {
         assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
+    QUnit.testInActiveWindow('Press down should save focus state on toggle button', function(assert) {
+        this.keyboard
+            .press('right')
+            .press('down');
+
+        assert.strictEqual(this.$actionButton.hasClass(FOCUSED_CLASS), false, 'action button is not focused');
+        assert.strictEqual(this.$toggleButton.hasClass(FOCUSED_CLASS), true, 'toggle button is focused');
+    });
+
+    QUnit.testInActiveWindow('Press up should save focus state on toggle button', function(assert) {
+        this.keyboard
+            .press('right')
+            .press('up');
+
+        assert.strictEqual(this.$actionButton.hasClass(FOCUSED_CLASS), false, 'action button is not focused');
+        assert.strictEqual(this.$toggleButton.hasClass(FOCUSED_CLASS), true, 'toggle button is focused');
+    });
+
     QUnit.testInActiveWindow('left on list should close the popup', function(assert) {
         this.keyboard
             .press('right')
