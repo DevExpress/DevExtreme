@@ -19,7 +19,6 @@ import {
     normalizeLoadResult,
     mapDataRespectingGrouping
 } from './utils';
-import { isCompareOptions } from '../../core/utils/data';
 
 export const DataSource = Class.inherit({
     /**
@@ -527,20 +526,6 @@ export const DataSource = Class.inherit({
         return this._operationManager.cancelAll();
     },
 
-    _addCompareOptionsToFilter(options) {
-        const filter = this._storeLoadOptions.filter;
-
-        if(!isCompareOptions(filter?.[0]) && options.compareOptions) {
-            this._storeLoadOptions.filter = [
-                {
-                    type: 'compareOptions',
-                    ...options.compareOptions
-                },
-                ...filter ? ['and', filter] : [],
-            ];
-        }
-    },
-
     _addSearchOptions(storeLoadOptions) {
         if(this._disposed) {
             return;
@@ -557,8 +542,6 @@ export const DataSource = Class.inherit({
 
     _createStoreLoadOptions() {
         const result = extend({}, this._storeLoadOptions);
-
-        this._addCompareOptionsToFilter(result);
 
         this._addSearchOptions(result);
 

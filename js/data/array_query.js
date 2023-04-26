@@ -99,10 +99,10 @@ const MapIterator = WrappedIterator.inherit({
 });
 
 const defaultCompare = function(xValue, yValue, options) {
-    if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.localeSensitive || options?.localeSortingOptions)) {
+    if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.locale || options?.collateOptions)) {
 
         /* eslint-disable-next-line */
-        return new Intl.Collator(options.localeSensitive, options.localeSortingOptions).compare(xValue, yValue);
+        return new Intl.Collator(options?.locale || undefined, options?.collateOptions || undefined).compare(xValue, yValue);
     }
 
     xValue = toComparable(xValue, false, options);
@@ -279,7 +279,7 @@ const compileCriteria = (function() {
 
     const toString = function(value) {
         return isDefined(value) ?
-            compareOptions?.localeSensitive ? value.toLocaleString(compareOptions.localeSensitive) : value.toString()
+            compareOptions?.locale ? value.toLocaleString(compareOptions.locale) : value.toString()
             : '';
     };
 

@@ -3,7 +3,6 @@ import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import arrayQuery from './array_query';
 import { normalizeSortingInfo } from './utils';
-import { isCompareOptions } from '../core/utils/data';
 
 function multiLevelGroup(query, groupInfo) {
     query = query.groupBy(groupInfo[0].selector);
@@ -33,74 +32,17 @@ function arrangeSortingInfo(groupInfo, sortInfo) {
     return filteredGroup.concat(sortInfo);
 }
 
-function _getOptionsAndFilters(filterWithOptions) {
-    let options = {};
-
-    if(!Array.isArray(filterWithOptions) || filterWithOptions.length === 0) {
-        return { filters: filterWithOptions, options: options };
-    }
-
-    const handleCriteria = (criteria) => {
-        const _empty = {};
-
-        criteria.forEach((crit, i) => {
-            if(Array.isArray(crit)) {
-                criteria[i] = handleCriteria(crit);
-            }
-        });
-
-        const optsIndex = criteria.findIndex((crit) => {
-            return isCompareOptions(crit) || (Array.isArray(crit) && crit?.length === 0);
-        });
-
-        if(optsIndex !== -1) {
-            options = { ...options, ...criteria[optsIndex] };
-            criteria[optsIndex] = _empty;
-            optsIndex > 0 && (criteria[optsIndex - 1] = _empty);
-            (optsIndex + 1) !== criteria.length && (criteria[optsIndex + 1] = _empty);
-
-            const cleanCriteria = criteria.filter((c) => c !== _empty);
-            criteria.length = 0;
-            criteria.push(...cleanCriteria);
-
-            if(criteria.length === 1 && Array.isArray(criteria[0])) {
-                criteria = criteria[0];
-            }
-        }
-
-        return criteria;
-    };
-
-    let filters = handleCriteria(filterWithOptions);
-
-    if(filters.length === 1) {
-        filters = filters[0];
-    } else if(filters.length === 0) {
-        filters = null;
-    }
-
-    return { filters, options };
-}
-
 function queryByOptions(query, options, isCountQuery) {
     options = options || {};
 
-    let filters = null;
-    let compareOptions = options.compareOptions;
+    const filter = options.filter;
 
-    if(options.filter) {
-        const optionsAndFilters = _getOptionsAndFilters(options.filter);
-
-        filters = optionsAndFilters.filters;
-        compareOptions = { ...compareOptions, ...optionsAndFilters.options };
+    if(options?.compareOptions) {
+        query.setCompareOptions?.(options?.compareOptions);
     }
 
-    if(compareOptions) {
-        query.setCompareOptions?.(compareOptions);
-    }
-
-    if(filters) {
-        query = query.filter(filters);
+    if(filter) {
+        query = query.filter(filter);
     }
 
     if(isCountQuery) {

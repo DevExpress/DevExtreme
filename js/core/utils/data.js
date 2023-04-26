@@ -199,16 +199,12 @@ export const toComparable = function(value, caseSensitive, options) {
     }
 
     if(!caseSensitive && typeof value === 'string') {
-        if(options.ignoreAccent) {
+        if(options?.collateOptions?.sensitivity === 'base') {
             value = value.normalize('NFD').replace(/[\u0300-\u0302\u030b\u030f\u0316\u0317\u032d]/g, '');
         }
 
-        return options.localeSensitive ? value.toLocaleLowerCase(options.localeSensitive) : value.toLowerCase();
+        return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
     }
 
     return value;
-};
-
-export const isCompareOptions = function(value) {
-    return value?.type === 'compareOptions';
 };
