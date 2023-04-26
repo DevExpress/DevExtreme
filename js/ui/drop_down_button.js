@@ -432,8 +432,7 @@ const DropDownButton = Widget.inherit({
     _popupHidingHandler() {
         this.option('opened', false);
 
-        this._setPopupButtonsAria(false);
-        this._setElementAria(false);
+        this._updateAriaAttributes(false);
     },
 
     _popupOptionChanged: function(args) {
@@ -461,15 +460,12 @@ const DropDownButton = Widget.inherit({
 
     _popupShowingHandler() {
         this.option('opened', true);
-        this._setPopupButtonsAria(true);
-        this._setElementAria(true);
+        this._updateAriaAttributes(true);
     },
 
-    _setElementAria(value) {
+    _updateAriaAttributes(value) {
         this.setAria({ owns: value ? this._popupContentId : undefined }, this.$element());
-    },
 
-    _setPopupButtonsAria(value) {
         this._$buttonElements.each((_, $button) => {
             this.setAria({ expanded: value, haspopup: 'listbox' }, $($button));
         });
@@ -485,17 +481,14 @@ const DropDownButton = Widget.inherit({
 
         this._$buttonElements = this._buttonGroup.$element().find('.dx-button');
 
-        this._buttonGroup._buttonsCollection.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
-        this._buttonGroup._buttonsCollection.registerKeyHandler('tab', this._tabHandler.bind(this));
-        this._buttonGroup._buttonsCollection.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
-        this._buttonGroup._buttonsCollection.registerKeyHandler('escape', this._escHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
 
-        const { opened } = this.option();
-
-        this._setElementAria(opened);
-        this._setPopupButtonsAria(opened);
+        this._updateAriaAttributes(this.option('opened'));
     },
 
     _updateArrowClass() {
