@@ -169,6 +169,7 @@ testComponentDefaults(DateBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
+        deferRendering: true,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,

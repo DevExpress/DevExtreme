@@ -50,6 +50,8 @@ class DateRangeBox extends Widget {
 
             dateSerializationFormat: undefined,
 
+            deferRendering: true,
+
             disabledDates: null,
 
             displayFormat: null,
@@ -354,6 +356,7 @@ class DateRangeBox extends Widget {
             applyValueMode: options.applyValueMode,
             dateOutOfRangeMessage: options.dateOutOfRangeMessage,
             dateSerializationFormat: options.dateSerializationFormat,
+            deferRendering: options.deferRendering,
             displayFormat: options.displayFormat,
             elementAttr: options.elementAttr,
             focusStateEnabled: options.focusStateEnabled,
@@ -389,6 +392,7 @@ class DateRangeBox extends Widget {
             applyButtonText: options.applyButtonText,
             calendarOptions: options.calendarOptions,
             cancelButtonText: options.cancelButtonText,
+            deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
             onValueChanged: ({ value }) => {
@@ -439,6 +443,7 @@ class DateRangeBox extends Widget {
             value: this.option('value')[1],
             label: options.endDateLabel,
             placeholder: options.endDatePlaceholder,
+            deferRendering: true,
         };
     }
 
@@ -557,6 +562,7 @@ class DateRangeBox extends Widget {
                 this._createValueChangeAction();
                 break;
             case 'opened':
+            case 'deferRendering':
             case 'dropDownOptions':
                 this.getStartDateBox().option(name, value);
                 break;
