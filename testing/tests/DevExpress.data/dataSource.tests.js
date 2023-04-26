@@ -1458,8 +1458,8 @@ QUnit.test('filter with compareOptions', function(assert) {
     let source = new DataSource({
         store: data,
         compareOptions: {
-            localeSensitive: 'tr',
-            localeSortingOptions: {
+            locale: 'tr',
+            collateOptions: {
                 caseFirst: 'upper',
             }
         },
@@ -1479,7 +1479,9 @@ QUnit.test('filter with compareOptions', function(assert) {
     source = new DataSource({
         store: data,
         compareOptions: {
-            ignoreAccent: true
+            collateOptions: {
+                sensitivity: 'base'
+            }
         }
     });
 
