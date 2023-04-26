@@ -113,6 +113,10 @@ class LessTemplateLoader {
         this.outColorScheme = config.outColorScheme;
         this.version = version;
         this.noClean = config.noClean;
+
+        if(this.lessCompiler) {
+            this.lessCompiler.render = this.lessCompiler.render || this.lessCompiler.default.render;
+        }
     }
 
     load(theme, colorScheme, metadata, modifiedItems, widgets) {
