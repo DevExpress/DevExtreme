@@ -18,6 +18,7 @@ const Widget = {
   off: (event: string, handler: (e: any) => void) => {
     eventHandlers[event] = eventHandlers[event].filter((e) => e !== handler);
   },
+  clearExtensions: jest.fn(),
   dispose: jest.fn(),
   skipOptionsRollBack: false,
 };
@@ -35,6 +36,11 @@ class TestComponent<P = any> extends Component<P> {
 
     super._createWidget(element);
     Widget.option.mockReset();
+  }
+
+  clearExtensions(): void {
+    super.clearExtensions();
+    Widget.clearExtensions();
   }
 }
 class TestPortalComponent<P = any> extends TestComponent<P> {

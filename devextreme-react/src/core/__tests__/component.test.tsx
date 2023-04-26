@@ -62,7 +62,7 @@ describe('rendering', () => {
       </TestComponent>
     );
     const { container, unmount, rerender } = render(
-      component, { legacyRoot: true }
+      component, { legacyRoot: true },
     );
 
     unmount();
@@ -171,6 +171,17 @@ describe('rendering', () => {
     expect(WidgetClass.mock.instances[1]).toEqual({});
   });
 
+  it('clears nested option in strict mode', () => {
+    render(
+      <React.StrictMode>
+        <TestComponent>
+          <TestComponent />
+        </TestComponent>
+      </React.StrictMode>,
+    );
+    expect(Widget.clearExtensions).toHaveBeenCalledTimes(4);
+  });
+
   it('do not pass children to options', () => {
     render(
       <TestComponent>
@@ -185,8 +196,8 @@ describe('rendering', () => {
 describe('element attrs management', () => {
   it('passes id, className and style to element', () => {
     const { container } = render(
-      <TestComponent id="id1" className="class1" style={{ background: 'red' }} />, {
-      },
+      <TestComponent id="id1" className="class1" style={{ background: 'red' }} />,
+      {},
     );
 
     const element: HTMLElement = container.firstChild as HTMLElement;

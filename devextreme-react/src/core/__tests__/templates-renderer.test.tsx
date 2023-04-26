@@ -96,7 +96,7 @@ describe('option update', () => {
     const ref = React.createRef<TemplatesRenderer>();
     const templatesStore = new TemplatesStore(() => { });
 
-    deferUpdate.mockImplementation((func, _) => {
+    (deferUpdate as jest.Mock).mockImplementation((func, _) => {
       func();
     });
 

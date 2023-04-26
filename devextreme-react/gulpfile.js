@@ -14,7 +14,6 @@ const generateSync = require('devextreme-react-generator').default;
 const GENERATE = 'generate';
 const CLEAN = 'clean';
 
-const OLD_OUTPUTDIR_CREATE = 'output-dir.create';
 const GEN_RUN = 'generator.run';
 
 const NPM_CLEAN = 'npm.clean';
@@ -29,10 +28,6 @@ gulp.task(CLEAN, (c) =>
   del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
 );
 
-gulp.task(OLD_OUTPUTDIR_CREATE, (done) =>
-  mkdir(config.oldComponentsDir, {}, done)
-);
-
 gulp.task(GEN_RUN, (done) => {
   generateSync({
     metaData: JSON.parse(fs.readFileSync(config.metadataPath).toString()),
@@ -43,10 +38,13 @@ gulp.task(GEN_RUN, (done) => {
     },
     out: {
       componentsDir: config.generatedComponentsDir,
-      oldComponentsDir: config.oldComponentsDir,
       indexFileName: config.indexFileName
     },
-    widgetsPackage: 'devextreme'
+    widgetsPackage: 'devextreme',
+    typeGenerationOptions: {
+      generateReexports: true,
+      generateCustomTypes: true,
+    },
   });
 
   done();
@@ -54,7 +52,6 @@ gulp.task(GEN_RUN, (done) => {
 
 gulp.task(GENERATE, gulp.series(
   CLEAN,
-  OLD_OUTPUTDIR_CREATE,
   GEN_RUN
 ));
 

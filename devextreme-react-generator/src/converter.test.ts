@@ -67,6 +67,7 @@ it('expands custom types', () => {
         ],
         props: [],
         templates: [],
+        module: '',
       },
     },
   )).toEqual(['object', 'string', 'number']);

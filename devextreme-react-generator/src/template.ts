@@ -15,7 +15,7 @@ const defaultSettings = {
   varname: 'it',
 };
 
-const createTempate = (templateStr: string): ((model: any) => string) => {
+const createTemplate = (templateStr: string): ((model: any) => string) => {
   const templateFunc = template(templateStr, defaultSettings);
 
   return (model: any) => (templateFunc(model) as string)
@@ -38,7 +38,7 @@ const TAB3: string = tab(3);
 const TAB4: string = tab(4);
 
 export {
-  createTempate,
+  createTemplate,
   L1,
   L2,
   L3,

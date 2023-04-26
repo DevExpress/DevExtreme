@@ -1,4 +1,4 @@
-import { createTempate } from './template';
+import { createTemplate } from './template';
 
 interface IReExport {
   name: string;
@@ -8,7 +8,7 @@ interface IReExport {
 const constParts = `export { Template } from "./core/template";
 `;
 
-const render: (model: IReExport[]) => string = createTempate(`
+const render: (model: IReExport[]) => string = createTemplate(`
 <#~ it :reExport #>export { <#= reExport.name #> } from "<#= reExport.path #>";
 <#~#>
 `.trim());
