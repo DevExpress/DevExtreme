@@ -1736,7 +1736,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
       .notOk();
 
     for (let i = 0; i < 3; i += 1) {
-      // act
+    // act
       await t
         .click(dataGrid.getPager().getNavPage('4').element)
         .wait(3500);
@@ -1815,7 +1815,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
 // T1152498
 ['infinite', 'virtual'].forEach((scrollingMode) => {
   safeSizeTest(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
-    // arrange
+  // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
