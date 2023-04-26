@@ -12,6 +12,8 @@ import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { isSameDates, isSameDateArrays } from './ui.date_range.utils';
+import { each } from '../../core/utils/iterator';
+import { camelize } from '../../core/utils/inflector';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
@@ -26,6 +28,12 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
 const SEPARATOR_ICON_NAME = 'to';
+
+const EVENTS_LIST = [
+    'KeyDown', 'KeyPress', 'KeyUp',
+    'Change', 'Cut', 'Copy', 'Paste', 'Input',
+    'EnterKey',
+];
 
 // STYLE dateRangeBox
 
@@ -129,6 +137,22 @@ class DateRangeBox extends Widget {
             onOpened: null,
 
             onClosed: null,
+
+            onKeyDown: null,
+
+            onKeyUp: null,
+
+            onChange: null,
+
+            onInput: null,
+
+            onCut: null,
+
+            onCopy: null,
+
+            onPaste: null,
+
+            onEnterKey: null,
         });
     }
 
@@ -177,6 +201,20 @@ class DateRangeBox extends Widget {
         this._valueChangeAction = this._createActionByOption('onValueChanged', {
             excludeValidators: ['disabled', 'readOnly']
         });
+    }
+
+    _createEventAction(eventName) {
+        this[`_${camelize(eventName)}Action`] = this._createActionByOption(`on${eventName}`, {
+            excludeValidators: ['readOnly']
+        });
+    }
+
+    _raiseAction(eventName, event) {
+        const action = this[`_${camelize(eventName)}Action`];
+        if(!action) {
+            this._createEventAction(eventName);
+        }
+        this[`_${camelize(eventName)}Action`]({ event });
     }
 
     _raiseValueChangeAction(value, previousValue) {
@@ -349,7 +387,7 @@ class DateRangeBox extends Widget {
     _getDateBoxConfig() {
         const options = this.option();
 
-        return {
+        const dateBoxConfig = {
             // TODO: pass type option clearly
             acceptCustomValue: options.acceptCustomValue,
             activeStateEnabled: options.activeStateEnabled,
@@ -380,8 +418,28 @@ class DateRangeBox extends Widget {
             validationMessagePosition: options.validationMessagePosition,
             validationStatus: options.validationStatus,
             valueChangeEvent: options.valueChangeEvent,
+            onKeyDown: options.onKeyUp,
+            onKeyUp: options.onKeyUp,
+            onChange: options.onChange,
+            onInput: options.onInput,
+            onCut: options.onCut,
+            onCopy: options.onCopy,
+            onPaste: options.onPaste,
+            onEnterKey: options.onEnterKey,
             _dateRangeBoxInstance: this,
         };
+
+        each(EVENTS_LIST, (_, eventName) => {
+            const optionName = `on${eventName}`;
+
+            if(this.hasActionSubscription(optionName)) {
+                dateBoxConfig[optionName] = (e) => {
+                    this._raiseAction(eventName, e.event);
+                };
+            }
+        });
+
+        return dateBoxConfig;
     }
 
     _getStartDateBoxConfig() {
