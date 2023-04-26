@@ -1445,8 +1445,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     focus: function() {
-        if(this._$selectAllItem) {
-            this._$selectAllItem.focus();
+        if(this._selectAllEnabled()) {
+            eventsEngine.trigger(this._$selectAllItem, 'focus');
             return;
         }
 
