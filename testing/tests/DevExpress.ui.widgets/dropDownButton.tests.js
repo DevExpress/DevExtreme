@@ -2647,13 +2647,16 @@ QUnit.module('Accessibility', {
 
     QUnit.test('check aria-expanded attr if splitButton=true', function(assert) {
         const instance = this.createInstance();
+        const $firstButton = this.getButtons().eq(0);
 
-        assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual($firstButton.attr('aria-expanded'), 'false');
 
         instance.option({ splitButton: true });
 
-        assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), 'false');
-        assert.strictEqual(this.getButtons().eq(1).attr('aria-expanded'), 'false');
+        const $buttonElements = this.getButtons();
+
+        assert.strictEqual($buttonElements.eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual($buttonElements.eq(1).attr('aria-expanded'), 'false');
     });
 
     QUnit.test('check aria-owns attr for element', function(assert) {

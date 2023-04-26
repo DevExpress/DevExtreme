@@ -28,6 +28,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+const DX_BUTTON_CLASS = 'dx-button';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
@@ -463,12 +464,28 @@ const DropDownButton = Widget.inherit({
         this._updateAriaAttributes(true);
     },
 
-    _updateAriaAttributes(value) {
-        this.setAria({ owns: value ? this._popupContentId : undefined }, this.$element());
+    _setElementAria(value) {
+        const elementAria = {
+            owns: value ? this._popupContentId : undefined,
+        };
 
-        this._$buttonElements.each((_, $button) => {
-            this.setAria({ expanded: value, haspopup: 'listbox' }, $($button));
+        this.setAria(elementAria, this.$element());
+    },
+
+    _setButtonsAria(value) {
+        const buttonAria = {
+            expanded: value,
+            haspopup: 'listbox',
+        };
+
+        this._$buttonElements.forEach($button => {
+            this.setAria(buttonAria, $($button));
         });
+    },
+
+    _updateAriaAttributes(value) {
+        this._setElementAria(value);
+        this._setButtonsAria(value);
     },
 
     _renderButtonGroup() {
@@ -479,7 +496,7 @@ const DropDownButton = Widget.inherit({
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
-        this._$buttonElements = this._buttonGroup.$element().find('.dx-button');
+        this._$buttonElements = this._buttonGroup.$element().find(`${DX_BUTTON_CLASS}`).toArray();
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -538,7 +555,7 @@ const DropDownButton = Widget.inherit({
         this._list && this._list.$element().remove();
         this._popup && this._popup.$element().remove();
 
-        delete this._$buttonElements;
+        this._$buttonElements = null;
     },
 
     _selectedItemKeyChanged(value) {
