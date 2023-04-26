@@ -2675,7 +2675,19 @@ QUnit.module('Accessibility', {
     });
 
     ['items', 'dataSource'].forEach(dataSource => {
-        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource}`, function(assert) {
+        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
+            const instance = this.createInstance({ opened: true });
+
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+        });
+
+        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is empty on init`, function(assert) {
             const instance = this.createInstance({
                 [dataSource]: [],
                 opened: true,
@@ -2688,6 +2700,22 @@ QUnit.module('Accessibility', {
 
             instance.option(dataSource, []);
             assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+        });
+
+        [[1, 2, 3], []].forEach(items => {
+            QUnit.test(`There is no errors if dataSource is ${dataSource}=[${items}] was changed in runtime and list was not rendered`, function(assert) {
+                const instance = this.createInstance({
+                    [dataSource]: items,
+                });
+
+                try {
+                    instance.option(dataSource, items);
+                } catch(e) {
+                    assert.ok(false, `error is raised: ${e.message}`);
+                } finally {
+                    assert.ok(true, 'no error raised');
+                }
+            });
         });
     });
 });
