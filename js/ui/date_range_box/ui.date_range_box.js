@@ -645,6 +645,14 @@ class DateRangeBox extends Widget {
                 break;
             case 'onOpened':
             case 'onClosed':
+            case 'onKeyDown':
+            case 'onKeyUp':
+            case 'onChange':
+            case 'onInput':
+            case 'onCut':
+            case 'onCopy':
+            case 'onPaste':
+            case 'onEnterKey':
                 break;
             case 'openOnFieldClick':
                 break;
