@@ -1151,7 +1151,13 @@ export const validatingModule = {
             const isOverlayVisible = editorPopup && editorPopup.option('visible');
             const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
             const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
-            const $overlayContainer = $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+
+            // TODO: Don't forget to remove this code
+            //  after refactoring the fixed table position (or implementation).
+            const hasFixedColumns = this._columnsController.getFixedColumns()?.length > 0;
+            const $overlayContainer = hasFixedColumns
+              ? this.getView('rowsView').element()
+              : $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
             let errorMessageText = '';
             messages && messages.forEach((message) => {
