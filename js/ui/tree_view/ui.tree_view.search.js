@@ -85,6 +85,10 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         return this._itemContainer();
     },
 
+    _cleanItemContainer: function() {
+        this.$element().empty();
+    },
+
     _itemContainer: function(isSearchMode) {
         const WIDGET_CLASS = 'dx-treeview';
         const NODE_CLASS = `${WIDGET_CLASS}-node`;

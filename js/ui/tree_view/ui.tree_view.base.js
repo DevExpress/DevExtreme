@@ -1444,6 +1444,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    focus: function() {
+        if(this._$selectAllItem) {
+            this._$selectAllItem.focus();
+            return;
+        }
+
+        this.callBase();
+    },
+
     _focusInHandler: function(e) {
         this._updateFocusState(e, true);
 
