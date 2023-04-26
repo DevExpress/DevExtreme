@@ -3,7 +3,44 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
 import { tasks as taskList, employees } from './data.js';
 
-const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
+function getLists(statusArray, taskArray) {
+  const tasksMap = taskArray.reduce((result, task) => {
+    if (result[task.Task_Status]) {
+      result[task.Task_Status].push(task);
+    } else {
+      result[task.Task_Status] = [task];
+    }
+
+    return result;
+  }, {});
+  return statusArray.map((status) => tasksMap[status]);
+}
+
+function getEmployeesMap(employeesArray) {
+  return employeesArray.reduce((result, employee) => {
+    result[employee.ID] = employee.Name;
+    return result;
+  }, {});
+}
+
+function removeItem(array, removeIdx) {
+  return array.filter((_, idx) => idx !== removeIdx);
+}
+
+function insertItem(array, item, insertIdx) {
+  const newArray = [...array];
+  newArray.splice(insertIdx, 0, item);
+  return newArray;
+}
+
+function reorderItem(array, fromIdx, toIdx) {
+  const item = array[fromIdx];
+  const result = removeItem(array, fromIdx);
+  return insertItem(result, item, toIdx);
+}
+
+const taskStatuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
+const employeesRecord = getEmployeesMap(employees);
 
 function Card({ task, employeesMap }) {
   return <div className="card dx-card dx-theme-text-color dx-theme-background-color">
@@ -14,7 +51,7 @@ function Card({ task, employeesMap }) {
 }
 
 function List({
-  title, index, tasks, employeesMap, onTaskDragStart, onTaskDrop,
+  title, index, tasks, employeesMap, onTaskDrop,
 }) {
   return <div className="list">
     <div className="list-title dx-theme-text-color">{title}</div>
@@ -26,7 +63,6 @@ function List({
         className="sortable-cards"
         group="cardsGroup"
         data={index}
-        onDragStart={onTaskDragStart}
         onReorder={onTaskDrop}
         onAdd={onTaskDrop}>
         {tasks.map((task) => <Card
@@ -39,106 +75,56 @@ function List({
   </div>;
 }
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [statuses, setStatuses] = React.useState(taskStatuses);
+  const [lists, setLists] = React.useState(getLists(taskStatuses, taskList));
 
-    const employeesMap = {};
+  const onListReorder = React.useCallback(({ fromIndex, toIndex }) => {
+    setLists((state) => reorderItem(state, fromIndex, toIndex));
+    setStatuses((state) => reorderItem(state, fromIndex, toIndex));
+  }, []);
 
-    employees.forEach((employee) => {
-      employeesMap[employee.ID] = employee.Name;
-    });
+  const onTaskDrop = React.useCallback(
+    ({
+      fromData, toData, fromIndex, toIndex,
+    }) => {
+      const updatedLists = [...lists];
 
-    const lists = [];
+      const item = updatedLists[fromData][fromIndex];
+      updatedLists[fromData] = removeItem(updatedLists[fromData], fromIndex);
+      updatedLists[toData] = insertItem(updatedLists[toData], item, toIndex);
 
-    statuses.forEach((status) => {
-      lists.push(taskList.filter((task) => task.Task_Status === status));
-    });
+      setLists(updatedLists);
+    },
+    [lists],
+  );
 
-    this.state = {
-      statuses,
-      lists,
-      employeesMap,
-    };
-
-    this.onListReorder = this.onListReorder.bind(this);
-    this.onTaskDragStart = this.onTaskDragStart.bind(this);
-    this.onTaskDrop = this.onTaskDrop.bind(this);
-  }
-
-  render() {
-    return (
-      <div id="kanban">
-        <ScrollView
-          className="scrollable-board"
-          direction="horizontal"
-          showScrollbar="always">
-          <Sortable
-            className="sortable-lists"
-            itemOrientation="horizontal"
-            handle=".list-title"
-            onReorder={this.onListReorder}>
-            {this.state.lists.map((tasks, listIndex) => {
-              const status = this.state.statuses[listIndex];
-              return <List
-                key={status}
-                title={status}
-                index={listIndex}
-                tasks={tasks}
-                employeesMap={this.state.employeesMap}
-                onTaskDragStart={this.onTaskDragStart}
-                onTaskDrop={this.onTaskDrop}>
-              </List>;
-            })}
-          </Sortable>
-        </ScrollView>
-      </div>
-    );
-  }
-
-  onListReorder(e) {
-    this.setState({
-      lists: this.reorder(this.state.lists, this.state.lists[e.fromIndex], e.fromIndex, e.toIndex),
-      statuses: this.reorder(
-        this.state.statuses,
-        this.state.statuses[e.fromIndex],
-        e.fromIndex,
-        e.toIndex,
-      ),
-    });
-  }
-
-  onTaskDragStart(e) {
-    e.itemData = this.state.lists[e.fromData][e.fromIndex];
-  }
-
-  onTaskDrop(e) {
-    this.updateTask(e.fromData, e.itemData, e.fromIndex, -1);
-    this.updateTask(e.toData, e.itemData, -1, e.toIndex);
-  }
-
-  reorder(items, item, fromIndex, toIndex) {
-    let result = items;
-    if (fromIndex >= 0) {
-      result = [...items.slice(0, fromIndex), ...items.slice(fromIndex + 1)];
-    }
-
-    if (toIndex >= 0) {
-      result = [...items.slice(0, toIndex), item, ...items.slice(toIndex)];
-    }
-
-    return result;
-  }
-
-  updateTask(listIndex, itemData, fromIndex, toIndex) {
-    const lists = this.state.lists.slice();
-
-    lists[listIndex] = this.reorder(lists[listIndex], itemData, fromIndex, toIndex);
-
-    this.setState({
-      lists,
-    });
-  }
+  return (
+    <div id="kanban">
+      <ScrollView
+        className="scrollable-board"
+        direction="horizontal"
+        showScrollbar="always">
+        <Sortable
+          className="sortable-lists"
+          itemOrientation="horizontal"
+          handle=".list-title"
+          onReorder={onListReorder}>
+          {lists.map((tasks, listIndex) => {
+            const status = statuses[listIndex];
+            return <List
+              key={status}
+              title={status}
+              index={listIndex}
+              tasks={tasks}
+              employeesMap={employeesRecord}
+              onTaskDrop={onTaskDrop}>
+            </List>;
+          })}
+        </Sortable>
+      </ScrollView>
+    </div>
+  );
 }
 
 export default App;
