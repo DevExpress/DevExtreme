@@ -170,6 +170,42 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
         assert.strictEqual($clearButton.length, 0, 'clear button was rendered');
     });
 
+    QUnit.test('StartDateBox input should have accesKey attribute if accesKey option is set on init', function(assert) {
+        this.reinit({
+            accessKey: 'x'
+        });
+
+        const $startDateInput = $(this.instance.field()[0]);
+
+        assert.strictEqual($startDateInput.attr('accesskey'), 'x');
+    });
+
+    QUnit.test('EndDateBox input should have accesKey attribute if accesKey option is set on init', function(assert) {
+        this.reinit({
+            accessKey: 'x'
+        });
+
+        const $endDateInput = $(this.instance.field()[1]);
+
+        assert.strictEqual($endDateInput.attr('accesskey'), undefined);
+    });
+
+    QUnit.test('StartDateBox input should have accesKey attribute if accesKey option is set on runtime', function(assert) {
+        this.instance.option('accessKey', 'y');
+
+        const $startDateInput = $(this.instance.field()[0]);
+
+        assert.strictEqual($startDateInput.attr('accesskey'), 'y');
+    });
+
+    QUnit.test('EndDateBox input should have accesKey attribute if accesKey option is set on runtime', function(assert) {
+        this.instance.option('accessKey', 'y');
+
+        const $endDateInput = $(this.instance.field()[1]);
+
+        assert.strictEqual($endDateInput.attr('accesskey'), undefined);
+    });
+
     ['readOnly', 'disabled'].forEach((optionName) => {
         QUnit.test(`DateRangeBox inputs should not have ${optionName} attribute if ${optionName} is false`, function(assert) {
             this.reinit({

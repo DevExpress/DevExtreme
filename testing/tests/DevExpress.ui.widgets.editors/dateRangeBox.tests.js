@@ -1208,7 +1208,16 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'valueChangeEvent',
             optionValue: 'keyDown',
-        },
+        }, {
+            optionName: 'min',
+            optionValue: new Date('2023/03/01'),
+        }, {
+            optionName: 'max',
+            optionValue: new Date('2023/06/30'),
+        }, {
+            optionName: 'spellcheck',
+            optionValue: true,
+        }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
             const initOptions = {};
