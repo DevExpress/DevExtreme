@@ -2639,7 +2639,7 @@ QUnit.module('Accessibility', {
 
         const buttonElements = this.getButtons();
 
-        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), undefined);
+        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'true');
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'true');
         assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
@@ -2652,7 +2652,7 @@ QUnit.module('Accessibility', {
         instance.open();
         instance.close();
 
-        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), undefined);
+        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'false');
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'false');
         assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
@@ -2664,7 +2664,7 @@ QUnit.module('Accessibility', {
 
         instance.option({ splitButton: true });
 
-        assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), undefined);
+        assert.strictEqual(this.getButtons().eq(0).attr('aria-expanded'), 'false');
         assert.strictEqual(this.getButtons().eq(1).attr('aria-expanded'), 'false');
     });
 
@@ -2703,7 +2703,7 @@ QUnit.module('Accessibility', {
         const $firstButton = this.getButtons().eq(0);
         const $secondButton = this.getButtons().eq(1);
 
-        assert.strictEqual($firstButton.attr('aria-haspopup'), undefined);
+        assert.strictEqual($firstButton.attr('aria-haspopup'), 'listbox');
         assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
     });
 });
