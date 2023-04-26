@@ -465,7 +465,7 @@ const DropDownButton = Widget.inherit({
         this._setElementAria(true);
     },
 
-    _getPopupButton() {
+    _getPopupToggleButton() {
         const { splitButton } = this.option();
 
         return splitButton ? this._$buttonElements.eq(1) : this._$buttonElements.eq(0);
@@ -476,7 +476,7 @@ const DropDownButton = Widget.inherit({
     },
 
     _setPopupButtonAria(value) {
-        this.setAria({ expanded: value, haspopup: 'listbox' }, this._getPopupButton());
+        this.setAria({ expanded: value, haspopup: 'listbox' }, this._getPopupToggleButton());
     },
 
     _renderButtonGroup() {
@@ -548,6 +548,8 @@ const DropDownButton = Widget.inherit({
     _clean() {
         this._list && this._list.$element().remove();
         this._popup && this._popup.$element().remove();
+
+        delete this._$buttonElements;
     },
 
     _selectedItemKeyChanged(value) {
