@@ -496,7 +496,7 @@ const DropDownButton = Widget.inherit({
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
-        this._$buttonElements = this._buttonGroup.$element().find(`${DX_BUTTON_CLASS}`).toArray();
+        this._$buttonElements = this._buttonGroup.$element().find(`.${DX_BUTTON_CLASS}`).toArray();
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
