@@ -80,7 +80,7 @@ test('Buttons render in disabled state', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
+  await setAttribute('#container', 'class', `dx-theme-${process.env.theme?.split('.')[0]}-typography`);
 
   for (const stylingMode of stylingModes) {
     for (const type of types) {
