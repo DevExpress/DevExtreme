@@ -86,7 +86,7 @@ class DateRangeBox extends Widget {
 
             opened: false,
 
-            openOnFieldClick: false,
+            openOnFieldClick: true,
 
             readOnly: false,
 
@@ -350,7 +350,7 @@ class DateRangeBox extends Widget {
         return {
             // TODO: pass type option clearly
             acceptCustomValue: options.acceptCustomValue,
-            activeStateEnabled: false,
+            activeStateEnabled: options.activeStateEnabled,
             applyValueMode: options.applyValueMode,
             dateOutOfRangeMessage: options.dateOutOfRangeMessage,
             dateSerializationFormat: options.dateSerializationFormat,
@@ -358,7 +358,7 @@ class DateRangeBox extends Widget {
             elementAttr: options.elementAttr,
             focusStateEnabled: options.focusStateEnabled,
             height: options.height,
-            hoverStateEnabled: false,
+            hoverStateEnabled: options.hoverStateEnabled,
             invalidDateMessage: options.invalidDateMessage,
             isValid: options.isValid,
             labelMode: options.labelMode,
