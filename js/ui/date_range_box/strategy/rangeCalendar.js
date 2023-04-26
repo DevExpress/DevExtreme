@@ -81,7 +81,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     this.dateRangeBox.updateValue(value);
                     this.getDateRangeBox().getEndDateBox().focus();
                     this._widget.option('_currentSelection', 'endDate');
-                    this._widget._view.option('contouredDate', value[1]);
+
+                    if(value[1]) {
+                        this._widget.option('currentDate', value[1]);
+                    }
                 } else {
                     this.setActiveEndDateBox();
                     this.dateRangeBox.updateValue(value);

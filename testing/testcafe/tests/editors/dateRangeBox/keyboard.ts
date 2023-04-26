@@ -9,6 +9,12 @@ fixture.disablePageReloads`DateRangeBox keyboard navigation`
 
 const initialValue = ['2021/10/17', '2021/11/24'];
 
+const getDateByOffset = (date: Date | string, offset: number) => {
+  const resultDate = new Date(date);
+
+  return new Date(resultDate.setDate(resultDate.getDate() + offset));
+};
+
 test('DateRangeBox should be opened and close by press alt+down and alt+up respectively when startDateBox is focused', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
@@ -64,11 +70,11 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 }));
 
 [
-  { key: 'left', expectedStartDate: new Date(2021, 9, 16) },
-  { key: 'right', expectedStartDate: new Date(2021, 9, 18) },
-  { key: 'up', expectedStartDate: new Date(2021, 9, 10) },
-  { key: 'down', expectedStartDate: new Date(2021, 9, 24) },
-].forEach(({ key, expectedStartDate }) => {
+  { key: 'left', offsetInDays: -1 },
+  { key: 'right', offsetInDays: 1 },
+  { key: 'up', offsetInDays: -7 },
+  { key: 'down', offsetInDays: 7 },
+].forEach(({ key, offsetInDays }) => {
   test(`DateRangeBox start value should be changed after after opening and navigation by '${key}' key and click on 'enter' key`, async (t) => {
     const dateRangeBox = new DateRangeBox('#container');
 
@@ -85,6 +91,8 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
       .pressKey(key)
       .pressKey('enter');
 
+    const expectedStartDate = getDateByOffset(initialValue[0], offsetInDays);
+
     await t
       .expect(dateRangeBox.option('opened'))
       .eql(true)
@@ -94,7 +102,7 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
     value: initialValue,
   }));
 
-  test('DateRangeBox should allow to select endDate value in calendar after select startDate', async (t) => {
+  test('Selection in calendar should be started with current startDate value after select startDate if endDate is not specified', async (t) => {
     const dateRangeBox = new DateRangeBox('#container');
 
     await t
@@ -112,8 +120,34 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
       .pressKey('right')
       .pressKey('enter');
 
-    let expectedEndDate = new Date(expectedStartDate);
-    expectedEndDate = new Date(expectedEndDate.setDate(expectedStartDate.getDate() + 5));
+    const expectedStartDate = getDateByOffset(initialValue[0], offsetInDays);
+    const expectedEndDate = getDateByOffset(expectedStartDate, 5);
+
+    await t
+      .expect(dateRangeBox.option('opened'))
+      .eql(false)
+      .expect(dateRangeBox.option('value'))
+      .eql([expectedStartDate, expectedEndDate]);
+  }).before(async () => createWidget('dxDateRangeBox', {
+    value: [initialValue[0], null],
+  }));
+
+  test('Selection in calendar should be started with endDate value after select startDate if endDate is specified', async (t) => {
+    const dateRangeBox = new DateRangeBox('#container');
+
+    await t
+      .click(dateRangeBox.dropDownButton);
+
+    await t
+      .pressKey('left')
+      .pressKey('enter');
+
+    await t
+      .pressKey(key)
+      .pressKey('enter');
+
+    const expectedStartDate = getDateByOffset(initialValue[0], -1);
+    const expectedEndDate = getDateByOffset(initialValue[1], offsetInDays);
 
     await t
       .expect(dateRangeBox.option('opened'))
