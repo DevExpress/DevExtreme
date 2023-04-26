@@ -132,7 +132,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 maxLength: null,
                 min: undefined,
                 opened: false,
-                openOnFieldClick: false,
+                openOnFieldClick: true,
                 readOnly: false,
                 rtlEnabled: false,
                 showClearButton: false,
@@ -160,13 +160,13 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
         const expectedDateBoxOptions = {
             acceptCustomValue: true,
-            activeStateEnabled: false,
+            activeStateEnabled: true,
             applyValueMode: 'instantly',
             displayFormat: null,
             deferRendering: true,
             elementAttr: {},
             focusStateEnabled: true,
-            hoverStateEnabled: false,
+            hoverStateEnabled: true,
             isValid: true,
             label: '',
             labelMode: 'static',
@@ -184,6 +184,9 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             validationStatus: 'valid',
             valueChangeEvent: 'change',
             tabIndex: 0,
+            openOnFieldClick: true,
+            showDropDownButton: false,
+            showClearButton: false,
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -196,8 +199,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 cancelButtonText: 'Cancel',
                 disabledDates: null,
                 opened: false,
-                showClearButton: false,
-                showDropDownButton: false,
+
                 label: 'Start Date',
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
@@ -230,6 +232,10 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             buttons: ['dropDown'],
             readOnly: true,
             deferRendering: false,
+            disabled: true,
+            activeStateEnabled: false,
+            hoverStateEnabled: false,
+            focusStateEnabled: false,
             // TODO: extend this list of options
         };
 
@@ -242,6 +248,10 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 buttons: undefined,
                 readOnly: true,
                 deferRendering: false,
+                disabled: true,
+                activeStateEnabled: false,
+                hoverStateEnabled: false,
+                focusStateEnabled: false,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -259,12 +269,32 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 buttons: undefined,
                 readOnly: true,
                 deferRendering: true,
+                disabled: true,
+                activeStateEnabled: false,
+                hoverStateEnabled: false,
+                focusStateEnabled: false,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
             Object.entries(initialDateRangeBoxOptions).forEach(([key]) => {
                 assert.deepEqual(endDateBox.option(key), expectedOptions[key], `${key} value is correct`);
             });
+        });
+    });
+});
+
+QUnit.module('Classes', moduleConfig, () => {
+    [true, false].forEach(readOnly => {
+        QUnit.test(`hover class should be added on hover event if dateRangeBox readOnly is ${readOnly}`, function(assert) {
+            this.reinit({
+                hoverStateEnabled: true,
+                value: ['2021/09/17', '2022/10/14'],
+                readOnly,
+            });
+
+            this.$element.trigger(hoverEvents.start);
+
+            assert.strictEqual(this.$element.hasClass(STATE_HOVER_CLASS), true, 'dateRangeBox element has hover class');
         });
     });
 });
@@ -892,18 +922,6 @@ QUnit.module('Events', moduleConfig, () => {
             this.instance.reset();
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 2);
-        });
-
-        QUnit.test('hover class should be added on hover event if dateRangeBox has readonly state', function(assert) {
-            this.reinit({
-                hoverStateEnabled: true,
-                value: ['2021/09/17', '2022/10/14'],
-                readOnly: true
-            });
-
-            this.$element.trigger(hoverEvents.start);
-
-            assert.strictEqual(this.$element.hasClass('dx-state-hover'), true, 'dateRangeBox element has hover class');
         });
 
         QUnit.test('keybord events should be attached if readonly is false', function(assert) {
