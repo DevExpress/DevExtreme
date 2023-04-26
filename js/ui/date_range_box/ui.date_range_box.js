@@ -355,7 +355,6 @@ class DateRangeBox extends Widget {
             dateOutOfRangeMessage: options.dateOutOfRangeMessage,
             dateSerializationFormat: options.dateSerializationFormat,
             displayFormat: options.displayFormat,
-            elementAttr: options.elementAttr,
             focusStateEnabled: options.focusStateEnabled,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
@@ -464,6 +463,13 @@ class DateRangeBox extends Widget {
         }
     }
 
+    _renderAccessKey() {
+        const $startDateInput = $(this.field()[0]);
+        const { accessKey } = this.option();
+
+        $startDateInput.attr('accesskey', accessKey);
+    }
+
     _focusTarget() {
         return this.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
@@ -511,6 +517,9 @@ class DateRangeBox extends Widget {
                 this._renderButtonsContainer();
                 break;
             case 'dateSerializationFormat':
+            case 'max':
+            case 'min':
+            case 'spellcheck':
             case 'useMaskBehavior':
             case 'valueChangeEvent':
                 this.getStartDateBox().option(name, value);
@@ -569,7 +578,6 @@ class DateRangeBox extends Widget {
                 this._toggleReadOnlyState();
                 this._refreshFocusState();
                 break;
-            case 'spellcheck':
             case 'startDate':
                 break;
             case 'stylingMode':

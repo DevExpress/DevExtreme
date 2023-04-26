@@ -243,3 +243,20 @@ test('DateRangeBox & StartDateBox should be focused if endDateBox open and close
   value: ['2021/09/17', '2021/10/24'],
   openOnFieldClick: false,
 }));
+
+test('DateRangeBox and StartDateBox should have focus class after focus via accessKey', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(Selector('body'))
+    .pressKey('alt+x')
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  accessKey: 'x',
+  openOnFieldClick: false,
+}));
