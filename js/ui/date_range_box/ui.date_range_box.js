@@ -30,7 +30,7 @@ const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 const SEPARATOR_ICON_NAME = 'to';
 
 const EVENTS_LIST = [
-    'KeyDown', 'KeyPress', 'KeyUp',
+    'KeyDown', 'KeyUp',
     'Change', 'Cut', 'Copy', 'Paste', 'Input',
     'EnterKey',
 ];
