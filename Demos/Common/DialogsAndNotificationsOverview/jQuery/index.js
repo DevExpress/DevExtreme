@@ -1,6 +1,11 @@
 $(() => {
   let currentHouse;
 
+  DevExpress.setTemplateEngine({
+    compile: (element) => $(element).html(),
+    render: (template, data) => Mustache.render(template, data),
+  });
+
   window.formatCurrency = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -12,7 +17,7 @@ $(() => {
     width: 660,
     height: 540,
     contentTemplate() {
-      const result = $(_.template($('#property-details').html())(currentHouse));
+      const result = $(Mustache.render($('#property-details').html(), currentHouse));
       const button = result.find('#favorites')
         .dxButton(buttonOptions)
         .dxButton('instance');
@@ -65,7 +70,7 @@ $(() => {
   }
 
   $.each(houses, (index, house) => {
-    const template = $(_.template($('#property-item').html())(house));
+    const template = $(Mustache.render($('#property-item').html(), house));
 
     template.find(`#popover${house.ID}`)
       .dxPopover($.extend(popoverOptions, {

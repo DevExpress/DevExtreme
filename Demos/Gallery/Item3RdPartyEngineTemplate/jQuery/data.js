@@ -160,4 +160,9 @@ const gallery = [{
   Status: '0',
   Image: '../../../../images/gallery/9.jpg',
 },
-];
+].map((dataItem) => ({
+  ...dataItem,
+  formatCurrency: () => function (text, render) {
+    return window.formatCurrency(parseInt(render(text), 10));
+  },
+}));

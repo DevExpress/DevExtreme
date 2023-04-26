@@ -8,7 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -20,12 +20,12 @@
           <script type="text/html" id="list-template">
             <div>
               <div class="hotel">
-                <div class="name"><%= Hotel_Name %></div>
-                <div class="address"><%= Postal_Code + ", " + Address %></div>
-                <div class="type <%= Hotel_Class.toLowerCase() %>"></div>
+                <div class="name">{{ Hotel_Name }}</div>
+                <div class="address">{{ Postal_Code }}, {{ Address }}</div>
+                <div class="type {{ #toLowerCase }}{{ Hotel_Class }}{{ /toLowerCase }}"></div>
               </div>
               <div class="price-container">
-                <div class="price">$<%= Price %></div>
+                <div class="price">${{ Price }}</div>
                 <div class="caption">per<br />night</div>
               </div>
             </div>
@@ -45,7 +45,7 @@
         </div>
         <div class="tile">
           <script type="text/html" id="tile-template">
-            <div class="tile-image" style="background-image: url(<%= '../../../../images/hotels/' + FileName %>);"></div>
+            <div class="tile-image" style="background-image: url('../../../../images/hotels/{{ FileName }}');"></div>
           </script>
         </div>
         <div class="address"></div>

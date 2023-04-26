@@ -1,5 +1,8 @@
 $(() => {
-  DevExpress.setTemplateEngine('underscore');
+  DevExpress.setTemplateEngine({
+    compile: (element) => $(element).html(),
+    render: (template, data) => Mustache.render(template, data),
+  });
 
   const tile = $('.tile').dxTileView({
     noDataText: '',

@@ -8,7 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -46,17 +46,17 @@
 
       <script type="text/html" id="arabic-accordion-template">
         <div>
-          <div>عاصمة: <%= capitalAr %> </div>
-          <div>عدد السكان: <%= population %> نسمة</div>
-          <div>المساحة: <%= area %> كم<sup>2</sup></div>
+          <div>عاصمة: {{ capitalAr }} </div>
+          <div>عدد السكان: {{ population }} نسمة</div>
+          <div>المساحة: {{ area }} كم<sup>2</sup></div>
         </div>
       </script>
 
       <script type="text/html" id="english-accordion-template">
         <div>
-          <div>Capital: <%= capitalEn %> </div>
-          <div>Population: <%= population %> people</div>
-          <div>Area: <%= area %> km<sup>2</sup></div>
+          <div>Capital: {{ capitalEn }} </div>
+          <div>Population: {{ population }} people</div>
+          <div>Area: {{ area }} km<sup>2</sup></div>
         </div>
       </script>
     </div>

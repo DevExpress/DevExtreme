@@ -142,4 +142,9 @@ const products = [{
   Manufacturing: 225,
   Category: 'Automation',
   ImageSrc: '../../../../images/products/19.png',
-}];
+}].map((dataItem) => ({
+  ...dataItem,
+  formatCurrency: () => function (text, render) {
+    return window.formatCurrency(parseInt(render(text), 10));
+  },
+}));

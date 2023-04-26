@@ -1,5 +1,8 @@
 $(() => {
-  DevExpress.setTemplateEngine('underscore');
+  DevExpress.setTemplateEngine({
+    compile: (element) => $(element).html(),
+    render: (template, data) => Mustache.render(template, data),
+  });
 
   const multiView = $('#multiview-container').dxMultiView({
     height: 300,

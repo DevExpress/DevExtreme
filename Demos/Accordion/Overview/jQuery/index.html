@@ -8,7 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -38,27 +38,27 @@
       </div>
 
       <script type="text/html" id="title">
-        <h1><%= CompanyName%></h1>
+        <h1>{{ CompanyName }}</h1>
       </script>
 
       <script type="text/html" id="customer">
         <div class="accodion-item">
           <div>
             <p>
-              <b><%= City%></b>
-              (<span><%= State%></span>)
+              <b>{{ City }}</b>
+              (<span>{{ State }}</span>)
             </p>
             <p>
-              <span><%= Zipcode%></span>
-              <span><%= Address%></span>
+              <span>{{ Zipcode }}</span>
+              <span>{{ Address }}</span>
             </p>
           </div>
           <div>
-            <p> Phone: <b><%= Phone%></b> </p>
-            <p> Fax: <b><%= Fax%></b> </p>
+            <p> Phone: <b>{{ Phone }}</b> </p>
+            <p> Fax: <b>{{ Fax }}</b> </p>
             <p>
               Website:
-              <a href="<%= Website%>" target="_blank"> <%= Website%> </a>
+              <a href="{{ Website }}" target="_blank"> {{ Website }} </a>
             </p>
           </div>
         </div>

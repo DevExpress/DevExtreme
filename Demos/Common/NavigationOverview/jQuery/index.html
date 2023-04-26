@@ -8,7 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -49,29 +49,29 @@
       </div>
 
       <script type="text/html" id="title">
-        <span class="tab-panel-title"><%= text%></span>
+        <span class="tab-panel-title">{{ text }}</span>
       </script>
 
       <script type="text/html" id="city-template">
         <div>
-          <img class="flag" src="<%= flag %>" />
+          <img class="flag" src="{{ flag }}" />
           <div class="right-content">
-            <div><b><%= (typeof capital != "undefined" && capital) ? "Capital. " : "" %></b><%= description %></div>
+            <div><b>{{ #capital }}Capital. {{ /capital }}</b>{{ description }}</div>
             <div class="stats">
               <div>
                 <div>Population</div>
-                <div><b><%= population %> people</b></div>
+                <div><b>{{ population }} people</b></div>
               </div>
               <div>
                 <div>Area</div>
                 <div
-                  ><b><%= area %> km<sup>2</sup></b></div
+                  ><b>{{ area }} km<sup>2</sup></b></div
                 >
               </div>
               <div>
                 <div>Density</div>
                 <div
-                  ><b><%= density %>/km<sup>2</sup></b></div
+                  ><b>{{ density }}/km<sup>2</sup></b></div
                 >
               </div>
             </div>

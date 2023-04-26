@@ -214,4 +214,12 @@ const houses = [{
     Picture: '../../../../images/employees/01.png',
   },
 },
-];
+].map((dataItem) => ({
+  ...dataItem,
+  formatCurrency: () => function (text, render) {
+    return window.formatCurrency(parseInt(render(text), 10));
+  },
+  replaceFileExtension: () => function (text, render) {
+    return render(text).replace('.jpg', 'b.jpg');
+  },
+}));

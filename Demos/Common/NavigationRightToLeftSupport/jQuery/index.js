@@ -1,5 +1,8 @@
 $(() => {
-  DevExpress.setTemplateEngine('underscore');
+  DevExpress.setTemplateEngine({
+    compile: (element) => $(element).html(),
+    render: (template, data) => Mustache.render(template, data),
+  });
 
   const treeViewWidget = $('#treeview').dxTreeView({
     dataSource: continents,
@@ -13,16 +16,18 @@ $(() => {
 
   const arabicAccordionOptions = {
     rtlEnabled: true,
-    itemTitleTemplate(data) {
-      return data.nameAr;
+    itemTitleTemplate(data, index, element) {
+      const $item = $('<div>').text(data.nameAr);
+      element.append($item);
     },
     itemTemplate: $('#arabic-accordion-template'),
   };
 
   const englishAccordionOptions = {
     rtlEnabled: false,
-    itemTitleTemplate(data) {
-      return data.nameEn;
+    itemTitleTemplate(data, index, element) {
+      const $item = $('<div>').text(data.nameEn);
+      element.append($item);
     },
     itemTemplate: $('#english-accordion-template'),
   };

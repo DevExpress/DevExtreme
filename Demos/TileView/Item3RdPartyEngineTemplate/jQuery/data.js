@@ -116,4 +116,9 @@ const homes = [{
   State: 'CA',
   Price: 1100000,
   ImageSrc: '../../../../images/gallery/21.jpg',
-}];
+}].map((dataItem) => ({
+  ...dataItem,
+  formatCurrency: () => function (text, render) {
+    return window.formatCurrency(parseInt(render(text), 10));
+  },
+}));

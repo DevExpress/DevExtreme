@@ -8,7 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -18,8 +18,8 @@
       <div id="tileview"></div>
 
       <script type="text/html" id="home-template">
-        <div class="price"><%= formatCurrency(Price) %> </div>
-        <div class="image" style="background-image: url('<%= ImageSrc %>')"></div>
+        <div class="price">{{ #formatCurrency }}{{ Price }}{{ /formatCurrency }} </div>
+        <div class="image" style="background-image: url('{{ ImageSrc }}')"></div>
       </script>
     </div>
   </body>

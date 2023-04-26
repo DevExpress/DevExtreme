@@ -8,7 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
     <script src="data.js"></script>
@@ -22,13 +22,13 @@
     <script id="property-item" type="text/html">
       <div>
         <div class="item-content">
-          <img id="house-image<%= ID %>" src="<%= Image %>" />
+          <img id="house-image{{ ID }}" src="{{ Image }}" />
           <div class="item-options">
             <div>
-              <div class="address"><%= Address %></div>
-              <div class="price large-text"><%= formatCurrency(Price) %></div>
+              <div class="address">{{ Address }}</div>
+              <div class="price large-text">{{ #formatCurrency }}{{ Price }}{{ /formatCurrency }}</div>
               <div class="agent">
-                <div id="house<%= ID %>">
+                <div id="house{{ ID }}">
                   <img src="../../../../images/icon-agent.svg" />
                   Listing agent
                 </div>
@@ -36,12 +36,12 @@
             </div>
           </div>
         </div>
-        <div id="popover<%= ID %>">
+        <div id="popover{{ ID }}">
           <div class="agent-details">
-            <img src="<%= Agent.Picture %>" />
+            <img src="{{ Agent.Picture }}" />
             <div>
-              <div class="name large-text"><%= Agent.Name %></div>
-              <div class="phone">Tel: <%= Agent.Phone %></div>
+              <div class="name large-text">{{ Agent.Name }}</div>
+              <div class="phone">Tel: {{ Agent.Phone }}</div>
             </div>
           </div>
         </div>
@@ -50,14 +50,14 @@
 
     <script id="property-details" type="text/html">
       <div class="popup-property-details">
-        <div class="large-text"><%= formatCurrency(Price) %></div>
-        <div class="opacity"><%= Address + ", " + City + ", " + State %></div>
+        <div class="large-text">{{ #formatCurrency }}{{ Price }}{{ /formatCurrency }}</div>
+        <div class="opacity">{{ Address }}, {{ City }}, {{ State }}</div>
         <div id="favorites" class="favorites"></div>
         <div class="images">
-          <img src="<%= Image %>" />
-          <img src="<%= Image.replace('.jpg', 'b.jpg') %>" />
+          <img src="{{ Image }}" />
+          <img src="{{ #replaceFileExtension }}{{ Image }}{{ /replaceFileExtension }}" />
         </div>
-        <div><%= Features %></div>
+        <div>{{ Features }}</div>
       </div>
     </script>
   </body>

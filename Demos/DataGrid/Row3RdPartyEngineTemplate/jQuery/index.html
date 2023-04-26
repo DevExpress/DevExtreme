@@ -12,7 +12,7 @@
     <script src="../../../../../node_modules/cldrjs/dist/cldr/unresolved.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
-    <script src="../../../../../node_modules/underscore/underscore.js"></script>
+    <script src="../../../../../node_modules/mustache/mustache.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -22,16 +22,16 @@
       <div id="gridContainer"></div>
       <script id="gridRow" type="text/html">
         <tr class="main-row">
-          <td rowspan="2"><img src="<%= data.Picture %>" /></td>
-          <td><%= data.Prefix %></td>
-          <td><%= data.FirstName %></td>
-          <td><%= data.LastName %></td>
-          <td><%= data.Position %></td>
-          <td><%= data.BirthDate %></td>
-          <td><%= data.HireDate %></td>
+          <td rowspan="2"><img src="{{ data.Picture }}" /></td>
+          <td>{{ data.Prefix }}</td>
+          <td>{{ data.FirstName }}</td>
+          <td>{{ data.LastName }}</td>
+          <td>{{ data.Position }}</td>
+          <td>{{ data.BirthDate }}</td>
+          <td>{{ data.HireDate }}</td>
         </tr>
         <tr class="notes-row">
-          <td colspan="6"><div><%= data.Notes %></div></td>
+          <td colspan="6"><div>{{ data.Notes }}</div></td>
         </tr>
       </script>
     </div>
