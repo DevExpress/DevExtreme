@@ -6,6 +6,7 @@ import { isRenderer } from 'core/utils/type';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import Popup from 'ui/popup/ui.popup';
 
 import 'generic_light.css!';
 
@@ -112,6 +113,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
                 dateSerializationFormat: undefined,
+                deferRendering: true,
                 disabledDates: null,
                 displayFormat: null,
                 dropDownOptions: {},
@@ -132,6 +134,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 opened: false,
                 openOnFieldClick: true,
                 readOnly: false,
+                disabled: false,
                 rtlEnabled: false,
                 showClearButton: false,
                 showDropDownButton: true,
@@ -161,6 +164,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             activeStateEnabled: true,
             applyValueMode: 'instantly',
             displayFormat: null,
+            deferRendering: true,
             elementAttr: {},
             focusStateEnabled: true,
             hoverStateEnabled: true,
@@ -172,6 +176,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             min: undefined,
             placeholder: '',
             readOnly: false,
+            disabled: false,
             rtlEnabled: false,
             spellcheck: false,
             stylingMode: 'underlined',
@@ -228,6 +233,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showDropDownButton: true,
             buttons: ['dropDown'],
             readOnly: true,
+            deferRendering: false,
             disabled: true,
             activeStateEnabled: false,
             hoverStateEnabled: false,
@@ -243,6 +249,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                deferRendering: false,
                 disabled: true,
                 activeStateEnabled: false,
                 hoverStateEnabled: false,
@@ -263,6 +270,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                deferRendering: true,
                 disabled: true,
                 activeStateEnabled: false,
                 hoverStateEnabled: false,
@@ -604,6 +612,19 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
         assert.strictEqual(this.instance.getStartDateBox().option('opened'), true, 'startDateBox is opened');
         assert.strictEqual(this.instance.getEndDateBox().option('opened'), false, 'endDateBox is opened');
+    });
+
+    QUnit.test('Drop down button should be rendered and not disabled after change readOnly state', function(assert) {
+        this.reinit({
+            readOnly: true,
+        });
+
+        assert.equal(this.instance.getButton('dropDown'), undefined, 'drop down button is not rendered');
+
+        this.instance.option('readOnly', false);
+
+        assert.equal(this.instance.getButton('dropDown'), getButtons(this.$element).dxButton('instance'), 'drop down button is rendered');
+        assert.equal(this.instance.getButton('dropDown').option('disabled'), false, 'drop down button is not disabled');
     });
 });
 
@@ -1154,23 +1175,6 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         assert.strictEqual(this.instance.getEndDateBox().option('placeholder'), 'text', 'endDateBox placeholder option value has been changed');
     });
 
-    QUnit.test('StartDateBox & endDateBox inputs should have the same value of tabIndex attribute after initialization', function(assert) {
-        this.reinit({
-            tabIndex: '2'
-        });
-
-        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
-        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
-    });
-
-    QUnit.test('StartDateBox & endDateBox inputs should have the same value of tabIndex attribute if tabIndex option was changed in runtime', function(assert) {
-        this.reinit({});
-        this.instance.option('tabIndex', 3);
-
-        assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '3', 'startDateBox input tabIndex value');
-        assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '3', 'endDateBox input tabIndex value');
-    });
-
     QUnit.test('DropDownOptions should be passed to startDateBox on init', function(assert) {
         this.reinit({
             dropDownOptions: {
@@ -1284,6 +1288,32 @@ QUnit.module('Option synchronization', moduleConfig, () => {
                 .caret({ start: 0, end: 1 })
                 .type('1');
         });
+    });
+
+    QUnit.test('StartDateBox & EndDateBox popups should not be rendered by default', function(assert) {
+        assert.strictEqual(this.instance.getStartDateBox()._popup, undefined, 'startDateBox popup is not rendered by default');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered by default');
+    });
+
+    QUnit.test('Only startDateBox should be rendered if deferRendering is false', function(assert) {
+        this.reinit({
+            deferRendering: false,
+        });
+
+        assert.strictEqual(this.instance.getStartDateBox()._popup instanceof Popup, true, 'startDateBox popup is rendered');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered');
+    });
+
+    QUnit.test('Only startDateBox should be rendered if deferRendering was changed in runtime', function(assert) {
+        this.reinit({});
+
+        assert.strictEqual(this.instance.getStartDateBox()._popup, undefined, 'startDateBox popup is not rendered by default');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered by default');
+
+        this.instance.option('deferRendering', false);
+
+        assert.strictEqual(this.instance.getStartDateBox()._popup instanceof Popup, true, 'startDateBox popup is rendered');
+        assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered');
     });
 });
 

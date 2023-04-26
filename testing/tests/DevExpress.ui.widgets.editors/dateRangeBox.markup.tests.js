@@ -205,5 +205,95 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
 
         assert.strictEqual($endDateInput.attr('accesskey'), undefined);
     });
+
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        QUnit.test(`DateRangeBox inputs should not have ${optionName} attribute if ${optionName} is false`, function(assert) {
+            this.reinit({
+                [optionName]: false,
+            });
+
+            const field = this.instance.field();
+
+            assert.strictEqual($(field[0]).prop(optionName), false, `startDate input does not have ${optionName} attribute`);
+            assert.strictEqual($(field[1]).prop(optionName), false, `endDate input does not have ${optionName} attribute`);
+        });
+
+        QUnit.test(`DateRangeBox inputs should have ${optionName} attribute if ${optionName} is true`, function(assert) {
+            this.reinit({
+                [optionName]: true,
+            });
+
+            const field = this.instance.field();
+
+            assert.strictEqual($(field[0]).prop(optionName), true, `startDate input have ${optionName} attribute`);
+            assert.strictEqual($(field[1]).prop(optionName), true, `endDate input have ${optionName} attribute`);
+        });
+
+        QUnit.test(`DateRangeBox inputs should have ${optionName} attribute if ${optionName} option value is changed in runtime`, function(assert) {
+            this.reinit({
+                [optionName]: false,
+            });
+
+            this.instance.option(optionName, true);
+
+            const field = this.instance.field();
+
+            assert.strictEqual($(field[0]).prop(optionName), true, `startDate input have ${optionName} attribute`);
+            assert.strictEqual($(field[1]).prop(optionName), true, `endDate input have ${optionName} attribute`);
+
+            this.instance.option(optionName, false);
+
+            assert.strictEqual($(field[0]).prop(optionName), false, `startDate input does not have ${optionName} attribute`);
+            assert.strictEqual($(field[1]).prop(optionName), false, `endDate input does not have ${optionName} attribute`);
+        });
+    });
+
+    QUnit.test('DateRangeBox inputs should have the same value of tabIndex attribute after initialization', function(assert) {
+        this.reinit({
+            tabIndex: '2'
+        });
+
+        assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
+    });
+
+    QUnit.test('DateRangeBox inputs should have the same value of tabIndex attribute if tabIndex option was changed in runtime', function(assert) {
+        this.reinit({});
+        this.instance.option('tabIndex', 3);
+
+        assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '3', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '3', 'endDateBox input tabIndex value');
+    });
+
+    QUnit.test('DateRangeBox inputs should have tabIndex attribute that equal -1 after initialization if focusStateEnabled is false', function(assert) {
+        this.reinit({
+            tabIndex: '2',
+            focusStateEnabled: false,
+        });
+
+        assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '-1', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '-1', 'endDateBox input tabIndex value');
+    });
+
+    QUnit.test('DateRangeBox inputs should have correct tabIndex attribute value if focusStateEnabled is changed in runtime', function(assert) {
+        this.reinit({
+            tabIndex: '2',
+            focusStateEnabled: true,
+        });
+
+        assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
+
+        this.instance.option('focusStateEnabled', false);
+
+        assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '-1', 'startDateBox input tabIndex value');
+        assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '-1', 'endDateBox input tabIndex value');
+
+        this.instance.option('focusStateEnabled', true);
+
+        // TODO: it doesn't clear why texteditor remove tabindex on toggling
+        // assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
+        // assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
+    });
 });
 

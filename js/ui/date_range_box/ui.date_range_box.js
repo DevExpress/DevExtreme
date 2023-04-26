@@ -50,6 +50,8 @@ class DateRangeBox extends Widget {
 
             dateSerializationFormat: undefined,
 
+            deferRendering: true,
+
             disabledDates: null,
 
             displayFormat: null,
@@ -354,8 +356,10 @@ class DateRangeBox extends Widget {
             applyValueMode: options.applyValueMode,
             dateOutOfRangeMessage: options.dateOutOfRangeMessage,
             dateSerializationFormat: options.dateSerializationFormat,
+            deferRendering: options.deferRendering,
             displayFormat: options.displayFormat,
             focusStateEnabled: options.focusStateEnabled,
+            tabIndex: options.tabIndex,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
             invalidDateMessage: options.invalidDateMessage,
@@ -367,6 +371,7 @@ class DateRangeBox extends Widget {
             openOnFieldClick: options.openOnFieldClick,
             pickerType: 'calendar',
             readOnly: options.readOnly,
+            disabled: options.disabled,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
             stylingMode: 'underlined',
@@ -388,6 +393,7 @@ class DateRangeBox extends Widget {
             applyButtonText: options.applyButtonText,
             calendarOptions: options.calendarOptions,
             cancelButtonText: options.cancelButtonText,
+            deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
             onValueChanged: ({ value }) => {
@@ -438,6 +444,7 @@ class DateRangeBox extends Widget {
             value: this.option('value')[1],
             label: options.endDateLabel,
             placeholder: options.endDatePlaceholder,
+            deferRendering: true,
         };
     }
 
@@ -560,12 +567,21 @@ class DateRangeBox extends Widget {
                 this.getEndDateBox().option('placeholder', value);
                 break;
             case 'labelMode':
+                break;
+            case 'tabIndex':
+            case 'focusStateEnabled':
+                super._optionChanged(args);
+
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
+                break;
             case 'maxLength':
                 break;
             case 'onValueChanged':
                 this._createValueChangeAction();
                 break;
             case 'opened':
+            case 'deferRendering':
             case 'dropDownOptions':
                 this.getStartDateBox().option(name, value);
                 break;
@@ -575,8 +591,22 @@ class DateRangeBox extends Widget {
             case 'openOnFieldClick':
                 break;
             case 'readOnly':
+                this._updateButtons();
+
                 this._toggleReadOnlyState();
                 this._refreshFocusState();
+
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
+                break;
+            case 'disabled':
+                // TODO: understand the scenario where it needs and add test
+                this._updateButtons();
+
+                super._optionChanged(args);
+
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
                 break;
             case 'startDate':
                 break;
