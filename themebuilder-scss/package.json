@@ -32,6 +32,7 @@
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
   "devDependencies": {
+    "@types/babel__traverse": "ts3.9",
     "@types/clean-css": "^4.2.3",
     "@types/dependency-tree": "^7.2.0",
     "@types/filing-cabinet": "^2.5.0",
