@@ -3,7 +3,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
+import {
+  appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage, setAttribute,
+} from '../../../helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
 
 const BUTTON_CLASS = 'dx-button';
@@ -78,6 +80,8 @@ test('Buttons render in disabled state', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
+
   for (const stylingMode of stylingModes) {
     for (const type of types) {
       const id = `${new Guid()}`;
