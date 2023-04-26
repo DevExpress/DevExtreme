@@ -285,6 +285,11 @@ QUnit.testInActiveWindow('Focusing widget when there is search editor', function
 });
 
 QUnit.test('select all item should be focused on treeview focus', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     initTree({
         items: $.extend(true, [], DATA[0]),
         showCheckBoxesMode: 'selectAll',
@@ -316,6 +321,11 @@ QUnit.test('SelectAll checkbox should be checked with space key', function(asser
 });
 
 QUnit.test('search bar should be focused when both search and selectAll item are enabled', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     initTree({
         items: $.extend(true, [], DATA[0]),
         searchEnabled: true,
@@ -328,6 +338,11 @@ QUnit.test('search bar should be focused when both search and selectAll item are
 });
 
 QUnit.test('first item should be focused if both search bar and selectAll item are absent', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
     initTree({
         items: $.extend(true, [], DATA[0]),
     }).dxTreeView('focus');
