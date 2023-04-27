@@ -226,7 +226,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _setLabelContainerAria: function() {
-        const $input = this._getLabelContainer().find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $input = this.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         this.setAria('labelledby', this._label.getId(), $input);
     },
