@@ -42,6 +42,7 @@ const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -225,7 +226,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _setLabelContainerAria: function() {
-        const $input = this._getLabelContainer().find('input');
+        const $input = this._getLabelContainer().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         this.setAria('labelledby', this._label.getId(), $input);
     },

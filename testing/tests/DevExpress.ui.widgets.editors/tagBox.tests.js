@@ -53,6 +53,7 @@ const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
 const TAGBOX_POPUP_WRAPPER_CLASS = 'dx-tagbox-popup-wrapper';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
+const TAGBOX_SELECT_SELECTOR = 'select';
 const FOCUSED_CLASS = 'dx-state-focused';
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 const KEY_ENTER = 'Enter';
@@ -7656,7 +7657,7 @@ QUnit.module('accessibility', () => {
 
     QUnit.test('select should have a correct aria-label', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox();
-        const $select = $tagBox.find('select');
+        const $select = $tagBox.find(TAGBOX_SELECT_SELECTOR);
 
         assert.equal($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
     });
