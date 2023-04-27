@@ -184,12 +184,6 @@ export const compileSetter = function(expr) {
 export const toComparable = function(value, caseSensitive, options) {
     options = options || {};
 
-    const customConverter = options.toComparable;
-
-    if(isFunction(customConverter)) {
-        return customConverter(value);
-    }
-
     if(value instanceof Date) {
         return value.getTime();
     }
