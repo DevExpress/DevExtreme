@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const mock = require('../../../helpers/mockModule.js').mock;
+require('../../../helpers/trackerMock.js');
+
 const vizMocks = require('../../../helpers/vizMocks.js');
 const { Label } = require('viz/series/points/label');
 const LabelCtor = new vizMocks.ObjectPool(Label);
@@ -18,9 +18,7 @@ const Crosshair = crosshairModule.Crosshair;
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const scrollBarClassModule = require('viz/chart_components/scroll_bar');
 const ScrollBarClass = scrollBarClassModule.ScrollBar;
-const { ChartTracker, PieTracker } = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
-const PieTrackerSub = vizMocks.stubClass(PieTracker);
+const trackerModule = require('viz/chart_components/tracker');
 const dataValidatorModule = require('viz/components/data_validator');
 const chartMocks = require('../../../helpers/chartMocks.js');
 const insertMockFactory = chartMocks.insertMockFactory;
@@ -96,11 +94,6 @@ legendModule.Legend = sinon.spy(function(parameters) {
         return [];
     });
     return legend;
-});
-
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters)),
-    PieTracker: sinon.spy((parameters) => new PieTrackerSub(parameters))
 });
 
 const resetModules = exports.resetModules = function() {
