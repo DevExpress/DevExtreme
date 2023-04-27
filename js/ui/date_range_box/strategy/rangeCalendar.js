@@ -71,6 +71,9 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
+        // fix error after select endDate and invalidate dateBoxes
+        this.setActiveStartDateBox();
+
         if(isSameDateArrays(value, previousValue)) {
             return;
         }
