@@ -2485,6 +2485,10 @@ declare module DevExpress.common.grids {
      */
     mode?: ColumnChooserMode;
     /**
+     * [descr:GridBaseOptions.columnChooser.position]
+     */
+    position?: PositionConfig;
+    /**
      * [descr:GridBaseOptions.columnChooser.search]
      */
     search?: ColumnChooserSearchConfig;
