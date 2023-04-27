@@ -1420,6 +1420,9 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'acceptCustomValue',
             optionValue: false
+        }, {
+            optionName: 'rtlEnabled',
+            optionValue: true
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
