@@ -880,6 +880,18 @@ QUnit.module('Events', moduleConfig, () => {
             assert.ok(this.onValueChangedHandler.calledOnce);
         });
 
+        QUnit.test('should be called after startDate change', function(assert) {
+            this.instance.option('startDate', '2020/02/20');
+
+            assert.ok(this.onValueChangedHandler.calledOnce);
+        });
+
+        QUnit.test('should be called after endDate change', function(assert) {
+            this.instance.option('endDate', '2020/03/30');
+
+            assert.ok(this.onValueChangedHandler.calledOnce);
+        });
+
         QUnit.test('onValueChanged event should have correct arguments', function(assert) {
             const oldValue = this.instance.option('value');
             const newValue = ['2023/04/19', null];
@@ -1279,6 +1291,78 @@ QUnit.module('Popup integration', moduleConfig, () => {
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
+    QUnit.test('StartDate option should get first item from value option on init', function(assert) {
+        const { value, startDate } = this.instance.option();
+
+        assert.strictEqual(startDate, value[0]);
+    });
+
+    QUnit.test('EndDate option should get second item from value option on init', function(assert) {
+        const { value, endDate } = this.instance.option();
+
+        assert.strictEqual(endDate, value[1]);
+    });
+
+    QUnit.test('Value option should get values from startDate/endDate options on init', function(assert) {
+        const startDate = '2023/01/01';
+        const endDate = '2023/02/02';
+
+        this.reinit({
+            startDate, endDate
+        });
+
+        const { value } = this.instance.option();
+
+        assert.strictEqual(value[0], startDate);
+        assert.strictEqual(value[1], endDate);
+    });
+
+    QUnit.test('Value should have higher priority if value option and startDate/endDate options are defined on init', function(assert) {
+        const startDate = '2023/01/01';
+        const endDate = '2023/02/02';
+        const value = ['2024/01/01', '2024/02/02'];
+
+        this.reinit({
+            startDate, endDate, value
+        });
+
+        assert.deepEqual(this.instance.option('value'), value);
+        assert.strictEqual(this.instance.option('startDate'), value[0]);
+        assert.strictEqual(this.instance.option('endDate'), value[1]);
+    });
+
+    QUnit.test('StartDate option should update value option on runtime change', function(assert) {
+        const startDate = '2023/01/05';
+
+        this.instance.option('startDate', startDate);
+
+        assert.strictEqual(startDate, this.instance.option('value')[0]);
+    });
+
+    QUnit.test('EndDate option should update value option on runtime change', function(assert) {
+        const endDate = '2023/01/15';
+
+        this.instance.option('endDate', endDate);
+
+        assert.strictEqual(endDate, this.instance.option('value')[1]);
+    });
+
+    QUnit.test('Value option should update startDate option on runtime change', function(assert) {
+        const value = ['2023/01/07', '2023/02/07'];
+
+        this.instance.option('value', value);
+
+        assert.strictEqual(this.instance.option('startDate'), value[0]);
+    });
+
+    QUnit.test('value option should update endDate option on runtime change', function(assert) {
+        const value = ['2023/01/07', '2023/02/07'];
+
+        this.instance.option('value', value);
+
+        assert.strictEqual(this.instance.option('endDate'), value[1]);
+    });
+
     QUnit.test('StartDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
         const endDateBox = getEndDateBoxInstance(this.instance);

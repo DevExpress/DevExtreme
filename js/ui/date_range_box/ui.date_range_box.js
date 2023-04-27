@@ -171,6 +171,18 @@ class DateRangeBox extends Widget {
         ]);
     }
 
+    _initOptions(options) {
+        super._initOptions(options);
+
+        const { value: initialValue } = this.initialOption();
+        const { value, startDate, endDate } = this.option();
+        if(value[0] === initialValue[0] && value[1] === initialValue[1]) {
+            this.option('value', [startDate, endDate]);
+        } else {
+            this.option({ startDate: value[0], endDate: value[1] });
+        }
+    }
+
     _createOpenAction() {
         this._openAction = this._createActionByOption('onOpened', {
             excludeValidators: ['disabled', 'readOnly']
@@ -609,6 +621,8 @@ class DateRangeBox extends Widget {
                 this._updateButtons(['clear']);
                 break;
             case 'endDate':
+                this.updateValue([this.option('value')[0], value]);
+                break;
             case 'invalidDateMessage':
             case 'isValid':
                 break;
@@ -675,6 +689,7 @@ class DateRangeBox extends Widget {
                 this.getEndDateBox().option(name, value);
                 break;
             case 'startDate':
+                this.updateValue([value, this.option('value')[1]]);
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
@@ -689,6 +704,9 @@ class DateRangeBox extends Widget {
             case 'validationStatus':
                 break;
             case 'value':
+                this._setOptionWithoutOptionChange('startDate', args.value[0]);
+                this._setOptionWithoutOptionChange('endDate', args.value[1]);
+
                 this._raiseValueChangeAction(value, previousValue);
                 this._saveValueChangeEvent(undefined);
                 this._updateDateBoxesValue(value);
