@@ -18,6 +18,12 @@ $(() => {
           e.fromData.splice(e.fromIndex, 1);
           e.component.reload();
         },
+        onReorder({
+          fromIndex, toIndex, fromData, component,
+        }) {
+          [fromData[fromIndex], fromData[toIndex]] = [fromData[toIndex], fromData[fromIndex]];
+          component.reload();
+        },
       },
     });
   }

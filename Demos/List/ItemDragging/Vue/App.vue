@@ -11,6 +11,7 @@
           :on-drag-start="onDragStart"
           :on-add="onAdd"
           :on-remove="onRemove"
+          :on-reorder="onReorder"
           group="tasks"
         />
       </DxList>
@@ -24,6 +25,7 @@
           :on-drag-start="onDragStart"
           :on-add="onAdd"
           :on-remove="onRemove"
+          :on-reorder="onReorder"
           group="tasks"
         />
       </DxList>
@@ -60,6 +62,10 @@ export default {
       const data = [...this[e.fromData]];
       data.splice(e.fromIndex, 1);
       this[e.fromData] = data;
+    },
+    onReorder(e) {
+      this.onRemove(e);
+      this.onAdd(e);
     },
   },
 };
