@@ -46,7 +46,7 @@ const Navigator = Widget.inherit({
         const that = this;
         const direction = this.option('rtlEnabled') ? -1 : 1;
 
-        this._prevButton = this._createComponent($('<a>'),
+        this._prevButton = this._createComponent($('<div>'),
             Button, {
                 focusStateEnabled: false,
                 icon: 'chevronleft',
@@ -58,7 +58,7 @@ const Navigator = Widget.inherit({
             .addClass(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)
             .addClass(CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS);
 
-        this._nextButton = this._createComponent($('<a>'),
+        this._nextButton = this._createComponent($('<div>'),
             Button, {
                 focusStateEnabled: false,
                 icon: 'chevronright',
@@ -70,7 +70,7 @@ const Navigator = Widget.inherit({
             .addClass(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)
             .addClass(CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS);
 
-        this._caption = this._createComponent($('<a>').addClass(CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS),
+        this._caption = this._createComponent($('<div>').addClass(CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS),
             Button, {
                 focusStateEnabled: false,
                 onClick: function(e) { that._captionClickAction({ event: e }); },
