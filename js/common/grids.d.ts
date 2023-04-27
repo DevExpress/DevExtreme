@@ -377,6 +377,7 @@ export interface ColumnBase<TRowData = any> {
   /**
    * @docid GridBaseColumn.sortIndex
    * @default undefined
+   * @fires GridBaseOptions.onOptionChanged
    * @public
    */
   sortIndex?: number;
