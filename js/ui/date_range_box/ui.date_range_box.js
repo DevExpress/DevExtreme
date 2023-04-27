@@ -602,10 +602,12 @@ class DateRangeBox extends Widget {
                 this._cleanButtonContainers();
                 this._renderButtonsContainer();
                 break;
-            case 'pickerType':
-                this.getStartDateBox().option(name, this._getPickerType());
-                this.getEndDateBox().option(name, this._getPickerType());
+            case 'pickerType': {
+                const pickerType = this._getPickerType();
+                this.getStartDateBox().option(name, pickerType);
+                this.getEndDateBox().option(name, pickerType);
                 break;
+            }
             case 'calendarOptions':
                 break;
             case 'dateOutOfRangeMessage':
