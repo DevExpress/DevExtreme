@@ -115,7 +115,7 @@ if(Globalize && Globalize.formatDate) {
         },
 
         getPeriodNames: function() {
-            const json = Globalize.locale().main('dates/calendars/gregorian/dayPeriods/stand-alone/wide');
+            const json = Globalize.locale().main('dates/calendars/gregorian/dayPeriods/stand-alone/abbreviated');
             return [json['am'], json['pm']];
         },
 
