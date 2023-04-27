@@ -3,7 +3,6 @@ import config from 'core/config';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
-import { titleize } from 'core/utils/inflector.js';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -161,6 +160,10 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 onCopy: null,
                 onPaste: null,
                 onEnterKey: null,
+                startDateInputAttr: {},
+                startDateName: '',
+                endDateInputAttr: {},
+                endDateName: '',
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -206,6 +209,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             onCopy: null,
             onPaste: null,
             onEnterKey: null,
+            name: '',
+            inputAttr: {},
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -218,7 +223,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 cancelButtonText: 'Cancel',
                 disabledDates: null,
                 opened: false,
-
                 label: 'Start Date',
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
@@ -255,6 +259,10 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             activeStateEnabled: false,
             hoverStateEnabled: false,
             focusStateEnabled: false,
+            startDateInputAttr: { id: 'startDateInput' },
+            startDateName: 'start_input',
+            endDateInputAttr: { id: 'endDateInput' },
+            endDateName: 'end_input',
             // TODO: extend this list of options
         };
 
@@ -271,6 +279,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 activeStateEnabled: false,
                 hoverStateEnabled: false,
                 focusStateEnabled: false,
+                name: 'start_input',
+                inputAttr: { id: 'startDateInput' },
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -292,6 +302,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 activeStateEnabled: false,
                 hoverStateEnabled: false,
                 focusStateEnabled: false,
+                name: 'end_input',
+                inputAttr: { id: 'endDateInput' },
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -1339,6 +1351,30 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         this.instance.option('endDatePlaceholder', 'text');
 
         assert.strictEqual(this.instance.getEndDateBox().option('placeholder'), 'text', 'endDateBox placeholder option value has been changed');
+    });
+
+    QUnit.test('DateRangeBox "startDateInputAttr", "endDateInputAttr" option values should be passed in "inputAttr" option of startDateBox and endDateBox after change in runtime respectively', function(assert) {
+        this.reinit({});
+
+        this.instance.option({
+            startDateInputAttr: { id: 'startDateInput' },
+            endDateInputAttr: { id: 'endDateInput' }
+        });
+
+        assert.deepEqual(this.instance.getStartDateBox().option('inputAttr'), { id: 'startDateInput' }, 'startDateBox inputAttr option has correct value');
+        assert.deepEqual(this.instance.getEndDateBox().option('inputAttr'), { id: 'endDateInput' }, 'endDateBox inputAttr option has correct value');
+    });
+
+    QUnit.test('DateRangeBox "startDateName", "endDateName" option values should be passed in "name" option of startDateBox and endDateBox after change in runtime respectively', function(assert) {
+        this.reinit({});
+
+        this.instance.option({
+            startDateName: 'start_input',
+            endDateName: 'end_input',
+        });
+
+        assert.strictEqual(this.instance.getStartDateBox().option('name'), 'start_input', 'startDateBox name option has correct value');
+        assert.strictEqual(this.instance.getEndDateBox().option('name'), 'end_input', 'endDateBox name option has correct value');
     });
 
     QUnit.test('DropDownOptions should be passed to startDateBox on init', function(assert) {
