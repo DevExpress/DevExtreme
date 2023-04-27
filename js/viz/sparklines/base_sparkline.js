@@ -39,7 +39,7 @@ function pointerHandler({ data }) {
 }
 
 function getDefaultTemplate({ lineSpacing, size }, textAlign) {
-    const lineHeight = `${((lineSpacing !== undefined && lineSpacing !== null) ? lineSpacing : DEFAULT_LINE_SPACING) + size}px`;
+    const lineHeight = `${(lineSpacing ?? DEFAULT_LINE_SPACING) + size}px`;
 
     return function({ valueText }, container) {
         const table = $('<table>').css({
@@ -296,9 +296,7 @@ BaseSparkline.prototype._getDefaultTooltipTemplate = function(options) {
         const formatObject = this._getTooltipData();
         const customizeResult = options.customizeTooltip.call(formatObject, formatObject) ?? {};
 
-        if(!('html' in customizeResult) && !('text' in customizeResult)) {
-            defaultTemplateNeeded = true;
-        }
+        defaultTemplateNeeded = !('html' in customizeResult) && !('text' in customizeResult);
     } else {
         defaultTemplateNeeded = true;
     }
