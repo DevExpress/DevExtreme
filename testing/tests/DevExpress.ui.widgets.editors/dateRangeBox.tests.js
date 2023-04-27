@@ -1363,6 +1363,37 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
     [
         {
+            optionName: 'applyButtonText',
+            optionValue: 'kk'
+        }, {
+            optionName: 'cancelButtonText',
+            optionValue: 'abort'
+        }, {
+            optionName: 'todayButtonText',
+            optionValue: 'now'
+        }
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`${optionName} should be passed to startDateBox on init`, function(assert) {
+            this.reinit({
+                [optionName]: optionValue
+            });
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option(optionName), optionValue);
+        });
+
+        QUnit.test(`${optionName} should be passed to startDateBox on runtime change`, function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            this.instance.option(optionName, optionValue);
+
+            assert.strictEqual(startDateBox.option(optionName), optionValue);
+        });
+    });
+
+    [
+        {
             optionName: 'dateSerializationFormat',
             optionValue: 'yyyy-MM-dd',
         }, {
@@ -1383,12 +1414,18 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'spellcheck',
             optionValue: true,
+        }, {
+            optionName: 'pickerType',
+            optionValue: 'native'
+        }, {
+            optionName: 'acceptCustomValue',
+            optionValue: false
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
-            const initOptions = {};
-            initOptions[optionName] = optionValue;
-            this.reinit(initOptions);
+            this.reinit({
+                [optionName]: optionValue
+            });
 
             const startDateBox = getStartDateBoxInstance(this.instance);
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -1453,6 +1490,22 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             keyboard
                 .caret({ start: 0, end: 1 })
                 .type('1');
+        });
+
+        QUnit.test('DateBoxes pickerType should be "calendar" if initial DateRangeBox pickerType is not "calendar" or "native"', function(assert) {
+            this.reinit({
+                pickerType: 'rollers'
+            });
+
+            assert.strictEqual(this.instance.getStartDateBox().option('pickerType'), 'calendar');
+            assert.strictEqual(this.instance.getEndDateBox().option('pickerType'), 'calendar');
+        });
+
+        QUnit.test('DateBoxes pickerType should be "calendar" if DateRangeBox pickerType is not "calendar" or "native" on runtime change', function(assert) {
+            this.instance.option('pickerType', 'rollers');
+
+            assert.strictEqual(this.instance.getStartDateBox().option('pickerType'), 'calendar');
+            assert.strictEqual(this.instance.getEndDateBox().option('pickerType'), 'calendar');
         });
     });
 
