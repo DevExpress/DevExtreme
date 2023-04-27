@@ -78,12 +78,12 @@ class VerticalGroupedStrategy {
     getGroupBoundsOffset(groupIndex, [$firstCell, $lastCell]) {
         return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
             const { startDayHour, endDayHour, hoursInterval } = this._workSpace.option();
+            const $scrollableElement = this._workSpace.getScrollable().$element().get(0);
 
             const hoursInDay = calculateDayDuration(startDayHour, endDayHour) / hoursInterval;
             const dayHeight = hoursInDay * this._workSpace.getCellHeight();
+            const topOffset = this.getScrollViewTop($scrollableElement, this._workSpace, groupIndex, dayHeight);
 
-            const scrollViewTop = this._workSpace.getScrollable().$element().get(0).getBoundingClientRect().top;
-            const topOffset = scrollViewTop + groupIndex * dayHeight;
             const bottomOffset = topOffset + dayHeight;
 
             const { left } = $firstCell.getBoundingClientRect();
@@ -96,6 +96,17 @@ class VerticalGroupedStrategy {
                 bottom: bottomOffset
             };
         });
+    }
+
+    getScrollViewTop($scrollableElement, workSpace, groupIndex, dayHeight) {
+        const scrollViewTop = $scrollableElement.getBoundingClientRect().top;
+        const topOffset = scrollViewTop + groupIndex * dayHeight;
+
+        if(workSpace.option('showAllDayPanel') && workSpace.supportAllDayRow()) {
+            return topOffset + this._workSpace.getCellHeight() * (groupIndex + 1);
+        }
+
+        return topOffset;
     }
 
     shiftIndicator($indicator, height, rtlOffset, i) {
