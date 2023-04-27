@@ -262,58 +262,60 @@ export const grep = function(elements, checkFunction, invert) {
     return result;
 };
 
-const arraysEqualByValue = function(array1, array2, depth) {
+const compareArrays = (array1, array2, depth, options) => {
     if(array1.length !== array2.length) {
         return false;
     }
 
-    for(let i = 0; i < array1.length; i++) {
-        if(!equalByValue(array1[i], array2[i], depth + 1)) {
-            return false;
-        }
-    }
-
-    return true;
+    return !array1.some((item, idx) => !compareByValue(item, array2[idx], depth + 1, {
+        ...options,
+        strict: true,
+    }));
 };
 
-const objectsEqualByValue = function(object1, object2, depth, strict) {
-    for(const propertyName in object1) {
-        if(
-            Object.prototype.hasOwnProperty.call(object1, propertyName) &&
-            !equalByValue(object1[propertyName], object2[propertyName], depth + 1, strict)
-        ) {
-            return false;
-        }
+const compareObjects = (object1, object2, depth, options) => {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if(keys1.length !== keys2.length) {
+        return false;
     }
 
-    for(const propertyName in object2) {
-        if(!(propertyName in object1)) {
-            return false;
-        }
-    }
-
-    return true;
+    return !keys1.some((key) =>
+        !Object.prototype.hasOwnProperty.call(object2, key)
+        || (Object.prototype.hasOwnProperty.call(object1, key)
+            && !compareByValue(object1[key], object2[key], depth + 1, options))
+    );
 };
 
-const maxEqualityDepth = 3;
+const DEFAULT_EQUAL_BY_VALUE_OPTS = {
+    maxDepth: 3,
+    strict: true,
+};
+const compareByValue = (value1, value2, depth, options) => {
+    const { strict, maxDepth } = options;
+    const comparable1 = toComparable(value1, true);
+    const comparable2 = toComparable(value2, true);
 
-export const equalByValue = function(object1, object2, depth = 0, strict = true) {
+    const comparisonResult = strict
+        ? comparable1 === comparable2
+        // eslint-disable-next-line eqeqeq
+        : comparable1 == comparable2;
 
-    object1 = toComparable(object1, true);
-    object2 = toComparable(object2, true);
-
-    // eslint-disable-next-line eqeqeq
-    const comparisonResult = strict ? object1 === object2 : object1 == object2;
-
-    if(comparisonResult || depth >= maxEqualityDepth) {
-        return true;
+    switch(true) {
+        case comparisonResult:
+        case depth >= maxDepth:
+            return true;
+        case isObject(comparable1) && isObject(comparable2):
+            return compareObjects(comparable1, comparable2, depth, options);
+        case Array.isArray(comparable1) && Array.isArray(comparable2):
+            return compareArrays(comparable1, comparable2, depth, options);
+        default:
+            return false;
     }
+};
 
-    if(isObject(object1) && isObject(object2)) {
-        return objectsEqualByValue(object1, object2, depth, strict);
-    } else if(Array.isArray(object1) && Array.isArray(object2)) {
-        return arraysEqualByValue(object1, object2, depth);
-    }
-
-    return false;
+export const equalByValue = (value1, value2, options = DEFAULT_EQUAL_BY_VALUE_OPTS) => {
+    const compareOptions = { ...DEFAULT_EQUAL_BY_VALUE_OPTS, ...options };
+    return compareByValue(value1, value2, 0, compareOptions);
 };
