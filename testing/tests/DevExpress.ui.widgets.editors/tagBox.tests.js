@@ -7642,7 +7642,7 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
-    QUnit.test('input should have a correct aria-labelledby attribute', function(assert) {
+    QUnit.test('input should have a correct aria-labelledby', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -7652,5 +7652,12 @@ QUnit.module('accessibility', () => {
 
         tagBox.option('label', null);
         assert.equal($input.attr('aria-labelledby'), undefined, 'aria-labelledby was not set');
+    });
+
+    QUnit.test('select should have a correct aria-label', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox();
+        const $select = $tagBox.find('select');
+
+        assert.equal($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
     });
 });

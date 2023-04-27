@@ -448,8 +448,13 @@ const TagBox = SelectBox.inherit({
             return;
         }
 
+        const attributes = {
+            'multiple': 'multiple',
+            'aria-label': 'Selected items',
+        };
+
         this._$submitElement = $('<select>')
-            .attr('multiple', 'multiple')
+            .attr(attributes)
             .css('display', 'none')
             .appendTo(this.$element());
     },
