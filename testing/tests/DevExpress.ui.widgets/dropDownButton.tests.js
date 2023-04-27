@@ -2607,10 +2607,9 @@ QUnit.module('Accessibility', {
 
         const buttonElements = this.getButtons();
 
-        assert.ok(buttonElements.eq(0).attr('aria-expanded'));
-        assert.ok(this.$element.attr('aria-expanded'));
+        assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
-
 
     QUnit.test('check aria-expanded attr for visible dropdown', function(assert) {
         this.createInstance({ opened: true });
@@ -2618,7 +2617,7 @@ QUnit.module('Accessibility', {
         const buttonElements = this.getButtons();
 
         assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'true');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     QUnit.test('check aria-expanded attr for visible dropdown if splitButton is true', function(assert) {
@@ -2630,7 +2629,7 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'true');
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'true');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     QUnit.test('check aria-expanded attr if splitButton is true after dropdown was closed', function(assert) {
@@ -2643,7 +2642,33 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'false');
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'false');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
+    });
+
+    QUnit.test('check aria-expanded attr if splitButton=true', function(assert) {
+        const instance = this.createInstance();
+        const $firstButton = this.getButtons().eq(0);
+
+        assert.strictEqual($firstButton.attr('aria-expanded'), 'false');
+
+        instance.option({ splitButton: true });
+
+        const $buttonElements = this.getButtons();
+
+        assert.strictEqual($buttonElements.eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual($buttonElements.eq(1).attr('aria-expanded'), 'false');
+    });
+
+    QUnit.test('check aria-owns attr for element', function(assert) {
+        const instance = this.createInstance();
+
+        assert.strictEqual(this.$element.attr('aria-owns'), undefined);
+
+        instance.open();
+
+        const popupId = $(`.${POPUP_CONTENT_CLASS}`).attr('id');
+
+        assert.strictEqual(this.$element.attr('aria-owns'), popupId);
     });
 
     [true, false].forEach(splitButton => {
@@ -2669,7 +2694,7 @@ QUnit.module('Accessibility', {
         const $firstButton = this.getButtons().eq(0);
         const $secondButton = this.getButtons().eq(1);
 
-        assert.strictEqual($firstButton.attr('aria-haspopup'), undefined);
+        assert.strictEqual($firstButton.attr('aria-haspopup'), 'listbox');
         assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
     });
 });
