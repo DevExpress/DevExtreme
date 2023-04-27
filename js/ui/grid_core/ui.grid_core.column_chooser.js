@@ -226,7 +226,6 @@ const columnChooserMembers = {
          * @type {import('../tree_view').Options}
          */
         const treeViewConfig = {
-            items: items,
             dataStructure: 'plain',
             activeStateEnabled: true,
             focusStateEnabled: true,
@@ -267,6 +266,9 @@ const columnChooserMembers = {
             treeViewConfig.useNativeScrolling = false;
         }
         extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
+
+        // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+        treeViewConfig.items = items;
 
         if(this._columnChooserList) {
             if(!treeViewConfig.searchEnabled) {

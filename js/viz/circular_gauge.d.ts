@@ -117,7 +117,10 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
      */
     valueIndicator?: GaugeIndicator;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.orientation
@@ -132,7 +135,10 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxCircularGaugeOptions.scale.label
@@ -147,7 +153,10 @@ export interface dxCircularGaugeScale extends BaseGaugeScale {
      */
     orientation?: CircularGaugeElementOrientation;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast

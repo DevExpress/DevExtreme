@@ -189,7 +189,10 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      */
     wrapperAttr?: any;
 }
-/** @namespace DevExpress.ui */
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxOverlayAnimation {
     /**
      * @docid dxOverlayOptions.animation.hide

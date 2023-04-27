@@ -1,6 +1,8 @@
 import {
   Component,
+  ComponentBindings,
   JSXComponent,
+  OneWay,
   Effect,
   InternalState, RefObject, Ref,
 } from '@devextreme-generator/declarations';
@@ -25,7 +27,7 @@ export const viewFunction = ({
   width,
   value,
   pagesCountText,
-  props: { pageCount },
+  props: { pageCount, inputAttr },
 }: PagesSmall): JSX.Element => (
   <div className={LIGHT_PAGES_CLASS} ref={pageIndexRef}>
     <NumberBox
@@ -35,6 +37,7 @@ export const viewFunction = ({
       width={width}
       value={value}
       valueChange={valueChange}
+      inputAttr={inputAttr}
     />
     <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
     <Page
@@ -45,11 +48,17 @@ export const viewFunction = ({
     />
   </div>
 );
+
+@ComponentBindings()
+export class PagerSmallProps {
+  @OneWay() inputAttr = { 'aria-label': messageLocalization.format('dxPager-ariaPageNumber') };
+}
+
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallProps = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'>;
+type PagerSmallPropsType = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'> & PagerSmallProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent<PagerSmallProps, 'pageIndexChange'>() {
+export class PagesSmall extends JSXComponent<PagerSmallPropsType, 'pageIndexChange'>() {
   @Ref() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {

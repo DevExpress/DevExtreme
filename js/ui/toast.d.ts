@@ -145,7 +145,10 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     width?: number | string | (() => number | string);
 }
-/** @namespace DevExpress.ui */
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxToastAnimation extends dxOverlayAnimation {
     /**
      * @docid dxToastOptions.animation.hide

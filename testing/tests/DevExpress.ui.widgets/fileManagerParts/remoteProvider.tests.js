@@ -6,9 +6,8 @@ import RemoteFileSystemProvider from 'file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
-import { isString } from 'core/utils/type';
+import { isString, isFunction } from 'core/utils/type';
 import { extend } from 'core/utils/extend';
-import { isFunction } from '../../../../js/core/utils/type.js';
 
 const { test } = QUnit;
 

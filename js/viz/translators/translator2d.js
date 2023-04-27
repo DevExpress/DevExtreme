@@ -384,7 +384,8 @@ _Translator2d.prototype = {
 
         return _abs(this.from(visibleArea.min) - (!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
     },
-    checkMinBarSize: function(value, minShownValue, stackValue) {
+
+    checkMinBarSize: function(value, minShownValue) {
         return _abs(value) < minShownValue ? value >= 0 ? minShownValue : -minShownValue : value;
     },
 

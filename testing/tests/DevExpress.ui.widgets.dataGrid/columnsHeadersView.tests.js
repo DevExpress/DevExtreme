@@ -2,7 +2,6 @@ import 'generic_light.css!';
 
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
-import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import typeUtils from 'core/utils/type';
 import config from 'core/config';
 import devices from 'core/devices';
@@ -14,8 +13,6 @@ import messageLocalization from 'localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 import 'ui/data_grid';
-import 'hogan.js';
-setTemplateEngine('hogan');
 
 const SORT_INDEX_ICON_SELECTOR = '.dx-sort-index-icon';
 const SORT_INDEX_INDICATOR_SELECTOR = '.dx-sort-index-indicator';
@@ -1523,7 +1520,7 @@ QUnit.module('Headers', {
         assert.equal(headerCellTemplateOptions.columnIndex, 2, 'headerCellTemplate option columnIndex');
     });
 
-    QUnit.test('Custom headerCellTemplate as string selector for column with hogan', function(assert) {
+    QUnit.test('Custom headerCellTemplate as string selector for column with jquery template', function(assert) {
         // arrange
         const that = this;
         const testElement = $('#container');
@@ -1533,12 +1530,12 @@ QUnit.module('Headers', {
             { caption: 'Column 2' },
             {
                 caption: 'Column3',
-                headerCellTemplate: '#hoganHeaderColumnTemplate'
+                headerCellTemplate: '#jqHeaderColumnTemplate'
             }
         ]);
 
         this._getTemplate = function(selector) {
-            assert.equal(selector, '#hoganHeaderColumnTemplate');
+            assert.equal(selector, '#jqHeaderColumnTemplate');
             return {
                 render: function(options) {
                     options.container.append('<b>' + options.model.caption + '</b>');

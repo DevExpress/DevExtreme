@@ -1,4 +1,4 @@
-// @ts-expect-error
+/* eslint-disable class-methods-use-this */
 import { focusModule } from '@js/ui/grid_core/ui.grid_core.focus';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -7,13 +7,29 @@ import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { createGroupFilter } from '../module_utils';
 import gridCore from '../module_core';
+import type { ModuleType } from '../../grid_core/module_types';
+import type { DataController } from '../../grid_core/data_controller/module';
+import type { GroupingDataControllerExtension } from '../grouping/module';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
+
+// Move CoreFocusModuleType to focusModule after migration to ts
+interface CoreFocusModuleType {
+  _generateFilterByKey: (key, operation?) => any;
+  _calculateGlobalRowIndexByFlatData: (key, groupFilter, useGroup?) => any;
+  _concatWithCombinedFilter: (filter, groupFilter?) => any;
+}
+
+type DataControllerBase = ModuleType<
+DataController
+& CoreFocusModuleType
+& GroupingDataControllerExtension>;
 
 gridCore.registerModule('focus', extend(true, {}, focusModule, {
   extenders: {
     controllers: {
-      data: {
+      data: (Base: DataControllerBase): DataControllerBase => class FocusDataControllerExtender
+        extends (Base.inherit(focusModule.extenders.controllers.data) as DataControllerBase) {
         changeRowExpand(path, isRowClick) {
           if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
             const keyboardNavigation = this.getController('keyboardNavigation');
@@ -22,8 +38,9 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
             }
           }
 
-          return this.callBase.apply(this, arguments);
-        },
+          return super.changeRowExpand(path, isRowClick);
+        }
+
         _isFocusedRowInsideGroup(path) {
           const columnsController = this.getController('columns');
           const focusedRowKey = this.option('focusedRowKey');
@@ -42,7 +59,8 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
             }
           }
           return true;
-        },
+        }
+
         _getGroupPath(groupItem, groupCount) {
           const groupPath: any[] = [];
           let items = [groupItem];
@@ -56,7 +74,8 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
             groupCount--;
           }
           return groupPath;
-        },
+        }
+
         _expandGroupByPath(that, groupPath, level) {
           // @ts-expect-error
           const d = new Deferred();
@@ -74,7 +93,8 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
           }).fail(d.reject);
 
           return d.promise();
-        },
+        }
+
         _calculateGlobalRowIndexByGroupedData(key) {
           const that = this;
           const dataSource = that._dataSource;
@@ -111,7 +131,8 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
           }).fail(deferred.reject);
 
           return deferred.promise();
-        },
+        }
+
         _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group) {
           const groupFilter = createGroupFilter(groupPath, { group });
           const dataSource = this._dataSource;
@@ -149,7 +170,7 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
 
             deferred.resolve(count);
           }).fail(deferred.reject);
-        },
+        }
       },
     },
   },

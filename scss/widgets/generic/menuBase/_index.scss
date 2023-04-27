@@ -21,12 +21,20 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
 .dx-menu-item {
   color: $menu-color;
 
+  a {
+    color: $typography-link-color;
+  }
+
   &.dx-state-hover {
     color: $menu-item-hovered-color;
     background-color: $menu-item-hover-bg;
   }
 
   &.dx-state-focused {
+    a {
+      color: $base-inverted-text-color;
+    }
+
     background-color: $menu-item-focused-bg;
     color: $base-inverted-text-color;
   }

@@ -247,7 +247,10 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      */
     width?: number | string | (() => number | string);
 }
-/** @namespace DevExpress.ui */
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
      * @docid dxPopupOptions.animation.hide

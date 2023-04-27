@@ -223,7 +223,7 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     }
   }
 
-  &.dx-calendar-selected-date {
+  &.dx-calendar-selected-date:not(.dx-calendar-other-view) {
     &,
     &.dx-calendar-today {
       span {
@@ -234,19 +234,23 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     }
   }
 
-  &.dx-calendar-range-date {
+  &.dx-calendar-range-date:not(.dx-calendar-other-view) {
     background-color: color.change($calendar-cell-selected-bg, $alpha: 0.08);
     box-shadow: inset 0 2px $calendar-bg, inset 0 -2px $calendar-bg;
     font-weight: normal;
     border-radius: 0;
   }
+}
 
-  &.dx-calendar-range-start-date {
+.dx-calendar-views-wrapper {
+  .dx-widget:not(.dx-rtl) .dx-calendar-range-start-date:not(.dx-calendar-other-view),
+  .dx-widget.dx-rtl .dx-calendar-range-end-date:not(.dx-calendar-other-view) {
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
   }
 
-  &.dx-calendar-range-end-date {
+  .dx-widget:not(.dx-rtl) .dx-calendar-range-end-date:not(.dx-calendar-other-view),
+  .dx-widget.dx-rtl .dx-calendar-range-start-date:not(.dx-calendar-other-view) {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
   }
