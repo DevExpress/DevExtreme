@@ -1,12 +1,15 @@
 /* global currentTest, createTestContainer */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
-const rendererModule = require('viz/core/renderers/renderer');
-const baseThemeManagerModule = require('viz/core/base_theme_manager');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import tooltipModule from 'viz/core/tooltip';
+import rendererModule from 'viz/core/renderers/renderer';
+import baseThemeManagerModule from 'viz/core/base_theme_manager';
+import { isFunction } from 'core/utils/type';
+const TOOLTIP_TABLE_BORDER_SPACING = 0;
+const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
 
-require('viz/bullet');
+import 'viz/bullet';
 
 $('<div>')
     .attr('id', 'container')
@@ -31,6 +34,36 @@ StubThemeManager.prototype.setTheme = function() {
     vizMocks.forceThemeOptions(this);
 };
 
+function getBulletTooltip(bullet) {
+    return bullet._tooltip;
+}
+
+function showBulletTooltip(bullet) {
+    bullet._showTooltip();
+}
+
+function checkTemplateTable(assert, $table, templateArg, elementsSettings) {
+    assert.strictEqual($table.css('borderSpacing'), `${TOOLTIP_TABLE_BORDER_SPACING}px`);
+    assert.strictEqual($table.css('lineHeight'), elementsSettings.lineHeight);
+    const $tr = $table.find('tr');
+
+    assert.strictEqual($tr.length, templateArg.valueText.length / 2);
+
+    for(let i = 0; i < $tr.length; i += 2) {
+        const $currentTr = $($tr[i]);
+        const $td = $currentTr.find('td');
+
+        assert.strictEqual($td.length, 3);
+
+        assert.strictEqual($($td.get(0)).text(), templateArg.valueText[i]);
+
+        assert.strictEqual($($td.get(1)).css('width'), `${TOOLTIP_TABLE_KEY_VALUE_SPACE}px`);
+
+        assert.strictEqual($($td.get(2)).css('textAlign'), elementsSettings.textAlign);
+        assert.strictEqual($($td.get(2)).text(), templateArg.valueText[i + 1]);
+    }
+}
+
 const environment = {
     beforeEach: function() {
         this.themeManager = new StubThemeManager();
@@ -47,77 +80,91 @@ const environment = {
         });
         this.renderer = new vizMocks.Renderer();
         this.$container = $(createTestContainer('#container'));
-        this.createBullet = function(options) {
-            return this.$container.dxBullet($.extend(true, {
-                tooltip: {
-                    enabled: true
-                }
-            }, options)).dxBullet('instance');
-        };
     },
     afterEach: function() {
         this.$container.remove();
+    },
+    createBullet(options) {
+        return this.$container.dxBullet($.extend(true, {
+            tooltip: {
+                enabled: true
+            }
+        }, options)).dxBullet('instance');
     }
 };
 
-QUnit.module('Tooltip creating', environment);
+QUnit.module('Bullet tooltip', environment);
 
-QUnit.test('Enabled tooltip', function(assert) {
+QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled', function(assert) {
     const bullet = this.createBullet({
         value: 10,
         maxScaleValue: 20,
         tooltip: {
             font: {
                 size: 12
-            },
-            enabled: true
+            }
         }
     });
-    bullet._showTooltip();
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
 
-    const arg = bullet._tooltip.ctorArgs;
+    const arg = tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
     assert.deepEqual(arg[0].cssClass, 'dxb-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
-
-    assert.equal(bullet._tooltip.update.callCount, 1, 'update is called');
-    assert.ok($.isFunction(bullet._tooltip.update.lastCall.args[0].customizeTooltip));
-    bullet._tooltip.update.lastCall.args[0].customizeTooltip = {};
-    assert.deepEqual(bullet._tooltip.update.lastCall.args[0], {
-        enabled: true,
-        font: {
-            size: 12
-        },
-        customizeTooltip: {}
-    });
 });
 
-QUnit.test('Enabled tooltip. Empty data', function(assert) {
+QUnit.test('Update method shoul accept valid params when tooltip enabled', function(assert) {
+    const bullet = this.createBullet({
+        value: 10,
+        maxScaleValue: 20,
+        tooltip: {
+            font: {
+                size: 12
+            }
+        }
+    });
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
+
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.strictEqual(tooltip.update.lastCall.args[0].enabled, true);
+    assert.strictEqual(tooltip.update.lastCall.args[0].font.size, 12);
+    assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
+});
+
+QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled and no data', function(assert) {
     const bullet = this.createBullet({
         tooltip: {
             font: {
                 size: 12
-            },
-            enabled: true
+            }
         }
     });
-    bullet._showTooltip();
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
 
-    const arg = bullet._tooltip.ctorArgs;
+    const arg = tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
     assert.deepEqual(arg[0].cssClass, 'dxb-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
+});
 
-    assert.equal(bullet._tooltip.update.callCount, 1, 'update is called');
-    assert.ok($.isFunction(bullet._tooltip.update.lastCall.args[0].customizeTooltip));
-    bullet._tooltip.update.lastCall.args[0].customizeTooltip = {};
-    assert.deepEqual(bullet._tooltip.update.lastCall.args[0], {
-        enabled: false,
-        font: {
-            size: 12
-        },
-        customizeTooltip: {}
+QUnit.test('Update method shoul accept valid params when tooltip enabled and no data', function(assert) {
+    const bullet = this.createBullet({
+        tooltip: {
+            font: {
+                size: 12
+            }
+        }
     });
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
+
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.strictEqual(tooltip.update.lastCall.args[0].enabled, false);
+    assert.strictEqual(tooltip.update.lastCall.args[0].font.size, 12);
+    assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
 });
 
 QUnit.test('Disabled tooltip', function(assert) {
@@ -129,23 +176,22 @@ QUnit.test('Disabled tooltip', function(assert) {
         }
     });
 
-    bullet._showTooltip();
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
 
-    assert.equal(bullet._tooltip.update.callCount, 1, 'update is called');
-    assert.equal(bullet._tooltip.update.lastCall.args[0].enabled, false);
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.equal(tooltip.update.lastCall.args[0].enabled, false);
 });
 
 QUnit.test('dxBullet get TooltipFormatObject', function(assert) {
     this.renderer.bBoxTemplate = { x: 10, width: 200 };
     const bullet = this.createBullet({
-        value: 10, target: 20, endScaleValue: 30,
-        tooltip: {
-            enabled: true
-        }
+        value: 10, target: 20, endScaleValue: 30
     });
-    bullet._showTooltip();
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
 
-    assert.deepEqual(bullet._tooltip.show.lastCall.args, [{
+    assert.deepEqual(tooltip.show.lastCall.args, [{
         originalTarget: 20,
         originalValue: 10,
         target: '20:undefined',
@@ -157,43 +203,71 @@ QUnit.test('dxBullet get TooltipFormatObject', function(assert) {
     }, {}]);
 });
 
-QUnit.test('Default Tooltip text', function(assert) {
+QUnit.test('Default template should be used when customizeTooltip is nota defined', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
-
+    const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
+    const $templateContainer = $('<div>');
     const bullet = this.createBullet({
         dataSource: data,
         tooltip: {
-            font: { size: 12 },
-            enabled: true
+            font: { size: 12 }
         }
     });
 
-    bullet._showTooltip();
-    bullet._tooltip.formatValue = function(value, format) { return value; };
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
 
-    const ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
-    assert.deepEqual(ctResult, {
-        html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Actual Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>0</td></tr><tr><td>Target Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>0</td></tr></table>'
+    const contentTemplate = tooltip.update.lastCall.args[0].contentTemplate;
+    contentTemplate(templateArg, $templateContainer);
+    const $table = $templateContainer.find('table');
+
+    checkTemplateTable(assert, $table, templateArg, {
+        textAlign: 'right',
+        lineHeight: '14px'
     });
 });
 
-QUnit.test('Default Tooltip text. Rtl', function(assert) {
-    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
 
+QUnit.test('Default tooltip template should have valid text align when rtl enabled', function(assert) {
+    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
+    const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
+    const $templateContainer = $('<div>');
     const bullet = this.createBullet({
         dataSource: data,
         tooltip: {
-            font: { size: 12 },
-            enabled: true
+            font: { size: 12 }
         },
         rtlEnabled: true
     });
 
-    bullet._showTooltip();
-    bullet._tooltip.formatValue = function(value, format) { return value; };
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
 
-    const ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
-    assert.deepEqual(ctResult, {
-        html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Actual Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>0</td></tr><tr><td>Target Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>0</td></tr></table>'
+    const contentTemplate = tooltip.update.lastCall.args[0].contentTemplate;
+    contentTemplate(templateArg, $templateContainer);
+    const $table = $templateContainer.find('table');
+
+    checkTemplateTable(assert, $table, templateArg, {
+        textAlign: 'left',
+        lineHeight: '14px'
     });
+});
+
+QUnit.test('Method "show" should accept valud info', function(assert) {
+    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
+
+    const bullet = this.createBullet({
+        dataSource: data,
+        type: 'winloss'
+    });
+    showBulletTooltip(bullet);
+    const tooltip = getBulletTooltip(bullet);
+
+    assert.deepEqual(tooltip.show.lastCall.args, [{
+        'originalValue': 0,
+        'originalTarget': 0,
+        'value': '0:undefined',
+        'target': '0:undefined',
+        'valueText': ['Actual Value:', '0:undefined', 'Target Value:', '0:undefined']
+    }, { 'x': 14, 'y': 20 }, {}]);
 });

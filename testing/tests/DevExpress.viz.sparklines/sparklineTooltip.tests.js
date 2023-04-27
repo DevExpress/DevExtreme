@@ -1,12 +1,15 @@
 /* global currentTest, createTestContainer */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
-const baseThemeManagerModule = require('viz/core/base_theme_manager');
-const rendererModule = require('viz/core/renderers/renderer');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import tooltipModule from 'viz/core/tooltip';
+import baseThemeManagerModule from 'viz/core/base_theme_manager';
+import rendererModule from 'viz/core/renderers/renderer';
+import { isFunction } from 'core/utils/type';
+const TOOLTIP_TABLE_BORDER_SPACING = 0;
+const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
 
-require('viz/sparkline');
+import 'viz/sparkline';
 
 $('<div>')
     .attr('id', 'container')
@@ -14,7 +17,10 @@ $('<div>')
     .appendTo('#qunit-fixture');
 
 const StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
-const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
+const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+    isEnabled: function() { return true; },
+    formatValue: function(value, format) { return value + ':' + format; }
+});
 
 StubThemeManager.prototype.setTheme = function() {
     vizMocks.forceThemeOptions(this);
@@ -30,6 +36,36 @@ rendererModule.Renderer = function() {
 baseThemeManagerModule.BaseThemeManager = function() {
     return currentTest().themeManager;
 };
+
+function getSparklineTooltip(sparkline) {
+    return sparkline._tooltip;
+}
+
+function showSparklineTooltip(sparkline) {
+    sparkline._showTooltip();
+}
+
+function checkTemplateTable(assert, $table, templateArg, elementsSettings) {
+    assert.strictEqual($table.css('borderSpacing'), `${TOOLTIP_TABLE_BORDER_SPACING}px`);
+    assert.strictEqual($table.css('lineHeight'), elementsSettings.lineHeight);
+    const $tr = $table.find('tr');
+
+    assert.strictEqual($tr.length, templateArg.valueText.length / 2);
+
+    for(let i = 0; i < $tr.length; i += 2) {
+        const $currentTr = $($tr[i]);
+        const $td = $currentTr.find('td');
+
+        assert.strictEqual($td.length, 3);
+
+        assert.strictEqual($($td.get(0)).text(), templateArg.valueText[i]);
+
+        assert.strictEqual($($td.get(1)).css('width'), `${TOOLTIP_TABLE_KEY_VALUE_SPACE}px`);
+
+        assert.strictEqual($($td.get(2)).css('textAlign'), elementsSettings.textAlign);
+        assert.strictEqual($($td.get(2)).text(), templateArg.valueText[i + 1]);
+    }
+}
 
 const environment = {
     beforeEach: function() {
@@ -49,76 +85,89 @@ const environment = {
         });
 
         this.$container = $(createTestContainer('#container'));
-        this.createSparkline = function(options) {
-            return this.$container.dxSparkline($.extend(true, {
-                tooltip: {
-                    enabled: true
-                }
-            }, options)).dxSparkline('instance');
-        };
     },
     afterEach: function() {
         this.$container.remove();
+    },
+    createSparkline(options) {
+        return this.$container.dxSparkline($.extend(true, {
+            tooltip: {
+                enabled: true
+            }
+        }, options)).dxSparkline('instance');
     }
 };
 
-QUnit.module('Tooltip creating', environment);
+QUnit.module('Sparkline tooltip', environment);
 
-QUnit.test('Enabled tooltip', function(assert) {
+QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
             font: {
                 size: 12
-            },
-            enabled: true
+            }
         }
     });
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    const arg = sparkline._tooltip.ctorArgs;
+    const arg = tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
     assert.deepEqual(arg[0].cssClass, 'dxsl-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, sparkline._eventTrigger, 'parameter - event trigger');
-
-    assert.equal(sparkline._tooltip.update.callCount, 1, 'update is called');
-    assert.ok($.isFunction(sparkline._tooltip.update.lastCall.args[0].customizeTooltip));
-    sparkline._tooltip.update.lastCall.args[0].customizeTooltip = {};
-    assert.deepEqual(sparkline._tooltip.update.lastCall.args[0], {
-        enabled: true,
-        font: {
-            size: 12
-        },
-        customizeTooltip: {}
-    });
 });
 
-QUnit.test('Enabled tooltip. Empty data', function(assert) {
+QUnit.test('Update method shoul accept valid params when tooltip enabled', function(assert) {
+    const sparkline = this.createSparkline({
+        dataSource: [1, 2, 3, 4, 5, 6, 7],
+        tooltip: {
+            font: {
+                size: 12
+            }
+        }
+    });
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
+
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.strictEqual(tooltip.update.lastCall.args[0].enabled, true);
+    assert.strictEqual(tooltip.update.lastCall.args[0].font.size, 12);
+    assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
+});
+
+QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled and no dataSource', function(assert) {
     const sparkline = this.createSparkline({
         tooltip: {
             font: {
                 size: 12
-            },
-            enabled: true
+            }
         }
     });
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    const arg = sparkline._tooltip.ctorArgs;
+    const arg = tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
     assert.deepEqual(arg[0].cssClass, 'dxsl-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, sparkline._eventTrigger, 'parameter - event trigger');
+});
 
-    assert.equal(sparkline._tooltip.update.callCount, 1, 'update is called');
-    assert.ok($.isFunction(sparkline._tooltip.update.lastCall.args[0].customizeTooltip));
-    sparkline._tooltip.update.lastCall.args[0].customizeTooltip = {};
-    assert.deepEqual(sparkline._tooltip.update.lastCall.args[0], {
-        enabled: false,
-        font: {
-            size: 12
-        },
-        customizeTooltip: {}
+QUnit.test('Update method shoul accept valid params when tooltip enabled and no dataSource', function(assert) {
+    const sparkline = this.createSparkline({
+        tooltip: {
+            font: {
+                size: 12
+            }
+        }
     });
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
+
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.strictEqual(tooltip.update.lastCall.args[0].enabled, false);
+    assert.strictEqual(tooltip.update.lastCall.args[0].font.size, 12);
+    assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
 });
 
 QUnit.test('Disabled tooltip', function(assert) {
@@ -128,11 +177,11 @@ QUnit.test('Disabled tooltip', function(assert) {
             enabled: false
         }
     });
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    sparkline._showTooltip();
-
-    assert.equal(sparkline._tooltip.update.callCount, 1, 'update is called');
-    assert.equal(sparkline._tooltip.update.lastCall.args[0].enabled, false);
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.equal(tooltip.update.lastCall.args[0].enabled, false);
 });
 
 QUnit.test('Tooltip when datasource is empty', function(assert) {
@@ -143,35 +192,11 @@ QUnit.test('Tooltip when datasource is empty', function(assert) {
         }
     });
 
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    assert.equal(sparkline._tooltip.update.callCount, 1, 'update is called');
-    assert.equal(sparkline._tooltip.update.lastCall.args[0].enabled, false);
-});
-
-QUnit.test('customizeTooltip does not return html or text', function(assert) {
-    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
-    const customizeTooltipArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
-    const customizeTooltip = function() { return { color: 'red' }; };
-    const sparkline = this.createSparkline({
-        dataSource: data,
-        tooltip: {
-            enabled: true,
-            font: {
-                size: 12
-            },
-            customizeTooltip: customizeTooltip
-        }
-    });
-
-    sparkline._showTooltip();
-
-    const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
-
-    assert.deepEqual(ct.call(customizeTooltipArg, customizeTooltipArg), {
-        color: 'red',
-        html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Cell11</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>Cell12</td></tr><tr><td>Cell21</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>Cell22</td></tr></table>'
-    });
+    assert.equal(tooltip.update.callCount, 1, 'update is called');
+    assert.equal(tooltip.update.lastCall.args[0].enabled, false);
 });
 
 QUnit.test('customizeTooltip return html', function(assert) {
@@ -181,7 +206,6 @@ QUnit.test('customizeTooltip return html', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: data,
         tooltip: {
-            enabled: true,
             font: {
                 size: 12
             },
@@ -189,9 +213,10 @@ QUnit.test('customizeTooltip return html', function(assert) {
         }
     });
 
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
+    const ct = tooltip.update.lastCall.args[0].customizeTooltip;
 
     assert.deepEqual(ct.call(customizeTooltipArg, customizeTooltipArg), {
         color: 'red',
@@ -206,17 +231,17 @@ QUnit.test('customizeTooltip return text', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: data,
         tooltip: {
-            enabled: true,
             font: {
                 size: 12
             },
-            customizeTooltip: customizeTooltip
+            customizeTooltip
         }
     });
 
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
+    const ct = tooltip.update.lastCall.args[0].customizeTooltip;
 
     assert.deepEqual(ct.call(customizeTooltipArg, customizeTooltipArg), {
         color: 'red',
@@ -224,46 +249,55 @@ QUnit.test('customizeTooltip return text', function(assert) {
     });
 });
 
-QUnit.test('customizeTooltip is not function', function(assert) {
+QUnit.test('Default template should be used when customizeTooltip is nota defined', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
-    const customizeTooltipArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
-    const customizeTooltip = {};
+    const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
+    const $templateContainer = $('<div>');
     const sparkline = this.createSparkline({
         dataSource: data,
         tooltip: {
-            enabled: true,
             font: {
                 size: 12
-            },
-            customizeTooltip: customizeTooltip
+            }
         }
     });
 
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
+    const contentTemplate = tooltip.update.lastCall.args[0].contentTemplate;
+    contentTemplate(templateArg, $templateContainer);
 
-    assert.deepEqual(ct.call(customizeTooltipArg, customizeTooltipArg), {
-        html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Cell11</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>Cell12</td></tr><tr><td>Cell21</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>Cell22</td></tr></table>'
+    const $table = $templateContainer.find('table');
+
+    checkTemplateTable(assert, $table, templateArg, {
+        textAlign: 'right',
+        lineHeight: '14px'
     });
+
 });
 
 QUnit.test('Default customizeTooltip callback. Custom linespacing', function(assert) {
-    const customizeTooltipArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
+    const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
+    const $templateContainer = $('<div>');
     const sparkline = this.createSparkline({
         dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
-            enabled: true,
             font: { size: 15, lineSpacing: 3 }
         }
     });
 
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
+    const contentTemplate = tooltip.update.lastCall.args[0].contentTemplate;
+    contentTemplate(templateArg, $templateContainer);
 
-    assert.deepEqual(ct.call(customizeTooltipArg, customizeTooltipArg), {
-        html: '<table style=\'border-spacing:0px; line-height: 18px\'><tr><td>Cell11</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>Cell12</td></tr><tr><td>Cell21</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>Cell22</td></tr></table>'
+    const $table = $templateContainer.find('table');
+
+    checkTemplateTable(assert, $table, templateArg, {
+        textAlign: 'right',
+        lineHeight: '18px'
     });
 });
 
@@ -271,14 +305,12 @@ QUnit.test('dxSparkline get TooltipFormatObject', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
 
     const sparkline = this.createSparkline({
-        dataSource: data,
-        tooltip: {
-            enabled: true
-        }
+        dataSource: data
     });
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    assert.deepEqual(sparkline._tooltip.show.lastCall.args, [{
+    assert.deepEqual(tooltip.show.lastCall.args, [{
         firstValue: '4:undefined',
         lastValue: '12:undefined',
         maxValue: '23:undefined',
@@ -297,64 +329,38 @@ QUnit.test('dxSparkline get TooltipFormatObject', function(assert) {
 // T714171
 QUnit.test('sparkline tooltip format object. min/max values when all values are equal', function(assert) {
     const sparkline = this.createSparkline({
-        dataSource: [0, 0, 0],
-        tooltip: {
-            enabled: true
-        }
+        dataSource: [0, 0, 0]
     });
 
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
-    assert.strictEqual(sparkline._tooltip.show.lastCall.args[0].originalMinValue, 0);
-    assert.strictEqual(sparkline._tooltip.show.lastCall.args[0].originalMaxValue, 0);
+    assert.strictEqual(tooltip.show.lastCall.args[0].originalMinValue, 0);
+    assert.strictEqual(tooltip.show.lastCall.args[0].originalMaxValue, 0);
 });
 
-QUnit.test('Default Tooltip text', function(assert) {
-    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
-
+QUnit.test('Default tooltip template should have valid text align when rtl enabled', function(assert) {
+    const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
+    const $templateContainer = $('<div>');
     const sparkline = this.createSparkline({
-        dataSource: data,
+        dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
-            font: { size: 12 },
-            enabled: true
-        }
-    });
-    sparkline._showTooltip();
-    sparkline._tooltip.formatValue = function(value, format) { return value; };
-
-    const ctResult = sparkline._tooltip.update.lastCall.args[0].customizeTooltip(sparkline._getTooltipData());
-    assert.deepEqual(ctResult, {
-        html: '<table style=\'border-spacing:0px; line-height: 14px\'>' +
-            '<tr><td>Start:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>4</td></tr>' +
-            '<tr><td>End:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>12</td></tr>' +
-            '<tr><td>Min:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>-1</td></tr>' +
-            '<tr><td>Max:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>23</td></tr>' +
-            '</table>'
-    });
-});
-
-QUnit.test('Default Tooltip text. Rtl', function(assert) {
-    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
-
-    const sparkline = this.createSparkline({
-        dataSource: data,
-        tooltip: {
-            font: { size: 12 },
-            enabled: true
+            font: { size: 12 }
         },
         rtlEnabled: true
     });
-    sparkline._showTooltip();
-    sparkline._tooltip.formatValue = function(value, format) { return value; };
 
-    const ctResult = sparkline._tooltip.update.lastCall.args[0].customizeTooltip(sparkline._getTooltipData());
-    assert.deepEqual(ctResult, {
-        html: '<table style=\'border-spacing:0px; line-height: 14px\'>' +
-            '<tr><td>Start:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>4</td></tr>' +
-            '<tr><td>End:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>12</td></tr>' +
-            '<tr><td>Min:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>-1</td></tr>' +
-            '<tr><td>Max:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>23</td></tr>' +
-            '</table>'
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
+
+    const contentTemplate = tooltip.update.lastCall.args[0].contentTemplate;
+    contentTemplate(templateArg, $templateContainer);
+
+    const $table = $templateContainer.find('table');
+
+    checkTemplateTable(assert, $table, templateArg, {
+        textAlign: 'left',
+        lineHeight: '14px'
     });
 });
 
@@ -363,15 +369,13 @@ QUnit.test('Winloss sparkline get TooltipFormatObject', function(assert) {
 
     const sparkline = this.createSparkline({
         dataSource: data,
-        type: 'winloss',
-        tooltip: {
-            enabled: true
-        }
+        type: 'winloss'
     });
-    sparkline._showTooltip();
+    showSparklineTooltip(sparkline);
+    const tooltip = getSparklineTooltip(sparkline);
 
 
-    assert.deepEqual(sparkline._tooltip.show.lastCall.args, [{
+    assert.deepEqual(tooltip.show.lastCall.args, [{
         firstValue: '4:undefined',
         lastValue: '12:undefined',
         maxValue: '23:undefined',
