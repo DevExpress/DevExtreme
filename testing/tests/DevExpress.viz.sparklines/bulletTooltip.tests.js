@@ -114,7 +114,7 @@ QUnit.test('Tooltip constructor should accept valid params when tooltip is enabl
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
 });
 
-QUnit.test('Update method shoul accept valid params when tooltip enabled', function(assert) {
+QUnit.test('Update method should accept valid params when tooltip enabled', function(assert) {
     const bullet = this.createBullet({
         value: 10,
         maxScaleValue: 20,
@@ -133,7 +133,7 @@ QUnit.test('Update method shoul accept valid params when tooltip enabled', funct
     assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
 });
 
-QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled and no data', function(assert) {
+QUnit.test('Tooltip constructor should accept valid params when tooltip enabled and no data', function(assert) {
     const bullet = this.createBullet({
         tooltip: {
             font: {

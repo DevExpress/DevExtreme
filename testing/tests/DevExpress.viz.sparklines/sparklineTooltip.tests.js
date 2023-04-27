@@ -100,7 +100,7 @@ const environment = {
 
 QUnit.module('Sparkline tooltip', environment);
 
-QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled', function(assert) {
+QUnit.test('Tooltip constructor should accept valid params when tooltip enabled', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
@@ -118,7 +118,7 @@ QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled'
     assert.strictEqual(arg[0].eventTrigger, sparkline._eventTrigger, 'parameter - event trigger');
 });
 
-QUnit.test('Update method shoul accept valid params when tooltip enabled', function(assert) {
+QUnit.test('Update method should accept valid params when tooltip enabled', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
@@ -136,7 +136,7 @@ QUnit.test('Update method shoul accept valid params when tooltip enabled', funct
     assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
 });
 
-QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled and no dataSource', function(assert) {
+QUnit.test('Tooltip constructor should accept valid params when tooltip enabled and no dataSource', function(assert) {
     const sparkline = this.createSparkline({
         tooltip: {
             font: {
@@ -153,7 +153,7 @@ QUnit.test('Tooltip constructor should accept valid parems when tooltip enabled 
     assert.strictEqual(arg[0].eventTrigger, sparkline._eventTrigger, 'parameter - event trigger');
 });
 
-QUnit.test('Update method shoul accept valid params when tooltip enabled and no dataSource', function(assert) {
+QUnit.test('Update method should accept valid params when tooltip enabled and no dataSource', function(assert) {
     const sparkline = this.createSparkline({
         tooltip: {
             font: {
