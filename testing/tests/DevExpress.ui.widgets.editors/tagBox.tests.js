@@ -59,6 +59,7 @@ const KEY_ENTER = 'Enter';
 const KEY_DOWN = 'ArrowDown';
 const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 
 const TIME_TO_WAIT = 500;
 
@@ -7637,5 +7638,19 @@ QUnit.module('label integration', () => {
         } finally {
             TagBox.restoreTextEditorLabel();
         }
+    });
+});
+
+QUnit.module('accessibility', () => {
+    QUnit.test('input should have a correct aria-labelledby attribute', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $label = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`);
+
+        assert.equal($input.attr('aria-labelledby'), $label.attr('id'), 'aria-labelledby was set correctly');
+
+        tagBox.option('label', null);
+        assert.equal($input.attr('aria-labelledby'), undefined, 'aria-labelledby was not set');
     });
 });

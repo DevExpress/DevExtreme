@@ -220,6 +220,16 @@ const TagBox = SelectBox.inherit({
         return this.callBase();
     },
 
+    _getLabelContainer: function() {
+        return this._$tagsContainer;
+    },
+
+    _setLabelContainerAria: function() {
+        const $input = this._getLabelContainer().find('input');
+
+        this.setAria('labelledby', this._label.getId(), $input);
+    },
+
     _scrollContainer: function(direction) {
         if(this.option('multiline') || !hasWindow()) {
             return;
