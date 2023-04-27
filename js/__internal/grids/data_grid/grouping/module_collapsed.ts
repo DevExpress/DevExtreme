@@ -235,6 +235,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function () {
           group: groups,
         }),
         select: options.storeLoadOptions.select,
+        compareOptions: options.storeLoadOptions?.compareOptions,
       };
 
       if (expandedItemIndex === 0) {

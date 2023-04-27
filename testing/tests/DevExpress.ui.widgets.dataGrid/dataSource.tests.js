@@ -7690,3 +7690,109 @@ QUnit.module('New virtual scrolling mode', {
         assert.deepEqual(dataSource._dataSource.items(), items, 'dataSource items');
     });
 });
+
+QUnit.module('DataSource with diacritical marks', {
+    beforeEach: function() {
+        this.array = [
+            { id: 1, city: 'izmir' },
+            { id: 2, city: 'İzmi̇r' },
+            { id: 3, city: 'İZMİR' }
+        ];
+
+        this.compareOptions = {};
+
+        this.createDataSource = function(options) {
+            return createDataSource($.extend({
+                store: this.array,
+                compareOptions: this.compareOptions
+            }, options));
+        };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    [true, false].forEach((remoteOperations) => {
+        ['no base', 'base'].forEach((sensitivity) => {
+            QUnit.test(`Filtering with remoteOperations = ${remoteOperations}, locale = 'en-US' and sensitivity=${sensitivity}`, function(assert) {
+                // arrange
+                this.compareOptions.collateOptions = { sensitivity };
+                this.compareOptions.locale = 'en-US';
+                const dataSource = this.createDataSource({ remoteOperations });
+
+                // act
+                dataSource.filter(['city', '=', 'İZMİR']);
+                dataSource.load();
+
+                if(sensitivity === 'base') {
+                    // assert
+                    assert.strictEqual(dataSource.items().length, 3, 'item count');
+                    assert.deepEqual(dataSource.items()[0], { id: 1, city: 'izmir' }, 'first item');
+                    assert.deepEqual(dataSource.items()[1], { id: 2, city: 'İzmi̇r' }, 'second item');
+                    assert.deepEqual(dataSource.items()[2], { id: 3, city: 'İZMİR' }, 'third item');
+                } else {
+                    // assert
+                    assert.strictEqual(dataSource.items().length, 2, 'item count');
+                    assert.deepEqual(dataSource.items()[0], { id: 2, city: 'İzmi̇r' }, 'first item');
+                    assert.deepEqual(dataSource.items()[1], { id: 3, city: 'İZMİR' }, 'second item');
+                }
+            });
+
+            QUnit.test(`Filtering with remoteOperations = ${remoteOperations}, locale = 'tr' and sensitivity=${sensitivity}`, function(assert) {
+                // arrange
+                this.compareOptions.collateOptions = { sensitivity };
+                this.compareOptions.locale = 'tr';
+                const dataSource = this.createDataSource({ remoteOperations });
+
+                // act
+                dataSource.filter(['city', '=', 'İZMİR']);
+                dataSource.load();
+
+                if(sensitivity === 'base') {
+                    // assert
+                    assert.strictEqual(dataSource.items().length, 1, 'item count');
+                    assert.deepEqual(dataSource.items()[0], { id: 3, city: 'İZMİR' }, 'first item');
+                } else {
+                    // assert
+                    assert.strictEqual(dataSource.items().length, 2, 'item count');
+                    assert.deepEqual(dataSource.items()[0], { id: 1, city: 'izmir' }, 'first item');
+                    assert.deepEqual(dataSource.items()[1], { id: 3, city: 'İZMİR' }, 'second item');
+                }
+            });
+        });
+
+        QUnit.test(`Sorting with remoteOperations = ${remoteOperations} and locale = 'en-US'`, function(assert) {
+            // arrange
+            this.compareOptions.locale = 'en-US';
+            this.compareOptions.collateOptions = { caseFirst: 'upper' };
+            const dataSource = this.createDataSource({ remoteOperations });
+
+            // act
+            dataSource.sort('city');
+            dataSource.load();
+
+            // assert
+            assert.deepEqual(dataSource.items()[0], { id: 1, city: 'izmir' }, 'first item');
+            assert.deepEqual(dataSource.items()[1], { id: 3, city: 'İZMİR' }, 'second item');
+            assert.deepEqual(dataSource.items()[2], { id: 2, city: 'İzmi̇r' }, 'third item');
+        });
+
+        QUnit.test(`Sorting with remoteOperations = ${remoteOperations} and locale = 'tr'`, function(assert) {
+            // arrange
+            this.compareOptions.locale = 'tr';
+            this.compareOptions.collateOptions = { caseFirst: 'upper' };
+            const dataSource = this.createDataSource({ remoteOperations });
+
+            // act
+            dataSource.sort('city');
+            dataSource.load();
+
+            // assert
+            assert.deepEqual(dataSource.items()[0], { id: 3, city: 'İZMİR' }, 'first item');
+            assert.deepEqual(dataSource.items()[1], { id: 1, city: 'izmir' }, 'second item');
+            assert.deepEqual(dataSource.items()[2], { id: 2, city: 'İzmi̇r' }, 'third item');
+        });
+    });
+});
