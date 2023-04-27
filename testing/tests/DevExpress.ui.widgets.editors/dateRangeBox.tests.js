@@ -3,6 +3,7 @@ import config from 'core/config';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
+import { titleize } from 'core/utils/inflector.js';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -152,6 +153,14 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 valueChangeEvent: 'change',
                 width: undefined,
                 tabIndex: 0,
+                onKeyDown: null,
+                onKeyUp: null,
+                onChange: null,
+                onInput: null,
+                onCut: null,
+                onCopy: null,
+                onPaste: null,
+                onEnterKey: null,
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -189,6 +198,14 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             openOnFieldClick: true,
             showDropDownButton: false,
             showClearButton: false,
+            onKeyDown: null,
+            onKeyUp: null,
+            onChange: null,
+            onInput: null,
+            onCut: null,
+            onCopy: null,
+            onPaste: null,
+            onEnterKey: null,
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -1041,6 +1058,155 @@ QUnit.module('Events', moduleConfig, () => {
 
             assert.strictEqual(this.onOpenedHandler.callCount, 0, 'onOpenHandler callCount');
             assert.strictEqual(this.onClosedHandler.callCount, 1, 'onCloseHandler callCount');
+        });
+    });
+
+    QUnit.module('Keyboard events', {
+        beforeEach: function() {
+            this.onKeyDownHandler = sinon.stub();
+            this.onKeyUpHandler = sinon.stub();
+            this.onChangeHandler = sinon.stub();
+            this.onInputHandler = sinon.stub();
+            this.onCutHandler = sinon.stub();
+            this.onCopyHandler = sinon.stub();
+            this.onPasteHandler = sinon.stub();
+            this.onEnterKeyHandler = sinon.stub();
+
+            this.checkEventHandlerArgs = (targetInput, event, eventName) => {
+                const handler = this[`${event}Handler`];
+
+                QUnit.assert.strictEqual(handler.callCount, 1, `${eventName} event raised once`);
+
+                const args = handler.getCall(0).args[0];
+                QUnit.assert.strictEqual(args.component, this.instance, `${event} component`);
+                QUnit.assert.strictEqual($(args.element).get(0), this.$element.get(0), `${event} element`);
+                QUnit.assert.strictEqual(args.event.type, eventName.toLowerCase(), `${event} event`);
+                QUnit.assert.equal($(args.event.target).get(0), $(targetInput).get(0), `${event} target`);
+            };
+        }
+    }, () => {
+        ['keyUp', 'keyDown', 'change', 'input', 'cut', 'copy', 'paste'].forEach((eventName) => {
+            const event = `on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`;
+            const mockHandlerName = `${event}Handler`;
+
+            QUnit.test(`${event} event should not be called after trigger '${eventName}' event in startDate or endDate input by default`, function(assert) {
+                const startDateInput = this.instance.field()[0];
+                const endDateInput = this.instance.field()[1];
+
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                assert.strictEqual(this[`${event}Handler`].callCount, 0, `${eventName} event is not raised`);
+            });
+
+            QUnit.test(`${event} event handler not be called if new value is null after trigger '${eventName}' event in startDate or endDate input`, function(assert) {
+                this.reinit({
+                    [event]: this[mockHandlerName],
+                });
+
+                this.instance.option(event, null);
+
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                assert.strictEqual(this[`${event}Handler`].callCount, 0, `${eventName} event is not raised`);
+            });
+
+            QUnit.test(`${event} event should be called after trigger '${eventName}' event in startDate input`, function() {
+                this.reinit({
+                    [event]: this[mockHandlerName],
+                });
+
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(startDateInput, event, eventName);
+            });
+
+            QUnit.test(`${event} event handler be called with a new handlers after trigger '${eventName}' event in startDate input`, function() {
+                this.reinit({
+                    [event]: () => {},
+                });
+
+                this.instance.option(event, this[mockHandlerName]);
+
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(startDateInput, event, eventName);
+            });
+
+            QUnit.test(`${event} event should be called after trigger '${eventName}' event in endDate input`, function() {
+                this.reinit({
+                    [event]: this[mockHandlerName],
+                });
+
+                const endDateInput = this.instance.field()[1];
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(endDateInput, event, eventName);
+            });
+
+            QUnit.test(`${event} event handler be called with a new handlers after trigger '${eventName}' event on endDate input`, function() {
+                this.reinit({
+                    [event]: () => {},
+                });
+
+                this.instance.option(event, this[mockHandlerName]);
+
+                const endDateInput = this.instance.field()[1];
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(endDateInput, event, eventName);
+            });
+        });
+
+        [0, 1].forEach(inputIndex => {
+            const inputName = inputIndex ? 'endDate' : 'startDate';
+
+            QUnit.test(`onEnterKey event should be called after trigger keyup with "enter" key in ${inputName} input`, function() {
+                this.reinit({
+                    onEnterKey: this.onEnterKeyHandler,
+                });
+
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                this.checkEventHandlerArgs(input, 'onEnterKey', 'keyup');
+            });
+
+            QUnit.test(`onEnterKey event handler be called with a new handlers after trigger keyup with "enter" key in ${inputName} input`, function() {
+                this.reinit({
+                    onEnterKey: () => {},
+                });
+
+                this.instance.option('onEnterKey', this.onEnterKeyHandler);
+
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                this.checkEventHandlerArgs(input, 'onEnterKey', 'keyup');
+            });
+
+            QUnit.test(`onEnterKey event should not be called after trigger keyup with "enter" key in ${inputName} input by default`, function(assert) {
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                assert.strictEqual(this.onEnterKeyHandler.callCount, 0, 'onEnterKey event is not raised');
+            });
+
+            QUnit.test(`onEnterKey event handler not be called if new value is null after trigger keyup with "enter" key in ${inputName} input`, function(assert) {
+                this.reinit({
+                    onEnterKey: this.onEnterKeyHandler,
+                });
+
+                this.instance.option('onEnterKey', null);
+
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                assert.strictEqual(this.onEnterKeyHandler.callCount, 0, 'onEnterKey event is not raised');
+            });
         });
     });
 });

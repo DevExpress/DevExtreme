@@ -187,6 +187,14 @@ testComponentDefaults(DateRangeBox,
         onValueChanged: null,
         onOpened: null,
         onClosed: null,
+        onKeyDown: null,
+        onKeyUp: null,
+        onChange: null,
+        onInput: null,
+        onCut: null,
+        onCopy: null,
+        onPaste: null,
+        onEnterKey: null,
     }
 );
 
