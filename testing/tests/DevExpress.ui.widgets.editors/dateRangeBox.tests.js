@@ -892,6 +892,28 @@ QUnit.module('Events', moduleConfig, () => {
             assert.ok(this.onValueChangedHandler.calledOnce);
         });
 
+        QUnit.test('should not be called after update startDate to the same value', function(assert) {
+            this.reinit({
+                startDate: '2008/06/06',
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.instance.option('startDate', '2008/06/06');
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test('should not be called after update endDate to the same value', function(assert) {
+            this.reinit({
+                endDate: '2009/07/07',
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.instance.option('endDate', '2009/07/07');
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
         QUnit.test('onValueChanged event should have correct arguments', function(assert) {
             const oldValue = this.instance.option('value');
             const newValue = ['2023/04/19', null];
@@ -1326,9 +1348,9 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             startDate, endDate, value
         });
 
-        assert.deepEqual(this.instance.option('value'), value);
-        assert.strictEqual(this.instance.option('startDate'), value[0]);
-        assert.strictEqual(this.instance.option('endDate'), value[1]);
+        assert.deepEqual(this.instance.option('value'), value, 'value is not changed');
+        assert.strictEqual(this.instance.option('startDate'), value[0], 'startDate got date from value');
+        assert.strictEqual(this.instance.option('endDate'), value[1]), 'endDate got date from value';
     });
 
     QUnit.test('StartDate option should update value option on runtime change', function(assert) {
@@ -1336,7 +1358,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
         this.instance.option('startDate', startDate);
 
-        assert.strictEqual(startDate, this.instance.option('value')[0]);
+        assert.strictEqual(this.instance.option('value')[0], startDate);
     });
 
     QUnit.test('EndDate option should update value option on runtime change', function(assert) {
@@ -1344,7 +1366,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
         this.instance.option('endDate', endDate);
 
-        assert.strictEqual(endDate, this.instance.option('value')[1]);
+        assert.strictEqual(this.instance.option('value')[1], endDate);
     });
 
     QUnit.test('Value option should update startDate option on runtime change', function(assert) {

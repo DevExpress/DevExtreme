@@ -176,10 +176,11 @@ class DateRangeBox extends Widget {
 
         const { value: initialValue } = this.initialOption();
         const { value, startDate, endDate } = this.option();
-        if(value[0] === initialValue[0] && value[1] === initialValue[1]) {
+        if(isSameDateArrays(initialValue, value)) {
             this.option('value', [startDate, endDate]);
         } else {
-            this.option({ startDate: value[0], endDate: value[1] });
+            const [startDate, endDate] = value;
+            this.option({ startDate, endDate });
         }
     }
 
