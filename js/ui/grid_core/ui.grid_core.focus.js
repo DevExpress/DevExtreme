@@ -263,7 +263,7 @@ const FocusController = core.ViewController.inherit((function() {
                 const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
                 const triggerUpdateFocusedRow = () => {
-                    if(dataController.totalCount() && !dataController.items().length) {
+                    if(dataController.totalCount() && dataController.isEmpty()) {
                         return;
                     }
                     this.component.off('contentReady', triggerUpdateFocusedRow);
