@@ -11,6 +11,37 @@ import TreeView from '../../../model/treeView';
 fixture.disablePageReloads`TreeView`
   .page(url(__dirname, '../../container.html'));
 
+test('treeview items should be focused in DOM elements order when navigating with tab and shift+tab', async (t) => {
+  const treeView = new TreeView('#container');
+  const selectAllItem = treeView.element.find('.dx-treeview-select-all-item');
+
+  const SEARCH_BAR_CLASS = 'dx-treeview-search';
+  const searchItem = treeView.element.find(`.${SEARCH_BAR_CLASS}`);
+
+  const NODE_CLASS = 'dx-treeview-node';
+  const treeviewNode = treeView.element.find(`.${NODE_CLASS}`);
+
+  await t.pressKey('tab')
+    .expect(searchItem.hasClass('dx-state-focused'))
+    .ok()
+    .pressKey('tab')
+    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .ok()
+    .pressKey('tab')
+    .expect(treeviewNode.hasClass('dx-state-focused'))
+    .ok()
+    .pressKey('shift+tab')
+    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .ok()
+    .pressKey('shift+tab')
+    .expect(searchItem.hasClass('dx-state-focused'))
+    .ok();
+}).before(async () => createWidget('dxTreeView', {
+  searchEnabled: true,
+  showCheckBoxesMode: 'selectAll',
+  items: employees,
+}));
+
 test('TreeView: height should be calculated correctly when searchEnabled is true (T1138605)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
