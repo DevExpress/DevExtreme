@@ -667,7 +667,8 @@ export const MockSeries = function MockSeries(options) {
         getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
         useAggregation: sinon.stub().returns(!!(options.aggregation && options.aggregation.enabled)),
         usePointsToDefineAutoHiding: sinon.stub().returns(false),
-        resetApplyingAnimation: sinon.stub()
+        resetApplyingAnimation: sinon.stub(),
+        clearSelection: function() { }
     };
 };
 
@@ -897,7 +898,8 @@ export const MockPoint = Class.inherit(
         setHole: function() { },
         resetHoles: function() { },
         setInvisibility: sinon.spy(),
-        setDefaultCoords: sinon.spy()
+        setDefaultCoords: sinon.spy(),
+        clearSelection: function() { },
     });
 
 export const MockAxis = function(renderOptions) {
