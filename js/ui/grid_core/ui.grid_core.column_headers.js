@@ -8,6 +8,7 @@ import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { registerKeyboardAction } from './ui.grid_core.accessibility';
+import domAdapter from '../../core/dom_adapter';
 
 const CELL_CONTENT_CLASS = 'text-content';
 const HEADERS_CLASS = 'headers';
@@ -26,6 +27,7 @@ const SORT_INDEX_INDICATOR_CLASS = 'dx-sort-index-indicator';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
 const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
+const LINK = 'dx-link';
 
 export const columnHeadersModule = {
     defaultOptions: function() {
@@ -74,6 +76,13 @@ export const columnHeadersModule = {
              * @type {Partial<import('./ui.grid_core.column_headers').ColumnHeadersView>}
              */
             const members = {
+                init: function() {
+                    this.callBase();
+
+                    this.columnChooserView = this.component.getView('columnChooserView');
+                    this.headerPanelView = this.component.getView('headerPanel');
+                },
+
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
@@ -96,10 +105,12 @@ export const columnHeadersModule = {
                     const that = this;
 
                     return function($container, options) {
-                        const caption = column.command === 'empty' ? that._getEmptyHeaderText() : column.caption;
+                        const { caption } = column;
                         const needCellContent = !column.command || (caption && column.command !== 'expand');
 
-                        if(needCellContent) {
+                        if(column.command === 'empty') {
+                            that._renderEmptyMessage($container, options);
+                        } else if(needCellContent) {
                             const $content = createCellContent(that, $container, options);
 
                             $content.text(caption);
@@ -110,8 +121,8 @@ export const columnHeadersModule = {
                 },
 
                 _getEmptyHeaderText: function() {
-                    const hasHiddenColumns = !!this.component.getView('columnChooserView').hasHiddenColumns();
-                    const hasGroupedColumns = !!this.component.getView('headerPanel').hasGroupedColumns();
+                    const hasHiddenColumns = !!this.columnChooserView.hasHiddenColumns();
+                    const hasGroupedColumns = !!this.headerPanelView.hasGroupedColumns();
 
                     switch(true) {
                         case (hasHiddenColumns && hasGroupedColumns):
@@ -125,6 +136,34 @@ export const columnHeadersModule = {
 
                         default:
                             return '';
+                    }
+                },
+
+                _renderEmptyMessage: function($container, options) {
+                    const textEmpty = this._getEmptyHeaderText();
+
+                    if(!textEmpty) {
+                        $container.html('&nbsp;');
+                        return;
+                    }
+
+                    const $cellContent = createCellContent(this, $container, options);
+                    const needSplit = textEmpty.indexOf('{0}');
+
+                    if(needSplit) {
+                        const [leftPart, rightPart] = textEmpty.split('{0}');
+                        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+
+                        const $link = $('<a>').text(columnChooserTitle).addClass(LINK);
+
+                        eventsEngine.on($link, 'click', this.createAction(() => this.columnChooserView.showColumnChooser()));
+
+                        $cellContent
+                            .append(domAdapter.createTextNode(leftPart))
+                            .append($link)
+                            .append(domAdapter.createTextNode(rightPart));
+                    } else {
+                        $cellContent.text(textEmpty);
                     }
                 },
 

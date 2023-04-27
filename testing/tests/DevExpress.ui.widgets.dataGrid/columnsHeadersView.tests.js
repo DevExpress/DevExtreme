@@ -3,6 +3,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
 import typeUtils from 'core/utils/type';
+import { format } from 'core/utils/string';
 import config from 'core/config';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
@@ -2223,8 +2224,27 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+        const text = format(messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'), columnChooserTitle);
+
         assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
-        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'));
+        assert.strictEqual(emptyCell.text(), text);
+
+        // act
+        const columnChooserLink = emptyCell.find('.dx-datagrid-text-content .dx-link');
+
+        // assert
+        assert.strictEqual(columnChooserLink.length, 1, 'link for column chooser created');
+        assert.strictEqual(columnChooserLink.text(), columnChooserTitle);
+
+        // act
+        let chooserOpened = false;
+        this.columnChooserView.showColumnChooser = () => chooserOpened = true;
+
+        columnChooserLink.trigger('click');
+
+        // assert
+        assert.ok(chooserOpened, 'chooser has been opened');
     });
 
     QUnit.test('Check header text when all columns are hidden but column chooser is not enabled', function(assert) {
@@ -2269,8 +2289,27 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+        const text = format(messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'), columnChooserTitle);
+
         assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
-        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'));
+        assert.strictEqual(emptyCell.text(), text);
+
+        // act
+        const columnChooserLink = emptyCell.find('.dx-datagrid-text-content .dx-link');
+
+        // assert
+        assert.strictEqual(columnChooserLink.length, 1, 'link for column chooser created');
+        assert.strictEqual(columnChooserLink.text(), columnChooserTitle);
+
+        // act
+        let chooserOpened = false;
+        this.columnChooserView.showColumnChooser = () => chooserOpened = true;
+
+        columnChooserLink.trigger('click');
+
+        // assert
+        assert.ok(chooserOpened, 'chooser has been opened');
     });
 
     QUnit.test('Check header text when all columns are hidden or grouped but column chooser and group panel are not enabled', function(assert) {
