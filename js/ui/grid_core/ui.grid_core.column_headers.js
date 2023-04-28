@@ -76,13 +76,6 @@ export const columnHeadersModule = {
              * @type {Partial<import('./ui.grid_core.column_headers').ColumnHeadersView>}
              */
             const members = {
-                init: function() {
-                    this.callBase();
-
-                    this.columnChooserView = this.component.getView('columnChooserView');
-                    this.headerPanelView = this.component.getView('headerPanel');
-                },
-
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
@@ -120,25 +113,6 @@ export const columnHeadersModule = {
                     };
                 },
 
-                _getEmptyHeaderText: function() {
-                    const hasHiddenColumns = !!this.columnChooserView.hasHiddenColumns();
-                    const hasGroupedColumns = !!this.headerPanelView.hasGroupedColumns();
-
-                    switch(true) {
-                        case (hasHiddenColumns && hasGroupedColumns):
-                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText');
-
-                        case hasGroupedColumns:
-                            return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
-
-                        case hasHiddenColumns:
-                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
-
-                        default:
-                            return '';
-                    }
-                },
-
                 _renderEmptyMessage: function($container, options) {
                     const textEmpty = this._getEmptyHeaderText();
 
@@ -154,9 +128,10 @@ export const columnHeadersModule = {
                         const [leftPart, rightPart] = textEmpty.split('{0}');
                         const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
 
+                        const columnChooserView = this.component.getView('columnChooserView');
                         const $link = $('<a>').text(columnChooserTitle).addClass(LINK);
 
-                        eventsEngine.on($link, 'click', this.createAction(() => this.columnChooserView.showColumnChooser()));
+                        eventsEngine.on($link, 'click', this.createAction(() => columnChooserView.showColumnChooser()));
 
                         $cellContent
                             .append(domAdapter.createTextNode(leftPart))
@@ -164,6 +139,25 @@ export const columnHeadersModule = {
                             .append(domAdapter.createTextNode(rightPart));
                     } else {
                         $cellContent.text(textEmpty);
+                    }
+                },
+
+                _getEmptyHeaderText: function() {
+                    const hasHiddenColumns = !!this.component.getView('columnChooserView').hasHiddenColumns();
+                    const hasGroupedColumns = !!this.component.getView('headerPanel').hasGroupedColumns();
+
+                    switch(true) {
+                        case (hasHiddenColumns && hasGroupedColumns):
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText');
+
+                        case hasGroupedColumns:
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText');
+
+                        case hasHiddenColumns:
+                            return messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText');
+
+                        default:
+                            return '';
                     }
                 },
 
