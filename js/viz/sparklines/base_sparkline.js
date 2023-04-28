@@ -287,7 +287,7 @@ BaseSparkline.prototype._setTooltipOptions = function() {
 };
 
 BaseSparkline.prototype._getDefaultTooltipTemplate = function(options) {
-    let defaultTemplateNeeded = false;
+    let defaultTemplateNeeded = true;
     const textAlign = this.option('rtlEnabled') ? 'left' : 'right';
 
     if(isFunction(options.customizeTooltip)) {
@@ -297,8 +297,6 @@ BaseSparkline.prototype._getDefaultTooltipTemplate = function(options) {
         const customizeResult = options.customizeTooltip.call(formatObject, formatObject) ?? {};
 
         defaultTemplateNeeded = !('html' in customizeResult) && !('text' in customizeResult);
-    } else {
-        defaultTemplateNeeded = true;
     }
 
     return defaultTemplateNeeded && getDefaultTemplate(options.font, textAlign);

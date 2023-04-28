@@ -114,7 +114,7 @@ QUnit.test('Tooltip constructor should accept valid params when tooltip is enabl
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
 });
 
-QUnit.test('Update method should accept valid params when tooltip enabled', function(assert) {
+QUnit.test('Update method should accept valid params when tooltip is enabled', function(assert) {
     const bullet = this.createBullet({
         value: 10,
         maxScaleValue: 20,
@@ -133,7 +133,7 @@ QUnit.test('Update method should accept valid params when tooltip enabled', func
     assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
 });
 
-QUnit.test('Tooltip constructor should accept valid params when tooltip enabled and no data', function(assert) {
+QUnit.test('Tooltip constructor should accept valid params when tooltip is enabled and no data', function(assert) {
     const bullet = this.createBullet({
         tooltip: {
             font: {
@@ -228,7 +228,7 @@ QUnit.test('Default template should be used when customizeTooltip is not specifi
 });
 
 
-QUnit.test('Default tooltip template should have valid text align when rtl enabled', function(assert) {
+QUnit.test('Default tooltip template should have valid text align when rtl is enabled', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
     const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
     const $templateContainer = $('<div>');

@@ -100,7 +100,7 @@ const environment = {
 
 QUnit.module('Sparkline tooltip', environment);
 
-QUnit.test('Tooltip constructor should accept valid params when tooltip enabled', function(assert) {
+QUnit.test('Tooltip constructor should accept valid params when tooltip is enabled', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
@@ -118,7 +118,7 @@ QUnit.test('Tooltip constructor should accept valid params when tooltip enabled'
     assert.strictEqual(arg[0].eventTrigger, sparkline._eventTrigger, 'parameter - event trigger');
 });
 
-QUnit.test('Update method should accept valid params when tooltip enabled', function(assert) {
+QUnit.test('Update method should accept valid params when tooltip is enabled', function(assert) {
     const sparkline = this.createSparkline({
         dataSource: [1, 2, 3, 4, 5, 6, 7],
         tooltip: {
@@ -136,7 +136,7 @@ QUnit.test('Update method should accept valid params when tooltip enabled', func
     assert.strictEqual(isFunction(tooltip.update.lastCall.args[0].contentTemplate), true);
 });
 
-QUnit.test('Tooltip constructor should accept valid params when tooltip enabled and no dataSource', function(assert) {
+QUnit.test('Tooltip constructor should accept valid params when tooltip is enabled and no dataSource', function(assert) {
     const sparkline = this.createSparkline({
         tooltip: {
             font: {
@@ -153,7 +153,7 @@ QUnit.test('Tooltip constructor should accept valid params when tooltip enabled 
     assert.strictEqual(arg[0].eventTrigger, sparkline._eventTrigger, 'parameter - event trigger');
 });
 
-QUnit.test('Update method should accept valid params when tooltip enabled and no dataSource', function(assert) {
+QUnit.test('Update method should accept valid params when tooltip is enabled and no dataSource', function(assert) {
     const sparkline = this.createSparkline({
         tooltip: {
             font: {
@@ -249,7 +249,7 @@ QUnit.test('customizeTooltip return text', function(assert) {
     });
 });
 
-QUnit.test('Default template should be used when customizeTooltip is nota defined', function(assert) {
+QUnit.test('Default template should be used when customizeTooltip is not defined', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
     const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
     const $templateContainer = $('<div>');
@@ -339,7 +339,7 @@ QUnit.test('sparkline tooltip format object. min/max values when all values are 
     assert.strictEqual(tooltip.show.lastCall.args[0].originalMaxValue, 0);
 });
 
-QUnit.test('Default tooltip template should have valid text align when rtl enabled', function(assert) {
+QUnit.test('Default tooltip template should have valid text align when rtl is enabled', function(assert) {
     const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };
     const $templateContainer = $('<div>');
     const sparkline = this.createSparkline({
