@@ -102,8 +102,10 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     _cellHoverHandler(e) {
         const isMaxZoomLevel = this._isMaxZoomLevel();
         const [startDate, endDate] = this._getValues();
+        const { _allowChangeSelectionOrder, _currentSelection } = this.calendar.option();
+        const skipHoveredRange = _allowChangeSelectionOrder && _currentSelection === 'startDate';
 
-        if(isMaxZoomLevel && startDate && !endDate) {
+        if(isMaxZoomLevel && startDate && !endDate && !skipHoveredRange) {
             this._updateViewsOption('range', this._getDaysInRange(startDate, e.value));
         }
     }

@@ -2288,6 +2288,21 @@ QUnit.module('Options', {
                     assert.deepEqual(this.calendar.option('values'), [startCellDate, endCellDate]);
                 });
             });
+
+            QUnit.test('Range should not be displayed on cell hover if only startDate is defined and _allowChangeSelectionOrder is true and _currentSelection is startDate', function(assert) {
+                this.reinit({
+                    values: ['2023/04/01', null],
+                    selectionMode: 'range',
+                    _allowChangeSelectionOrder: true,
+                    _currentSelection: 'startDate',
+                });
+
+                const $cellToHover = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+
+                $cellToHover.trigger('mouseenter');
+
+                assert.notOk($cellToHover.hasClass(CALENDAR_RANGE_DATE_CLASS));
+            });
         });
     });
 

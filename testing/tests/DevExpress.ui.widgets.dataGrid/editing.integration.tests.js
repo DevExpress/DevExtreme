@@ -772,7 +772,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(1, 0)).text(), '2', 'second row cell text');
     });
 
-    QUnit.test('Edit row with the underscore template when the editForm mode is enabled', function(assert) {
+    QUnit.test('Edit row with the jquery template when the editForm mode is enabled', function(assert) {
         // arrange
         const data = [{ firstName: 'Super', lastName: 'Man' }, { firstName: 'Super', lastName: 'Zi' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -792,7 +792,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
+        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the jquery template is rendered correctly');
     });
 
     // T386755
