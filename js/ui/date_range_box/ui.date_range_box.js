@@ -41,120 +41,67 @@ class DateRangeBox extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             acceptCustomValue: true,
-
             activeStateEnabled: true,
-
             applyButtonText: messageLocalization.format('OK'),
-
             applyValueMode: 'instantly',
-
             buttons: undefined,
-
             calendarOptions: {},
-
             cancelButtonText: messageLocalization.format('Cancel'),
-
             dateOutOfRangeMessage: messageLocalization.format('validation-range'),
-
             dateSerializationFormat: undefined,
-
             deferRendering: true,
-
             disabledDates: null,
-
             displayFormat: null,
-
-            dropDownOptions: {},
-
             dropDownButtonTemplate: 'dropDownButton',
-
+            dropDownOptions: {},
             endDate: null,
-
-            focusStateEnabled: true,
-
-            hoverStateEnabled: true,
-
-            invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
-
-            isValid: true,
-
-            startDateLabel: 'Start Date', // default value was ''
-
-            endDateLabel: 'End Date', // default value was ''
-
-            startDatePlaceholder: '',
-
+            endDateInputAttr: {},
+            endDateLabel: 'End Date',
+            endDateName: '',
             endDatePlaceholder: '',
-
+            focusStateEnabled: true,
+            hoverStateEnabled: true,
+            invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
+            isValid: true,
             labelMode: 'static',
-
             max: undefined,
-
             maxLength: null,
-
             min: undefined,
-
-            opened: false,
-
-            openOnFieldClick: true,
-
-            pickerType: 'calendar',
-
-            readOnly: false,
-
-            showClearButton: false,
-
-            showDropDownButton: true,
-
-            spellcheck: false,
-
-            startDate: null,
-
-            stylingMode: config().editorStylingMode || 'outlined',
-
-            text: '',
-
-            todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
-
-            useHiddenSubmitElement: false,
-
-            useMaskBehavior: false,
-
-            validationError: null,
-
-            validationErrors: null,
-
-            validationMessageMode: 'auto',
-
-            validationMessagePosition: 'auto',
-
-            validationStatus: 'valid',
-
-            value: [null, null],
-
-            valueChangeEvent: 'change',
-
-            onValueChanged: null,
-
-            onOpened: null,
-
-            onClosed: null,
-
-            onKeyDown: null,
-
-            onKeyUp: null,
-
             onChange: null,
-
-            onInput: null,
-
-            onCut: null,
-
+            onClosed: null,
             onCopy: null,
-
-            onPaste: null,
-
+            onCut: null,
             onEnterKey: null,
+            onInput: null,
+            onKeyDown: null,
+            onKeyUp: null,
+            onOpened: null,
+            onPaste: null,
+            onValueChanged: null,
+            openOnFieldClick: true,
+            opened: false,
+            pickerType: 'calendar',
+            readOnly: false,
+            showClearButton: false,
+            showDropDownButton: true,
+            spellcheck: false,
+            startDate: null,
+            startDateInputAttr: {},
+            startDateLabel: 'Start Date',
+            startDateName: '',
+            startDatePlaceholder: '',
+            stylingMode: config().editorStylingMode || 'outlined',
+            text: '',
+            todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
+            useHiddenSubmitElement: false,
+            useMaskBehavior: false,
+            validationError: null,
+            validationErrors: null,
+            validationMessageMode: 'auto',
+            validationMessagePosition: 'auto',
+            validationStatus: 'valid',
+            value: [null, null],
+            valueChangeEvent: 'change',
         });
     }
 
@@ -171,6 +118,19 @@ class DateRangeBox extends Widget {
                 }
             }
         ]);
+    }
+
+    _initOptions(options) {
+        super._initOptions(options);
+
+        const { value: initialValue } = this.initialOption();
+        const { value, startDate, endDate } = this.option();
+        if(isSameDateArrays(initialValue, value)) {
+            this.option('value', [startDate, endDate]);
+        } else {
+            const [startDate, endDate] = value;
+            this.option({ startDate, endDate });
+        }
     }
 
     _createOpenAction() {
@@ -450,7 +410,6 @@ class DateRangeBox extends Widget {
     }
 
     _getStartDateBoxConfig() {
-        // NOTE: delete part of options if we deside to use new Popup
         const options = this.option();
 
         return {
@@ -482,6 +441,8 @@ class DateRangeBox extends Widget {
             value: this.option('value')[0],
             label: options.startDateLabel,
             placeholder: options.startDatePlaceholder,
+            inputAttr: options.startDateInputAttr,
+            name: options.startDateName,
         };
     }
 
@@ -510,6 +471,8 @@ class DateRangeBox extends Widget {
             label: options.endDateLabel,
             placeholder: options.endDatePlaceholder,
             deferRendering: true,
+            inputAttr: options.endDateInputAttr,
+            name: options.endDateName,
         };
     }
 
@@ -627,6 +590,8 @@ class DateRangeBox extends Widget {
                 this._updateButtons(['clear']);
                 break;
             case 'endDate':
+                this.updateValue([this.option('value')[0], value]);
+                break;
             case 'invalidDateMessage':
             case 'isValid':
                 break;
@@ -641,6 +606,18 @@ class DateRangeBox extends Widget {
                 break;
             case 'endDatePlaceholder':
                 this.getEndDateBox().option('placeholder', value);
+                break;
+            case 'startDateInputAttr':
+                this.getStartDateBox().option('inputAttr', value);
+                break;
+            case 'startDateName':
+                this.getStartDateBox().option('name', value);
+                break;
+            case 'endDateInputAttr':
+                this.getEndDateBox().option('inputAttr', value);
+                break;
+            case 'endDateName':
+                this.getEndDateBox().option('name', value);
                 break;
             case 'labelMode':
                 break;
@@ -693,6 +670,7 @@ class DateRangeBox extends Widget {
                 this.getEndDateBox().option(name, value);
                 break;
             case 'startDate':
+                this.updateValue([value, this.option('value')[1]]);
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
@@ -706,6 +684,9 @@ class DateRangeBox extends Widget {
             case 'validationStatus':
                 break;
             case 'value':
+                this._setOptionWithoutOptionChange('startDate', args.value[0]);
+                this._setOptionWithoutOptionChange('endDate', args.value[1]);
+
                 this._raiseValueChangeAction(value, previousValue);
                 this._saveValueChangeEvent(undefined);
                 this._updateDateBoxesValue(value);
