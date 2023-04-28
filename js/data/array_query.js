@@ -101,7 +101,7 @@ const MapIterator = WrappedIterator.inherit({
 const defaultCompare = function(xValue, yValue, options) {
     if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.locale || options?.collateOptions)) {
 
-        /* eslint-disable-next-line */
+        /* eslint-disable-next-line no-undef */
         return new Intl.Collator(options?.locale || undefined, options?.collateOptions || undefined).compare(xValue, yValue);
     }
 
@@ -207,6 +207,9 @@ const SortIterator = Iterator.inherit({
     _unwrap: function(wrappedItem) {
         return wrappedItem.value;
     },
+    _getDefaultCompare(compareOptions) {
+        return ((xValue, yValue) => defaultCompare(xValue, yValue, compareOptions));
+    },
     _compare: function(x, y) {
         const xIndex = x.index;
         const yIndex = y.index;
@@ -222,7 +225,7 @@ const SortIterator = Iterator.inherit({
             const rule = this.rules[i];
             const xValue = rule.getter(x);
             const yValue = rule.getter(y);
-            const compare = rule.compare || ((xValue, yValue) => defaultCompare(xValue, yValue, rule.compareOptions));
+            const compare = rule.compare || this._getDefaultCompare(rule.compareOptions);
             const compareResult = compare(xValue, yValue);
 
             if(compareResult) {

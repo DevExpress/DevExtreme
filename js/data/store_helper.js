@@ -38,7 +38,7 @@ function queryByOptions(query, options, isCountQuery) {
     const filter = options.filter;
 
     if(options?.compareOptions) {
-        query.setCompareOptions?.(options?.compareOptions);
+        query.setCompareOptions?.(options.compareOptions);
     }
 
     if(filter) {
