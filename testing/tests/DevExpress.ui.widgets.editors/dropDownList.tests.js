@@ -1710,6 +1710,20 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
         assert.strictEqual($input.attr('role'), 'combobox', 'input.role');
     });
+
+    ['items', 'dataSource'].forEach(dataSource => {
+        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource}`, function(assert) {
+            const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
+
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+        });
+    });
 });
 
 QUnit.module('dropdownlist with groups', {

@@ -68,8 +68,11 @@ $shadow-top: 0 (-1px);
   }
 }
 
-.dx-start-datebox {
-  margin-left: $material-daterangebox-start-datebox-padding;
+.dx-daterangebox-outlined,
+.dx-daterangebox-filled {
+  .dx-start-datebox {
+    margin-left: $material-daterangebox-start-datebox-padding;
+  }
 }
 
 .dx-daterangebox-separator {

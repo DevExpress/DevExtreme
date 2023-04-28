@@ -69,7 +69,7 @@ export interface OptionChangedArgs<T extends string = string> {
 }
 
 export interface Controllers {
-  data: any;
+  data: import('./data_controller/module').DataController;
   columns: any;
   resizing: any;
   adaptiveColumns: any;
@@ -109,6 +109,8 @@ export interface ClassStaticMembers {
 }
 export type ModuleType<T extends ModuleItem> = (new (component: any) => T) & ClassStaticMembers;
 declare class ModuleItem {
+  _updateLockCount?: number;
+
   component: InternalGrid;
 
   name: string;
@@ -131,7 +133,7 @@ declare class ModuleItem {
 
   callbackNames(): string[];
 
-  callbackFlags(): any;
+  callbackFlags(name?: string): any | undefined;
 
   publicMethods(): string[];
 

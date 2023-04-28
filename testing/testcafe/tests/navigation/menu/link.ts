@@ -20,6 +20,20 @@ test('Items should have links if item.url is set', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Items should have links if item.url is set.png', { element: '#container' });
 
   await t
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Items without link should have correct focus style.png', { element: '#container' });
+
+  await t
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Items with link should have correct focus style.png', { element: '#container' });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

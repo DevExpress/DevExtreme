@@ -44,7 +44,7 @@ themes.setDefaultTimeout(0);
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
-    let style = '<style>\
+    let style = '<style nonce="qunit-test">\
         html, body {\
             height: 100%;\
             margin: 0;\
@@ -1035,13 +1035,12 @@ QUnit.module('options changed callbacks', {
             return;
         }
 
-        const $content = $(
-            '<div class="dx-treeview">\
-            <div style="height: 30px;"></div>\
-            <div class="dx-scrollable" style="height: calc(100% - 30px)">\
-                <div style="height: 100px;"></div>\
-            </div>\
-        </div>');
+        const $content = $('<div class="dx-treeview"></div>').append(
+            $('<div>').css('height', '30px'),
+            $('<div class="dx-scrollable"></div>')
+                .css('height', 'calc(100% - 30px)')
+                .append($('<div>').css('height', '100px'))
+        );
 
         $('#popup').dxPopup({
             visible: true,
