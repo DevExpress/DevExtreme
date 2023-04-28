@@ -212,6 +212,18 @@ const transpileRenovationModules = async(Builder) => {
     }
 };
 
+const buildCssAsSystemModule = (name, filePath) => `
+    System.register('${filePath}', [], false, function() {});
+    (function() {
+        if (typeof document == 'undefined') return;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/${filePath}';
+        link.setAttribute('data-theme', '${name}');
+        document.getElementsByTagName('head')[0].appendChild(link);
+    })();
+`;
+
 const transpileCss = async(Builder) => {
     const pluginsList = ['css', 'json'];
 
@@ -226,20 +238,20 @@ const transpileCss = async(Builder) => {
         })
     );
 
-    const cssList = ['artifacts/css/dx.light.css', 'artifacts/css/dx.material.blue.light.css'];
+    const cssList = [
+        ['artifacts/css/dx.light.css', 'generic.light'],
+        ['artifacts/css/dx.material.blue.light.css', 'material.blue.light']
+    ];
 
     // eslint-disable-next-line no-restricted-syntax
-    for(const cssFile of cssList) {
+    for(const [cssFile, stylesName] of cssList) {
         const destPath = path.join(root, cssFile.replace('css', 'css-systemjs'));
         const destDir = path.dirname(destPath);
         if(!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir, { recursive: true });
         }
 
-        const systemInject = `System.register('${cssFile}', [], false, function () {});`;
-        const cssInject = `(function(c){if (typeof document == 'undefined') return;var d=document,a='appendChild',i='styleSheet',s=d.createElement('link');s.rel='stylesheet';s.type='text/css';s.href='/${cssFile}';d.getElementsByTagName('head')[0][a](s);})();`;
-
-        fs.writeFileSync(destPath, [systemInject, cssInject].join('\n'));
+        fs.writeFileSync(destPath, buildCssAsSystemModule(stylesName, cssFile));
     }
 };
 
