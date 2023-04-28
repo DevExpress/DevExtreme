@@ -4,7 +4,6 @@ import {
 import $ from '@js/core/renderer';
 import eventsEngine from '@js/events/core/events_engine';
 import { createObjectWithChanges } from '@js/data/array_utils';
-// @ts-expect-error
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
@@ -1065,10 +1064,11 @@ export const validatingModule = {
             }
 
             const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+            const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
 
             $tooltipElement?.remove();
             $tooltipElement = $('<div>')
-              .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
+              .addClass(revertTooltipClass)
               .appendTo($container);
 
             const tooltipOptions = {
@@ -1080,8 +1080,7 @@ export const validatingModule = {
               container: $overlayContainer,
               propagateOutsideClick: true,
               hideOnOutsideClick: false,
-              copyRootClassesToWrapper: true,
-              _ignoreCopyRootClassesToWrapperDeprecation: true,
+              wrapperAttr: { class: revertTooltipClass },
               contentTemplate: () => {
                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
                 const buttonOptions = {
@@ -1154,7 +1153,13 @@ export const validatingModule = {
             const isOverlayVisible = editorPopup && editorPopup.option('visible');
             const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
             const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
-            const $overlayContainer = $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+
+            // TODO: Don't forget to remove this code
+            //  after refactoring the fixed table position (or implementation).
+            const hasFixedColumns = this._columnsController.getFixedColumns()?.length > 0;
+            const $overlayContainer = hasFixedColumns
+              ? this.getView('rowsView').element()
+              : $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
             let errorMessageText = '';
             messages && messages.forEach((message) => {
@@ -1181,8 +1186,7 @@ export const validatingModule = {
               animation: false,
               propagateOutsideClick: true,
               hideOnOutsideClick: false,
-              copyRootClassesToWrapper: true,
-              _ignoreCopyRootClassesToWrapperDeprecation: true,
+              wrapperAttr: { class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}` },
               position: {
                 collision: 'flip',
                 boundary: this._rowsView.element(),

@@ -9,6 +9,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
+import messageLocalization from '../../../../localization/message';
 import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types';
@@ -18,7 +19,7 @@ import { InternalPagerProps } from '../common/pager_props';
 export const viewFunction = ({
   width,
   props: {
-    pageSize, pageSizeChange, pageSizes,
+    pageSize, pageSizeChange, pageSizes, inputAttr,
   },
 }: PageSizeSmall): JSX.Element => (
   <SelectBox
@@ -28,6 +29,7 @@ export const viewFunction = ({
     value={pageSize}
     valueChange={pageSizeChange}
     width={width}
+    inputAttr={inputAttr}
   />
 );
 
@@ -36,6 +38,8 @@ export class PageSizeSmallProps {
   @Ref() parentRef!: RefObject<HTMLElement>;
 
   @OneWay() pageSizes!: FullPageSize[];
+
+  @OneWay() inputAttr = { 'aria-label': messageLocalization.format('dxPager-ariaPageSize') };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias

@@ -1,6 +1,5 @@
 import { getHeight, getWidth } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-// @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';

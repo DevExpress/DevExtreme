@@ -173,11 +173,14 @@
 
         "dxPager-infoText": "Puslapis {0} iš {1} ({2} elementai)",
         "dxPager-pagesCountText": "apie",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Viskas",
         "dxPager-page": "Puslapis {0}",
         "dxPager-prevPage": "Ankstesnis puslapis",
         "dxPager-nextPage": "Kitas puslapis",
         "dxPager-ariaLabel": "Puslapio naršymas",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Iš viso",
         "dxPivotGrid-total": "{0} iš viso",
@@ -257,6 +260,7 @@
 
         "dxCalendar-todayButtonText": "Šiandien",
         "dxCalendar-ariaWidgetName": "Kalendorius",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "Raudonas",
         "dxColorView-ariaGreen": "Žalias",

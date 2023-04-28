@@ -134,7 +134,7 @@ QUnit.module('Navigator', {
 }, () => {
     QUnit.test('Navigator links must prevent default click browser action', function(assert) {
         const $window = $(window);
-        const brick = $('<div style=\'height:50000px;\'></div>');
+        const brick = $('<div></div>');
         const immediateClick = (element) => {
             const event = document.createEvent('MouseEvent');
 
@@ -144,6 +144,7 @@ QUnit.module('Navigator', {
         let actualScrollTop;
         try {
             brick.appendTo('#qunit-fixture');
+            brick.css('height', '50000px');
             brick.insertBefore(this.$element);
             $window.scrollTop(50000);
             actualScrollTop = $window.scrollTop();
@@ -1565,7 +1566,7 @@ QUnit.module('Options', {
                 firstFourDays: 0,
                 fullWeek: 0
             };
-            const getWeekNumberStub = sinon.stub(dateUtils, 'getWeekNumber', (date, firstDayOfWeek, rule) => {
+            const getWeekNumberStub = sinon.stub(dateUtils, 'getWeekNumber').callsFake((date, firstDayOfWeek, rule) => {
                 dateUtilsCallCountMap[rule]++;
             });
 
@@ -3790,6 +3791,16 @@ QUnit.module('Aria accessibility', {
         const calendar = this.$element.dxCalendar().dxCalendar('instance');
         const $navigatorNext = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS));
 
+        const expectedLabel = `
+            Calendar.
+            To navigate between views, press Control, and then Left Arrow or Right Arrow.
+            To zoom in on a view, press Control, and then Down Arrow.
+            To zoom out, press Control, and then Up Arrow.
+        `
+            .replace(/(\r\n|\n|\r)/gm, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
         ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
             calendar.option({ zoomLevel });
             $navigatorNext.trigger('dxclick');
@@ -3801,7 +3812,7 @@ QUnit.module('Aria accessibility', {
                 const label = tableElement.getAttribute('aria-label');
 
                 assert.strictEqual(role, 'grid', `zoomLevel: ${zoomLevel}, role is correct`);
-                assert.equal(label, 'Calendar', `zoomLevel: ${zoomLevel}, label is correct`);
+                assert.strictEqual(label, expectedLabel, 'label is correct');
             });
         });
     });

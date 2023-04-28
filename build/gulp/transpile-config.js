@@ -22,6 +22,15 @@ module.exports = {
         ])
     }),
 
+    tsCjs: Object.assign({}, common, {
+        presets: ['@babel/preset-env'],
+        plugins: common.plugins.concat([
+            ['@babel/plugin-transform-modules-commonjs'],
+            ['@babel/plugin-transform-classes', { loose: true }],
+            '@babel/plugin-transform-property-mutators'
+        ])
+    }),
+
     esm: Object.assign({}, common, {
         // eslint-disable-next-line spellcheck/spell-checker
         presets: [['@babel/preset-env', { modules: false, targets: { esmodules: true } }]],

@@ -30,7 +30,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 QUnit.testStart(function() {
     const markup =
-        '<style>\
+        '<style nonce="qunit-test">\
     .qunit-fixture-static {\
         position: absolute !important;\
         left: 0 !important;\

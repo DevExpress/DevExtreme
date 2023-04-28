@@ -8,9 +8,10 @@ QUnit.testStart(() => {
         '<div id="radioGroup"> </div>\
         <div id="radioGroup2"> </div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const { test, module } = QUnit;
