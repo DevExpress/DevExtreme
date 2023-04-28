@@ -83,6 +83,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
+        if(!this.isStartDateBoxActive()) {
+            this.setActiveStartDateBox();
+        }
+
         if(isSameDateArrays(value, previousValue)) {
             return;
         }
@@ -107,6 +111,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 this.dateRangeBox.updateValue(value);
             }
         }
+    }
+
+    isStartDateBoxActive() {
+        return this.dateBox.$element().hasClass('dx-start-datebox');
     }
 
     _closeDropDownByEnter() {
