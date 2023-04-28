@@ -847,16 +847,19 @@ const Lookup = DropDownList.inherit({
 
             let isKeyboardListeningEnabled = false;
 
-            this._searchBox = this._createComponent($searchBox, TextBox, {
-                onDisposing: () => isKeyboardListeningEnabled = false,
-                onFocusIn: () => isKeyboardListeningEnabled = true,
-                onFocusOut: () => isKeyboardListeningEnabled = false,
-                onKeyboardHandled: opts => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
+            const textBoxOptions = {
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option('searchStartEvent'),
-                onValueChanged: (e) => { this._searchHandler(e); }
-            });
+                inputAttr: { 'aria-label': 'Search' },
+                onDisposing: () => isKeyboardListeningEnabled = false,
+                onFocusIn: () => isKeyboardListeningEnabled = true,
+                onFocusOut: () => isKeyboardListeningEnabled = false,
+                onKeyboardHandled: (opts) => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
+                onValueChanged: (e) => this._searchHandler(e),
+            };
+
+            this._searchBox = this._createComponent($searchBox, TextBox, textBoxOptions);
 
             this._registerSearchKeyHandlers();
 
