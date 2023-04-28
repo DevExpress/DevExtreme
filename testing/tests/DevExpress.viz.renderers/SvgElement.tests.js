@@ -481,7 +481,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             element.smartAttr(filterAttrs);
             assert.strictEqual(Object.hasOwnProperty.call(filterAttrs, 'filter'), false);
         } catch(e) {
-            assert.true(false, `error: ${e.message}`);
+            assert.ok(false, `error: ${e.message}`);
         }
     });
 
