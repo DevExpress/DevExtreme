@@ -1,3 +1,5 @@
+window.includeThemesLinks();
+
 import $ from 'jquery';
 import domAdapter from 'core/dom_adapter';
 import themes from 'ui/themes';

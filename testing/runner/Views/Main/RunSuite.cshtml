@@ -348,8 +348,6 @@
             jQuery(resolve);
         }));
 
-        includeThemesLinks();
-
         Promise.all(imports)
         .then(function() {
             var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;

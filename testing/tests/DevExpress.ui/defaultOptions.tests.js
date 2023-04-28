@@ -1,3 +1,5 @@
+require('../../helpers/includeThemesLinks.js');
+
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 let browser = require('core/utils/browser');
