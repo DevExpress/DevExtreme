@@ -545,6 +545,7 @@ export type ColumnChooserSearchConfig = {
   /**
    * @docid
    * @default {}
+   * @type dxTextBoxOptions
    */
   editorOptions?: TextBoxProperties;
   /**
@@ -1252,6 +1253,7 @@ export type HeaderFilterSearchConfig = {
   /**
    * @docid
    * @default {}
+   * @type dxTextBoxOptions
    */
   editorOptions?: TextBoxProperties;
   /**
