@@ -279,4 +279,23 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
         assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
     });
+
+    QUnit.test('Popup should not break after selecting values by click and updating min option that triggers invalidate', function(assert) {
+        this.reinit({
+            applyValueMode: 'instantly',
+            value: [null, null],
+            opened: true,
+        });
+
+        const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
+
+        $startDateCell.trigger('dxclick');
+        $endDateCell.trigger('dxclick');
+
+        this.instance.option('min', new Date('2000/01/01'));
+        this.instance.open();
+
+        assert.strictEqual(this.instance.option('opened'), true);
+    });
 });
