@@ -148,7 +148,7 @@ export const columnHeadersModule = {
                     }
 
                     const $cellContent = createCellContent(this, $container, options);
-                    const needSplit = textEmpty.indexOf('{0}');
+                    const needSplit = textEmpty.includes('{0}');
 
                     if(needSplit) {
                         const [leftPart, rightPart] = textEmpty.split('{0}');
