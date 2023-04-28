@@ -72,7 +72,9 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     _valueChangedHandler({ value, previousValue, event }) {
         // fix error after select endDate and invalidate dateBoxes
-        this.setActiveStartDateBox();
+        if(!this.isStartDateBoxActive()) {
+            this.setActiveStartDateBox();
+        }
 
         if(isSameDateArrays(value, previousValue)) {
             return;
@@ -98,6 +100,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 this.dateRangeBox.updateValue(value);
             }
         }
+    }
+
+    isStartDateBoxActive() {
+        return this.dateBox.$element().hasClass('dx-start-datebox');
     }
 
     _closeDropDownByEnter() {
