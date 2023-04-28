@@ -555,6 +555,7 @@ class DateRangeBox extends Widget {
                 this.getEndDateBox().option(name, value);
                 break;
             case 'applyButtonText':
+            case 'disabledDates':
             case 'cancelButtonText':
             case 'todayButtonText':
                 this.getStartDateBox().option(name, value);
@@ -574,7 +575,6 @@ class DateRangeBox extends Widget {
             case 'calendarOptions':
                 break;
             case 'dateOutOfRangeMessage':
-            case 'disabledDates':
             case 'displayFormat':
                 break;
             case 'height':

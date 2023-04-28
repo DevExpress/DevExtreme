@@ -1513,6 +1513,9 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'todayButtonText',
             optionValue: 'now'
+        }, {
+            optionName: 'disabledDates',
+            optionValue: [new Date('2023/04/27'), new Date('2023/04/28')]
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox on init`, function(assert) {
@@ -1522,7 +1525,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
             const startDateBox = getStartDateBoxInstance(this.instance);
 
-            assert.strictEqual(startDateBox.option(optionName), optionValue);
+            assert.deepEqual(startDateBox.option(optionName), optionValue);
         });
 
         QUnit.test(`${optionName} should be passed to startDateBox on runtime change`, function(assert) {
@@ -1530,7 +1533,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
             this.instance.option(optionName, optionValue);
 
-            assert.strictEqual(startDateBox.option(optionName), optionValue);
+            assert.deepEqual(startDateBox.option(optionName), optionValue);
         });
     });
 
@@ -1678,6 +1681,18 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
         assert.strictEqual(this.instance.getStartDateBox()._popup instanceof Popup, true, 'startDateBox popup is rendered');
         assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered');
+    });
+
+    QUnit.test('disabledDates argument should have component parameter with DateRangeBox instance if disabledDates are set as function', function(assert) {
+        const disabledDates = sinon.stub();
+
+        this.reinit({
+            disabledDates,
+            opened: true
+        });
+
+        const componentField = disabledDates.lastCall.args[0].component;
+        assert.equal(componentField.NAME, 'dxDateRangeBox', 'Correct component');
     });
 });
 
