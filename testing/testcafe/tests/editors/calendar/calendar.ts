@@ -95,3 +95,32 @@ test('Calendar with multiview rendered correct', async (t) => {
   selectionMode: 'range',
   viewsCount: 2,
 }));
+
+test('Calendar with today button rendered correct', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Calendar with today button.png', { element: '#container', shouldTestInCompact: true });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCalendar', {
+  value: new Date(2021, 9, 17),
+  showTodayButton: true,
+}));
+
+test('Calendar with disabled dates rendered correct', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Calendar with today button.png', { element: '#container', shouldTestInCompact: true });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCalendar', {
+  value: new Date(2021, 9, 17),
+  showTodayButton: true,
+  showWeekNumbers: true,
+  min: new Date(2021, 9, 10),
+  disabledDates: [new Date(2021, 9, 18)],
+}));
