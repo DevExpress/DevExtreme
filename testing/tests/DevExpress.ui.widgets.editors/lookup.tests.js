@@ -2055,13 +2055,13 @@ QUnit.module('options', {
             inputAttr: { custom: true },
         }).dxLookup('instance');
 
-        const $field = lookup.$element().find(`.${LOOKUP_FIELD_CLASS}`).get(0);
+        const $field = lookup.$element().find(`.${LOOKUP_FIELD_CLASS}`);
 
-        assert.strictEqual($field.getAttribute('custom'), 'true', 'custom attribute is set correctly');
+        assert.strictEqual($field.attr('custom'), 'true', 'custom attribute is set correctly');
 
         lookup.option({ inputAttr: { custom: null } });
 
-        assert.strictEqual($field.getAttribute('custom'), null, 'custom attribute is set correctly');
+        assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
     });
 });
 
