@@ -80,6 +80,7 @@ class DateRangeBox extends Widget {
             onValueChanged: null,
             openOnFieldClick: true,
             opened: false,
+            pickerType: 'calendar',
             readOnly: false,
             showClearButton: false,
             showDropDownButton: true,
@@ -345,17 +346,22 @@ class DateRangeBox extends Widget {
         super._focusInHandler(e);
     }
 
+    _getPickerType() {
+        const { pickerType } = this.option();
+        return ['calendar', 'native'].includes(pickerType) ? pickerType : 'calendar';
+    }
+
     _getDateBoxConfig() {
         const options = this.option();
 
         const dateBoxConfig = {
-            // TODO: pass type option clearly
             acceptCustomValue: options.acceptCustomValue,
             activeStateEnabled: options.activeStateEnabled,
             applyValueMode: options.applyValueMode,
             dateOutOfRangeMessage: options.dateOutOfRangeMessage,
             dateSerializationFormat: options.dateSerializationFormat,
             deferRendering: options.deferRendering,
+            disabled: options.disabled,
             displayFormat: options.displayFormat,
             focusStateEnabled: options.focusStateEnabled,
             tabIndex: options.tabIndex,
@@ -368,12 +374,12 @@ class DateRangeBox extends Widget {
             maxLength: options.maxLength,
             min: options.min,
             openOnFieldClick: options.openOnFieldClick,
-            pickerType: 'calendar',
+            pickerType: this._getPickerType(),
             readOnly: options.readOnly,
-            disabled: options.disabled,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
             stylingMode: 'underlined',
+            type: 'date',
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
@@ -538,24 +544,35 @@ class DateRangeBox extends Widget {
 
         switch(name) {
             case 'acceptCustomValue':
-            case 'applyButtonText':
-            case 'applyValueMode':
-                break;
-            case 'buttons':
-                this._cleanButtonContainers();
-                this._renderButtonsContainer();
-                break;
             case 'dateSerializationFormat':
             case 'max':
             case 'min':
+            case 'rtlEnabled':
             case 'spellcheck':
             case 'useMaskBehavior':
             case 'valueChangeEvent':
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
                 break;
-            case 'calendarOptions':
+            case 'applyButtonText':
             case 'cancelButtonText':
+            case 'todayButtonText':
+                this.getStartDateBox().option(name, value);
+                break;
+            case 'applyValueMode':
+                break;
+            case 'buttons':
+                this._cleanButtonContainers();
+                this._renderButtonsContainer();
+                break;
+            case 'pickerType': {
+                const pickerType = this._getPickerType();
+                this.getStartDateBox().option(name, pickerType);
+                this.getEndDateBox().option(name, pickerType);
+                break;
+            }
+            case 'calendarOptions':
+                break;
             case 'dateOutOfRangeMessage':
             case 'disabledDates':
             case 'displayFormat':
@@ -659,7 +676,6 @@ class DateRangeBox extends Widget {
                 this._renderStylingMode();
                 break;
             case 'text':
-            case 'todayButtonText':
             case 'useHiddenSubmitElement':
             case 'validationError':
             case 'validationErrors':
