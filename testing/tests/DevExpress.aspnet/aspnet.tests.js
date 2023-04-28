@@ -378,7 +378,8 @@
         }
     });
 
-    QUnit.test('T744904 - MVCx extension in template', function(assert) {
+    const testNoCSP = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+    testNoCSP('T744904 - MVCx extension in template', function(assert) {
         aspnet.setTemplateEngine();
         window['MVCx'] = { };
         try {
