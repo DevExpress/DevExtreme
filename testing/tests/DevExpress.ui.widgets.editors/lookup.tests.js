@@ -3351,28 +3351,94 @@ if(devices.real().deviceType === 'desktop') {
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
-                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+                let listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'listbox',
+                    tabindex: '0',
+                    'aria-label': 'No data to display',
+                };
+
+                let fieldAttributes = {
+                    role: 'combobox',
+                    tabindex: '0',
+                    'aria-owns': helper.widget._popupContentId,
+                    'aria-expanded': 'true',
+                    'aria-controls': helper.widget._listId
+                };
+
+                let widgetAttributes = {
+                    'aria-owns': helper.widget._popupContentId,
+                };
+
+                let popupContentAttributes = {
+                    id: helper.widget._popupContentId,
+                };
+
+                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($field, fieldAttributes, 'field');
+                helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
+
                 if($input.length) {
-                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' };
+                    const expectedAttributes = {
+                        autocomplete: 'off',
+                        type: 'text',
+                        spellcheck: 'false',
+                        tabindex: '0',
+                        role: 'textbox',
+                        'aria-label': 'Search',
+                    };
+
                     if(this.isMac) {
                         expectedAttributes.placeholder = ' ';
                     }
+
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
-                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+
+                listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'listbox',
+                    tabindex: '0',
+                    'aria-label': 'No data to display',
+                };
+
+                fieldAttributes = {
+                    role: 'combobox',
+                    tabindex: '0',
+                    'aria-owns': helper.widget._popupContentId,
+                    'aria-expanded': 'true',
+                    'aria-controls': helper.widget._listId,
+                };
+
+                widgetAttributes = {
+                    'aria-owns': helper.widget._popupContentId,
+                };
+
+                popupContentAttributes = {
+                    id: helper.widget._popupContentId,
+                };
+
+                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($field, fieldAttributes, 'field');
+                helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
+
                 if($input.length) {
-                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' };
+                    const expectedAttributes = {
+                        autocomplete: 'off',
+                        type: 'text',
+                        spellcheck: 'false',
+                        role: 'textbox',
+                        'aria-label': 'Search',
+                    };
+
                     if(this.isMac) {
                         expectedAttributes.placeholder = ' ';
                     }
+
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
             });
@@ -3395,6 +3461,26 @@ if(devices.real().deviceType === 'desktop') {
 
                 const list = $(`.${LIST_CLASS}`).dxList('instance');
                 assert.deepEqual(list._getAriaTarget(), list.$element(), 'aria target for nested list is correct');
+            });
+
+            QUnit.test('user inputAttr should set attributes to lookup', function(assert) {
+                helper.createWidget({
+                    inputAttr: {
+                        custom: true,
+                    },
+                });
+
+                const $lookupField = helper.widget.$element().find(`.${LOOKUP_FIELD_CLASS}`);
+
+                assert.strictEqual($lookupField.attr('custom'), 'true', 'custom attribute is set correctly');
+
+                helper.widget.option({
+                    inputAttr: {
+                        custom: undefined,
+                    },
+                });
+
+                assert.strictEqual($lookupField.attr('custom'), undefined, 'custom attribute is set correctly');
             });
         });
     });
