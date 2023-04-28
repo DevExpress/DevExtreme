@@ -2049,6 +2049,20 @@ QUnit.module('options', {
         $clearButton = getClearButton(lookup);
         assert.notOk($clearButton, 'clearButton is not rendered after option runtime change');
     });
+
+    QUnit.test('user inputAttr should set attributes to lookup', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            inputAttr: { custom: true },
+        }).dxLookup('instance');
+
+        const $field = lookup.$element().find(`.${LOOKUP_FIELD_CLASS}`).get(0);
+
+        assert.strictEqual($field.getAttribute('custom'), 'true', 'custom attribute is set correctly');
+
+        lookup.option({ inputAttr: { custom: null } });
+
+        assert.strictEqual($field.getAttribute('custom'), null, 'custom attribute is set correctly');
+    });
 });
 
 QUnit.module('popup options', {
@@ -3461,26 +3475,6 @@ if(devices.real().deviceType === 'desktop') {
 
                 const list = $(`.${LIST_CLASS}`).dxList('instance');
                 assert.deepEqual(list._getAriaTarget(), list.$element(), 'aria target for nested list is correct');
-            });
-
-            QUnit.test('user inputAttr should set attributes to lookup', function(assert) {
-                helper.createWidget({
-                    inputAttr: {
-                        custom: true,
-                    },
-                });
-
-                const $lookupField = helper.widget.$element().find(`.${LOOKUP_FIELD_CLASS}`);
-
-                assert.strictEqual($lookupField.attr('custom'), 'true', 'custom attribute is set correctly');
-
-                helper.widget.option({
-                    inputAttr: {
-                        custom: undefined,
-                    },
-                });
-
-                assert.strictEqual($lookupField.attr('custom'), undefined, 'custom attribute is set correctly');
             });
         });
     });
