@@ -58,7 +58,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         });
     },
 
-    _getRootNodeContainer: function() {
+    _getNodeContainer: function() {
         return this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
     },
 
@@ -70,7 +70,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _repaintContainer: function() {
-        const $container = this._getRootNodeContainer();
+        const $container = this._getNodeContainer();
         let rootNodes;
 
         if($container.length) {
@@ -92,7 +92,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
 
     _itemContainer: function(isSearchMode) {
         if(this._selectAllEnabled()) {
-            return this._getRootNodeContainer();
+            return this._getNodeContainer();
         }
 
         if(this._scrollable && isSearchMode) {
