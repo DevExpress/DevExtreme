@@ -138,6 +138,7 @@ export function processHatchingAttrs(element, attrs) {
     } else if(element._hatching) {
         element.renderer.releaseDefsElements(element._hatching);
         element._hatching = null;
+        delete attrs.filter;
     } else if(attrs.filter) {
         attrs = extend({}, attrs);
         attrs.filter = element._filter = element.renderer.lockDefsElements({}, element._filter, 'filter');
