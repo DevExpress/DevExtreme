@@ -1734,7 +1734,7 @@ QUnit.module('Options', {
         this.calendar.option('showTodayButton', true);
 
         let $todayButton = getTodayButton();
-        assert.strictEqual($todayButton.text, 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
+        assert.strictEqual($($todayButton).text(), 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
 
         this.calendar.option('showTodayButton', false);
         $todayButton = getTodayButton();
