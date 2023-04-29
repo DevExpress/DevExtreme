@@ -112,7 +112,7 @@ test('Calendar with today button rendered correct', async (t) => {
 test('Calendar with disabled dates rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Calendar with today button.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Calendar with disabled dates.png', { element: '#container', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())
