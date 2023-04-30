@@ -16,10 +16,10 @@ $material-calendar-cell-hover-bg-color: color.change($base-accent, $alpha: 0.24)
 $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32) !default;
 
 .dx-calendar {
-  width: 226px; // $material-calendar-width;
-  min-width: 226px; // $material-calendar-width;
-  height: 242px; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap
-  min-height: 242px; // $material-calendar-height + 20px;
+  width: 226px; // $material-calendar-width; width: 226px;
+  min-width: 226px; // $material-calendar-width; min-width: 226px;
+  height: 264px; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap height: 264.4px;
+  min-height: 242px; // $material-calendar-height + 20px; min-height: 264.4px;
   background-color: $calendar-bg;
   border: 1px solid transparent; // need for validation to avoid jumping
 
@@ -125,12 +125,9 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 
 
   span {
-
-    // width: $material-calendar-cell-diameter;
-
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: $material-calendar-cell-diameter;
+    height: $material-calendar-cell-diameter;
   }
 
   &.dx-calendar-today {
