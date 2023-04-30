@@ -1,29 +1,8 @@
-QUnit.testStart(function() {
-    const markup =
-        '<style>\
-    .qunit-fixture-static {\
-        position: absolute !important;\
-        left: 0 !important;\
-        top: 0 !important;\
-    }\
-</style>\
-<div>\
-    <div id="container" class="dx-widget" style="width: 400px;">\
-        <div class="dx-datagrid">\
-        </div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
+import hogan from 'hogan.js';
 
 window.Hogan = hogan;
 
@@ -65,6 +44,28 @@ const setScrollerSpacing = function(rowsView) {
 };
 
 setTemplateEngine('hogan');
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            #container {
+                width: 400px;
+            }
+        </style>
+        <div>
+            <div id="container" class="dx-widget">
+                <div class="dx-datagrid">
+                </div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Fixed columns', {
     beforeEach: function() {
@@ -2223,6 +2224,31 @@ QUnit.module('Fixed columns', {
 
         // assert
         assert.equal(fixedMenuItems.length, 0, 'there are no fixed menu items');
+    });
+
+    // T1148937
+    QUnit.test('The hover event should be attached after all async templates have rendered (React)', function(assert) {
+        // arrange
+        const d = $.Deferred();
+        const $testElement = $('#container');
+
+        this.setupDataGrid();
+        this.option('hoverStateEnabled', true);
+        this.rowsView._templateDeferreds.add(d);
+        sinon.spy(this.rowsView, '_attachHoverEvents');
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual(this.rowsView._attachHoverEvents.callCount, 0, 'hover event is not attached');
+
+        // act
+        this.rowsView._templateDeferreds.delete(d);
+        d.resolve();
+
+        // assert
+        assert.strictEqual(this.rowsView._attachHoverEvents.callCount, 1, 'hover event is attached');
     });
 });
 

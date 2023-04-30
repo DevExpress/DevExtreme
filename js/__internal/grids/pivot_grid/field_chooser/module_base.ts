@@ -216,7 +216,7 @@ const FieldChooserBase = (Widget as any)
         groupSelector: `.${CLASSES.area.fieldList}`,
         groupFilter() {
           const dataSource = that._dataSource;
-          const $sortable = $(this).closest('.dx-sortable-old');
+          const $sortable = $(this).closest('.dx-sortable-old') as any;
           const pivotGrid: any = $sortable.data('dxPivotGrid');
           const pivotGridFieldChooser: any = $sortable.data('dxPivotGridFieldChooser');
 
@@ -338,7 +338,7 @@ const FieldChooserBase = (Widget as any)
     subscribeToEvents(element) {
       const that = this;
       const func = function (e) {
-        const field: any = $(e.currentTarget).data('field');
+        const field: any = ($(e.currentTarget) as any).data('field');
         const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
         const isHeaderFilter = $(e.target).hasClass(CLASSES.headerFilter);
         const dataSource = that._dataSource;

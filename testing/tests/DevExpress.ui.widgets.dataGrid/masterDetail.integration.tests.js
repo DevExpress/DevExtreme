@@ -1133,16 +1133,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     });
 
     QUnit.test('Detail row heights should be synced with fixed columns with async templates (react) (T1103945)', function(assert) {
-        const templateDeferred = $.Deferred();
-
         // arrange
-        const template = sinon.spy(function(container, options) {
-            templateDeferred.done(() => {
-                $('<div>')
-                    .css('height', '40px')
-                    .appendTo(container);
-            });
-        });
+        let templateDeferred;
+        const template = sinon.spy();
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [...new Array(20).keys()].map(i => ({ id: i })),
@@ -1153,20 +1146,30 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             },
             masterDetail: {
                 enabled: true,
-                template,
+                template
             },
             templatesRenderAsynchronously: true,
             renderAsync: false,
         }).dxDataGrid('instance');
 
-        const originalRenderTemplate = dataGrid.getView('rowsView').renderTemplate;
-        sinon.stub(dataGrid.getView('rowsView'), 'renderTemplate', function() {
-            const r = originalRenderTemplate.apply(this, arguments);
-            if(arguments[2].rowType === 'detail') {
-                arguments[4].templateDeferreds.pop();
-                arguments[4].templateDeferreds.push(templateDeferred);
+        this.clock.tick(100);
+
+        const rowsView = dataGrid.getView('rowsView');
+
+        rowsView._templatesCache = {};
+        const originalProcessTemplate = dataGrid.getView('rowsView')._processTemplate;
+        sinon.stub(rowsView, '_processTemplate').callsFake(function(template, templateOptions) {
+            if(templateOptions.rowType === 'detail') {
+                return {
+                    render: function(options) {
+                        templateDeferred = options.deferred.done(() => {
+                            $(options.container).append($('<div/>').height(40));
+                        });
+                    }
+                };
             }
-            return r;
+
+            return originalProcessTemplate.apply(this, arguments);
         });
 
         // act

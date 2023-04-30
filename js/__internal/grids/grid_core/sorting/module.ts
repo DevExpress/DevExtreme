@@ -29,7 +29,7 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
     const that = this;
     let keyName: any = null;
     const $cellElementFromEvent = $(event.currentTarget);
-    const rowIndex = $cellElementFromEvent.parent().index();
+    const rowIndex = ($cellElementFromEvent.parent() as any).index();
     let columnIndex = -1;
     // eslint-disable-next-line array-callback-return
     [].slice.call(that.getCellElements(rowIndex)).some(($cellElement, index) => {
@@ -106,7 +106,6 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
 const HeaderPanelSortingExtender = extend({}, sortingMixin, {
   _createGroupPanelItem($rootElement, groupColumn) {
     const that = this;
-    // @ts-expect-error
     const $item = that.callBase(...arguments);
 
     eventsEngine.on($item, addNamespace(clickEventName, 'dxDataGridHeaderPanel'), that.createAction(() => {

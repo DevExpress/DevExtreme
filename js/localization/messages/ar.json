@@ -167,6 +167,7 @@
 
         "dxPager-infoText": "الصفحة {0} من {1} ({2} من العناصر)",
         "dxPager-pagesCountText": "من",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "الكل",
 
         "dxPivotGrid-grandTotal": "الإجمالي الكلي",

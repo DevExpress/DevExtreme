@@ -1,41 +1,5 @@
-QUnit.testStart(function() {
-    const gridMarkup = `
-        <div id='container'>
-            <div id="dataGrid">
-                <div data-options="dxTemplate: { name: 'test' }">Template Content</div>
-                <div data-options="dxTemplate: { name: 'test2' }">Template Content2</div>
-                <table data-options="dxTemplate: { name: 'testRow' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>
-            </div>
-        </div>
-    `;
-    const markup = `
-        <style>
-            .dx-scrollable-native-ios .dx-scrollable-content {
-                padding: 0 !important;
-            }
-        </style>
-
-        <!--qunit-fixture-->
-
-        ${gridMarkup}
-
-        <script id="jsrenderRow" type="text/x-jsrender">
-            <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>
-        </script>
-        <script id="scriptTestTemplate1" type="text/html">
-            <span id="template1">Template1</span>
-        </script>
-        <script id="scriptTestTemplate2" type="text/html">
-            <span>Template2</span>
-        </script>
-    `;
-
-    $('#qunit-fixture').html(markup);
-    // $(gridMarkup).appendTo('body');
-});
-
-import '../../../node_modules/underscore/underscore-min.js';
-import '../../../node_modules/jsrender/jsrender.min.js';
+import 'underscore';
+import 'jsrender';
 
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
@@ -55,6 +19,7 @@ import fx from 'animation/fx';
 import config from 'core/config';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
@@ -65,13 +30,47 @@ const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
 fx.off = true;
+
+QUnit.testStart(function() {
+    const gridMarkup = `
+        <div id='container'>
+            <div id="dataGrid">
+                <div data-options="dxTemplate: { name: 'test' }">Template Content</div>
+                <div data-options="dxTemplate: { name: 'test2' }">Template Content2</div>
+                <table data-options="dxTemplate: { name: 'testRow' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>
+            </div>
+        </div>
+    `;
+    const markup = `
+        <style nonce="qunit-test">
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+
+            .myClass .dx-editor-cell .dx-texteditor .dx-texteditor-input {
+                height: 60px;
+            }
+            ${getEmulatorStyles()}
+        </style>
+
+        <!--qunit-fixture-->
+
+        ${gridMarkup}
+
+        <script id="jsrenderRow" type="text/x-jsrender">
+            <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>
+        </script>
+        <script id="scriptTestTemplate1" type="text/html">
+            <span id="template1">Template1</span>
+        </script>
+        <script id="scriptTestTemplate2" type="text/html">
+            <span>Template2</span>
+        </script>
+    `;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.testDone(function() {
     ajaxMock.clear();
@@ -4731,7 +4730,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4780,7 +4779,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4829,7 +4828,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4877,7 +4876,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4928,7 +4927,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         this.clock.tick(100);
 
         dataGrid.getView('rowsView')._templatesCache = {};
-        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+        sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
             // assert
             assert.strictEqual(selector, '#testTemplate', 'template name');
 
@@ -4956,6 +4955,108 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         // assert
         assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-data-row').get(-1), lastRowElement, 'rows are re-render');
+    });
+
+    QUnit.test('No exceptions on initial loading and rendering data when there are async templates and virtual scrolling is enabled', function(assert) {
+        let getTemplateStub;
+
+        try {
+            // arrange
+            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate', function(selector) {
+                return {
+                    render: function(options) {
+                        setTimeout(() => {
+                            options.deferred && options.deferred.resolve();
+                        }, 100);
+                    }
+                };
+            });
+
+            const dataGrid = createDataGrid({
+                renderAsync: false,
+                templatesRenderAsynchronously: true,
+                dataSource: generateItems(100),
+                height: 700,
+                scrolling: {
+                    mode: 'virtual'
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    renderAsync: true,
+                    cellTemplate: '#testTemplate'
+                }]
+            });
+            this.clock.tick(50);
+
+            // act
+            dataGrid.dispose();
+            this.clock.tick(200);
+
+            // assert
+            assert.ok(true, 'no exceptions');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        } finally {
+            getTemplateStub.restore();
+        }
+    });
+
+    [true, false].forEach((renderAsync) => {
+        // T1150306
+        QUnit.test(`Headers should display correctly when there are a fixed command column, headerCellTemplate is set and renderAsync = ${renderAsync} (react)`, function(assert) {
+            // arrange
+            assert.expect(3);
+
+            $('#dataGrid').addClass('myClass');
+
+            // act
+            const dataGrid = createDataGrid({
+                renderAsync,
+                templatesRenderAsynchronously: true,
+                dataSource: generateItems(100),
+                height: 600,
+                selection: {
+                    mode: 'multiple'
+                },
+                filterRow: {
+                    visible: true
+                },
+                columnFixing: {
+                    enabled: true
+                },
+                columns: [{
+                    dataField: 'field1',
+                    headerCellTemplate: '#testTemplate'
+                }]
+            });
+            this.clock.tick(100);
+
+            dataGrid.getView('columnHeadersView')._templatesCache = {};
+            sinon.stub(dataGrid, '_getTemplate').callsFake(function(selector) {
+                // assert
+                assert.strictEqual(selector, '#testTemplate', 'template name');
+
+                return {
+                    render: function(options) {
+                        setTimeout(() => {
+                            $(options.container).append($('<div/>').height(60));
+                            options.deferred && options.deferred.resolve();
+                        }, 100);
+                    }
+                };
+            });
+
+            // act
+            dataGrid.repaint();
+            this.clock.tick(100);
+
+            // assert
+            const $tableElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-datagrid-content:not(.dx-datagrid-content-fixed) .dx-datagrid-table');
+            const $fixedTableElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-datagrid-content-fixed .dx-datagrid-table');
+
+            assert.strictEqual($tableElement.height(), $fixedTableElement.height(), 'table height is equal to fixed table height');
+        });
     });
 });
 

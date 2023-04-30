@@ -171,6 +171,7 @@
 
         "dxPager-infoText": "Side {0} av {1} ({2} punkter)",
         "dxPager-pagesCountText": "av",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Alle",
 
         "dxPivotGrid-grandTotal": "Totalsum",

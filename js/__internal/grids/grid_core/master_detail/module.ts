@@ -74,7 +74,6 @@ export const masterDetailModule = {
           },
           isRowExpanded(key) {
             const that = this;
-            // @ts-expect-error
             const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
 
             if (Array.isArray(key)) {
@@ -94,7 +93,6 @@ export const masterDetailModule = {
             if (Array.isArray(key)) {
               result = that.callBase.apply(that, arguments);
             } else {
-              // @ts-expect-error
               const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
               if (expandIndex >= 0) {
                 const { visible } = that._expandedItems[expandIndex];
@@ -107,7 +105,6 @@ export const masterDetailModule = {
               that.updateItems({
                 changeType: 'update',
                 rowIndices: that._getRowIndicesForExpand(key),
-                isMasterDetail: true,
               });
 
               // @ts-expect-error
@@ -129,6 +126,8 @@ export const masterDetailModule = {
                   options.detailColumnIndex = index;
                   return false;
                 }
+
+                return undefined;
               });
             }
             if (options.detailColumnIndex >= 0) {
@@ -153,7 +152,6 @@ export const masterDetailModule = {
 
             each(items, (index, item) => {
               result.push(item);
-              // @ts-expect-error
               const expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
 
               if (item.rowType === 'data' && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {

@@ -30,7 +30,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
       eventsEngine.on($closeButton, clickEventName, that.createAction((args) => {
         const e = args.event;
         let $errorRow;
-        const errorRowIndex = $(e.currentTarget).closest(`.${ERROR_ROW_CLASS}`).index();
+        const errorRowIndex = ($(e.currentTarget).closest(`.${ERROR_ROW_CLASS}`) as any).index();
 
         e.stopPropagation();
         each($tableElements, (_, tableElement) => {

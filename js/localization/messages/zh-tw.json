@@ -152,6 +152,7 @@
         "dxTreeList-editingAddRowToNode": "添加",
         "dxPager-infoText": "第{0}頁,共{1}頁 ({2} 個項目)",
         "dxPager-pagesCountText": "到",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "全部",
         "dxPivotGrid-grandTotal": "合計",
         "dxPivotGrid-total": "{0} 總計",

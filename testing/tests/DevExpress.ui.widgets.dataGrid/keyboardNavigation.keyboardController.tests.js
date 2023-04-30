@@ -1,12 +1,3 @@
-QUnit.testStart(function() {
-    const markup = `
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
 import $ from 'jquery';
 
 import 'generic_light.css!';
@@ -23,6 +14,15 @@ import { MockDataController, MockColumnsController, MockEditingController } from
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Keyboard controller', {
     beforeEach: function() {

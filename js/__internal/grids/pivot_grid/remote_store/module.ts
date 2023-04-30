@@ -3,6 +3,7 @@ import Class from '@js/core/class';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { DataSource } from '@js/data/data_source/data_source';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { normalizeLoadResult } from '@js/data/data_source/utils';

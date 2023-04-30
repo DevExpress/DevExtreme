@@ -62,34 +62,37 @@ const animationCapturing = {
 
 
 QUnit.testStart(() => {
-    const markup = '\
-    <style>\
-         body {\
-                margin: 0px;\
-        }\
-    </style>\
-    \
-    <div id="drawer">\
-        <div id="content">Test Content</div>\
-    </div>\
-    <div id="drawerWithContent">\
-        <div id="content"><div id="button"></div></div>\
-        <div id="additionalContent"></div>\
-    </div>\
-    <div id="outerDrawer">\
-        <div id="innerDrawer"></div>\
-    </div>\
-    <div id="drawerContainer" style="width: 100px">\
-        <div id="drawer2"></div>\
-    </div>\
-        <div id="contentTemplate">\
-        <div data-options="dxTemplate: { name: \'customMenu\' }">\
-            Test Menu Template\
-        </div>\
-            <div data-options="dxTemplate: { name: \'customContent\' }">\
-            Test Content Template\
-        </div>\
-    </div>';
+    const markup = `
+    <style nonce="qunit-test">
+        body {
+            margin: 0;
+        }
+        #drawerContainer {
+            width: 100px;
+        }
+    </style>
+
+    <div id="drawer">
+        <div id="content">Test Content</div>
+    </div>
+    <div id="drawerWithContent">
+        <div id="content"><div id="button"></div></div>
+        <div id="additionalContent"></div>
+    </div>
+    <div id="outerDrawer">
+        <div id="innerDrawer"></div>
+    </div>
+    <div id="drawerContainer">
+        <div id="drawer2"></div>
+    </div>
+        <div id="contentTemplate">
+        <div data-options="dxTemplate: { name: 'customMenu' }">
+            Test Menu Template
+        </div>
+            <div data-options="dxTemplate: { name: 'customContent' }">
+            Test Content Template
+        </div>
+    </div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -165,7 +168,11 @@ QUnit.module('Drawer behavior', () => {
             animationDuration: 1,
             width: 100,
             height: 50,
-            template: () => $('<div style="width: 10px; height: 10px; background-color: red"></div>')
+            template: () => $('<div>').css({
+                width: '10px',
+                height: '10px',
+                backgroundColor: 'red'
+            })
         }).dxDrawer('instance');
 
         const triggerResizeEventInitial = visibilityChange.triggerResizeEvent;
@@ -190,7 +197,11 @@ QUnit.module('Drawer behavior', () => {
             animationEnabled: false,
             width: 100,
             height: 50,
-            template: () => $('<div style="width: 10px; height: 10px; background-color: red"></div>')
+            template: () => $('<div>').css({
+                width: '10px',
+                height: '10px',
+                backgroundColor: 'red'
+            })
         }).dxDrawer('instance');
 
         const triggerFunction = visibilityChange.triggerResizeEvent;

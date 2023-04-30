@@ -78,7 +78,7 @@ const RowDraggingExtender = {
           }
 
           const $dragElement = $(e.dragElement);
-          const gridInstance = $dragElement.children('.dx-widget').data(this.component.NAME);
+          const gridInstance = ($dragElement.children('.dx-widget') as any).data(this.component.NAME);
 
           this._synchronizeScrollLeftPosition(gridInstance);
         },

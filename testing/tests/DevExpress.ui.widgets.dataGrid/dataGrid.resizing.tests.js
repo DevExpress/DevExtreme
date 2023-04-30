@@ -1,8 +1,18 @@
+import $ from 'jquery';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import browser from 'core/utils/browser';
+import { getWindow } from 'core/utils/window';
+import { getWidth, getHeight } from 'core/utils/size';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+
 QUnit.testStart(function() {
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .fixed-height {
                 height: 400px;
+            }
+            #dataGridWithStyle {
+                width: 500px;
             }
             .qunit-fixture-auto-height {
                 position: static !important;
@@ -15,19 +25,12 @@ QUnit.testStart(function() {
 
         <div id='container'>
             <div id="dataGrid"></div>
-            <div id="dataGridWithStyle" style="width: 500px;"></div>
+            <div id="dataGridWithStyle"></div>
         </div>
     `;
 
     $('#qunit-fixture').html(markup);
 });
-
-import $ from 'jquery';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import browser from 'core/utils/browser';
-import { getWindow } from 'core/utils/window';
-import { getWidth, getHeight } from 'core/utils/size';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Size options', function(assert) {

@@ -1,38 +1,3 @@
-QUnit.testStart(function() {
-    const gridMarkup = `
-        <div id='container'>
-            <div id="dataGrid"></div>
-            <div id="dataGrid2"></div>
-            <div id="form"></div>
-        </div>
-    `;
-    const markup = `
-        <style>
-            .fixed-height {
-                height: 400px;
-            }
-            .qunit-fixture-auto-height {
-                position: static !important;
-                height: auto !important;
-            }
-            .dx-scrollable-native-ios .dx-scrollable-content {
-                padding: 0 !important;
-            }
-        </style>
-
-        <!--qunit-fixture-->
-
-        ${gridMarkup}
-
-        <script id="scriptTestTemplate1" type="text/html">
-            <span id="template1">Template1</span>
-        </script>
-    `;
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-});
-
 import $ from 'jquery';
 import devices from 'core/devices';
 import fx from 'animation/fx';
@@ -51,25 +16,48 @@ import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
 fx.off = true;
 
+QUnit.testStart(function() {
+    const gridMarkup = `
+        <div id='container'>
+            <div id="dataGrid"></div>
+            <div id="dataGrid2"></div>
+            <div id="form"></div>
+        </div>
+    `;
+    const markup = `
+        <style nonce="qunit-test">
+            .fixed-height {
+                height: 400px;
+            }
+            .qunit-fixture-auto-height {
+                position: static !important;
+                height: auto !important;
+            }
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+            ${getEmulatorStyles()}
+        </style>
 
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
+        <!--qunit-fixture-->
+
+        ${gridMarkup}
+
+        <script id="scriptTestTemplate1" type="text/html">
+            <span id="template1">Template1</span>
+        </script>
+    `;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Accessibility columns id should not set for columns editors (T710132)', function(assert) {

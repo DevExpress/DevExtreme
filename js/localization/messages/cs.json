@@ -166,6 +166,7 @@
 
         "dxPager-infoText": "Strana {0} ze {1} ({2} položek)",
         "dxPager-pagesCountText": "ze",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Vše",
 
         "dxPivotGrid-grandTotal": "Celkem",

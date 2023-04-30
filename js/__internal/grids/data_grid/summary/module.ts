@@ -102,7 +102,7 @@ export const FooterView = ColumnsView.inherit((function () {
 
     _updateContent($newTable, change) {
       if (change && change.changeType === 'update' && change.columnIndices) {
-        return this.waitAsyncTemplates(change).done(() => {
+        return this.waitAsyncTemplates().done(() => {
           const $row = this.getTableElement().find('.dx-row');
           const $newRow = $newTable.find('.dx-row');
 
@@ -772,6 +772,8 @@ gridCore.registerModule('summary', {
                 sortByGroups,
               };
             }
+
+            return undefined;
           },
 
           publicMethods() {

@@ -23,7 +23,7 @@ export interface dxElementWrapper {
 
   clone(): this;
 
-  closest(selector: string): this;
+  closest(selector: string | dxElementWrapper): this;
 
   contents(): this;
 

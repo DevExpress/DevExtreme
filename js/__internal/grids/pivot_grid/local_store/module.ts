@@ -1,3 +1,4 @@
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 // eslint-disable-next-line import/extensions
 // @ts-expect-error

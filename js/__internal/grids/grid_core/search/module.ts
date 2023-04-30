@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
 import $ from '@js/core/renderer';
 import domAdapter from '@js/core/dom_adapter';
 import { isDefined } from '@js/core/utils/type';
@@ -28,7 +29,9 @@ function parseValue(column, text) {
 
   return column.parseValue(text);
 }
-
+export interface SearchDataControllerExtension {
+  searchByText(text: string): void;
+}
 export const searchModule = {
   defaultOptions() {
     return {
@@ -99,7 +102,6 @@ export const searchModule = {
             const filter = that.callBase();
             const searchFilter = calculateSearchFilter(that, that.option('searchPanel.text'));
 
-            // @ts-expect-error
             return gridCoreUtils.combineFilters([filter, searchFilter]);
           },
 
@@ -316,7 +318,7 @@ export const searchModule = {
         },
 
         _renderCore() {
-          this.callBase.apply(this, arguments);
+          const deferred = this.callBase.apply(this, arguments);
 
           // T103538
           if (this.option().rowTemplate || this.option('dataRowTemplate')) {
@@ -330,6 +332,8 @@ export const searchModule = {
               this._highlightSearchText(this.getTableElement());
             }
           }
+
+          return deferred;
         },
 
         _updateCell($cell, parameters) {

@@ -1,7 +1,7 @@
 import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
 import pointerEvents from '../../events/pointer';
@@ -381,11 +381,13 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _renderDelayedTemplatesCoreAsync: function(templates) {
-        const that = this;
         if(templates.length) {
-            getWindow().setTimeout(function() {
-                that._renderDelayedTemplatesCore(templates, true);
+            const templateTimeout = getWindow().setTimeout(() => {
+                this._templateTimeouts.delete(templateTimeout);
+                this._renderDelayedTemplatesCore(templates, true);
             });
+
+            this._templateTimeouts.add(templateTimeout);
         }
     },
 
@@ -456,8 +458,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     renderTemplate: function(container, template, options, allowRenderToDetachedContainer, change) {
-        const that = this;
-        const renderingTemplate = that._processTemplate(template, options);
+        const renderingTemplate = this._processTemplate(template, options);
         const column = options.column;
         const isDataRow = options.rowType === 'data';
         const templateDeferred = new Deferred();
@@ -466,33 +467,37 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             model: options,
             deferred: templateDeferred,
             onRendered: () => {
-                templateDeferred.resolve();
+                if(this.isDisposed()) {
+                    templateDeferred.reject();
+                } else {
+                    templateDeferred.resolve();
+                }
             }
         };
 
         if(renderingTemplate) {
-            options.component = that.component;
+            options.component = this.component;
 
             const async = column && (
                 (column.renderAsync && isDataRow) ||
-                that.option('renderAsync') &&
+                this.option('renderAsync') &&
                     (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
             );
 
             if((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
                 renderingTemplate.render(templateOptions);
             } else {
-                that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
+                this._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
             }
-            if(change) {
-                change.templateDeferreds = change.templateDeferreds || [];
-                change.templateDeferreds.push(templateDeferred);
-            }
+
+            this._templateDeferreds.add(templateDeferred);
         } else {
             templateDeferred.reject();
         }
 
-        return templateDeferred.promise();
+        return templateDeferred.promise().always(() => {
+            this._templateDeferreds.delete(templateDeferred);
+        });
     },
 
     _getBodies: function(tableElement) {
@@ -811,25 +816,26 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     init: function() {
-        const that = this;
-        that._scrollLeft = -1;
-        that._columnsController = that.getController('columns');
-        that._dataController = that.getController('data');
-        that._delayedTemplates = [];
-        that._templatesCache = {};
-        that.createAction('onCellClick');
-        that.createAction('onRowClick');
-        that.createAction('onCellDblClick');
-        that.createAction('onRowDblClick');
-        that.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
-        that.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-        that.createAction('onRowPrepared', {
-            excludeValidators: ['disabled', 'readOnly'], category: 'rendering', afterExecute: function(e) {
-                that._afterRowPrepared(e);
+        this._scrollLeft = -1;
+        this._columnsController = this.getController('columns');
+        this._dataController = this.getController('data');
+        this._delayedTemplates = [];
+        this._templateDeferreds = new Set();
+        this._templatesCache = {};
+        this._templateTimeouts = new Set();
+        this.createAction('onCellClick');
+        this.createAction('onRowClick');
+        this.createAction('onCellDblClick');
+        this.createAction('onRowDblClick');
+        this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
+        this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+        this.createAction('onRowPrepared', {
+            excludeValidators: ['disabled', 'readOnly'], category: 'rendering', afterExecute: (e) => {
+                this._afterRowPrepared(e);
             } });
 
-        that._columnsController.columnsChanged.add(that._columnOptionChanged.bind(that));
-        that._dataController && that._dataController.changed.add(that._handleDataChanged.bind(that));
+        this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
+        this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
     },
 
     _afterRowPrepared: noop,
@@ -890,17 +896,36 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    waitAsyncTemplates: function(change, forceWaiting) {
-        const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate || change.isMasterDetail)) && change?.templateDeferreds ? change?.templateDeferreds : [];
+    waitAsyncTemplates: function(forceWaiting = false) {
+        // @ts-expect-error
+        const result = new Deferred();
+        const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
-        return when.apply(this, templateDeferreds);
+        if(!needWaitAsyncTemplates) {
+            return result.resolve();
+        }
+
+        const waitTemplatesRecursion = () =>
+            when.apply(this, Array.from(this._templateDeferreds))
+                .done(() => {
+                    if(this.isDisposed()) {
+                        result.reject();
+                    } else if(this._templateDeferreds.size > 0) {
+                        waitTemplatesRecursion();
+                    } else {
+                        result.resolve();
+                    }
+                }).fail(result.reject);
+
+        waitTemplatesRecursion();
+
+        return result.promise();
     },
 
-    _updateContent: function($newTableElement, change) {
-        return this.waitAsyncTemplates(change).done(() => {
-            this.setTableElement($newTableElement);
-            this._wrapTableInScrollContainer($newTableElement);
+    _updateContent: function($newTableElement, change, isFixedTableRendering) {
+        return this.waitAsyncTemplates().done(() => {
+            this.setTableElement($newTableElement, isFixedTableRendering);
+            this._wrapTableInScrollContainer($newTableElement, isFixedTableRendering);
         });
     },
 
@@ -1161,5 +1186,18 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         return false;
+    },
+
+    isDisposed: function() {
+        return this.component?._disposed;
+    },
+
+    dispose: function() {
+        if(hasWindow()) {
+            const window = getWindow();
+
+            this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
+            this._templateTimeouts?.clear();
+        }
     }
 });

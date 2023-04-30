@@ -147,7 +147,8 @@ const ColumnChooserView = ColumnsView.inherit({
 
     _initializePopupContainer: function() {
         const that = this;
-        const $element = that.element().addClass(that.addWidgetPrefix(COLUMN_CHOOSER_CLASS));
+        const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
+        const $element = that.element().addClass(columnChooserClass);
         const columnChooserOptions = that.option('columnChooser');
         const themeName = current();
         const isGenericTheme = isGeneric(themeName);
@@ -158,8 +159,7 @@ const ColumnChooserView = ColumnsView.inherit({
             showCloseButton: false,
             dragEnabled: true,
             resizeEnabled: true,
-            copyRootClassesToWrapper: true,
-            _ignoreCopyRootClassesToWrapperDeprecation: true,
+            wrapperAttr: { class: columnChooserClass },
             toolbarItems: [
                 { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' }
             ],

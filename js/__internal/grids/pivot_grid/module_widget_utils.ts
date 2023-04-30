@@ -9,7 +9,9 @@ import localizationDate from '@js/localization/date';
 import formatHelper from '@js/format_helper';
 import { DataSource } from '@js/data/data_source/data_source';
 import ArrayStore from '@js/data/array_store';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
+import { CLASSES } from './const';
 
 const setFieldProperty = function (field, property, value, isInitialization?) {
   const initProperties = field._initProperties = field._initProperties || {};
@@ -370,7 +372,7 @@ const calculateScrollbarWidth = callOnce(() => {
 
   document.body.insertAdjacentHTML(
     'beforeend',
-    '<div style=\'position: absolute; overflow: scroll; width: 100px; height: 100px; top: -9999px;\'></div>',
+    `<div class="${CLASSES.scrollBarMeasureElement}"></div>`,
   );
 
   const scrollbar = document.body.lastElementChild;

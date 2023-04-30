@@ -164,6 +164,7 @@
 
         "dxPager-infoText": "Stran {0} od {1} ({2} zapisov)",
         "dxPager-pagesCountText": "od",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Vse",
         "dxPivotGrid-grandTotal": "Skupna vsota",
         "dxPivotGrid-total": "{0} skupaj",

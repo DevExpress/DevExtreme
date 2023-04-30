@@ -2,6 +2,7 @@ import $ from '@js/core/renderer';
 import Class from '@js/core/class';
 // @ts-expect-error
 import { normalizeSortingInfo } from '@js/data/utils';
+// @ts-expect-error
 import { when } from '@js/core/utils/deferred';
 import gridCore from '../module_core';
 

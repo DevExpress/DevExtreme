@@ -1,15 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -20,6 +8,17 @@ import dataUtils from 'core/element_data';
 import { createEvent } from 'events/utils/index';
 
 import Pager from 'ui/pager';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Pager', {
     beforeEach: function() {

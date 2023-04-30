@@ -1,11 +1,6 @@
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
-QUnit.testStart(function() {
-    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 import 'ui/data_grid';
 
@@ -17,6 +12,10 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+QUnit.testStart(function() {
+    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('API methods', {
     beforeEach: function() {
@@ -167,8 +166,18 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+        const $table = $(that.columnsView._createTable()).append(
+            $(`
+                <tr class="dx-row">
+                    <td>Test</td>
+                    <td>Test Test Test Test Test</td>
+                </tr>
+            `)
+        );
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append($table)
+        );
 
         // act
         const firstCellElement = $table.find('td').first();
@@ -197,7 +206,20 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 2', width: 100 });
 
         const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    that.columnsView._createColGroup(that.columns),
+                    $(`
+                        <tr class = "dx-row">
+                            <td>Test</td>
+                            <td>Test Test Test Test Test</td>
+                        </tr>
+                    `)
+                )
+            )
+        );
 
         // act
         const firstCellElement = $table.find('td').first();
@@ -513,12 +535,85 @@ QUnit.module('API methods', {
 
         this.option('cellHintEnabled', true);
         const $table = $(this.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    this.columnsView._createColGroup(this.columns),
+                    `<tr class="dx-row dx-master-detail-row">
+                        <td>
+                            <div id="content">
+                                <div>Test</div>
+                            </div>
+                        </td>
+                    </tr>`
+                )
+            )
+        );
+
+        $container.find('#content').css('overflow', 'hidden');
+
+        $container.find('#content > div').css({
+            width: '600px',
+            height: '30px'
+        });
 
         // act
         $('#content').trigger('mousemove');
 
         // assert
         assert.strictEqual($('#content').attr('title'), undefined, 'not has attribute title');
+    });
+
+    QUnit.test('waitAsyncTemplates with async templates', function(assert) {
+        // arrange
+        const deferred = $.Deferred();
+
+        this.options.renderAsync = false;
+        this.options.templatesRenderAsynchronously = true;
+        this.columnsView._templateDeferreds.add(deferred);
+
+        // assert
+        assert.strictEqual(this.columnsView.waitAsyncTemplates().state(), 'pending', 'promise state');
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferred);
+        deferred.resolve();
+
+        // assert
+        assert.strictEqual(this.columnsView.waitAsyncTemplates().state(), 'resolved', 'promise state');
+    });
+
+    QUnit.test('waitAsyncTemplates with dynamic addition of async templates', function(assert) {
+        // arrange
+        const deferreds = [$.Deferred(), $.Deferred()];
+
+        this.options.renderAsync = false;
+        this.options.templatesRenderAsynchronously = true;
+        this.columnsView._templateDeferreds.add(deferreds[0]);
+
+        // assert
+        const promise1 = this.columnsView.waitAsyncTemplates();
+        assert.strictEqual(promise1.state(), 'pending', 'promise1 is pending');
+
+        // arrange
+        this.columnsView._templateDeferreds.add(deferreds[1]);
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferreds[0]);
+        deferreds[0].resolve();
+
+        // assert
+        const promise2 = this.columnsView.waitAsyncTemplates();
+        assert.strictEqual(promise1.state(), 'pending', 'promise1 is pending');
+        assert.strictEqual(promise2.state(), 'pending', 'promise2 is pending');
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferreds[1]);
+        deferreds[1].resolve();
+
+        // assert
+        assert.strictEqual(promise1.state(), 'resolved', 'promise1 is resolved');
+        assert.strictEqual(promise2.state(), 'resolved', 'promise2 is resolved');
     });
 });

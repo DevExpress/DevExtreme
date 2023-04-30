@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
 import { getHeight } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
@@ -21,6 +22,11 @@ const DATAGRID_GROUP_PANEL_CONTAINER_CLASS = 'dx-toolbar-item';
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
+
+export interface GroupingDataControllerExtension {
+  isRowExpanded(key): boolean;
+  changeRowExpand(key, isRowClick?): any;
+}
 
 const GroupingDataSourceAdapterExtender = (function () {
   return {
@@ -128,6 +134,8 @@ const GroupingDataSourceAdapterExtender = (function () {
           }
         }
       }
+
+      return undefined;
     },
     _customizeRemoteOperations(options, operationTypes) {
       const { remoteOperations } = options;

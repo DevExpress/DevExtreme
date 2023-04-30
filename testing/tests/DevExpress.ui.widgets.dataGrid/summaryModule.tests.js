@@ -1,13 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container" class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -16,6 +6,15 @@ import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 
 import summaryModule from 'ui/data_grid/ui.data_grid.summary';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 function getFooterOptions(cellsByColumns, cellsCount) {
     const cells = [];

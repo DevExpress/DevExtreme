@@ -233,7 +233,7 @@ export default {
     return { of: $element };
   },
 
-  getIndexByKey(key, items, keyName) {
+  getIndexByKey(key, items, keyName?) {
     let index = -1;
 
     if (key !== undefined && Array.isArray(items)) {
@@ -251,7 +251,7 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation) {
+  combineFilters(filters, operation?) {
     let resultFilter: any[] = [];
 
     operation = operation || 'and';
@@ -279,6 +279,8 @@ export default {
     if (resultFilter.length) {
       return resultFilter;
     }
+
+    return undefined;
   },
 
   checkChanges(changes, changeNames) {
@@ -295,7 +297,7 @@ export default {
 
   equalFilterParameters,
 
-  proxyMethod(instance, methodName, defaultResult) {
+  proxyMethod(instance, methodName, defaultResult?) {
     if (!instance[methodName]) {
       instance[methodName] = function () {
         const dataSource = this._dataSource;
@@ -350,6 +352,8 @@ export default {
         return 'shortDate';
       case 'datetime':
         return 'shortDateShortTime';
+      default:
+        return undefined;
     }
   },
 

@@ -1,5 +1,1 @@
-
-import treeListCore from './ui.tree_list.core';
-import editingCellBasedModule from '../grid_core/ui.grid_core.editing_cell_based';
-
-treeListCore.registerModule('editingCellBased', editingCellBasedModule);
+import '../../__internal/grids/tree_list/module_not_extended/editing_cell_based';

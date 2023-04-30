@@ -1,4 +1,1 @@
-import treeListCore from './ui.tree_list.core';
-import { columnHeadersModule } from '../grid_core/ui.grid_core.column_headers';
-
-treeListCore.registerModule('columnHeaders', columnHeadersModule);
+import '../../__internal/grids/tree_list/module_not_extended/column_headers';

@@ -16,6 +16,8 @@ import { isMaterial } from '@js/ui/themes';
 import Form from '@js/ui/form';
 import gridCoreUtils from '../module_utils';
 import modules from '../modules';
+import type { KeyboardNavigationController } from '../keyboard_navigation/module';
+import type { ModuleType } from '../module_types';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -370,6 +372,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         return i;
       }
     }
+
+    return undefined;
   },
 
   _hideAdaptiveColumn(resultWidths, visibleColumns) {
@@ -726,7 +730,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   },
 
   isAdaptiveDetailRowExpanded(key) {
-    return this._dataController.adaptiveExpandedKey() && equalByValue(this._dataController.adaptiveExpandedKey(), key);
+    const dataController = this._dataController;
+    return dataController.adaptiveExpandedKey() && equalByValue(dataController.adaptiveExpandedKey(), key);
   },
 
   expandAdaptiveDetailRow(key) {
@@ -759,8 +764,46 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
   },
 });
 
-export const adaptivityModule = {
-  defaultOptions() {
+const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class AdaptivityKeyboardNavigationExtender extends Base {
+  _isCellValid($cell, isClick?) {
+    return (
+      super._isCellValid($cell, isClick)
+        && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS))
+        && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS)
+    );
+  }
+
+  _processNextCellInMasterDetail($nextCell, $cell) {
+    super._processNextCellInMasterDetail($nextCell, $cell);
+
+    const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
+    const isEditing = this._editingController.isEditing();
+
+    if (
+      isEditing
+        && $nextCell
+        && isCellOrBatchMode
+        && !this._isInsideEditForm($nextCell)
+    ) {
+      eventsEngine.off($nextCell, 'focus', focusCellHandler);
+      eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
+
+      // @ts-expect-error
+      eventsEngine.trigger($cell, 'focus');
+    }
+  }
+
+  _isCellElement($cell) {
+    return super._isCellElement($cell) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
+  }
+
+  init() {
+    super.init();
+    this._adaptiveController = this.getController('adaptiveColumns');
+  }
+};
+export const adaptivityModule: import('../module_types').Module = {
+  defaultOptions(): any {
     return {
       columnHidingEnabled: false,
       onAdaptiveDetailRowPreparing: null,
@@ -935,7 +978,6 @@ export const adaptivityModule = {
           if (!this._adaptiveController.isFormOrPopupEditMode() && this._adaptiveController.hasHiddenColumns()) {
             const items = this._dataController.items();
             const item = items[rowIndex];
-            // @ts-expect-error
             const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
 
             this._isForceRowAdaptiveExpand = !this._adaptiveController.hasAdaptiveDetailRowExpanded();
@@ -1007,7 +1049,6 @@ export const adaptivityModule = {
           const expandedKey = this._dataController._adaptiveExpandedKey;
 
           if (expandedKey) {
-            // @ts-expect-error
             const rowIndex = gridCoreUtils.getIndexByKey(expandedKey, this._dataController.items());
             if (rowIndex > -1) {
               rowIndices.unshift(rowIndex);
@@ -1090,7 +1131,6 @@ export const adaptivityModule = {
             return items;
           }
 
-          // @ts-expect-error
           const expandRowIndex = gridCoreUtils.getIndexByKey(this._adaptiveExpandedKey, items);
           const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
 
@@ -1135,9 +1175,7 @@ export const adaptivityModule = {
         toggleExpandAdaptiveDetailRow(key, alwaysExpanded) {
           const that = this;
 
-          // @ts-expect-error
           let oldExpandLoadedRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items);
-          // @ts-expect-error
           let newExpandLoadedRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
 
           if (oldExpandLoadedRowIndex >= 0 && oldExpandLoadedRowIndex === newExpandLoadedRowIndex && !alwaysExpanded) {
@@ -1192,37 +1230,7 @@ export const adaptivityModule = {
           return this.callBase(column) && !column.adaptiveHidden;
         },
       },
-      keyboardNavigation: {
-        _isCellValid($cell) {
-          return this.callBase.apply(this, arguments)
-                        && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS))
-                        && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
-        },
-
-        _processNextCellInMasterDetail($nextCell, $cell) {
-          this.callBase($nextCell);
-
-          const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
-          const isEditing = this._editingController.isEditing();
-
-          if (isEditing && $nextCell && isCellOrBatchMode && !this._isInsideEditForm($nextCell)) {
-            eventsEngine.off($nextCell, 'focus', focusCellHandler);
-            eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
-
-            // @ts-expect-error
-            eventsEngine.trigger($cell, 'focus');
-          }
-        },
-
-        _isCellElement($cell) {
-          return this.callBase.apply(this, arguments) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
-        },
-
-        init() {
-          this.callBase();
-          this._adaptiveController = this.getController('adaptiveColumns');
-        },
-      },
+      keyboardNavigation,
     },
   },
 };

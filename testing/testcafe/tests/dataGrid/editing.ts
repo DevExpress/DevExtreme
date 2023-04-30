@@ -8,6 +8,7 @@ import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
+import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -2144,5 +2145,30 @@ test('The first cell of the last row should be focused when newRowPosition = las
     allowUpdating: true,
     allowAdding: true,
     newRowPosition: 'last',
+  },
+}));
+
+test('Popup EditForm screenshot', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const commandCellRow0 = dataGrid.getDataCell(0, 2);
+
+  await t
+    .click(commandCellRow0.getLinkEdit())
+    // act
+    .expect(await takeScreenshot('popup-edit-form.png', dataGrid.element))
+    .ok()
+    // assert
+    .expect(dataGrid.getPopupEditForm().element.exists)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 2),
+  height: 400,
+  showBorders: true,
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
   },
 }));

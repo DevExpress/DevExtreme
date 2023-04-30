@@ -1,4 +1,1 @@
-import treeListCore from './ui.tree_list.core';
-import { columnsResizingReorderingModule } from '../grid_core/ui.grid_core.columns_resizing_reordering';
-
-treeListCore.registerModule('columnsResizingReordering', columnsResizingReorderingModule);
+import '../../__internal/grids/tree_list/module_not_extended/columns_resizing_reordering';

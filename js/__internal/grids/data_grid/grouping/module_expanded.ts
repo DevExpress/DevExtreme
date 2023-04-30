@@ -6,6 +6,7 @@ import { each } from '@js/core/utils/iterator';
 import { extend } from '@js/core/utils/extend';
 import storeHelper from '@js/data/store_helper';
 import dataQuery from '@js/data/query';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import dataGridCore from '../module_core';
 import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './module_core';

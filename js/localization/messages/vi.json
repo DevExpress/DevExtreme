@@ -166,6 +166,7 @@
 
         "dxPager-infoText": "Trang {0} của {1} ({2} mục)",
         "dxPager-pagesCountText": "của",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Tất cả",
         "dxPivotGrid-grandTotal": "Tổng tất cả",
         "dxPivotGrid-total": "{0} Tổng",
