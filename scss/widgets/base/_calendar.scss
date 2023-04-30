@@ -7,14 +7,10 @@
   @include user-select(none);
 
   position: relative;
-  display: block;
-
-  &.dx-calendar-with-footer {
-    .dx-calendar-footer {
-      position: absolute;
-      bottom: 0;
-    }
-  }
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .dx-calendar-views-wrapper {
@@ -24,49 +20,34 @@
 }
 
 .dx-calendar-navigator {
-  position: relative;
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
 
   .dx-button {
-    position: absolute;
-
     &.dx-calendar-disabled-navigator-link {
       visibility: hidden;
     }
   }
 
   .dx-calendar-caption-button {
-    text-decoration: none;
+    width: 100%;
   }
 }
 
-.dx-calendar-navigator-previous-view,
-.dx-calendar-navigator-next-view {
-  background: none;
+.dx-calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &.dx-button {
-    margin: 0 1px;
+  .dx-button {
+    width: 100%;
   }
-
-  .dx-button-content {
-    padding: 0;
-  }
-}
-
-.dx-calendar-navigator-previous-view {
-  left: 0;
-}
-
-.dx-calendar-navigator-next-view {
-  right: 0;
 }
 
 .dx-calendar-body {
   overflow: hidden;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  display: flex;
+  flex: 1 0 auto;
 
   .dx-widget {
     position: absolute;
@@ -85,7 +66,6 @@
   table {
     width: 100%;
     height: 100%;
-    position: absolute;
     direction: ltr;
     table-layout: fixed;
 
@@ -97,7 +77,7 @@
 
   td {
     cursor: pointer;
-    box-sizing: content-box;
+    position: relative;
   }
 
   thead th {
@@ -106,7 +86,15 @@
 }
 
 .dx-calendar-cell {
-  white-space: normal;
+  text-align: center;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
 }
 
 .dx-calendar-contoured-date {
