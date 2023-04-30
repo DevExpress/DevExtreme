@@ -260,10 +260,27 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = (text ?? '') || messageLocalization.format(camelize(icon, true)) || icon;
+    let label = text ?? '';
 
-    if (!text && icon && getImageSourceType(icon) === 'image') {
-      label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+    if (!text && icon) {
+      const iconSource = getImageSourceType(icon);
+
+      switch (iconSource) {
+        case 'dxIcon':
+          label = messageLocalization.format(camelize(icon, true)) || icon;
+          break;
+        case 'fontIcon':
+          label = icon.split(' ').at(-1) ?? '';
+          break;
+        case 'svg': {
+          const titleRegexp = /<title>(.*?)<\/title>/;
+          const title = titleRegexp.exec(icon)?.[1] ?? '';
+          label = title;
+          break;
+        }
+        default:
+          break;
+      }
     }
 
     return {
