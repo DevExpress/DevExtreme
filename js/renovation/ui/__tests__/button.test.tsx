@@ -443,12 +443,34 @@ describe('Button', () => {
             expect(new Button({}).aria).not.toHaveProperty('label');
           });
 
-          it('should be compiled from the icon if the icon source type is "image"', () => {
-            let button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
-            expect(button.aria).toMatchObject({ label: 'Base64' });
+          it('should be empty if icon is set as a base64', () => {
+            const button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
+            expect(button.aria).not.toHaveProperty('label');
+          });
 
-            button = new Button({ icon: '.' });
-            expect(button.aria).toMatchObject({ label: '.' });
+          it('should be empty if icon in set as an URL', () => {
+            const button = new Button({ icon: 'https://google.com/' });
+            expect(button.aria).not.toHaveProperty('label');
+          });
+
+          it('should be equal to icon if it is set as a dx icon', () => {
+            const button = new Button({ icon: 'comment' });
+            expect(button.aria).toMatchObject({ label: 'comment' });
+          });
+
+          it('should be equal to icon name if it is set as a font icon', () => {
+            const button = new Button({ icon: 'fas fa-home' });
+            expect(button.aria).toMatchObject({ label: 'fa-home' });
+          });
+
+          it('should be equal to title tag content if icon is set in svg format and contains a title tag', () => {
+            const button = new Button({ icon: '<svg></svg>' });
+            expect(button.aria).not.toHaveProperty('label');
+          });
+
+          it('should be empty if icon is set in svg format and does not contain a title tag (T1160438)', () => {
+            const button = new Button({ icon: '<svg><title>Svg Title</title></svg>' });
+            expect(button.aria).toMatchObject({ label: 'Svg Title' });
           });
 
           it('should return icon value if the text is empty', () => {
