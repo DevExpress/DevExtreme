@@ -428,25 +428,33 @@ describe('Button', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('aria', () => {
-        it('should compile label value from the icon if the icon source type is "image"', () => {
-          let button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
-          expect(button.aria).toEqual({ label: 'Base64', role: 'button' });
-
-          button = new Button({ icon: '.' });
-          expect(button.aria).toEqual({ label: '.', role: 'button' });
+        describe('role', () => {
+          it('should be equal to "button"', () => {
+            expect(new Button({}).aria).toMatchObject({ role: 'button' });
+          });
         });
 
-        it('should not return label if the text and the icon are empty', () => {
-          expect(new Button({}).aria).toEqual({ role: 'button' });
-        });
+        describe('label', () => {
+          it('should return text value if it is specified', () => {
+            expect(new Button({ text: 'text' }).aria).toMatchObject({ label: 'text' });
+          });
 
-        it('should return icon value if the text is empty', () => {
-          expect(new Button({ icon: 'icon' }).aria)
-            .toEqual({ label: 'icon', role: 'button' });
-        });
+          it('should be empty if the text and the icon are empty', () => {
+            expect(new Button({}).aria).not.toHaveProperty('label');
+          });
 
-        it('should return text value if it is specified', () => {
-          expect(new Button({ text: 'text' }).aria).toEqual({ label: 'text', role: 'button' });
+          it('should be compiled from the icon if the icon source type is "image"', () => {
+            let button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
+            expect(button.aria).toMatchObject({ label: 'Base64' });
+
+            button = new Button({ icon: '.' });
+            expect(button.aria).toMatchObject({ label: '.' });
+          });
+
+          it('should return icon value if the text is empty', () => {
+            expect(new Button({ icon: 'icon' }).aria)
+              .toMatchObject({ label: 'icon' });
+          });
         });
       });
 
