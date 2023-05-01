@@ -22,8 +22,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
   height: $generic-calendar-height + 20px;
   min-height: $generic-calendar-height + 20px;
   background-color: $calendar-bg;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  outline: 0;
   border: 1px solid transparent;
 
   &.dx-calendar-with-footer {
@@ -35,13 +33,9 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
     }
 
     .dx-calendar-footer {
-      text-align: center;
       height: $generic-calendar-footer-height;
-      width: 100%;
 
       .dx-button {
-        background: none;
-
         &.dx-state-active {
           background-color: $calendar-button-footer-active-bg;
         }
@@ -51,8 +45,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 }
 
 .dx-calendar-navigator {
-  height: $generic-calendar-navigator-height;
-
   .dx-button {
     border-radius: 0;
     border-color: $calendar-navigator-border-color;
@@ -63,9 +55,7 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
   }
 
   .dx-calendar-caption-button {
-    font-size: $generic-calendar-navigator-fontsize;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-weight: 600;
 
     &.dx-button {
       &.dx-state-active {
@@ -77,6 +67,18 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
       }
     }
   }
+
+  .dx-calendar-navigator-previous-view {
+    margin-right: -1px;
+    border-top-left-radius: $calendar-navigator-border-radius;
+    border-bottom-left-radius: $calendar-navigator-border-radius;
+  }
+
+  .dx-calendar-navigator-next-view {
+    margin-left: -1px;
+    border-top-right-radius: $calendar-navigator-border-radius;
+    border-bottom-right-radius: $calendar-navigator-border-radius;
+  }
 }
 
 .dx-calendar-navigator-previous-view,
@@ -86,18 +88,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
       color: $calendar-shevron-icon-color;
     }
   }
-}
-
-.dx-calendar-navigator-previous-view {
-  margin-right: -1px;
-  border-top-left-radius: $calendar-navigator-border-radius;
-  border-bottom-left-radius: $calendar-navigator-border-radius;
-}
-
-.dx-calendar-navigator-next-view {
-  margin-left: -1px;
-  border-top-right-radius: $calendar-navigator-border-radius;
-  border-bottom-right-radius: $calendar-navigator-border-radius;
 }
 
 .dx-calendar-body {
