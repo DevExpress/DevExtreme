@@ -202,3 +202,63 @@ test('Calendar with disabled dates rendered correct', async (t) => {
     }, '#calendar');
   });
 });
+
+['year', 'decade', 'century'].forEach((zoomLevel) => {
+  const testName = `Calendar ${zoomLevel} view cell styles`;
+
+  test(testName, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const calendar = new Calendar('#calendar');
+
+    const startCellDate = new Date(2021, 9, 3);
+    const view = calendar.getView();
+
+    let cellOffset = 0;
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const cellTypeClass of [
+      STATE_HOVER_CLASS,
+      STATE_ACTIVE_CLASS,
+      CALENDAR_TODAY_CLASS,
+      CALENDAR_OTHER_VIEW_CLASS,
+      CALENDAR_EMPTY_CELL_CLASS,
+      CALENDAR_CONTOURED_DATE_CLASS,
+      CALENDAR_SELECTED_DATE_CLASS,
+      `${CALENDAR_CONTOURED_DATE_CLASS} ${CALENDAR_SELECTED_DATE_CLASS}`,
+    ]) {
+      const cellClasses = `${cellTypeClass}`;
+
+      await setClassAttribute(view.getCellByIndex(cellOffset), cellClasses);
+
+      const cellNumber = startCellDate.getDate() + cellOffset;
+      const cellId = `cell-${cellNumber}`;
+      await appendElementTo('#container', 'div', cellId);
+
+      await ClientFunction(() => {
+        $(`#${cellId}`).text(`${cellNumber} - ${cellClasses}`);
+      }, {
+        dependencies: {
+          cellNumber, cellId, cellClasses,
+        },
+      })();
+
+      cellOffset += 1;
+    }
+
+    await t.debug();
+    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container', shouldTestInCompact: true });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
+    await appendElementTo('#container', 'div', 'calendar');
+
+    return createWidget('dxCalendar', {
+      currentDate: new Date(2021, 9, 17),
+      zoomLevel,
+    }, '#calendar');
+  });
+});

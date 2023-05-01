@@ -3,6 +3,9 @@ import Widget from '../internal/widget';
 import dateSerialization from '../../../../js/core/utils/date_serialization';
 import dateUtils from '../../../../js/core/utils/date';
 
+const CLASS = {
+  cell: 'dx-calendar-cell',
+};
 export default class CalendarView extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxCalendarView'; }
@@ -21,5 +24,9 @@ export default class CalendarView extends Widget {
 
   getCellByOffset(date: Date, offset: number): Selector {
     return this.element.find(`td[data-value='${dateSerialization.serializeDate(this.getDateByOffset(date, offset), dateUtils.getShortDateFormat())}']`);
+  }
+
+  getCellByIndex(index: number): Selector {
+    return this.element.find(`.${CLASS.cell}`).nth(index);
   }
 }
