@@ -108,18 +108,44 @@ test('Calendar with multiview rendered correct', async (t) => {
   viewsCount: 2,
 }));
 
-test('Calendar with today button rendered correct', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
+  test(`Calendar ${zoomLevel} view rendered correct`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Calendar with today button.png', { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view.png`, { element: '#container', shouldTestInCompact: true });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxCalendar', {
-  value: new Date(2021, 9, 17),
-  showTodayButton: true,
-}));
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
+    await appendElementTo('#container', 'div', 'calendar');
+
+    return createWidget('dxCalendar', {
+      value: new Date(2021, 9, 17),
+    }, '#calendar');
+  });
+
+  test(`Calendar ${zoomLevel} view with today button rendered correct`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view with today button.png`, { element: '#container', shouldTestInCompact: true });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
+    await appendElementTo('#container', 'div', 'calendar');
+
+    return createWidget('dxCalendar', {
+      value: new Date(2021, 9, 17),
+      width: 450,
+      height: 450,
+      showTodayButton: true,
+    }, '#calendar');
+  });
+});
 
 test('Calendar with disabled dates rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
