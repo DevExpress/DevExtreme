@@ -18,7 +18,7 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 .dx-calendar {
   width: 226px; // $material-calendar-width; width: 226px;
   min-width: 226px; // $material-calendar-width; min-width: 226px;
-  height: 264px; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap height: 264.4px;
+  height: 264.4px; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap height: 264.4px;
   min-height: 242px; // $material-calendar-height + 20px; min-height: 264.4px;
   background-color: $calendar-bg;
   border: 1px solid transparent; // need for validation to avoid jumping
@@ -32,36 +32,8 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 }
 
 .dx-calendar-navigator {
-  .dx-button {
-    &.dx-calendar-disabled-navigator-link {
-      visibility: visible;
-      opacity: 1;
-
-      .dx-button-content {
-        opacity: 0.5;
-      }
-    }
-
-    &.dx-state-active:not(.dx-calendar-disabled-navigator-link) {
-      z-index: 1;
-    }
-
-    &.dx-state-hover:not(.dx-calendar-disabled-navigator-link) {
-      z-index: 1;
-    }
-  }
-
   .dx-calendar-caption-button {
     font-size: $material-calendar-navigator-fontsize;
-
-    .dx-button-content {
-      padding-left: 6px;
-      padding-right: 6px;
-    }
-
-    .dx-button-text {
-      text-transform: none;
-    }
   }
 }
 

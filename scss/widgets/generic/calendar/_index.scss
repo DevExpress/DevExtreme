@@ -34,21 +34,7 @@ $generic-calendar-table-header-font-size: 10px;
     border-radius: 0;
     border-color: $calendar-navigator-border-color;
 
-    &.dx-calendar-disabled-navigator-link {
-      visibility: visible;
-      opacity: 1;
-
-      .dx-button-content {
-        opacity: 0.5;
-      }
-    }
-
-    &.dx-state-active:not(.dx-calendar-disabled-navigator-link) {
-      z-index: 1;
-    }
-
-    &.dx-state-hover:not(.dx-calendar-disabled-navigator-link) {
-      z-index: 1;
+    &.dx-state-hover {
       border-color: $calendar-navigator-hover-border-color;
     }
   }
@@ -81,7 +67,8 @@ $generic-calendar-table-header-font-size: 10px;
   margin-right: -1px;
 
   &.dx-button {
-    border-radius: $calendar-navigator-border-radius 0 0 $calendar-navigator-border-radius;
+    border-top-left-radius: $calendar-navigator-border-radius;
+    border-bottom-left-radius: $calendar-navigator-border-radius;
   }
 }
 
@@ -89,7 +76,8 @@ $generic-calendar-table-header-font-size: 10px;
   margin-left: -1px;
 
   &.dx-button {
-    border-radius: 0 $calendar-navigator-border-radius $calendar-navigator-border-radius 0;
+    border-top-right-radius: $calendar-navigator-border-radius;
+    border-bottom-right-radius: $calendar-navigator-border-radius;
   }
 }
 

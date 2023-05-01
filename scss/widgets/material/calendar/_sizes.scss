@@ -2,14 +2,23 @@
 
 // adduse
 
+$generic-calendar-legacy-height: null !default;
+$generic-calendar-legacy-width: null !default;
+
 $material-calendar-cell-diameter: null !default;
 $material-calendar-cell-font-size: 14px !default;
 $material-calendar-cell-horizontal-padding: 8px !default;
 
 @if $size == "default" {
+  $generic-calendar-legacy-height: 264.4px !default;
+  $generic-calendar-legacy-width: 226 !default;
+
   $material-calendar-cell-diameter: 28px !default;
 }
 
 @else if $size == "compact" {
+  $generic-calendar-legacy-height: 260.4px !default;
+  $generic-calendar-legacy-width: 250px !default;
+
   $material-calendar-cell-diameter: 28px !default;
 }

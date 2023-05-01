@@ -22,15 +22,29 @@
 .dx-calendar-navigator {
   display: flex;
   justify-content: space-between;
-
-  .dx-button {
-    &.dx-calendar-disabled-navigator-link {
-      visibility: hidden;
-    }
-  }
+  direction: ltr;
 
   .dx-calendar-caption-button {
-    width: 100%;
+    flex-grow: 1;
+  }
+
+  .dx-button {
+    .dx-button-text {
+      text-transform: none;
+    }
+
+    &.dx-state-disabled {
+      opacity: 1;
+
+      .dx-button-content {
+        opacity: 0.5;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-hover {
+      z-index: 1;
+    }
   }
 }
 
@@ -40,7 +54,7 @@
   justify-content: center;
 
   .dx-button {
-    width: 100%;
+    flex-grow: 1;
   }
 }
 
