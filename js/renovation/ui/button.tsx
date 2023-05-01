@@ -277,7 +277,7 @@ export class Button extends JSXComponent(ButtonProps) {
           break;
         case 'fontIcon': {
           const iconParts = icon.split(' ');
-          label = iconParts[iconParts.length - 1] ?? '';
+          label = iconParts[iconParts.length - 1];
           break;
         }
         case 'svg': {
