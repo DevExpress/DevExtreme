@@ -275,9 +275,11 @@ export class Button extends JSXComponent(ButtonProps) {
         case 'dxIcon':
           label = messageLocalization.format(camelize(icon, true)) || icon;
           break;
-        case 'fontIcon':
-          label = icon.split(' ').at(-1) ?? '';
+        case 'fontIcon': {
+          const iconParts = icon.split(' ');
+          label = iconParts[iconParts.length - 1] ?? '';
           break;
+        }
         case 'svg': {
           const titleRegexp = /<title>(.*?)<\/title>/;
           const title = titleRegexp.exec(icon)?.[1] ?? '';
