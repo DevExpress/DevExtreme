@@ -465,6 +465,11 @@ describe('Button', () => {
             expect(button.aria).toMatchObject({ label: 'home' });
           });
 
+          it('should be empty if invalid icon is specified', () => {
+            const button = new Button({ icon: '.' });
+            expect(button.aria).not.toHaveProperty('label');
+          });
+
           it('should be equal to icon if it is set as a dx icon', () => {
             const button = new Button({ icon: 'comment' });
             expect(button.aria).toMatchObject({ label: 'comment' });
