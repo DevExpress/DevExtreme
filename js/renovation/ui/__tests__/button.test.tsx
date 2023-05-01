@@ -466,7 +466,7 @@ describe('Button', () => {
           });
 
           it('should be empty if invalid icon is specified', () => {
-            const button = new Button({ icon: '. *' });
+            const button = new Button({ icon: 1 as unknown as string });
             expect(button.aria).not.toHaveProperty('label');
           });
 
