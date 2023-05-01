@@ -24,7 +24,6 @@ import { isCommandKeyPressed } from '../../events/utils/index';
 import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
 import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
-import { isMaterial } from '../themes';
 
 // STYLE calendar
 
@@ -1058,8 +1057,8 @@ const Calendar = Editor.inherit({
                     onClick: (function(args) {
                         this._toTodayView(args);
                     }).bind(this),
-                    type: isMaterial() ? 'default' : 'normal',
-                    stylingMode: isMaterial() ? 'text' : 'contained',
+                    type: 'default',
+                    stylingMode: 'text',
                     integrationOptions: {}
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);
