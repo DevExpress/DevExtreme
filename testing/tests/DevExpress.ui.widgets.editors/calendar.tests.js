@@ -469,7 +469,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'May 2015 - June 2015',
+            expectedText: 'May 2015June 2015',
             isLeftSwipe: false
         },
         {
@@ -479,7 +479,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'July 2015 - August 2015',
+            expectedText: 'July 2015August 2015',
             isLeftSwipe: true
         },
     ].forEach(({ viewsCount, expectedText, isLeftSwipe }) => {

@@ -12,20 +12,20 @@ const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
 const CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 
-const Navigator = Widget.inherit({
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+class Navigator extends Widget {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             onClick: null,
             onCaptionClick: null,
             type: 'normal',
             stylingMode: 'outlined',
-            text: ''
+            text: '',
+            viewsCount: 1,
         });
-    },
+    }
 
     _defaultOptionsRules() {
-        return this.callBase().concat([
+        return super._defaultOptionsRules().concat([
             {
                 device: function() {
                     return isMaterial();
@@ -36,40 +36,40 @@ const Navigator = Widget.inherit({
                 }
             },
         ]);
-    },
+    }
 
-    _init: function() {
-        this.callBase();
+    _init() {
+        super._init();
 
         this._initActions();
-    },
+    }
 
-    _initActions: function() {
+    _initActions() {
         this._clickAction = this._createActionByOption('onClick');
         this._captionClickAction = this._createActionByOption('onCaptionClick');
-    },
+    }
 
-    _initMarkup: function() {
-        this.callBase();
+    _initMarkup() {
+        super._initMarkup();
 
         this.$element().addClass(CALENDAR_NAVIGATOR_CLASS);
 
         this._renderButtons();
 
         this._renderCaption();
-    },
+    }
 
-    _renderButtons: function() {
-        const that = this;
-        const direction = this.option('rtlEnabled') ? -1 : 1;
+    _renderButtons() {
+        const { rtlEnabled, type, stylingMode } = this.option();
+        const direction = rtlEnabled ? -1 : 1;
 
         this._prevButton = this._createComponent($('<div>'),
             Button, {
                 focusStateEnabled: false,
                 icon: 'chevronleft',
-                onClick: function(e) { that._clickAction({ direction: -direction, event: e }); },
-                type: this.option('type'),
-                stylingMode: this.option('stylingMode'),
+                onClick: (e) => { this._clickAction({ direction: -direction, event: e }); },
+                type,
+                stylingMode,
                 integrationOptions: {}
             });
 
@@ -81,9 +81,9 @@ const Navigator = Widget.inherit({
             Button, {
                 focusStateEnabled: false,
                 icon: 'chevronright',
-                onClick: function(e) { that._clickAction({ direction: direction, event: e }); },
-                type: this.option('type'),
-                stylingMode: this.option('stylingMode'),
+                onClick: (e) => { this._clickAction({ direction: direction, event: e }); },
+                type,
+                stylingMode,
                 integrationOptions: {}
             });
 
@@ -94,22 +94,37 @@ const Navigator = Widget.inherit({
         this._caption = this._createComponent($('<div>').addClass(CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS),
             Button, {
                 focusStateEnabled: false,
-                onClick: function(e) { that._captionClickAction({ event: e }); },
-                type: this.option('type'),
-                stylingMode: this.option('stylingMode'),
+                onClick: (e) => { this._captionClickAction({ event: e }); },
+                type,
+                stylingMode,
+                template: (_, content) => {
+                    const { viewsCount, text } = this.option();
+
+                    if(viewsCount <= 1) {
+                        return text;
+                    }
+
+                    const captionSeparator = ' - ';
+                    const viewCaptionTexts = text.split(captionSeparator);
+
+                    viewCaptionTexts.forEach((captionText) => {
+                        $(content)
+                            .append($('<span>').text(captionText));
+                    });
+                },
                 integrationOptions: {}
             });
 
         const $caption = this._caption.$element();
 
         this.$element().append($prevButton, $caption, $nextButton);
-    },
+    }
 
-    _renderCaption: function() {
+    _renderCaption() {
         this._caption.option('text', this.option('text'));
-    },
+    }
 
-    toggleButton: function(buttonPrefix, value) {
+    toggleButton(buttonPrefix, value) {
         const buttonName = '_' + buttonPrefix + 'Button';
         const button = this[buttonName];
 
@@ -117,17 +132,19 @@ const Navigator = Widget.inherit({
             button.option('disabled', value);
             button.$element().toggleClass(CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS, value);
         }
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case 'text':
                 this._renderCaption();
                 break;
+            case 'viewsCount':
+                break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
-});
+}
 
 export default Navigator;

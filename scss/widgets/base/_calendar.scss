@@ -74,14 +74,6 @@
     height: 100%;
   }
 
-  .dx-calendar-multiview {
-    width: 50%;
-
-    table {
-      padding: 0 5px;
-    }
-  }
-
   table {
     width: 100%;
     height: 100%;
@@ -102,6 +94,33 @@
 
   thead th {
     @include dx-overflow();
+  }
+}
+
+.dx-calendar-multiview {
+  .dx-calendar-caption-button {
+    .dx-button-content {
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: initial;
+      }
+    }
+  }
+
+  .dx-calendar-body {
+    .dx-widget {
+      width: 50%;
+    }
+
+    table {
+      padding: 0 10px;
+    }
   }
 }
 
