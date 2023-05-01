@@ -477,7 +477,7 @@ describe('Button', () => {
 
           it('should be equal to icon name if it is set as a font icon', () => {
             const button = new Button({ icon: 'fas fa-home' });
-            expect(button.aria).toMatchObject({ label: 'fa-home' });
+            expect(button.aria).toMatchObject({ label: 'fas fa-home' });
           });
 
           it('should be equal to title tag content if icon is set in svg format and contains a title tag', () => {
