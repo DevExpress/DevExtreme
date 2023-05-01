@@ -266,6 +266,12 @@ export class Button extends JSXComponent(ButtonProps) {
       const iconSource = getImageSourceType(icon);
 
       switch (iconSource) {
+        case 'image': {
+          const notURLRegexp = /^(?!(?:https?:\/\/)|(?:ftp:\/\/)|(?:www\.))[^\s]+$/;
+          const isPathToImage = !icon.includes('base64') && notURLRegexp.test(icon);
+          label = isPathToImage ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : '';
+          break;
+        }
         case 'dxIcon':
           label = messageLocalization.format(camelize(icon, true)) || icon;
           break;

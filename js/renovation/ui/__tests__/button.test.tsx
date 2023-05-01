@@ -448,9 +448,21 @@ describe('Button', () => {
             expect(button.aria).not.toHaveProperty('label');
           });
 
-          it('should be empty if icon in set as an URL', () => {
-            const button = new Button({ icon: 'https://google.com/' });
-            expect(button.aria).not.toHaveProperty('label');
+          [
+            'https://google.com/',
+            'http://google.com/',
+            'www.google.com/',
+            'ftp://google.com/',
+          ].forEach((url) => {
+            it(`should be empty if icon is set as an URL, url="${url}"`, () => {
+              const button = new Button({ icon: url });
+              expect(button.aria).not.toHaveProperty('label');
+            });
+          });
+
+          it('should be equal to a file name if icon is set as a path to file', () => {
+            const button = new Button({ icon: './statics/home.png' });
+            expect(button.aria).toMatchObject({ label: 'home' });
           });
 
           it('should be equal to icon if it is set as a dx icon', () => {
