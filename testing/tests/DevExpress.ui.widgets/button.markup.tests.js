@@ -288,7 +288,7 @@ QUnit.module('Button markup', function() {
                 icon: 'data:image/png;base64,'
             });
 
-            assert.equal($element.attr('aria-label'), '', 'aria label does not exist');
+            assert.equal($element.attr('aria-label'), undefined, 'aria label does not exist');
         });
 
         QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {
