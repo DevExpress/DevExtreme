@@ -65,7 +65,6 @@ class DateRangeBox extends Widget {
             isValid: true,
             labelMode: 'static',
             max: undefined,
-            maxLength: null,
             min: undefined,
             onChange: null,
             onClosed: null,
@@ -371,7 +370,6 @@ class DateRangeBox extends Widget {
             isValid: options.isValid,
             labelMode: options.labelMode,
             max: options.max,
-            maxLength: options.maxLength,
             min: options.min,
             openOnFieldClick: options.openOnFieldClick,
             pickerType: this._getPickerType(),
@@ -545,6 +543,7 @@ class DateRangeBox extends Widget {
         switch(name) {
             case 'acceptCustomValue':
             case 'dateSerializationFormat':
+            case 'displayFormat':
             case 'max':
             case 'min':
             case 'rtlEnabled':
@@ -555,11 +554,12 @@ class DateRangeBox extends Widget {
                 this.getEndDateBox().option(name, value);
                 break;
             case 'applyButtonText':
+            case 'applyValueMode':
+            case 'calendarOptions':
             case 'cancelButtonText':
+            case 'disabledDates':
             case 'todayButtonText':
                 this.getStartDateBox().option(name, value);
-                break;
-            case 'applyValueMode':
                 break;
             case 'buttons':
                 this._cleanButtonContainers();
@@ -571,11 +571,7 @@ class DateRangeBox extends Widget {
                 this.getEndDateBox().option(name, pickerType);
                 break;
             }
-            case 'calendarOptions':
-                break;
             case 'dateOutOfRangeMessage':
-            case 'disabledDates':
-            case 'displayFormat':
                 break;
             case 'height':
                 this.getStartDateBox().option(name, value);
@@ -627,8 +623,6 @@ class DateRangeBox extends Widget {
 
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
-                break;
-            case 'maxLength':
                 break;
             case 'onValueChanged':
                 this._createValueChangeAction();
