@@ -7879,4 +7879,47 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
         });
     });
+
+    ['pageBottom', 'pageTop'].forEach(newRowPosition => {
+        QUnit.test(`Adding a new row should not throw error in popup mode (newRowPosition is ${newRowPosition} and rowRenderingMode: virtual)`, function(assert) {
+            // arrange
+            const getData = () => {
+                const items = [];
+                for(let i = 0; i < 100; i += 1) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const dataGrid = createDataGrid({
+                height: 200,
+                dataSource: getData(),
+                keyExpr: 'id',
+                editing: {
+                    newRowPosition,
+                },
+                paging: {
+                    pageSize: 10
+                },
+                scrolling: {
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                masterDetail: {
+                    enabled: true,
+                    autoExpandAll: true,
+                }
+            });
+
+            this.clock.tick(400);
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(400);
+
+            assert.ok(true, 'no errors');
+        });
+    });
 });
