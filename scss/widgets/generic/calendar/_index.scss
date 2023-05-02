@@ -33,8 +33,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
     }
 
     .dx-calendar-footer {
-      height: $generic-calendar-footer-height;
-
       .dx-button {
         &.dx-state-active {
           background-color: $calendar-button-footer-active-bg;

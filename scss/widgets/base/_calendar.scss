@@ -7,14 +7,10 @@
   @include user-select(none);
 
   position: relative;
-  display: block;
-
-  &.dx-calendar-with-footer {
-    .dx-calendar-footer {
-      position: absolute;
-      bottom: 0;
-    }
-  }
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .dx-calendar-views-wrapper {
@@ -88,6 +84,16 @@
   }
 }
 
+.dx-calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dx-calendar-today-button {
+  flex-grow: 1;
+}
+
 .dx-calendar-multiview {
   .dx-calendar-caption-button {
     .dx-button-content {
@@ -109,14 +115,6 @@
       padding: 0 10px;
     }
   }
-}
-
-.dx-calendar-cell {
-  white-space: normal;
-}
-
-.dx-calendar-contoured-date {
-  outline-offset: -1px;
 }
 
 .dx-rtl {

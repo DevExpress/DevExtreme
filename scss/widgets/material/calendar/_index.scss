@@ -29,12 +29,6 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     .dx-calendar-body {
       bottom: $material-calendar-footer-height + 10px;
     }
-
-    .dx-calendar-footer {
-      text-align: center;
-      height: $material-calendar-footer-height;
-      width: 100%;
-    }
   }
 }
 
@@ -100,14 +94,12 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     }
   }
 
-
   .dx-calendar-view-century & {
     span {
       line-height: 200%;
       width: 48px;
     }
   }
-
 
   span {
     display: inline-block;
@@ -133,7 +125,6 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
   &.dx-calendar-other-view,
   &.dx-calendar-empty-cell {
     color: $calendar-cell-other-color;
-
 
     &.dx-state-hover,
     &.dx-state-active {
