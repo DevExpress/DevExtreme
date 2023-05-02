@@ -52,7 +52,7 @@ export default {
                             const targetComponent = event[TARGET_COMPONENT_NAME];
                             const component = this.component;
 
-                            if($pointerDownTarget && $pointerDownTarget.is('input') && !$pointerDownTarget.is($target)) {
+                            if(isEditable($pointerDownTarget) && !$pointerDownTarget.is($target)) {
                                 return;
                             }
 
@@ -63,6 +63,10 @@ export default {
                                 const $dropDownEditorOverlay = $element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
                                 const $componentElement = component.$element();
                                 return $dropDownEditorOverlay.length > 0 && $componentElement.closest($dropDownEditorOverlay).length === 0;
+                            }
+
+                            function isEditable($element) {
+                                return $element && ($element.is('input') || $element.is('textarea'));
                             }
 
                             if(this.isCellOrBatchEditMode() && !this._editCellInProgress) {

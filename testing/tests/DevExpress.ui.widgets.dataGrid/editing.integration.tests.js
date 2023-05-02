@@ -6,6 +6,7 @@ import themes from 'ui/themes';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import SelectBox from 'ui/select_box';
+import 'ui/text_area';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -4028,6 +4029,45 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         const $cell = $(dataGrid.getCellElement(0, 0));
         assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
+    });
+
+    // T1161254
+    QUnit.test('A cell with a TextArea editor should not close when a mouse click is released outside the editor', function(assert) {
+        let $firstCell;
+        let $textArea;
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ value: 1, displayValue: 'text1' }],
+            showBorders: true,
+            columns: [{
+                dataField: 'displayValue'
+            }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+            onEditorPreparing(e) {
+                e.editorName = 'dxTextArea';
+            },
+        });
+        this.clock.tick(100);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $firstCell.trigger('dxclick');
+        this.clock.tick(5000);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $textArea = $firstCell.find('textarea');
+        assert.equal($textArea.length, 1, 'textarea should appear');
+
+        $textArea.trigger($.Event('dxpointerdown', { pageX: $textArea.offset().left + 5, pageY: $textArea.offset().top + 5 }));
+        $textArea.trigger($.Event('dxpointerup', { pageX: 0, pageY: 0 }));
+        $textArea.trigger($.Event('click', { pageX: 0, pageY: 0, target: $('body').get(0) }));
+        this.clock.tick(5000);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $textArea = $firstCell.find('textarea');
+        assert.equal($textArea.length, 1, 'textarea should not disappear');
     });
 });
 
