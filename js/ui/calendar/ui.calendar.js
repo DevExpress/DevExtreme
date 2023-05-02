@@ -700,6 +700,9 @@ const Calendar = Editor.inherit({
         this.$element().addClass(CALENDAR_VIEW_CLASS + '-' + this.option('zoomLevel'));
 
         const { currentDate, viewsCount } = this.option();
+
+        this.$element().toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
+
         this._view = this._renderSpecificView(currentDate);
 
         if(hasWindow()) {
@@ -874,11 +877,13 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorConfig: function() {
+        const { rtlEnabled } = this.option();
+
         return {
-            text: this._view.getNavigatorCaption(),
+            text: this._getViewsCaption(this._view, this._additionalView),
             onClick: this._navigatorClickHandler.bind(this),
             onCaptionClick: this._navigateUp.bind(this),
-            rtlEnabled: this.option('rtlEnabled')
+            rtlEnabled,
         };
     },
 
