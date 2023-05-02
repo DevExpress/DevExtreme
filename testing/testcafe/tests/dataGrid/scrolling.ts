@@ -5,6 +5,7 @@ import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { salesApiMock } from './apiMocks/salesApiMock';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1015,16 +1016,10 @@ test('Scroll to the bottom after expand several group', async (t) => {
   };
 
   // act
-  await t.wait(200);
   await t.expect(dataGrid.hasScrollable()).ok();
   await scrollToBottom();
-  await scrollToBottom();
-  await scrollToBottom();
   await dataGrid.apiExpandRow(['Contoso York Store']);
-  await t.wait(200);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
-  await t.wait(200);
-  await scrollToBottom();
   await scrollToBottom();
   await dataGrid.scrollBy({ y: -1 });
   await t.expect(dataGrid.isReady()).ok();
@@ -1038,49 +1033,54 @@ test('Scroll to the bottom after expand several group', async (t) => {
       .within(897075, 932043);
   }
 })
-  .before(async () => createWidget('dxDataGrid', () => ({
-    width: 1000,
-    height: 440,
-    dataSource: (window as any).DevExpress.data.AspNet.createStore({
-      key: 'Id',
-      loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales',
-    }),
-    remoteOperations: { groupPaging: true },
-    scrolling: {
-      mode: 'virtual',
-      useNative: false,
-    },
-    grouping: {
-      autoExpandAll: false,
-    },
-    groupPanel: {
-      visible: true,
-    },
-    showBorders: true,
-    columns: [{
-      dataField: 'Id',
-      dataType: 'number',
-      width: 75,
-    }, {
-      caption: 'Subcategory',
-      dataField: 'ProductSubcategoryName',
-      width: 150,
-    }, {
-      caption: 'Store',
-      dataField: 'StoreName',
-      groupIndex: 0,
-      width: 150,
-    }, {
-      caption: 'Category',
-      dataField: 'ProductCategoryName',
-      groupIndex: 1,
-      width: 120,
-    }, {
-      caption: 'Product',
-      dataField: 'ProductName',
-    }],
-    loadingTimeout: 0,
-  })));
+  .before(async (t) => {
+    await t.addRequestHooks(salesApiMock);
+    return createWidget('dxDataGrid', () => ({
+      width: 1000,
+      height: 440,
+      dataSource: (window as any).DevExpress.data.AspNet.createStore({
+        key: 'Id',
+        loadUrl: 'https://api/data',
+      }),
+      remoteOperations: { groupPaging: true },
+      scrolling: {
+        mode: 'virtual',
+        useNative: false,
+      },
+      grouping: {
+        autoExpandAll: false,
+      },
+      groupPanel: {
+        visible: true,
+      },
+      showBorders: true,
+      columns: [{
+        dataField: 'Id',
+        dataType: 'number',
+        width: 75,
+      }, {
+        caption: 'Subcategory',
+        dataField: 'ProductSubcategoryName',
+        width: 150,
+      }, {
+        caption: 'Store',
+        dataField: 'StoreName',
+        groupIndex: 0,
+        width: 150,
+      }, {
+        caption: 'Category',
+        dataField: 'ProductCategoryName',
+        groupIndex: 1,
+        width: 120,
+      }, {
+        caption: 'Product',
+        dataField: 'ProductName',
+      }],
+      loadingTimeout: 0,
+    }));
+  }).after(async (t) => {
+    await t.removeRequestHooks(salesApiMock);
+  });
 
 test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
   const dataGrid = new DataGrid('#container');
