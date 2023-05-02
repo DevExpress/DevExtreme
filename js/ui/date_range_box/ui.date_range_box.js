@@ -547,6 +547,7 @@ class DateRangeBox extends Widget {
             case 'max':
             case 'min':
             case 'rtlEnabled':
+            case 'labelMode':
             case 'spellcheck':
             case 'useMaskBehavior':
             case 'valueChangeEvent':
@@ -614,8 +615,6 @@ class DateRangeBox extends Widget {
                 break;
             case 'endDateName':
                 this.getEndDateBox().option('name', value);
-                break;
-            case 'labelMode':
                 break;
             case 'tabIndex':
             case 'focusStateEnabled':
