@@ -254,6 +254,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             readOnly: true,
             deferRendering: false,
             disabled: true,
+            labelMode: 'floating',
             activeStateEnabled: false,
             hoverStateEnabled: false,
             focusStateEnabled: false,
@@ -272,6 +273,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                labelMode: 'floating',
                 deferRendering: false,
                 disabled: true,
                 activeStateEnabled: false,
@@ -295,6 +297,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 showDropDownButton: false,
                 buttons: undefined,
                 readOnly: true,
+                labelMode: 'floating',
                 deferRendering: true,
                 disabled: true,
                 activeStateEnabled: false,
@@ -1592,6 +1595,10 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'displayFormat',
             optionValue: 'EEEE, d of MMM, yyyy'
+        },
+        {
+            optionName: 'labelMode',
+            optionValue: 'floating'
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
