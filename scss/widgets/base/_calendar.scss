@@ -102,14 +102,10 @@
     .dx-button-content {
       justify-content: space-between;
       align-items: center;
+    }
 
-      span {
-        width: 50%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: initial;
-      }
+    .dx-button-text {
+      width: 50%;
     }
   }
 

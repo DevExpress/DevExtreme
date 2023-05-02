@@ -11,6 +11,7 @@ const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-v
 const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
 const CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
+const BUTTON_TEXT_CLASS = 'dx-button-text';
 
 class Navigator extends Widget {
     _getDefaultOptions() {
@@ -20,7 +21,6 @@ class Navigator extends Widget {
             type: 'normal',
             stylingMode: 'outlined',
             text: '',
-            viewsCount: 1,
         });
     }
 
@@ -98,18 +98,14 @@ class Navigator extends Widget {
                 type,
                 stylingMode,
                 template: (_, content) => {
-                    const { viewsCount, text } = this.option();
-
-                    if(viewsCount <= 1) {
-                        return text;
-                    }
+                    const { text } = this.option();
 
                     const captionSeparator = ' - ';
                     const viewCaptionTexts = text.split(captionSeparator);
 
                     viewCaptionTexts.forEach((captionText) => {
                         $(content)
-                            .append($('<span>').text(captionText));
+                            .append($('<span>').addClass(BUTTON_TEXT_CLASS).text(captionText));
                     });
                 },
                 integrationOptions: {}
@@ -138,8 +134,6 @@ class Navigator extends Widget {
         switch(args.name) {
             case 'text':
                 this._renderCaption();
-                break;
-            case 'viewsCount':
                 break;
             default:
                 super._optionChanged(args);
