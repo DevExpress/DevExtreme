@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 import DateBox from '../dateBox';
-import Calendar from '../calendar/calendar';
+import Calendar from '../calendar';
 import Popup from '../popup';
 
 const CLASS = {

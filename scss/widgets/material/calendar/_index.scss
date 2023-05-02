@@ -10,31 +10,17 @@
 // adduse
 
 $material-calendar-base-size: 28px;
-$material-calendar-navigator-fontsize: 14px;
 
 $material-calendar-cell-hover-bg-color: color.change($base-accent, $alpha: 0.24) !default;
 $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32) !default;
 
 .dx-calendar {
-  width: 226px; // $material-calendar-width; width: 226px;
+  width: $material-calendar-legacy-width; // $material-calendar-width; width: 226px;
   min-width: 226px; // $material-calendar-width; min-width: 226px;
-  height: 264.4px; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap height: 264.4px;
+  height: $material-calendar-legacy-height; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap height: 264.4px;
   min-height: 242px; // $material-calendar-height + 20px; min-height: 264.4px;
   background-color: $calendar-bg;
-  border: 1px solid transparent; // need for validation to avoid jumping
-
-  &.dx-calendar-with-footer {
-
-    // height: $material-calendar-height + $material-calendar-footer-height + 10px + 20px;
-
-    // min-height: $material-calendar-height + $material-calendar-footer-height;
-  }
-}
-
-.dx-calendar-navigator {
-  .dx-calendar-caption-button {
-    font-size: $material-calendar-navigator-fontsize;
-  }
+  border: 1px solid transparent;
 }
 
 .dx-calendar-navigator-previous-view,
@@ -87,14 +73,12 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
     }
   }
 
-
   .dx-calendar-view-century & {
     span {
       line-height: 200%;
       width: 48px;
     }
   }
-
 
   span {
     border-radius: 50%;

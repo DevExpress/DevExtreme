@@ -469,7 +469,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'May 2015 - June 2015',
+            expectedText: 'May 2015June 2015',
             isLeftSwipe: false
         },
         {
@@ -479,7 +479,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'July 2015 - August 2015',
+            expectedText: 'July 2015August 2015',
             isLeftSwipe: true
         },
     ].forEach(({ viewsCount, expectedText, isLeftSwipe }) => {
@@ -4151,6 +4151,12 @@ QUnit.module('Aria accessibility', {
 
         assert.notEqual($cell.attr('id'), undefined, 'id exists');
         assert.equal($element.attr('aria-activedescendant'), $cell.attr('id'), 'cell\'s id and element\'s activedescendant are equal');
+    });
+
+    QUnit.test('calendar should have role=application attribute', function(assert) {
+        this.$element.dxCalendar();
+
+        assert.strictEqual(this.$element.attr('role'), 'application');
     });
 
     QUnit.test('onContouredChanged action on init', function(assert) {
