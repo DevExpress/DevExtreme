@@ -5,9 +5,6 @@ import themes from 'ui/themes';
 import viewPortUtils from 'core/utils/view_port';
 
 const viewPortChanged = viewPortUtils.changeCallback;
-// import knownCssFiles from '/themes-test/get-css-files-list/!json';
-
-const knownCssFiles = [];
 
 const { test, testInActiveWindow } = QUnit;
 
@@ -129,55 +126,58 @@ QUnit.module('Selector check', () => {
         return badSelectors;
     }
 
-    $.each(knownCssFiles, function(i, cssFileName) {
-        test(cssFileName, function(assert) {
-            const done = assert.async();
-            const frame = $('<iframe/>').appendTo('body');
+    $.getJSON('/themes-test/get-css-files-list', knownCssFiles => {
+        $.each(knownCssFiles, function(i, cssFileName) {
+            test(cssFileName, function(assert) {
+                const done = assert.async();
+                const frame = $('<iframe/>').appendTo('body');
 
-            window.waitFor(loadCss(frame, cssFileName)).done(function() {
-                assert.deepEqual(findBadCssSelectors(frame[0].contentWindow.document), [], 'Css rule has incorrect selectors');
-                frame.remove();
-                done();
+                window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                    assert.deepEqual(findBadCssSelectors(frame[0].contentWindow.document), [], 'Css rule has incorrect selectors');
+                    frame.remove();
+                    done();
+                });
+
             });
-
         });
     });
-
 });
 
 QUnit.module('All images are defined with data-uri and will be inlined', () => {
-    $.each(knownCssFiles, function(i, cssFileName) {
+    $.getJSON('/themes-test/get-css-files-list', knownCssFiles => {
+        $.each(knownCssFiles, function(i, cssFileName) {
 
-        function hasUrlImageProperty(doc) {
-            const rulesWithUrl = [];
-            $.each(doc.styleSheets, function() {
-                const rules = rulesFromSheet(this);
+            function hasUrlImageProperty(doc) {
+                const rulesWithUrl = [];
+                $.each(doc.styleSheets, function() {
+                    const rules = rulesFromSheet(this);
 
-                $.each(rules, function() {
-                    if(!this.cssText) {
-                        return;
-                    }
-                    if(/url\((?!"data:image)/.test(this.cssText) &&
-                       /url\((?!"?icons)/.test(this.cssText) &&
-                       /url\((?!"?fonts)/.test(this.cssText) &&
-                       /url\((?!"?https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
-                        rulesWithUrl.push(this.cssText);
-                    }
+                    $.each(rules, function() {
+                        if(!this.cssText) {
+                            return;
+                        }
+                        if(/url\((?!"data:image)/.test(this.cssText) &&
+                            /url\((?!"?icons)/.test(this.cssText) &&
+                            /url\((?!"?fonts)/.test(this.cssText) &&
+                            /url\((?!"?https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
+                            rulesWithUrl.push(this.cssText);
+                        }
+                    });
                 });
+                return rulesWithUrl;
+            }
+
+            test(cssFileName, function(assert) {
+                const done = assert.async();
+                const frame = $('<iframe/>').appendTo('body');
+
+                window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                    assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], 'Css rule has non-encoded url, change url() to data-uri() in the less file');
+                    frame.remove();
+                    done();
+                });
+
             });
-            return rulesWithUrl;
-        }
-
-        test(cssFileName, function(assert) {
-            const done = assert.async();
-            const frame = $('<iframe/>').appendTo('body');
-
-            window.waitFor(loadCss(frame, cssFileName)).done(function() {
-                assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], 'Css rule has non-encoded url, change url() to data-uri() in the less file');
-                frame.remove();
-                done();
-            });
-
         });
     });
 });
