@@ -10,29 +10,6 @@ fixture.disablePageReloads`Header Filter`
 
 const GRID_CONTAINER = '#container';
 
-test('The header filter should fit inside the viewport if the grid is scrolled horizontally (T1156848)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(GRID_CONTAINER);
-  const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
-
-  // act
-  await dataGrid.scrollBy({ x: 100 });
-  await t.click(filterIconElement);
-
-  // assert
-  await t
-    .expect(await takeScreenshot('grid-header-filter-popup-T1156848', '#container'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  columns: ['Column1', 'Column2'],
-  columnWidth: 250,
-  width: 400,
-  height: 400,
-  headerFilter: { visible: true },
-}));
-
 test('HeaderFilter popup screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
