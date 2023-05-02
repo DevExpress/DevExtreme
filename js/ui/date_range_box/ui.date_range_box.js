@@ -643,7 +643,11 @@ class DateRangeBox extends Widget {
                 this._createValueChangeAction();
                 break;
             case 'onOpened':
+                this._createOpenAction();
+                break;
             case 'onClosed':
+                this._createCloseAction();
+                break;
             case 'onKeyDown':
             case 'onKeyUp':
             case 'onChange':
@@ -652,6 +656,7 @@ class DateRangeBox extends Widget {
             case 'onCopy':
             case 'onPaste':
             case 'onEnterKey':
+                this._createEventAction(name.replace('on', ''));
                 break;
             case 'openOnFieldClick':
                 break;

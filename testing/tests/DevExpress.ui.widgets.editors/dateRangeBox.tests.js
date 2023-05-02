@@ -1094,6 +1094,9 @@ QUnit.module('Events', moduleConfig, () => {
                 onClosed: () => {}
             });
 
+            this.instance.option('opened', true);
+            this.instance.option('opened', false);
+
             this.instance.option('onOpened', this.onOpenedHandler);
             this.instance.option('onClosed', this.onClosedHandler);
 
@@ -1177,9 +1180,11 @@ QUnit.module('Events', moduleConfig, () => {
                     [event]: () => {},
                 });
 
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
                 this.instance.option(event, this[mockHandlerName]);
 
-                const startDateInput = this.instance.field()[0];
                 $(startDateInput).trigger($.Event(eventName.toLowerCase()));
 
                 this.checkEventHandlerArgs(startDateInput, event, eventName);
@@ -1201,9 +1206,11 @@ QUnit.module('Events', moduleConfig, () => {
                     [event]: () => {},
                 });
 
+                const endDateInput = this.instance.field()[1];
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
                 this.instance.option(event, this[mockHandlerName]);
 
-                const endDateInput = this.instance.field()[1];
                 $(endDateInput).trigger($.Event(eventName.toLowerCase()));
 
                 this.checkEventHandlerArgs(endDateInput, event, eventName);
@@ -1229,9 +1236,11 @@ QUnit.module('Events', moduleConfig, () => {
                     onEnterKey: () => {},
                 });
 
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
                 this.instance.option('onEnterKey', this.onEnterKeyHandler);
 
-                const input = this.instance.field()[inputIndex];
                 $(input).trigger($.Event('keyup', { key: 'enter' }));
 
                 this.checkEventHandlerArgs(input, 'onEnterKey', 'keyup');
