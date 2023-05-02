@@ -114,33 +114,47 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 cancelButtonText: 'Cancel',
                 dateSerializationFormat: undefined,
                 deferRendering: true,
+                disabled: false,
                 disabledDates: null,
                 displayFormat: null,
-                dropDownOptions: {},
                 dropDownButtonTemplate: 'dropDownButton',
+                dropDownOptions: {},
                 endDate: null,
+                endDateInputAttr: {},
+                endDateLabel: 'End Date',
+                endDateName: '',
+                endDatePlaceholder: '',
+                endDateText: '',
                 focusStateEnabled: true,
                 height: undefined,
                 hoverStateEnabled: true,
                 isValid: true,
-                startDateLabel: 'Start Date',
-                endDateLabel: 'End Date',
-                startDatePlaceholder: '',
-                endDatePlaceholder: '',
                 labelMode: 'static',
                 max: undefined,
                 min: undefined,
-                opened: false,
+                onChange: null,
+                onCopy: null,
+                onCut: null,
+                onEnterKey: null,
+                onInput: null,
+                onKeyDown: null,
+                onKeyUp: null,
+                onPaste: null,
                 openOnFieldClick: true,
+                opened: false,
                 readOnly: false,
-                disabled: false,
                 rtlEnabled: false,
                 showClearButton: false,
                 showDropDownButton: true,
                 spellcheck: false,
                 startDate: null,
+                startDateInputAttr: {},
+                startDateLabel: 'Start Date',
+                startDateName: '',
+                startDatePlaceholder: '',
+                startDateText: '',
                 stylingMode: 'outlined',
-                text: '',
+                tabIndex: 0,
                 useMaskBehavior: false,
                 validationError: null,
                 validationErrors: null,
@@ -150,19 +164,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 value: [null, null],
                 valueChangeEvent: 'change',
                 width: undefined,
-                tabIndex: 0,
-                onKeyDown: null,
-                onKeyUp: null,
-                onChange: null,
-                onInput: null,
-                onCut: null,
-                onCopy: null,
-                onPaste: null,
-                onEnterKey: null,
-                startDateInputAttr: {},
-                startDateName: '',
-                endDateInputAttr: {},
-                endDateName: '',
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -174,41 +175,41 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             acceptCustomValue: true,
             activeStateEnabled: true,
             applyValueMode: 'instantly',
-            displayFormat: null,
             deferRendering: true,
+            disabled: false,
+            displayFormat: null,
             elementAttr: {},
             focusStateEnabled: true,
             hoverStateEnabled: true,
+            inputAttr: {},
             isValid: true,
             label: '',
             labelMode: 'static',
             max: undefined,
             min: undefined,
+            name: '',
+            onChange: null,
+            onCopy: null,
+            onCut: null,
+            onEnterKey: null,
+            onInput: null,
+            onKeyDown: null,
+            onKeyUp: null,
+            onPaste: null,
+            openOnFieldClick: true,
             placeholder: '',
             readOnly: false,
-            disabled: false,
             rtlEnabled: false,
+            showClearButton: false,
+            showDropDownButton: false,
             spellcheck: false,
             stylingMode: 'underlined',
+            tabIndex: 0,
             useMaskBehavior: false,
             validationMessageMode: 'auto',
             validationMessagePosition: 'auto',
             validationStatus: 'valid',
             valueChangeEvent: 'change',
-            tabIndex: 0,
-            openOnFieldClick: true,
-            showDropDownButton: false,
-            showClearButton: false,
-            onKeyDown: null,
-            onKeyUp: null,
-            onChange: null,
-            onInput: null,
-            onCut: null,
-            onCopy: null,
-            onPaste: null,
-            onEnterKey: null,
-            name: '',
-            inputAttr: {},
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -220,8 +221,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
                 disabledDates: null,
-                opened: false,
                 label: 'Start Date',
+                opened: false,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -235,7 +236,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
             const expectedOptions = {
                 ...expectedDateBoxOptions,
-                showClearButton: false,
                 label: 'End Date',
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -248,20 +248,20 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
     QUnit.module('DateBox\'s option dependency from DateRangeBox options ', () => {
         const initialDateRangeBoxOptions = {
-            showClearButton: true,
-            showDropDownButton: true,
+            activeStateEnabled: false,
             buttons: ['dropDown'],
-            readOnly: true,
             deferRendering: false,
             disabled: true,
-            labelMode: 'floating',
-            activeStateEnabled: false,
-            hoverStateEnabled: false,
-            focusStateEnabled: false,
-            startDateInputAttr: { id: 'startDateInput' },
-            startDateName: 'start_input',
             endDateInputAttr: { id: 'endDateInput' },
             endDateName: 'end_input',
+            focusStateEnabled: false,
+            hoverStateEnabled: false,
+            labelMode: 'floating',
+            showClearButton: true,
+            readOnly: true,
+            showDropDownButton: true,
+            startDateInputAttr: { id: 'startDateInput' },
+            startDateName: 'start_input',
             // TODO: extend this list of options
         };
 
@@ -269,18 +269,18 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             this.reinit(initialDateRangeBoxOptions);
 
             const expectedOptions = {
-                showClearButton: false,
-                showDropDownButton: false,
+                activeStateEnabled: false,
                 buttons: undefined,
-                readOnly: true,
-                labelMode: 'floating',
                 deferRendering: false,
                 disabled: true,
-                activeStateEnabled: false,
-                hoverStateEnabled: false,
                 focusStateEnabled: false,
-                name: 'start_input',
+                hoverStateEnabled: false,
                 inputAttr: { id: 'startDateInput' },
+                labelMode: 'floating',
+                name: 'start_input',
+                readOnly: true,
+                showClearButton: false,
+                showDropDownButton: false,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -293,18 +293,19 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             this.reinit(initialDateRangeBoxOptions);
 
             const expectedOptions = {
-                showClearButton: false,
-                showDropDownButton: false,
+                activeStateEnabled: false,
                 buttons: undefined,
-                readOnly: true,
-                labelMode: 'floating',
                 deferRendering: true,
                 disabled: true,
-                activeStateEnabled: false,
-                hoverStateEnabled: false,
+                earButton: false,
                 focusStateEnabled: false,
-                name: 'end_input',
+                hoverStateEnabled: false,
                 inputAttr: { id: 'endDateInput' },
+                labelMode: 'floating',
+                name: 'end_input',
+                readOnly: true,
+                showDropDownButton: false,
+                showClearButton: false,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -1685,6 +1686,28 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
             assert.strictEqual(this.instance.getStartDateBox().option('pickerType'), 'calendar');
             assert.strictEqual(this.instance.getEndDateBox().option('pickerType'), 'calendar');
+        });
+
+        QUnit.test('DateRangeBox startDateText and endDateText options should return text option of dateboxes correctly', function(assert) {
+            this.reinit({
+                value: ['2021/09/17', '2021/09/24'],
+            });
+
+            assert.deepEqual(new Date(this.instance.option('startDateText')), new Date('2021/09/17'));
+            assert.deepEqual(new Date(this.instance.option('endDateText')), new Date('2021/09/24'));
+            assert.strictEqual(this.instance.option('startDateText'), this.instance.getStartDateBox().option('text'));
+            assert.strictEqual(this.instance.option('endDateText'), this.instance.getEndDateBox().option('text'));
+        });
+
+        QUnit.test('DateRangeBox startDateText and endDateText options should return text option of dateboxes correctly after change value in runtime', function(assert) {
+            this.reinit({});
+
+            this.instance.option('value', ['2021/09/17', '2021/09/24']),
+
+            assert.deepEqual(new Date(this.instance.option('startDateText')), new Date('2021/09/17'));
+            assert.deepEqual(new Date(this.instance.option('endDateText')), new Date('2021/09/24'));
+            assert.strictEqual(this.instance.option('startDateText'), this.instance.getStartDateBox().option('text'));
+            assert.strictEqual(this.instance.option('endDateText'), this.instance.getEndDateBox().option('text'));
         });
     });
 

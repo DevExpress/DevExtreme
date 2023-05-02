@@ -59,6 +59,7 @@ class DateRangeBox extends Widget {
             endDateLabel: 'End Date',
             endDateName: '',
             endDatePlaceholder: '',
+            endDateText: undefined,
             focusStateEnabled: true,
             hoverStateEnabled: true,
             invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
@@ -89,8 +90,8 @@ class DateRangeBox extends Widget {
             startDateLabel: 'Start Date',
             startDateName: '',
             startDatePlaceholder: '',
+            startDateText: undefined,
             stylingMode: config().editorStylingMode || 'outlined',
-            text: '',
             todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
             useHiddenSubmitElement: false,
             useMaskBehavior: false,
@@ -433,6 +434,11 @@ class DateRangeBox extends Widget {
 
                 this._raiseCloseAction();
             },
+            onOptionChanged: ({ name, value }) => {
+                if(name === 'text') {
+                    this.option('startDateText', value);
+                }
+            },
             todayButtonText: options.todayButtonText,
             showClearButton: false,
             showDropDownButton: false,
@@ -462,6 +468,11 @@ class DateRangeBox extends Widget {
             onValueChanged: ({ value }) => {
                 const newValue = [this.option('value')[0], value];
                 this.updateValue(newValue);
+            },
+            onOptionChanged: ({ name, value }) => {
+                if(name === 'text') {
+                    this.option('endDateText', value);
+                }
             },
             showClearButton: false,
             showDropDownButton: false,
@@ -668,7 +679,8 @@ class DateRangeBox extends Widget {
             case 'stylingMode':
                 this._renderStylingMode();
                 break;
-            case 'text':
+            case 'startDateText':
+            case 'endDateText':
             case 'useHiddenSubmitElement':
             case 'validationError':
             case 'validationErrors':
