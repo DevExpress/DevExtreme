@@ -340,7 +340,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is not changed');
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
 
-            const $okButton = $(this.instance.getStartDateBox().content().parent()).find(`.${CALENDAR_OK_BUTTON}`);
+            const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${CALENDAR_OK_BUTTON}`);
             $okButton.trigger('dxclick');
 
             assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
@@ -372,7 +372,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
 
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
 
-            const $cancelButton = $(this.instance.getStartDateBox().content().parent()).find(`.${CALENDAR_CANCEL_BUTTON}`);
+            const $cancelButton = $(this.instance.getStartDateBox().content()).parent().find(`.${CALENDAR_CANCEL_BUTTON}`);
             $cancelButton.trigger('dxclick');
 
             assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is not changed');
@@ -419,7 +419,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
         assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is not changed');
         assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
 
-        const $okButton = $(this.instance.getStartDateBox().content().parent()).find(`.${CALENDAR_OK_BUTTON}`);
+        const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${CALENDAR_OK_BUTTON}`);
         $okButton.trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), [startCellDate, null], 'dateRangeBox value is correct');
@@ -464,7 +464,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
 
             const buttonClass = button === 'ok' ? CALENDAR_OK_BUTTON : CALENDAR_CANCEL_BUTTON;
-            const $button = $(this.instance.getStartDateBox().content().parent()).find(`.${buttonClass}`);
+            const $button = $(this.instance.getStartDateBox().content()).parent().find(`.${buttonClass}`);
             $button.trigger('dxclick');
 
             assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
@@ -487,7 +487,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
 
             const buttonClass = button === 'ok' ? CALENDAR_OK_BUTTON : CALENDAR_CANCEL_BUTTON;
-            const $button = $(this.instance.getStartDateBox().content().parent()).find(`.${buttonClass}`);
+            const $button = $(this.instance.getStartDateBox().content()).parent().find(`.${buttonClass}`);
             $button.trigger('dxclick');
 
             assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
