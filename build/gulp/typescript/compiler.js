@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const del = require('del');
 const { glob } = require('glob');
 
 const tsCompiler = require('typescript');
@@ -123,14 +122,9 @@ const createTsCompiler = (compilerConfig) => {
         tsCompiler.createWatchProgram(host);
     };
 
-    const clearAfterTSCompileAsync = async() => {
-        await del(compilerConfig.clearFilePattern, { force: true });
-    };
-
     return {
         compileTsAsync,
         watchTsAsync,
-        clearAfterTSCompileAsync,
     };
 };
 

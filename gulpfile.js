@@ -84,7 +84,13 @@ function createDefaultBatch(dev) {
     if(!env.BUILD_TESTCAFE) {
         tasks.push('discover-declarations');
     }
+
     tasks.push('transpile-systemjs');
+
+    if(!dev) {
+        tasks.push('transpile-clean');
+    }
+
     return gulp.series(tasks);
 }
 
@@ -107,8 +113,7 @@ gulp.task('dev-watch', gulp.parallel(
     'bundler-config-watch',
     'js-bundles-watch',
     'style-compiler-themes-watch',
-    'test-env',
-    'compile-ts-watch'
+    'test-env'
 ));
 
 gulp.task('dev', gulp.series(

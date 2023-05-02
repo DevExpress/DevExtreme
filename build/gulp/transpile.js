@@ -3,6 +3,7 @@
 const babel = require('gulp-babel');
 const flatMap = require('gulp-flatmap');
 const fs = require('fs');
+const del = require('del');
 const gulp = require('gulp');
 
 const normalize = require('normalize-path');
@@ -60,11 +61,11 @@ const generatedTs = [
 
 const bundlesSrc = ['js/bundles/**/*.js'];
 
-const TS_OUTPUT_SRC = ['artifacts/dist_ts/__internal/**/*.js'];
+const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
+const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.js`];
 const TS_COMPILER_CONFIG = {
     tsconfigAbsPath: path.resolve(__dirname, '../../js/__internal/tsconfig.json'),
     aliasAbsPath: path.resolve(__dirname, '../../js'),
-    clearFilePattern: 'artifacts/dist_ts',
     normalizeTsAliasFilePath: (filePath) => filePath.replace(/\/artifacts\/dist_ts\//, '/js/'),
     messages: {
         createDirErr: 'Cannot create directory',
@@ -217,7 +218,6 @@ gulp.task('transpile', (done) => {
         transpileRenovation(),
         transpileRenovationProd(),
         ifEsmPackage('transpile-esm'),
-        transpileTsClear(compiler),
     )(done);
 });
 
@@ -256,44 +256,56 @@ gulp.task('renovated-components-watch', () => {
 
 });
 
-gulp.task('compile-ts-watch', async() => {
-    const compiler = createTsCompiler(TS_COMPILER_CONFIG);
-    await compiler.watchTsAsync();
 
-    gulp.watch(TS_OUTPUT_SRC)
+const watchJsTask = () => {
+    const watchTask = watch(src)
+        .on('ready', () => console.log('transpile JS is watching for changes...'))
+        .pipe(plumber({
+            errorHandler: notify
+                .onError('Error: <%= error.message %>')
+                .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
+        }));
+    watchTask
+        .pipe(babel(transpileConfig.cjs))
+        .pipe(gulp.dest(ctx.TRANSPILED_PATH));
+    watchTask
+        .pipe(replaceWidgets(true))
+        .pipe(babel(transpileConfig.cjs))
+        .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
+    watchTask
+        .pipe(removeDebug())
+        .pipe(replaceWidgets(true))
+        .pipe(babel(transpileConfig.cjs))
+        .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
+    return watchTask;
+};
+watchJsTask.displayName = 'transpile JS watch';
+
+const watchTsTask = () => {
+    const patchesToWatch = TS_OUTPUT_SRC.map((pathToWatch) => path.resolve(__dirname, '../..', pathToWatch));
+
+    const compiler = createTsCompiler(TS_COMPILER_CONFIG);
+    compiler.watchTsAsync();
+
+    return watch(patchesToWatch)
+        .on('ready', () => console.log('transpile TS is watching for changes...'))
         .on('change', (path) => {
-            gulp.src(path)
+            return gulp.src(path)
                 .pipe(babel(transpileConfig.tsCjs))
                 .pipe(writeFilePipe((filePath) => replaceArtifactPath(filePath, ctx.TS_OUT_PATH, ctx.TRANSPILED_PATH)))
                 .pipe(writeFilePipe((filePath) => replaceArtifactPath(filePath, ctx.TS_OUT_PATH, ctx.TRANSPILED_RENOVATION_PATH)))
                 .pipe(writeFilePipe((filePath) => replaceArtifactPath(filePath, ctx.TS_OUT_PATH, ctx.TRANSPILED_PROD_RENOVATION_PATH)));
-        });
-});
+        }
+        );
 
-gulp.task('transpile-watch', gulp.series(
-    () => {
-        const watchTask = watch(src)
-            .on('ready', () => console.log('transpile task is watching for changes...'))
-            .pipe(plumber({
-                errorHandler: notify
-                    .onError('Error: <%= error.message %>')
-                    .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
-            }));
-        watchTask
-            .pipe(babel(transpileConfig.cjs))
-            .pipe(gulp.dest(ctx.TRANSPILED_PATH));
-        watchTask
-            .pipe(replaceWidgets(true))
-            .pipe(babel(transpileConfig.cjs))
-            .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
-        watchTask
-            .pipe(removeDebug())
-            .pipe(replaceWidgets(true))
-            .pipe(babel(transpileConfig.cjs))
-            .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
-        return watchTask;
-    }
-));
+};
+watchTsTask.displayName = 'transpile TS watch';
+
+gulp.task('transpile-watch', gulp.parallel(watchJsTask, watchTsTask));
+
+gulp.task('transpile-clean', async() => {
+    await del(TS_OUTPUT_BASE_DIR, { force: true });
+});
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>
     gulp
