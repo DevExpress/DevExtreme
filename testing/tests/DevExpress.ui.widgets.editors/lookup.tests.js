@@ -2049,6 +2049,20 @@ QUnit.module('options', {
         $clearButton = getClearButton(lookup);
         assert.notOk($clearButton, 'clearButton is not rendered after option runtime change');
     });
+
+    QUnit.test('user inputAttr should set attributes to lookup', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            inputAttr: { custom: true },
+        }).dxLookup('instance');
+
+        const $field = lookup.$element().find(`.${LOOKUP_FIELD_CLASS}`);
+
+        assert.strictEqual($field.attr('custom'), 'true', 'custom attribute is set correctly');
+
+        lookup.option({ inputAttr: { custom: null } });
+
+        assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
+    });
 });
 
 QUnit.module('popup options', {
@@ -3351,28 +3365,94 @@ if(devices.real().deviceType === 'desktop') {
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
-                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+                let listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'listbox',
+                    tabindex: '0',
+                    'aria-label': 'No data to display',
+                };
+
+                let fieldAttributes = {
+                    role: 'combobox',
+                    tabindex: '0',
+                    'aria-owns': helper.widget._popupContentId,
+                    'aria-expanded': 'true',
+                    'aria-controls': helper.widget._listId
+                };
+
+                let widgetAttributes = {
+                    'aria-owns': helper.widget._popupContentId,
+                };
+
+                let popupContentAttributes = {
+                    id: helper.widget._popupContentId,
+                };
+
+                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($field, fieldAttributes, 'field');
+                helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
+
                 if($input.length) {
-                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' };
+                    const expectedAttributes = {
+                        autocomplete: 'off',
+                        type: 'text',
+                        spellcheck: 'false',
+                        tabindex: '0',
+                        role: 'textbox',
+                        'aria-label': 'Search',
+                    };
+
                     if(this.isMac) {
                         expectedAttributes.placeholder = ' ';
                     }
+
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
-                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+
+                listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'listbox',
+                    tabindex: '0',
+                    'aria-label': 'No data to display',
+                };
+
+                fieldAttributes = {
+                    role: 'combobox',
+                    tabindex: '0',
+                    'aria-owns': helper.widget._popupContentId,
+                    'aria-expanded': 'true',
+                    'aria-controls': helper.widget._listId,
+                };
+
+                widgetAttributes = {
+                    'aria-owns': helper.widget._popupContentId,
+                };
+
+                popupContentAttributes = {
+                    id: helper.widget._popupContentId,
+                };
+
+                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($field, fieldAttributes, 'field');
+                helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
+
                 if($input.length) {
-                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' };
+                    const expectedAttributes = {
+                        autocomplete: 'off',
+                        type: 'text',
+                        spellcheck: 'false',
+                        role: 'textbox',
+                        'aria-label': 'Search',
+                    };
+
                     if(this.isMac) {
                         expectedAttributes.placeholder = ' ';
                     }
+
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
             });

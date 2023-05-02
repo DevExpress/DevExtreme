@@ -195,6 +195,10 @@ testComponentDefaults(DateRangeBox,
         onCopy: null,
         onPaste: null,
         onEnterKey: null,
+        startDateInputAttr: {},
+        startDateName: '',
+        endDateInputAttr: {},
+        endDateName: '',
     }
 );
 

@@ -2,6 +2,7 @@ import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import { extend } from '../../../core/utils/extend';
 import { isSameDateArrays } from '../ui.date_range.utils';
+import { isFunction } from '../../../core/utils/type';
 
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
@@ -42,7 +43,14 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _getWidgetOptions() {
+        let { disabledDates } = this.dateRangeBox.option();
+
+        disabledDates = isFunction(disabledDates)
+            ? this._injectComponent(disabledDates)
+            : disabledDates;
+
         return extend(super._getWidgetOptions(), {
+            disabledDates,
             values: this.dateRangeBox.option('value'),
             selectionMode: 'range',
             viewsCount: 2,
@@ -50,6 +58,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
             _allowChangeSelectionOrder: true,
             _currentSelection: 'startDate',
         });
+    }
+
+    _injectComponent(func) {
+        return (params) => func(extend(params, { component: this.dateRangeBox }));
     }
 
     getKeyboardListener() {
@@ -71,6 +83,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
+        if(!this.isStartDateBoxActive()) {
+            this.setActiveStartDateBox();
+        }
+
         if(isSameDateArrays(value, previousValue)) {
             return;
         }
@@ -95,6 +111,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 this.dateRangeBox.updateValue(value);
             }
         }
+    }
+
+    isStartDateBoxActive() {
+        return this.dateBox.$element().hasClass('dx-start-datebox');
     }
 
     _closeDropDownByEnter() {
