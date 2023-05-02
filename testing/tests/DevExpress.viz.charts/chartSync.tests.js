@@ -169,13 +169,13 @@ const environment = {
             return new StubTooltip(parameters);
         });
 
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
+        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });
         });
 
-        validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
+        validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
             return { arg: data || [] };
         });
     },
@@ -218,7 +218,7 @@ const environment = {
         const spyLayoutManager = layoutManagerModule.LayoutManager;
 
         vizUtils.updatePanesCanvases.restore();
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes) {
             panes[0].canvas = rect;
         });
 
