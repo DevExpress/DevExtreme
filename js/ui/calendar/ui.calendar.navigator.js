@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import Button from '../button';
+import { isMaterial } from '../themes';
 
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
@@ -17,8 +18,24 @@ const Navigator = Widget.inherit({
         return extend(this.callBase(), {
             onClick: null,
             onCaptionClick: null,
+            type: 'normal',
+            stylingMode: 'outlined',
             text: ''
         });
+    },
+
+    _defaultOptionsRules() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return isMaterial();
+                },
+                options: {
+                    type: 'default',
+                    stylingMode: 'text'
+                }
+            },
+        ]);
     },
 
     _init: function() {
@@ -51,6 +68,8 @@ const Navigator = Widget.inherit({
                 focusStateEnabled: false,
                 icon: 'chevronleft',
                 onClick: function(e) { that._clickAction({ direction: -direction, event: e }); },
+                type: this.option('type'),
+                stylingMode: this.option('stylingMode'),
                 integrationOptions: {}
             });
 
@@ -63,6 +82,8 @@ const Navigator = Widget.inherit({
                 focusStateEnabled: false,
                 icon: 'chevronright',
                 onClick: function(e) { that._clickAction({ direction: direction, event: e }); },
+                type: this.option('type'),
+                stylingMode: this.option('stylingMode'),
                 integrationOptions: {}
             });
 
@@ -74,6 +95,8 @@ const Navigator = Widget.inherit({
             Button, {
                 focusStateEnabled: false,
                 onClick: function(e) { that._captionClickAction({ event: e }); },
+                type: this.option('type'),
+                stylingMode: this.option('stylingMode'),
                 integrationOptions: {}
             });
 

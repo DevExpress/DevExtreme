@@ -24,41 +24,32 @@
 }
 
 .dx-calendar-navigator {
-  position: relative;
-  width: 100%;
-
-  .dx-button {
-    position: absolute;
-
-    &.dx-calendar-disabled-navigator-link {
-      visibility: hidden;
-    }
-  }
+  display: flex;
+  justify-content: space-between;
+  direction: ltr;
 
   .dx-calendar-caption-button {
-    text-decoration: none;
-  }
-}
-
-.dx-calendar-navigator-previous-view,
-.dx-calendar-navigator-next-view {
-  background: none;
-
-  &.dx-button {
-    margin: 0 1px;
+    flex-grow: 1;
   }
 
-  .dx-button-content {
-    padding: 0;
+  .dx-button {
+    .dx-button-text {
+      text-transform: none;
+    }
+
+    &.dx-state-disabled {
+      opacity: 1;
+
+      .dx-button-content {
+        opacity: 0.5;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-hover {
+      z-index: 1;
+    }
   }
-}
-
-.dx-calendar-navigator-previous-view {
-  left: 0;
-}
-
-.dx-calendar-navigator-next-view {
-  right: 0;
 }
 
 .dx-calendar-body {
@@ -103,10 +94,6 @@
   thead th {
     @include dx-overflow();
   }
-}
-
-.dx-calendar-cell {
-  white-space: normal;
 }
 
 .dx-calendar-contoured-date {

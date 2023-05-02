@@ -1734,7 +1734,7 @@ QUnit.module('Options', {
         this.calendar.option('showTodayButton', true);
 
         let $todayButton = getTodayButton();
-        assert.strictEqual($todayButton.text, 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
+        assert.strictEqual($($todayButton).text(), 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
 
         this.calendar.option('showTodayButton', false);
         $todayButton = getTodayButton();
@@ -4151,6 +4151,12 @@ QUnit.module('Aria accessibility', {
 
         assert.notEqual($cell.attr('id'), undefined, 'id exists');
         assert.equal($element.attr('aria-activedescendant'), $cell.attr('id'), 'cell\'s id and element\'s activedescendant are equal');
+    });
+
+    QUnit.test('calendar should have role=application attribute', function(assert) {
+        this.$element.dxCalendar();
+
+        assert.strictEqual(this.$element.attr('role'), 'application');
     });
 
     QUnit.test('onContouredChanged action on init', function(assert) {
