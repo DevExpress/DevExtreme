@@ -524,6 +524,10 @@ const arrayQueryImpl = function(iter, queryOptions) {
         iter = new ArrayIterator(iter);
     }
 
+    if(queryOptions.compareOptions) {
+        iter.compareOptions = queryOptions.compareOptions;
+    }
+
     const handleError = function(error) {
         const handler = queryOptions.errorHandler;
         if(handler) {
