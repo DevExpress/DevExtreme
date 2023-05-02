@@ -83,9 +83,9 @@
         "dxNumberBox-invalidValueMessage": "Значение должно быть числом",
         "dxNumberBox-noDataText": "Нет данных",
 
-        "dxDataGrid-emptyHeaderWithColumnChooserText": "Используйте ${0} чтобы отобразить столбцы",
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Используйте {0} чтобы отобразить столбцы",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетащите столбец из панели группировки",
-        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Используйте ${0} или перетащите столбец из панели группировки",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Используйте {0} или перетащите столбец из панели группировки",
         "dxDataGrid-emptyHeaderColumnChooserText": "панель выбора столбцов",
         "dxDataGrid-columnChooserTitle": "Выбор столбцов",
         "dxDataGrid-columnChooserEmptyText": "Перетащите столбец сюда, чтобы скрыть его",
