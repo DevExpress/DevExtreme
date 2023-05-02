@@ -12,9 +12,15 @@
     [enabled]="true"
     [mode]="columnChooserModes[1].key"
   >
+    <dxo-position
+      my="right top"
+      at="right bottom"
+      of=".dx-datagrid-column-chooser-button"
+    ></dxo-position>
+
     <dxo-search
       [enabled]="searchEnabled"
-      [editorOptions]="{ placeholder: 'Search column' }"
+      [editorOptions]="editorOptions"
     ></dxo-search>
 
     <dxo-selection
@@ -30,7 +36,7 @@
   <dxi-column dataField="City"></dxi-column>
   <dxi-column dataField="State"></dxi-column>
   <dxi-column caption="Contacts">
-    <dxi-column dataField="Mobile_Phone" [allowHiding]="false"></dxi-column>
+    <dxi-column dataField="MobilePhone" [allowHiding]="false"></dxi-column>
     <dxi-column dataField="Email"></dxi-column>
     <dxi-column dataField="Skype" [visible]="false"></dxi-column>
   </dxi-column>
@@ -39,41 +45,47 @@
 
 <div class="options">
   <div class="caption">Options</div>
-  <div class="option">
-    <span>Column chooser mode</span>
-    <dx-select-box
-      id="columnChooserMode"
-      [items]="columnChooserModes"
-      [(value)]="columnChooser.mode"
-      valueExpr="key"
-      displayExpr="name"
-    ></dx-select-box>
+
+  <div class="selectboxes-container">
+    <div class="option">
+      <span>Column chooser mode</span>
+      <dx-select-box
+        id="columnChooserMode"
+        [items]="columnChooserModes"
+        [(value)]="columnChooser.mode"
+        valueExpr="key"
+        displayExpr="name"
+      ></dx-select-box>
+    </div>
   </div>
-  <div class="option">
-    <dx-check-box
-      text="Search enabled"
-      [(value)]="searchEnabled"
-    ></dx-check-box>
-  </div>
-  <div class="option">
-    <dx-check-box
-      text="Allow select all"
-      [(value)]="allowSelectAll"
-      [disabled]="columnChooser.mode === 'dragAndDrop'"
-    ></dx-check-box>
-  </div>
-  <div class="option">
-    <dx-check-box
-      text="Select by click"
-      [(value)]="selectByClick"
-      [disabled]="columnChooser.mode === 'dragAndDrop'"
-    ></dx-check-box>
-  </div>
-  <div class="option">
-    <dx-check-box
-      text="Recursive"
-      [(value)]="recursive"
-      [disabled]="columnChooser.mode === 'dragAndDrop'"
-    ></dx-check-box>
+
+  <div class="checkboxes-container">
+    <div class="option">
+      <dx-check-box
+        text="Search enabled"
+        [(value)]="searchEnabled"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Allow select all"
+        [(value)]="allowSelectAll"
+        [disabled]="columnChooser.mode === 'dragAndDrop'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Select by click"
+        [(value)]="selectByClick"
+        [disabled]="columnChooser.mode === 'dragAndDrop'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Recursive"
+        [(value)]="recursive"
+        [disabled]="columnChooser.mode === 'dragAndDrop'"
+      ></dx-check-box>
+    </div>
   </div>
 </div>

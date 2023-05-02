@@ -37,8 +37,8 @@
         <DxHeaderFilter>
           <DxSearch
             :enabled="true"
-            :search-expr="['City', 'State']"
-            :editor-options="{ placeholder: 'Search city or state' }"
+            :search-expr="searchExpr"
+            :editor-options="editorOptions"
           />
         </DxHeaderFilter>
       </DxColumn>
@@ -66,6 +66,8 @@ export default {
     return {
       employees,
       expandedRowKeys: [1],
+      searchExpr: ['City', 'State'],
+      editorOptions: { placeholder: 'Search city or state' },
     };
   },
 };

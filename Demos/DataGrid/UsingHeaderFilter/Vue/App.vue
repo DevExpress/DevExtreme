@@ -35,8 +35,8 @@
         <DxHeaderFilter>
           <DxSearch
             :enabled="true"
-            :search-expr="['City', 'State']"
-            :editor-options="{ placeholder: 'Search city or state' }"
+            :search-expr="searchExpr"
+            :editor-options="editorOptions"
           />
         </DxHeaderFilter>
       </DxColumn>
@@ -63,6 +63,8 @@ export default {
   data() {
     return {
       employees,
+      searchExpr: ['City', 'State'],
+      editorOptions: { placeholder: 'Search city or state' },
     };
   },
 };

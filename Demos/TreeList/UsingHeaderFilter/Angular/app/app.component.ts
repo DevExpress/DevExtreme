@@ -21,9 +21,15 @@ export class AppComponent {
 
   showHeaderFilter: boolean;
 
+  editorOptions: any;
+
+  searchExpr: any;
+
   constructor(service: Service) {
     this.employees = service.getEmployees();
     this.showHeaderFilter = true;
+    this.editorOptions = { placeholder: 'Search city or state' };
+    this.searchExpr = ['City', 'State'];
   }
 }
 

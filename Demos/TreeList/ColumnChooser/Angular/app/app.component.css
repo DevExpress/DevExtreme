@@ -25,3 +25,20 @@
   display: inline-block;
   vertical-align: middle;
 }
+
+::ng-deep .selectbox-container {
+  display: flex;
+}
+
+::ng-deep .checkboxes-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+::ng-deep .checkboxes-container > .option {
+  margin: 10px 30px 10px 0;
+  width: 200px;
+}

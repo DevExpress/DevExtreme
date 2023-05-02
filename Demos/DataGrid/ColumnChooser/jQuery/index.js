@@ -32,6 +32,11 @@ $(() => {
     columnChooser: {
       enabled: true,
       mode: columnChooserModes[1].key,
+      position: {
+        my: 'right top',
+        at: 'right bottom',
+        of: '.dx-datagrid-column-chooser-button',
+      },
       search: {
         enabled: true,
         editorOptions: { placeholder: 'Search column' },

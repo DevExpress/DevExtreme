@@ -36,6 +36,11 @@ $(() => {
     columnChooser: {
       mode: columnChooserModes[1].key,
       enabled: true,
+      position: {
+        my: 'right top',
+        at: 'right bottom',
+        of: '.dx-treelist-column-chooser-button',
+      },
       search: {
         enabled: true,
         editorOptions: { placeholder: 'Search column' },

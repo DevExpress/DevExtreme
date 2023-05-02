@@ -133,7 +133,8 @@
             "MvcAdditionalFiles": [
               "/Models/DataService/Sale.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "Horizontal Virtual Scrolling",
@@ -423,7 +424,8 @@
               "/Models/OrderWithDelivery.cs",
               "/Models/SampleData/OrdersWithDelivery.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "Filtering API",
@@ -1017,7 +1019,8 @@
             "Title": "OLAP Data Source",
             "Name": "OLAPDataSource",
             "Widget": "PivotGrid",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "Web API Service",
@@ -1036,7 +1039,8 @@
             "Title": "Integrated Field Chooser",
             "Name": "IntegratedFieldChooser",
             "Widget": "PivotGrid",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "Standalone Field Chooser",
@@ -1049,7 +1053,8 @@
               "/Models/Layout.cs",
               "/Models/SampleData/Layouts.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           }
         ]
       },
@@ -1072,7 +1077,8 @@
             "Title": "Header Filter",
             "Name": "HeaderFilter",
             "Widget": "PivotGrid",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "Running Totals",
@@ -1122,7 +1128,8 @@
             "Title": "Remote Virtual Scrolling",
             "Name": "RemoteVirtualScrolling",
             "Widget": "PivotGrid",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "State Persistence",
