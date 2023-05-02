@@ -24,6 +24,7 @@ import { isCommandKeyPressed } from '../../events/utils/index';
 import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
 import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
+import { isMaterial } from '../themes';
 
 // STYLE calendar
 
@@ -672,6 +673,8 @@ const Calendar = Editor.inherit({
         this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
 
+        this.setAria('role', 'application');
+
         this._moveToClosestAvailableDate();
     },
 
@@ -1052,13 +1055,13 @@ const Calendar = Editor.inherit({
         if(showTodayButton) {
             const $todayButton = this._createComponent($('<div>'),
                 Button, {
-                    focusStateEnabled: false,
+                    focusStateEnabled: this.option('focusStateEnabled'),
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    onClick: (function(args) {
+                    onClick: (args) => {
                         this._toTodayView(args);
-                    }).bind(this),
-                    type: 'default',
-                    stylingMode: 'text',
+                    },
+                    type: isMaterial() ? 'default' : 'normal',
+                    stylingMode: isMaterial() ? 'text' : 'contained',
                     integrationOptions: {}
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);

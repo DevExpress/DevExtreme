@@ -12,7 +12,6 @@ $generic-calendar-navigator-vertical-padding: null !default;
 $generic-calendar-navigator-height: null !default;
 $generic-calendar-header-bottom-padding: null !default;
 $generic-calendar-cell-horizontal-padding: null !default;
-$generic-nav-button-width: null !default;
 
 @if $size == "default" {
   $generic-calendar-cell-font-size: 15px !default;
@@ -26,7 +25,6 @@ $generic-nav-button-width: null !default;
 
   $generic-calendar-header-bottom-padding: 6px !default;
   $generic-calendar-cell-horizontal-padding: 8px !default;
-  $generic-nav-button-width: 36px !default;
 }
 
 @else if $size == "compact" {
@@ -41,5 +39,4 @@ $generic-nav-button-width: null !default;
 
   $generic-calendar-header-bottom-padding: 2px !default;
   $generic-calendar-cell-horizontal-padding: 3px !default;
-  $generic-nav-button-width: 30px !default;
 }
