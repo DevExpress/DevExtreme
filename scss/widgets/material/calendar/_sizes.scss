@@ -9,7 +9,7 @@ $material-calendar-cell-base-size: null !default;
 
 @if $size == "default" {
   $material-calendar-legacy-height: 264.4px !default;
-  $material-calendar-legacy-width: 226 !default;
+  $material-calendar-legacy-width: 226px !default;
 
   $material-calendar-cell-base-size: 28px !default;
 }

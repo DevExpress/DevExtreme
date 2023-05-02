@@ -13,10 +13,10 @@ $material-calendar-cell-hover-bg-color: color.change($base-accent, $alpha: 0.24)
 $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32) !default;
 
 .dx-calendar {
-  width: $material-calendar-legacy-width; // $material-calendar-width; width: 226px;
-  min-width: 226px; // $material-calendar-width; min-width: 226px;
-  height: $material-calendar-legacy-height; // $material-calendar-height + 20px; // 242 without today button 36 + 8gap height: 264.4px;
-  min-height: 242px; // $material-calendar-height + 20px; min-height: 264.4px;
+  width: $material-calendar-legacy-width;
+  min-width: $material-calendar-legacy-width;
+  height: $material-calendar-legacy-height;
+  min-height: $material-calendar-legacy-height;
   background-color: $calendar-bg;
   border: 1px solid transparent;
 }
