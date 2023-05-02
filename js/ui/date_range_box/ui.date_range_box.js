@@ -538,7 +538,7 @@ class DateRangeBox extends Widget {
     }
 
     _optionChanged(args) {
-        const { name, value, previousValue } = args;
+        const { name, fullName, value, previousValue } = args;
 
         switch(name) {
             case 'acceptCustomValue':
@@ -556,15 +556,20 @@ class DateRangeBox extends Widget {
                 break;
             case 'applyButtonText':
             case 'applyValueMode':
-            case 'calendarOptions':
             case 'cancelButtonText':
+            case 'deferRendering':
             case 'disabledDates':
+            case 'opened':
             case 'todayButtonText':
                 this.getStartDateBox().option(name, value);
                 break;
             case 'buttons':
                 this._cleanButtonContainers();
                 this._renderButtonsContainer();
+                break;
+            case 'calendarOptions':
+            case 'dropDownOptions':
+                this.getStartDateBox().option(fullName, value);
                 break;
             case 'pickerType': {
                 const pickerType = this._getPickerType();
@@ -625,11 +630,6 @@ class DateRangeBox extends Widget {
                 break;
             case 'onValueChanged':
                 this._createValueChangeAction();
-                break;
-            case 'opened':
-            case 'deferRendering':
-            case 'dropDownOptions':
-                this.getStartDateBox().option(name, value);
                 break;
             case 'onOpened':
             case 'onClosed':
