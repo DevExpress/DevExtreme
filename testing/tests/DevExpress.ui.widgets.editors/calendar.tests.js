@@ -4153,6 +4153,12 @@ QUnit.module('Aria accessibility', {
         assert.equal($element.attr('aria-activedescendant'), $cell.attr('id'), 'cell\'s id and element\'s activedescendant are equal');
     });
 
+    QUnit.test('calendar should have role=application attribute', function(assert) {
+        this.$element.dxCalendar();
+
+        assert.strictEqual(this.$element.attr('role'), 'application');
+    });
+
     QUnit.test('onContouredChanged action on init', function(assert) {
         assert.expect(2);
 

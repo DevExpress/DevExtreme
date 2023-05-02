@@ -283,12 +283,12 @@ QUnit.module('Button markup', function() {
             assert.strictEqual($element.attr('aria-label'), 'new custom value', 'custom aria label was overridden via elementAttr option');
         });
 
-        QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
+        QUnit.test('aria-label should be empty if icon is set as a base64 (T281454)', function(assert) {
             const $element = $('#button').dxButton({
                 icon: 'data:image/png;base64,'
             });
 
-            assert.equal($element.attr('aria-label'), 'Base64', 'aria label is not exist');
+            assert.equal($element.attr('aria-label'), undefined, 'aria label does not exist');
         });
 
         QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {

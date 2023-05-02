@@ -5,7 +5,9 @@ import dateUtils from '../../../../js/core/utils/date';
 
 const CLASS = {
   cell: 'dx-calendar-cell',
+  contouredCell: 'dx-calendar-contoured-date',
 };
+
 export default class CalendarView extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxCalendarView'; }

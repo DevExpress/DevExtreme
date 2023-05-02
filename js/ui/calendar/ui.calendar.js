@@ -673,6 +673,8 @@ const Calendar = Editor.inherit({
         this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
 
+        this.setAria('role', 'application');
+
         this._moveToClosestAvailableDate();
     },
 
@@ -1058,11 +1060,11 @@ const Calendar = Editor.inherit({
         if(showTodayButton) {
             const $todayButton = this._createComponent($('<div>'),
                 Button, {
-                    focusStateEnabled: false,
+                    focusStateEnabled: this.option('focusStateEnabled'),
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    onClick: (function(args) {
+                    onClick: (args) => {
                         this._toTodayView(args);
-                    }).bind(this),
+                    },
                     type: isMaterial() ? 'default' : 'normal',
                     stylingMode: isMaterial() ? 'text' : 'contained',
                     integrationOptions: {}
