@@ -46,7 +46,7 @@ QUnit.module('Width', () => {
         }
 
         setContainerWidth(width) {
-            this.$container[0].setAttribute('style', `width:${width}px`);
+            this.$container[0].style = `width: ${width}px`;
         }
 
         _getTabItem(index) {
@@ -168,7 +168,12 @@ QUnit.module('Width', () => {
     });
 
     QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', function(assert) {
-        const styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
+        const styles = `
+            <style nonce="qunit-test">
+                .dx-tabs { max-width: 413px; }
+                .dx-tab { width: 100px; }
+            </style>
+        `;
 
         $('#qunit-fixture').html(styles);
 
@@ -196,7 +201,12 @@ QUnit.module('Width', () => {
     });
 
     QUnit.test('Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }', function(assert) {
-        const styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
+        const styles = `
+            <style nonce="qunit-test">
+                .dx-tabs { max-width: 380px; }
+                .dx-tab { width: 100px; }
+            </style>
+        `;
 
         $('#qunit-fixture').html(styles);
 

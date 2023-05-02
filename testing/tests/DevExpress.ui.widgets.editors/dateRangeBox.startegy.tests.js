@@ -90,25 +90,65 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
         assert.deepEqual(startDateBox._strategy.widgetOption('values'), [null, null]);
     });
 
-    QUnit.test('StartDateBox & EndDateBox should have correct date values after select start date in calendar', function(assert) {
-        this.reinit({
-            applyValueMode: 'instantly',
-            value: [null, null],
+    [
+        [null, null],
+        [new Date(2021, 9, 17), null],
+        [null, new Date(2021, 10, 25)],
+        [new Date(2021, 9, 17), new Date(2021, 10, 25)]
+    ].forEach((initialValue) => {
+        QUnit.test(`StartDateBox & EndDateBox should have correct date values after select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+            this.reinit({
+                applyValueMode: 'instantly',
+                value: initialValue,
+            });
+
+            this.instance.open();
+
+            assert.deepEqual(this.instance.option('value'), initialValue, 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), initialValue, 'calendar value is correct');
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $startDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, initialValue[1]], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, initialValue[1]], 'calendar value is correct');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $endDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
         });
 
-        this.instance.open();
+        QUnit.test(`onValueChanged should be called once on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+            const onValueChangedHandler = sinon.spy();
 
-        assert.deepEqual(this.startDateBox.option('value'), null, 'startDateBox value is correct');
-        assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
-        assert.deepEqual(this.getCalendar().option('values'), [null, null], 'calendar value is correct');
+            this.reinit({
+                applyValueMode: 'instantly',
+                value: initialValue,
+                onValueChanged: onValueChangedHandler,
+                opened: true,
+            });
 
-        const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
-        const cellDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
-        $cell.trigger('dxclick');
+            const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            $cell.trigger('dxclick');
 
-        assert.deepEqual(this.startDateBox.option('value'), cellDate, 'startDateBox value is correct');
-        assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
-        assert.deepEqual(this.getCalendar().option('values'), [cellDate, null], 'calendar value is correct');
+            assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select start date');
+            onValueChangedHandler.reset();
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            $endDateCell.trigger('dxclick');
+
+            assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select end date');
+        });
     });
 
     QUnit.test('DateRangeBox should not be closed after select start date in calendar', function(assert) {
@@ -136,6 +176,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
 
             this.instance.open();
 
+            assert.deepEqual(this.instance.option('value'), [null, null], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), null, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
             assert.deepEqual(this.getCalendar().option('values'), [null, null], 'calendar value is correct');
@@ -148,6 +189,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
             const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
             (cellElement === 'td' ? $endDateCell : $endDateCell.find(cellElement)).trigger('dxclick');
 
+            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
             assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
             assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
@@ -171,6 +213,43 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
         $endDateCell.trigger('dxclick');
 
         assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+    });
+
+    [
+        { field: 'startDate', index: 0 },
+        { field: 'endDate', index: 1 },
+    ].forEach(({ field, index }) => {
+        QUnit.test(`StartDate value should be choosed first after opening by click on ${field} field if openOnFieldClick is true`, function(assert) {
+            this.reinit({
+                applyValueMode: 'instantly',
+                value: [null, null],
+                openOnFieldClick: true,
+            });
+
+            $(this.instance.field()[index]).trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $startDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, null], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $endDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+
+            assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        });
     });
 
     QUnit.testInActiveWindow('DateRangeBox & End DateBox should have focus class after select end date', function(assert) {
@@ -199,5 +278,24 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly', moduleConfig, 
         assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
         assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
+    });
+
+    QUnit.test('Popup should not break after selecting values by click and updating min option that triggers invalidate', function(assert) {
+        this.reinit({
+            applyValueMode: 'instantly',
+            value: [null, null],
+            opened: true,
+        });
+
+        const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
+
+        $startDateCell.trigger('dxclick');
+        $endDateCell.trigger('dxclick');
+
+        this.instance.option('min', new Date('2000/01/01'));
+        this.instance.open();
+
+        assert.strictEqual(this.instance.option('opened'), true);
     });
 });

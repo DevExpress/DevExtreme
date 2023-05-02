@@ -708,15 +708,25 @@ const LayoutManager = Widget.inherit({
     },
 
     _createComponent: function($editor, type, editorOptions) {
-        const that = this;
         const readOnlyState = this.option('readOnly');
-        const instance = that.callBase($editor, type, editorOptions);
+        let hasEditorReadOnly = Object.hasOwn(editorOptions, 'readOnly');
+        const instance = this.callBase($editor, type, {
+            ...editorOptions,
+            readOnly: !hasEditorReadOnly ? readOnlyState : editorOptions.readOnly
+        });
 
-        readOnlyState && instance.option('readOnly', readOnlyState);
+        let isChangeByForm = false;
+        instance.on('optionChanged', (args) => {
+            if(args.name === 'readOnly' && !isChangeByForm) {
+                hasEditorReadOnly = true;
+            }
+        });
 
-        that.on('optionChanged', function(args) {
-            if(args.name === 'readOnly' && !isDefined(editorOptions.readOnly)) {
+        this.on('optionChanged', function(args) {
+            if(args.name === 'readOnly' && !hasEditorReadOnly) {
+                isChangeByForm = true;
                 instance.option(args.name, args.value);
+                isChangeByForm = false;
             }
         });
 

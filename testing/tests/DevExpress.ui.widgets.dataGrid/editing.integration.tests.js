@@ -773,7 +773,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(1, 0)).text(), '2', 'second row cell text');
     });
 
-    QUnit.test('Edit row with the underscore template when the editForm mode is enabled', function(assert) {
+    QUnit.test('Edit row with the jquery template when the editForm mode is enabled', function(assert) {
         // arrange
         const data = [{ firstName: 'Super', lastName: 'Man' }, { firstName: 'Super', lastName: 'Zi' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -793,7 +793,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
+        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the jquery template is rendered correctly');
     });
 
     // T386755
@@ -7917,6 +7917,49 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowInfo.visibleIndex), 'new row visible after adding repeatedly');
             checkNeighboringRow();
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
+        });
+    });
+
+    ['pageBottom', 'pageTop'].forEach(newRowPosition => {
+        QUnit.test(`Adding a new row should not throw error in popup mode (newRowPosition is ${newRowPosition} and rowRenderingMode: virtual)`, function(assert) {
+            // arrange
+            const getData = () => {
+                const items = [];
+                for(let i = 0; i < 100; i += 1) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const dataGrid = createDataGrid({
+                height: 200,
+                dataSource: getData(),
+                keyExpr: 'id',
+                editing: {
+                    newRowPosition,
+                },
+                paging: {
+                    pageSize: 10
+                },
+                scrolling: {
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                masterDetail: {
+                    enabled: true,
+                    autoExpandAll: true,
+                }
+            });
+
+            this.clock.tick(400);
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(400);
+
+            assert.ok(true, 'no errors');
         });
     });
 });

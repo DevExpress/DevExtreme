@@ -14,7 +14,7 @@ const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
 
-fixture.disablePageReloads`DateRangeBox render`
+fixture.disablePageReloads.skip`DateRangeBox render`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {

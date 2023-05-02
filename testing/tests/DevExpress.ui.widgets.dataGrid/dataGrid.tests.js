@@ -1,5 +1,3 @@
-import 'underscore';
-
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
 import Class from 'core/class';

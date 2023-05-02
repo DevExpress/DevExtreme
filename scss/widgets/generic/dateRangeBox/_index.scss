@@ -57,8 +57,11 @@ $shadow-top: 0 (-$generic-base-border-width);
   }
 }
 
-.dx-start-datebox {
-  margin-left: $generic-daterangebox-start-datebox-padding;
+.dx-daterangebox-outlined,
+.dx-daterangebox-filled {
+  .dx-start-datebox {
+    margin-left: $generic-daterangebox-start-datebox-padding;
+  }
 }
 
 .dx-daterangebox-separator {

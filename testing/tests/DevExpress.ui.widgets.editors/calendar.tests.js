@@ -469,7 +469,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'May 2015 - June 2015',
+            expectedText: 'May 2015June 2015',
             isLeftSwipe: false
         },
         {
@@ -479,7 +479,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'July 2015 - August 2015',
+            expectedText: 'July 2015August 2015',
             isLeftSwipe: true
         },
     ].forEach(({ viewsCount, expectedText, isLeftSwipe }) => {
@@ -1734,7 +1734,7 @@ QUnit.module('Options', {
         this.calendar.option('showTodayButton', true);
 
         let $todayButton = getTodayButton();
-        assert.strictEqual($todayButton.text, 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
+        assert.strictEqual($($todayButton).text(), 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
 
         this.calendar.option('showTodayButton', false);
         $todayButton = getTodayButton();
@@ -2215,6 +2215,93 @@ QUnit.module('Options', {
                 const selectedRange = getCurrentViewInstance(this.calendar).option('range');
 
                 assert.ok(selectedRange.length < 240);
+            });
+
+            [
+                [null, null],
+                [new Date(2021, 9, 17), null],
+                [null, new Date(2021, 10, 25)],
+                [new Date(2021, 9, 17), new Date(2021, 10, 25)]
+            ].forEach((values) => {
+                QUnit.test(`Click by cell should change startDate value if _allowChangeSelectionOrder is true and _currentSelection is startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'startDate',
+                    });
+
+                    let $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                    let startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+
+                    $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+                });
+
+                QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    let $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(25);
+                    let endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+
+                    $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+                });
+
+                QUnit.test(`Click by cell should change endDate then startDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate then startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    const $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+
+                    this.calendar.option('_currentSelection', 'startDate');
+
+                    const $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(10);
+                    const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, endCellDate]);
+                });
+            });
+
+            QUnit.test('Range should not be displayed on cell hover if only startDate is defined and _allowChangeSelectionOrder is true and _currentSelection is startDate', function(assert) {
+                this.reinit({
+                    values: ['2023/04/01', null],
+                    selectionMode: 'range',
+                    _allowChangeSelectionOrder: true,
+                    _currentSelection: 'startDate',
+                });
+
+                const $cellToHover = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+
+                $cellToHover.trigger('mouseenter');
+
+                assert.notOk($cellToHover.hasClass(CALENDAR_RANGE_DATE_CLASS));
             });
         });
     });
@@ -4064,6 +4151,12 @@ QUnit.module('Aria accessibility', {
 
         assert.notEqual($cell.attr('id'), undefined, 'id exists');
         assert.equal($element.attr('aria-activedescendant'), $cell.attr('id'), 'cell\'s id and element\'s activedescendant are equal');
+    });
+
+    QUnit.test('calendar should have role=application attribute', function(assert) {
+        this.$element.dxCalendar();
+
+        assert.strictEqual(this.$element.attr('role'), 'application');
     });
 
     QUnit.test('onContouredChanged action on init', function(assert) {

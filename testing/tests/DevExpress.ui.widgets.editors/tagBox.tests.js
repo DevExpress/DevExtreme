@@ -53,12 +53,14 @@ const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
 const TAGBOX_POPUP_WRAPPER_CLASS = 'dx-tagbox-popup-wrapper';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
+const TAGBOX_SELECT_SELECTOR = 'select';
 const FOCUSED_CLASS = 'dx-state-focused';
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 const KEY_ENTER = 'Enter';
 const KEY_DOWN = 'ArrowDown';
 const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 
 const TIME_TO_WAIT = 500;
 
@@ -7637,5 +7639,26 @@ QUnit.module('label integration', () => {
         } finally {
             TagBox.restoreTextEditorLabel();
         }
+    });
+});
+
+QUnit.module('accessibility', () => {
+    QUnit.test('input should have a correct aria-labelledby', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $label = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`);
+
+        assert.equal($input.attr('aria-labelledby'), $label.attr('id'), 'aria-labelledby was set correctly');
+
+        tagBox.option('label', null);
+        assert.equal($input.attr('aria-labelledby'), undefined, 'aria-labelledby was not set');
+    });
+
+    QUnit.test('select should have a correct aria-label', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox();
+        const $select = $tagBox.find(TAGBOX_SELECT_SELECTOR);
+
+        assert.equal($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
     });
 });
