@@ -152,7 +152,7 @@ const environment = {
         this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
             return { arg: data || [] };
         });
     },
