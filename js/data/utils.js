@@ -160,13 +160,14 @@ export const keysEqual = function(keyExpr, key1, key2) {
         let name;
         for(let i = 0; i < names.length; i++) {
             name = names[i];
-            if(!equalByValue(key1[name], key2[name], 0, false)) {
+            if(!equalByValue(key1[name], key2[name], { strict: false })) {
                 return false;
             }
         }
         return true;
     }
-    return equalByValue(key1, key2, 0, false);
+
+    return equalByValue(key1, key2, { strict: false });
 };
 
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
