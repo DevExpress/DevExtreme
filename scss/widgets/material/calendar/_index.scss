@@ -26,6 +26,9 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
   &.dx-button {
     .dx-icon {
       color: $calendar-shevron-icon-color;
+      width: $material-base-icon-size;
+      height: $material-base-icon-size;
+      font-size: $material-base-icon-size;
     }
   }
 }
@@ -60,7 +63,6 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 }
 
 .dx-calendar-cell {
-  text-align: center;
   color: $calendar-color;
 
   .dx-calendar-view-decade &,

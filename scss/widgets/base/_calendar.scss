@@ -71,18 +71,14 @@
     }
   }
 
-  td {
-    cursor: pointer;
-    position: relative;
-  }
-
   thead th {
     @include dx-overflow();
   }
 }
 
 .dx-calendar-cell {
-  text-align: center;
+  cursor: pointer;
+  padding: 0;
 
   span {
     display: inline-flex;
