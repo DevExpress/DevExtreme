@@ -5,22 +5,12 @@
 $generic-calendar-legacy-height: null !default;
 $generic-calendar-legacy-width: null !default;
 
-$generic-calendar-cell-font-size: null !default;
-$generic-calendar-week-number-cell-font-size: null !default;
-$generic-calendar-cell-horizontal-padding: null !default;
-
 @if $size == "default" {
-  $generic-calendar-height: 268.6px;
-  $generic-calendar-width: 282px;
-  $generic-calendar-cell-font-size: 14px !default;
-  $generic-calendar-week-number-cell-font-size: 12px !default;
-  $generic-calendar-cell-horizontal-padding: 8px !default;
+  $generic-calendar-legacy-height: 268.6px;
+  $generic-calendar-legacy-width: 282px;
 }
 
 @else if $size == "compact" {
-  $generic-calendar-height: null 225.4px;
-  $generic-calendar-width: null 232px;
-  $generic-calendar-cell-font-size: 12px !default;
-  $generic-calendar-week-number-cell-font-size: 11px !default;
-  $generic-calendar-cell-horizontal-padding: 3px !default;
+  $generic-calendar-legacy-height: 225.4px;
+  $generic-calendar-legacy-width: 232px;
 }

@@ -9,8 +9,6 @@
 
 // adduse
 
-$material-calendar-base-size: 28px;
-
 $material-calendar-cell-hover-bg-color: color.change($base-accent, $alpha: 0.24) !default;
 $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32) !default;
 
@@ -37,7 +35,7 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
     font-size: 12px;
 
     tr {
-      height: $material-calendar-base-size;
+      height: $material-calendar-cell-base-size;
     }
   }
 
@@ -51,7 +49,7 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 
     .dx-week-number-header {
       color: $calendar-cell-selected-bg;
-      width: $material-calendar-base-size;
+      width: $material-calendar-cell-base-size;
     }
 
     .dx-calendar-week-number-cell {
@@ -82,8 +80,8 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 
   span {
     border-radius: 50%;
-    width: $material-calendar-cell-diameter;
-    height: $material-calendar-cell-diameter;
+    width: $material-calendar-cell-base-size;
+    height: $material-calendar-cell-base-size;
   }
 
   &.dx-calendar-today {

@@ -123,6 +123,7 @@ test('Calendar with multiview rendered correct', async (t) => {
 
     return createWidget('dxCalendar', {
       value: new Date(2021, 9, 17),
+      zoomLevel,
     }, '#calendar');
   });
 
@@ -272,7 +273,6 @@ test('Calendar with disabled dates rendered correct', async (t) => {
       cellOffset += 1;
     }
 
-    await t.debug();
     await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container', shouldTestInCompact: true });
 
     await t

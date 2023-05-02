@@ -5,20 +5,18 @@
 $material-calendar-legacy-height: null !default;
 $material-calendar-legacy-width: null !default;
 
-$material-calendar-cell-diameter: null !default;
-$material-calendar-cell-font-size: 14px !default;
-$material-calendar-cell-horizontal-padding: 8px !default;
+$material-calendar-cell-base-size: null !default;
 
 @if $size == "default" {
   $material-calendar-legacy-height: 264.4px !default;
   $material-calendar-legacy-width: 226 !default;
 
-  $material-calendar-cell-diameter: 28px !default;
+  $material-calendar-cell-base-size: 28px !default;
 }
 
 @else if $size == "compact" {
   $material-calendar-legacy-height: 260.4px !default;
   $material-calendar-legacy-width: 250px !default;
 
-  $material-calendar-cell-diameter: 28px !default;
+  $material-calendar-cell-base-size: 28px !default;
 }
