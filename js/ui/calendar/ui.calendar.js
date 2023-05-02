@@ -673,6 +673,8 @@ const Calendar = Editor.inherit({
         this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
 
+        this.setAria('role', 'application');
+
         this._moveToClosestAvailableDate();
     },
 
