@@ -3,6 +3,7 @@ import config from 'core/config';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
+import { isObject } from 'core/utils/type.js';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1504,6 +1505,17 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         assert.strictEqual(startDateBox.option('calendarOptions.showWeekNumbers'), true);
     });
 
+    QUnit.test('CalendarOptions field should be correctly passed to startDateBox on runtime change', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        this.instance.option('calendarOptions.showWeekNumbers', true);
+
+        const calendarOptions = startDateBox.option('calendarOptions');
+
+        assert.ok(isObject(calendarOptions), 'option is object');
+        assert.strictEqual(calendarOptions.showWeekNumbers, true);
+    });
+
     QUnit.test('DropDownOptions should be passed to startDateBox on init', function(assert) {
         this.reinit({
             dropDownOptions: {
@@ -1522,6 +1534,17 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         this.instance.option('dropDownOptions', { width: 800 });
 
         assert.strictEqual(startDateBox.option('dropDownOptions.width'), 800);
+    });
+
+    QUnit.test('DropDownOptions field should be correctly passed to startDateBox on runtime change', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        this.instance.option('dropDownOptions.hideOnOutsideClick', false);
+
+        const dropDownOptions = startDateBox.option('dropDownOptions');
+
+        assert.ok(isObject(dropDownOptions), 'option is object');
+        assert.strictEqual(dropDownOptions.hideOnOutsideClick, false);
     });
 
     [
