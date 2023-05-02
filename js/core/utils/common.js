@@ -281,10 +281,9 @@ const compareObjects = (object1, object2, depth, options) => {
         return false;
     }
 
+    const keys2Set = new Set(keys2);
     return !keys1.some((key) =>
-        !Object.prototype.hasOwnProperty.call(object2, key)
-        || (Object.prototype.hasOwnProperty.call(object1, key)
-            && !compareByValue(object1[key], object2[key], depth + 1, options))
+        !keys2Set.has(key) || !compareByValue(object1[key], object2[key], depth + 1, options)
     );
 };
 
