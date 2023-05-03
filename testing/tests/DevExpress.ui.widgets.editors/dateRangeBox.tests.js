@@ -881,16 +881,30 @@ QUnit.module('Behavior', moduleConfig, () => {
 
     QUnit.module('startDate > endDate', {
         beforeEach: function() {
+            this.onValueChangedHandler = sinon.stub();
+
             this.testValue = (assert, value) => {
                 assert.deepEqual(this.instance.option('value'), value, 'value is correct');
                 assert.strictEqual(this.instance.option('startDate'), value[0], 'startDate is correct');
                 assert.strictEqual(this.instance.option('endDate'), value[1], 'end is correct');
                 assert.strictEqual(this.instance.getStartDateBox().option('value'), value[0], 'startDateBox value is correct');
                 assert.strictEqual(this.instance.getEndDateBox().option('value'), value[1], 'endDateBox value is correct');
+
+                const { value: eventValue } = this.onValueChangedHandler.getCall(0).args[0];
+
+                assert.strictEqual(this.onValueChangedHandler.callCount, 1, 'onValueChanged called one time');
+                assert.deepEqual(eventValue, value, 'onValueChanged handler got correct value field');
             };
+        },
+        afterEach: function() {
+            this.onValueChangedHandler.reset();
         }
     }, () => {
         QUnit.test('dates should be swapped if passed value has dates in wrong order', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler
+            });
+
             this.instance.option('value', ['2023/02/02', '2023/01/01']);
 
             this.testValue(assert, ['2023/01/01', '2023/02/02']);
@@ -898,6 +912,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         QUnit.test('dates should be swapped if passed startDate is bigger than endDate', function(assert) {
             this.reinit({
+                onValueChanged: this.onValueChangedHandler,
                 value: ['2023/01/01', '2023/02/02']
             });
             this.instance.option('startDate', '2023/03/03');
@@ -907,6 +922,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         QUnit.test('dates should be swapped if passed endDate is smaller than endDate', function(assert) {
             this.reinit({
+                onValueChanged: this.onValueChangedHandler,
                 value: ['2023/02/02', '2023/03/03']
             });
             this.instance.option('endDate', '2023/01/01');
@@ -916,6 +932,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         QUnit.test('dates should be swapped if startDateBox got value bigger than endDateBox value', function(assert) {
             this.reinit({
+                onValueChanged: this.onValueChangedHandler,
                 value: ['2023/01/01', '2023/02/02']
             });
             this.instance.getStartDateBox().option('value', '2023/03/03');
@@ -925,6 +942,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         QUnit.test('dates should be swapped if endDateBox got value smaller than startDateBox value', function(assert) {
             this.reinit({
+                onValueChanged: this.onValueChangedHandler,
                 value: ['2023/02/02', '2023/03/03']
             });
             this.instance.getEndDateBox().option('value', '2023/01/01');
