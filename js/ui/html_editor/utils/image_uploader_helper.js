@@ -431,22 +431,12 @@ class FileStrategy extends BaseStrategy {
         return this.isValidInternal;
     }
 
-    closeDialogPopup(data) {
-        this.editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
-    }
-
-    serverUpload(data) {
-        if(!this.useBase64) {
-            const imageUrl = correctSlashesInUrl(this.config.uploadDirectory) + data.file.name;
-
-            urlUpload(this.quill, this.selection.index, { src: imageUrl });
-            this.closeDialogPopup(data);
-        }
+    onUploaded(data) {
+        serverUpload(this.config.uploadDirectory, data.file.name, this.quill, this.selection.index);
     }
 
     base64Upload(data) {
         this.quill.getModule('uploader').upload(this.selection, data.value, true);
-        this.closeDialogPopup(data);
     }
 
     pasteImage(formData, event) {
@@ -477,7 +467,7 @@ class FileStrategy extends BaseStrategy {
                 this.data = data;
                 this.onFileSelected();
             },
-            onUploaded: e => this.serverUpload(e)
+            onUploaded: e => this.onUploaded(e)
         };
 
         return extend({}, getFileUploaderBaseOptions(), fileUploaderOptions, this.config.fileUploaderOptions);
@@ -532,4 +522,12 @@ export function getFileUploaderBaseOptions() {
 export function urlUpload(quill, index, attributes) {
     quill.insertEmbed(index, 'extendedImage', attributes, USER_ACTION);
     quill.setSelection(index + 1, 0, USER_ACTION);
+}
+
+export function serverUpload(url, fileName, quill, pasteIndex) {
+    if(url) {
+        const imageUrl = correctSlashesInUrl(url) + fileName;
+
+        urlUpload(quill, pasteIndex, { src: imageUrl });
+    }
 }
