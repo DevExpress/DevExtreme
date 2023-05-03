@@ -7699,12 +7699,12 @@ QUnit.module('DataSource with diacritical marks', {
             { id: 3, city: 'İZMİR' }
         ];
 
-        this.compareOptions = {};
+        this.langParams = {};
 
         this.createDataSource = function(options) {
             return createDataSource($.extend({
                 store: this.array,
-                compareOptions: this.compareOptions
+                langParams: this.langParams
             }, options));
         };
 
@@ -7718,8 +7718,8 @@ QUnit.module('DataSource with diacritical marks', {
         ['no base', 'base'].forEach((sensitivity) => {
             QUnit.test(`Filtering with remoteOperations = ${remoteOperations}, locale = 'en-US' and sensitivity=${sensitivity}`, function(assert) {
                 // arrange
-                this.compareOptions.collateOptions = { sensitivity };
-                this.compareOptions.locale = 'en-US';
+                this.langParams.collateOptions = { sensitivity };
+                this.langParams.locale = 'en-US';
                 const dataSource = this.createDataSource({ remoteOperations });
 
                 // act
@@ -7742,8 +7742,8 @@ QUnit.module('DataSource with diacritical marks', {
 
             QUnit.test(`Filtering with remoteOperations = ${remoteOperations}, locale = 'tr' and sensitivity=${sensitivity}`, function(assert) {
                 // arrange
-                this.compareOptions.collateOptions = { sensitivity };
-                this.compareOptions.locale = 'tr';
+                this.langParams.collateOptions = { sensitivity };
+                this.langParams.locale = 'tr';
                 const dataSource = this.createDataSource({ remoteOperations });
 
                 // act
@@ -7765,8 +7765,8 @@ QUnit.module('DataSource with diacritical marks', {
 
         QUnit.test(`Sorting with remoteOperations = ${remoteOperations} and locale = 'en-US'`, function(assert) {
             // arrange
-            this.compareOptions.locale = 'en-US';
-            this.compareOptions.collateOptions = { caseFirst: 'upper' };
+            this.langParams.locale = 'en-US';
+            this.langParams.collateOptions = { caseFirst: 'upper' };
             const dataSource = this.createDataSource({ remoteOperations });
 
             // act
@@ -7781,8 +7781,8 @@ QUnit.module('DataSource with diacritical marks', {
 
         QUnit.test(`Sorting with remoteOperations = ${remoteOperations} and locale = 'tr'`, function(assert) {
             // arrange
-            this.compareOptions.locale = 'tr';
-            this.compareOptions.collateOptions = { caseFirst: 'upper' };
+            this.langParams.locale = 'tr';
+            this.langParams.collateOptions = { caseFirst: 'upper' };
             const dataSource = this.createDataSource({ remoteOperations });
 
             // act

@@ -369,7 +369,7 @@ const DataAdapter = Class.inherit({
     },
 
     getChildrenNodes: function(parentKey) {
-        return query(this._dataStructure, { compareOptions: this.options.compareOptions }).filter(['internalFields.parentKey', parentKey]).toArray();
+        return query(this._dataStructure, { langParams: this.options.langParams }).filter(['internalFields.parentKey', parentKey]).toArray();
     },
 
     getIndexByKey: function(key) {
@@ -473,7 +473,7 @@ const DataAdapter = Class.inherit({
 
         dataStructure = dataStructure || this._initialDataStructure;
 
-        return query(dataStructure, { compareOptions: this.options.compareOptions }).filter(criteria).toArray();
+        return query(dataStructure, { langParams: this.options.langParams }).filter(criteria).toArray();
     },
 
     search: function(searchValue) {
@@ -519,7 +519,7 @@ const DataAdapter = Class.inherit({
 
         if(this.options.sort) {
             matches = storeHelper
-                .queryByOptions(query(matches), { sort: this.options.sort, compareOptions: this.options.compareOptions })
+                .queryByOptions(query(matches), { sort: this.options.sort, langParams: this.options.langParams })
                 .toArray();
         }
 

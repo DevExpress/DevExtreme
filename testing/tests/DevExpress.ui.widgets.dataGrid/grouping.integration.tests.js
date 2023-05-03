@@ -738,7 +738,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.getCellElement(1, 2)).text(), 'Name: Name 1 (100)', 'second group row text');
     });
 
-    QUnit.test('Load options should contain the \'compareOptions\' parameter after expanding groups', function(assert) {
+    QUnit.test('Load options should contain the \'langParams\' parameter after expanding groups', function(assert) {
         // arrange
         const arrayStore = new ArrayStore({
             key: 'id',
@@ -756,7 +756,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: {
                 key: 'id',
                 sort: 'text2',
-                compareOptions: {
+                langParams: {
                     locale: 'tr',
                     collateOptions: { caseFirst: 'upper' }
                 },
@@ -764,7 +764,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     const d = $.Deferred();
 
                     // assert
-                    assert.notEqual(options.compareOptions, undefined, 'loadOptions.compareOptions is defined');
+                    assert.notEqual(options.langParams, undefined, 'loadOptions.langParams is defined');
 
                     setTimeout(function() {
                         const result = {};

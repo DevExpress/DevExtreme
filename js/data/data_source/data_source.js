@@ -169,7 +169,7 @@ export const DataSource = Class.inherit({
 
     _extractLoadOptions(options) {
         const result = {};
-        let names = ['sort', 'filter', 'compareOptions', 'select', 'group', 'requireTotalCount'];
+        let names = ['sort', 'filter', 'langParams', 'select', 'group', 'requireTotalCount'];
         const customNames = this._store._customLoadOptions();
 
         if(customNames) {
@@ -497,8 +497,8 @@ export const DataSource = Class.inherit({
         const operationId = this._operationManager.add(deferred);
         const storeLoadOptions = this._createStoreLoadOptions();
 
-        if(this._store && !isEmptyObject(storeLoadOptions?.compareOptions)) {
-            this._store._compareOptions = { ...this._store._compareOptions, ...storeLoadOptions.compareOptions };
+        if(this._store && !isEmptyObject(storeLoadOptions?.langParams)) {
+            this._store._langParams = { ...this._store._langParams, ...storeLoadOptions.langParams };
         }
 
         deferred.always(() => this._operationManager.remove(operationId));

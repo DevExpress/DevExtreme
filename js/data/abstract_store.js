@@ -14,7 +14,7 @@ import { isEmptyObject } from '../core/utils/type';
 const storeImpl = {};
 
 const Store = Class.inherit({
-    _compareOptions: {},
+    _langParams: {},
     ctor: function(options) {
         const that = this;
         options = options || {};
@@ -93,9 +93,9 @@ const Store = Class.inherit({
     },
 
     _loadImpl: function(options) {
-        if(!isEmptyObject(this._compareOptions)) {
+        if(!isEmptyObject(this._langParams)) {
             options = options || {};
-            options._compareOptions = { ...this._compareOptions, ...options._compareOptions };
+            options._langParams = { ...this._langParams, ...options._langParams };
         }
 
         return queryByOptions(this.createQuery(options), options).enumerate();

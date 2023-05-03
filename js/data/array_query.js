@@ -137,15 +137,15 @@ const defaultCompare = function(xValue, yValue, options) {
 
 const SortIterator = Iterator.inherit({
     ctor: function(iter, getter, desc, compare) {
-        this.compareOptions = iter.compareOptions;
+        this.langParams = iter.langParams;
 
         if(!(iter instanceof MapIterator)) {
             iter = new MapIterator(iter, this._wrap);
-            iter.compareOptions = this.compareOptions;
+            iter.langParams = this.langParams;
         }
         this.iter = iter;
 
-        this.rules = [{ getter: getter, desc: desc, compare: compare, compareOptions: this.compareOptions }];
+        this.rules = [{ getter: getter, desc: desc, compare: compare, langParams: this.langParams }];
     },
 
     thenBy: function(getter, desc, compare) {
@@ -207,8 +207,8 @@ const SortIterator = Iterator.inherit({
     _unwrap: function(wrappedItem) {
         return wrappedItem.value;
     },
-    _getDefaultCompare(compareOptions) {
-        return ((xValue, yValue) => defaultCompare(xValue, yValue, compareOptions));
+    _getDefaultCompare(langParams) {
+        return ((xValue, yValue) => defaultCompare(xValue, yValue, langParams));
     },
     _compare: function(x, y) {
         const xIndex = x.index;
@@ -225,7 +225,7 @@ const SortIterator = Iterator.inherit({
             const rule = this.rules[i];
             const xValue = rule.getter(x);
             const yValue = rule.getter(y);
-            const compare = rule.compare || this._getDefaultCompare(rule.compareOptions);
+            const compare = rule.compare || this._getDefaultCompare(rule.langParams);
             const compareResult = compare(xValue, yValue);
 
             if(compareResult) {
@@ -239,10 +239,10 @@ const SortIterator = Iterator.inherit({
 
 
 const compileCriteria = (function() {
-    let compareOptions = {};
+    let langParams = {};
 
     const toTunedComparable = function(value) {
-        return toComparable(value, false, compareOptions);
+        return toComparable(value, false, langParams);
     };
 
     const compileGroup = function(crit) {
@@ -257,7 +257,7 @@ const compileCriteria = (function() {
                     throw new errors.Error('E4019');
                 }
 
-                ops.push(compileCriteria(this, compareOptions));
+                ops.push(compileCriteria(this, langParams));
 
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
@@ -282,7 +282,7 @@ const compileCriteria = (function() {
 
     const toString = function(value) {
         return isDefined(value) ?
-            compareOptions?.locale ? value.toLocaleString(compareOptions.locale) : value.toString()
+            langParams?.locale ? value.toLocaleString(langParams.locale) : value.toString()
             : '';
     };
 
@@ -353,7 +353,7 @@ const compileCriteria = (function() {
 
     function compileUnary(crit) {
         const op = crit[0];
-        const criteria = compileCriteria(crit[1], compareOptions);
+        const criteria = compileCriteria(crit[1], langParams);
 
         if(op === '!') {
             return function(obj) { return !criteria(obj); };
@@ -363,7 +363,7 @@ const compileCriteria = (function() {
     }
 
     return function(crit, options) {
-        compareOptions = options || {};
+        langParams = options || {};
 
         if(isFunction(crit)) {
             return crit;
@@ -383,8 +383,8 @@ const FilterIterator = WrappedIterator.inherit({
 
     ctor: function(iter, criteria) {
         this.callBase(iter);
-        this.compareOptions = iter.compareOptions;
-        this.criteria = compileCriteria(criteria, this.compareOptions);
+        this.langParams = iter.langParams;
+        this.criteria = compileCriteria(criteria, this.langParams);
     },
 
     next: function() {
@@ -524,8 +524,8 @@ const arrayQueryImpl = function(iter, queryOptions) {
         iter = new ArrayIterator(iter);
     }
 
-    if(queryOptions.compareOptions) {
-        iter.compareOptions = queryOptions.compareOptions;
+    if(queryOptions.langParams) {
+        iter.langParams = queryOptions.langParams;
     }
 
     const handleError = function(error) {
@@ -611,8 +611,8 @@ const arrayQueryImpl = function(iter, queryOptions) {
             return d.promise();
         },
 
-        setCompareOptions(options) {
-            iter.compareOptions = options;
+        setLangParams(options) {
+            iter.langParams = options;
         },
 
         sortBy: function(getter, desc, compare) {

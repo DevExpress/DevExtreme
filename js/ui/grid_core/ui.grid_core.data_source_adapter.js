@@ -566,7 +566,7 @@ export default modules.Controller.inherit((function() {
                 skip: !remoteOperations.paging,
                 take: !remoteOperations.paging,
                 requireTotalCount: cachedExtra && 'totalCount' in cachedExtra || !remoteOperations.paging,
-                compareOptions: !remoteOperations.filtering || !remoteOperations.sorting
+                langParams: !remoteOperations.filtering || !remoteOperations.sorting
             };
 
             each(options.storeLoadOptions, function(optionName, optionValue) {
@@ -837,7 +837,7 @@ export default modules.Controller.inherit((function() {
                 const store = dataSource.store();
                 const dataSourceLoadOptions = dataSource.loadOptions();
                 const loadResult = {
-                    storeLoadOptions: extend({}, options, { compareOptions: dataSourceLoadOptions?.compareOptions }),
+                    storeLoadOptions: extend({}, options, { langParams: dataSourceLoadOptions?.langParams }),
                     isCustomLoading: true
                 };
 
