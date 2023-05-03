@@ -24,14 +24,9 @@ $material-calendar-cell-focused-color: color.change($base-accent, $alpha: 0.5) !
   background-color: $calendar-bg;
 
   &.dx-calendar-multiview {
-    width: $generic-calendar-legacy-width * 2;
-    min-width: $generic-calendar-legacy-width * 2;
+    width: $material-calendar-legacy-width * 2;
+    min-width: $material-calendar-legacy-width * 2;
   }
-}
-
-.dx-calendar-multiview {
-  width: $generic-calendar-legacy-width * 2;
-  min-width: $generic-calendar-legacy-width * 2;
 }
 
 .dx-calendar-navigator-previous-view,
