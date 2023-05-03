@@ -152,6 +152,29 @@ QUnit.module('general', moduleConfig, () => {
 
         assert.equal($('.dx-toast-content').filter(':visible').length, 2, 'both toasts are visible');
     });
+
+    QUnit.test('toast should repeat trying to close after hiding is cancelled (T1156504)', function(assert) {
+        let hidingCallCount = 0;
+        const displayTime = 500;
+        this.instance.option({
+            displayTime,
+            onHiding: (e) => {
+                if(hidingCallCount === 0) {
+                    e.cancel = true;
+                }
+                hidingCallCount += 1;
+            }
+        });
+        this.instance.show();
+
+        this.clock.tick(displayTime);
+        assert.strictEqual(hidingCallCount, 1, 'toast tried to close after displayTime');
+        assert.strictEqual(this.instance.option('visible'), true, 'hiding was cancelled');
+
+        this.clock.tick(displayTime);
+        assert.strictEqual(hidingCallCount, 2, 'toast tried to close after displayTime repeatedly');
+        assert.strictEqual(this.instance.option('visible'), false, 'toast was hidden');
+    });
 });
 
 QUnit.module('API', moduleConfig, () => {

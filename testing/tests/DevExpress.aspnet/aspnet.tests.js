@@ -154,43 +154,43 @@
                 $('#qunit-fixture').html(
                     '<div id="button"></div>\
                     \
-                    <script id="templateWithCreateComponent" type="text/html">\
+                    <script id="templateWithCreateComponent" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <div id="inner-button"></div>\
                         <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
                     </div>\
                     </script>\
-                    <script id="simpleTemplate" type="text/html">\
+                    <script id="simpleTemplate" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton") %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithOptions" type="text/html">\
+                    <script id="templateWithOptions" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { text: "text" }) %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithID" type="text/html">\
+                    <script id="templateWithID" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { }, "test-id") %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithExoticId" type="text/html">\
+                    <script id="templateWithExoticId" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\\\\]^`{|}~") %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithValidator" type="text/html">\
+                    <script id="templateWithValidator" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxTextBox", { }, "test-id", { validationGroup: "my-group" }) %>\
                     </div>\
                     </script>\
                     \
-                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
+                    <div id="buttonWithInnerTemplate"><script nonce="wIkO6u">// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
                 );
 
                 aspnet.setTemplateEngine();
@@ -256,7 +256,7 @@
         beforeEach: function() {
             $('#qunit-fixture').html(
                 '<div id="button"></div>\
-                <script id="simpleTemplate" type="text/html"></script>'
+                <script id="simpleTemplate" type="text/html" nonce="wIkO6u"></script>'
             );
             aspnet.setTemplateEngine();
         },
@@ -320,8 +320,8 @@
         );
 
         testTemplate('Html encode: stored in variable',
-            '<% var a = \'<script>alert(1)</script>\'; %><%- a %>',
-            '<script>alert(1)</script>'
+            '<% var a = \'<script nonce="wIkO6u">alert(1)</script>\'; %><%- a %>',
+            '<script nonce="wIkO6u">alert(1)</script>'
         );
 
         testTemplate('obj', '<%- obj.text %>', 'Test button');
@@ -355,7 +355,7 @@
             $('#qunit-fixture').html('\
                 <div id=test-button>\
                     <div id=test-button-inner></div>\
-                    <script>\
+                    <script nonce="wIkO6u">\
                         testCounters.innerEval++;\
                         $(\'#test-button-inner\')\
                             .append(\'test-button-inner-text\')\
@@ -378,13 +378,14 @@
         }
     });
 
-    QUnit.test('T744904 - MVCx extension in template', function(assert) {
+    const testNoCSP = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+    testNoCSP('T744904 - MVCx extension in template', function(assert) {
         aspnet.setTemplateEngine();
         window['MVCx'] = { };
         try {
             $('#qunit-fixture').html(
                 '<div id="test-widget"></div>' +
-                '<script id="test-template" type="text/html">' +
+                '<script id="test-template" type="text/html" nonce="wIkO6u">' +
                 '  <script id="dxss_123456789" type="text/javascript"></<% %>script>' +
                 '</script>'
             );
@@ -410,8 +411,8 @@
         try {
             $('#qunit-fixture').html(
                 '<div id="template-holder-widget"></div>' +
-                '<script>var rawJsStringWithHtmlTags = "<b>Encoded</b>";</script>' +
-                '<script id="template-nested-func" type="text/html">' +
+                '<script nonce="wIkO6u">var rawJsStringWithHtmlTags = "<b>Encoded</b>";</script>' +
+                '<script id="template-nested-func" type="text/html" nonce="wIkO6u">' +
                 '<%!function(){%>\
                    <div id="<%=arguments[0]%>">\
                      <div id="nested-function-expr"><%- rawJsStringWithHtmlTags %></div>\
@@ -468,12 +469,12 @@
                 '<div id="popup1">' +
                 '</div>' +
 
-                '<script id="popup1_contentTemplate" type="text/html">' +
+                '<script id="popup1_contentTemplate" type="text/html" nonce="wIkO6u">' +
                 '  <div id=' + formID + '></div>' +
                 '  <% __createForm() %>' +
                 '</script>' +
 
-                '<script id="popup1_form_fieldTempalte" type="text/html">' +
+                '<script id="popup1_form_fieldTempalte" type="text/html" nonce="wIkO6u">' +
                 '  <div id=' + textBoxID + '></div>' +
                 '  <% __createTextBox(obj) %>' +
                 '</script>'
@@ -513,7 +514,7 @@
         try {
             $('#qunit-fixture').html(
                 '<div id="popup1"></div>' +
-                '<script id="popup1_contentTemplate" type="text/html">' +
+                '<script id="popup1_contentTemplate" type="text/html" nonce="wIkO6u">' +
                 '  <div id="b1"></div><% __createButton("b1") %>' +
                 '  <div id="b2"></div><% __createButton("b2") %>' +
                 '</script>'
@@ -539,7 +540,7 @@
         try {
             $('#qunit-fixture').html(
                 '<div id=list1></div>' +
-                '<script id="list1_itemTemplate" type="text/html">' +
+                '<script id="list1_itemTemplate" type="text/html" nonce="wIkO6u">' +
                 '  <div id="<%= key %>"></div><% DevExpress.aspnet.createComponent("dxTextBox", { }, key) %>' +
                 '</script>'
             );
@@ -568,7 +569,7 @@
         try {
             $('#qunit-fixture').html(
                 '<div id=toolbar1></div>' +
-                '<script id=template1 type=text/html>' +
+                '<script id=template1 type=text/html nonce="wIkO6u">' +
                 '  <div id=checkBox1></div><% __createCheckBox("checkBox1") %>' +
                 '</script>'
             );

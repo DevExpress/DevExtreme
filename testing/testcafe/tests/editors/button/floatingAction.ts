@@ -157,7 +157,7 @@ for (const label of ['Add Row', '']) {
 
     test(`FAB with two speed dial action buttons after opening, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      await t.debug();
+
       await t
         .click(Selector('body'))
         .click(Selector(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`));

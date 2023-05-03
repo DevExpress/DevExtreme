@@ -83,9 +83,10 @@
         "dxNumberBox-invalidValueMessage": "数値を指定してください。",
         "dxNumberBox-noDataText": "データがありません",
 
-        "dxDataGrid-emptyHeaderWithColumnChooserText": "列の選択ツールを使用して列を表示してください",
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "{0} を使用して列を表示してください",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "グループパネルからここに列をドラッグしてください",
-        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "列の選択ツールを使用するか、グループパネルから列をドラッグしてください",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "{0} を使用するか、グループ パネルから列をドラッグしてください",
+        "dxDataGrid-emptyHeaderColumnChooserText": "列の選択",
         "dxDataGrid-columnChooserTitle": "列の選択",
         "dxDataGrid-columnChooserEmptyText": "隠したい列のヘッダーをここにドラッグしてください。",
         "dxDataGrid-groupContinuesMessage": "次ページに続く",
@@ -182,6 +183,8 @@
         "dxPager-prevPage": "前のページ",
         "dxPager-nextPage": "次のページ",
         "dxPager-ariaLabel": "ページ ナビゲーション",
+        "dxPager-ariaPageSize": "ページ サイズ",
+        "dxPager-ariaPageNumber": "ページ番号",
 
         "dxPivotGrid-grandTotal": "総計",
         "dxPivotGrid-total": "{0} 合計",
@@ -261,6 +264,7 @@
 
         "dxCalendar-todayButtonText": "今日",
         "dxCalendar-ariaWidgetName": "カレンダー",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "赤",
         "dxColorView-ariaGreen": "緑",
