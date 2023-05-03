@@ -71,7 +71,7 @@ export default {
     return {
       productsStore: new DataSource(products),
       backButtonOptions: {
-        type: 'back',
+        icon: 'back',
         onClick: () => {
           notify('Back button has been clicked!');
         },

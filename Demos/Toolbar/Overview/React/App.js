@@ -54,7 +54,7 @@ class App extends React.Component {
 const productsStore = new DataSource(products);
 
 const backButtonOptions = {
-  type: 'back',
+  icon: 'back',
   onClick: () => {
     notify('Back button has been clicked!');
   },

@@ -46,7 +46,7 @@ export class AppComponent {
     this.productsStore = new DataSource(service.getProducts());
 
     this.backButtonOptions = {
-      type: 'back',
+      icon: 'back',
       onClick: () => {
         notify('Back button has been clicked!');
       },

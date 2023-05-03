@@ -4,7 +4,7 @@ $(() => {
       location: 'before',
       widget: 'dxButton',
       options: {
-        type: 'back',
+        icon: 'back',
         onClick() {
           DevExpress.ui.notify('Back button has been clicked!');
         },
