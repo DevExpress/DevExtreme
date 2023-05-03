@@ -28,7 +28,7 @@ const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
 const CLICK_TIMEOUT = 300;
 
-const processItems = function(that, chooserColumns) {
+const processItems = function(that, chooserColumns, flag = true) {
     const items = [];
     const isSelectMode = that.isSelectMode();
     const isRecursive = that.option('columnChooser.selection.recursive');
@@ -45,7 +45,7 @@ const processItems = function(that, chooserColumns) {
                 parentId: isDefined(column.ownerBand) ? column.ownerBand : null
             };
 
-            const isRecursiveWithColumns = isRecursive && column.hasColumns;
+            const isRecursiveWithColumns = flag && isRecursive && column.hasColumns;
 
             if(isSelectMode && !isRecursiveWithColumns) {
                 item.selected = column.visible;
@@ -57,6 +57,18 @@ const processItems = function(that, chooserColumns) {
 
     return items;
 };
+
+/*
+todo: check T726413
+
+selection doesn't change correctly if we hide columns via option:
+grid.beginUpdate();
+grid.columnOption(0, 'visible', false)
+grid.columnOption(1, 'visible', false)
+grid.columnOption(4, 'visible', false)
+grid.endUpdate();
+
+*/
 
 /**
  * @type {Partial<import('./ui.grid_core.column_chooser').ColumnChooserController>}
@@ -126,27 +138,42 @@ const columnChooserMembers = {
         const columnChooserList = this._columnChooserList;
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
-        this._popupContainer.setAria({
-            role: 'dialog',
-            label: messageLocalization.format('dxDataGrid-columnChooserTitle')
-        });
-
         // T726413
         if(isSelectMode && columnChooserList && change && change.changeType === 'selection') {
-            items = processItems(this, chooserColumns);
-            for(let i = 0; i < items.length; i++) {
-                const selected = items[i].selected;
-                const id = items[i].id;
+            const isRecursive = this.option('columnChooser.selection.recursive');
 
-                if(id === change.columnIndex) {
-                    if(selected) {
-                        columnChooserList.selectItem(id, selected);
-                    } else {
-                        columnChooserList.unselectItem(id, selected);
-                    }
-                }
+            const column = this.component.columnOption(change.columnIndex);
+
+            let selected = column.visible;
+
+            if(isRecursive && column.hasColumns) {
+                selected = undefined;
             }
+
+            if(selected) {
+                columnChooserList.selectItem(change.columnIndex, selected);
+            } else if(selected === false) {
+                columnChooserList.unselectItem(change.columnIndex, selected);
+            }
+
+
+            // items = processItems(this, chooserColumns);
+
+            // for(let i = 0; i < items.length; i++) {
+            //     const selected = items[i].selected;
+            //     const id = items[i].id;
+
+            //     if(id === change.columnIndex) {
+            //         if(selected) {
+            //             columnChooserList.selectItem(id, selected);
+            //         } else if(selected === false) {
+            //             columnChooserList.unselectItem(id, selected);
+            //         }
+            //     }
+            // }
+
         } else if(!isSelectMode || !columnChooserList || change === 'full') {
+            console.log('full render', change);
             this._popupContainer.$wrapper()
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
@@ -161,9 +188,12 @@ const columnChooserMembers = {
         const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
         const $element = that.element().addClass(columnChooserClass);
         const columnChooserOptions = that.option('columnChooser');
+        const isSelectMode = this.isSelectMode();
+
         const themeName = current();
         const isGenericTheme = isGeneric(themeName);
         const isMaterial = isMaterialTheme(themeName);
+
         const dxPopupOptions = {
             visible: false,
             shading: false,
@@ -206,16 +236,34 @@ const columnChooserMembers = {
         } else {
             this._popupContainer.option(dxPopupOptions);
         }
+
+        this._popupContainer.setAria({
+            role: 'dialog',
+            label: messageLocalization.format('dxDataGrid-columnChooserTitle')
+        });
+
+        this._popupContainer.$wrapper()
+            .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
+            .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
     },
 
     _renderCore: function(change) {
         if(this._popupContainer) {
-            this._updateList(change);
+            const isDragMode = !this.isSelectMode();
+
+            if(!this._columnChooserList || change === 'full') {
+                this._renderTreeView();
+            } else if(isDragMode) {
+                this._updateItems();
+            }
         }
     },
 
-    _renderTreeView: function($container, items) {
+    _renderTreeView: function() {
+        console.log('render');
         const that = this;
+        const $container = this._popupContainer.$content();
+
         const columnChooser = this.option('columnChooser');
         const isSelectMode = this.isSelectMode();
 
@@ -267,9 +315,6 @@ const columnChooserMembers = {
         }
         extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
-        // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
-        treeViewConfig.items = items;
-
         if(this._columnChooserList) {
             if(!treeViewConfig.searchEnabled) {
                 treeViewConfig.searchValue = '';
@@ -280,6 +325,9 @@ const columnChooserMembers = {
             this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);
             $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
         }
+
+        // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+        this._updateItems();
     },
 
     _prepareDragModeConfig: function() {
@@ -321,12 +369,14 @@ const columnChooserMembers = {
         };
 
         const updateSelection = (e, nodes) => {
+            console.log('updateSelection');
             nodes
                 .filter(node => node.itemData.allowHiding === false)
                 .forEach(node => e.component.selectItem(node.key));
         };
 
         const updateColumnVisibility = (nodes) => {
+            console.log('updateColumnVisibility');
             nodes.forEach(node => {
                 const columnIndex = node.itemData.id;
                 const isVisible = node.selected !== false;
@@ -370,32 +420,68 @@ const columnChooserMembers = {
         };
     },
 
+    _updateItems: function() {
+        const isSelectMode = this.isSelectMode();
+        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
+
+        const items = processItems(this, chooserColumns, false);
+
+        this._columnChooserList.option('items', items);
+    },
+
+    _updateItemSelection: function(columnIndex) {
+        const isRecursive = this.option('columnChooser.selection.recursive');
+        const column = this.component.columnOption(columnIndex);
+
+        const isRecursiveWithColumns = isRecursive && column.hasColumns;
+
+        if(!isRecursiveWithColumns) {
+            column.visible ?
+                this._columnChooserList.selectItem(columnIndex) :
+                this._columnChooserList.unselectItem(columnIndex);
+        }
+    },
+
     _columnOptionChanged: function(e) {
         const changeTypes = e.changeTypes;
-        const optionNames = e.optionNames;
-        const isSelectMode = this.isSelectMode();
 
         this.callBase(e);
 
-        if(isSelectMode) {
-            const needPartialRender = optionNames.visible && optionNames.length === 1 && e.columnIndex !== undefined;
+        const optionNames = e.optionNames;
+        const isSelectMode = this.isSelectMode();
+
+        if(isSelectMode && this._columnChooserList) {
+            const isColumnVisibleChanged = optionNames.visible && e.columnIndex !== undefined;
             const needFullRender = optionNames.showInColumnChooser || optionNames.caption || optionNames.visible || changeTypes.columns && optionNames.all;
 
-            if(needPartialRender) {
-                this.render(null, {
-                    changeType: 'selection',
-                    columnIndex: e.columnIndex
-                });
+            if(isColumnVisibleChanged) {
+                this._updateItemSelection(e.columnIndex);
             } else if(needFullRender) {
-                this.render(null, 'full');
+                this._updateItems();
             }
         }
+
+        // if(isSelectMode) {
+        //     // const needPartialRender = (optionNames.visible || optionNames.groupIndex) && e.columnIndex !== undefined;
+        //     const needPartialRender = optionNames.visible && optionNames.length === 1 && e.columnIndex !== undefined;
+        //     const needFullRender = optionNames.showInColumnChooser || optionNames.caption || optionNames.visible || changeTypes.columns && optionNames.all;
+
+        //     if(needPartialRender) {
+        //         this.render(null, {
+        //             changeType: 'selection',
+        //             columnIndex: e.columnIndex
+        //         });
+        //     } else if(needFullRender) {
+        //         this.render(null, 'full');
+        //     }
+        // }
     },
 
     optionChanged: function(args) {
         switch(args.name) {
             case 'columnChooser':
                 this._initializePopupContainer();
+
                 this.render(null, 'full');
                 break;
             default:
@@ -468,6 +554,7 @@ const columnChooserMembers = {
         ///#ENDDEBUG
         if(!this._popupContainer) {
             this._initializePopupContainer();
+
             this.render();
         }
         this._popupContainer.show();
