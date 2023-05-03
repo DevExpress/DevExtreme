@@ -8,6 +8,8 @@ const CLASS = {
   node: 'dx-treeview-node',
   checkbox: 'dx-checkbox',
   scrollable: 'dx-scrollable',
+  selectAllItem: 'dx-treeview-select-all-item',
+  searchBar: 'dx-treeview-search',
 };
 
 export default class TreeView extends Widget {
@@ -20,6 +22,14 @@ export default class TreeView extends Widget {
 
   getNode(index = 0): Selector {
     return this.getNodes().nth(index);
+  }
+
+  getSelectAllItem(): Selector {
+    return this.element.find(`.${CLASS.selectAllItem}`);
+  }
+
+  getSearchBar(): Selector {
+    return this.element.find(`.${CLASS.searchBar}`);
   }
 
   getCheckBoxByNodeIndex(index = 0): CheckBox {

@@ -69,6 +69,11 @@ import {
 import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
+import { PositionConfig } from '../animation/position';
+
+import {
+  Properties as TextBoxProperties,
+} from '../ui/text_box';
 
 /**
  * @namespace DevExpress.common.grids
@@ -376,6 +381,7 @@ export interface ColumnBase<TRowData = any> {
   /**
    * @docid GridBaseColumn.sortIndex
    * @default undefined
+   * @fires GridBaseOptions.onOptionChanged
    * @public
    */
   sortIndex?: number;
@@ -489,6 +495,11 @@ export type ColumnChooser = {
    */
   mode?: ColumnChooserMode;
   /**
+   * @docid GridBaseOptions.columnChooser.position
+   * @default undefined
+   */
+  position?: PositionConfig;
+  /**
    * @docid GridBaseOptions.columnChooser.search
    */
   search?: ColumnChooserSearchConfig;
@@ -534,8 +545,9 @@ export type ColumnChooserSearchConfig = {
   /**
    * @docid
    * @default {}
+   * @type dxTextBoxOptions
    */
-  editorOptions?: any;
+  editorOptions?: TextBoxProperties;
   /**
    * @docid
    * @default false
@@ -1241,8 +1253,9 @@ export type HeaderFilterSearchConfig = {
   /**
    * @docid
    * @default {}
+   * @type dxTextBoxOptions
    */
-  editorOptions?: any;
+  editorOptions?: TextBoxProperties;
   /**
    * @docid
    * @default false

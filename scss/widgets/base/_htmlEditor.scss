@@ -437,6 +437,11 @@ $transparent-border: 1px solid transparent;
   position: absolute;
   box-sizing: content-box;
   border: 1px dashed lightslategrey;
+  pointer-events: none;
+
+  .dx-resizable-handle {
+    pointer-events: auto;
+  }
 
   .dx-resizable-handle-corner-top-right,
   .dx-resizable-handle-corner-top-left,

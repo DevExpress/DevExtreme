@@ -3,6 +3,7 @@ import config from 'core/config';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
+import { isObject } from 'core/utils/type.js';
 import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -114,34 +115,47 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 cancelButtonText: 'Cancel',
                 dateSerializationFormat: undefined,
                 deferRendering: true,
+                disabled: false,
                 disabledDates: null,
                 displayFormat: null,
-                dropDownOptions: {},
                 dropDownButtonTemplate: 'dropDownButton',
+                dropDownOptions: {},
                 endDate: null,
+                endDateInputAttr: {},
+                endDateLabel: 'End Date',
+                endDateName: '',
+                endDatePlaceholder: '',
+                endDateText: '',
                 focusStateEnabled: true,
                 height: undefined,
                 hoverStateEnabled: true,
                 isValid: true,
-                startDateLabel: 'Start Date',
-                endDateLabel: 'End Date',
-                startDatePlaceholder: '',
-                endDatePlaceholder: '',
                 labelMode: 'static',
                 max: undefined,
-                maxLength: null,
                 min: undefined,
-                opened: false,
+                onChange: null,
+                onCopy: null,
+                onCut: null,
+                onEnterKey: null,
+                onInput: null,
+                onKeyDown: null,
+                onKeyUp: null,
+                onPaste: null,
                 openOnFieldClick: true,
+                opened: false,
                 readOnly: false,
-                disabled: false,
                 rtlEnabled: false,
                 showClearButton: false,
                 showDropDownButton: true,
                 spellcheck: false,
                 startDate: null,
+                startDateInputAttr: {},
+                startDateLabel: 'Start Date',
+                startDateName: '',
+                startDatePlaceholder: '',
+                startDateText: '',
                 stylingMode: 'outlined',
-                text: '',
+                tabIndex: 0,
                 useMaskBehavior: false,
                 validationError: null,
                 validationErrors: null,
@@ -151,7 +165,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 value: [null, null],
                 valueChangeEvent: 'change',
                 width: undefined,
-                tabIndex: 0,
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -163,32 +176,41 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             acceptCustomValue: true,
             activeStateEnabled: true,
             applyValueMode: 'instantly',
-            displayFormat: null,
             deferRendering: true,
+            disabled: false,
+            displayFormat: null,
             elementAttr: {},
             focusStateEnabled: true,
             hoverStateEnabled: true,
+            inputAttr: {},
             isValid: true,
             label: '',
             labelMode: 'static',
             max: undefined,
-            maxLength: null,
             min: undefined,
+            name: '',
+            onChange: null,
+            onCopy: null,
+            onCut: null,
+            onEnterKey: null,
+            onInput: null,
+            onKeyDown: null,
+            onKeyUp: null,
+            onPaste: null,
+            openOnFieldClick: true,
             placeholder: '',
             readOnly: false,
-            disabled: false,
             rtlEnabled: false,
+            showClearButton: false,
+            showDropDownButton: false,
             spellcheck: false,
             stylingMode: 'underlined',
+            tabIndex: 0,
             useMaskBehavior: false,
             validationMessageMode: 'auto',
             validationMessagePosition: 'auto',
             validationStatus: 'valid',
             valueChangeEvent: 'change',
-            tabIndex: 0,
-            openOnFieldClick: true,
-            showDropDownButton: false,
-            showClearButton: false,
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -200,9 +222,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
                 disabledDates: null,
-                opened: false,
-
                 label: 'Start Date',
+                opened: false,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -216,7 +237,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
             const expectedOptions = {
                 ...expectedDateBoxOptions,
-                showClearButton: false,
                 label: 'End Date',
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -229,15 +249,20 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
     QUnit.module('DateBox\'s option dependency from DateRangeBox options ', () => {
         const initialDateRangeBoxOptions = {
-            showClearButton: true,
-            showDropDownButton: true,
+            activeStateEnabled: false,
             buttons: ['dropDown'],
-            readOnly: true,
             deferRendering: false,
             disabled: true,
-            activeStateEnabled: false,
-            hoverStateEnabled: false,
+            endDateInputAttr: { id: 'endDateInput' },
+            endDateName: 'end_input',
             focusStateEnabled: false,
+            hoverStateEnabled: false,
+            labelMode: 'floating',
+            showClearButton: true,
+            readOnly: true,
+            showDropDownButton: true,
+            startDateInputAttr: { id: 'startDateInput' },
+            startDateName: 'start_input',
             // TODO: extend this list of options
         };
 
@@ -245,15 +270,18 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             this.reinit(initialDateRangeBoxOptions);
 
             const expectedOptions = {
-                showClearButton: false,
-                showDropDownButton: false,
+                activeStateEnabled: false,
                 buttons: undefined,
-                readOnly: true,
                 deferRendering: false,
                 disabled: true,
-                activeStateEnabled: false,
-                hoverStateEnabled: false,
                 focusStateEnabled: false,
+                hoverStateEnabled: false,
+                inputAttr: { id: 'startDateInput' },
+                labelMode: 'floating',
+                name: 'start_input',
+                readOnly: true,
+                showClearButton: false,
+                showDropDownButton: false,
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -266,15 +294,19 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             this.reinit(initialDateRangeBoxOptions);
 
             const expectedOptions = {
-                showClearButton: false,
-                showDropDownButton: false,
+                activeStateEnabled: false,
                 buttons: undefined,
-                readOnly: true,
                 deferRendering: true,
                 disabled: true,
-                activeStateEnabled: false,
-                hoverStateEnabled: false,
+                earButton: false,
                 focusStateEnabled: false,
+                hoverStateEnabled: false,
+                inputAttr: { id: 'endDateInput' },
+                labelMode: 'floating',
+                name: 'end_input',
+                readOnly: true,
+                showDropDownButton: false,
+                showClearButton: false,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -863,6 +895,40 @@ QUnit.module('Events', moduleConfig, () => {
             assert.ok(this.onValueChangedHandler.calledOnce);
         });
 
+        QUnit.test('should be called after startDate change', function(assert) {
+            this.instance.option('startDate', '2020/02/20');
+
+            assert.ok(this.onValueChangedHandler.calledOnce);
+        });
+
+        QUnit.test('should be called after endDate change', function(assert) {
+            this.instance.option('endDate', '2020/03/30');
+
+            assert.ok(this.onValueChangedHandler.calledOnce);
+        });
+
+        QUnit.test('should not be called after update startDate to the same value', function(assert) {
+            this.reinit({
+                startDate: '2008/06/06',
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.instance.option('startDate', '2008/06/06');
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test('should not be called after update endDate to the same value', function(assert) {
+            this.reinit({
+                endDate: '2009/07/07',
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.instance.option('endDate', '2009/07/07');
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
         QUnit.test('onValueChanged event should have correct arguments', function(assert) {
             const oldValue = this.instance.option('value');
             const newValue = ['2023/04/19', null];
@@ -1028,6 +1094,9 @@ QUnit.module('Events', moduleConfig, () => {
                 onClosed: () => {}
             });
 
+            this.instance.option('opened', true);
+            this.instance.option('opened', false);
+
             this.instance.option('onOpened', this.onOpenedHandler);
             this.instance.option('onClosed', this.onClosedHandler);
 
@@ -1041,6 +1110,216 @@ QUnit.module('Events', moduleConfig, () => {
 
             assert.strictEqual(this.onOpenedHandler.callCount, 0, 'onOpenHandler callCount');
             assert.strictEqual(this.onClosedHandler.callCount, 1, 'onCloseHandler callCount');
+        });
+    });
+
+    QUnit.module('Keyboard events', {
+        beforeEach: function() {
+            this.onKeyDownHandler = sinon.stub();
+            this.onKeyUpHandler = sinon.stub();
+            this.onChangeHandler = sinon.stub();
+            this.onInputHandler = sinon.stub();
+            this.onCutHandler = sinon.stub();
+            this.onCopyHandler = sinon.stub();
+            this.onPasteHandler = sinon.stub();
+            this.onEnterKeyHandler = sinon.stub();
+
+            this.checkEventHandlerArgs = (targetInput, event, eventName) => {
+                const handler = this[`${event}Handler`];
+
+                QUnit.assert.strictEqual(handler.callCount, 1, `${eventName} event raised once`);
+
+                const args = handler.getCall(0).args[0];
+                QUnit.assert.strictEqual(args.component, this.instance, `${event} component`);
+                QUnit.assert.strictEqual($(args.element).get(0), this.$element.get(0), `${event} element`);
+                QUnit.assert.strictEqual(args.event.type, eventName.toLowerCase(), `${event} event`);
+                QUnit.assert.equal($(args.event.target).get(0), $(targetInput).get(0), `${event} target`);
+            };
+        }
+    }, () => {
+        ['keyUp', 'keyDown', 'change', 'input', 'cut', 'copy', 'paste'].forEach((eventName) => {
+            const event = `on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`;
+            const mockHandlerName = `${event}Handler`;
+
+            QUnit.test(`${event} event should not be called after trigger '${eventName}' event in startDate or endDate input by default`, function(assert) {
+                const startDateInput = this.instance.field()[0];
+                const endDateInput = this.instance.field()[1];
+
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                assert.strictEqual(this[`${event}Handler`].callCount, 0, `${eventName} event is not raised`);
+            });
+
+            QUnit.test(`${event} event handler not be called if new value is null after trigger '${eventName}' event in startDate or endDate input`, function(assert) {
+                this.reinit({
+                    [event]: this[mockHandlerName],
+                });
+
+                this.instance.option(event, null);
+
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                assert.strictEqual(this[`${event}Handler`].callCount, 0, `${eventName} event is not raised`);
+            });
+
+            QUnit.test(`${event} event should be called after trigger '${eventName}' event in startDate input`, function() {
+                this.reinit({
+                    [event]: this[mockHandlerName],
+                });
+
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(startDateInput, event, eventName);
+            });
+
+            QUnit.test(`${event} event handler be called with a new handlers after trigger '${eventName}' event in startDate input`, function() {
+                this.reinit({
+                    [event]: () => {},
+                });
+
+                const startDateInput = this.instance.field()[0];
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.instance.option(event, this[mockHandlerName]);
+
+                $(startDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(startDateInput, event, eventName);
+            });
+
+            QUnit.test(`${event} event should be called after trigger '${eventName}' event in endDate input`, function() {
+                this.reinit({
+                    [event]: this[mockHandlerName],
+                });
+
+                const endDateInput = this.instance.field()[1];
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(endDateInput, event, eventName);
+            });
+
+            QUnit.test(`${event} event handler be called with a new handlers after trigger '${eventName}' event on endDate input`, function() {
+                this.reinit({
+                    [event]: () => {},
+                });
+
+                const endDateInput = this.instance.field()[1];
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.instance.option(event, this[mockHandlerName]);
+
+                $(endDateInput).trigger($.Event(eventName.toLowerCase()));
+
+                this.checkEventHandlerArgs(endDateInput, event, eventName);
+            });
+        });
+
+        [0, 1].forEach(inputIndex => {
+            const inputName = inputIndex ? 'endDate' : 'startDate';
+
+            QUnit.test(`onEnterKey event should be called after trigger keyup with "enter" key in ${inputName} input`, function() {
+                this.reinit({
+                    onEnterKey: this.onEnterKeyHandler,
+                });
+
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                this.checkEventHandlerArgs(input, 'onEnterKey', 'keyup');
+            });
+
+            QUnit.test(`onEnterKey event handler be called with a new handlers after trigger keyup with "enter" key in ${inputName} input`, function() {
+                this.reinit({
+                    onEnterKey: () => {},
+                });
+
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                this.instance.option('onEnterKey', this.onEnterKeyHandler);
+
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                this.checkEventHandlerArgs(input, 'onEnterKey', 'keyup');
+            });
+
+            QUnit.test(`onEnterKey event should not be called after trigger keyup with "enter" key in ${inputName} input by default`, function(assert) {
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                assert.strictEqual(this.onEnterKeyHandler.callCount, 0, 'onEnterKey event is not raised');
+            });
+
+            QUnit.test(`onEnterKey event handler not be called if new value is null after trigger keyup with "enter" key in ${inputName} input`, function(assert) {
+                this.reinit({
+                    onEnterKey: this.onEnterKeyHandler,
+                });
+
+                this.instance.option('onEnterKey', null);
+
+                const input = this.instance.field()[inputIndex];
+                $(input).trigger($.Event('keyup', { key: 'enter' }));
+
+                assert.strictEqual(this.onEnterKeyHandler.callCount, 0, 'onEnterKey event is not raised');
+            });
+        });
+    });
+
+    QUnit.module('onFocusIn & onFocusOut events', {
+        beforeEach: function() {
+            this.onFocusInHandler = sinon.stub();
+            this.onFocusOutHandler = sinon.stub();
+        }
+    }, () => {
+        QUnit.test('onFocusIn should be called once on call focus() method', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+        });
+
+        QUnit.test('onFocusOut should be called once on call blur() method if startDate input is focused', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.getStartDateBox().focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+
+            this.onFocusInHandler.reset();
+            this.instance.blur();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 0, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 1, 'onFocusOut callCount');
+        });
+
+        QUnit.test('onFocusOut should be called once on call blur() method if endDate input is focused', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.getEndDateBox().focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+
+            this.onFocusInHandler.reset();
+            this.instance.blur();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 0, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 1, 'onFocusOut callCount');
         });
     });
 });
@@ -1098,6 +1377,42 @@ QUnit.module('Public methods', moduleConfig, () => {
         assert.strictEqual($popupContent.is($(startDateBox.content())), true, 'content returns right element');
         assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
     });
+
+    QUnit.testInActiveWindow('Focus() method should focus startDate input', function(assert) {
+        this.instance.focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('Blur() method should unfocus startDate input', function(assert) {
+        this.instance.getStartDateBox().focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+
+        this.instance.blur();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('Blur() method should unfocus startDate input', function(assert) {
+        this.instance.getEndDateBox().focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
+
+        this.instance.blur();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
 });
 
 QUnit.module('Popup integration', moduleConfig, () => {
@@ -1113,6 +1428,78 @@ QUnit.module('Popup integration', moduleConfig, () => {
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
+    QUnit.test('StartDate option should get first item from value option on init', function(assert) {
+        const { value, startDate } = this.instance.option();
+
+        assert.strictEqual(startDate, value[0]);
+    });
+
+    QUnit.test('EndDate option should get second item from value option on init', function(assert) {
+        const { value, endDate } = this.instance.option();
+
+        assert.strictEqual(endDate, value[1]);
+    });
+
+    QUnit.test('Value option should get values from startDate/endDate options on init', function(assert) {
+        const startDate = '2023/01/01';
+        const endDate = '2023/02/02';
+
+        this.reinit({
+            startDate, endDate
+        });
+
+        const { value } = this.instance.option();
+
+        assert.strictEqual(value[0], startDate);
+        assert.strictEqual(value[1], endDate);
+    });
+
+    QUnit.test('Value should have higher priority if value option and startDate/endDate options are defined on init', function(assert) {
+        const startDate = '2023/01/01';
+        const endDate = '2023/02/02';
+        const value = ['2024/01/01', '2024/02/02'];
+
+        this.reinit({
+            startDate, endDate, value
+        });
+
+        assert.deepEqual(this.instance.option('value'), value, 'value is not changed');
+        assert.strictEqual(this.instance.option('startDate'), value[0], 'startDate got date from value');
+        assert.strictEqual(this.instance.option('endDate'), value[1]), 'endDate got date from value';
+    });
+
+    QUnit.test('StartDate option should update value option on runtime change', function(assert) {
+        const startDate = '2023/01/05';
+
+        this.instance.option('startDate', startDate);
+
+        assert.strictEqual(this.instance.option('value')[0], startDate);
+    });
+
+    QUnit.test('EndDate option should update value option on runtime change', function(assert) {
+        const endDate = '2023/01/15';
+
+        this.instance.option('endDate', endDate);
+
+        assert.strictEqual(this.instance.option('value')[1], endDate);
+    });
+
+    QUnit.test('Value option should update startDate option on runtime change', function(assert) {
+        const value = ['2023/01/07', '2023/02/07'];
+
+        this.instance.option('value', value);
+
+        assert.strictEqual(this.instance.option('startDate'), value[0]);
+    });
+
+    QUnit.test('value option should update endDate option on runtime change', function(assert) {
+        const value = ['2023/01/07', '2023/02/07'];
+
+        this.instance.option('value', value);
+
+        assert.strictEqual(this.instance.option('endDate'), value[1]);
+    });
+
     QUnit.test('StartDateBox opened option value should be change after change DateRangeBox option value', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
         const endDateBox = getEndDateBoxInstance(this.instance);
@@ -1175,6 +1562,61 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         assert.strictEqual(this.instance.getEndDateBox().option('placeholder'), 'text', 'endDateBox placeholder option value has been changed');
     });
 
+    QUnit.test('DateRangeBox "startDateInputAttr", "endDateInputAttr" option values should be passed in "inputAttr" option of startDateBox and endDateBox after change in runtime respectively', function(assert) {
+        this.reinit({});
+
+        this.instance.option({
+            startDateInputAttr: { id: 'startDateInput' },
+            endDateInputAttr: { id: 'endDateInput' }
+        });
+
+        assert.deepEqual(this.instance.getStartDateBox().option('inputAttr'), { id: 'startDateInput' }, 'startDateBox inputAttr option has correct value');
+        assert.deepEqual(this.instance.getEndDateBox().option('inputAttr'), { id: 'endDateInput' }, 'endDateBox inputAttr option has correct value');
+    });
+
+    QUnit.test('DateRangeBox "startDateName", "endDateName" option values should be passed in "name" option of startDateBox and endDateBox after change in runtime respectively', function(assert) {
+        this.reinit({});
+
+        this.instance.option({
+            startDateName: 'start_input',
+            endDateName: 'end_input',
+        });
+
+        assert.strictEqual(this.instance.getStartDateBox().option('name'), 'start_input', 'startDateBox name option has correct value');
+        assert.strictEqual(this.instance.getEndDateBox().option('name'), 'end_input', 'endDateBox name option has correct value');
+    });
+
+    QUnit.test('CalendarOptions should be passed to startDateBox on init', function(assert) {
+        this.reinit({
+            calendarOptions: {
+                showWeekNumbers: true,
+            }
+        });
+
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        assert.strictEqual(startDateBox.option('calendarOptions.showWeekNumbers'), true);
+    });
+
+    QUnit.test('CalendarOptions should be passed to startDateBox on runtime change', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        this.instance.option('calendarOptions', { showWeekNumbers: true });
+
+        assert.strictEqual(startDateBox.option('calendarOptions.showWeekNumbers'), true);
+    });
+
+    QUnit.test('CalendarOptions field should be correctly passed to startDateBox on runtime change', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        this.instance.option('calendarOptions.showWeekNumbers', true);
+
+        const calendarOptions = startDateBox.option('calendarOptions');
+
+        assert.ok(isObject(calendarOptions), 'option is object');
+        assert.strictEqual(calendarOptions.showWeekNumbers, true);
+    });
+
     QUnit.test('DropDownOptions should be passed to startDateBox on init', function(assert) {
         this.reinit({
             dropDownOptions: {
@@ -1193,6 +1635,54 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         this.instance.option('dropDownOptions', { width: 800 });
 
         assert.strictEqual(startDateBox.option('dropDownOptions.width'), 800);
+    });
+
+    QUnit.test('DropDownOptions field should be correctly passed to startDateBox on runtime change', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        this.instance.option('dropDownOptions.hideOnOutsideClick', false);
+
+        const dropDownOptions = startDateBox.option('dropDownOptions');
+
+        assert.ok(isObject(dropDownOptions), 'option is object');
+        assert.strictEqual(dropDownOptions.hideOnOutsideClick, false);
+    });
+
+    [
+        {
+            optionName: 'applyValueMode',
+            optionValue: 'useButtons'
+        }, {
+            optionName: 'applyButtonText',
+            optionValue: 'kk'
+        }, {
+            optionName: 'cancelButtonText',
+            optionValue: 'abort'
+        }, {
+            optionName: 'todayButtonText',
+            optionValue: 'now'
+        }, {
+            optionName: 'disabledDates',
+            optionValue: [new Date('2023/04/27'), new Date('2023/04/28')]
+        }
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`${optionName} should be passed to startDateBox on init`, function(assert) {
+            this.reinit({
+                [optionName]: optionValue
+            });
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.deepEqual(startDateBox.option(optionName), optionValue);
+        });
+
+        QUnit.test(`${optionName} should be passed to startDateBox on runtime change`, function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            this.instance.option(optionName, optionValue);
+
+            assert.deepEqual(startDateBox.option(optionName), optionValue);
+        });
     });
 
     [
@@ -1217,12 +1707,28 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'spellcheck',
             optionValue: true,
+        }, {
+            optionName: 'pickerType',
+            optionValue: 'native'
+        }, {
+            optionName: 'acceptCustomValue',
+            optionValue: false
+        }, {
+            optionName: 'rtlEnabled',
+            optionValue: true
+        }, {
+            optionName: 'displayFormat',
+            optionValue: 'EEEE, d of MMM, yyyy'
+        },
+        {
+            optionName: 'labelMode',
+            optionValue: 'floating'
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
-            const initOptions = {};
-            initOptions[optionName] = optionValue;
-            this.reinit(initOptions);
+            this.reinit({
+                [optionName]: optionValue
+            });
 
             const startDateBox = getStartDateBoxInstance(this.instance);
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -1288,6 +1794,44 @@ QUnit.module('Option synchronization', moduleConfig, () => {
                 .caret({ start: 0, end: 1 })
                 .type('1');
         });
+
+        QUnit.test('DateBoxes pickerType should be "calendar" if initial DateRangeBox pickerType is not "calendar" or "native"', function(assert) {
+            this.reinit({
+                pickerType: 'rollers'
+            });
+
+            assert.strictEqual(this.instance.getStartDateBox().option('pickerType'), 'calendar');
+            assert.strictEqual(this.instance.getEndDateBox().option('pickerType'), 'calendar');
+        });
+
+        QUnit.test('DateBoxes pickerType should be "calendar" if DateRangeBox pickerType is not "calendar" or "native" on runtime change', function(assert) {
+            this.instance.option('pickerType', 'rollers');
+
+            assert.strictEqual(this.instance.getStartDateBox().option('pickerType'), 'calendar');
+            assert.strictEqual(this.instance.getEndDateBox().option('pickerType'), 'calendar');
+        });
+
+        QUnit.test('DateRangeBox startDateText and endDateText options should return text option of dateboxes correctly', function(assert) {
+            this.reinit({
+                value: ['2021/09/17', '2021/09/24'],
+            });
+
+            assert.deepEqual(new Date(this.instance.option('startDateText')), new Date('2021/09/17'));
+            assert.deepEqual(new Date(this.instance.option('endDateText')), new Date('2021/09/24'));
+            assert.strictEqual(this.instance.option('startDateText'), this.instance.getStartDateBox().option('text'));
+            assert.strictEqual(this.instance.option('endDateText'), this.instance.getEndDateBox().option('text'));
+        });
+
+        QUnit.test('DateRangeBox startDateText and endDateText options should return text option of dateboxes correctly after change value in runtime', function(assert) {
+            this.reinit({});
+
+            this.instance.option('value', ['2021/09/17', '2021/09/24']),
+
+            assert.deepEqual(new Date(this.instance.option('startDateText')), new Date('2021/09/17'));
+            assert.deepEqual(new Date(this.instance.option('endDateText')), new Date('2021/09/24'));
+            assert.strictEqual(this.instance.option('startDateText'), this.instance.getStartDateBox().option('text'));
+            assert.strictEqual(this.instance.option('endDateText'), this.instance.getEndDateBox().option('text'));
+        });
     });
 
     QUnit.test('StartDateBox & EndDateBox popups should not be rendered by default', function(assert) {
@@ -1314,6 +1858,18 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
         assert.strictEqual(this.instance.getStartDateBox()._popup instanceof Popup, true, 'startDateBox popup is rendered');
         assert.strictEqual(this.instance.getEndDateBox()._popup, undefined, 'endDateBox popup is not rendered');
+    });
+
+    QUnit.test('disabledDates argument should have component parameter with DateRangeBox instance if disabledDates are set as function', function(assert) {
+        const disabledDates = sinon.stub();
+
+        this.reinit({
+            disabledDates,
+            opened: true
+        });
+
+        const componentField = disabledDates.lastCall.args[0].component;
+        assert.equal(componentField.NAME, 'dxDateRangeBox', 'Correct component');
     });
 });
 

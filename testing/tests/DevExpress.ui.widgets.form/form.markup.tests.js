@@ -32,6 +32,8 @@ const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const VALIDATOR_CLASS = 'dx-validator';
+const READONLY_STATE_CLASS = 'dx-state-readonly';
+const TEXTEDITOR_CLASS = 'dx-texteditor';
 
 const { test } = QUnit;
 
@@ -188,7 +190,7 @@ QUnit.module('Form', () => {
             ]
         });
 
-        assert.ok($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-readonly'), 'editor is read only');
+        assert.ok($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-readonly'), 'editor is read only');
     });
 
     test('Render form with colspan', function(assert) {
@@ -226,11 +228,27 @@ QUnit.module('Form', () => {
             ]
         });
 
-        assert.notOk($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-readonly'), 'editor isn\'t read only');
+        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor isn\'t read only');
 
         $formContainer.dxForm('instance').option('readOnly', true);
 
-        assert.ok($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-readonly'), 'editor is read only');
+        assert.ok($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor is read only');
+    });
+
+    test('editor should not change readonly state after form readOnly option change if editorOptions.readOnly was updated before', function(assert) {
+        const $testContainer = $('#container').dxForm({
+            items: [{
+                dataField: 'dxTextBox',
+                editorType: 'dxTextBox',
+            }]
+        });
+        const instance = $testContainer.dxForm('instance');
+
+        instance.option('items[0].editorOptions.readOnly', true);
+        instance.option('readOnly', true);
+        instance.option('readOnly', false);
+
+        assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor is read only');
     });
 
     test('\'disable\' is changed in inner components on optionChanged', function(assert) {
@@ -244,11 +262,11 @@ QUnit.module('Form', () => {
             disabled: true
         });
 
-        assert.ok($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-disabled'), 'editor is disabled');
+        assert.ok($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-disabled'), 'editor is disabled');
 
         $formContainer.dxForm('instance').option('disabled', false);
 
-        assert.notOk($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-disabled'), 'editor isn\'t disabled');
+        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-disabled'), 'editor isn\'t disabled');
     });
 
     test('Customize item event', function(assert) {

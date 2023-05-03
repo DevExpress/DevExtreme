@@ -252,27 +252,29 @@ const FocusController = core.ViewController.inherit((function() {
             }
         },
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
-            const that = this;
             const dataController = this.getController('data');
             // @ts-expect-error
             const rowsScrollController = dataController._rowsScrollController;
             const rowIndex = gridCoreUtils.getIndexByKey(key, dataController.items(true));
-            const scrollable = that.getView('rowsView').getScrollable();
+            const scrollable = this.getView('rowsView').getScrollable();
 
             if(rowsScrollController && scrollable && rowIndex >= 0) {
                 const focusedRowIndex = rowIndex + dataController.getRowIndexOffset(true);
                 const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
-                const triggerUpdateFocusedRow = function() {
-                    that.component.off('contentReady', triggerUpdateFocusedRow);
+                const triggerUpdateFocusedRow = () => {
+                    if(dataController.totalCount() && !dataController.items().length) {
+                        return;
+                    }
+                    this.component.off('contentReady', triggerUpdateFocusedRow);
 
                     if(needFocusRow) {
-                        that._triggerUpdateFocusedRow(key, deferred);
+                        this._triggerUpdateFocusedRow(key, deferred);
                     } else {
                         deferred.resolve(focusedRowIndex);
                     }
                 };
-                that.component.on('contentReady', triggerUpdateFocusedRow);
+                this.component.on('contentReady', triggerUpdateFocusedRow);
 
                 this.getView('rowsView').scrollTopPosition(offset);
             } else {
