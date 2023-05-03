@@ -257,6 +257,7 @@ const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) =>
 
 const transpileWithBabel = async(sourceCode, destPath) => {
     const { code } = await babel.transform(sourceCode, {
+        compact: false,
         plugins: ['@babel/plugin-transform-modules-systemjs'],
     });
 
