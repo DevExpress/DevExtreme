@@ -53,7 +53,7 @@ export interface DataSourceOptions<
        group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
      /**
       * @docid
-      * @type any
+      * @type object
       * @public
       */
      // eslint-disable-next-line spellcheck/spell-checker
