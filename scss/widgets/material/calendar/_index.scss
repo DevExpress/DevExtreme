@@ -65,35 +65,34 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 .dx-calendar-cell {
   color: $calendar-color;
 
-  .dx-calendar-view-decade &,
-  .dx-calendar-view-year & {
-    span {
-      line-height: 400%;
-      width: 48px;
-    }
-  }
-
-  .dx-calendar-view-century & {
-    span {
-      line-height: 200%;
-      width: 48px;
-    }
-  }
-
   span {
     border-radius: 50%;
     width: $material-calendar-cell-base-size;
     height: $material-calendar-cell-base-size;
   }
 
+  .dx-calendar-view-decade &,
+  .dx-calendar-view-year &,
+  .dx-calendar-view-century & {
+    span {
+      width: $material-calendar-cell-base-size * 2;
+      height: $material-calendar-cell-base-size * 2;
+      border-radius: $base-border-radius;
+      word-spacing: $material-calendar-cell-base-size * 2;
+    }
+  }
+
   &.dx-calendar-today {
     font-weight: bold;
-    color: $calendar-cell-selected-bg;
+
+    span {
+      border: 2px solid $base-accent;
+    }
   }
 
   &.dx-state-hover {
     span {
-      background-color: $material-calendar-cell-hover-bg-color;
+      background-color: $material-calendar-cell-hovered-color;
     }
   }
 
