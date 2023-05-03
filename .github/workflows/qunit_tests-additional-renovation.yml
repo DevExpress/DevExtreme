@@ -113,18 +113,21 @@ jobs:
         ]
 
     steps:
-    - name: Run QUnit tests
-      uses: ./.github/actions/run-qunit-tests
-      with:
-        constel: ${{ matrix.envs.CONSTEL }}
-        browser: ${{ matrix.envs.BROWSER }}
-        withJQuery: ${{ matrix.envs.JQUERY }}
-        userAgent: ${{ matrix.envs.MOBILE_UA }}
-        withShadowDom: ${{ matrix.envs.SHADOW_DOM }}
-        timezone: ${{ matrix.envs.TZ }}
-        isPerformance: ${{ matrix.envs.PERF }}
-        withHeadless: ${{ matrix.envs.NO_HEADLESS }}
-        withCsp: ${{ matrix.envs.NO_CSP }}
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          constel: ${{ matrix.envs.CONSTEL }}
+          browser: ${{ matrix.envs.BROWSER }}
+          withJQuery: ${{ matrix.envs.JQUERY }}
+          userAgent: ${{ matrix.envs.MOBILE_UA }}
+          withShadowDom: ${{ matrix.envs.SHADOW_DOM }}
+          timezone: ${{ matrix.envs.TZ }}
+          isPerformance: ${{ matrix.envs.PERF }}
+          withHeadless: ${{ matrix.envs.NO_HEADLESS }}
+          withCsp: ${{ matrix.envs.NO_CSP }}
 
   notify:
     runs-on: devextreme-shr2
