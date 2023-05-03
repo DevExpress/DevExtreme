@@ -106,8 +106,8 @@ runs:
         SHADOW_DOM: ${{ inputs.withShadowDom }}
         TZ: ${{ inputs.timezone }}
         PERF: ${{ inputs.isPerformance }}
-        NO_HEADLESS: ${{ inputs.withHeadless == 'true' && 'false' || 'true }}
-        NO_CSP: ${{ inputs.withCsp == 'true' && 'false' || 'true }}
+        NO_HEADLESS: ${{ inputs.withHeadless == 'true' && 'false' || 'true' }}
+        NO_CSP: ${{ inputs.withCsp == 'true' && 'false' || 'true' }}
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
