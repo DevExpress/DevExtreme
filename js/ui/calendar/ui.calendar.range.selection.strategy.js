@@ -28,12 +28,22 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         this.skipNavigate();
         this._updateCurrentDate(selectedValue);
         this._currentDateChanged = true;
-        if(!startDate || endDate) {
-            this.dateValue([selectedValue, null], e);
+
+        if(this.calendar.option('_allowChangeSelectionOrder') === true) {
+            if(this.calendar.option('_currentSelection') === 'startDate') {
+                this.dateValue([selectedValue, endDate], e);
+            } else {
+                this.dateValue([startDate, selectedValue], e);
+            }
         } else {
-            this.dateValue(startDate < selectedValue ? [startDate, selectedValue] : [selectedValue, startDate], e);
+            if(!startDate || endDate) {
+                this.dateValue([selectedValue, null], e);
+            } else {
+                this.dateValue(startDate < selectedValue ? [startDate, selectedValue] : [selectedValue, startDate], e);
+            }
         }
     }
+
 
     updateAriaSelected(value, previousValue) {
         value ??= this._getValues();
@@ -92,8 +102,10 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     _cellHoverHandler(e) {
         const isMaxZoomLevel = this._isMaxZoomLevel();
         const [startDate, endDate] = this._getValues();
+        const { _allowChangeSelectionOrder, _currentSelection } = this.calendar.option();
+        const skipHoveredRange = _allowChangeSelectionOrder && _currentSelection === 'startDate';
 
-        if(isMaxZoomLevel && startDate && !endDate) {
+        if(isMaxZoomLevel && startDate && !endDate && !skipHoveredRange) {
             this._updateViewsOption('range', this._getDaysInRange(startDate, e.value));
         }
     }

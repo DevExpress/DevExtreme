@@ -10,14 +10,26 @@ import {
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '\
-            <div id="scrollable" style="height: 50px; width: 50px;">\
-                <div class="content1" style="height: 100px; width: 100px;"></div>\
-                <div class="content2"></div>\
-            </div>\
-            <div id="scrollableVary" style="height: auto">\
-                <div class="content3" style="height: 100px; width: 100px;"></div>\
-            </div>';
+        const markup = `
+            <style nonce="qunit-test">
+                #scrollable {
+                    height: 50px;
+                    width: 50px;
+                }
+                #scrollableVary {
+                    height: auto;
+                }
+                .content1, .content3 {
+                    height: 100px; width: 100px;
+                }
+            </style>
+            <div id="scrollable">
+                <div class="content1"></div>
+                <div class="content2"></div>
+            </div>
+            <div id="scrollableVary">
+                <div class="content3"></div>
+            </div>`;
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
