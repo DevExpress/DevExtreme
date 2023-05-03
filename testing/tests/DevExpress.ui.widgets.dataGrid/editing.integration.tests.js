@@ -4050,20 +4050,20 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 e.editorName = 'dxTextArea';
             },
         });
-        this.clock.tick(100);
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $firstCell.trigger('dxclick');
-        this.clock.tick(5000);
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $textArea = $firstCell.find('textarea');
         assert.equal($textArea.length, 1, 'textarea should appear');
 
-        $textArea.trigger($.Event('dxpointerdown', { pageX: $textArea.offset().left + 5, pageY: $textArea.offset().top + 5 }));
-        $textArea.trigger($.Event('dxpointerup', { pageX: 0, pageY: 0 }));
-        $textArea.trigger($.Event('click', { pageX: 0, pageY: 0, target: $('body').get(0) }));
-        this.clock.tick(5000);
+        $textArea.trigger($.Event('dxpointerdown'));
+        $textArea.trigger($.Event('dxpointerup'));
+        $textArea.trigger($.Event('click', { target: $('body').get(0) }));
+        this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $textArea = $firstCell.find('textarea');
