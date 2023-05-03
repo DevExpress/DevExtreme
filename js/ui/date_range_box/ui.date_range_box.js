@@ -1,5 +1,7 @@
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
+import domAdapter from '../../core/dom_adapter';
+import { resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
@@ -530,6 +532,16 @@ class DateRangeBox extends Widget {
         super._toggleFocusClass(isFocused, this._focusClassTarget($element));
     }
 
+    _hasActiveElement() {
+        const [startDateInput, endDateInput] = this.field();
+
+        return this._isActiveElement(startDateInput) || this._isActiveElement(endDateInput);
+    }
+
+    _isActiveElement(input) {
+        return $(input).is(domAdapter.getActiveElement(input));
+    }
+
     _cleanButtonContainers() {
         this._$beforeButtonsContainer?.remove();
         this._$afterButtonsContainer?.remove();
@@ -732,6 +744,16 @@ class DateRangeBox extends Widget {
 
     field() {
         return [this.getStartDateBox().field(), this.getEndDateBox().field()];
+    }
+
+    focus() {
+        this.getStartDateBox().focus();
+    }
+
+    blur() {
+        if(this._hasActiveElement()) {
+            resetActiveElement();
+        }
     }
 
     reset() {

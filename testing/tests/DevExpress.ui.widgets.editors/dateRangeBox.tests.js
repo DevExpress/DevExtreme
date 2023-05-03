@@ -1267,6 +1267,61 @@ QUnit.module('Events', moduleConfig, () => {
             });
         });
     });
+
+    QUnit.module('onFocusIn & onFocusOut events', {
+        beforeEach: function() {
+            this.onFocusInHandler = sinon.stub();
+            this.onFocusOutHandler = sinon.stub();
+        }
+    }, () => {
+        QUnit.test('onFocusIn should be called once on call focus() method', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+        });
+
+        QUnit.test('onFocusOut should be called once on call blur() method if startDate input is focused', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.getStartDateBox().focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+
+            this.onFocusInHandler.reset();
+            this.instance.blur();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 0, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 1, 'onFocusOut callCount');
+        });
+
+        QUnit.test('onFocusOut should be called once on call blur() method if endDate input is focused', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.getEndDateBox().focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+
+            this.onFocusInHandler.reset();
+            this.instance.blur();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 0, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 1, 'onFocusOut callCount');
+        });
+    });
 });
 
 QUnit.module('Public methods', moduleConfig, () => {
@@ -1321,6 +1376,42 @@ QUnit.module('Public methods', moduleConfig, () => {
 
         assert.strictEqual($popupContent.is($(startDateBox.content())), true, 'content returns right element');
         assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
+    });
+
+    QUnit.testInActiveWindow('Focus() method should focus startDate input', function(assert) {
+        this.instance.focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('Blur() method should unfocus startDate input', function(assert) {
+        this.instance.getStartDateBox().focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+
+        this.instance.blur();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('Blur() method should unfocus startDate input', function(assert) {
+        this.instance.getEndDateBox().focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
+
+        this.instance.blur();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
     });
 });
 
