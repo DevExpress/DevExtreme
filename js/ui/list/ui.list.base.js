@@ -663,10 +663,6 @@ export const ListBase = CollectionWidget.inherit({
         return this._itemContainer();
     },
 
-    _getAriaTarget: function() {
-        return this._itemContainer();
-    },
-
     _renderInkRipple: function() {
         this._inkRipple = render();
     },
