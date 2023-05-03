@@ -11,6 +11,10 @@
 
 $material-calendar-cell-hover-bg-color: color.change($base-accent, $alpha: 0.24) !default;
 $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32) !default;
+$material-calendar-cell-hovered-color: color.change($base-accent, $alpha: 0.24) !default;
+$material-calendar-cell-selected-color: color.change($base-accent, $alpha: 0.32) !default;
+$material-calendar-cell-active-color: color.change($base-accent, $alpha: 0.4) !default;
+$material-calendar-cell-focused-color: color.change($base-accent, $alpha: 0.5) !default;
 
 .dx-calendar {
   width: $material-calendar-legacy-width;
@@ -46,7 +50,6 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
     border-spacing: 0;
 
     th {
-      color: $calendar-header-color;
       font-weight: 500;
     }
 
@@ -57,7 +60,6 @@ $material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32
 
     .dx-calendar-week-number-cell {
       color: $calendar-cell-selected-bg;
-      border-radius: $calendar-cell-contoured-border-radius;
     }
   }
 }
