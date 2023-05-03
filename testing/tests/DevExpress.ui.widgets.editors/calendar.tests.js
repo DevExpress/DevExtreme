@@ -254,6 +254,22 @@ QUnit.module('Navigator integration', {
         });
     });
 
+    QUnit.test('calendar width should not be changed after change zoom level by click on caption button if width option is set', function(assert) {
+        const initialWidthValue = '400px';
+
+        this.reinit({
+            width: '400px',
+            value: new Date(2021, 9, 17)
+        });
+
+        const $navigatorCaptionButton = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+
+        $navigatorCaptionButton.trigger('dxclick');
+
+        assert.strictEqual(this.calendar.option('zoomLevel'), 'year', 'zoom level is changed');
+        assert.strictEqual(this.$element.css('width'), initialWidthValue, 'width is correct');
+    });
+
     QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
         const calendar = this.calendar;
         const $navigatorPrev = this.$navigatorPrev;
