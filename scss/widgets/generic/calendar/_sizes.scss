@@ -5,12 +5,18 @@
 $generic-calendar-legacy-height: null !default;
 $generic-calendar-legacy-width: null !default;
 
+$generic-calendar-cell-base-size: null !default;
+
 @if $size == "default" {
   $generic-calendar-legacy-height: 268.6px;
   $generic-calendar-legacy-width: 282px;
+
+  $generic-calendar-cell-base-size: 28px;
 }
 
 @else if $size == "compact" {
   $generic-calendar-legacy-height: 225.4px;
   $generic-calendar-legacy-width: 232px;
+
+  $generic-calendar-cell-base-size: 28px;
 }

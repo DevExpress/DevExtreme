@@ -67,7 +67,6 @@
 
     .dx-calendar-week-number-cell {
       text-align: center;
-      cursor: default;
     }
   }
 
@@ -78,6 +77,8 @@
 
 .dx-calendar-cell {
   cursor: pointer;
+  position: relative;
+  text-align: center;
   padding: 0;
 
   span {
@@ -86,6 +87,16 @@
     justify-content: center;
     position: relative;
     z-index: 2;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    inset-inline-start: 50%;
+    inset-inline-end: 0;
+    transform: translateY(-50%);
   }
 }
 

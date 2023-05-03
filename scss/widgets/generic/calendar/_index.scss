@@ -121,6 +121,11 @@ $generic-calendar-table-header-font-size: 10px;
   min-height: $generic-calendar-base-size;
   border-radius: $calendar-cell-contoured-border-radius;
 
+  span {
+    width: $generic-calendar-cell-base-size;
+    height: $generic-calendar-cell-base-size;
+  }
+
   &.dx-calendar-today {
     font-weight: bold;
   }
