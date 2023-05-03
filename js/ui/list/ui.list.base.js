@@ -656,7 +656,16 @@ export const ListBase = CollectionWidget.inherit({
         this.callBase();
         this.option('useInkRipple') && this._renderInkRipple();
 
-        this.setAria('role', this.option('_listAttributes').role);
+        this.setAria('role', this.option('_listAttributes').role, this._itemContainer());
+    },
+
+    _focusTarget: function() {
+        const { searchEnabled } = this.option();
+        return this._itemContainer(searchEnabled);
+    },
+
+    _refreshActiveDescendant: function() {
+        this.callBase(this._itemContainer());
     },
 
     _renderInkRipple: function() {
