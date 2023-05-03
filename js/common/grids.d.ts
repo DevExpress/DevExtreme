@@ -71,6 +71,10 @@ import {
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from '../animation/position';
 
+import {
+  Properties as TextBoxProperties,
+} from '../ui/text_box';
+
 /**
  * @namespace DevExpress.common.grids
  */
@@ -541,8 +545,9 @@ export type ColumnChooserSearchConfig = {
   /**
    * @docid
    * @default {}
+   * @type dxTextBoxOptions
    */
-  editorOptions?: any;
+  editorOptions?: TextBoxProperties;
   /**
    * @docid
    * @default false
@@ -1248,8 +1253,9 @@ export type HeaderFilterSearchConfig = {
   /**
    * @docid
    * @default {}
+   * @type dxTextBoxOptions
    */
-  editorOptions?: any;
+  editorOptions?: TextBoxProperties;
   /**
    * @docid
    * @default false
