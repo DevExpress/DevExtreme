@@ -11,7 +11,7 @@ import TextEditorButtonCollection from '../text_box/texteditor_button_collection
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import { isSameDates, isSameDateArrays } from './ui.date_range.utils';
+import { isSameDates, isSameDateArrays, sortDatesArray } from './ui.date_range.utils';
 import { each } from '../../core/utils/iterator';
 import { camelize } from '../../core/utils/inflector';
 
@@ -124,6 +124,7 @@ class DateRangeBox extends Widget {
 
         const { value: initialValue } = this.initialOption();
         const { value, startDate, endDate } = this.option();
+
         if(isSameDateArrays(initialValue, value)) {
             this.option('value', [startDate, endDate]);
         } else {
@@ -676,14 +677,19 @@ class DateRangeBox extends Widget {
             case 'validationMessagePosition':
             case 'validationStatus':
                 break;
-            case 'value':
-                this._setOptionWithoutOptionChange('startDate', args.value[0]);
-                this._setOptionWithoutOptionChange('endDate', args.value[1]);
+            case 'value': {
+                const newValue = sortDatesArray(value);
+                if(!isSameDateArrays(newValue, previousValue)) {
+                    this._setOptionWithoutOptionChange('value', newValue);
+                    this._setOptionWithoutOptionChange('startDate', newValue[0]);
+                    this._setOptionWithoutOptionChange('endDate', newValue[1]);
 
-                this._raiseValueChangeAction(value, previousValue);
-                this._saveValueChangeEvent(undefined);
-                this._updateDateBoxesValue(value);
+                    this._raiseValueChangeAction(newValue, previousValue);
+                    this._saveValueChangeEvent(undefined);
+                    this._updateDateBoxesValue(newValue);
+                }
                 break;
+            }
             default:
                 super._optionChanged(args);
         }
