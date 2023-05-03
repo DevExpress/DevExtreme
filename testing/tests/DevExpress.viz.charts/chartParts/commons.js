@@ -264,7 +264,7 @@ exports.environment = {
     },
 
     mockValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data, groupsData) {
             const categories = [];
             if(data) {
                 data.forEach(function(item) {
