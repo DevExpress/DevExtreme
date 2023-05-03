@@ -1660,8 +1660,8 @@ QUnit.module('options', {
 
         assert.equal(searchBox.option('value'), '', 'search value has been cleared');
 
-        $($list).trigger('focusin');
-        assert.equal($list.find('.dx-state-focused').eq(0).text(), $listItems.eq(0).text(), 'list focused item has been refreshed');
+        $list.dxList('focus');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}.${FOCUSED_CLASS}`).eq(0).text(), $listItems.eq(0).text(), 'list focused item has been refreshed');
     });
 
     QUnit.test('click on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -2692,6 +2692,7 @@ QUnit.module('focus policy', {
         const $listItems = $list.find('.dx-item');
         const list = $list.dxList('instance');
 
+        list.focus();
         $($listItems.eq(1)).trigger('dxclick');
         instance.open();
 
@@ -2841,10 +2842,11 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        $(instance._$list).focus();
+        instance._$list.dxList('focus');
         assert.ok(instance._$list.find('.dx-list-item').eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
 
-        const keyboard = keyboardMock(instance._$list);
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find('.dx-list-item').eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
@@ -2910,10 +2912,11 @@ QUnit.module('keyboard navigation', {
 
         instance.option('searchEnabled', false);
 
-        const keyboard = keyboardMock(instance._$list);
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find('.dx-list-item').first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
     });
 
     QUnit.test('space key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -2977,7 +2980,9 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true,
             searchEnabled: false
         }).dxLookup('instance');
-        const keyboard = keyboardMock(instance._$list);
+
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
@@ -3351,7 +3356,7 @@ if(devices.real().deviceType === 'desktop') {
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
+                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display' }, 'list');
                 helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
@@ -3364,7 +3369,7 @@ if(devices.real().deviceType === 'desktop') {
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
+                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display' }, 'list');
                 helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
@@ -3388,13 +3393,6 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.$widget, {}, 'widget');
                 helper.checkAttributes($field, { role: 'combobox', 'aria-expanded': 'false', tabindex: '0' }, 'field');
-            });
-
-            QUnit.test('aria-target for lookup\'s list should point to the list\'s focusTarget', function(assert) {
-                helper.createWidget({ opened: true });
-
-                const list = $(`.${LIST_CLASS}`).dxList('instance');
-                assert.deepEqual(list._getAriaTarget(), list.$element(), 'aria target for nested list is correct');
             });
         });
     });
