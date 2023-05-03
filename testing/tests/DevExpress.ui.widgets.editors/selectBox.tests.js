@@ -5930,7 +5930,7 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({ opened: true });
 
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
+                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display' }, 'list');
 
                 const inputAttributes = {
                     role: 'combobox',
@@ -5957,7 +5957,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
+                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display' }, 'list');
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
