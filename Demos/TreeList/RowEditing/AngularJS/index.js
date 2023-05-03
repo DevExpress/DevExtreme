@@ -11,7 +11,7 @@ DemoApp.controller('DemoController', ($scope) => {
     editing: {
       mode: 'row',
       allowUpdating: true,
-      allowDeleting: true,
+      allowDeleting: (args) => args.row.data.ID !== 1,
       allowAdding: true,
     },
     columns: [{

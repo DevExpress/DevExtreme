@@ -18,6 +18,10 @@ const lookupData = {
 };
 
 class App extends React.Component {
+  allowDeleting(e) {
+    return e.row.data.ID !== 1;
+  }
+
   render() {
     return (
       <div id="tree-list-demo">
@@ -32,7 +36,7 @@ class App extends React.Component {
           onEditorPreparing={this.onEditorPreparing}
           onInitNewRow={this.onInitNewRow}
         >
-          <Editing allowUpdating={true} allowDeleting={true} allowAdding={true} popup={popupOptions} mode="popup" />
+          <Editing allowUpdating={true} allowDeleting={this.allowDeleting} allowAdding={true} popup={popupOptions} mode="popup" />
           <Column dataField="Full_Name">
             <ValidationRule type="required" />
           </Column>

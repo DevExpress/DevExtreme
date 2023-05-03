@@ -8,7 +8,7 @@ DemoApp.controller('DemoController', ($scope) => {
     editing: {
       mode: 'form',
       allowUpdating: true,
-      allowDeleting: true,
+      allowDeleting: (args) => args.row.data.ID !== 1,
       allowAdding: true,
     },
     columnAutoWidth: true,

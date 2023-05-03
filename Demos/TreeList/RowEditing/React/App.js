@@ -12,6 +12,10 @@ const headDataSource = {
 };
 
 class App extends React.Component {
+  allowDeleting(e) {
+    return e.row.data.ID !== 1;
+  }
+
   render() {
     return (
       <div id="tree-list-demo">
@@ -29,7 +33,7 @@ class App extends React.Component {
         >
           <Editing
             allowUpdating={true}
-            allowDeleting={true}
+            allowDeleting={this.allowDeleting}
             allowAdding={true}
             mode="row" />
           <Column

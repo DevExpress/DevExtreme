@@ -6,7 +6,7 @@ $(() => {
     editing: {
       mode: 'popup',
       allowUpdating: true,
-      allowDeleting: true,
+      allowDeleting: (args) => args.row.data.ID !== 1,
       allowAdding: true,
       popup: {
         title: 'Employee Info',

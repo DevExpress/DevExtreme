@@ -39,6 +39,10 @@ export class AppComponent {
   initNewRow(e) {
     e.data.Head_ID = 1;
   }
+
+  allowDeleting(e) {
+    return e.row.data.ID !== 1;
+  }
 }
 
 @NgModule({

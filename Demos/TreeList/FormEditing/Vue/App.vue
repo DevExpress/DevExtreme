@@ -14,7 +14,7 @@
     >
       <DxEditing
         :allow-updating="true"
-        :allow-deleting="true"
+        :allow-deleting="allowDeleting"
         :allow-adding="true"
         mode="form"
       />
@@ -108,6 +108,9 @@ export default {
     },
     onInitNewRow(e) {
       e.data.Head_ID = 1;
+    },
+    allowDeleting(e) {
+      return e.row.data.ID !== 1;
     },
   },
 };
