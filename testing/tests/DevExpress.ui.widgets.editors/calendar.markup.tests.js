@@ -65,12 +65,9 @@ QUnit.module('Calendar markup', {
         }
     }, () => {
         QUnit.test('calendar should have width equals viewsCount * view width', function(assert) {
-            const viewWidth = this.calendar._viewWidth();
+            const elementWidth = $(this.calendar.$element()).width();
 
-            const bordersWidth = 2;
-            const elementWidth = this.calendar.$element().css('width');
-
-            assert.strictEqual(elementWidth, `${viewWidth * 2 + bordersWidth}px`);
+            assert.strictEqual(elementWidth, this.viewWidth * 2);
         });
 
         QUnit.test('calendar should not have inline width after multiview runtime disable', function(assert) {
