@@ -52,7 +52,7 @@ jobs:
         path: artifacts.zip
         retention-days: 1
 
-  qunit-tests:
+  qunit-tests-timezones:
     needs: build
     runs-on: devextreme-shr2
     name: ${{ matrix.envs.name }}
@@ -73,8 +73,46 @@ jobs:
           { CONSTEL: "ui.scheduler", TZ: 'PST8PDT', name: 'ui.scheduler-PST8PDT' },
           { CONSTEL: "ui.scheduler", TZ: 'Japan', name: 'ui.scheduler-Japan' },
           { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT', name: 'ui.scheduler-Australia' },
-          { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler-Europe' },
-          { PERF: true, JQUERY: true, HEADLESS: false, USE_CSP: false, name: 'Performance' },
+          { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler-Europe' }
+        ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          constel: ${{ matrix.envs.CONSTEL }}
+          timezone: ${{ matrix.envs.TZ }}
+          useCsp: ${{ matrix.envs.USE_CSP }}
+
+  qunit-tests-performance:
+    needs: build
+    runs-on: devextreme-shr2
+    name: Performance
+    timeout-minutes: 30
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          isPerformance: "true"
+          useJQuery: "true"
+          headless: "false"
+          useCsp: "false"
+
+  qunit-tests-mobile-and-shadow-dom:
+    needs: build
+    runs-on: devextreme-shr2
+    name: ${{ matrix.envs.name }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        envs: [
           { MOBILE_UA: "ios10", CONSTEL: "ui", USE_CSP: false, name: 'ui-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", HEADLESS: false, USE_CSP: false, name: 'ui.widgets(1/3)-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", HEADLESS: false, USE_CSP: false, name: 'ui.widgets(2/3)-iOS10' },
@@ -98,7 +136,32 @@ jobs:
           { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", HEADLESS: false, name: 'ui.widgets(3/3)-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.editors", HEADLESS: false, name: 'ui.editors-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", HEADLESS: false, USE_CSP: false, name: 'ui.htmlEditor-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.grid", HEADLESS: false, name: 'ui.grid-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.grid", HEADLESS: false, name: 'ui.grid-shadowdom' }
+        ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          constel: ${{ matrix.envs.CONSTEL }}
+          useJQuery: ${{ matrix.envs.JQUERY }}
+          userAgent: ${{ matrix.envs.MOBILE_UA }}
+          useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
+          headless: ${{ matrix.envs.HEADLESS }}
+          useCsp: ${{ matrix.envs.USE_CSP }}
+
+  qunit-tests-firefox:
+    needs: build
+    runs-on: devextreme-shr2
+    name: ${{ matrix.envs.name }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        envs: [
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", USE_CSP: false, name: 'export-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", USE_CSP: false, name: 'misc-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", USE_CSP: false, name: 'ui-firefox' },
@@ -120,19 +183,20 @@ jobs:
         uses: ./.github/actions/run-qunit-tests
         with:
           constel: ${{ matrix.envs.CONSTEL }}
-          browser: ${{ matrix.envs.BROWSER }}
-          useJQuery: ${{ matrix.envs.JQUERY }}
-          userAgent: ${{ matrix.envs.MOBILE_UA }}
-          useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
-          timezone: ${{ matrix.envs.TZ }}
-          isPerformance: ${{ matrix.envs.PERF }}
-          headless: ${{ matrix.envs.HEADLESS }}
+          browser: "firefox"
+          useJQuery: "true"
           useCsp: ${{ matrix.envs.USE_CSP }}
 
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [build, qunit-tests]
+    needs: [
+      build,
+      qunit-tests-timezones,
+      qunit-tests-performance,
+      qunit-tests-mobile-and-shadow-dom,
+      qunit-tests-firefox
+    ]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
