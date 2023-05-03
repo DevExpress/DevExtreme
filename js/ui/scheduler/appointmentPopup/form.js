@@ -338,10 +338,6 @@ export class AppointmentForm {
                 }]
             },
             {
-                itemType: 'empty',
-                colSpan: 2
-            },
-            {
                 dataField: dataExprs.descriptionExpr,
                 editorType: 'dxTextArea',
                 colSpan: 2,
