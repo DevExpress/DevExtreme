@@ -22,7 +22,11 @@ const sourceItemsToMocking = {};
 export const categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
 let renderer;
 
-export let seriesMockData = {};
+export const seriesMockData = {
+    series: [],
+    args: [],
+    currentSeries: 0
+};
 
 const canvas = {
     width: 610,
@@ -325,11 +329,7 @@ const MockSeriesFamily = Class.inherit({
 });
 
 export const insertMockFactory = function insertMockFactory() {
-    seriesMockData = {
-        series: [],
-        args: [],
-        currentSeries: 0
-    };
+    resetMockFactory();
 
     mockItem('Point', pointModule, function(series, data, options) {
         const opt = $.extend(true, {}, data, options);
@@ -383,7 +383,9 @@ export const restoreMockFactory = function() {
 };
 
 export const resetMockFactory = function resetMockFactory() {
-    seriesMockData = null;
+    seriesMockData.series = [];
+    seriesMockData.args = [];
+    seriesMockData.currentSeries = 0;
 };
 
 export const setupSeriesFamily = function() {
