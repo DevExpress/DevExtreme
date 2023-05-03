@@ -95,7 +95,7 @@ export default {
         if(this.option('searchEnabled')) {
             return this._itemContainer(true);
         }
-        return this.$element();
+        return this.callBase();
     },
 
     _focusTarget: function() {
