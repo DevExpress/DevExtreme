@@ -46,6 +46,10 @@ const getList = (instance) => {
     return instance._list;
 };
 
+const getListKeyboard = (dropDownButton) => {
+    return keyboardMock($(getList(dropDownButton).element()).find('[tabindex=0]'));
+};
+
 const getButtonGroup = (instance) => {
     return instance._buttonGroup;
 };
@@ -2228,7 +2232,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
@@ -2249,7 +2253,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
@@ -2270,7 +2274,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'selectionChanged is raised');
@@ -2289,7 +2293,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
 
@@ -2311,7 +2315,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'onSelectionChanged is raised');
@@ -2372,7 +2376,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('esc');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2397,7 +2401,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('left');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2412,7 +2416,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('right');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2435,7 +2439,7 @@ QUnit.module('keyboard navigation', {
             .press('down')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('enter');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2461,7 +2465,7 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(this.dropDownButton.option('dropDownOptions.visible'), 'popup is opened');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         const event = listKeyboard.press('tab').event;
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
