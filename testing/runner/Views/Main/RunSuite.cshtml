@@ -10,10 +10,11 @@
     var renovationPart = Model.NoRenovation ? "" : "-renovation";
     var cspPart = Model.NoCsp ? "" : "-systemjs";
     var npmModule = "transpiled" + renovationPart + cspPart;
+    var testingBasePath = Model.NoCsp ? "~/testing/" : "~/artifacts/transpiled-testing/";
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
-            return Url.Content("~/testing/helpers/noJQuery.js");
+            return Url.Content(testingBasePath + "helpers/noJQuery.js");
 
         return Url.Content("~/artifacts/js/jquery.js");
     }
@@ -27,7 +28,6 @@
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
-                var testingBasePath = Model.NoCsp ? "~/testing/" : "~/artifacts/transpiled-testing/";
                 yield return Url.Content(testingBasePath + "helpers/jQueryEventsPatch.js");
                 yield return Url.Content(testingBasePath + "helpers/argumentsValidator.js");
                 yield return Url.Content(testingBasePath + "helpers/dataPatch.js");
