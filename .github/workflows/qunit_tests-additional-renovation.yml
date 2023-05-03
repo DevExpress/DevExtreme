@@ -121,13 +121,13 @@ jobs:
         with:
           constel: ${{ matrix.envs.CONSTEL }}
           browser: ${{ matrix.envs.BROWSER }}
-          withJQuery: ${{ matrix.envs.JQUERY }}
+          useJQuery: ${{ matrix.envs.JQUERY }}
           userAgent: ${{ matrix.envs.MOBILE_UA }}
-          withShadowDom: ${{ matrix.envs.SHADOW_DOM }}
+          useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
           timezone: ${{ matrix.envs.TZ }}
           isPerformance: ${{ matrix.envs.PERF }}
-          withHeadless: ${{ matrix.envs.WITH_HEADLESS }}
-          withCsp: ${{ matrix.envs.WITH_CSP }}
+          headless: ${{ matrix.envs.WITH_HEADLESS }}
+          useCsp: ${{ matrix.envs.WITH_CSP }}
 
   notify:
     runs-on: devextreme-shr2

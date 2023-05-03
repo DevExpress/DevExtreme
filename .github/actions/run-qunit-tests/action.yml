@@ -7,13 +7,13 @@ inputs:
   browser:
     description: "Name of the browser"
     default: "chrome"
-  withJQuery:
+  useJQuery:
     description: "Indicates if jQuery should be used"
     default: "false"
   userAgent:
     description: "User agent string to be passed to the browser"
     default: ""
-  withShadowDom:
+  useShadowDom:
     description: "Specifies if shadow DOM should be utilized"
     default: "false"
   timezone:
@@ -22,10 +22,10 @@ inputs:
   isPerformance:
     description: "Indicates if performance testing should be conducted"
     default: "false"
-  withHeadless:
+  headless:
     description: "Specifies if the browser should run in headless mode"
     default: "true"
-  withCsp:
+  useCsp:
     description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
 

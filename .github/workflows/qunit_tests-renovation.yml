@@ -70,7 +70,7 @@ jobs:
       uses: ./.github/actions/run-qunit-tests
       with:
         constel: ${{ matrix.CONSTEL }}
-        withCsp: "false"
+        useCsp: "false"
 
   notify:
     runs-on: devextreme-shr2
