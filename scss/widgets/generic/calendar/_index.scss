@@ -126,6 +126,17 @@ $generic-calendar-table-header-font-size: 10px;
     height: $generic-calendar-cell-base-size;
   }
 
+  .dx-calendar-view-decade &,
+  .dx-calendar-view-year &,
+  .dx-calendar-view-century & {
+    span {
+      width: $generic-calendar-cell-base-size * 2;
+      height: $generic-calendar-cell-base-size * 2;
+      border-radius: $base-border-radius;
+      word-spacing: $generic-calendar-cell-base-size * 2;
+    }
+  }
+
   &.dx-calendar-today {
     font-weight: bold;
   }

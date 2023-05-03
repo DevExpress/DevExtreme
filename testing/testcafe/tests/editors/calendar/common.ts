@@ -143,6 +143,7 @@ test('Calendar with multiview rendered correct', async (t) => {
       value: new Date(2021, 9, 17),
       width: 450,
       height: 450,
+      zoomLevel,
       showTodayButton: true,
     }, '#calendar');
   });
