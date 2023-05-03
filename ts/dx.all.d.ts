@@ -4890,6 +4890,10 @@ declare module DevExpress.data {
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
+     * [descr:DataSourceOptions.langParams]
+     */
+    langParams?: LangParams;
+    /**
      * [descr:DataSourceOptions.map]
      */
     map?: (dataItem: TStoreItem) => TMappedItem;
@@ -5005,6 +5009,13 @@ declare module DevExpress.data {
   type KeySelector<T> =
     | string
     | ((source: T) => string | number | Date | Object);
+  /**
+   * [descr:LangParams]
+   */
+  export type LangParams = {
+    locale: string;
+    collateOptions?: Intl.CollatorOptions;
+  };
   /**
    * [descr:LoadOptions]
    */

@@ -5,9 +5,6 @@ module.exports = {
         es6: true,
         node: false,
     },
-    plugins: [
-        'spellcheck'
-    ],
     overrides: [
         {
             files: [
@@ -33,13 +30,7 @@ module.exports = {
                         }],
                         patterns: ['../'],
                     }
-                ],
-                'spellcheck/spell-checker': [1,
-                    {
-                        'skipWords': [
-                            'langParams',
-                        ],
-                    }],
+                ]
             },
         },
         {
