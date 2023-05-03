@@ -2,37 +2,31 @@ name: "Run QUnit tests"
 description: "Runs tests with environment specified through parameters"
 
 inputs:
-  chrome-version:
-    description: "Chrome version to install"
-    default: "110.0.5481.177-1"
-  firefox-version:
-    description: "Firefox version to install"
-    default: "latest"
   constel:
-    description: "A tests group name"
+    description: "Name of the test group"
   browser:
-    description: "Browser name"
+    description: "Name of the browser"
     default: "chrome"
   withJQuery:
-    description: "Defines whether use jQuery or not"
+    description: "Indicates if jQuery should be used"
     default: "false"
   userAgent:
-    description: "User agent passed into a browser"
+    description: "User agent string to be passed to the browser"
     default: ""
   withShadowDom:
-    description: "Defined whether use with shadow DOM or not"
+    description: "Specifies if shadow DOM should be utilized"
     default: "false"
   timezone:
-    description: "A timezone"
+    description: "Timezone for the test environment"
     default: ""
   isPerformance:
-    description: "Defines whether use performance testing"
+    description: "Indicates if performance testing should be conducted"
     default: "false"
   withHeadless:
-    description: "Defines whether run browser in a headless mode or not"
+    description: "Specifies if the browser should run in headless mode"
     default: "true"
   withCsp:
-    description: "Defines whether run tests with CSP turned on"
+    description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
 
 runs:
