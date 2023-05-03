@@ -275,7 +275,7 @@ export class AppointmentForm {
                 colSpan: 2,
                 colCountByScreen: {
                     lg: 2,
-                    xs: 1
+                    xs: 2
                 },
                 items: [{
                     dataField: dataExprs.allDayExpr,
