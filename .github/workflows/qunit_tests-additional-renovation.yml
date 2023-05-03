@@ -126,8 +126,8 @@ jobs:
           withShadowDom: ${{ matrix.envs.SHADOW_DOM }}
           timezone: ${{ matrix.envs.TZ }}
           isPerformance: ${{ matrix.envs.PERF }}
-          withHeadless: ${{ matrix.envs.NO_HEADLESS }}
-          withCsp: ${{ matrix.envs.NO_CSP }}
+          withHeadless: ${{ matrix.envs.WITH_HEADLESS }}
+          withCsp: ${{ matrix.envs.WITH_CSP }}
 
   notify:
     runs-on: devextreme-shr2
