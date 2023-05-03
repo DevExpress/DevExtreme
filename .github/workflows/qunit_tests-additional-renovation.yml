@@ -61,10 +61,10 @@ jobs:
       fail-fast: false
       matrix:
         envs: [
-          { CONSTEL: "misc", TZ: 'PST8PDT', NO_CSP: true, name: 'misc-PST8PDT' },
-          { CONSTEL: "misc", TZ: 'Japan', NO_CSP: true, name: 'misc-Japan' },
-          { CONSTEL: "misc", TZ: 'Australia/ACT', NO_CSP: true, name: 'misc-Australia' },
-          { CONSTEL: "misc", JQUERY: true, NO_CSP: true, name: 'misc-jQuery' },
+          { CONSTEL: "misc", TZ: 'PST8PDT', WITH_CSP: false, name: 'misc-PST8PDT' },
+          { CONSTEL: "misc", TZ: 'Japan', WITH_CSP: false, name: 'misc-Japan' },
+          { CONSTEL: "misc", TZ: 'Australia/ACT', WITH_CSP: false, name: 'misc-Australia' },
+          { CONSTEL: "misc", JQUERY: true, WITH_CSP: false, name: 'misc-jQuery' },
           { CONSTEL: "ui.editors", TZ: 'PST8PDT', name: 'ui.editors-PST8PDT' },
           { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors-Japan' },
           { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors-Australia' },
@@ -74,126 +74,57 @@ jobs:
           { CONSTEL: "ui.scheduler", TZ: 'Japan', name: 'ui.scheduler-Japan' },
           { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT', name: 'ui.scheduler-Australia' },
           { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler-Europe' },
-          { PERF: true, JQUERY: true, NO_HEADLESS: true, NO_CSP: true, name: 'Performance' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui", NO_CSP: true, name: 'ui-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "viz", NO_CSP: true, name: 'viz-iOS10' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", NO_CSP: true, name: 'viz-android6' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-shadowdom' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", NO_CSP: true, name: 'export-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", NO_CSP: true, name: 'misc-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-firefox' },
+          { PERF: true, JQUERY: true, WITH_HEADLESS: false, WITH_CSP: false, name: 'Performance' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui", WITH_CSP: false, name: 'ui-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.widgets(1/3)-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.widgets(2/3)-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(3/3)", WITH_HEADLESS: false, name: 'ui.widgets(3/3)-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.editors", WITH_HEADLESS: false, name: 'ui.editors-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.htmlEditor", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.htmlEditor-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.grid", WITH_HEADLESS: false, name: 'ui.grid-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.scheduler", WITH_HEADLESS: false, name: 'ui.scheduler-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "viz", WITH_CSP: false, name: 'viz-iOS10' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui", WITH_CSP: false, name: 'ui-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(1/3)", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.widgets(1/3)-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(2/3)", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.widgets(2/3)-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(3/3)", WITH_HEADLESS: false, name: 'ui.widgets(3/3)-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", WITH_HEADLESS: false, name: 'ui.editors-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.htmlEditor-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", WITH_HEADLESS: false, name: 'ui.grid-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", WITH_HEADLESS: false, name: 'ui.scheduler-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", WITH_CSP: false, name: 'viz-android6' },
+          { SHADOW_DOM: true, CONSTEL: "ui.widgets(1/3)", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.widgets(1/3)-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.widgets(2/3)-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", WITH_HEADLESS: false, name: 'ui.widgets(3/3)-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.editors", WITH_HEADLESS: false, name: 'ui.editors-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", WITH_HEADLESS: false, WITH_CSP: false, name: 'ui.htmlEditor-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.grid", WITH_HEADLESS: false, name: 'ui.grid-shadowdom' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", WITH_CSP: false, name: 'export-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", WITH_CSP: false, name: 'misc-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", WITH_CSP: false, name: 'ui-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors", name: 'ui.editors-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_CSP: true, name: 'ui.htmlEditor-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(1/2)", NO_CSP: true, name: 'ui.grid(1/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(2/2)", NO_CSP: true, name: 'ui.grid(2/2)-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.htmlEditor", WITH_CSP: false, name: 'ui.htmlEditor-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(1/2)", WITH_CSP: false, name: 'ui.grid(1/2)-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(2/2)", WITH_CSP: false, name: 'ui.grid(2/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(1/2)", name: 'ui.scheduler(1/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(2/2)", name: 'ui.scheduler(2/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", NO_CSP: true, name: 'viz-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", WITH_CSP: false, name: 'viz-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' }
         ]
 
     steps:
-    - name: Setup MATRIX_ENVS_NAME_SAFE
-      run: |
-        MATRIX_ENVS_NAME_SAFE=$(echo -n "${{ matrix.envs.name }}" | sed 's|/|-|g')
-        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
-        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
-
-    - name: Setup firefox profile
-      run: |
-        mkdir -p /tmp/firefox-profile
-        for p in \
-        '"browser.shell.checkDefaultBrowser", false' \
-        '"datareporting.policy.dataSubmissionEnabled", false' \
-        '"font.name-list.monospace.x-western", "Liberation Mono"' \
-        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
-
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
-
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - uses: ./.github/actions/pin-browsers
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-
-    - name: Unpack artifacts
-      run: 7z x artifacts.zip
-
-    - name: Build dotnet
-      run: dotnet build build/build-dotnet.sln
-
     - name: Run QUnit tests
-      env:
-        CONSTEL: ${{ matrix.envs.CONSTEL }}
-        BROWSER: ${{ matrix.envs.BROWSER }}
-        JQUERY: ${{ matrix.envs.JQUERY }}
-        MOBILE_UA: ${{ matrix.envs.MOBILE_UA }}
-        SHADOW_DOM: ${{ matrix.envs.SHADOW_DOM }}
-        TZ: ${{ matrix.envs.TZ }}
-        PERF: ${{ matrix.envs.PERF }}
-        NO_HEADLESS: ${{ matrix.envs.NO_HEADLESS }}
-        NO_CSP: ${{ matrix.envs.NO_CSP }}
-        NORENOVATION: "false"
-        GITHUBACTION: "true"
-        TARGET: "test"
-        DISPLAY: ":99"
-      run: |
-        chmod +x ./docker-ci.sh
-        ./docker-ci.sh
-
-    - name: Copy RawLog.txt
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: ./.github/actions/run-qunit-tests
       with:
-        name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
-        path: ${{ github.workspace }}/testing/RawLog.txt
-        if-no-files-found: ignore
+        constel: ${{ matrix.envs.CONSTEL }}
+        browser: ${{ matrix.envs.BROWSER }}
+        withJQuery: ${{ matrix.envs.JQUERY }}
+        userAgent: ${{ matrix.envs.MOBILE_UA }}
+        withShadowDom: ${{ matrix.envs.SHADOW_DOM }}
+        timezone: ${{ matrix.envs.TZ }}
+        isPerformance: ${{ matrix.envs.PERF }}
+        withHeadless: ${{ matrix.envs.NO_HEADLESS }}
+        withCsp: ${{ matrix.envs.NO_CSP }}
 
   notify:
     runs-on: devextreme-shr2
