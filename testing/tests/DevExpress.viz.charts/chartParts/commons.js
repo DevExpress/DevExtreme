@@ -1,5 +1,6 @@
 require('../../../helpers/trackerMock.js');
 
+const $ = require('jquery');
 const vizMocks = require('../../../helpers/vizMocks.js');
 const { Label } = require('viz/series/points/label');
 const LabelCtor = new vizMocks.ObjectPool(Label);
