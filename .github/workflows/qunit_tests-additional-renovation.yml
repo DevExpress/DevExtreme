@@ -115,29 +115,29 @@ jobs:
       matrix:
         envs: [
           { MOBILE_UA: "ios10", CONSTEL: "ui", NO_CSP: true, name: 'ui-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", HEADLESS: false, NO_CSP: true, name: 'ui.widgets(1/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", HEADLESS: false, NO_CSP: true, name: 'ui.widgets(2/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(3/3)", HEADLESS: false, name: 'ui.widgets(3/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.editors", HEADLESS: false, name: 'ui.editors-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.htmlEditor", HEADLESS: false, NO_CSP: true, name: 'ui.htmlEditor-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.grid", HEADLESS: false, name: 'ui.grid-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.scheduler", HEADLESS: false, name: 'ui.scheduler-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-iOS10' },
+          { MOBILE_UA: "ios10", CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "viz", NO_CSP: true, name: 'viz-iOS10' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(1/3)", HEADLESS: false, NO_CSP: true, name: 'ui.widgets(1/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(2/3)", HEADLESS: false, NO_CSP: true, name: 'ui.widgets(2/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(3/3)", HEADLESS: false, name: 'ui.widgets(3/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", HEADLESS: false, name: 'ui.editors-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", HEADLESS: false, NO_CSP: true, name: 'ui.htmlEditor-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", HEADLESS: false, name: 'ui.grid-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", HEADLESS: false, name: 'ui.scheduler-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", NO_CSP: true, name: 'viz-android6' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(1/3)", HEADLESS: false, NO_CSP: true, name: 'ui.widgets(1/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", HEADLESS: false, NO_CSP: true, name: 'ui.widgets(2/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", HEADLESS: false, name: 'ui.widgets(3/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.editors", HEADLESS: false, name: 'ui.editors-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", HEADLESS: false, NO_CSP: true, name: 'ui.htmlEditor-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.grid", HEADLESS: false, name: 'ui.grid-shadowdom' }
+          { SHADOW_DOM: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-shadowdom' }
         ]
 
     steps:
@@ -151,7 +151,7 @@ jobs:
           useJQuery: ${{ matrix.envs.JQUERY || 'false' }}
           userAgent: ${{ matrix.envs.MOBILE_UA }}
           useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
-          headless: ${{ matrix.envs.HEADLESS }}
+          headless: ${{ matrix.envs.NO_HEADLESS == 'true' && 'false' || 'true' }}
           useCsp: ${{ matrix.envs.NO_CSP == 'true' && 'false' || 'true' }}
 
   qunit-tests-firefox:
