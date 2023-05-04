@@ -124,7 +124,6 @@ const columnChooserMembers = {
         const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
         const $element = that.element().addClass(columnChooserClass);
         const columnChooserOptions = that.option('columnChooser');
-        const isSelectMode = this.isSelectMode();
 
         const themeName = current();
         const isGenericTheme = isGeneric(themeName);
@@ -173,6 +172,12 @@ const columnChooserMembers = {
             this._popupContainer.option(dxPopupOptions);
         }
 
+        this.setPopupAttributes();
+    },
+
+    setPopupAttributes: function() {
+        const isSelectMode = this.isSelectMode();
+
         this._popupContainer.setAria({
             role: 'dialog',
             label: messageLocalization.format('dxDataGrid-columnChooserTitle')
@@ -181,6 +186,12 @@ const columnChooserMembers = {
         this._popupContainer.$wrapper()
             .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
             .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
+
+        this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
+
+        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
+            this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+        }
     },
 
     _renderCore: function(change) {
@@ -221,33 +232,10 @@ const columnChooserMembers = {
             searchEditorOptions: columnChooser.search?.editorOptions,
         };
 
-        const scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
-        const scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-
-        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
-            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
-        }
-
-        treeViewConfig.onContentReady = function(e) {
-            deferUpdate(function() {
-                if(scrollTop) {
-                    /**
-                     * @type {import('../scroll_view/ui.scrollable').default}
-                    */
-                    // @ts-expect-error
-                    const scrollable = $(e.element).find('.dx-scrollable').data('dxScrollable');
-                    scrollable && scrollable.scrollTo({ y: scrollTop });
-                }
-
-                // @ts-expect-error
-                that.renderCompleted.fire();
-            });
-        };
-
-
         if(this._isWinDevice()) {
             treeViewConfig.useNativeScrolling = false;
         }
+
         extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
         if(this._columnChooserList) {
@@ -258,7 +246,25 @@ const columnChooserMembers = {
             this._columnChooserList.option(treeViewConfig);
         } else {
             this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);
-            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
+
+            let scrollTop;
+
+            this._columnChooserList.on('optionChanged', e => {
+                const scrollable = e.component.getScrollable();
+                scrollTop = scrollable?.scrollTop();
+            });
+
+            this._columnChooserList.on('contentReady', e => {
+                deferUpdate(function() {
+                    if(scrollTop) {
+                        const scrollable = e.component.getScrollable();
+                        scrollTop = scrollable?.scrollTo({ y: scrollTop });
+                    }
+
+                    // @ts-expect-error
+                    that.renderCompleted.fire();
+                });
+            });
         }
 
         // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
