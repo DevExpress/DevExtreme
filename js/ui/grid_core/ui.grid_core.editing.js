@@ -1019,14 +1019,18 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _focusFirstEditableCellInRow: function(rowIndex) {
             const dataController = this._dataController;
+            const keyboardController = this.getController('keyboardNavigation');
             const key = dataController.getKeyByRowIndex(rowIndex);
             const $firstCell = this.getFirstEditableCellInRow(rowIndex);
+
+            keyboardController?.focus($firstCell);
 
             this._editCellInProgress = true;
             this._delayedInputFocus($firstCell, () => {
                 rowIndex = dataController.getRowIndexByKey(key);
                 this._editCellInProgress = false;
                 this._beforeFocusElementInRow(rowIndex);
+                this.option('focusedRowIndex', rowIndex);
             });
         },
 
