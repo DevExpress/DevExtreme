@@ -241,9 +241,7 @@ const SortIterator = Iterator.inherit({
 const compileCriteria = (function() {
     let langParams = {};
 
-    const toTunedComparable = function(value) {
-        return toComparable(value, false, langParams);
-    };
+    const _toComparable = (value) => toComparable(value, false, langParams);
 
     const compileGroup = function(crit) {
         const ops = [];
@@ -292,10 +290,10 @@ const compileCriteria = (function() {
         const op = crit[1];
         let value = crit[2];
 
-        value = toTunedComparable(value);
+        value = _toComparable(value);
 
         const compare = (obj, operatorFn) => {
-            obj = toTunedComparable(getter(obj));
+            obj = _toComparable(getter(obj));
             return (value == null || obj == null) && value !== obj ? false : operatorFn(obj, value);
         };
 
@@ -313,10 +311,10 @@ const compileCriteria = (function() {
             case '<=':
                 return (obj) => compare(obj, (a, b) => a <= b);
             case 'startswith':
-                return function(obj) { return toTunedComparable(toString(getter(obj))).indexOf(value) === 0; };
+                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) === 0; };
             case 'endswith':
                 return function(obj) {
-                    const getterValue = toTunedComparable(toString(getter(obj)));
+                    const getterValue = _toComparable(toString(getter(obj)));
                     const searchValue = toString(value);
 
                     if(getterValue.length < searchValue.length) {
@@ -327,9 +325,9 @@ const compileCriteria = (function() {
                     return index !== -1 && index === getterValue.length - value.length;
                 };
             case 'contains':
-                return function(obj) { return toTunedComparable(toString(getter(obj))).indexOf(value) > -1; };
+                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) > -1; };
             case 'notcontains':
-                return function(obj) { return toTunedComparable(toString(getter(obj))).indexOf(value) === -1; };
+                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) === -1; };
         }
 
         throw errors.Error('E4003', op);
@@ -337,7 +335,7 @@ const compileCriteria = (function() {
 
     function compileEquals(getter, value, negate) {
         return function(obj) {
-            obj = toTunedComparable(getter(obj));
+            obj = _toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
