@@ -545,7 +545,8 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             this.instance.option('focusStateEnabled', true);
             assert.ok(this.overflowMenu.list().option('focusStateEnabled'));
 
-            assert.equal(this.overflowMenu.$list().attr('tabindex'), -1, 'tabindex for list is -1');
+            const $listItemContainer = this.overflowMenu.$list().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+            assert.equal($listItemContainer.attr('tabindex'), -1, 'tabindex for list is -1');
         });
 
         QUnit.test('enter/space keys', function(assert) {
