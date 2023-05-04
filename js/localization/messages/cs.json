@@ -119,7 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Mezi",
         "dxDataGrid-filterRowOperationBetweenStartText": "Začíná",
         "dxDataGrid-filterRowOperationBetweenEndText": "Končí",
-        "dxDataGrid-searchBoxLabel": "Search box",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Použít filtr",
         "dxDataGrid-trueText": "Platí",
         "dxDataGrid-falseText": "Neplatí",

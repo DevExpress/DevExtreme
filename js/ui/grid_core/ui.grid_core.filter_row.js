@@ -65,6 +65,8 @@ const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
 
+const ARIA_SEARCH_BOX = messageLocalization.format('dxDataGrid-ariaSearchBox');
+
 function isOnClickApplyFilterMode(that) {
     return that.option('filterRow.applyFilter') === 'onClick';
 }
@@ -548,9 +550,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 cssClass: that.getWidgetContainerClass() + ' ' + CELL_FOCUS_DISABLED_CLASS + ' ' + FILTER_MENU,
                 showFirstSubmenuMode: 'onHover',
                 hideSubmenuOnMouseLeave: true,
-                elementAttr: {
-                    'aria-label': messageLocalization.format('dxDataGrid-searchBoxLabel')
-                },
+                elementAttr: { 'aria-label': ARIA_SEARCH_BOX },
                 items: [{
                     disabled: column.filterOperations && column.filterOperations.length ? false : true,
                     icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
