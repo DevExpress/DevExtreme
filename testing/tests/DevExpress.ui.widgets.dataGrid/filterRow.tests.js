@@ -2793,7 +2793,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
     });
 
     // T1047481
-    QUnit.test('Filter menu should render aria-label attribute', function(assert) {
+    QUnit.test('Search box should render aria-label attribute', function(assert) {
         // arrange
         const $testElement = $('#container');
         this.options.filterRow.visible = true;
@@ -2802,10 +2802,9 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
         this.columnHeadersView.render($testElement);
-        const filterMenu = this.columnHeadersView.element().find('.dx-menu').first();
 
         // assert
-        assert.equal(filterMenu.attr('aria-label'), 'Filter type');
+        assert.equal(this.columnHeadersView.element().find('.dx-menu').first().attr('aria-label'), 'Search box');
     });
 
     if(device.deviceType === 'desktop') {
