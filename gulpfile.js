@@ -86,11 +86,6 @@ function createDefaultBatch(dev) {
     }
 
     tasks.push('transpile-systemjs');
-
-    if(!dev) {
-        tasks.push('transpile-clean');
-    }
-
     return gulp.series(tasks);
 }
 
