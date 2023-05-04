@@ -10,28 +10,18 @@
 
 // adduse
 
-
-$generic-calendar-navigator-fontsize: $generic-h5-font-size;
-$generic-calendar-navigator-line-height: 1.6;
-$generic-calendar-width: $generic-calendar-body-width;
-$generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navigator-fontsize * $generic-calendar-navigator-line-height + $generic-calendar-navigator-vertical-padding * 2;
+$generic-calendar-base-size: 28px;
+$generic-calendar-table-header-font-size: 10px;
 
 .dx-calendar {
-  width: $generic-calendar-width;
-  min-width: $generic-calendar-width;
-  height: $generic-calendar-height + 20px;
-  min-height: $generic-calendar-height + 20px;
+  width: $generic-calendar-legacy-width;
+  min-width: $generic-calendar-legacy-width;
+  height: $generic-calendar-legacy-height;
+  min-height: $generic-calendar-legacy-height;
   background-color: $calendar-bg;
   border: 1px solid transparent;
 
   &.dx-calendar-with-footer {
-    height: $generic-calendar-height + $generic-calendar-footer-height + 10px + 20px;
-    min-height: $generic-calendar-height + $generic-calendar-footer-height;
-
-    .dx-calendar-body {
-      bottom: $generic-calendar-footer-height + 10px;
-    }
-
     .dx-calendar-footer {
       .dx-button {
         &.dx-state-active {
@@ -89,17 +79,12 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 }
 
 .dx-calendar-body {
-  top: $generic-calendar-body-top;
-
   thead {
-    font-size: 10px;
     font-weight: bold;
     text-transform: uppercase;
-    line-height: 1.2;
 
     tr {
-      height: 25px;
-      padding-bottom: 10px;
+      height: $generic-calendar-base-size;
 
       th {
         box-shadow: inset 0 -1px 0 $calendar-border-color;
@@ -113,32 +98,44 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 
     th {
       color: $calendar-header-color;
+      font-weight: 500;
       text-align: center;
-      font-size: $generic-xs-font-size;
-      padding: 1px 0 $generic-calendar-header-bottom-padding 0;
+      font-size: $generic-calendar-table-header-font-size;
     }
 
     .dx-week-number-header {
       color: $calendar-cell-selected-bg;
+      width: $generic-calendar-base-size;
     }
 
     .dx-calendar-week-number-cell {
-      padding: 1px $generic-calendar-cell-horizontal-padding 2px;
       color: $calendar-cell-selected-bg;
-      font-size: $generic-calendar-week-number-cell-font-size;
-      width: 39px;
+      width: 28px;
     }
   }
 }
 
 .dx-calendar-cell {
-  text-align: center;
-  padding: 1px $generic-calendar-cell-horizontal-padding 2px;
   color: $calendar-color;
-  font-size: $generic-calendar-cell-font-size;
   border: 1px double transparent;
-  width: 39px;
+  min-height: $generic-calendar-base-size;
   border-radius: $calendar-cell-contoured-border-radius;
+
+  span {
+    width: $generic-calendar-cell-base-size;
+    height: $generic-calendar-cell-base-size;
+  }
+
+  .dx-calendar-view-decade &,
+  .dx-calendar-view-year &,
+  .dx-calendar-view-century & {
+    span {
+      width: $generic-calendar-cell-base-size * 2;
+      height: $generic-calendar-cell-base-size * 2;
+      border-radius: $base-border-radius;
+      word-spacing: $generic-calendar-cell-base-size * 2;
+    }
+  }
 
   &.dx-calendar-today {
     font-weight: bold;
