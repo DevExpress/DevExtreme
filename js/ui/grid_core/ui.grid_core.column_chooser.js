@@ -58,6 +58,24 @@ const processItems = function(that, chooserColumns) {
     return items;
 };
 
+/*
+todo: check T726413
+todo: check with columnChooser.sortOrder
+todo: test for saving scroll when we update option
+
+selection doesn't change correctly if we hide columns via option:
+grid.beginUpdate();
+grid.columnOption(0, 'visible', false)
+grid.columnOption(1, 'visible', false)
+grid.columnOption(4, 'visible', false)
+grid.endUpdate();
+
+check tests when column these options changed:
+optionNames.showInColumnChooser || optionNames.caption || optionNames.allowHiding || optionNames.visible
+
+also maybe columnIndex, column.columns,column.cssClass
+*/
+
 /**
  * @type {Partial<import('./ui.grid_core.column_chooser').ColumnChooserController>}
  */
@@ -362,7 +380,8 @@ const columnChooserMembers = {
     },
 
     _updateItems: function() {
-        const chooserColumns = this.getColumns();
+        const isSelectMode = this.isSelectMode();
+        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const items = processItems(this, chooserColumns);
 
         this._columnChooserList.option('items', items);
@@ -417,7 +436,8 @@ const columnChooserMembers = {
     getColumnElements: function() {
         const result = [];
 
-        const chooserColumns = this.getColumns();
+        const isSelectMode = this.isSelectMode();
+        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const $content = this._popupContainer && this._popupContainer.$content();
         const $nodes = $content && $content.find('.dx-treeview-node');
 
@@ -438,8 +458,7 @@ const columnChooserMembers = {
     },
 
     getColumns: function() {
-        const isSelectMode = this.isSelectMode();
-        return this._columnsController.getChooserColumns(isSelectMode);
+        return this._columnsController.getChooserColumns();
     },
 
     allowDragging: function(column) {
