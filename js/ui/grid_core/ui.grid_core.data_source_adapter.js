@@ -123,9 +123,11 @@ export default modules.Controller.inherit((function() {
                 if(skips.length) {
                     result.isContinuation = true;
                 }
-                if(takes.length) {
-                    result.isContinuationOnNextPage = true;
+
+                if(take) {
+                    result.isContinuationOnNextPage = cacheItem.count > take;
                 }
+
                 for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
                     const childCacheItem = items[i + skip];
                     const isLast = i + 1 === take;
