@@ -144,7 +144,9 @@ export type Options = dxResizableOptions;
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
-type Events = CheckedEvents<Properties, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxResizableOptions.onDisposing
@@ -181,4 +183,4 @@ onResizeEnd?: ((e: ResizeEndEvent) => void);
  * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
  */
 onResizeStart?: ((e: ResizeStartEvent) => void);
-}>>;
+};

@@ -286,7 +286,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
 
-type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxSortableOptions.onAdd
@@ -347,4 +349,4 @@ onRemove?: ((e: RemoveEvent) => void);
  * @type_function_param1 e:{ui/sortable:ReorderEvent}
  */
 onReorder?: ((e: ReorderEvent) => void);
-}>>;
+};

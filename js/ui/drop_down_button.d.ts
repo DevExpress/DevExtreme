@@ -325,7 +325,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxDropDownButtonOptions.onButtonClick
@@ -368,4 +370,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-}>>;
+};

@@ -159,7 +159,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>;
 
-type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxDrawerOptions.onDisposing
@@ -178,4 +180,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/drawer:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-}>>;
+};

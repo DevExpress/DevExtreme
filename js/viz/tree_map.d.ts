@@ -717,7 +717,9 @@ export type Options = dxTreeMapOptions;
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
-type Events = CheckedEvents<Properties, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxTreeMapOptions.onClick
@@ -802,4 +804,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  * @type_function_param1 e:{viz/tree_map:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-}>>;
+};

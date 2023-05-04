@@ -58,7 +58,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onResize' | 'onResizeEnd' | 'onResizeStart' | 'onTitleRendered'>;
 
-type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxTooltipOptions.onContentReady
@@ -107,4 +109,4 @@ onShowing?: ((e: ShowingEvent) => void);
  * @type_function_param1 e:{ui/tooltip:ShownEvent}
  */
 onShown?: ((e: ShownEvent) => void);
-}>>;
+};

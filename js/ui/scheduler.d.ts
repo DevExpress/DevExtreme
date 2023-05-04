@@ -1169,7 +1169,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxSchedulerOptions.onAppointmentAdded
@@ -1278,4 +1280,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-}>>;
+};

@@ -2304,7 +2304,9 @@ export type Options = dxPolarChartOptions;
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
-type Events = CheckedEvents<Properties, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxPolarChartOptions.onArgumentAxisClick
@@ -2431,4 +2433,4 @@ onZoomEnd?: ((e: ZoomEndEvent) => void);
  * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
  */
 onZoomStart?: ((e: ZoomStartEvent) => void);
-}>>;
+};

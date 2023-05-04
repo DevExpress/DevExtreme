@@ -221,7 +221,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type FilterOutHidden<T> = Omit<T, 'onDrop'>;
 
-type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxDraggableOptions.onDisposing
@@ -258,4 +260,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/draggable:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-}>>;
+};

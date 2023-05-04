@@ -903,7 +903,9 @@ export type Options = dxVectorMapOptions;
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
-type Events = CheckedEvents<Properties, Required<{
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
 /**
  * @skip
  * @docid dxVectorMapOptions.onCenterChanged
@@ -988,4 +990,4 @@ onTooltipShown?: ((e: TooltipShownEvent) => void);
  * @type_function_param1 e:{viz/vector_map:ZoomFactorChangedEvent}
  */
 onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
-}>>;
+};
