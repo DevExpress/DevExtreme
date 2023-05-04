@@ -190,7 +190,6 @@ export const ListBase = CollectionWidget.inherit({
             activeStateEnabled: true,
 
             _itemAttributes: { 'role': 'option' },
-            _listAttributes: { 'role': 'listbox' },
 
             useInkRipple: false,
 
@@ -656,7 +655,7 @@ export const ListBase = CollectionWidget.inherit({
         this.callBase();
         this.option('useInkRipple') && this._renderInkRipple();
 
-        this.setAria('role', this.option('_listAttributes').role);
+        this.setAria('role', 'listbox');
     },
 
     _focusTarget: function() {
@@ -946,7 +945,6 @@ export const ListBase = CollectionWidget.inherit({
                 break;
             case '_swipeEnabled':
                 break;
-            case '_listAttributes':
             case 'selectByClick':
                 break;
             default:
