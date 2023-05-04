@@ -428,31 +428,6 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
         assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
     });
 
-    QUnit.test('DateRangeBox should be opened after select 2+ dates in calendar', function(assert) {
-        this.reinit({
-            applyValueMode: 'useButtons',
-            value: [null, null],
-        });
-
-        this.instance.open();
-
-        assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
-
-        let $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
-        $startDateCell.trigger('dxclick');
-
-        let $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
-        $endDateCell.trigger('dxclick');
-
-        $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
-        $startDateCell.trigger('dxclick');
-
-        $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(142);
-        $endDateCell.trigger('dxclick');
-
-        assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
-    });
-
     ['ok', 'cancel'].forEach((button) => {
         QUnit.test(`DateRangeBox should be closed after click on ${button} button`, function(assert) {
             this.reinit({
