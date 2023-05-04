@@ -11,10 +11,14 @@ const restoreMockFactory = chartMocks.restoreMockFactory;
 require('viz/chart');
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="chartContainer" style="width: 300px; height: 150px;"></div>';
+    const markup = '<div id="chartContainer"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#chartContainer').css({
+        width: '300px',
+        height: '150px'
+    });
 });
 
 function setupMocks() {
