@@ -867,7 +867,7 @@ QUnit.module('Column chooser', {
         assert.ok(!callRenderColumnChooser, 'not update treeview');
     });
 
-    QUnit.test('CheckBox mode - update treeview when changed the column option is showInColumnChooser', function(assert) {
+    QUnit.test('CheckBox mode - update treeview items when changed the column option is showInColumnChooser', function(assert) {
         // arrange
         const $testElement = $('#container');
         let callRenderColumnChooser;
@@ -879,7 +879,7 @@ QUnit.module('Column chooser', {
 
         this.renderColumnChooser();
         columnChooserView._popupContainer.option('visible', true);
-        columnChooserView._renderTreeView = function() {
+        columnChooserView._updateItems = function() {
             callRenderColumnChooser = true;
         };
 
@@ -887,7 +887,7 @@ QUnit.module('Column chooser', {
         columnChooserView._columnsController.columnsChanged.fire({ optionNames: { showInColumnChooser: true } });
 
         // assert
-        assert.ok(callRenderColumnChooser, 'not update treeview');
+        assert.ok(callRenderColumnChooser, 'update treeview items');
     });
 
     QUnit.test('CheckBox mode - column chooser with hidden band column', function(assert) {
@@ -1069,7 +1069,7 @@ QUnit.module('Column chooser', {
 
 
     // T535738
-    QUnit.test('CheckBox mode - update treeview when changing the column options', function(assert) {
+    QUnit.test('CheckBox mode - update treeview items when changing the column options', function(assert) {
         // arrange
         const $testElement = $('#container');
 
@@ -1080,13 +1080,13 @@ QUnit.module('Column chooser', {
         this.showColumnChooser();
         this.clock.tick(1000);
 
-        sinon.spy(this.columnChooserView, '_renderTreeView');
+        sinon.spy(this.columnChooserView, '_updateItems');
 
         // act
         this.columnsController.columnsChanged.fire({ optionNames: { all: true }, changeTypes: { columns: true } });
 
         // assert
-        assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'update treeview');
+        assert.strictEqual(this.columnChooserView._updateItems.callCount, 1, 'update treeview item');
     });
 
 
@@ -1162,7 +1162,11 @@ QUnit.module('Column chooser', {
             this.columnChooserView.showColumnChooser();
             this.clock.tick(1000);
 
+            // assert
             assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview is rendered');
+
+            // act
+            sinon.spy(this.columnChooserView, '_updateItems');
 
             const optionNames = {
                 caption: true,
@@ -1191,7 +1195,8 @@ QUnit.module('Column chooser', {
             // assert
             const $treeViewItems = $('.dx-treeview-item');
 
-            assert.strictEqual(this.columnChooserView._renderTreeView.callCount, useBeginEndUpdate ? 2 : 3, 'treeview render count');
+            assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview rendered only one time');
+            assert.strictEqual(this.columnChooserView._updateItems.callCount, useBeginEndUpdate ? 1 : 2, 'treeview items update count');
             assert.equal($treeViewItems.eq(0).text(), 'new caption', 'caption was changed');
             assert.equal($treeViewItems.eq(1).text(), 'new caption', 'caption was changed');
 

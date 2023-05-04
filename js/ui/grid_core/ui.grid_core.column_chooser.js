@@ -383,7 +383,7 @@ const columnChooserMembers = {
 
     _updateItemSelection: function(columnIndex) {
         const isRecursive = this.option('columnChooser.selection.recursive');
-        const column = this.component.columnOption(columnIndex);
+        const column = this._columnsController.columnOption(columnIndex);
 
         const isRecursiveWithColumns = isRecursive && column.hasColumns;
 
