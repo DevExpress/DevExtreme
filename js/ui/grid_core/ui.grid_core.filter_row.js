@@ -548,6 +548,9 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 cssClass: that.getWidgetContainerClass() + ' ' + CELL_FOCUS_DISABLED_CLASS + ' ' + FILTER_MENU,
                 showFirstSubmenuMode: 'onHover',
                 hideSubmenuOnMouseLeave: true,
+                elementAttr: {
+                    'aria-label': messageLocalization.format('dxDataGrid-filterRowFilterButtonLabel')
+                },
                 items: [{
                     disabled: column.filterOperations && column.filterOperations.length ? false : true,
                     icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
