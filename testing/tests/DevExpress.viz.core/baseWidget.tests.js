@@ -1,20 +1,18 @@
 /* global currentTest */
 
+const errorsModule = require('viz/core/errors_warnings');
+
+errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
+errorsModule.ERROR_MESSAGES.E100 = 'Templated text 1: {0}, Templated text 2: {1}';
+errorsModule.ERROR_MESSAGES.W100 = 'Warning: Templated text 1: {0}, Templated text 2: {1}';
+
 const $ = require('jquery');
 const { version } = require('core/version');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const registerComponent = require('core/component_registrator');
 const logger = require('core/utils/console').logger;
-const mock = require('../../helpers/mockModule.js').mock;
-const errorsModule = require('viz/core/errors_warnings');
 const resizeObserverSingleton = require('core/resize_observer');
 const isFunction = require('core/utils/type').isFunction;
-errorsModule.ERROR_MESSAGES = {
-    W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
-    E100: 'Templated text 1: {0}, Templated text 2: {1}',
-    W100: 'Warning: Templated text 1: {0}, Templated text 2: {1}'
-};
-mock('viz/core/errors_warnings', errorsModule);
 // const errors = require('viz/core/errors_warnings');
 const BaseWidget = require('viz/core/base_widget');
 const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
