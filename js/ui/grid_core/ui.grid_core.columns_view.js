@@ -397,11 +397,13 @@ const columnsViewMembers = {
     },
 
     _renderDelayedTemplatesCoreAsync: function(templates) {
-        const that = this;
         if(templates.length) {
-            that._templateTimeout = getWindow().setTimeout(function() {
-                that._renderDelayedTemplatesCore(templates, true);
+            const templateTimeout = getWindow().setTimeout(() => {
+                this._templateTimeouts.delete(templateTimeout);
+                this._renderDelayedTemplatesCore(templates, true);
             });
+
+            this._templateTimeouts.add(templateTimeout);
         }
     },
 
@@ -478,8 +480,7 @@ const columnsViewMembers = {
     },
 
     renderTemplate: function(container, template, options, allowRenderToDetachedContainer, change) {
-        const that = this;
-        const renderingTemplate = that._processTemplate(template, options);
+        const renderingTemplate = this._processTemplate(template, options);
         const column = options.column;
         const isDataRow = options.rowType === 'data';
         // @ts-expect-error
@@ -489,24 +490,27 @@ const columnsViewMembers = {
             model: options,
             deferred: templateDeferred,
             onRendered: () => {
-                if(that.component._disposed) return;
-                templateDeferred.resolve();
+                if(this.isDisposed()) {
+                    templateDeferred.reject();
+                } else {
+                    templateDeferred.resolve();
+                }
             }
         };
 
         if(renderingTemplate) {
-            options.component = that.component;
+            options.component = this.component;
 
             const async = column && (
                 (column.renderAsync && isDataRow) ||
-                that.option('renderAsync') &&
+                this.option('renderAsync') &&
                     (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
             );
 
             if((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
                 renderingTemplate.render(templateOptions);
             } else {
-                that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
+                this._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
             }
 
             this._templateDeferreds.add(templateDeferred);
@@ -843,6 +847,7 @@ const columnsViewMembers = {
         this._delayedTemplates = [];
         this._templateDeferreds = new Set();
         this._templatesCache = {};
+        this._templateTimeouts = new Set();
         this.createAction('onCellClick');
         this.createAction('onRowClick');
         this.createAction('onCellDblClick');
@@ -928,7 +933,9 @@ const columnsViewMembers = {
         const waitTemplatesRecursion = () =>
             when.apply(this, Array.from(this._templateDeferreds))
                 .done(() => {
-                    if(this._templateDeferreds.size > 0) {
+                    if(this.isDisposed()) {
+                        result.reject();
+                    } else if(this._templateDeferreds.size > 0) {
                         waitTemplatesRecursion();
                     } else {
                         result.resolve();
@@ -1210,9 +1217,16 @@ const columnsViewMembers = {
         return false;
     },
 
+    isDisposed: function() {
+        return this.component?._disposed;
+    },
+
     dispose: function() {
         if(hasWindow()) {
-            getWindow().clearTimeout(this._templateTimeout);
+            const window = getWindow();
+
+            this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
+            this._templateTimeouts?.clear();
         }
     }
 };

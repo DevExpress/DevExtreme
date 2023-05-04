@@ -1,26 +1,8 @@
-QUnit.testStart(function() {
-    viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
-    const markup =
-'<div>\
-    <div id="container">\
-        <div class="dx-datagrid"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
 import ArrayStore from 'data/array_store';
-
-import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
-
-window.Hogan = hogan;
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
@@ -28,7 +10,6 @@ import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 
@@ -36,9 +17,19 @@ const device = devices.real();
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
+QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
-setTemplateEngine('hogan');
+    const markup =
+        `<div>
+            <div id="container">
+                <div class="dx-datagrid"></div>
+            </div>
+        </div>`;
 
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Filter Row', {
     beforeEach: function() {

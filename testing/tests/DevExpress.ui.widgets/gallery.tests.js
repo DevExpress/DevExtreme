@@ -18,78 +18,63 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-        '<style>\
-            .dx-gallery {\
-                width: 400px;\
-            }\
-            .dx-gallery-item {\
-                width: 400px;\
-                height: 400px;\
-            }\
-            \
-            #galleryWithItemPaddings,\
-            #galleryWithBorderBox\
-            {\
-                width: 400px;\
-                height: 400px;\
-                display: inline-block;\
-                border: solid 1px black;\
-            }\
-            \
-            #galleryWithItemPaddings .dx-gallery-item\
-            {\
-                width: 200px;\
-                height: 200px;\
-                padding: 20px;\
-            }\
-            \
-            #galleryWithItemPaddings .dx-gallery-item > div\
-            {\
-                width: 100%;\
-                height: 100%;\
-            }\
-            \
-            #galleryWithBorderBox .dx-gallery-item\
-            {\
-                -webkit-box-sizing: border-box;\
-                    -moz-box-sizing: border-box;\
-                        box-sizing: border-box;\
-            }\
-            \
-            #galleryWithBorderBox .dx-gallery-item\
-            {\
-                width: 100%;\
-                height: 100%;\
-                padding: 20px;\
-            }\
-            \
-            #galleryWithBorderBox .dx-gallery-item > div\
-            {\
-                width: 100%;\
-                height: 100%;\
-            }\
-            \
-            #widthRootStyle .dx-gallery-item {\
-                width: 100%;\
-                height: 100%;\
-            }\
-        </style>\
-        \
-        <div id="gallerySimple"></div>\
-        \
-        <div id="galleryWithItemPaddings"></div>\
-        \
-        <div id="galleryWithBorderBox"></div>\
-        \
-        <div id="galleryWithTmpl">\
-            <div data-options="dxTemplate : { name: \'item\' } " >\
-                <div>0</div>\
-            </div>\
-        </div>\
-        \
-        <div id="galleryWithoutSize"></div>\
-        <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        `<style nonce="qunit-test">
+            .dx-gallery {
+                width: 400px;
+            }
+            .dx-gallery-item {
+                width: 400px;
+                height: 400px;
+            }
+            #galleryWithItemPaddings,
+            #galleryWithBorderBox {
+                width: 400px;
+                height: 400px;
+                display: inline-block;
+                border: solid 1px black;
+            }
+            #galleryWithItemPaddings .dx-gallery-item {
+                width: 200px;
+                height: 200px;
+                padding: 20px;
+            }
+            #galleryWithItemPaddings .dx-gallery-item > div {
+                width: 100%;
+                height: 100%;
+            }
+            #galleryWithBorderBox .dx-gallery-item {
+                -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+            }
+            #galleryWithBorderBox .dx-gallery-item {
+                width: 100%;
+                height: 100%;
+                padding: 20px;
+            }
+            #galleryWithBorderBox .dx-gallery-item > div {
+                width: 100%;
+                height: 100%;
+            }
+            #widthRootStyle .dx-gallery-item {
+                width: 100%;
+                height: 100%;
+            }
+            #widthRootStyle {
+                width: 300px;
+            }
+        </style>
+        <div id="gallerySimple"></div>
+        <div id="galleryWithItemPaddings"></div>
+        <div id="galleryWithBorderBox"></div>
+        <div id="galleryWithTmpl">
+            <div data-options="dxTemplate : { name: 'item' } " >
+                <div>0</div>
+            </div>
+        </div>
+        <div id="galleryWithoutSize"></div>
+        <div id="widget"></div>
+        <div id="widthRootStyle"></div>`;
 
     $('#qunit-fixture').html(markup);
 });

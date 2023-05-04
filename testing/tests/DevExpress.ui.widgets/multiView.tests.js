@@ -12,28 +12,31 @@ import { animation } from 'ui/multi_view/ui.multi_view.animation';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-
 QUnit.testStart(() => {
     const markup =
-        `<style>
+        `<style nonce="qunit-test">
             #animated {
                 position: absolute;
             }
-            
             #multiView {
                 width: 800px;
                 height: 1000px;
             }
+            #customMultiViewTemplate1 {
+                height: 50px;
+            }
+            #customMultiViewTemplate2 {
+                height: 100px;
+            }
         </style>
-        
         <div id="animated"></div>
         <div id="container">
             <div id="multiView"></div>
         </div>
         <div id="container2">
             <div id="customMultiView">
-                <div data-options="dxTemplate: { name: 'template1' }" style="height: 50px;"></div>
-                <div data-options="dxTemplate: { name: 'template2' }" style="height: 100px;"></div>
+                <div id="customMultiViewTemplate1" data-options="dxTemplate: { name: 'template1' }"></div>
+                <div id="customMultiViewTemplate2" data-options="dxTemplate: { name: 'template2' }"></div>
             </div>
         </div>
         <div id="container3">

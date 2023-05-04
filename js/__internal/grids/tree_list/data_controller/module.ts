@@ -1,12 +1,11 @@
 import { extend } from '@js/core/utils/extend';
 import { Deferred } from '@js/core/utils/deferred';
 import { equalByValue } from '@js/core/utils/common';
-// @ts-expect-error
 import { dataControllerModule } from '@js/ui/grid_core/ui.grid_core.data_controller';
 import treeListCore from '../module_core';
 import dataSourceAdapterProvider from '../data_source_adapter/module';
 
-export const DataController = dataControllerModule.controllers.data.inherit((function () {
+export const DataController = (dataControllerModule.controllers as any).data.inherit((function () {
   return {
     _getDataSourceAdapter() {
       return dataSourceAdapterProvider;
@@ -189,7 +188,7 @@ export const DataController = dataControllerModule.controllers.data.inherit((fun
 
 treeListCore.registerModule('data', {
   defaultOptions() {
-    return extend({}, dataControllerModule.defaultOptions(), {
+    return extend({}, (dataControllerModule as any).defaultOptions(), {
       itemsExpr: 'items',
       parentIdExpr: 'parentId',
       rootValue: 0,

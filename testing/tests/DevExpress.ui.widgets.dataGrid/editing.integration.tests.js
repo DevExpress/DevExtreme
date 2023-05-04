@@ -1,38 +1,3 @@
-QUnit.testStart(function() {
-    const gridMarkup = `
-        <div id='container'>
-            <div id="dataGrid"></div>
-            <div id="dataGrid2"></div>
-            <div id="form"></div>
-        </div>
-    `;
-    const markup = `
-        <style>
-            .fixed-height {
-                height: 400px;
-            }
-            .qunit-fixture-auto-height {
-                position: static !important;
-                height: auto !important;
-            }
-            .dx-scrollable-native-ios .dx-scrollable-content {
-                padding: 0 !important;
-            }
-        </style>
-
-        <!--qunit-fixture-->
-
-        ${gridMarkup}
-
-        <script id="scriptTestTemplate1" type="text/html">
-            <span id="template1">Template1</span>
-        </script>
-    `;
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-});
-
 import $ from 'jquery';
 import devices from 'core/devices';
 import fx from 'animation/fx';
@@ -51,25 +16,48 @@ import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
 fx.off = true;
 
+QUnit.testStart(function() {
+    const gridMarkup = `
+        <div id='container'>
+            <div id="dataGrid"></div>
+            <div id="dataGrid2"></div>
+            <div id="form"></div>
+        </div>
+    `;
+    const markup = `
+        <style nonce="qunit-test">
+            .fixed-height {
+                height: 400px;
+            }
+            .qunit-fixture-auto-height {
+                position: static !important;
+                height: auto !important;
+            }
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+            ${getEmulatorStyles()}
+        </style>
 
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
+        <!--qunit-fixture-->
+
+        ${gridMarkup}
+
+        <script id="scriptTestTemplate1" type="text/html">
+            <span id="template1">Template1</span>
+        </script>
+    `;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Accessibility columns id should not set for columns editors (T710132)', function(assert) {
@@ -784,7 +772,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(1, 0)).text(), '2', 'second row cell text');
     });
 
-    QUnit.test('Edit row with the underscore template when the editForm mode is enabled', function(assert) {
+    QUnit.test('Edit row with the jquery template when the editForm mode is enabled', function(assert) {
         // arrange
         const data = [{ firstName: 'Super', lastName: 'Man' }, { firstName: 'Super', lastName: 'Zi' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -804,7 +792,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
+        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the jquery template is rendered correctly');
     });
 
     // T386755
@@ -7889,6 +7877,49 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowInfo.visibleIndex), 'new row visible after adding repeatedly');
             checkNeighboringRow();
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
+        });
+    });
+
+    ['pageBottom', 'pageTop'].forEach(newRowPosition => {
+        QUnit.test(`Adding a new row should not throw error in popup mode (newRowPosition is ${newRowPosition} and rowRenderingMode: virtual)`, function(assert) {
+            // arrange
+            const getData = () => {
+                const items = [];
+                for(let i = 0; i < 100; i += 1) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const dataGrid = createDataGrid({
+                height: 200,
+                dataSource: getData(),
+                keyExpr: 'id',
+                editing: {
+                    newRowPosition,
+                },
+                paging: {
+                    pageSize: 10
+                },
+                scrolling: {
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                masterDetail: {
+                    enabled: true,
+                    autoExpandAll: true,
+                }
+            });
+
+            this.clock.tick(400);
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(400);
+
+            assert.ok(true, 'no errors');
         });
     });
 });

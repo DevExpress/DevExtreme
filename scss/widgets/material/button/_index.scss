@@ -48,54 +48,6 @@
 
 // NOTE: Button styles
 
-@mixin dx-button-styling-variant(
-  $background-color, $text-color, $shadow-color,
-  $hover-background-color, $hover-shadow-color, $focused-background-color,
-  $focused-shadow-color, $active-background-color, $active-shadow-color,
-  $disabled-background-color, $icon-color
-) {
-  background-color: $background-color;
-  color: $text-color;
-  box-shadow: $shadow-color;
-
-  .dx-icon {
-    color: $icon-color;
-  }
-
-  &.dx-state-hover {
-    background-color: $hover-background-color;
-    box-shadow: $hover-shadow-color;
-  }
-
-  &.dx-state-focused {
-    background-color: $focused-background-color;
-    box-shadow: $focused-shadow-color;
-  }
-
-  &.dx-state-active {
-    background-color: $active-background-color;
-    box-shadow: $active-shadow-color;
-  }
-
-  &.dx-state-disabled {
-    background: $disabled-background-color;
-    box-shadow: none;
-
-    .dx-icon {
-      opacity: $button-disabled-icon-opacity;
-    }
-
-    .dx-button-text {
-      color: $button-disabled-text-color;
-    }
-  }
-
-  .dx-inkripple-wave {
-    background-color: color.change($text-color, $alpha: 0.2);
-  }
-}
-
-
 .dx-button { // stylelint-disable-line no-duplicate-selectors
   height: $material-button-height;
   position: relative;

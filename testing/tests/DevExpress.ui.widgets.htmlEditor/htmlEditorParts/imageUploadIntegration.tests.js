@@ -20,6 +20,8 @@ const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
 const DIALOG_OK_BUTTON_SELECTOR = '.dx-formdialog .dx-toolbar .dx-button';
 const ASPECT_RATIO_BUTTON_SELECTOR = '.dx-buttongroup .dx-button';
 
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+
 const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4////fwAJ+wP93BEhJAAAAABJRU5ErkJggg==';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
 const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
@@ -685,6 +687,50 @@ module('Image uploading integration', {
         });
     });
 
+    test('file uploading to the server should not raise error if uploadDirectory is not set', function(assert) {
+        this.createWidget({
+            imageUpload: {
+                fileUploadMode: 'both',
+                tabs: ['file', 'url'],
+                uploadUrl: '/',
+            },
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const $form = this.getFormElement([1, 2]);
+        const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        fileUploader.option('value', [fakeFile]);
+
+        $form.find(`.${FILEUPLOADER_INPUT_CLASS}`).trigger('change');
+
+        assert.notOk(this.$element.find(`.${OVERLAY_CONTENT_CLASS}`).hasClass('dx-state-invisible'), 'overlay is visible');
+        try {
+            this.clickDialogOkButton();
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+            assert.ok(this.$element.find(`.${OVERLAY_CONTENT_CLASS}`).hasClass('dx-state-invisible'), 'overlay is not visible');
+            assert.ok(true, 'There is no error');
+        } catch(e) {
+            assert.ok(false, `Error message: ${e}`);
+        }
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
     test('check form fileUploaderOption', function(assert) {
         this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'both', fileUploaderOptions: { width: 155, name: 'photo123' } } });
         this.clock.tick(TIME_TO_WAIT);
@@ -819,6 +865,44 @@ module('Image uploading integration', {
             delete this.xhrMock;
             delete this.formDataMock;
         });
+    });
+
+    test('file uploading to the server with drop should not raise error if uploadDirectory is not set', function(assert) {
+        this.createWidget({
+            imageUpload: {
+                fileUploadMode: 'both',
+                tabs: ['file', 'url'],
+                uploadUrl: '/',
+            },
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+
+        try {
+            this.xhrMock.getInstanceAt();
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+            assert.ok(true, 'There is no error');
+        } catch(e) {
+            assert.ok(false, `Error message: ${e}`);
+        }
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
     });
 
     test('the form popup render only url tab for image updating', function(assert) {

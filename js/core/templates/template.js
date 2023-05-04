@@ -2,7 +2,6 @@ import $ from '../renderer';
 import { TemplateBase } from './template_base';
 import { normalizeTemplateElement } from '../utils/dom';
 import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from './template_engine_registry';
-import './template_engines';
 
 registerTemplateEngine('default', {
     compile: (element) => normalizeTemplateElement(element),

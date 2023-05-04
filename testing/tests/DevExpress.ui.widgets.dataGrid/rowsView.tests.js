@@ -1,29 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-        '<style>\
-    .qunit-fixture-static {\
-        position: static !important;\
-        left: 0 !important;\
-        top: 0 !important;\
-    }\
-    .dx-scrollable-native-ios .dx-scrollable-content {\
-            padding: 0 !important;\
-    }\
-    .cross-browser-border-width-getting table {\
-        border-collapse: separate !important;\
-    }\
-</style>\
-<div class="dx-widget">\
-    <div class="dx-datagrid dx-gridbase-container">\
-        <div id="container"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -116,6 +90,32 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
     this.dataGrid = mockDataGrid;
     return mockDataGrid.rowsView;
 }
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: static !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+            .cross-browser-border-width-getting table {
+                border-collapse: separate !important;
+            }
+        </style>
+        <div class="dx-widget">
+            <div class="dx-datagrid dx-gridbase-container">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Rows view', {
     beforeEach: function() {
@@ -7714,6 +7714,12 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
 
         // act
         rowsView.render($testElement, { changeType: 'refresh' });
+        rowsView.render($testElement, {
+            changeType: 'update',
+            changeTypes: ['insert'],
+            rowIndices: [1],
+            items: [{ data: { name: 'test2', id: 2, date: new Date(2001, 0, 2) }, values: ['test2', 2, '2/01/2001'], rowType: 'data', dataIndex: 1 }],
+        });
         rowsView.dispose();
         this.clock.tick(150);
 

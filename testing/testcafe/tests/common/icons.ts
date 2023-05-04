@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import { testScreenshot } from '../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
@@ -234,6 +234,21 @@ const iconSet = {
   imgarlock: '\f156',
   imgarunlock: '\f157',
   bell: '\f158',
+  sun: '\f159',
+  send: '\f160', // material only
+  pinmap: '\f161', // material only
+  photooutline: '\f162', // material only
+  panelright: '\f163',
+  panelleft: '\f164',
+  optionsgear: '\f165', // material only
+  moon: '\f166',
+  login: '\f167',
+  eyeopen: '\f168',
+  eyeclose: '\f169',
+  expandform: '\f170',
+  description: '\f171',
+  belloutline: '\f172', // material only
+  to: '\f173',
 };
 
 fixture.disablePageReloads`Icons`
@@ -268,6 +283,41 @@ test('Icon set', async (t) => {
     }, {
       dependencies: {
         ICON_CLASS, id, iconName, glyph,
+      },
+    })();
+  }
+});
+
+test('SVG icon set', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const [iconName, glyph] of Object.entries(iconSet)) {
+    const id = `dx-${new Guid()}`;
+
+    await appendElementTo('#container', 'div', id, {
+      display: 'inline-flex',
+      padding: '3px',
+      border: '1px solid black',
+      alignItems: 'center',
+      flexDirection: 'column',
+      fontSize: '10px',
+    });
+
+    const isMaterialTheme = isMaterial();
+
+    await ClientFunction(() => {
+      $(`#${id}`)
+        .append($(`<img src="../../../images/icons/${isMaterialTheme ? 'material' : 'generic'}/${iconName}.svg">`))
+        .append($('<div>').text(`${iconName}`));
+    }, {
+      dependencies: {
+        ICON_CLASS, id, iconName, glyph, isMaterialTheme,
       },
     })();
   }

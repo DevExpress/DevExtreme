@@ -243,39 +243,54 @@ const transpileCss = async(Builder) => {
     }
 };
 
-const transpileTests = async(Builder) => {
+const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) => {
+    await builder.buildStatic(
+        `[${sourcePath}]`,
+        destPath,
+        {
+            minify: false,
+            sourceMaps: true,
+            encodeNames: false
+        }
+    );
+};
+
+const transpileWithBabel = async(sourceCode, destPath) => {
+    const { code } = await babel.transform(sourceCode, {
+        plugins: ['@babel/plugin-transform-modules-systemjs'],
+    });
+
+    const destDir = path.dirname(destPath);
+
+    if(!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir, { recursive: true });
+    }
+
+    fs.writeFileSync(destPath, code);
+};
+
+const transpileTesting = async(Builder) => {
     const builder = new Builder(root, config);
+    const contentList = getFileList(path.join(root, 'testing/content'));
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
-    const listFiles = [].concat(helpersList, testsList);
+    const listFiles = [].concat(contentList, helpersList, testsList);
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        const destPath = filePath.replace('testing', 'artifacts/transpiled-testing');
-        try {
-            await builder.buildStatic(
-                `[${filePath}]`,
-                destPath,
-                {
-                    minify: false,
-                    sourceMaps: true,
-                    encodeNames: false
-                }
-            );
-        } catch(error) {
+        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
+
+        if(filePath.includes('ui.widgets/fileManagerParts')) {
             const file = fs.readFileSync(filePath);
-            const { code } = await babel.transform(file.toString(), {
-                plugins: ['@babel/plugin-transform-modules-systemjs']
-            });
-
-            const destDir = path.dirname(destPath);
-            if(!fs.existsSync(destDir)) {
-                fs.mkdirSync(destDir, { recursive: true });
+            await transpileWithBabel(file.toString(), destPath);
+        } else {
+            try {
+                await transpileWithBuilder(builder, filePath, destPath);
+            } catch(error) {
+                const file = fs.readFileSync(filePath);
+                await transpileWithBabel(file.toString(), destPath);
             }
-
-            fs.writeFileSync(destPath, code);
         }
-
     }
 };
 
@@ -297,8 +312,7 @@ const updateBuilder = () => {
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
         'load.depMap[dep] = dep' +
         '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
-        '.replace("/node_modules/", "/../node_modules/")' +
-        '.replace("hogan-3.0.2.js", "hogan-3.0.2.amd.js");'
+        '.replace("/node_modules/", "/../node_modules/");'
     );
 
     patchBuilder(
@@ -318,7 +332,7 @@ const updateBuilder = () => {
         case 'builder': return updateBuilder();
         case 'modules': return await transpileModules(Builder);
         case 'modules-renovation': return await transpileRenovationModules(Builder);
-        case 'tests': return await transpileTests(Builder);
+        case 'testing': return await transpileTesting(Builder);
         case 'css': return await transpileCss(Builder);
     }
 })();

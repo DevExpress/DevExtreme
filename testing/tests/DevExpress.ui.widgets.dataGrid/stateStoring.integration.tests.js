@@ -1,3 +1,6 @@
+import $ from 'jquery';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -7,10 +10,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(gridMarkup);
 });
-
-import $ from 'jquery';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
 
 QUnit.module('State storing', baseModuleConfig, () => {
     // T240338

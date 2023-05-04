@@ -1,37 +1,10 @@
-QUnit.testStart(function() {
-    const markup =
-        '<style>\
-    .qunit-fixture-static {\
-        position: absolute !important;\
-        left: 0 !important;\
-        top: 0 !important;\
-    }\
-</style>\
-<div>\
-    <div id="container" class="dx-widget" style="width: 400px;">\
-        <div class="dx-datagrid">\
-        </div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-    addShadowDomStyles($('#qunit-fixture'));
-});
-
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
-
-window.Hogan = hogan;
-
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
-import setTemplateEngine from 'ui/set_template_engine';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
@@ -66,7 +39,28 @@ const setScrollerSpacing = function(rowsView) {
     rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
 };
 
-setTemplateEngine('hogan');
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            .qunit-fixture-static {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            #container {
+                width: 400px;
+            }
+        </style>
+        <div>
+            <div id="container" class="dx-widget">
+                <div class="dx-datagrid">
+                </div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Fixed columns', {
     beforeEach: function() {

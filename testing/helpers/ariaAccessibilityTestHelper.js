@@ -97,7 +97,6 @@ class ariaAccessibilityTestHelper {
             role: 'treeitem',
             'data-item-id': node.id.toString(),
             'aria-level': $item.parents('.dx-treeview-node').length.toString(),
-            'aria-expanded': node.internalFields.expanded.toString(),
             'aria-label': $item.text()
         };
 
@@ -111,6 +110,10 @@ class ariaAccessibilityTestHelper {
 
         if(isDefined(focusedNodeIndex) && index === focusedNodeIndex) {
             nodeAttributes.id = this.focusedItemId;
+        }
+
+        if(node.internalFields.childrenKeys.length) {
+            nodeAttributes['aria-expanded'] = node.internalFields.expanded.toString();
         }
 
         this.checkAttributes($node, nodeAttributes, `node[${index}]`);

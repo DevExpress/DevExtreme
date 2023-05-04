@@ -28,6 +28,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+const DX_BUTTON_CLASS = 'dx-button';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
@@ -133,9 +134,21 @@ const DropDownButton = Widget.inherit({
                 this._list.registerKeyHandler('tab', this._escHandler.bind(this));
                 this._list.registerKeyHandler('leftArrow', this._escHandler.bind(this));
                 this._list.registerKeyHandler('rightArrow', this._escHandler.bind(this));
+
+                this._setListAriaLabel();
             })
         });
         this.callBase();
+    },
+
+    _setListAriaLabel() {
+        if(!this._list) {
+            return;
+        }
+
+        const label = this._list.option('items')?.length ? 'List' : this.option('noDataText');
+
+        this.setAria('label', label, this._list.$element());
     },
 
     _itemsToDataSource: function(value) {
@@ -432,7 +445,7 @@ const DropDownButton = Widget.inherit({
     _popupHidingHandler() {
         this.option('opened', false);
 
-        this._setAriaExpanded(false);
+        this._updateAriaAttributes(false);
     },
 
     _popupOptionChanged: function(args) {
@@ -460,17 +473,31 @@ const DropDownButton = Widget.inherit({
 
     _popupShowingHandler() {
         this.option('opened', true);
-        this._setAriaExpanded(true);
+        this._updateAriaAttributes(true);
     },
 
-    _setAriaExpanded(value) {
-        this._ariaExpandedElements.forEach((ariaElement) => {
-            this.setAria({
-                expanded: value,
-                owns: value ? this._popupContentId : undefined,
-            },
-            $(ariaElement));
+    _setElementAria(value) {
+        const elementAria = {
+            owns: value ? this._popupContentId : undefined,
+        };
+
+        this.setAria(elementAria, this.$element());
+    },
+
+    _setButtonsAria(value) {
+        const buttonAria = {
+            expanded: value,
+            haspopup: 'listbox',
+        };
+
+        this._$buttonElements.each((_, $button) => {
+            this.setAria(buttonAria, $($button));
         });
+    },
+
+    _updateAriaAttributes(value) {
+        this._setElementAria(value);
+        this._setButtonsAria(value);
     },
 
     _renderButtonGroup() {
@@ -481,9 +508,7 @@ const DropDownButton = Widget.inherit({
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
-        const buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
-
-        this._ariaExpandedElements = [ ...buttonElements, this.$element() ];
+        this._$buttonElements = this._buttonGroup.$element().find(`.${DX_BUTTON_CLASS}`);
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -492,7 +517,7 @@ const DropDownButton = Widget.inherit({
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
 
-        this._setAriaExpanded(this.option('opened'));
+        this._updateAriaAttributes(this.option('opened'));
     },
 
     _updateArrowClass() {
@@ -541,6 +566,8 @@ const DropDownButton = Widget.inherit({
     _clean() {
         this._list && this._list.$element().remove();
         this._popup && this._popup.$element().remove();
+
+        this._$buttonElements = null;
     },
 
     _selectedItemKeyChanged(value) {
@@ -656,6 +683,7 @@ const DropDownButton = Widget.inherit({
             case 'items':
                 this._updateDataSource(this.option('items'));
                 this._updateItemCollection(name);
+                this._setListAriaLabel();
                 break;
             case 'dataSource':
                 if(Array.isArray(value)) {
@@ -665,6 +693,7 @@ const DropDownButton = Widget.inherit({
                     this._updateKeyExpr();
                 }
                 this._updateItemCollection(name);
+                this._setListAriaLabel();
                 break;
             case 'icon':
             case 'text':

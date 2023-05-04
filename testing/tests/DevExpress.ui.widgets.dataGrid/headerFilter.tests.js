@@ -1,12 +1,3 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container"  class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
 import 'generic_light.css!';
 
 import 'ui/data_grid';
@@ -34,6 +25,15 @@ function getListOrTreeView() {
 
     return list.length ? list.dxList('instance') : treeView.dxTreeView('instance');
 }
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container"  class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Header Filter dataController', {
     beforeEach: function() {

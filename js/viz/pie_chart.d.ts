@@ -399,7 +399,10 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      */
     tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
      * @docid dxPieChartOptions.adaptiveLayout.keepLabels
@@ -408,7 +411,10 @@ export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
      */
     keepLabels?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ * */
 export interface dxPieChartLegend extends BaseChartLegend {
     /**
      * @docid dxPieChartOptions.legend.customizeHint

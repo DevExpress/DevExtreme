@@ -29,15 +29,17 @@ describe('Equals svg to font', () => {
   });
 
   test('material themes', () => {
-    const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`) - 1; // TODO
+    const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`);
     const countElementMaterialSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/material`);
 
     expect(countElementMaterialFont).toBe(countElementMaterialSvg);
   });
 
   test('check svg elements', () => {
+    const isOnlyMaterialIcons = ['belloutline.svg', 'optionsgear.svg', 'photooutline.svg', 'pinmap.svg', 'send.svg'];
+
     const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
-    const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`);
+    const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`).filter((svg) => !isOnlyMaterialIcons.includes(svg));
 
     const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));
     const differenceGeneric = genericIcons.filter((svg) => !materialIcons.includes(svg));
