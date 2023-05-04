@@ -61,10 +61,10 @@ jobs:
       fail-fast: false
       matrix:
         envs: [
-          { CONSTEL: "misc", TZ: 'PST8PDT', NO_CSP: true, name: 'misc-PST8PDT' },
-          { CONSTEL: "misc", TZ: 'Japan', NO_CSP: true, name: 'misc-Japan' },
-          { CONSTEL: "misc", TZ: 'Australia/ACT', NO_CSP: true, name: 'misc-Australia' },
-          { CONSTEL: "misc", JQUERY: true, NO_CSP: true, name: 'misc-jQuery' },
+          { CONSTEL: "misc", TZ: 'PST8PDT', name: 'misc-PST8PDT' },
+          { CONSTEL: "misc", TZ: 'Japan', name: 'misc-Japan' },
+          { CONSTEL: "misc", TZ: 'Australia/ACT', name: 'misc-Australia' },
+          { CONSTEL: "misc", JQUERY: true, name: 'misc-jQuery' },
           { CONSTEL: "ui.editors", TZ: 'PST8PDT', name: 'ui.editors-PST8PDT' },
           { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors-Japan' },
           { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors-Australia' },
@@ -100,7 +100,7 @@ jobs:
           { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-shadowdom' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", NO_CSP: true, name: 'export-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", NO_CSP: true, name: 'misc-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", name: 'misc-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors", name: 'ui.editors-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_CSP: true, name: 'ui.htmlEditor-firefox' },
