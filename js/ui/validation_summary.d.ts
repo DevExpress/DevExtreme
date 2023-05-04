@@ -99,3 +99,41 @@ export type Options<
     TItem extends ItemLike = any,
     TKey = any,
 > = Properties<TItem, TKey>;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemContextMenu' | 'onItemDeleted' | 'onItemDeleting' | 'onItemHold' | 'onItemRendered' | 'onItemReordered' | 'onItemSelect' | 'onSelectionChanged'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxValidationSummaryOptions.onContentReady
+ * @type_function_param1 e:{ui/validation_summary:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationSummaryOptions.onDisposing
+ * @type_function_param1 e:{ui/validation_summary:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationSummaryOptions.onInitialized
+ * @type_function_param1 e:{ui/validation_summary:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationSummaryOptions.onItemClick
+ * @type_function_param1 e:{ui/validation_summary:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationSummaryOptions.onOptionChanged
+ * @type_function_param1 e:{ui/validation_summary:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+}>>;

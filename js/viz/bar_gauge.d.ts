@@ -414,3 +414,69 @@ export type Properties = dxBarGaugeOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxBarGaugeOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onDisposing
+ * @type_function_param1 e:{viz/bar_gauge:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onDrawn
+ * @type_function_param1 e:{viz/bar_gauge:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onExported
+ * @type_function_param1 e:{viz/bar_gauge:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onExporting
+ * @type_function_param1 e:{viz/bar_gauge:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onFileSaving
+ * @type_function_param1 e:{viz/bar_gauge:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/bar_gauge:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onInitialized
+ * @type_function_param1 e:{viz/bar_gauge:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onOptionChanged
+ * @type_function_param1 e:{viz/bar_gauge:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxBarGaugeOptions.onTooltipShown
+ * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+}>>;

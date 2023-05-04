@@ -140,3 +140,45 @@ export type Properties = dxResizableOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxResizableOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxResizableOptions.onDisposing
+ * @type_function_param1 e:{ui/resizable:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onInitialized
+ * @type_function_param1 e:{ui/resizable:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onOptionChanged
+ * @type_function_param1 e:{ui/resizable:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onResize
+ * @type_function_param1 e:{ui/resizable:ResizeEvent}
+ */
+onResize?: ((e: ResizeEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onResizeEnd
+ * @type_function_param1 e:{ui/resizable:ResizeEndEvent}
+ */
+onResizeEnd?: ((e: ResizeEndEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onResizeStart
+ * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
+ */
+onResizeStart?: ((e: ResizeStartEvent) => void);
+}>>;

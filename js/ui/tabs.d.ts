@@ -195,3 +195,65 @@ export type Options<
     TItem extends ItemLike = any,
     TKey = any,
 > = Properties<TItem, TKey>;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxTabsOptions.onContentReady
+ * @type_function_param1 e:{ui/tabs:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onDisposing
+ * @type_function_param1 e:{ui/tabs:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onInitialized
+ * @type_function_param1 e:{ui/tabs:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemClick
+ * @type_function_param1 e:{ui/tabs:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/tabs:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemHold
+ * @type_function_param1 e:{ui/tabs:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemRendered
+ * @type_function_param1 e:{ui/tabs:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tabs:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tabs:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+}>>;

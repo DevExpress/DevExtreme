@@ -192,3 +192,69 @@ export type Properties = dxLinearGaugeOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onDisposing
+ * @type_function_param1 e:{viz/linear_gauge:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onDrawn
+ * @type_function_param1 e:{viz/linear_gauge:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onExported
+ * @type_function_param1 e:{viz/linear_gauge:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onExporting
+ * @type_function_param1 e:{viz/linear_gauge:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onFileSaving
+ * @type_function_param1 e:{viz/linear_gauge:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/linear_gauge:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onInitialized
+ * @type_function_param1 e:{viz/linear_gauge:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onOptionChanged
+ * @type_function_param1 e:{viz/linear_gauge:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/linear_gauge:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onTooltipShown
+ * @type_function_param1 e:{viz/linear_gauge:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+}>>;

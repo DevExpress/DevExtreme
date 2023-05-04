@@ -258,3 +258,71 @@ export type Options<
     TItem extends ItemLike = any,
     TKey = any,
 > = Properties<TItem, TKey>;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxAccordionOptions.onContentReady
+ * @type_function_param1 e:{ui/accordion:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onDisposing
+ * @type_function_param1 e:{ui/accordion:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onInitialized
+ * @type_function_param1 e:{ui/accordion:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemClick
+ * @type_function_param1 e:{ui/accordion:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/accordion:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemHold
+ * @type_function_param1 e:{ui/accordion:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemRendered
+ * @type_function_param1 e:{ui/accordion:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemTitleClick
+ * @type_function_param1 e:{ui/accordion:ItemTitleClickEvent}
+ */
+onItemTitleClick?: ((e: ItemTitleClickEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onOptionChanged
+ * @type_function_param1 e:{ui/accordion:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/accordion:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+}>>;

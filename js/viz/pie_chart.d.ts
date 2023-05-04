@@ -911,3 +911,99 @@ export type Properties = dxPieChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPieChartOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxPieChartOptions.onDisposing
+ * @type_function_param1 e:{viz/pie_chart:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onDone
+ * @type_function_param1 e:{viz/pie_chart:DoneEvent}
+ */
+onDone?: ((e: DoneEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onDrawn
+ * @type_function_param1 e:{viz/pie_chart:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onExported
+ * @type_function_param1 e:{viz/pie_chart:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onExporting
+ * @type_function_param1 e:{viz/pie_chart:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onFileSaving
+ * @type_function_param1 e:{viz/pie_chart:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/pie_chart:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onInitialized
+ * @type_function_param1 e:{viz/pie_chart:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onLegendClick
+ * @type_function_param1 e:{viz/pie_chart:LegendClickEvent}
+ */
+onLegendClick?: ((e: LegendClickEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onOptionChanged
+ * @type_function_param1 e:{viz/pie_chart:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onPointClick
+ * @type_function_param1 e:{viz/pie_chart:PointClickEvent}
+ */
+onPointClick?: ((e: PointClickEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onPointHoverChanged
+ * @type_function_param1 e:{viz/pie_chart:PointHoverChangedEvent}
+ */
+onPointHoverChanged?: ((e: PointHoverChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onPointSelectionChanged
+ * @type_function_param1 e:{viz/pie_chart:PointSelectionChangedEvent}
+ */
+onPointSelectionChanged?: ((e: PointSelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/pie_chart:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxPieChartOptions.onTooltipShown
+ * @type_function_param1 e:{viz/pie_chart:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+}>>;

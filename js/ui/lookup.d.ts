@@ -331,3 +331,83 @@ export type Properties = dxLookupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLookupOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxLookupOptions.onClosed
+ * @type_function_param1 e:{ui/lookup:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onContentReady
+ * @type_function_param1 e:{ui/lookup:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onDisposing
+ * @type_function_param1 e:{ui/lookup:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onInitialized
+ * @type_function_param1 e:{ui/lookup:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onItemClick
+ * @type_function_param1 e:{ui/lookup:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onOpened
+ * @type_function_param1 e:{ui/lookup:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onOptionChanged
+ * @type_function_param1 e:{ui/lookup:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onPageLoading
+ * @type_function_param1 e:{ui/lookup:PageLoadingEvent}
+ */
+onPageLoading?: ((e: PageLoadingEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onPullRefresh
+ * @type_function_param1 e:{ui/lookup:PullRefreshEvent}
+ */
+onPullRefresh?: ((e: PullRefreshEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onScroll
+ * @type_function_param1 e:{ui/lookup:ScrollEvent}
+ */
+onScroll?: ((e: ScrollEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onValueChanged
+ * @type_function_param1 e:{ui/lookup:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+}>>;

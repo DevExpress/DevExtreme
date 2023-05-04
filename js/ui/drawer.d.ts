@@ -153,3 +153,29 @@ export type Properties = dxDrawerOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDrawerOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxDrawerOptions.onDisposing
+ * @type_function_param1 e:{ui/drawer:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDrawerOptions.onInitialized
+ * @type_function_param1 e:{ui/drawer:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDrawerOptions.onOptionChanged
+ * @type_function_param1 e:{ui/drawer:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+}>>;

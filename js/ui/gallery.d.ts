@@ -238,3 +238,65 @@ export type Options<
     TItem extends ItemLike = any,
     TKey = any,
 > = Properties<TItem, TKey>;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxGalleryOptions.onContentReady
+ * @type_function_param1 e:{ui/gallery:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onDisposing
+ * @type_function_param1 e:{ui/gallery:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onInitialized
+ * @type_function_param1 e:{ui/gallery:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemClick
+ * @type_function_param1 e:{ui/gallery:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/gallery:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemHold
+ * @type_function_param1 e:{ui/gallery:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemRendered
+ * @type_function_param1 e:{ui/gallery:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onOptionChanged
+ * @type_function_param1 e:{ui/gallery:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/gallery:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+}>>;

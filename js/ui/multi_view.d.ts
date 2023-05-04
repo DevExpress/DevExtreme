@@ -168,3 +168,65 @@ export type Options<
     TItem extends ItemLike = any,
     TKey = any,
 > = Properties<TItem, TKey>;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onContentReady
+ * @type_function_param1 e:{ui/multi_view:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onDisposing
+ * @type_function_param1 e:{ui/multi_view:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onInitialized
+ * @type_function_param1 e:{ui/multi_view:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemClick
+ * @type_function_param1 e:{ui/multi_view:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/multi_view:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemHold
+ * @type_function_param1 e:{ui/multi_view:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemRendered
+ * @type_function_param1 e:{ui/multi_view:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onOptionChanged
+ * @type_function_param1 e:{ui/multi_view:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/multi_view:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+}>>;

@@ -280,3 +280,71 @@ export type Properties = dxSortableOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSortableOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxSortableOptions.onAdd
+ * @type_function_param1 e:{ui/sortable:AddEvent}
+ */
+onAdd?: ((e: AddEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDisposing
+ * @type_function_param1 e:{ui/sortable:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragChange
+ * @type_function_param1 e:{ui/sortable:DragChangeEvent}
+ */
+onDragChange?: ((e: DragChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragEnd
+ * @type_function_param1 e:{ui/sortable:DragEndEvent}
+ */
+onDragEnd?: ((e: DragEndEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragMove
+ * @type_function_param1 e:{ui/sortable:DragMoveEvent}
+ */
+onDragMove?: ((e: DragMoveEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragStart
+ * @type_function_param1 e:{ui/sortable:DragStartEvent}
+ */
+onDragStart?: ((e: DragStartEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onInitialized
+ * @type_function_param1 e:{ui/sortable:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onOptionChanged
+ * @type_function_param1 e:{ui/sortable:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onRemove
+ * @type_function_param1 e:{ui/sortable:RemoveEvent}
+ */
+onRemove?: ((e: RemoveEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onReorder
+ * @type_function_param1 e:{ui/sortable:ReorderEvent}
+ */
+onReorder?: ((e: ReorderEvent) => void);
+}>>;

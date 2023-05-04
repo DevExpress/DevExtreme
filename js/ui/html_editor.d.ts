@@ -675,3 +675,51 @@ export type Properties = dxHtmlEditorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxHtmlEditorOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onContentReady
+ * @type_function_param1 e:{ui/html_editor:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onDisposing
+ * @type_function_param1 e:{ui/html_editor:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onFocusIn
+ * @type_function_param1 e:{ui/html_editor:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onFocusOut
+ * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onInitialized
+ * @type_function_param1 e:{ui/html_editor:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onOptionChanged
+ * @type_function_param1 e:{ui/html_editor:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onValueChanged
+ * @type_function_param1 e:{ui/html_editor:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+}>>;

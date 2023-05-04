@@ -78,3 +78,47 @@ export type Properties = dxProgressBarOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxProgressBarOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onComplete
+ * @type_function_param1 e:{ui/progress_bar:CompleteEvent}
+ */
+onComplete?: ((e: CompleteEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onContentReady
+ * @type_function_param1 e:{ui/progress_bar:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onDisposing
+ * @type_function_param1 e:{ui/progress_bar:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onInitialized
+ * @type_function_param1 e:{ui/progress_bar:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onOptionChanged
+ * @type_function_param1 e:{ui/progress_bar:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onValueChanged
+ * @type_function_param1 e:{ui/progress_bar:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+}>>;

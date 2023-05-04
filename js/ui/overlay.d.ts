@@ -263,3 +263,59 @@ interface OverlayInstance extends dxOverlay<Properties> { }
 type Properties = dxOverlayOptions<OverlayInstance>;
 
 export type Options = Properties;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type Events = CheckedEvents<FilterOutHidden<Properties>, Required<{
+/**
+ * @skip
+ * @docid dxOverlayOptions.onContentReady
+ * @type_function_param1 e:{ui/overlay:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onDisposing
+ * @type_function_param1 e:{ui/overlay:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onHidden
+ * @type_function_param1 e:{ui/overlay:HiddenEvent}
+ */
+onHidden?: ((e: HiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onHiding
+ * @type_function_param1 e:{ui/overlay:HidingEvent}
+ */
+onHiding?: ((e: HidingEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onInitialized
+ * @type_function_param1 e:{ui/overlay:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onOptionChanged
+ * @type_function_param1 e:{ui/overlay:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onShowing
+ * @type_function_param1 e:{ui/overlay:ShowingEvent}
+ */
+onShowing?: ((e: ShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxOverlayOptions.onShown
+ * @type_function_param1 e:{ui/overlay:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+}>>;

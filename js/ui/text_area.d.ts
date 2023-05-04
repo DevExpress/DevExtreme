@@ -105,3 +105,99 @@ export type Properties = dxTextAreaOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTextAreaOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onChange
+ * @type_function_param1 e:{ui/text_area:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onContentReady
+ * @type_function_param1 e:{ui/text_area:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onCopy
+ * @type_function_param1 e:{ui/text_area:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onCut
+ * @type_function_param1 e:{ui/text_area:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onDisposing
+ * @type_function_param1 e:{ui/text_area:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onEnterKey
+ * @type_function_param1 e:{ui/text_area:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onFocusIn
+ * @type_function_param1 e:{ui/text_area:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onFocusOut
+ * @type_function_param1 e:{ui/text_area:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onInitialized
+ * @type_function_param1 e:{ui/text_area:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onInput
+ * @type_function_param1 e:{ui/text_area:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onKeyDown
+ * @type_function_param1 e:{ui/text_area:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onKeyUp
+ * @type_function_param1 e:{ui/text_area:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onOptionChanged
+ * @type_function_param1 e:{ui/text_area:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onPaste
+ * @type_function_param1 e:{ui/text_area:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxTextAreaOptions.onValueChanged
+ * @type_function_param1 e:{ui/text_area:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+}>>;

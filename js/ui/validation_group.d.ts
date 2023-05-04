@@ -110,3 +110,27 @@ export type Properties = dxValidationGroupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type Events = CheckedEvents<Properties, Required<{
+/**
+ * @skip
+ * @docid dxValidationGroupOptions.onDisposing
+ * @type_function_param1 e:{ui/validation_group:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationGroupOptions.onInitialized
+ * @type_function_param1 e:{ui/validation_group:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationGroupOptions.onOptionChanged
+ * @type_function_param1 e:{ui/validation_group:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+}>>;
