@@ -64,7 +64,6 @@ jobs:
           { CONSTEL: "misc", TZ: 'PST8PDT', USE_CSP: false, name: 'misc-PST8PDT' },
           { CONSTEL: "misc", TZ: 'Japan', USE_CSP: false, name: 'misc-Japan' },
           { CONSTEL: "misc", TZ: 'Australia/ACT', USE_CSP: false, name: 'misc-Australia' },
-          { CONSTEL: "misc", JQUERY: true, USE_CSP: false, name: 'misc-jQuery' },
           { CONSTEL: "ui.editors", TZ: 'PST8PDT', name: 'ui.editors-PST8PDT' },
           { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors-Japan' },
           { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors-Australia' },
@@ -147,7 +146,7 @@ jobs:
         uses: ./.github/actions/run-qunit-tests
         with:
           constel: ${{ matrix.envs.CONSTEL }}
-          useJQuery: ${{ matrix.envs.JQUERY }}
+          useJQuery: ${{ matrix.envs.JQUERY || 'false' }}
           userAgent: ${{ matrix.envs.MOBILE_UA }}
           useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
           headless: ${{ matrix.envs.HEADLESS }}
@@ -185,7 +184,7 @@ jobs:
           constel: ${{ matrix.envs.CONSTEL }}
           browser: "firefox"
           useJQuery: "true"
-          useCsp: ${{ matrix.envs.USE_CSP }}
+          useCsp: ${{ matrix.envs.USE_CSP || 'true' }}
 
   notify:
     runs-on: devextreme-shr2
