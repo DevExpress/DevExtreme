@@ -76,6 +76,113 @@ QUnit.module('Strategy', moduleConfig, () => {
 
         assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
     });
+
+    QUnit.module('Min/max options in views', {
+        beforeEach: function() {
+            this.getCalendarMinMax = () => {
+                const { min, max } = this.getCalendar().option();
+
+                return {
+                    calendarMin: min,
+                    calendarMax: max,
+                };
+            };
+
+            this.getViewMinMax = () => {
+                const { min, max } = this.getCalendar()._view.option();
+
+                return {
+                    viewMin: min,
+                    viewMax: max,
+                };
+            };
+        }
+    }, () => {
+        ['instantly', 'useButtons'].forEach((applyValueMode) => {
+            QUnit.test(`view min/max should be equal to calendar min/max on Popup open (applyValueMode = ${applyValueMode})`, function(assert) {
+                this.reinit({
+                    value: ['2023/01/05', '2023/02/14'],
+                    applyValueMode
+                });
+
+                this.instance.open();
+
+                const { calendarMin, calendarMax } = this.getCalendarMinMax();
+                const { viewMin, viewMax } = this.getViewMinMax();
+
+                assert.strictEqual(viewMin, calendarMin, 'view and calendar min option is the same');
+                assert.strictEqual(viewMax, calendarMax, 'view and calendar max option is the same');
+            });
+
+            QUnit.test(`min option in views should be equal to startDate after selecting startDate (applyValueMode = ${applyValueMode})`, function(assert) {
+                this.reinit({
+                    applyValueMode
+                });
+
+                this.instance.open();
+
+                const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                $startDateCell.trigger('dxclick');
+
+                const { calendarMax } = this.getCalendarMinMax();
+                const { viewMin, viewMax } = this.getViewMinMax();
+
+                assert.deepEqual(viewMin, startCellDate, 'view min option equals start date');
+                assert.strictEqual(calendarMax, viewMax, 'view max option is not changed');
+            });
+
+            QUnit.test(`max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode = ${applyValueMode})`, function(assert) {
+                this.reinit({
+                    applyValueMode
+                });
+
+                this.instance.open();
+
+                const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                $startDateCell.trigger('dxclick');
+
+                const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+                const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                $endDateCell.trigger('dxclick');
+
+                const { calendarMin } = this.getCalendarMinMax();
+                const { viewMin, viewMax } = this.getViewMinMax();
+
+                assert.strictEqual(viewMin, calendarMin, 'view min option restored to calendar min option');
+                assert.deepEqual(viewMax, endCellDate, 'view max option equals endDate');
+            });
+
+            QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode = ${applyValueMode})`, function(assert) {
+                this.reinit({
+                    applyValueMode
+                });
+
+                this.instance.open();
+
+                const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                $startDateCell.trigger('dxclick');
+
+                const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+                $endDateCell.trigger('dxclick');
+
+                if(applyValueMode === 'useButtons') {
+                    const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${CALENDAR_OK_BUTTON}`);
+                    $okButton.trigger('dxclick');
+                } else {
+                    this.instance.close();
+                }
+
+                this.instance.open();
+
+                const { calendarMin, calendarMax } = this.getCalendarMinMax();
+                const { viewMin, viewMax } = this.getViewMinMax();
+
+                assert.strictEqual(viewMin, calendarMin, 'view min option restored to calendar min option');
+                assert.strictEqual(viewMax, calendarMax, 'view max option restored to calendar max option');
+            });
+        });
+    });
 });
 
 QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig, () => {
