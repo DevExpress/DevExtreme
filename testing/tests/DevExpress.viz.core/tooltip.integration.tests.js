@@ -4,7 +4,12 @@ const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
 const tooltipModule = require('viz/core/tooltip');
 
-$('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
+
+$('#test-container').css({
+    width: '600px',
+    height: '400px'
+});
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
