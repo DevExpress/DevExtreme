@@ -7,7 +7,7 @@ import {
 
 import { isPlatformServer } from '@angular/common';
 
-import { TransferState } from '@angular/platform-browser';
+import { TransferState, BrowserTransferStateModule } from '@angular/platform-browser';
 
 import { DxServerModule } from 'devextreme-angular/server';
 
@@ -38,7 +38,8 @@ describe('Universal', () => {
             declarations: [TestContainerComponent],
             imports: [
                 DxServerModule,
-                DxDataGridModule
+                DxDataGridModule,
+                BrowserTransferStateModule
             ]
         });
     });

@@ -8,6 +8,8 @@ import {
     TestBed
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     DxDataGridModule
 } from 'devextreme-angular';
@@ -36,7 +38,7 @@ describe('global events', () => {
 
         TestBed.configureTestingModule({
             declarations: [TestContainerComponent],
-            imports: [DxDataGridModule]
+            imports: [DxDataGridModule, BrowserTransferStateModule]
         });
 
         TestBed.overrideComponent(TestContainerComponent, {

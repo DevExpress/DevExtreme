@@ -12,6 +12,8 @@ import {
     FormControl
 } from '@angular/forms';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     TestBed
 } from '@angular/core/testing';
@@ -51,7 +53,7 @@ describe('DxTextBox value accessor', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxTextBoxModule, ReactiveFormsModule]
+                imports: [DxTextBoxModule, ReactiveFormsModule, BrowserTransferStateModule]
             });
     });
 

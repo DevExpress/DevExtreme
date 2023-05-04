@@ -9,6 +9,8 @@ import {
     TestBed
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     DxRangeSelectorModule, DxRangeSelectorComponent
 } from 'devextreme-angular';
@@ -32,7 +34,7 @@ describe('DxRangeSelector', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxRangeSelectorModule]
+                imports: [DxRangeSelectorModule, BrowserTransferStateModule]
             });
     });
 

@@ -9,6 +9,8 @@ import {
     TestBed
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     DxResponsiveBoxModule,
     DxResponsiveBoxComponent
@@ -31,7 +33,7 @@ describe('DxResponsiveBox', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxResponsiveBoxModule]
+                imports: [DxResponsiveBoxModule, BrowserTransferStateModule]
             });
     });
 

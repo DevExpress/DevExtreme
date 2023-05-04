@@ -9,6 +9,8 @@ import {
     TestBed
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     DxTabPanelModule,
     DxTabPanelComponent
@@ -36,7 +38,7 @@ describe('DxTabPanel', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxTabPanelModule]
+                imports: [DxTabPanelModule, BrowserTransferStateModule]
             });
     });
 

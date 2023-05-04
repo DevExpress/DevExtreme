@@ -9,6 +9,8 @@ import {
     TestBed
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     DxToolbarModule,
     DxToolbarComponent
@@ -28,7 +30,7 @@ describe('DxToolbar', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxToolbarModule]
+                imports: [DxToolbarModule, BrowserTransferStateModule]
             });
     });
 

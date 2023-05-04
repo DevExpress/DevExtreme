@@ -12,6 +12,8 @@ import {
     TestBed
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import DxButton from 'devextreme/ui/button';
 
 import {
@@ -43,7 +45,7 @@ describe('DxList', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxListModule]
+                imports: [DxListModule, BrowserTransferStateModule]
             });
     });
 

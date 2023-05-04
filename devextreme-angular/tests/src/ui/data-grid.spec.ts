@@ -7,6 +7,8 @@ import {
     ViewChild
 } from '@angular/core';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     TestBed
 } from '@angular/core/testing';
@@ -71,7 +73,7 @@ describe('DxDataGrid', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxDataGridModule]
+                imports: [DxDataGridModule, BrowserTransferStateModule]
             });
     });
 
@@ -290,7 +292,7 @@ describe('DxDataGrid', () => {
 
         TestBed.configureTestingModule({
             declarations: [TestGridComponent],
-            imports: [DxDataGridModule]
+            imports: [DxDataGridModule, BrowserTransferStateModule]
         });
 
         TestBed.overrideComponent(TestGridComponent, {
@@ -350,7 +352,7 @@ describe('DxDataGrid', () => {
 
         TestBed.configureTestingModule({
             declarations: [TestGridComponent],
-            imports: [DxDataGridModule]
+            imports: [DxDataGridModule, BrowserTransferStateModule]
         });
 
         TestBed.overrideComponent(TestGridComponent, {
@@ -400,7 +402,7 @@ describe('Nested DxDataGrid', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxDataGridModule]
+                imports: [DxDataGridModule, BrowserTransferStateModule]
             });
 
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;

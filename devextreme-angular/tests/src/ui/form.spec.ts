@@ -10,6 +10,8 @@ import {
     ComponentFixture
 } from '@angular/core/testing';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     DxFormModule,
     DxTagBoxModule,
@@ -42,7 +44,7 @@ describe('DxForm', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxFormModule, DxTagBoxModule]
+                imports: [DxFormModule, DxTagBoxModule, BrowserTransferStateModule]
             });
     });
 

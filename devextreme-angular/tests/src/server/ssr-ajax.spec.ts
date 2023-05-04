@@ -12,7 +12,7 @@ import { Deferred } from 'devextreme/core/utils/deferred';
 import ajax from 'devextreme/core/utils/ajax';
 
 import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
-import { BrowserModule, TransferState, makeStateKey } from '@angular/platform-browser';
+import { BrowserModule, TransferState, makeStateKey, BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
     TestBed
@@ -50,6 +50,7 @@ describe('Universal', () => {
                     ServerModule,
                     DxServerTransferStateModule,
                     ServerTransferStateModule,
+                    BrowserTransferStateModule,
                     BrowserModule.withServerTransition({appId: 'appid'})]
             });
     });

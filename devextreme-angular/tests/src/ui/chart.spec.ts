@@ -5,6 +5,8 @@ import {
     ViewChild
 } from '@angular/core';
 
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+
 import {
     TestBed
 } from '@angular/core/testing';
@@ -44,7 +46,7 @@ describe('DxChart', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxChartModule, DxScrollViewModule]
+                imports: [DxChartModule, DxScrollViewModule, BrowserTransferStateModule]
             });
     });
 
