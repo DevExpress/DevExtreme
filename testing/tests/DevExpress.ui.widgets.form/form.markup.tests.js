@@ -1430,42 +1430,42 @@ QUnit.module('Grouping', () => {
         const items = form._testResultItems;
 
         items[0].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1');
         template.empty();
 
         items[0].items[0].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1 internal group 1');
         template.empty();
 
         items[0].items[1].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1 internal group 2');
         template.empty();
 
         items[1].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1');
         template.empty();
 
         items[1].items[0].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 2 internal group 1');
         template.empty();
 
         items[1].items[1].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 2 internal group 2');
@@ -1528,6 +1528,39 @@ QUnit.module('Grouping', () => {
             assert.notOk($layoutManager.children().length, 'layout manager content is empty');
             assert.notOk(form.getEditor('field'), 'editor is not created');
         });
+    });
+
+    test('Group should have aria-labelledby attribute equal to caption id', function(assert) {
+        const $formContainer = $('#form').dxForm({
+            formData: {
+                firstName: 'John',
+                lastName: 'Dow',
+                biography: 'bla-bla-bla',
+                photo: 'test photo',
+            },
+            items: [{
+                itemType: 'group',
+                caption: 'Personal Info',
+                items: ['firstName', 'lastName'],
+            },
+            {
+                itemType: 'group',
+                caption: 'Description',
+                items: ['biography', 'photo'],
+            }],
+        });
+
+        const $groups = $formContainer.find(`.${FORM_GROUP_CLASS}`);
+        const $firstCaption = $groups.eq(0).find(`.${FORM_GROUP_CAPTION_CLASS}`);
+        const $secondCaption = $groups.eq(1).find(`.${FORM_GROUP_CAPTION_CLASS}`);
+
+        assert.strictEqual($groups.length, 2, '2 groups rendered');
+
+        assert.ok($groups.get(0).hasAttribute('aria-labelledby'), 'first group has aria-labelledby attribute');
+        assert.strictEqual($groups.eq(0).attr('aria-labelledby'), $firstCaption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
+
+        assert.ok($groups.get(1).hasAttribute('aria-labelledby'), 'second group has aria-labelledby attribute');
+        assert.strictEqual($groups.eq(1).attr('aria-labelledby'), $secondCaption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
     });
 });
 

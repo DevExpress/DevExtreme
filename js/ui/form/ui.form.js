@@ -525,21 +525,23 @@ const Form = Widget.inherit({
         tryUpdateTabPanelInstance([{ guid: item.guid }, ...(item.tabs ?? [])], tabPanel);
     },
 
-    _itemGroupTemplate: function(item, e, $container) {
+    _itemGroupTemplate: function(item, options, $container) {
+        const id = options.editorOptions.inputAttr.id;
         const $group = $('<div>')
             .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
 
-        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
+        this.setAria('role', 'group', $group);
+        this.setAria('labelledby', id, $group);
 
-        let colCount;
-        let layoutManager;
+        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
 
         if(item.caption) {
             $('<span>')
                 .addClass(FORM_GROUP_CAPTION_CLASS)
                 .text(item.caption)
+                .attr('id', id)
                 .appendTo($group);
         }
 
@@ -561,7 +563,7 @@ const Form = Widget.inherit({
             };
             item._renderGroupContentTemplate();
         } else {
-            layoutManager = this._renderLayoutManager($groupContent, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(item), {
+            const layoutManager = this._renderLayoutManager($groupContent, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(item), {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,
@@ -570,7 +572,7 @@ const Form = Widget.inherit({
 
             this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
-            colCount = layoutManager._getColCount();
+            const colCount = layoutManager._getColCount();
             if(!this._groupsColCount.includes(colCount)) {
                 this._groupsColCount.push(colCount);
             }
