@@ -1,6 +1,28 @@
 import Editor, {
-    EditorOptions,
+    EditorOptions, ValueChangedInfo,
 } from './editor/editor';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    NativeEventInfo,
+} from '../events/index';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxRecurrenceEditor>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRecurrenceEditor>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRecurrenceEditor>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRecurrenceEditor> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxRecurrenceEditor, Event> & ValueChangedInfo;
 
 /** @namespace DevExpress.ui */
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {

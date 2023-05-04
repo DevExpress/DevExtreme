@@ -19,11 +19,37 @@ import {
     DxEvent,
     Cancelable,
     EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
+
+/** @public */
+export type DisposingEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
+
+/** @public */
+export type HiddenEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
+
+/** @public */
+export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxOverlay<TKey>>;
+
+/** @public */
+export type InitializedEvent<TKey = any> = InitializedEventInfo<dxOverlay<TKey>>;
+
+/** @public */
+export type ShowingEvent<TKey = any> = Cancelable & EventInfo<dxOverlay<TKey>>;
+
+/** @public */
+export type OptionChangedEvent<TKey = any> = EventInfo<dxOverlay<TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type ShownEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
 
 /** @namespace DevExpress.ui */
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
@@ -120,7 +146,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onHidden?: ((e: EventInfo<TComponent>) => void);
+    onHidden?: ((e: HiddenEvent<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -130,7 +156,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onHiding?: ((e: Cancelable & EventInfo<TComponent>) => void);
+    onHiding?: ((e: HidingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -140,7 +166,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onShowing?: ((e: Cancelable & EventInfo<TComponent>) => void);
+    onShowing?: ((e: ShowingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -148,7 +174,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onShown?: ((e: EventInfo<TComponent>) => void);
+    onShown?: ((e: ShownEvent<TComponent>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
