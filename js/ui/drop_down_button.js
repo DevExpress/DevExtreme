@@ -134,21 +134,9 @@ const DropDownButton = Widget.inherit({
                 this._list.registerKeyHandler('tab', this._escHandler.bind(this));
                 this._list.registerKeyHandler('leftArrow', this._escHandler.bind(this));
                 this._list.registerKeyHandler('rightArrow', this._escHandler.bind(this));
-
-                this._setListAriaLabel();
             })
         });
         this.callBase();
-    },
-
-    _setListAriaLabel() {
-        if(!this._list) {
-            return;
-        }
-
-        const label = this._list.option('items')?.length ? 'List' : this.option('noDataText');
-
-        this._list?.setAria('label', label);
     },
 
     _itemsToDataSource: function(value) {
@@ -683,7 +671,6 @@ const DropDownButton = Widget.inherit({
             case 'items':
                 this._updateDataSource(this.option('items'));
                 this._updateItemCollection(name);
-                this._setListAriaLabel();
                 break;
             case 'dataSource':
                 if(Array.isArray(value)) {
@@ -693,7 +680,6 @@ const DropDownButton = Widget.inherit({
                     this._updateKeyExpr();
                 }
                 this._updateItemCollection(name);
-                this._setListAriaLabel();
                 break;
             case 'icon':
             case 'text':

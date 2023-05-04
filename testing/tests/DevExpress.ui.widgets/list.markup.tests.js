@@ -24,6 +24,7 @@ const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -250,6 +251,42 @@ QUnit.module('nested rendering', {}, () => {
 let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
+        QUnit.module('aria-label', () => {
+            ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+                QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
+                    const $list = $('#list').dxList({ });
+                    const list = $list.dxList('instance');
+
+                    assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
+
+                    list.option(dataSourcePropertyName, [1, 2, 3]);
+                    assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
+
+                    list.option(dataSourcePropertyName, []);
+                    assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
+                });
+            });
+
+            QUnit.test('noDataText should be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
+                const noDataText = 'Custom no data text';
+
+                const $list = $('#list').dxList({ noDataText });
+
+                assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), noDataText);
+            });
+
+            QUnit.test('aria-label of empty list should be updated after noDataText option change', function(assert) {
+                const noDataText = 'Custom no data text';
+
+                const $list = $('#list').dxList({ });
+                const list = $list.dxList('instance');
+
+                list.option({ noDataText });
+
+                assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), noDataText);
+            });
+        });
+
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
                 helper = new ariaAccessibilityTestHelper({
@@ -263,7 +300,7 @@ if(devices.real().deviceType === 'desktop') {
                 this.expectedItemContainerAttrs = {
                     role: 'listbox',
                     tabindex: '0',
-                    'aria-label': 'List Items'
+                    'aria-label': 'List'
                 };
             },
             afterEach: function() {

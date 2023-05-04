@@ -425,8 +425,6 @@ const DropDownList = DropDownEditor.inherit({
             }
             this._clearSelectedItem();
         }).bind(this));
-
-        this._setListAriaLabel();
     },
 
     _isCustomValueAllowed: function() {
@@ -463,14 +461,6 @@ const DropDownList = DropDownEditor.inherit({
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
 
-    _setListAriaLabel() {
-        const { items } = this.option();
-
-        const label = items?.length ? 'List' : this.option('noDataText');
-
-        this._list?.setAria('label', label);
-    },
-
     _renderList: function() {
         this._listId = 'dx-' + new Guid()._value;
 
@@ -481,7 +471,6 @@ const DropDownList = DropDownEditor.inherit({
 
         this._list = this._createComponent($list, List, this._listConfig());
         this._refreshList();
-        this._setListAriaLabel();
 
         this._renderPreventBlurOnListClick();
         this._setListFocusedElementOptionChange();
