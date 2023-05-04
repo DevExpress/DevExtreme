@@ -58,23 +58,6 @@ const processItems = function(that, chooserColumns) {
     return items;
 };
 
-/*
-todo: check T726413
-todo: check with columnChooser.sortOrder
-
-selection doesn't change correctly if we hide columns via option:
-grid.beginUpdate();
-grid.columnOption(0, 'visible', false)
-grid.columnOption(1, 'visible', false)
-grid.columnOption(4, 'visible', false)
-grid.endUpdate();
-
-check tests when column these options changed:
-optionNames.showInColumnChooser || optionNames.caption || optionNames.allowHiding || optionNames.visible
-
-also maybe columnIndex, column.columns,column.cssClass
-*/
-
 /**
  * @type {Partial<import('./ui.grid_core.column_chooser').ColumnChooserController>}
  */
@@ -373,9 +356,7 @@ const columnChooserMembers = {
     },
 
     _updateItems: function() {
-        const isSelectMode = this.isSelectMode();
-        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
-
+        const chooserColumns = this.getColumns();
         const items = processItems(this, chooserColumns);
 
         this._columnChooserList.option('items', items);
@@ -395,16 +376,17 @@ const columnChooserMembers = {
     },
 
     _columnOptionChanged: function(e) {
-        const changeTypes = e.changeTypes;
-
         this.callBase(e);
 
+        const changeTypes = e.changeTypes;
         const optionNames = e.optionNames;
         const isSelectMode = this.isSelectMode();
 
         if(isSelectMode && this._columnChooserList && this._isUpdatingColumnVisibility !== true) {
             const isColumnVisibleChanged = optionNames.visible && e.columnIndex !== undefined;
-            const needFullRender = optionNames.showInColumnChooser || optionNames.caption || optionNames.allowHiding || optionNames.visible || (changeTypes.columns && optionNames.all);
+
+            const optionsUsedInItems = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
+            const needFullRender = optionsUsedInItems.some(optionName => optionNames[optionName]) || (changeTypes.columns && optionNames.all);
 
             if(isColumnVisibleChanged) {
                 this._updateItemSelection(e.columnIndex);
@@ -428,15 +410,14 @@ const columnChooserMembers = {
 
     getColumnElements: function() {
         const result = [];
-        let $node;
-        const isSelectMode = this.isSelectMode();
-        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
+
+        const chooserColumns = this.getColumns();
         const $content = this._popupContainer && this._popupContainer.$content();
         const $nodes = $content && $content.find('.dx-treeview-node');
 
         if($nodes) {
             chooserColumns.forEach(function(column) {
-                $node = $nodes.filter('[data-item-id = \'' + column.index + '\']');
+                const $node = $nodes.filter('[data-item-id = \'' + column.index + '\']');
                 const item = $node.length ? $node.children('.' + COLUMN_CHOOSER_ITEM_CLASS).get(0) : null;
                 result.push(item);
             });
@@ -451,7 +432,8 @@ const columnChooserMembers = {
     },
 
     getColumns: function() {
-        return this._columnsController.getChooserColumns();
+        const isSelectMode = this.isSelectMode();
+        return this._columnsController.getChooserColumns(isSelectMode);
     },
 
     allowDragging: function(column) {
