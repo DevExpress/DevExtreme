@@ -2706,9 +2706,9 @@ QUnit.module('focus policy', {
         const $listItems = $list.find('.dx-item');
         const list = $list.dxList('instance');
 
-        list.focus();
         $($listItems.eq(1)).trigger('dxclick');
         instance.open();
+        list.focus();
 
         assert.equal($(list.option('focusedElement')).text(), $listItems.eq(1).text(), 'clicked item is focused after popup is reopened');
     });
