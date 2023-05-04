@@ -84,8 +84,11 @@ jobs:
         with:
           name: ${{ matrix.envs.name }}
           constel: ${{ matrix.envs.CONSTEL }}
+          browser: "chrome"
           timezone: ${{ matrix.envs.TZ }}
-          useCsp: ${{ matrix.envs.NO_CSP == 'true' && 'false' || 'true' }}
+          headless: "true"
+          useJQuery: "false"
+          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
 
   qunit-tests-performance:
     needs: build
@@ -100,6 +103,7 @@ jobs:
         uses: ./.github/actions/run-qunit-tests
         with:
           name: "Performance"
+          browser: "chrome"
           isPerformance: "true"
           useJQuery: "true"
           headless: "false"
@@ -148,11 +152,12 @@ jobs:
         uses: ./.github/actions/run-qunit-tests
         with:
           constel: ${{ matrix.envs.CONSTEL }}
+          browser: "chrome"
           useJQuery: ${{ matrix.envs.JQUERY || 'false' }}
           userAgent: ${{ matrix.envs.MOBILE_UA }}
           useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
-          headless: ${{ matrix.envs.NO_HEADLESS == 'true' && 'false' || 'true' }}
-          useCsp: ${{ matrix.envs.NO_CSP == 'true' && 'false' || 'true' }}
+          headless: ${{ matrix.envs.NO_HEADLESS == true && 'false' || 'true' }}
+          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
 
   qunit-tests-firefox:
     needs: build
@@ -187,7 +192,8 @@ jobs:
           constel: ${{ matrix.envs.CONSTEL }}
           browser: "firefox"
           useJQuery: "true"
-          useCsp: ${{ matrix.envs.NO_CSP == 'true' && 'false' || 'true' }}
+          headless: "true"
+          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
 
   notify:
     runs-on: devextreme-shr2
