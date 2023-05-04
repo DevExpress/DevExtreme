@@ -95,13 +95,13 @@ runs:
       env:
         CONSTEL: ${{ inputs.constel }}
         BROWSER: ${{ inputs.browser }}
-        JQUERY: ${{ inputs.withJQuery }}
+        JQUERY: ${{ inputs.useJQuery }}
         MOBILE_UA: ${{ inputs.userAgent }}
-        SHADOW_DOM: ${{ inputs.withShadowDom }}
+        SHADOW_DOM: ${{ inputs.useShadowDom }}
         TZ: ${{ inputs.timezone }}
         PERF: ${{ inputs.isPerformance }}
-        NO_HEADLESS: ${{ inputs.withHeadless == 'true' && 'false' || 'true' }}
-        NO_CSP: ${{ inputs.withCsp == 'true' && 'false' || 'true' }}
+        NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}
+        NO_CSP: ${{ inputs.useCsp == 'false' && 'true' || 'false' }}
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
