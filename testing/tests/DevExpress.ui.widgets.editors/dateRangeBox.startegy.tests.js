@@ -167,7 +167,7 @@ QUnit.module('Strategy', moduleConfig, () => {
                 $endDateCell.trigger('dxclick');
 
                 if(applyValueMode === 'useButtons') {
-                    const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${CALENDAR_OK_BUTTON}`);
+                    const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${POPUP_DONE_BUTTON}`);
                     $okButton.trigger('dxclick');
                 }
 
