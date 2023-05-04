@@ -1153,7 +1153,10 @@ QUnit.module('Column chooser', {
             const $testElement = $('#container');
 
             this.options.columnChooser.mode = 'select';
-            $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
+            $.extend(this.columns, [
+                { caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true },
+                { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }
+            ]);
             this.setTestElement($testElement);
 
             sinon.spy(this.columnChooserView, '_renderTreeView');
@@ -1165,9 +1168,10 @@ QUnit.module('Column chooser', {
             // assert
             assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview is rendered');
 
-            // act
+            // arrange
             sinon.spy(this.columnChooserView, '_updateItems');
 
+            // act
             const optionNames = {
                 caption: true,
                 length: 1
@@ -1202,6 +1206,73 @@ QUnit.module('Column chooser', {
 
             this.columnChooserView.hideColumnChooser();
         });
+    });
+
+    ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'].forEach(optionName => {
+        QUnit.test(`ColumnChooser should update items when column option '${optionName}' was changed`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+
+            this.options.columnChooser.mode = 'select';
+
+            this.setTestElement($testElement);
+
+            // act
+            this.columnChooserView.showColumnChooser();
+
+            // arrange
+            sinon.spy(this.columnChooserView, '_updateItems');
+
+            // act
+            this.columnsController.columnsChanged.fire({
+                optionNames: { [optionName]: true },
+            });
+
+            assert.strictEqual(this.columnChooserView._updateItems.callCount, 1, 'treeview items update count');
+
+            this.columnChooserView.hideColumnChooser();
+        });
+    });
+
+    QUnit.test('ColumnChooser should not update items if column was hidden via chooser', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        $.extend(this.columns, [
+            { caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true },
+        ]);
+        this.options.columnChooser.mode = 'select';
+
+        this.setTestElement($testElement);
+
+        // act
+        this.columnChooserView.showColumnChooser();
+
+        // arrange
+        let updateItemSelectionCalled = false;
+        let updateItemsCalled = false;
+
+        this.columnChooserView._updateItemSelection = () => updateItemSelectionCalled = true;
+        this.columnChooserView._updateItems = () => updateItemsCalled = true;
+
+        this.columnChooserView._columnsController.columnOption = function(columnIndex, optionName, value) {
+            if(optionName === 'visible' && !typeUtils.isDefined(value)) {
+                return;
+            }
+
+            this.columnsChanged.fire({ columnIndex, optionNames: { visible: true } });
+        };
+
+        // act
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+
+        treeView.unselectItem(0);
+
+        this.clock.tick(500);
+
+        assert.notOk(updateItemSelectionCalled, 'updateItemSelection called');
+        assert.notOk(updateItemsCalled, 'updateItems called');
+
+        this.columnChooserView.hideColumnChooser();
     });
 });
 

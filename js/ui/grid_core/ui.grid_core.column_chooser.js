@@ -58,24 +58,6 @@ const processItems = function(that, chooserColumns) {
     return items;
 };
 
-/*
-todo: check T726413
-todo: check with columnChooser.sortOrder
-todo: test for saving scroll when we update option
-
-selection doesn't change correctly if we hide columns via option:
-grid.beginUpdate();
-grid.columnOption(0, 'visible', false)
-grid.columnOption(1, 'visible', false)
-grid.columnOption(4, 'visible', false)
-grid.endUpdate();
-
-check tests when column these options changed:
-optionNames.showInColumnChooser || optionNames.caption || optionNames.allowHiding || optionNames.visible
-
-also maybe columnIndex, column.columns,column.cssClass
-*/
-
 /**
  * @type {Partial<import('./ui.grid_core.column_chooser').ColumnChooserController>}
  */
@@ -268,16 +250,12 @@ const columnChooserMembers = {
             let scrollTop;
 
             this._columnChooserList.on('optionChanged', e => {
-                const scrollable = e.component.getScrollable();
-                scrollTop = scrollable?.scrollTop();
+                scrollTop = e.component.getScrollable().scrollTop();
             });
 
             this._columnChooserList.on('contentReady', e => {
                 deferUpdate(function() {
-                    if(scrollTop) {
-                        const scrollable = e.component.getScrollable();
-                        scrollTop = scrollable?.scrollTo({ y: scrollTop });
-                    }
+                    e.component.getScrollable().scrollTo({ y: scrollTop });
 
                     // @ts-expect-error
                     that.renderCompleted.fire();

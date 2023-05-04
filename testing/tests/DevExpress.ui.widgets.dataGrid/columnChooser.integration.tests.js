@@ -526,4 +526,94 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.ok(selectedNodes.filter(node => node.text === 'band1'), 'band column is selected');
         assert.ok(selectedNodes.filter(node => node.text === 'field1'), 'field1 column is selected');
     });
+
+    QUnit.test('Dragged hidden column from the group panel should become visible', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            groupPanel: {
+                visible: true
+            },
+            columnChooser: {
+                mode: 'select',
+                selection: {
+                    recursive: true
+                },
+            },
+            columns: [{
+                caption: 'band1',
+                visible: false,
+                columns: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', groupIndex: 0, visible: false }
+                ]
+            }],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // drag the column from group panel to header panel
+        dataGrid.getController('columns').moveColumn(0, -1, 'group', 'headers');
+
+        this.clock.tick(500);
+
+        // assert
+        const bandColumns = dataGrid.getVisibleColumns(0);
+        const columns = dataGrid.getVisibleColumns(1);
+
+        assert.strictEqual(bandColumns.length, 1);
+        assert.ok(bandColumns.some(column => column.caption === 'band1'));
+
+        assert.strictEqual(columns.length, 1);
+        assert.ok(columns.some(column => column.dataField === 'field2'));
+
+        // assert
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+
+        const selectedNodes = treeView.getSelectedNodes();
+
+        assert.strictEqual(selectedNodes.length, 1);
+
+        assert.ok(selectedNodes.some(node => node.text === 'Field 2'), 'field2 column is selected');
+    });
+
+    QUnit.test('Column chooser list should preserve scroll top if items were updated', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: {
+                    recursive: true
+                },
+            },
+            columns: [
+                { dataField: 'field1' },
+                { dataField: 'field2' },
+                { dataField: 'field3' },
+                { dataField: 'field4' },
+                { dataField: 'field5' },
+                { dataField: 'field6' },
+                { dataField: 'field7' },
+                { dataField: 'field8' },
+            ],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+        treeView.getScrollable().scrollTo({ y: 50 });
+
+        dataGrid.beginUpdate();
+        dataGrid.columnOption(0, 'visible', false);
+        dataGrid.columnOption(1, 'visible', false);
+        dataGrid.endUpdate();
+
+        // assert
+        assert.strictEqual(treeView.getScrollable().scrollTop(), 50, 'scroll position');
+    });
 });
