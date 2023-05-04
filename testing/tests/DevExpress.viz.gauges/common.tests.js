@@ -75,7 +75,7 @@ tooltipModule.Tooltip = function(parameters) {
     return new StubTooltip(parameters);
 };
 
-sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
+sinon.stub(axisModule, 'Axis', function(parameters) {
     return new vizMocks.Axis(parameters);
 });
 
