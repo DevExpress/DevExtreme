@@ -259,6 +259,7 @@ const transpileWithBabel = async(sourceCode, destPath) => {
     const { code } = await babel.transform(sourceCode, {
         compact: false,
         plugins: ['@babel/plugin-transform-modules-systemjs'],
+        sourceMaps: true,
     });
 
     const destDir = path.dirname(destPath);
@@ -300,7 +301,7 @@ const patchBuilder = (fileName, searchValue, replaceValue) => {
     const file = fs.readFileSync(filePath).toString();
 
     if(!file.includes(replaceValue)) {
-        fs.writeFileSync(filePath, file.replace(
+        fs.writeFileSync(filePath, file.replaceAll(
             searchValue,
             replaceValue
         ));
@@ -320,6 +321,12 @@ const updateBuilder = () => {
         'compile.js',
         'exportDefault ? "true" : "false"',
         'exportDefault && !compileOpts.namedExports ? "true" : "false"'
+    );
+
+    patchBuilder(
+        'builder.js',
+        'return normalized;',
+        'return normalized.replace("%20", " ");'
     );
 };
 
