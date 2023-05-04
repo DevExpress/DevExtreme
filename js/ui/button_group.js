@@ -71,7 +71,7 @@ const ButtonCollection = CollectionWidget.inherit({
         return this.callBase(args);
     },
 
-    _setAriaSelected: function($target, value) {
+    _setAriaSelectionAttribute: function($target, value) {
         this.setAria('pressed', value, $target);
     },
 
