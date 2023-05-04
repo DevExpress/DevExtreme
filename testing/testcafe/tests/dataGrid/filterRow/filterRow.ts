@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../helpers/changeTheme';
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
-import FilterTextBox from '../../model/dataGrid/editors/filterTextBox';
-import { getNumberData } from './helpers/generateDataSourceData';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import DataGrid from '../../../model/dataGrid';
+import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { getNumberData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`FilterRow`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {
   const dataGrid = new DataGrid('#container');
