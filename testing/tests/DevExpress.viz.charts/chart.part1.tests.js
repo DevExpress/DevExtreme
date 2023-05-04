@@ -961,7 +961,7 @@ QUnit.test('handle render complete after any option changed', function(assert) {
 QUnit.module('drawn', $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.call(this);
-        sinon.stub(BaseChart.prototype, '_drawn', sinon.spy());
+        sinon.stub(BaseChart.prototype, '_drawn').callsFake(sinon.spy());
     },
     afterEach: function() {
         commons.environment.afterEach.call(this);

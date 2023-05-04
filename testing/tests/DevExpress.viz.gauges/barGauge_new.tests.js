@@ -10,7 +10,12 @@ import 'viz/gauges/bar_gauge';
 
 const stubLegend = stubClass(Legend);
 
-$('<div id="test-container" style="width: 400px; height: 400px;"></div>').appendTo('#qunit-fixture');
+$('<div id="test-container"></div>')
+    .css({
+        width: '400px',
+        height: '400px'
+    })
+    .appendTo('#qunit-fixture');
 
 const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
@@ -138,7 +143,7 @@ QUnit.module('Legend', {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
 
-        sinon.stub(rendererModule, 'Renderer', () => {
+        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
             return this.renderer;
         });
 
