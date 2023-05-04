@@ -22,7 +22,6 @@ test('Save appointment loading panel screenshot', async (t) => {
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .click(appointmentPopup.doneButton)
     // act
-    .wait(700)
     .expect(await takeScreenshot('save-appointment-loading-panel-screenshot.png', scheduler.element))
     .ok()
     // assert
