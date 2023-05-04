@@ -1,5 +1,5 @@
 import Class from '../core/class';
-import { isFunction, isDefined } from '../core/utils/type';
+import { isFunction, isDefined, isString } from '../core/utils/type';
 import { each, map } from '../core/utils/iterator';
 import { compileGetter, toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
@@ -99,7 +99,7 @@ const MapIterator = WrappedIterator.inherit({
 });
 
 const defaultCompare = function(xValue, yValue, options) {
-    if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.locale || options?.collatorOptions)) {
+    if(isString(xValue) && isString(yValue) && (options?.locale || options?.collatorOptions)) {
 
         /* eslint-disable-next-line no-undef */
         return new Intl.Collator(options?.locale || undefined, options?.collatorOptions || undefined).compare(xValue, yValue);
