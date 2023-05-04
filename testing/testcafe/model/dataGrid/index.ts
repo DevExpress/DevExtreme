@@ -457,6 +457,19 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiCollapseAllGroups(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).option('grouping.autoExpandAll', false),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
