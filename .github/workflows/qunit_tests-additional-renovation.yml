@@ -82,6 +82,7 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
+          name: ${{ matrix.envs.name }}
           constel: ${{ matrix.envs.CONSTEL }}
           timezone: ${{ matrix.envs.TZ }}
           useCsp: ${{ matrix.envs.USE_CSP }}
@@ -98,6 +99,7 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
+          name: "Performance"
           isPerformance: "true"
           useJQuery: "true"
           headless: "false"
@@ -181,6 +183,7 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
+          name: ${{ matrix.envs.name }}
           constel: ${{ matrix.envs.CONSTEL }}
           browser: "firefox"
           useJQuery: "true"
