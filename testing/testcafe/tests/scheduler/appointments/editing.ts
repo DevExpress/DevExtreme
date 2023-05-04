@@ -95,7 +95,7 @@ test('Appointment EditForm screenshot', async (t) => {
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
 
   await t
-    .doubleClick(appointment.element, CLICK_OPTIONS)
+    .doubleClick(appointment.element)
     // act
     .expect(await takeScreenshot('appointment-popup-screenshot.png', appointment.element))
     .ok()

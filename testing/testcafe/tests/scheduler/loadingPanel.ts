@@ -3,7 +3,6 @@ import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import url from '../../helpers/getPageUrl';
 
-const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
@@ -18,11 +17,12 @@ test('Save appointment loading panel screenshot', async (t) => {
   const { appointmentPopup } = scheduler;
 
   await t
-    .doubleClick(appointment.element, CLICK_OPTIONS)
+    .doubleClick(appointment.element)
     .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .click(appointmentPopup.doneButton)
     // act
+    .wait(700)
     .expect(await takeScreenshot('save-appointment-loading-panel-screenshot.png', scheduler.element))
     .ok()
     // assert

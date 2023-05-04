@@ -3,7 +3,6 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 
@@ -16,7 +15,7 @@ test('Reccurence dialog screenshot', async (t) => {
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
 
   await t
-    .doubleClick(appointment.element, CLICK_OPTIONS)
+    .doubleClick(appointment.element)
     // act
     .expect(await takeScreenshot('reccurence-dialog-screenshot.png', scheduler.element))
     .ok()
