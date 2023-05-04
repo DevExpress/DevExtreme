@@ -37,7 +37,7 @@
             }
         }
         if(isServerSideTest) {
-            yield return Url.Content("~/testing/helpers/ssrEmulator.js");
+            yield return Url.Content(testingBasePath + "helpers/ssrEmulator.js");
         }
     }
 }

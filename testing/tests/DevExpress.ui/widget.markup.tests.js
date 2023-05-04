@@ -16,11 +16,13 @@ require('generic_light.css!');
     QUnit.testStart(function() {
         const markup = '\
             <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
-            <div id="widthRootStylePercent" style="width: 50%;"></div>\
+            <div id="widthRootStyle"></div>\
+            <div id="widthRootStylePercent"></div>\
             </div>';
 
         $('#qunit-fixture').html(markup);
+        $('#widthRootStyle').css('width', '300px');
+        $('#widthRootStylePercent').css('width', '50%');
     });
 
     QUnit.module('Widget markup');
