@@ -17,10 +17,16 @@ setupSeriesFamily();
 QUnit.testStart(function() {
     const markup =
         '<div id="container"></div>\
-        <div id="containerForCheckingGroups" style="height: 150px"></div>\
-        <div id="chartContainer" style="width: 300px; height: 150px;"></div>';
+        <div id="containerForCheckingGroups"></div>\
+        <div id="chartContainer"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#containerForCheckingGroups').css('height', '150px');
+
+    $('#chartContainer').css({
+        width: '300px',
+        height: '150px'
+    });
 });
 
 let chartContainerCounter = 1;
@@ -28,8 +34,14 @@ let containerName;
 const moduleSetup = {
     beforeEach: function() {
         containerName = 'chartContainer' + chartContainerCounter;
-        this.$container = $('<div id="' + containerName + '" style="width: 600px;height:400px;"></div>');
+        this.$container = $(`<div id="${containerName}"></div>'`);
         $('#container').append(this.$container);
+
+        $(`#${containerName}`).css({
+            width: '600px',
+            height: '400px'
+        });
+
         chartContainerCounter++;
         executeAsyncMock.setup();
     },
@@ -66,7 +78,7 @@ QUnit.test('chart in container with height from style', function(assert) {
     const container = $('<div>').appendTo('#container');
     container.addClass('chart');
 
-    const style = $(`<style>
+    const style = $(`<style nonce="qunit-test">
         .chart {
             height: 600px;
         }
@@ -3856,8 +3868,7 @@ QUnit.module('Axis templates', moduleSetup);
 QUnit.test('Rotated labels', function(assert) {
     function renderText(opt, g) {
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-
-        text.setAttribute('style', 'fill: green; font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 15px;');
+        text.style = 'fill: green; font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 15px;';
         text.textContent = opt.valueText;
 
         g.appendChild(text);

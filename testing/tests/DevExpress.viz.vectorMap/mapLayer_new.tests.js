@@ -13,7 +13,12 @@ const rendererModule = require('viz/core/renderers/renderer');
 
 require('viz/vector_map/vector_map');
 
-$('#qunit-fixture').append('<div id="container" style="width: 1200px; height: 600px;"></div>');
+$('#qunit-fixture').append('<div id="container"></div>');
+
+$('#container').css({
+    width: '1200px',
+    height: '600px'
+});
 
 titleModule.DEBUG_set_title(vizMocks.stubClass(titleModule.Title, { }));
 tooltipModule.DEBUG_set_tooltip(vizMocks.stubClass(tooltipModule.Tooltip));
