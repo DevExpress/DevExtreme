@@ -1,12 +1,12 @@
 import {
- FilterDescriptor,
- GroupDescriptor,
- LoadOptions,
- SearchOperation,
- SelectDescriptor,
- SortDescriptor,
- Store,
- StoreOptions,
+  FilterDescriptor,
+  GroupDescriptor, LangParams,
+  LoadOptions,
+  SearchOperation,
+  SelectDescriptor,
+  SortDescriptor,
+  Store,
+  StoreOptions,
 } from './index';
 import { DxExtendedPromise } from '../core/utils/deferred';
 import { Options as CustomStoreOptions } from './custom_store';
@@ -50,7 +50,14 @@ export interface DataSourceOptions<
      * @type Group expression
      * @public
      */
-    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+       group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+     /**
+      * @docid
+      * @type object
+      * @public
+      */
+     // eslint-disable-next-line spellcheck/spell-checker
+     langParams?: LangParams;
     /**
      * @docid
      * @type_function_param1 dataItem:object

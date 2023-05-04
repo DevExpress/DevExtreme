@@ -832,7 +832,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         });
 
         QUnit.test(`DateRangeBox should update value on ${dateBoxName} value change`, function(assert) {
-            const newValue = '2023/07/07';
+            const newValue = '2023/01/20';
             const dateBox = dateBoxName === 'startDateBox'
                 ? getStartDateBoxInstance(this.instance)
                 : getEndDateBoxInstance(this.instance);
@@ -880,6 +880,78 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         assert.notStrictEqual(this.$element.css('display'), 'none');
     });
+
+    QUnit.module('startDate > endDate', {
+        beforeEach: function() {
+            this.onValueChangedHandler = sinon.stub();
+
+            this.testValue = (assert, value) => {
+                assert.deepEqual(this.instance.option('value'), value, 'value is correct');
+                assert.strictEqual(this.instance.option('startDate'), value[0], 'startDate is correct');
+                assert.strictEqual(this.instance.option('endDate'), value[1], 'end is correct');
+                assert.strictEqual(this.instance.getStartDateBox().option('value'), value[0], 'startDateBox value is correct');
+                assert.strictEqual(this.instance.getEndDateBox().option('value'), value[1], 'endDateBox value is correct');
+
+                const { value: eventValue } = this.onValueChangedHandler.getCall(0).args[0];
+
+                assert.strictEqual(this.onValueChangedHandler.callCount, 1, 'onValueChanged called one time');
+                assert.deepEqual(eventValue, value, 'onValueChanged handler got correct value field');
+            };
+        },
+        afterEach: function() {
+            this.onValueChangedHandler.reset();
+        }
+    }, () => {
+        QUnit.test('dates should be swapped if passed value has dates in wrong order', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.instance.option('value', ['2023/02/02', '2023/01/01']);
+
+            this.testValue(assert, ['2023/01/01', '2023/02/02']);
+        });
+
+        QUnit.test('dates should be swapped if passed startDate is bigger than endDate', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler,
+                value: ['2023/01/01', '2023/02/02']
+            });
+            this.instance.option('startDate', '2023/03/03');
+
+            this.testValue(assert, ['2023/02/02', '2023/03/03']);
+        });
+
+        QUnit.test('dates should be swapped if passed endDate is smaller than endDate', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler,
+                value: ['2023/02/02', '2023/03/03']
+            });
+            this.instance.option('endDate', '2023/01/01');
+
+            this.testValue(assert, ['2023/01/01', '2023/02/02']);
+        });
+
+        QUnit.test('dates should be swapped if startDateBox got value bigger than endDateBox value', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler,
+                value: ['2023/01/01', '2023/02/02']
+            });
+            this.instance.getStartDateBox().option('value', '2023/03/03');
+
+            this.testValue(assert, ['2023/02/02', '2023/03/03']);
+        });
+
+        QUnit.test('dates should be swapped if endDateBox got value smaller than startDateBox value', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler,
+                value: ['2023/02/02', '2023/03/03']
+            });
+            this.instance.getEndDateBox().option('value', '2023/01/01');
+
+            this.testValue(assert, ['2023/01/01', '2023/02/02']);
+        });
+    });
 });
 
 QUnit.module('Events', moduleConfig, () => {
@@ -893,6 +965,18 @@ QUnit.module('Events', moduleConfig, () => {
             this.instance.option('value', ['2023/04/19', null]);
 
             assert.ok(this.onValueChangedHandler.calledOnce);
+        });
+
+        QUnit.test('should not be called after update value on the same dates array', function(assert) {
+            this.instance.option('value', ['2023/01/05', '2023/02/14']);
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
+        });
+
+        QUnit.test('should not be called after update value on the same dates array with wrong order', function(assert) {
+            this.instance.option('value', ['2023/02/14', '2023/01/05']);
+
+            assert.strictEqual(this.onValueChangedHandler.callCount, 0);
         });
 
         QUnit.test('should be called after startDate change', function(assert) {
@@ -1267,6 +1351,61 @@ QUnit.module('Events', moduleConfig, () => {
             });
         });
     });
+
+    QUnit.module('onFocusIn & onFocusOut events', {
+        beforeEach: function() {
+            this.onFocusInHandler = sinon.stub();
+            this.onFocusOutHandler = sinon.stub();
+        }
+    }, () => {
+        QUnit.test('onFocusIn should be called once on call focus() method', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+        });
+
+        QUnit.test('onFocusOut should be called once on call blur() method if startDate input is focused', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.getStartDateBox().focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+
+            this.onFocusInHandler.reset();
+            this.instance.blur();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 0, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 1, 'onFocusOut callCount');
+        });
+
+        QUnit.test('onFocusOut should be called once on call blur() method if endDate input is focused', function(assert) {
+            this.reinit({
+                onFocusIn: this.onFocusInHandler,
+                onFocusOut: this.onFocusOutHandler,
+            });
+
+            this.instance.getEndDateBox().focus();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 1, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 0, 'onFocusOut callCount');
+
+            this.onFocusInHandler.reset();
+            this.instance.blur();
+
+            assert.strictEqual(this.onFocusInHandler.callCount, 0, 'onFocusIn callCount');
+            assert.strictEqual(this.onFocusOutHandler.callCount, 1, 'onFocusOut callCount');
+        });
+    });
 });
 
 QUnit.module('Public methods', moduleConfig, () => {
@@ -1321,6 +1460,42 @@ QUnit.module('Public methods', moduleConfig, () => {
 
         assert.strictEqual($popupContent.is($(startDateBox.content())), true, 'content returns right element');
         assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
+    });
+
+    QUnit.testInActiveWindow('Focus() method should focus startDate input', function(assert) {
+        this.instance.focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('Blur() method should unfocus startDate input', function(assert) {
+        this.instance.getStartDateBox().focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+
+        this.instance.blur();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('Blur() method should unfocus startDate input', function(assert) {
+        this.instance.getEndDateBox().focus();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
+
+        this.instance.blur();
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
     });
 });
 

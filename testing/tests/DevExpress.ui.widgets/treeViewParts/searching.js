@@ -185,6 +185,50 @@ QUnit.test('search should consider dataSource sorting', function(assert) {
     });
 });
 
+QUnit.test('search should consider dataSource langParams', function(assert) {
+    const data = [
+        { id: 1, parentId: 0, text: 'Towns' },
+        { id: 2, parentId: 1, text: 'istanbul' },
+        { id: 3, parentId: 1, text: 'İstanbul' },
+        { id: 4, parentId: 1, text: 'quebec' },
+        { id: 5, parentId: 1, text: 'Québec' },
+
+    ];
+
+    const treeView = initTree({
+        dataSource: { store: data, sort: 'text', langParams: { locale: 'tr', collatorOptions: { caseFirst: 'upper' } } },
+        dataStructure: 'plain',
+        parentIdExpr: 'parentId',
+        keyExpr: 'id'
+    }).dxTreeView('instance');
+
+    treeView.option('searchValue', 'is');
+
+    let $items = $(treeView.$element()).find('.dx-treeview-item');
+    let expectedValues = ['Towns', 'İstanbul', 'istanbul'];
+
+    $.each($items, function(index, item) {
+        assert.equal($(item).text(), expectedValues[index], 'Correct item');
+    });
+
+    treeView.option('dataSource', {
+        store: data,
+        sort: 'text',
+        langParams: { locale: 'fr', collatorOptions: { sensitivity: 'base' } }
+    });
+
+    treeView.option('searchValue', 'que');
+
+    $items = $(treeView.$element()).find('.dx-treeview-item');
+    expectedValues = ['Towns', 'quebec', 'Québec'];
+
+    assert.equal($items.length, 3);
+
+    $.each($items, function(index, item) {
+        assert.equal($(item).text(), expectedValues[index], 'Correct item');
+    });
+});
+
 QUnit.test('searchValue from value to empty - update selection', function(assert) {
     const data = $.extend(true, [], DATA[5]);
     data[0].items[1].expanded = true;

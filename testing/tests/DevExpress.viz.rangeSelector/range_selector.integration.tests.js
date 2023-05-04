@@ -4,9 +4,14 @@ import { DataSource } from 'data/data_source/data_source';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="container" style="width: 300px; height: 150px"></div>';
+        '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#container').css({
+        width: '300px',
+        height: '150px'
+    });
 });
 
 QUnit.module('Render', function(hook) {
