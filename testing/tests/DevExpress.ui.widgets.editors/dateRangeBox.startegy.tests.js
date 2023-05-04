@@ -169,8 +169,6 @@ QUnit.module('Strategy', moduleConfig, () => {
                 if(applyValueMode === 'useButtons') {
                     const $okButton = $(this.instance.getStartDateBox().content()).parent().find(`.${CALENDAR_OK_BUTTON}`);
                     $okButton.trigger('dxclick');
-                } else {
-                    this.instance.close();
                 }
 
                 this.instance.open();
