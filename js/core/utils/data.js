@@ -191,7 +191,7 @@ export const toComparable = function(value, caseSensitive, options = {}) {
     }
 
     if(!caseSensitive && typeof value === 'string') {
-        if(options?.collateOptions?.sensitivity === 'base') {
+        if(options?.collatorOptions?.sensitivity === 'base') {
             const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
             value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');

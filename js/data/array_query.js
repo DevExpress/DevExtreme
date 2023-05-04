@@ -99,10 +99,10 @@ const MapIterator = WrappedIterator.inherit({
 });
 
 const defaultCompare = function(xValue, yValue, options) {
-    if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.locale || options?.collateOptions)) {
+    if(typeof xValue === 'string' && typeof yValue === 'string' && (options?.locale || options?.collatorOptions)) {
 
         /* eslint-disable-next-line no-undef */
-        return new Intl.Collator(options?.locale || undefined, options?.collateOptions || undefined).compare(xValue, yValue);
+        return new Intl.Collator(options?.locale || undefined, options?.collatorOptions || undefined).compare(xValue, yValue);
     }
 
     xValue = toComparable(xValue, false, options);

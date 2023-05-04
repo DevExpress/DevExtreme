@@ -196,7 +196,7 @@ QUnit.test('search should consider dataSource langParams', function(assert) {
     ];
 
     const treeView = initTree({
-        dataSource: { store: data, sort: 'text', langParams: { locale: 'tr', collateOptions: { caseFirst: 'upper' } } },
+        dataSource: { store: data, sort: 'text', langParams: { locale: 'tr', collatorOptions: { caseFirst: 'upper' } } },
         dataStructure: 'plain',
         parentIdExpr: 'parentId',
         keyExpr: 'id'
@@ -214,7 +214,7 @@ QUnit.test('search should consider dataSource langParams', function(assert) {
     treeView.option('dataSource', {
         store: data,
         sort: 'text',
-        langParams: { locale: 'fr', collateOptions: { sensitivity: 'base' } }
+        langParams: { locale: 'fr', collatorOptions: { sensitivity: 'base' } }
     });
 
     treeView.option('searchValue', 'que');

@@ -7718,7 +7718,7 @@ QUnit.module('DataSource with diacritical marks', {
         ['no base', 'base'].forEach((sensitivity) => {
             QUnit.test(`Filtering with remoteOperations = ${remoteOperations}, locale = 'en-US' and sensitivity=${sensitivity}`, function(assert) {
                 // arrange
-                this.langParams.collateOptions = { sensitivity };
+                this.langParams.collatorOptions = { sensitivity };
                 this.langParams.locale = 'en-US';
                 const dataSource = this.createDataSource({ remoteOperations });
 
@@ -7742,7 +7742,7 @@ QUnit.module('DataSource with diacritical marks', {
 
             QUnit.test(`Filtering with remoteOperations = ${remoteOperations}, locale = 'tr' and sensitivity=${sensitivity}`, function(assert) {
                 // arrange
-                this.langParams.collateOptions = { sensitivity };
+                this.langParams.collatorOptions = { sensitivity };
                 this.langParams.locale = 'tr';
                 const dataSource = this.createDataSource({ remoteOperations });
 
@@ -7766,7 +7766,7 @@ QUnit.module('DataSource with diacritical marks', {
         QUnit.test(`Sorting with remoteOperations = ${remoteOperations} and locale = 'en-US'`, function(assert) {
             // arrange
             this.langParams.locale = 'en-US';
-            this.langParams.collateOptions = { caseFirst: 'upper' };
+            this.langParams.collatorOptions = { caseFirst: 'upper' };
             const dataSource = this.createDataSource({ remoteOperations });
 
             // act
@@ -7782,7 +7782,7 @@ QUnit.module('DataSource with diacritical marks', {
         QUnit.test(`Sorting with remoteOperations = ${remoteOperations} and locale = 'tr'`, function(assert) {
             // arrange
             this.langParams.locale = 'tr';
-            this.langParams.collateOptions = { caseFirst: 'upper' };
+            this.langParams.collatorOptions = { caseFirst: 'upper' };
             const dataSource = this.createDataSource({ remoteOperations });
 
             // act

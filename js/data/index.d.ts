@@ -48,7 +48,7 @@ export type FilterDescriptor = any;
  */
 export type LangParams = {
   locale: string;
-  collateOptions?: Intl.CollatorOptions;
+  collatorOptions?: Intl.CollatorOptions;
 };
  /**
  * @docid

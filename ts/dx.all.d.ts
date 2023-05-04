@@ -5014,7 +5014,7 @@ declare module DevExpress.data {
    */
   export type LangParams = {
     locale: string;
-    collateOptions?: Intl.CollatorOptions;
+    collatorOptions?: Intl.CollatorOptions;
   };
   /**
    * [descr:LoadOptions]

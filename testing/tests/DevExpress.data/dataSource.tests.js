@@ -1459,7 +1459,7 @@ QUnit.test('filter with langParams', function(assert) {
         store: data,
         langParams: {
             locale: 'tr',
-            collateOptions: {
+            collatorOptions: {
                 caseFirst: 'upper',
             }
         },
@@ -1479,7 +1479,7 @@ QUnit.test('filter with langParams', function(assert) {
     source = new DataSource({
         store: data,
         langParams: {
-            collateOptions: {
+            collatorOptions: {
                 sensitivity: 'base'
             }
         }

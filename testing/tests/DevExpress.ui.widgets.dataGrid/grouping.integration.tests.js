@@ -758,7 +758,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 sort: 'text2',
                 langParams: {
                     locale: 'tr',
-                    collateOptions: { caseFirst: 'upper' }
+                    collatorOptions: { caseFirst: 'upper' }
                 },
                 load: function(options) {
                     const d = $.Deferred();
