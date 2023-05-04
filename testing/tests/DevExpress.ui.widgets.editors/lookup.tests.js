@@ -85,6 +85,7 @@ const APPLY_BUTTON_CLASS = 'dx-popup-done';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
+const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const FOCUSED_CLASS = 'dx-state-focused';
 
@@ -3372,7 +3373,12 @@ if(devices.real().deviceType === 'desktop') {
 
                 let listAttributes = {
                     id: helper.widget._listId,
+                };
+
+                const listItemContainerAttributes = {
                     'aria-label': 'No data to display',
+                    tabindex: '0',
+                    role: 'listbox'
                 };
 
                 let fieldAttributes = {
@@ -3392,6 +3398,7 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
@@ -3417,7 +3424,6 @@ if(devices.real().deviceType === 'desktop') {
 
                 listAttributes = {
                     id: helper.widget._listId,
-                    'aria-label': 'No data to display',
                 };
 
                 fieldAttributes = {
@@ -3437,6 +3443,7 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
