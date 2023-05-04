@@ -83,7 +83,7 @@ const environment = {
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
         that.templateManager = new TemplateManagerModule.TemplateManager();
-        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager', function() {
+        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager').callsFake(function() {
             return that.templateManager;
         });
 
@@ -146,11 +146,11 @@ const environment = {
         that.layoutManager.needMoreSpaceForPanesCanvas.returns(true);
         that.layoutManager.applyPieChartSeriesLayout.returns({ radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200 });
 
-        that.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+        that.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
             return that.layoutManager;
         });
 
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
@@ -831,7 +831,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             environment.beforeEach.apply(this, arguments);
             const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D', function() {
+            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
@@ -890,7 +890,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
             const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D', function() {
+            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
@@ -1072,7 +1072,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             this.mockSeries2 = new MockSeries({ argumentField: 'arg' });
             const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D', function() {
+            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
@@ -2071,7 +2071,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
             const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D', function() {
+            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();

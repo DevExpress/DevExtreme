@@ -25,7 +25,7 @@ const environment = {
     beforeEach: function() {
 
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new vizMocks.Renderer();

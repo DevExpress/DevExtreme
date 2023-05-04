@@ -748,7 +748,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             commons.environment.afterEach.call(this);
         },
         mockValidateData: function() {
-            this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+            this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
                 return { x: data || [] };
             });
         },
