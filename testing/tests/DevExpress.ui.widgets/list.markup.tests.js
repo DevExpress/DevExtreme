@@ -251,42 +251,6 @@ QUnit.module('nested rendering', {}, () => {
 let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
-        QUnit.module('aria-label', () => {
-            ['items', 'dataSource'].forEach(dataSourcePropertyName => {
-                QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
-                    const $list = $('#list').dxList({ });
-                    const list = $list.dxList('instance');
-
-                    assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
-
-                    list.option(dataSourcePropertyName, [1, 2, 3]);
-                    assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
-
-                    list.option(dataSourcePropertyName, []);
-                    assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
-                });
-            });
-
-            QUnit.test('noDataText should be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
-                const noDataText = 'Custom no data text';
-
-                const $list = $('#list').dxList({ noDataText });
-
-                assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), noDataText);
-            });
-
-            QUnit.test('aria-label of empty list should be updated after noDataText option change', function(assert) {
-                const noDataText = 'Custom no data text';
-
-                const $list = $('#list').dxList({ });
-                const list = $list.dxList('instance');
-
-                list.option({ noDataText });
-
-                assert.strictEqual($list.find(`.${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), noDataText);
-            });
-        });
-
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
                 helper = new ariaAccessibilityTestHelper({
@@ -351,6 +315,37 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('focusedElement', null);
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkItemsAttributes([0], { attributes: ['aria-selected'], role: 'option' });
+            });
+
+            ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+                QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
+                    helper.createWidget({ items: [] });
+
+                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
+
+                    helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'List');
+
+                    helper.widget.option(dataSourcePropertyName, []);
+                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
+                });
+            });
+
+            QUnit.test('noDataText should be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
+                const noDataText = 'Custom no data text';
+
+                helper.createWidget({ noDataText, items: [] });
+
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), noDataText);
+            });
+
+            QUnit.test('aria-label of empty list should be updated after noDataText option change', function(assert) {
+                helper.createWidget({ items: [] });
+
+                const noDataText = 'Custom no data text';
+                helper.widget.option('noDataText', noDataText);
+
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), noDataText);
             });
         });
     });
