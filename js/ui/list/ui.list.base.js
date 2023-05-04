@@ -656,6 +656,7 @@ export const ListBase = CollectionWidget.inherit({
         this.option('useInkRipple') && this._renderInkRipple();
 
         this.setAria('role', 'listbox');
+        this.setAria('label', 'List Items');
     },
 
     _focusTarget: function() {
