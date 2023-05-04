@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Între",
         "dxDataGrid-filterRowOperationBetweenStartText": "Începe",
         "dxDataGrid-filterRowOperationBetweenEndText": "Sfârșit",
+        "dxDataGrid-searchBoxLabel": "Search box",
         "dxDataGrid-applyFilterText": "Aplica filtre",
         "dxDataGrid-trueText": "adevărat",
         "dxDataGrid-falseText": "fals",

@@ -549,7 +549,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 showFirstSubmenuMode: 'onHover',
                 hideSubmenuOnMouseLeave: true,
                 elementAttr: {
-                    'aria-label': messageLocalization.format('dxDataGrid-filterRowFilterButtonLabel')
+                    'aria-label': messageLocalization.format('dxDataGrid-searchBoxLabel')
                 },
                 items: [{
                     disabled: column.filterOperations && column.filterOperations.length ? false : true,

@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Arasında",
         "dxDataGrid-filterRowOperationBetweenStartText": "Başla",
         "dxDataGrid-filterRowOperationBetweenEndText": "Bitiş",
+        "dxDataGrid-searchBoxLabel": "Search box",
         "dxDataGrid-applyFilterText": "Filtre uygula",
         "dxDataGrid-trueText": "evet",
         "dxDataGrid-falseText": "hayır",

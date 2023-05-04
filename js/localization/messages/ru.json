@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "В диапазоне",
         "dxDataGrid-filterRowOperationBetweenStartText": "Начало",
         "dxDataGrid-filterRowOperationBetweenEndText": "Конец",
+        "dxDataGrid-searchBoxLabel": "Search box",
         "dxDataGrid-applyFilterText": "Применить фильтр",
         "dxDataGrid-trueText": "Да",
         "dxDataGrid-falseText": "Нет",

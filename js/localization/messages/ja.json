@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "～から～の間",
         "dxDataGrid-filterRowOperationBetweenStartText": "開始値",
         "dxDataGrid-filterRowOperationBetweenEndText": "終了値",
+        "dxDataGrid-searchBoxLabel": "Search box",
         "dxDataGrid-applyFilterText": "フィルターを適用",
         "dxDataGrid-trueText": "true",
         "dxDataGrid-falseText": "false",

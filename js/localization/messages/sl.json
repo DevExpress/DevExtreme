@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Je med",
         "dxDataGrid-filterRowOperationBetweenStartText": "Začetek",
         "dxDataGrid-filterRowOperationBetweenEndText": "Konec",
+        "dxDataGrid-searchBoxLabel": "Search box",
         "dxDataGrid-applyFilterText": "Uporabi filter",
         "dxDataGrid-trueText": "Da",
         "dxDataGrid-falseText": "Ne",

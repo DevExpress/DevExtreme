@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Mellom",
         "dxDataGrid-filterRowOperationBetweenStartText": "Start",
         "dxDataGrid-filterRowOperationBetweenEndText": "Slutt",
+        "dxDataGrid-searchBoxLabel": "Search box",
         "dxDataGrid-applyFilterText": "Bruk filter",
         "dxDataGrid-trueText": "sant",
         "dxDataGrid-falseText": "usant",
