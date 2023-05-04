@@ -2522,7 +2522,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnChooserSearchConfig.editorOptions]
      */
-    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+    editorOptions?: any;
     /**
      * [descr:ColumnChooserSearchConfig.enabled]
      */
@@ -3706,7 +3706,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:HeaderFilterSearchConfig.editorOptions]
      */
-    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+    editorOptions?: any;
     /**
      * [descr:HeaderFilterSearchConfig.enabled]
      */
