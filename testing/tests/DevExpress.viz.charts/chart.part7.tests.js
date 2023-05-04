@@ -749,7 +749,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             commons.environment.afterEach.call(this);
         },
         mockValidateData: function() {
-            this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+            this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
                 return { x: data || [] };
             });
         },
@@ -2093,7 +2093,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             commons.environment.beforeEach.call(this);
             this.clock = sinon.useFakeTimers();
 
-            this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects', function() {
+            this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects').callsFake(function() {
                 return {
                     'id_1': { type: 'linear', colors: 'colors_1', rotationAngle: 30 },
                     'id_2': { type: 'radial', colors: 'colors_2' },
