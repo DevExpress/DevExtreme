@@ -61,7 +61,6 @@ jobs:
       fail-fast: false
       matrix:
         constel: [ 'misc', 'ui.editors', 'ui.grid', 'ui.scheduler' ]
-        browser: 'chrome'
         timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
         include:
           - constel: 'misc'
