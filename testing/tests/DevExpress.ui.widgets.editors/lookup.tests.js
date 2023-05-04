@@ -3373,6 +3373,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 let listAttributes = {
                     id: helper.widget._listId,
+                    role: 'application'
                 };
 
                 const listItemContainerAttributes = {
@@ -3424,6 +3425,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 listAttributes = {
                     id: helper.widget._listId,
+                    role: 'application'
                 };
 
                 fieldAttributes = {

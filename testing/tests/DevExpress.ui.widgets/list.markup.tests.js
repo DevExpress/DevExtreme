@@ -266,6 +266,9 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                     'aria-label': 'List'
                 };
+                this.expectedListAttrs = {
+                    role: 'application'
+                };
             },
             afterEach: function() {
                 this.clock.restore();
@@ -276,7 +279,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget();
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
-                helper.checkAttributes(helper.$widget, {});
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([], { role: 'option' });
             });
 
@@ -285,7 +288,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
-                helper.checkAttributes(helper.$widget, {});
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
 
@@ -293,7 +296,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
-                helper.checkAttributes(helper.$widget, {});
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
 
@@ -301,7 +304,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({ selectedItemKeys: ['Item_2', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
-                helper.checkAttributes(helper.$widget, {});
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option' });
             });
 

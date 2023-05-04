@@ -5936,7 +5936,7 @@ if(devices.real().deviceType === 'desktop') {
                     role: 'listbox'
                 };
 
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId }, 'list');
+                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, role: 'application' }, 'list');
 
                 const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
                 helper.checkAttributes($listItemContainer, listItemContainerAttrs, 'scrollview content');
@@ -5966,7 +5966,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId }, 'list');
+                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, role: 'application' }, 'list');
                 helper.checkAttributes($listItemContainer, listItemContainerAttrs, 'scrollview content');
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
