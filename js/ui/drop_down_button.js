@@ -148,7 +148,7 @@ const DropDownButton = Widget.inherit({
 
         const label = this._list.option('items')?.length ? 'List' : this.option('noDataText');
 
-        this.setAria('label', label, this._list.$element());
+        this._list?.setAria('label', label);
     },
 
     _itemsToDataSource: function(value) {

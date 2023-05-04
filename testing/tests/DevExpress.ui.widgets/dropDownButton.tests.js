@@ -29,6 +29,7 @@ const FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 QUnit.testStart(() => {
     const markup =
@@ -2707,13 +2708,13 @@ QUnit.module('Accessibility', {
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
             const instance = this.createInstance({ opened: true });
 
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
 
             instance.option(dataSource, []);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
         });
 
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is empty on init`, function(assert) {
@@ -2722,13 +2723,13 @@ QUnit.module('Accessibility', {
                 opened: true,
             });
 
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
 
             instance.option(dataSource, []);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
         });
 
         [[1, 2, 3], []].forEach(items => {
