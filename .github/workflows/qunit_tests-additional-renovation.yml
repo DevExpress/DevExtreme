@@ -145,7 +145,8 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v3
 
-      - run: echo "${{ toJSON(matrix) }}"
+      - env: { $CONTENT: "${{ toJSON(matrix) }}" }
+        run: echo $CONTENT
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
