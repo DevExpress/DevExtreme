@@ -64,11 +64,10 @@ QUnit.module('Calendar markup', {
             this.getViews = () => this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
         }
     }, () => {
-        QUnit.test('calendar should have inline width equals  viewsCount * view width', function(assert) {
-            const viewWidth = this.calendar._viewWidth();
-            const elementWidth = this.$element[0].style.width;
+        QUnit.test('calendar should have width equals viewsCount * view width', function(assert) {
+            const elementWidth = $(this.calendar.$element()).width();
 
-            assert.strictEqual(elementWidth, `${viewWidth * 2}px`);
+            assert.strictEqual(elementWidth, this.viewWidth * 2);
         });
 
         QUnit.test('calendar should not have inline width after multiview runtime disable', function(assert) {

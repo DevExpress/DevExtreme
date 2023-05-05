@@ -716,11 +716,6 @@ const Calendar = Editor.inherit({
 
         if(viewsCount > 1) {
             this._additionalView = this._renderSpecificView(this._getDateByOffset(1, currentDate));
-
-            const viewWidth = this._viewWidth();
-            const elementWidth = viewWidth * viewsCount;
-
-            this.$element().css('width', elementWidth);
         }
 
         this._translateViews();
@@ -1000,7 +995,7 @@ const Calendar = Editor.inherit({
 
     _viewWidth: function() {
         if(!this._viewWidthValue) {
-            this._viewWidthValue = getWidth(this.$element());
+            this._viewWidthValue = getWidth(this.$element()) / this.option('viewsCount');
         }
 
         return this._viewWidthValue;
@@ -1246,7 +1241,6 @@ const Calendar = Editor.inherit({
 
     _clean: function() {
         this.callBase();
-        this._clearInlineWidth();
         this._clearViewWidthCache();
 
         delete this._$viewsWrapper;
@@ -1256,10 +1250,6 @@ const Calendar = Editor.inherit({
 
     _clearViewWidthCache: function() {
         delete this._viewWidthValue;
-    },
-
-    _clearInlineWidth: function() {
-        this.$element().css('width', '');
     },
 
     _disposeViews: function() {
@@ -1280,7 +1270,6 @@ const Calendar = Editor.inherit({
     },
 
     _refreshViews: function() {
-        this._clearInlineWidth();
         this._disposeViews();
         this._renderViews();
     },
