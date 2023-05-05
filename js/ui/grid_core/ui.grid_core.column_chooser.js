@@ -251,7 +251,7 @@ const columnChooserMembers = {
 
             this._columnChooserList.on('optionChanged', e => {
                 const scrollable = e.component.getScrollable();
-                scrollable.scrollTo({ y: scrollTop });
+                scrollTop = scrollable.scrollTop();
             });
 
             this._columnChooserList.on('contentReady', e => {
@@ -388,13 +388,14 @@ const columnChooserMembers = {
         const isSelectMode = this.isSelectMode();
 
         if(isSelectMode && this._columnChooserList && this._isUpdatingColumnVisibility !== true) {
-            const isColumnVisibleChanged = e.columnIndex !== undefined && optionNames.visible && optionNames.length === 1;
-            const isColumnDraggedFromGroupPanel = e.columnIndex !== undefined && optionNames.visible && optionNames.groupIndex && optionNames.length === 2;
+            const onlyOneColumnChanged = e.columnIndex !== undefined;
+            const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
+            const isDraggedFromGroupPanel = optionNames.visible && optionNames.groupIndex && optionNames.length === 2;
 
             const optionsUsedInItems = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
             const needFullRender = optionsUsedInItems.some(optionName => optionNames[optionName]) || (changeTypes.columns && optionNames.all);
 
-            if(isColumnVisibleChanged || isColumnDraggedFromGroupPanel) {
+            if(onlyOneColumnChanged && (onlyVisibleChanged || isDraggedFromGroupPanel)) {
                 this._updateItemSelection(e.columnIndex);
             } else if(needFullRender) {
                 this._updateItems();
