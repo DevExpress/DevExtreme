@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Entre",
         "dxDataGrid-filterRowOperationBetweenStartText": "Início",
         "dxDataGrid-filterRowOperationBetweenEndText": "Fim",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Aplicar filtro",
         "dxDataGrid-trueText": "verdadeiro",
         "dxDataGrid-falseText": "falso",
