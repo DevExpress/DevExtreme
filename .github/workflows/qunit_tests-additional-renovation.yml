@@ -63,14 +63,13 @@ jobs:
         constel: [ 'misc', 'ui.editors', 'ui.grid', 'ui.scheduler' ]
         timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
         include:
+          - useCsp: true
           - constel: 'misc'
             useCsp: false
 
     steps:
       - name: Get sources
         uses: actions/checkout@v3
-
-      - run: echo "${{ toJSON(matrix) }}"
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -100,7 +99,7 @@ jobs:
           isPerformance: 'true'
           useJQuery: 'true'
           headless: 'false'
-          useCsp: 'true'
+          useCsp: 'false'
 
   qunit-tests-mobile-and-shadow-dom:
     needs: build
@@ -126,6 +125,7 @@ jobs:
           - userAgent: ''
             useShadowDom: true
           - headless: false
+          - useCsp: true
           - constel: 'ui'
             headless: true
           - constel: 'viz'
@@ -144,9 +144,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v3
-
-      - env: { $CONTENT: "${{ toJSON(matrix) }}" }
-        run: echo $CONTENT
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -181,6 +178,7 @@ jobs:
           'renovation'
         ]
         include:
+          - useCsp: true
           - constel: 'export'
             useCsp: false
           - constel: 'misc'
@@ -193,8 +191,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v3
-
-      - run: echo "${{ toJSON(matrix) }}"
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
