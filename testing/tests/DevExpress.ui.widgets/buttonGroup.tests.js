@@ -233,6 +233,22 @@ QUnit.module('option changed', {
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), 'item.template', 'template is correct');
     });
 
+    QUnit.test('button has aria-pressed=false attribute if not selected', function(assert) {
+        $('#widget').dxButtonGroup({ items: [{ id: '1' }] });
+        const $button = $(`.${BUTTON_CLASS}`).eq(0);
+
+        assert.strictEqual($button.attr('aria-pressed'), 'false');
+    });
+
+    QUnit.test('button has aria-pressed=true attribute if selected', function(assert) {
+        $('#widget').dxButtonGroup({ items: [{ id: '1' }] });
+        const $button = $(`.${BUTTON_CLASS}`).eq(0);
+
+        eventsEngine.trigger($button, 'dxclick');
+
+        assert.strictEqual($button.attr('aria-pressed'), 'true');
+    });
+
     QUnit.test('it should be possible to set full set of options for each button', function(assert) {
         const $element = $('#widget').dxButtonGroup({
             items: [{ text: 'button 1', width: 24, elementAttr: { class: 'test' }, customOption: 'Test option' }]
