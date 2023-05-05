@@ -52,7 +52,7 @@ jobs:
         path: artifacts.zip
         retention-days: 1
 
-  qunit-tests:
+  qunit-tests-timezones:
     needs: build
     runs-on: devextreme-shr2
     name: ${{ matrix.envs.name }}
@@ -72,8 +72,50 @@ jobs:
           { CONSTEL: "ui.scheduler", TZ: 'PST8PDT', name: 'ui.scheduler-PST8PDT' },
           { CONSTEL: "ui.scheduler", TZ: 'Japan', name: 'ui.scheduler-Japan' },
           { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT', name: 'ui.scheduler-Australia' },
-          { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler-Europe' },
-          { PERF: true, JQUERY: true, NO_HEADLESS: true, name: 'Performance' },
+          { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler-Europe' }
+        ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          name: ${{ matrix.envs.name }}
+          constel: ${{ matrix.envs.CONSTEL }}
+          browser: "chrome"
+          timezone: ${{ matrix.envs.TZ }}
+          headless: "true"
+          useJQuery: "false"
+
+  qunit-tests-performance:
+    needs: build
+    runs-on: devextreme-shr2
+    name: Performance
+    timeout-minutes: 30
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          name: "Performance"
+          browser: "chrome"
+          isPerformance: "true"
+          useJQuery: "true"
+          headless: "false"
+
+  qunit-tests-mobile:
+    needs: build
+    runs-on: devextreme-shr2
+    name: ${{ matrix.envs.name }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        envs: [
           { MOBILE_UA: "ios10", CONSTEL: "ui", name: 'ui-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, name: 'ui.widgets(1/3)-iOS10' },
           { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, name: 'ui.widgets(2/3)-iOS10' },
@@ -91,7 +133,31 @@ jobs:
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, name: 'ui.htmlEditor-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-android6' },
           { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", name: 'viz-android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", name: 'viz-android6' }
+        ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          constel: ${{ matrix.envs.CONSTEL }}
+          browser: "chrome"
+          useJQuery: ${{ matrix.envs.JQUERY || 'false' }}
+          userAgent: ${{ matrix.envs.MOBILE_UA }}
+          headless: ${{ matrix.envs.NO_HEADLESS == true && 'false' || 'true' }}
+
+  qunit-tests-firefox:
+    needs: build
+    runs-on: devextreme-shr2
+    name: ${{ matrix.envs.name }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        envs: [
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", name: 'export-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", name: 'misc-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", name: 'ui-firefox' },
@@ -106,95 +172,28 @@ jobs:
         ]
 
     steps:
-    - name: Setup MATRIX_ENVS_NAME_SAFE
-      run: |
-        MATRIX_ENVS_NAME_SAFE=$(echo -n "${{ matrix.envs.name }}" | sed 's|/|-|g')
-        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
-        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
+      - name: Get sources
+        uses: actions/checkout@v3
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: devextreme-artifacts
-
-    - name: Setup firefox profile
-      run: |
-        mkdir -p /tmp/firefox-profile
-        for p in \
-        '"browser.shell.checkDefaultBrowser", false' \
-        '"datareporting.policy.dataSubmissionEnabled", false' \
-        '"font.name-list.monospace.x-western", "Liberation Mono"' \
-        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
-
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
-
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - uses: ./.github/actions/pin-browsers
-
-    - name: Use Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '15'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: devextreme-artifacts
-
-    - name: Unpack artifacts
-      run: 7z x artifacts.zip
-
-    - name: Build dotnet
-      run: dotnet build build/build-dotnet.sln
-
-    - name: Run QUnit tests
-      env:
-        CONSTEL: ${{ matrix.envs.CONSTEL }}
-        BROWSER: ${{ matrix.envs.BROWSER }}
-        JQUERY: ${{ matrix.envs.JQUERY }}
-        MOBILE_UA: ${{ matrix.envs.MOBILE_UA }}
-        TZ: ${{ matrix.envs.TZ }}
-        PERF: ${{ matrix.envs.PERF }}
-        NO_HEADLESS: ${{ matrix.envs.NO_HEADLESS }}
-        NORENOVATION: "false"
-        GITHUBACTION: "true"
-        TARGET: "test"
-        DISPLAY: ":99"
-      run: |
-        chmod +x ./docker-ci.sh
-        ./docker-ci.sh
-
-    - name: Copy RawLog.txt
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
-        path: ${{ github.workspace }}/testing/RawLog.txt
-        if-no-files-found: ignore
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          name: ${{ matrix.envs.name }}
+          constel: ${{ matrix.envs.CONSTEL }}
+          browser: "firefox"
+          useJQuery: "true"
+          headless: "true"
 
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [build, qunit-tests]
+    needs: [
+      build,
+      qunit-tests-timezones,
+      qunit-tests-performance,
+      qunit-tests-mobile,
+      qunit-tests-firefox
+    ]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:

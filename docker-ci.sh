@@ -41,8 +41,8 @@ function run_test_impl {
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
-    [ -z "$JQUERY"  ] && url="$url&nojquery=true"
-    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+    [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
+    [ "$PERF" == "true" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
