@@ -3,18 +3,16 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button/mixins" as *;
-@use "../button/colors" as *;
-@use "../../base/calendar";
+@use "../../base/calendar/calendar";
+@use "../../base/calendar/mixins" as *;
 
 // adduse
 
-$material-calendar-cell-hover-bg-color: color.change($base-accent, $alpha: 0.24) !default;
-$material-calendar-cell-active-bg-color: color.change($base-accent, $alpha: 0.32) !default;
-$material-calendar-cell-hovered-color: color.change($base-accent, $alpha: 0.24) !default;
-$material-calendar-cell-selected-color: color.change($base-accent, $alpha: 0.32) !default;
-$material-calendar-cell-active-color: color.change($base-accent, $alpha: 0.4) !default;
-$material-calendar-cell-focused-color: color.change($base-accent, $alpha: 0.5) !default;
+$material-week-number-cell-bg-color: color.change(darken($base-bg, 12%), $alpha: 0.5) !default;
+$material-calendar-cell-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
+$material-calendar-cell-selected-bg: color.change($calendar-cell-selected-bg, $alpha: 0.32) !default;
+$material-calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+$material-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 
 .dx-calendar {
   width: $material-calendar-legacy-width;
@@ -22,14 +20,12 @@ $material-calendar-cell-focused-color: color.change($base-accent, $alpha: 0.5) !
   height: $material-calendar-legacy-height;
   min-height: $material-calendar-legacy-height;
   background-color: $calendar-bg;
-  border: 1px solid transparent;
 }
 
 .dx-calendar-navigator-previous-view,
 .dx-calendar-navigator-next-view {
   &.dx-button {
     .dx-icon {
-      color: $calendar-shevron-icon-color;
       width: $material-base-icon-size;
       height: $material-base-icon-size;
       font-size: $material-base-icon-size;
@@ -37,143 +33,28 @@ $material-calendar-cell-focused-color: color.change($base-accent, $alpha: 0.5) !
   }
 }
 
-.dx-calendar-body {
-  thead {
-    font-size: 12px;
-
-    tr {
-      height: $material-calendar-cell-base-size;
-    }
-  }
-
-  table {
-    border-spacing: 0;
-
-    th {
-      font-weight: 500;
-    }
-
-    .dx-week-number-header {
-      color: $calendar-cell-selected-bg;
-      width: $material-calendar-cell-base-size;
-    }
-
-    .dx-calendar-week-number-cell {
-      color: $calendar-cell-selected-bg;
-    }
-  }
-}
-
-.dx-calendar-cell {
-  color: $calendar-color;
-
-  span {
-    border-radius: 50%;
-    width: $material-calendar-cell-base-size;
-    height: $material-calendar-cell-base-size;
-  }
-
-  .dx-calendar-view-decade &,
-  .dx-calendar-view-year &,
-  .dx-calendar-view-century & {
-    span {
-      width: $material-calendar-cell-base-size * 2;
-      height: $material-calendar-cell-base-size * 2;
-      border-radius: $base-border-radius;
-      word-spacing: $material-calendar-cell-base-size * 2;
-    }
-  }
-
-  &.dx-calendar-today {
-    font-weight: bold;
-
-    span {
-      border: 2px solid $base-accent;
-    }
-  }
-
-  &.dx-state-hover {
-    span {
-      background-color: $material-calendar-cell-hovered-color;
-    }
-  }
-
-  &.dx-calendar-contoured-date:not(.dx-calendar-today):not(.dx-calendar-selected-date):not(.dx-calendar-empty-cell) {
-    color: $calendar-cell-hover-color;
-
-    span {
-      box-sizing: border-box;
-      border: 2px solid $base-accent;
-
-      // box-shadow: inset 0 2px $base-accent, inset 0 -2px $base-accent;
-
-      // background-color: $material-calendar-cell-hover-bg-color;
-    }
-  }
-
-  &.dx-calendar-other-view,
-  &.dx-calendar-empty-cell {
-    color: $calendar-cell-other-color;
-
-    &.dx-state-hover,
-    &.dx-state-active {
-      color: $calendar-cell-other-hover-color;
-    }
-  }
-
-  &.dx-calendar-empty-cell {
-    cursor: default;
-    color: color.change($calendar-color, $alpha: 0.25);
-
-    &.dx-state-hover:not(.dx-calendar-selected-date) {
-      color: color.change($calendar-color, $alpha: 0.25);
-
-      span {
-        background-color: transparent;
-      }
-    }
-  }
-
-  &.dx-state-active {
-    &:not(.dx-calendar-empty-cell) {
-      &:not(.dx-calendar-selected-date) {
-        span {
-          background-color: $material-calendar-cell-active-bg-color;
-        }
-      }
-    }
-  }
-
-  &.dx-calendar-selected-date:not(.dx-calendar-other-view) {
-    &,
-    &.dx-calendar-today {
-      span {
-        color: $base-inverted-text-color;
-        background-color: $calendar-cell-selected-bg;
-      }
-    }
-  }
-
-  &.dx-calendar-range-date:not(.dx-calendar-other-view) {
-    background-color: color.change($calendar-cell-selected-bg, $alpha: 0.08);
-    box-shadow: inset 0 2px $calendar-bg, inset 0 -2px $calendar-bg;
-    border-radius: 0;
-  }
-}
-
-.dx-calendar-views-wrapper {
-  .dx-widget:not(.dx-rtl) .dx-calendar-range-start-date:not(.dx-calendar-other-view),
-  .dx-widget.dx-rtl .dx-calendar-range-end-date:not(.dx-calendar-other-view) {
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
-  }
-
-  .dx-widget:not(.dx-rtl) .dx-calendar-range-end-date:not(.dx-calendar-other-view),
-  .dx-widget.dx-rtl .dx-calendar-range-start-date:not(.dx-calendar-other-view) {
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-  }
-}
+@include dx-calendar-body-mixin(
+  $calendar-cell-other-color,
+  $material-week-number-cell-bg-color,
+  $base-border-radius,
+  $material-calendar-cell-font-size,
+  $calendar-header-color,
+);
+@include dx-calendar-cell-mixin(
+  $calendar-cell-contoured-border-radius,
+  $calendar-color,
+  $base-border-radius,
+  $base-accent,
+  $material-calendar-cell-hover-bg,
+  $calendar-cell-hover-color,
+  $material-calendar-cell-active-bg,
+  $material-calendar-cell-selected-bg,
+  $calendar-color,
+  $material-cell-contoured-border-color,
+  $calendar-cell-other-color,
+  $calendar-cell-other-hover-color,
+  $base-inverted-text-color,
+);
 
 .dx-invalid {
   &.dx-calendar {

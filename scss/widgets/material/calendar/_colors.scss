@@ -32,9 +32,3 @@ $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2)
 $calendar-cell-contoured-border-radius: 50% !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-
-/**
-* $name 50. Shevron icon color
-* $type color
-*/
-$calendar-shevron-icon-color: $base-accent !default;

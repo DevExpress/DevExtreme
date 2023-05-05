@@ -50,12 +50,6 @@ $calendar-cell-selected-bg: null !default;
 $calendar-cell-active-bg: null !default;
 
 /**
-* $name 80. Border color
-* $type color
-*/
-$calendar-border-color: $base-border-color !default;
-
-/**
 * $name 40. Date navigator border color
 * $type color
 */
@@ -69,18 +63,10 @@ $calendar-navigator-border-radius: null !default;
 $calendar-navigator-hover-border-color: null !default;
 $calendar-cell-contoured-border-color: null !default;
 $calendar-button-caption-active-bg: null !default;
-$calendar-button-footer-active-bg: null !default;
 $calendar-button-caption-color: null !default;
 $calendar-cell-contoured-border-radius: $base-border-radius !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-
-/**
-* $name 60. Shevron icon color
-* $type color
-*/
-$calendar-shevron-icon-color: null !default;
-$calendar-cell-empty-bg: null !default;
 
 @if $color == "carmine" {
   $calendar-header-color: $base-header-color !default;
@@ -95,10 +81,7 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $base-accent !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
 }
 
 @if $color == "contrast" {
@@ -109,15 +92,12 @@ $calendar-cell-empty-bg: null !default;
   $calendar-cell-other-hover-color: $base-text-color !default;
   $calendar-cell-selected-bg: $base-inverted-bg !default;
   $calendar-cell-active-bg: $base-accent !default;
-  $calendar-navigator-border-color: $calendar-border-color !default;
+  $calendar-navigator-border-color: $base-border-color !default;
   $calendar-navigator-border-radius: $base-border-radius !default;
-  $calendar-navigator-hover-border-color: $calendar-border-color !default;
-  $calendar-cell-contoured-border-color: $calendar-border-color !default;
+  $calendar-navigator-hover-border-color: $base-border-color !default;
+  $calendar-cell-contoured-border-color: $base-border-color !default;
   $calendar-button-caption-active-bg: $base-inverted-bg !default;
-  $calendar-button-footer-active-bg: $base-inverted-bg !default;
   $calendar-button-caption-color: $base-text-color !default;
-  $calendar-shevron-icon-color: $base-icon-color !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png') center center no-repeat !default;
 }
 
 @if $color == "dark" {
@@ -133,10 +113,7 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: lighten($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat !default;
 }
 
 @if $color == "darkmoon" {
@@ -152,10 +129,7 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: lighten($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat !default;
-  $calendar-shevron-icon-color: $base-accent !default;
 }
 
 @if $color == "darkviolet" {
@@ -171,10 +145,7 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: lighten($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-icon-color !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat !default;
 }
 
 @if $color == "greenmist" {
@@ -190,10 +161,7 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
 }
 
 @if $color == "light" {
@@ -209,10 +177,7 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
 }
 
 @if $color == "softblue" {
@@ -228,9 +193,6 @@ $calendar-cell-empty-bg: null !default;
   $calendar-navigator-hover-border-color: $base-border-color !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
   $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
   $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
 }
 
