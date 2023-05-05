@@ -286,7 +286,7 @@ const transpileWithBabel = async(sourceCode, destPath) => {
 const transpileJsVendors = async(Builder) => {
     const builder = new Builder(root, config);
 
-    const modulesList = [
+    const vendorsList = [
         {
             filePath: path.join(root, 'node_modules/angular/index.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/angular.js')
@@ -296,6 +296,17 @@ const transpileJsVendors = async(Builder) => {
             destPath: path.join(root, 'artifacts/js-systemjs/intl.js')
         }
     ];
+    const cldrDataList = getFileList(path.join(root, 'node_modules/devextreme-cldr-data'));
+    const cldrCoreList = getFileList(path.join(root, 'node_modules/cldr-core/supplemental'));
+
+    const formatList = [].concat(cldrDataList, cldrCoreList)
+        .filter(filePath => filePath.endsWith('.json'))
+        .map(jsonPath => ({
+            filePath: jsonPath,
+            destPath: jsonPath.replace('node_modules', 'artifacts/js-systemjs')
+        }));
+
+    const modulesList = [].concat(vendorsList, formatList);
 
     // eslint-disable-next-line no-restricted-syntax
     for(const { filePath, destPath } of modulesList) {
