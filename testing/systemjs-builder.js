@@ -255,9 +255,9 @@ const transpileCss = async(Builder) => {
     }
 };
 
-const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) => {
+const transpileWithBuilder = async(builder, sourcePath, destPath, buildTree) => {
     await builder.buildStatic(
-        `[${sourcePath}]`,
+        buildTree ? sourcePath : `[${sourcePath}]`,
         destPath,
         {
             minify: false,
@@ -281,6 +281,22 @@ const transpileWithBabel = async(sourceCode, destPath) => {
     }
 
     fs.writeFileSync(destPath, code);
+};
+
+const transpileJsVendors = async(Builder) => {
+    const builder = new Builder(root, config);
+
+    const modulesList = [
+        {
+            filePath: path.join(root, 'node_modules/angular/index.js'),
+            destPath: path.join(root, 'artifacts/js-systemjs/angular.js')
+        }
+    ];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for(const { filePath, destPath } of modulesList) {
+        await transpileWithBuilder(builder, filePath, destPath, true);
+    }
 };
 
 const transpileTesting = async(Builder) => {
@@ -324,9 +340,10 @@ const updateBuilder = () => {
     patchBuilder(
         'trace.js',
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep' +
-        '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
-        '.replace("/node_modules/", "/../node_modules/");'
+        `load.depMap[dep] = normalized.includes('node_modules/angular') ?
+            getCanonicalName(loader, normalized) :
+            dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")
+                .replace("/node_modules/", "/../node_modules/")`
     );
 
     patchBuilder(
@@ -354,5 +371,6 @@ const updateBuilder = () => {
         case 'modules-renovation': return await transpileRenovationModules(Builder);
         case 'testing': return await transpileTesting(Builder);
         case 'css': return await transpileCss(Builder);
+        case 'js-vendors': return await transpileJsVendors(Builder);
     }
 })();
