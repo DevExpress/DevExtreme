@@ -1,7 +1,7 @@
 {
   "author": "Developer Express Inc.",
   "name": "devextreme-react-generator",
-  "version": "4.0.4",
+  "version": "4.1.0",
   "description": "DevExtreme React UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "dasherize": "^2.0.0",
-    "devextreme-internal-tools": "10.0.0-beta.5",
+    "devextreme-internal-tools": "10.0.0-beta.6",
     "dot": "^1.1.3"
   },
   "devDependencies": {

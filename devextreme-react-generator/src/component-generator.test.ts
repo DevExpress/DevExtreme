@@ -1351,3 +1351,90 @@ export {
     ).toBe(EXPECTED);
   });
 });
+
+describe('Event types narrowing', () => {
+  it('generated correctly', () => {
+    // #region EXPECTED
+    const EXPECTED = `
+import dxCLASS_NAME, {
+    Properties
+} from "DX/WIDGET/PATH";
+
+import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
+
+type ReplaceFieldTypes<TSource, TReplacement> = {
+  [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
+}
+
+type ICLASS_NAMEOptionsNarrowedEvents = {
+  onSomethingHappened?: ((e: SomethingHappenedEvent) => void);
+}
+
+type ICLASS_NAMEOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ICLASS_NAMEOptionsNarrowedEvents> & IHtmlOptions & {
+}>
+
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
+
+  public get instance(): dxCLASS_NAME {
+    return this._instance;
+  }
+
+  protected _WidgetClass = dxCLASS_NAME;
+}
+export default CLASS_NAME;
+export {
+  CLASS_NAME,
+  ICLASS_NAMEOptions
+};
+`.trimLeft();
+      // #endregion
+
+    expect(
+      generate({
+        name: 'CLASS_NAME',
+        baseComponentPath: 'BASE_COMPONENT_PATH',
+        extensionComponentPath: 'EXTENSION_COMPONENT_PATH',
+        dxExportPath: 'DX/WIDGET/PATH',
+        narrowedEvents: [{ name: 'onSomethingHappened', type: '((e: SomethingHappenedEvent) => void)' }],
+      }),
+    ).toBe(EXPECTED);
+  });
+  it('not generated if narrowedEvents is empty', () => {
+    // #region EXPECTED
+    const EXPECTED = `
+import dxCLASS_NAME, {
+    Properties
+} from "DX/WIDGET/PATH";
+
+import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
+
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
+
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
+
+  public get instance(): dxCLASS_NAME {
+    return this._instance;
+  }
+
+  protected _WidgetClass = dxCLASS_NAME;
+}
+export default CLASS_NAME;
+export {
+  CLASS_NAME,
+  ICLASS_NAMEOptions
+};
+`.trimLeft();
+      // #endregion
+
+    expect(
+      generate({
+        name: 'CLASS_NAME',
+        baseComponentPath: 'BASE_COMPONENT_PATH',
+        extensionComponentPath: 'EXTENSION_COMPONENT_PATH',
+        dxExportPath: 'DX/WIDGET/PATH',
+        narrowedEvents: [],
+      }),
+    ).toBe(EXPECTED);
+  });
+});

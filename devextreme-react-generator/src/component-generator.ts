@@ -24,7 +24,8 @@ type IComponent = {
 } & {
   nestedComponents?: INestedComponent[];
   configComponentPath?: string;
-  containsReexports?: boolean
+  containsReexports?: boolean,
+  narrowedEvents?: IOption[]
 };
 
 interface INestedComponent {
@@ -126,6 +127,23 @@ function renderObject(props: IOption[], indent: number): string {
       result += opt.type;
     }
     result += ';';
+  });
+
+  indent -= 1;
+  result += `\n${getIndent(indent)}}`;
+  return result;
+}
+
+function renderNarrowedEvents(events: IOption[], typeParams?: string[]) {
+  let result = '{';
+  const typeArguments = typeParams && typeParams.length
+    ? `<${typeParams.join(', ')}>`
+    : '';
+  let indent = 1;
+
+  events.forEach((event) => {
+    const patchedType = event.type.replace(') =>', `${typeArguments}) =>`);
+    result += `\n${getIndent(indent)}${event.name}?: ${patchedType};`;
   });
 
   indent -= 1;
@@ -336,8 +354,17 @@ const renderOptionsInterface: (model: {
     name: string;
     type: string;
   }>;
+  renderedNarrowedEvents?: string | undefined
 }) => string = createTemplate(
-  `type <#= it.optionsName #>${TYPE_PARAMS_WITH_DEFAULTS} = React.PropsWithChildren<Properties${TYPE_PARAMS} & IHtmlOptions & {\n`
+  '<#? it.renderedNarrowedEvents #>'
++ 'type ReplaceFieldTypes<TSource, TReplacement> = {\n'
++ '  [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];\n'
++ '}\n\n'
+
++ `type <#= it.optionsName #>NarrowedEvents${TYPE_PARAMS_WITH_DEFAULTS} = <#= it.renderedNarrowedEvents #>\n\n`
++ '<#?#>'
+
++ `type <#= it.optionsName #>${TYPE_PARAMS_WITH_DEFAULTS} = React.PropsWithChildren<<#? it.renderedNarrowedEvents #>ReplaceFieldTypes<<#?#>Properties${TYPE_PARAMS}<#? it.renderedNarrowedEvents #>, <#= it.optionsName #>NarrowedEvents${TYPE_PARAMS}><#?#> & IHtmlOptions & {\n`
 
 + '<#? it.typeParams #>'
     + `  dataSource?: Properties${TYPE_PARAMS}["dataSource"];\n`
@@ -590,6 +617,7 @@ function generate(
     : undefined;
 
   const hasExplicitTypes = !!component.optionsTypeParams?.length;
+  const typeParams = component.optionsTypeParams?.length ? component.optionsTypeParams : undefined;
 
   return renderModule({
 
@@ -617,7 +645,9 @@ function generate(
       defaultProps: defaultProps || [],
       onChangeEvents: onChangeEvents || [],
       templates: templates || [],
-      typeParams: component.optionsTypeParams?.length ? component.optionsTypeParams : undefined,
+      typeParams,
+      renderedNarrowedEvents: component.narrowedEvents && component.narrowedEvents.length
+        ? renderNarrowedEvents(component.narrowedEvents, typeParams) : undefined,
     }),
 
     renderedComponent: renderComponent({

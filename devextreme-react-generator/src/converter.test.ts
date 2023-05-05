@@ -2,13 +2,27 @@ import { convertTypes } from './converter';
 
 it('deduplicates', () => {
   const types = [
-    { type: 'Array', isCustomType: false, acceptableValues: [] },
-    { type: 'Boolean', isCustomType: false, acceptableValues: [] },
-    { type: 'Function', isCustomType: false, acceptableValues: [] },
-    { type: 'Boolean', isCustomType: false, acceptableValues: [] },
-    { type: 'Number', isCustomType: false, acceptableValues: [] },
-    { type: 'Object', isCustomType: false, acceptableValues: [] },
-    { type: 'String', isCustomType: false, acceptableValues: [] },
+    {
+      type: 'Array', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Boolean', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Function', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Boolean', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Number', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Object', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'String', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
   ];
 
   const expected = [
@@ -24,17 +38,27 @@ it('deduplicates', () => {
 });
 
 it('returns undefiend if finds Any', () => {
-  expect(convertTypes([{ type: 'Any', isCustomType: false, acceptableValues: [] }])).toBeUndefined();
+  expect(convertTypes([{
+    type: 'Any', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+  }])).toBeUndefined();
   expect(convertTypes([
-    { type: 'String', isCustomType: false, acceptableValues: [] },
-    { type: 'Any', isCustomType: false, acceptableValues: [] },
-    { type: 'Number', isCustomType: false, acceptableValues: [] },
+    {
+      type: 'String', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Any', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
+    {
+      type: 'Number', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+    },
   ])).toBeUndefined();
 });
 
 it('returns object if finds isCustomType', () => {
   expect(convertTypes([
-    { type: 'CustomType', isCustomType: true, acceptableValues: [] },
+    {
+      type: 'CustomType', isCustomType: true, acceptableValues: [], importPath: '', isImportedType: false,
+    },
   ])).toEqual(['object']);
 });
 
@@ -57,13 +81,19 @@ it('returns undefined if array is undefined', () => {
 it('expands custom types', () => {
   expect(convertTypes(
     [
-      { type: 'CustomType', isCustomType: true, acceptableValues: [] },
+      {
+        type: 'CustomType', isCustomType: true, acceptableValues: [], importPath: '', isImportedType: false,
+      },
     ], {
       CustomType: {
         name: 'CustomType',
         types: [
-          { type: 'String', isCustomType: false, acceptableValues: [] },
-          { type: 'Number', isCustomType: false, acceptableValues: [] },
+          {
+            type: 'String', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+          },
+          {
+            type: 'Number', isCustomType: false, acceptableValues: [], importPath: '', isImportedType: false,
+          },
         ],
         props: [],
         templates: [],

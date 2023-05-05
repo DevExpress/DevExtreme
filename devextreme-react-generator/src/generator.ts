@@ -56,6 +56,9 @@ enum BaseTypes {
   False = 'false',
 }
 
+const UNKNOWN_MODULE = 'UNKNOWN_MODULE';
+const LOCAL_MODULE = 'LOCAL_MODULE';
+
 export type ImportOverridesMetadata = {
   importOverrides?: Record<string, string>,
   genericTypes?: Record<string, unknown>,
@@ -89,18 +92,30 @@ export function convertToBaseType(type: string): BaseTypes {
 }
 
 export function createCustomTypeResolver(
+  customTypeHash: Record<string, ICustomType>,
   importOverridesMetadata: ImportOverridesMetadata,
-  widgetCustomTypesCollector: Set<string>,
-  resolveNameConflicts: (string) => string = (typeName) => typeName,
+  customTypeModulesCollector: Record<string, string[]>,
+  resolveNameConflicts: (typeName: string, module?: string) => string = (typeName) => typeName,
 ): TypeResolver {
   return (typeDescriptor: ITypeDescr) => {
     const resolvedType = importOverridesMetadata.typeResolutions?.[typeDescriptor.type]
       || typeDescriptor.type;
-    widgetCustomTypesCollector.add(resolvedType);
-    const resultingType = resolveNameConflicts(
-      importOverridesMetadata.nameConflictsResolutionNamespaces?.[resolvedType]
-        ? `${importOverridesMetadata.nameConflictsResolutionNamespaces[resolvedType]}.${resolvedType}` : resolvedType,
-    );
+
+    const customType = customTypeHash[resolvedType];
+
+    const moduleImport = typeDescriptor.type === resolvedType && typeDescriptor.isImportedType
+      ? typeDescriptor.importPath
+      : customType && customType.module;
+    const fullModuleImport = moduleImport ? `devextreme/${moduleImport}` : UNKNOWN_MODULE;
+
+    customTypeModulesCollector[resolvedType] = [
+      ...(customTypeModulesCollector[resolvedType] || []),
+      fullModuleImport,
+    ];
+
+    const resultingType = importOverridesMetadata.nameConflictsResolutionNamespaces?.[resolvedType]
+      ? `${importOverridesMetadata.nameConflictsResolutionNamespaces[resolvedType]}.${resolvedType}`
+      : resolveNameConflicts(resolvedType, fullModuleImport);
     return importOverridesMetadata.genericTypes?.[resultingType] ? `${resultingType}<any>` : resultingType;
   };
 }
@@ -147,7 +162,7 @@ export function getComplexOptionType(
        && typeDescriptor.acceptableValues.length > 0) {
       return Array.from(new Set(typeDescriptor.acceptableValues)).join(' | ');
     }
-    if (typeDescriptor.isCustomType && resolveCustomType) {
+    if ((typeDescriptor.isCustomType || typeDescriptor.isImportedType) && resolveCustomType) {
       return resolveCustomType(typeDescriptor);
     }
     return convertToBaseType(typeDescriptor.type);
@@ -310,72 +325,110 @@ export function mapWidget(
   } {
   const name = removePrefix(raw.name, 'dx');
 
-  const widgetCustomTypes = new Set<string>();
   const { importOverridesMetadata, generateCustomTypes } = typeGenerationOptions || {};
 
-  const generatedComponentNames = Object.values(
+  const existingTypes: Record<string, string[]> = Object.values(
     getWidgetComponentNames(raw.name, name, raw.complexOptions || []),
-  );
+  ).reduce((result, current) => {
+    result[current] = [LOCAL_MODULE];
+    return result;
+  }, {});
 
-  const typeAliases: Record<string, string> = {};
-  const resolveGeneratedComponentNamesConflict = (typeName: string) => {
-    if (generatedComponentNames.includes(typeName)) {
-      const aliasedTypeName = `${typeName}Aliased`;
-      typeAliases[typeName] = aliasedTypeName;
+  const typeAliases: Record<string, Record<string, string>> = {};
+
+  const resolveGeneratedComponentNamesConflict = (
+    typeName: string, module: string = UNKNOWN_MODULE,
+  ) => {
+    const existingTypeEntry = existingTypes[typeName] || [];
+    const isModuleProcessed = existingTypeEntry.includes(module);
+    const isConflicted = existingTypeEntry.length && (
+      existingTypeEntry[0] === LOCAL_MODULE || !isModuleProcessed
+    );
+    if (!isModuleProcessed) {
+      existingTypeEntry.push(module);
+      existingTypes[typeName] = existingTypeEntry;
+    }
+    if (isConflicted) {
+      const typePrefix = module === UNKNOWN_MODULE || !module.length
+        ? 'Aliased'
+        : module
+          .substring(module.lastIndexOf('/') + 1)
+          .split(/[-_]+/)
+          .map((s) => (s.charAt(0).toUpperCase() + s.slice(1)))
+          .join('');
+
+      const aliasedTypeName = `${typePrefix}${typeName}`;
+      const moduleKey = module && module.length ? module : UNKNOWN_MODULE;
+      typeAliases[typeName] = { ...(typeAliases[typeName] || {}), [moduleKey]: aliasedTypeName };
       return aliasedTypeName;
     }
     return typeName;
   };
-  const getTypeImportStatement = (typeName: string) => (
-    typeAliases[typeName] ? `${typeName} as ${typeAliases[typeName]}` : typeName
+
+  const getTypeImportStatement = (typeName: string, module: string = UNKNOWN_MODULE) => (
+    typeAliases[typeName]?.[module] ? `${typeName} as ${typeAliases[typeName][module]}` : typeName
   );
 
+  const customTypeHash = customTypes.reduce<Record<string, ICustomType>>((result, type) => {
+    result[type.name] = type;
+    return result;
+  }, {});
+
+  const customTypeModules: Record<string, string[]> = {};
   const typeResolver = generateCustomTypes
     ? createCustomTypeResolver(
+      customTypeHash,
       importOverridesMetadata || {},
-      widgetCustomTypes,
+      customTypeModules,
       resolveGeneratedComponentNamesConflict,
     ) : undefined;
 
   const subscribableOptions: ISubscribableOption[] = collectSubscribableRecursively(raw.options)
     .map((option) => mapSubscribableOption(option, typeResolver));
 
-  const independentEvents: IIndependentEvents[] = collectIndependentEvents(raw.options)
-    .map(mapIndependentEvents);
+  const eventOptions = collectIndependentEvents(raw.options);
+
+  const hasNarrowedEventArgument = (option) => option.types[0].params[0].types[0].isImportedType;
+  const narrowedEvents = eventOptions
+    .filter(hasNarrowedEventArgument)
+    .map((prop) => mapOption(prop, typeResolver));
+
+  const independentEvents: IIndependentEvents[] = eventOptions.map(mapIndependentEvents);
 
   const nestedOptions = raw.complexOptions
     ? extractNestedComponents(raw.complexOptions, raw.name, name, typeResolver)
     : null;
 
-  const customTypeHash = customTypes.reduce((result, type) => {
-    result[type.name] = type;
-    return result;
-  }, {});
   const propTypings = extractPropTypings(raw.options, customTypeHash)
     .filter((propType) => propType !== null) as IPropTyping[];
 
-  const customTypeImports: Record<string, Array<string>> = {};
+  const customTypeImports: Record<string, string[]> = {};
   const defaultTypeImports: Record<string, string> = {};
   const wildcardTypeImports: Record<string, string> = {};
 
-  widgetCustomTypes.forEach((t) => {
+  Object.keys(customTypeModules).forEach((t) => {
     if (importOverridesMetadata?.defaultImports?.[t]) {
       defaultTypeImports[t] = importOverridesMetadata.defaultImports[t];
       return;
     }
-    const customType = customTypes.find((item) => item.name === t);
 
-    const module = importOverridesMetadata?.importOverrides?.[t] || (customType && customType.module && `devextreme/${customType.module}`);
-    if (module) {
-      const moduleImportNamespace = importOverridesMetadata?.nameConflictsResolutionNamespaces?.[t];
-      if (moduleImportNamespace) {
-        wildcardTypeImports[module] = moduleImportNamespace;
-      } else {
-        customTypeImports[module] = [
-          ...(customTypeImports[module] || []),
-          getTypeImportStatement(t),
-        ];
-      }
+    const modules = customTypeModules[t].map(
+      (m) => (importOverridesMetadata?.importOverrides?.[t] ?? m),
+    );
+
+    if (modules.length) {
+      modules
+        .forEach((module, index) => {
+          const importNamespace = importOverridesMetadata?.nameConflictsResolutionNamespaces?.[t];
+          if (importNamespace) {
+            wildcardTypeImports[module] = importNamespace;
+          } else {
+            const moduleImports = new Set(customTypeImports[module]);
+            const initialModule = customTypeModules[t][index];
+            moduleImports.add(getTypeImportStatement(t, initialModule));
+            customTypeImports[module] = Array.from(moduleImports);
+          }
+        });
     }
   });
 
@@ -397,6 +450,7 @@ export function mapWidget(
       propTypings: propTypings.length > 0 ? propTypings : undefined,
       optionsTypeParams: raw.optionsTypeParams,
       containsReexports: !!raw.reexports.filter((r) => r !== 'default').length,
+      narrowedEvents,
     },
     customTypeImports,
     defaultTypeImports,
