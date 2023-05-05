@@ -34,7 +34,7 @@ const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 
 // calendar view
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
-const CALENDAR_RANGE_DATE_CLASS = 'dx-calendar-range-date';
+const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
@@ -2120,10 +2120,10 @@ QUnit.module('Options', {
                 assert.ok($cell.hasClass(CALENDAR_RANGE_END_DATE_CLASS));
             });
 
-            QUnit.test(`Cells between startDate and endDate should have ${CALENDAR_RANGE_DATE_CLASS} class`, function(assert) {
+            QUnit.test(`Cells between startDate and endDate should have ${CALENDAR_CELL_IN_RANGE_CLASS} class`, function(assert) {
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/15"]'));
 
-                assert.ok($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
 
             QUnit.test('Should reselect startDate and clear endDate on click when both values are defined', function(assert) {
@@ -2171,7 +2171,7 @@ QUnit.module('Options', {
                     scenario: 'when both values are defined'
                 }
             ].forEach(({ values, scenario }) => {
-                QUnit.test(`Cells should not have ${CALENDAR_RANGE_DATE_CLASS} class on hover ${scenario}`, function(assert) {
+                QUnit.test(`Cells should not have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover ${scenario}`, function(assert) {
                     if(devices.real().deviceType !== 'desktop') {
                         assert.ok(true, 'test does not actual for mobile devices');
                         return;
@@ -2185,11 +2185,11 @@ QUnit.module('Options', {
 
                     $cell.trigger('mouseenter');
 
-                    assert.notOk($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                    assert.notOk($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
                 });
             });
 
-            QUnit.test(`Cells should have ${CALENDAR_RANGE_DATE_CLASS} class on hover when only startDate is defined`, function(assert) {
+            QUnit.test(`Cells should have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover when only startDate is defined`, function(assert) {
                 if(devices.real().deviceType !== 'desktop') {
                     assert.ok(true, 'test does not actual for mobile devices');
                     return;
@@ -2203,7 +2203,7 @@ QUnit.module('Options', {
 
                 $cell.trigger('mouseenter');
 
-                assert.ok($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
 
             QUnit.test('Selected range should be reduced when difference between startDate and endDate is bigger than four mounths', function(assert) {
@@ -2301,7 +2301,7 @@ QUnit.module('Options', {
 
                 $cellToHover.trigger('mouseenter');
 
-                assert.notOk($cellToHover.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                assert.notOk($cellToHover.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
         });
     });
