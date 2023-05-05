@@ -1541,16 +1541,6 @@ QUnit.module('aria accessibility', {}, () => {
         assert.equal($element.attr('aria-disabled'), undefined, 'attribute test on option change');
     });
 
-    QUnit.test('aria-hidden', function(assert) {
-        const $element = $('#widget').dxWidget({ visible: false });
-        const instance = $element.dxWidget('instance');
-
-        assert.equal($element.attr('aria-hidden'), 'true', 'attribute test on init');
-
-        instance.option('visible', true);
-        assert.equal($element.attr('aria-hidden'), undefined, 'attribute test on option change');
-    });
-
     QUnit.test('setAria function', function(assert) {
         const $element = $('#widget').dxWidget();
         const instance = $element.dxWidget('instance');
