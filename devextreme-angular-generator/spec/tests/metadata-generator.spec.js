@@ -235,6 +235,15 @@ describe("metadata-generator", function() {
                             onTestEvent: {
                                 IsEvent: true,
                             },
+                            onTestTypedEvent: {
+                                IsEvent: true,
+                                TypeImports: [
+                                    {
+                                        "Name": "SomeEvent",
+                                        "Path": "some/module"
+                                    }
+                                ]
+                            },
                             simpleTypedProperty: {
                                 PrimitiveTypes: [
                                     "boolean"
@@ -337,6 +346,7 @@ describe("metadata-generator", function() {
         it("should generate proper typed events", function() {
             expect(metas.DxTypedWidget.events.map(p => p.type)).toEqual([
                 'EventEmitter<any>',
+                'EventEmitter<SomeEvent>',
                 'EventEmitter<boolean>',
                 'EventEmitter<string' + TYPES_SEPORATOR + 'number>',
                 'EventEmitter<dxComplexType1>',
@@ -351,6 +361,10 @@ describe("metadata-generator", function() {
                 {
                     importString: "DevExpress",
                     path: "widgetPackageName/bundles/dx.all",
+                },
+                {
+                    importString: "{ SomeEvent }",
+                    path: "widgetPackageName/some/module",
                 },
                 {
                     importString: "{ dxComplexType1, dxComplexType2 }",
