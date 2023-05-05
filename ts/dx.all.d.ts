@@ -2522,7 +2522,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnChooserSearchConfig.editorOptions]
      */
-    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+    editorOptions?: any;
     /**
      * [descr:ColumnChooserSearchConfig.enabled]
      */
@@ -3706,7 +3706,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:HeaderFilterSearchConfig.editorOptions]
      */
-    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+    editorOptions?: any;
     /**
      * [descr:HeaderFilterSearchConfig.enabled]
      */
@@ -4940,6 +4940,10 @@ declare module DevExpress.data {
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
+     * [descr:DataSourceOptions.langParams]
+     */
+    langParams?: LangParams;
+    /**
      * [descr:DataSourceOptions.map]
      */
     map?: (dataItem: TStoreItem) => TMappedItem;
@@ -5055,6 +5059,13 @@ declare module DevExpress.data {
   type KeySelector<T> =
     | string
     | ((source: T) => string | number | Date | Object);
+  /**
+   * [descr:LangParams]
+   */
+  export type LangParams = {
+    locale: string;
+    collatorOptions?: Intl.CollatorOptions;
+  };
   /**
    * [descr:LoadOptions]
    */

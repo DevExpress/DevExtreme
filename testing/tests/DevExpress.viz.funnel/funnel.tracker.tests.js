@@ -31,7 +31,7 @@ const trackerEnvironment = $.extend({}, environment, {
         const that = this;
         common.environment.beforeEach.apply(this, arguments);
         this.legend = new stubLegend();
-        sinon.stub(labelModule, 'Label', function() {
+        sinon.stub(labelModule, 'Label').callsFake(function() {
             const stub = new stubLabel();
             stub.stub('getBoundingRect').returns({
                 width: 0,

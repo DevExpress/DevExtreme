@@ -312,6 +312,7 @@ const updateBuilder = () => {
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
         'load.depMap[dep] = dep' +
         '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
+        '.replace("../../../../artifacts/js/", "../../../../../artifacts/js")' +
         '.replace("/node_modules/", "/../node_modules/");'
     );
 
