@@ -19,13 +19,15 @@ const getTestParams = ({
   showBorders,
   hasFixedColumn,
   hasMasterDetail,
-}) => `theme: ${theme},
-alt rows: ${rowAlternationEnabled},
-column lines: ${showColumnLines},
-row lines: ${showRowLines},
-borders: ${showBorders},
-fixed columns: ${hasFixedColumn},
-master detail: ${hasMasterDetail}`;
+}) => [
+  `theme: ${theme}`,
+  `alt rows: ${rowAlternationEnabled}`,
+  `column lines: ${showColumnLines}`,
+  `row lines: ${showRowLines}`,
+  `borders: ${showBorders}`,
+  `fixed columns: ${hasFixedColumn}`,
+  `master detail: ${hasMasterDetail}`,
+].join(', ');
 
 const getScreenshotParams = ({
   theme,
@@ -35,14 +37,15 @@ const getScreenshotParams = ({
   showBorders,
   hasFixedColumn,
   hasMasterDetail,
-}) => `alt-rows-${rowAlternationEnabled}
-_column-lines-${showColumnLines}
-_row-lines-${showRowLines}
-_borders-${showBorders}
-_fixed-columns-${hasFixedColumn}
-_master-detail-${hasMasterDetail}
-(${theme})`;
-
+}) => [
+  `alt-rows-${rowAlternationEnabled}`,
+  `column-lines-${showColumnLines}`,
+  `row-lines-${showRowLines}`,
+  `borders-${showBorders}`,
+  `fixed-columns-${hasFixedColumn}`,
+  `master-detail-${hasMasterDetail}`,
+  `(${theme})`,
+].join('_');
 const createDataGrid = async ({
   rowAlternationEnabled,
   showColumnLines,
