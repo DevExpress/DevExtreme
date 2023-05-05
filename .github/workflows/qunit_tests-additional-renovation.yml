@@ -55,25 +55,17 @@ jobs:
   qunit-tests-timezones:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.envs.name }}
+    name: ${{ matrix.constel }}-${{ matrix.timezone }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        envs: [
-          { CONSTEL: "misc", TZ: 'PST8PDT', NO_CSP: true, name: 'misc-PST8PDT' },
-          { CONSTEL: "misc", TZ: 'Japan', NO_CSP: true, name: 'misc-Japan' },
-          { CONSTEL: "misc", TZ: 'Australia/ACT', NO_CSP: true, name: 'misc-Australia' },
-          { CONSTEL: "ui.editors", TZ: 'PST8PDT', name: 'ui.editors-PST8PDT' },
-          { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors-Japan' },
-          { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors-Australia' },
-          { CONSTEL: "ui.editors", TZ: 'Europe/London', name: 'ui.editors-Europe' },
-          { CONSTEL: "ui.grid", TZ: 'PST8PDT', name: 'ui.grid-PST8PDT' },
-          { CONSTEL: "ui.scheduler", TZ: 'PST8PDT', name: 'ui.scheduler-PST8PDT' },
-          { CONSTEL: "ui.scheduler", TZ: 'Japan', name: 'ui.scheduler-Japan' },
-          { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT', name: 'ui.scheduler-Australia' },
-          { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler-Europe' }
-        ]
+        constel: [ 'misc', 'ui.editors', 'ui.grid', 'ui.scheduler' ]
+        timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
+        include:
+          - useCsp: true
+          - constel: 'misc'
+            useCsp: false
 
     steps:
       - name: Get sources
@@ -82,13 +74,13 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          name: ${{ matrix.envs.name }}
-          constel: ${{ matrix.envs.CONSTEL }}
-          browser: "chrome"
-          timezone: ${{ matrix.envs.TZ }}
-          headless: "true"
-          useJQuery: "false"
-          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
+          name: ${{ matrix.constel }}-${{ matrix.timezone }}
+          constel: ${{ matrix.constel }}
+          browser: 'chrome'
+          timezone: ${{ matrix.timezone }}
+          headless: 'true'
+          useJQuery: 'false'
+          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
 
   qunit-tests-performance:
     needs: build
@@ -102,47 +94,52 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          name: "Performance"
-          browser: "chrome"
-          isPerformance: "true"
-          useJQuery: "true"
-          headless: "false"
-          useCsp: "false"
+          name: 'Performance'
+          browser: 'chrome'
+          isPerformance: 'true'
+          useJQuery: 'true'
+          headless: 'false'
+          useCsp: 'false'
 
   qunit-tests-mobile-and-shadow-dom:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.envs.name }}
+    name: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        envs: [
-          { MOBILE_UA: "ios10", CONSTEL: "ui", NO_CSP: true, name: 'ui-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-iOS10' },
-          { MOBILE_UA: "ios10", CONSTEL: "viz", name: 'viz-iOS10' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler-android6' },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", name: 'viz-android6' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(1/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(1/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, NO_CSP: true, name: 'ui.widgets(2/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.htmlEditor", NO_HEADLESS: true, NO_CSP: true, name: 'ui.htmlEditor-shadowdom' },
-          { SHADOW_DOM: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-shadowdom' }
+        constel: [
+          'ui',
+          'ui.widgets(1/3)',
+          'ui.widgets(2/3)',
+          'ui.widgets(3/3)',
+          'ui.editors',
+          'ui.htmlEditor',
+          'ui.grid',
+          'ui.scheduler',
+          'viz'
         ]
+        userAgent: [ '', 'ios10', 'android6' ]
+        include:
+          - userAgent: ''
+            useShadowDom: true
+          - headless: false
+          - useCsp: true
+          - constel: 'ui'
+            headless: true
+          - constel: 'viz'
+            headless: true
+          - userAgent: 'android6'
+            useJQuery: true
+          - constel: 'ui'
+            useCsp: false
+          - constel: 'ui.widgets(1/3)'
+            useCsp: false
+          - constel: 'ui.widgets(2/3)'
+            useCsp: false
+          - constel: 'ui.htmlEditor'
+            useCsp: false
 
     steps:
       - name: Get sources
@@ -151,35 +148,45 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          constel: ${{ matrix.envs.CONSTEL }}
-          browser: "chrome"
-          useJQuery: ${{ matrix.envs.JQUERY || 'false' }}
-          userAgent: ${{ matrix.envs.MOBILE_UA }}
-          useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
-          headless: ${{ matrix.envs.NO_HEADLESS == true && 'false' || 'true' }}
-          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
+          constel: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
+          browser: 'chrome'
+          useJQuery: ${{ matrix.useJquery || 'false' }}
+          userAgent: ${{ matrix.userAgent }}
+          useShadowDom: ${{ matrix.useShadowDom }}
+          headless: ${{ matrix.headless }}
+          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
 
   qunit-tests-firefox:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.envs.name }}
+    name: ${{ matrix.constel }}-firefox
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        envs: [
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", NO_CSP: true, name: 'export-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", NO_CSP: true, name: 'misc-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", NO_CSP: true, name: 'ui-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors", name: 'ui.editors-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.htmlEditor", NO_CSP: true, name: 'ui.htmlEditor-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(1/2)", name: 'ui.grid(1/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(2/2)", name: 'ui.grid(2/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(1/2)", name: 'ui.scheduler(1/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(2/2)", name: 'ui.scheduler(2/2)-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", name: 'viz-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' }
+        constel: [
+          'export',
+          'misc',
+          'ui',
+          'ui.editors',
+          'ui.htmlEditor',
+          'ui.grid(1/2)',
+          'ui.grid(2/2)',
+          'ui.scheduler(1/2)',
+          'ui.scheduler(2/2)',
+          'viz',
+          'renovation'
         ]
+        include:
+          - useCsp: true
+          - constel: 'export'
+            useCsp: false
+          - constel: 'misc'
+            useCsp: false
+          - constel: 'ui'
+            useCsp: false
+          - constel: 'ui.htmlEditor'
+            useCsp: false
 
     steps:
       - name: Get sources
@@ -188,12 +195,12 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          name: ${{ matrix.envs.name }}
-          constel: ${{ matrix.envs.CONSTEL }}
-          browser: "firefox"
-          useJQuery: "true"
-          headless: "true"
-          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
+          name: ${{ matrix.constel }}-firefox
+          constel: ${{ matrix.constel }}
+          browser: 'firefox'
+          useJQuery: 'true'
+          headless: 'true'
+          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
 
   notify:
     runs-on: devextreme-shr2
