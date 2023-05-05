@@ -70,6 +70,8 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v3
 
+      - run: echo "${{ toJSON(matrix) }}"
+
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
@@ -98,7 +100,7 @@ jobs:
           isPerformance: 'true'
           useJQuery: 'true'
           headless: 'false'
-          useCsp: 'false'
+          useCsp: 'true'
 
   qunit-tests-mobile-and-shadow-dom:
     needs: build
@@ -142,6 +144,8 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v3
+
+      - run: echo "${{ toJSON(matrix) }}"
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -188,6 +192,8 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v3
+
+      - run: echo "${{ toJSON(matrix) }}"
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
