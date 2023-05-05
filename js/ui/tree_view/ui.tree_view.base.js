@@ -719,7 +719,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _setAriaSelectionAttribute: function() {},
+    _setAriaSelectionAttribute() { return noop; },
 
     _renderChildren: function($node, node) {
         if(!this._hasChildren(node)) {

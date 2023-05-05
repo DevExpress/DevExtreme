@@ -258,6 +258,7 @@ QUnit.module('option changed', {
         eventsEngine.trigger($secondButton, 'dxclick');
 
         assert.strictEqual($firstButton.attr('aria-pressed'), 'false');
+        assert.strictEqual($secondButton.attr('aria-pressed'), 'true');
     });
 
     QUnit.test('it should be possible to set full set of options for each button', function(assert) {

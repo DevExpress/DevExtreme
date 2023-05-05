@@ -132,7 +132,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         return ITEM_CLASS;
     }
 
-    _setAriaSelectionAttribute() {}
+    _setAriaSelectionAttribute() { return noop; }
 
     _selectedItemClass() {
         return DX_MENU_SELECTED_ITEM_CLASS;
