@@ -18,17 +18,33 @@ const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {
-        const markup = '\
-            <div id="scrollable" style="height: 50px; width: 50px;">\
-                <div class="content1" style="height: 100px; width: 100px;"></div>\
-                <div class="content2"></div>\
-            </div>\
-            <div id="scrollable_container">\
-                <div style="width: 400px">\
-                    <div id="content_container_1" tabindex="1" style="height: 200px; width: 198px;"></div>\
-                    <div id="content_container_2" tabindex="2" style="height: 200px; width: 198px;"></div>\
-                </div>\
-            </div>';
+        const markup = `
+            <style nonce="qunit-test">
+                #scrollable {
+                    height: 50px;
+                    width: 50px;
+                }
+                #scrollable .content1 {
+                    height: 100px;
+                    width: 100px;
+                }
+                #scrollable_content {
+                    width: 400px;
+                }
+                #content_container_1, #content_container_2 {
+                    height: 200px; width: 198px;
+                }
+            </style>
+            <div id="scrollable">
+                <div class="content1"></div>
+                <div class="content2"></div>
+            </div>
+            <div id="scrollable_container">
+                <div id="scrollable_content">
+                    <div id="content_container_1" tabindex="1"></div>
+                    <div id="content_container_2" tabindex="2"></div>
+                </div>
+            </div>`;
         $('#qunit-fixture').html(markup);
         this.clock = sinon.useFakeTimers();
     },

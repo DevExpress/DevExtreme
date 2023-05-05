@@ -2,14 +2,9 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-import hogan from 'hogan.js';
-
-window.Hogan = hogan;
-
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
-import setTemplateEngine from 'ui/set_template_engine';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
@@ -43,8 +38,6 @@ const setScrollerSpacing = function(rowsView) {
 
     rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
 };
-
-setTemplateEngine('hogan');
 
 QUnit.testStart(function() {
     const markup =

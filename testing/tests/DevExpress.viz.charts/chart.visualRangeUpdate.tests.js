@@ -4,7 +4,13 @@ import dxChart from 'viz/chart';
 const moduleSetup = {
     createChart(options) {
         const onOptionChanged = sinon.spy();
-        const chart = new dxChart($('<div style="width: 100px;height:100px;"></div>').prependTo('#qunit-fixture'),
+        const $element = $('<div>')
+            .css({
+                width: '100px',
+                height: '100px'
+            })
+            .prependTo('#qunit-fixture');
+        const chart = new dxChart($element,
             $.extend({
                 dataSource: [],
                 commonAxisSettings: {

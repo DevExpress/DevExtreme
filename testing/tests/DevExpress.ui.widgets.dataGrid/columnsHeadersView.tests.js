@@ -2,8 +2,8 @@ import 'generic_light.css!';
 
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
-import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import typeUtils from 'core/utils/type';
+import { format } from 'core/utils/string';
 import config from 'core/config';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
@@ -14,8 +14,6 @@ import messageLocalization from 'localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 import 'ui/data_grid';
-import 'hogan.js';
-setTemplateEngine('hogan');
 
 const SORT_INDEX_ICON_SELECTOR = '.dx-sort-index-icon';
 const SORT_INDEX_INDICATOR_SELECTOR = '.dx-sort-index-indicator';
@@ -1523,7 +1521,7 @@ QUnit.module('Headers', {
         assert.equal(headerCellTemplateOptions.columnIndex, 2, 'headerCellTemplate option columnIndex');
     });
 
-    QUnit.test('Custom headerCellTemplate as string selector for column with hogan', function(assert) {
+    QUnit.test('Custom headerCellTemplate as string selector for column with jquery template', function(assert) {
         // arrange
         const that = this;
         const testElement = $('#container');
@@ -1533,12 +1531,12 @@ QUnit.module('Headers', {
             { caption: 'Column 2' },
             {
                 caption: 'Column3',
-                headerCellTemplate: '#hoganHeaderColumnTemplate'
+                headerCellTemplate: '#jqHeaderColumnTemplate'
             }
         ]);
 
         this._getTemplate = function(selector) {
-            assert.equal(selector, '#hoganHeaderColumnTemplate');
+            assert.equal(selector, '#jqHeaderColumnTemplate');
             return {
                 render: function(options) {
                     options.container.append('<b>' + options.model.caption + '</b>');
@@ -2226,8 +2224,27 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+        const text = format(messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'), columnChooserTitle);
+
         assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
-        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'));
+        assert.strictEqual(emptyCell.text(), text);
+
+        // act
+        const columnChooserLink = emptyCell.find('.dx-datagrid-text-content .dx-link');
+
+        // assert
+        assert.strictEqual(columnChooserLink.length, 1, 'link for column chooser created');
+        assert.strictEqual(columnChooserLink.text(), columnChooserTitle);
+
+        // act
+        let chooserOpened = false;
+        this.columnChooserView.showColumnChooser = () => chooserOpened = true;
+
+        columnChooserLink.trigger('click');
+
+        // assert
+        assert.ok(chooserOpened, 'chooser has been opened');
     });
 
     QUnit.test('Check header text when all columns are hidden but column chooser is not enabled', function(assert) {
@@ -2272,8 +2289,27 @@ QUnit.module('Headers with grouping and chooser', {
         const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
 
         // assert
+        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+        const text = format(messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'), columnChooserTitle);
+
         assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
-        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'));
+        assert.strictEqual(emptyCell.text(), text);
+
+        // act
+        const columnChooserLink = emptyCell.find('.dx-datagrid-text-content .dx-link');
+
+        // assert
+        assert.strictEqual(columnChooserLink.length, 1, 'link for column chooser created');
+        assert.strictEqual(columnChooserLink.text(), columnChooserTitle);
+
+        // act
+        let chooserOpened = false;
+        this.columnChooserView.showColumnChooser = () => chooserOpened = true;
+
+        columnChooserLink.trigger('click');
+
+        // assert
+        assert.ok(chooserOpened, 'chooser has been opened');
     });
 
     QUnit.test('Check header text when all columns are hidden or grouped but column chooser and group panel are not enabled', function(assert) {

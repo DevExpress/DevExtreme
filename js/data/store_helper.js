@@ -37,6 +37,10 @@ function queryByOptions(query, options, isCountQuery) {
 
     const filter = options.filter;
 
+    if(options?.langParams) {
+        query.setLangParams?.(options.langParams);
+    }
+
     if(filter) {
         query = query.filter(filter);
     }
@@ -55,7 +59,6 @@ function queryByOptions(query, options, isCountQuery) {
         group = normalizeSortingInfo(group);
         group.keepInitialKeyOrder = !!options.group.keepInitialKeyOrder;
     }
-
     if(sort || group) {
         sort = normalizeSortingInfo(sort || []);
         if(group && !group.keepInitialKeyOrder) {

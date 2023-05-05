@@ -10,13 +10,6 @@ define(function(require) {
     const setTemplateEngine = require('core/templates/template_engine_registry').setTemplateEngine;
     const errors = require('core/errors');
 
-    window.Handlebars = require('../../../node_modules/handlebars/dist/handlebars.min.js');
-    window.Hogan = require('../../../node_modules/hogan.js/dist/hogan-3.0.2.js');
-    require('../../../node_modules/jquery.tmpl/index.js');
-    require('../../../node_modules/jsrender/jsrender.min.js');
-    window.Mustache = require('../../../node_modules/mustache/mustache.min.js');
-    window._ = require('../../../node_modules/underscore/underscore-min.js');
-
     QUnit.module('custom template rendering', {
         beforeEach: function() {
             this.originalLog = errors.log;
@@ -24,69 +17,6 @@ define(function(require) {
         afterEach: function() {
             errors.log = this.originalLog;
         }
-    });
-
-    const createMarkup = function(content, tag) {
-        return $('<' + tag + '>').html(content);
-    };
-
-    const renderTemplate = function(engine, element, data, assert) {
-        setTemplateEngine(engine);
-        const template = new Template(element);
-        const container = $('<div>');
-
-        const result = template.render({ model: data, container: container });
-
-        assert.notEqual(typeof result, 'string', 'correct result type');
-
-        return container;
-    };
-
-    const checkTemplateEngine = function(engine, string, assert) {
-        let log;
-        errors.log = function() {
-            log.push($.makeArray(arguments));
-        };
-
-        // empty
-        log = [];
-        renderTemplate(engine, $(), { text: '123' }, assert);
-        assert.equal(log.length, 0);
-
-        // script
-        log = [];
-        errors.log = function() {
-            log.push($.makeArray(arguments));
-        };
-        const container = renderTemplate(engine, createMarkup(string, 'script type="text/html"'), { text: '123' }, assert);
-        assert.equal(container.text(), '123');
-        assert.equal(log.length, 0);
-    };
-
-    QUnit.module('predefined templates');
-
-    QUnit.test('jquery-tmpl', function(assert) {
-        checkTemplateEngine('jquery-tmpl', '${text}', assert);
-    });
-
-    QUnit.test('jsrender', function(assert) {
-        checkTemplateEngine('jsrender', '{{:text}}', assert);
-    });
-
-    QUnit.test('mustache', function(assert) {
-        checkTemplateEngine('mustache', '{{text}}', assert);
-    });
-
-    QUnit.test('hogan', function(assert) {
-        checkTemplateEngine('hogan', '{{text}}', assert);
-    });
-
-    QUnit.test('underscore', function(assert) {
-        checkTemplateEngine('underscore', '<%=text%>', assert);
-    });
-
-    QUnit.test('handlebars', function(assert) {
-        checkTemplateEngine('handlebars', '{{text}}', assert);
     });
 
     QUnit.module('user template engine');

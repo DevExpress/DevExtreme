@@ -1210,7 +1210,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
       valueAxis?: ChartZoomAndPanMode;
     };
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.aggregateByCategory
@@ -1418,7 +1421,10 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      */
     workdaysOnly?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxChartOptions.argumentAxis.constantLineStyle.label
@@ -1427,7 +1433,10 @@ export interface dxChartArgumentAxisConstantLineStyle extends dxChartCommonAxisS
      */
     label?: dxChartArgumentAxisConstantLineStyleLabel;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisConstantLineStyleLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.argumentAxis.constantLineStyle.label.horizontalAlignment
@@ -1442,7 +1451,10 @@ export interface dxChartArgumentAxisConstantLineStyleLabel extends dxChartCommon
      */
     verticalAlignment?: VerticalAlignment;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxChartOptions.argumentAxis.constantLines.displayBehindSeries
@@ -1469,7 +1481,10 @@ export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSetti
      */
     value?: number | Date | string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisConstantLinesLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.argumentAxis.constantLines.label.horizontalAlignment
@@ -1490,7 +1505,10 @@ export interface dxChartArgumentAxisConstantLinesLabel extends dxChartCommonAxis
      */
     verticalAlignment?: VerticalAlignment;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.argumentAxis.label.customizeHint
@@ -1510,7 +1528,10 @@ export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel
      */
     format?: Format;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisStrips extends dxChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxChartOptions.argumentAxis.strips.color
@@ -1537,7 +1558,10 @@ export interface dxChartArgumentAxisStrips extends dxChartCommonAxisSettingsStri
      */
     startValue?: number | Date | string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisStripsLabel extends dxChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxChartOptions.argumentAxis.strips.label.text
@@ -1546,7 +1570,10 @@ export interface dxChartArgumentAxisStripsLabel extends dxChartCommonAxisSetting
      */
     text?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartArgumentAxisTitle extends dxChartCommonAxisSettingsTitle {
     /**
      * @docid dxChartOptions.argumentAxis.title.text
@@ -1555,7 +1582,10 @@ export interface dxChartArgumentAxisTitle extends dxChartCommonAxisSettingsTitle
      */
     text?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.commonAxisSettings.allowDecimals
@@ -1805,7 +1835,10 @@ export interface dxChartCommonAxisSettings {
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.color
@@ -1844,7 +1877,10 @@ export interface dxChartCommonAxisSettingsConstantLineStyle {
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.font
@@ -1865,7 +1901,10 @@ export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.label.template
@@ -1943,7 +1982,10 @@ export interface dxChartCommonAxisSettingsLabel {
      */
     wordWrap?: WordWrap;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxChartOptions.commonAxisSettings.stripStyle.label
@@ -1964,7 +2006,10 @@ export interface dxChartCommonAxisSettingsStripStyle {
      */
     paddingTopBottom?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.stripStyle.label.font
@@ -1985,7 +2030,10 @@ export interface dxChartCommonAxisSettingsStripStyleLabel {
      */
     verticalAlignment?: VerticalAlignment;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonAxisSettingsTitle {
     /**
      * @docid dxChartOptions.commonAxisSettings.title.alignment
@@ -2019,7 +2067,10 @@ export interface dxChartCommonAxisSettingsTitle {
      */
     wordWrap?: WordWrap;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonPaneSettings {
     /**
      * @docid dxChartOptions.commonPaneSettings.backgroundColor
@@ -2079,7 +2130,10 @@ export interface dxChartCommonPaneSettings {
       width?: number;
     };
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSeries {
     /**
      * @docid dxChartOptions.commonSeriesSettings.area
@@ -2204,7 +2258,10 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      */
     type?: SeriesType;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartLegend extends BaseChartLegend {
     /**
      * @docid dxChartOptions.legend.customizeHint
@@ -2230,7 +2287,10 @@ export interface dxChartLegend extends BaseChartLegend {
      */
     position?: RelativePosition;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartPanes extends dxChartCommonPaneSettings {
     /**
      * @docid dxChartOptions.panes.height
@@ -2245,7 +2305,10 @@ export interface dxChartPanes extends dxChartCommonPaneSettings {
      */
     name?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartTooltip extends BaseChartTooltip {
     /**
      * @docid dxChartOptions.tooltip.location
@@ -2255,7 +2318,10 @@ export interface dxChartTooltip extends BaseChartTooltip {
      */
     location?: ChartTooltipLocation;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.autoBreaksEnabled
@@ -2451,7 +2517,10 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      */
     wholeRange?: VisualRange | Array<number | string | Date>;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxChartOptions.valueAxis.constantLineStyle.label
@@ -2460,7 +2529,10 @@ export interface dxChartValueAxisConstantLineStyle extends dxChartCommonAxisSett
      */
     label?: dxChartValueAxisConstantLineStyleLabel;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisConstantLineStyleLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.valueAxis.constantLineStyle.label.horizontalAlignment
@@ -2475,7 +2547,10 @@ export interface dxChartValueAxisConstantLineStyleLabel extends dxChartCommonAxi
      */
     verticalAlignment?: VerticalAlignment;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxChartOptions.valueAxis.constantLines.displayBehindSeries
@@ -2502,7 +2577,10 @@ export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettings
      */
     value?: number | Date | string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisConstantLinesLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.valueAxis.constantLines.label.horizontalAlignment
@@ -2523,7 +2601,10 @@ export interface dxChartValueAxisConstantLinesLabel extends dxChartCommonAxisSet
      */
     verticalAlignment?: VerticalAlignment;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.valueAxis.label.customizeHint
@@ -2543,7 +2624,10 @@ export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
      */
     format?: Format;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisStrips extends dxChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxChartOptions.valueAxis.strips.color
@@ -2570,7 +2654,10 @@ export interface dxChartValueAxisStrips extends dxChartCommonAxisSettingsStripSt
      */
     startValue?: number | Date | string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisStripsLabel extends dxChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxChartOptions.valueAxis.strips.label.text
@@ -2579,7 +2666,10 @@ export interface dxChartValueAxisStripsLabel extends dxChartCommonAxisSettingsSt
      */
     text?: string;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
     /**
      * @docid dxChartOptions.valueAxis.title.text

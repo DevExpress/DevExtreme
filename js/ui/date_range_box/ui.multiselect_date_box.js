@@ -1,9 +1,18 @@
 import DateBox from '../date_box/ui.date_box.mask';
-import CalendarStrategy from './strategy/rangeCalendar';
+import RangeCalendarStrategy from './strategy/rangeCalendar';
 
 class MultiselectDateBox extends DateBox {
     _initStrategy() {
-        this._strategy = new CalendarStrategy(this);
+        this._strategy = new RangeCalendarStrategy(this);
+    }
+
+    _applyButtonHandler(e) {
+        const value = this._strategy.getValue();
+
+        this._strategy.dateRangeBox.updateValue(value);
+
+        this.close();
+        this.option('focusStateEnabled') && this.focus();
     }
 }
 

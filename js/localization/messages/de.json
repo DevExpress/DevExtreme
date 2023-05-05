@@ -83,9 +83,10 @@
         "dxNumberBox-invalidValueMessage": "Der Wert muss eine Zahl sein",
         "dxNumberBox-noDataText": "Keine Daten",
 
-        "dxDataGrid-emptyHeaderWithColumnChooserText": "Verwenden Sie die Spaltenauswahl, um Spalten anzuzeigen",
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Verwenden Sie die {0}, um Spalten anzuzeigen",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Ziehen Sie eine Spalte aus dem Gruppenpanel hierher",
-        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Verwenden Sie die Spaltenauswahl oder ziehen Sie eine Spalte aus dem Gruppenpanel",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Verwenden Sie die {0} oder ziehen Sie eine Spalte aus dem Gruppenpanel",
+        "dxDataGrid-emptyHeaderColumnChooserText": "Spaltenauswahl",
         "dxDataGrid-columnChooserTitle": "Spaltenauswahl",
         "dxDataGrid-columnChooserEmptyText": "Ziehen Sie Spalten hierhin, um sie zu verstecken",
         "dxDataGrid-groupContinuesMessage": "Weiter auf der nächsten Seite",
@@ -118,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Zwischen",
         "dxDataGrid-filterRowOperationBetweenStartText": "Anfang",
         "dxDataGrid-filterRowOperationBetweenEndText": "Ende",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Filter anwenden",
         "dxDataGrid-trueText": "wahr",
         "dxDataGrid-falseText": "falsch",
@@ -182,6 +184,8 @@
         "dxPager-prevPage": "Vorherige Seite",
         "dxPager-nextPage": "Nächste Seite",
         "dxPager-ariaLabel": "Seitennavigation",
+        "dxPager-ariaPageSize": "Seitenlänge",
+        "dxPager-ariaPageNumber": "Seitennummer",
 
         "dxPivotGrid-grandTotal": "Gesamt",
         "dxPivotGrid-total": "{0} Gesamt",
@@ -261,6 +265,7 @@
 
         "dxCalendar-todayButtonText": "Heute",
         "dxCalendar-ariaWidgetName": "Kalendar",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "Rot",
         "dxColorView-ariaGreen": "Grün",

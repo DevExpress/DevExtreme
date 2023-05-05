@@ -118,6 +118,8 @@ export class EditorProps extends BaseWidgetProps {
 
   @OneWay() isValid = true;
 
+  @OneWay() inputAttr = {};
+
   // private
   @Event() onFocusIn?: (e: Event) => void;
 }

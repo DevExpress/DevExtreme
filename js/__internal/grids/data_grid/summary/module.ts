@@ -772,6 +772,8 @@ gridCore.registerModule('summary', {
                 sortByGroups,
               };
             }
+
+            return undefined;
           },
 
           publicMethods() {

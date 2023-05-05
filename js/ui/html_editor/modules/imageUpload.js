@@ -4,7 +4,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { urlUpload, getFileUploaderBaseOptions, correctSlashesInUrl } from '../utils/image_uploader_helper';
+import { serverUpload, getFileUploaderBaseOptions } from '../utils/image_uploader_helper';
 import { addNamespace } from '../../../events/utils/index';
 import FileUploader from '../../file_uploader';
 
@@ -71,11 +71,7 @@ if(Quill) {
 
         _onUploaded(data) {
             const { index: pasteIndex } = this.quill.getSelection() ?? { index: this.quill.getLength() };
-
-            const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + data.file.name;
-            urlUpload(this.quill, pasteIndex, { src: imageUrl });
-
-            this.quill.setSelection(pasteIndex + 1, 0);
+            serverUpload(this.options.uploadDirectory, data.file.name, this.quill, pasteIndex);
         }
 
         _attachEvents() {

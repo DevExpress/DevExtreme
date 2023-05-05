@@ -29,7 +29,6 @@ $calendar-cell-hover-color: $calendar-color !default;
 */
 $calendar-cell-selected-bg: $base-accent !default;
 $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-$calendar-navigator-border-radius: $button-border-radius !default;
 $calendar-cell-contoured-border-radius: 50% !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;

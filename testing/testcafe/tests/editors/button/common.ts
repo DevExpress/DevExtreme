@@ -3,7 +3,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
+import {
+  appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage, setAttribute,
+} from '../../../helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
 
 const BUTTON_CLASS = 'dx-button';
@@ -59,6 +61,39 @@ test('Buttons render', async (t) => {
           }
         }
       }
+    }
+  }
+});
+
+test('Buttons render in disabled state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { margin: 5px; }`);
+
+  await testScreenshot(t, takeScreenshot, 'Button render in disabled.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Button render in disabled.png', {
+    element: '#container',
+    theme: process.env.theme?.replace('.light', '.dark'),
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await setAttribute('#container', 'class', `dx-theme-${process.env.theme?.split('.')[0]}-typography`);
+
+  for (const stylingMode of stylingModes) {
+    for (const type of types) {
+      const id = `${new Guid()}`;
+
+      await appendElementTo('#container', 'div', id, { });
+      await createWidget('dxButton', {
+        stylingMode,
+        text: `stylingMode: ${stylingMode}, type: ${type}`,
+        type,
+        icon: 'home',
+        disabled: true,
+      }, `#${id}`);
     }
   }
 });

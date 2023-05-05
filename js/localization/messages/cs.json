@@ -83,6 +83,10 @@
         "dxNumberBox-invalidValueMessage": "Hodnota musí být číslo",
         "dxNumberBox-noDataText": "Žádná data",
 
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} to display columns",
+        "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} or drag a column from the group panel",
+        "dxDataGrid-emptyHeaderColumnChooserText": "column chooser",
         "dxDataGrid-columnChooserTitle": "Výběr sloupců",
         "dxDataGrid-columnChooserEmptyText": "Přesuňte sloupec zde pro skytí",
         "dxDataGrid-groupContinuesMessage": "Pokračovat na další straně",
@@ -115,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Mezi",
         "dxDataGrid-filterRowOperationBetweenStartText": "Začíná",
         "dxDataGrid-filterRowOperationBetweenEndText": "Končí",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Použít filtr",
         "dxDataGrid-trueText": "Platí",
         "dxDataGrid-falseText": "Neplatí",
@@ -173,11 +178,14 @@
 
         "dxPager-infoText": "Strana {0} ze {1} ({2} položek)",
         "dxPager-pagesCountText": "ze",
+        "dxPager-pageSize": "Items per page: {0}",
         "dxPager-pageSizesAllText": "Vše",
         "dxPager-page": "Page {0}",
         "dxPager-prevPage": "Previous Page",
         "dxPager-nextPage": "Next Page",
         "dxPager-ariaLabel": "Page Navigation",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Celkem",
         "dxPivotGrid-total": "{0} Celkem",
@@ -257,6 +265,7 @@
 
         "dxCalendar-todayButtonText": "Dnes",
         "dxCalendar-ariaWidgetName": "Kalendář",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "Červená",
         "dxColorView-ariaGreen": "Zelená",

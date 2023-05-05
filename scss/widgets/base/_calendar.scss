@@ -7,66 +7,51 @@
   @include user-select(none);
 
   position: relative;
-  display: block;
-
-  &.dx-calendar-with-footer {
-    .dx-calendar-footer {
-      position: absolute;
-      bottom: 0;
-    }
-  }
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .dx-calendar-views-wrapper {
-  width: 100%;
-  height: 100%;
   position: relative;
+  display: flex;
+  flex: auto;
 }
 
 .dx-calendar-navigator {
-  position: relative;
-  width: 100%;
-
-  .dx-button {
-    position: absolute;
-
-    &.dx-calendar-disabled-navigator-link {
-      visibility: hidden;
-    }
-  }
+  display: flex;
+  justify-content: space-between;
+  direction: ltr;
 
   .dx-calendar-caption-button {
-    text-decoration: none;
-  }
-}
-
-.dx-calendar-navigator-previous-view,
-.dx-calendar-navigator-next-view {
-  background: none;
-
-  &.dx-button {
-    margin: 0 1px;
+    flex-grow: 1;
   }
 
-  .dx-button-content {
-    padding: 0;
+  .dx-button {
+    .dx-button-text {
+      text-transform: none;
+    }
+
+    &.dx-state-disabled {
+      opacity: 1;
+
+      .dx-button-content {
+        opacity: 0.5;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-hover {
+      z-index: 1;
+    }
   }
-}
-
-.dx-calendar-navigator-previous-view {
-  left: 0;
-}
-
-.dx-calendar-navigator-next-view {
-  right: 0;
 }
 
 .dx-calendar-body {
   overflow: hidden;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  display: flex;
+  flex: 1 0 auto;
 
   .dx-widget {
     position: absolute;
@@ -74,30 +59,15 @@
     height: 100%;
   }
 
-  .dx-calendar-multiview {
-    width: 50%;
-
-    table {
-      padding: 0 5px;
-    }
-  }
-
   table {
     width: 100%;
     height: 100%;
-    position: absolute;
     direction: ltr;
     table-layout: fixed;
 
     .dx-calendar-week-number-cell {
       text-align: center;
-      cursor: default;
     }
-  }
-
-  td {
-    cursor: pointer;
-    box-sizing: content-box;
   }
 
   thead th {
@@ -106,11 +76,61 @@
 }
 
 .dx-calendar-cell {
-  white-space: normal;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+  padding: 0;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    inset-inline-start: 50%;
+    inset-inline-end: 0;
+    transform: translateY(-50%);
+  }
 }
 
-.dx-calendar-contoured-date {
-  outline-offset: -1px;
+.dx-calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dx-calendar-today-button {
+  flex-grow: 1;
+}
+
+.dx-calendar-multiview {
+  .dx-calendar-caption-button {
+    .dx-button-content {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dx-button-text {
+      width: 50%;
+    }
+  }
+
+  .dx-calendar-body {
+    .dx-widget {
+      width: 50%;
+    }
+
+    table {
+      padding: 0 10px;
+    }
+  }
 }
 
 .dx-rtl {

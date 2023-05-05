@@ -9,11 +9,12 @@ import storeHelper from './store_helper';
 const queryByOptions = storeHelper.queryByOptions;
 import { Deferred, when } from '../core/utils/deferred';
 import { noop } from '../core/utils/common';
+import { isEmptyObject } from '../core/utils/type';
 
 const storeImpl = {};
 
 const Store = Class.inherit({
-
+    _langParams: {},
     ctor: function(options) {
         const that = this;
         options = options || {};
@@ -92,6 +93,11 @@ const Store = Class.inherit({
     },
 
     _loadImpl: function(options) {
+        if(!isEmptyObject(this._langParams)) {
+            options = options || {};
+            options._langParams = { ...this._langParams, ...options._langParams };
+        }
+
         return queryByOptions(this.createQuery(options), options).enumerate();
     },
 

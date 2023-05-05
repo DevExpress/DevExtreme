@@ -27,7 +27,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.module('Adaptive columns', baseModuleConfig, () => {
-    QUnit.test('Form item of adaptive detail row is rendered with the underscore template', function(assert) {
+    QUnit.test('Form item of adaptive detail row is rendered with the jquery template', function(assert) {
         // arrange
         $('#container').width(200);
 
@@ -45,7 +45,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.find('.dx-adaptive-detail-row .dx-form').length, 1, 'adaptive detail form is opened');
-        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
+        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the jquery template is rendered correctly');
 
         instance.collapseAdaptiveDetailRow(data[0]);
     });
