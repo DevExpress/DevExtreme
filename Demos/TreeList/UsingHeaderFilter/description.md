@@ -6,7 +6,7 @@ Enable the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/
 
 ### Enable Search Within Header Filters
 
-Users can search values within header filters. To display the search bar, assign **true** to the [allowSearch](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/#allowSearch) property in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/) object or in a column's [headerFilter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/) object. At the column level, you can also specify a comparison operation used to search header filter values ([searchMode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/#searchMode)).
+Users can search values within header filters. To display the search bar, assign **true** to the **search**.[enabled](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/search/#enabled) property in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/) object or in a column's [headerFilter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/) object. You can also specify a comparison operation used to search header filter values. Use the **search**.[mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/search/#mode) property.
 
 ### Change Available Filter Values
 
