@@ -106,7 +106,6 @@ jobs:
           isPerformance: "true"
           useJQuery: "true"
           headless: "false"
-          useCsp: "false"
 
   qunit-tests-mobile:
     needs: build
