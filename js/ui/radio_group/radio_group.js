@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
-import { deferRender, noop } from '../../core/utils/common';
+import { deferRender } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
@@ -107,7 +107,7 @@ class RadioCollection extends CollectionWidget {
         return this._itemContainer().children(this._itemSelector());
     }
 
-    _setAriaSelectionAttribute = noop;
+    _setAriaSelectionAttribute() {}
 }
 
 class RadioGroup extends Editor {
