@@ -219,6 +219,7 @@ const TagBox = SelectBox.inherit({
         }
 
         this._toggleFocusClass(false, this._$focusedTag);
+        this._updateInputAriaActiveDescendant();
         delete this._$focusedTag;
     },
 
