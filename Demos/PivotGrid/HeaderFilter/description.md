@@ -2,8 +2,8 @@ A header filter allows a user to filter field values by including or excluding t
 
 To configure a header filter, use the global [headerFilter](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/) object or a field's [headerFilter](/Documentation/ApiReference/Data_Layer/PivotGridDataSource/Configuration/fields/headerFilter/) object. This demo specifies the following properties in the global **headerFilter** object:
 
-- [allowSearch](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/#allowSearch)     
-Allows users to search through field values.
+- [search](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/search/)     
+Allows you to configure a search panel within a header filter. 
 
 - [showRelevantValues](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/#showRelevantValues)       
 Specifies whether to show all field values or only those that satisfy the other applied filters.
@@ -11,4 +11,4 @@ Specifies whether to show all field values or only those that satisfy the other 
 - [width](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/#width) and [height](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/#height)     
 Configures the popup menu size.
 
-In this demo, a filter is applied to the Country field. This filter includes only the United Kingdom. The City field displays only cities in this country because the **showRelevantValues** property is **true**. If you clear the corresponding checkbox under the PivotGrid, the City field displays all cities, regardless of the other applied filters.
+In this demo, a filter is applied to the Country field. This filter includes only the United Kingdom. The City field displays only cities in this country because the **showRelevantValues** property is **true**. If you clear the corresponding check box under the PivotGrid, the City field displays all cities, regardless of the other applied filters.
