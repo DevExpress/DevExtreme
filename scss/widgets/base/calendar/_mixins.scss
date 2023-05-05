@@ -18,6 +18,11 @@
         color: $cell-other-color;
         background: $week-number-cell-bg-color;
         width: 2em;
+        margin-right: 0.5em;
+
+        .dx-rtl & {
+          margin-left: 0.5em;
+        }
       }
     }
 
