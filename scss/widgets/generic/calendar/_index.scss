@@ -59,10 +59,9 @@ $generic-week-number-cell-bg-color: color.change(darken($base-bg, 12%), $alpha: 
 @include dx-calendar-body-mixin(
   $calendar-cell-other-color,
   $generic-week-number-cell-bg-color,
-  $base-border-radius,
+  0,
   $generic-base-font-size,
   $calendar-header-color,
-  $calendar-border-color,
 );
 @include dx-calendar-cell-mixin(
   $calendar-cell-contoured-border-radius,

@@ -39,7 +39,6 @@ $material-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !
   $base-border-radius,
   $material-calendar-cell-font-size,
   $calendar-header-color,
-  transparent,
 );
 @include dx-calendar-cell-mixin(
   $calendar-cell-contoured-border-radius,

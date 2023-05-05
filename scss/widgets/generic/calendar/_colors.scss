@@ -15,7 +15,7 @@ $calendar-color: $base-text-color !default;
 * $name 10. Header text color
 * $type color
 */
-$calendar-header-color: null !default;
+$calendar-header-color: $base-text-color !default;
 
 /**
 * $name 30. Other month text color
@@ -50,12 +50,6 @@ $calendar-cell-selected-bg: null !default;
 $calendar-cell-active-bg: null !default;
 
 /**
-* $name 80. Border color
-* $type color
-*/
-$calendar-border-color: $base-border-color !default;
-
-/**
 * $name 40. Date navigator border color
 * $type color
 */
@@ -75,7 +69,6 @@ $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 
 @if $color == "carmine" {
-  $calendar-header-color: $base-header-color !default;
   $calendar-cell-other-color: lighten($calendar-color, 35%) !default; // #627789 => #c7d1d9
   $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-hover-bg !default;
@@ -91,7 +84,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "contrast" {
-  $calendar-header-color: $base-text-color !default;
   $calendar-cell-other-color: $base-accent !default;
   $calendar-hover-bg: $base-hover-color !default;
   $calendar-cell-hover-color: $base-text-color !default;
@@ -107,7 +99,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "dark" {
-  $calendar-header-color: darken($calendar-color, 40%) !default;
   $calendar-cell-other-color: darken($calendar-color, 49%) !default;
   $calendar-cell-other-hover-color: darken($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-hover-bg !default;
@@ -123,7 +114,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "darkmoon" {
-  $calendar-header-color: $screen-text-color !default;
   $calendar-cell-other-color: darken($calendar-color, 49%) !default;
   $calendar-cell-other-hover-color: darken($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-hover-bg !default;
@@ -139,7 +129,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "darkviolet" {
-  $calendar-header-color: $base-header-color !default;
   $calendar-cell-other-color: darken($calendar-color, 49%) !default;
   $calendar-cell-other-hover-color: darken($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-hover-bg !default;
@@ -155,7 +144,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "greenmist" {
-  $calendar-header-color: lighten($calendar-color, 40%) !default;
   $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
   $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-hover-bg !default;
@@ -171,7 +159,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "light" {
-  $calendar-header-color: lighten($calendar-color, 40%) !default;
   $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
   $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-hover-bg !default;
@@ -187,7 +174,6 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 }
 
 @if $color == "softblue" {
-  $calendar-header-color: $base-icon-color !default;
   $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
   $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
   $calendar-hover-bg: $base-webwidget-hover-background !default;

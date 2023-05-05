@@ -11,7 +11,7 @@ $calendar-color: $base-text-color !default;
 * $name 20. Header text color
 * $type color
 */
-$calendar-header-color: lighten($calendar-color, 40%) !default;
+$calendar-header-color: $calendar-color !default;
 
 /**
 * $name 30. Other month text color
