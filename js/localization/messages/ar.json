@@ -115,6 +115,7 @@
         "dxDataGrid-filterRowOperationBetween": "ما بين",
         "dxDataGrid-filterRowOperationBetweenStartText": "بدا",
         "dxDataGrid-filterRowOperationBetweenEndText": "انتهى",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "تطبيق مرشح",
         "dxDataGrid-trueText": "صحيح",
         "dxDataGrid-falseText": "خاطئة",

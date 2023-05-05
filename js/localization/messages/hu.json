@@ -115,6 +115,7 @@
         "dxDataGrid-filterRowOperationBetween": "Között",
         "dxDataGrid-filterRowOperationBetweenStartText": "Kezdete",
         "dxDataGrid-filterRowOperationBetweenEndText": "Vége",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Szűrő alkalmazása",
         "dxDataGrid-trueText": "igaz",
         "dxDataGrid-falseText": "hamis",
