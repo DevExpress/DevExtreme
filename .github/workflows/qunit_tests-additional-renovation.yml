@@ -155,7 +155,6 @@ jobs:
           userAgent: ${{ matrix.envs.MOBILE_UA }}
           useShadowDom: ${{ matrix.envs.SHADOW_DOM }}
           headless: ${{ matrix.envs.NO_HEADLESS == true && 'false' || 'true' }}
-          useCsp: ${{ matrix.envs.NO_CSP == true && 'false' || 'true' }}
 
   qunit-tests-firefox:
     needs: build
