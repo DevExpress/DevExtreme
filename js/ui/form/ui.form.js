@@ -532,8 +532,11 @@ const Form = Widget.inherit({
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
 
-        this.setAria('role', 'group', $group);
-        this.setAria('labelledby', id, $group);
+        const groupAria = {
+            role: 'group',
+            'labelledby': id,
+        };
+        this.setAria(groupAria, $group);
 
         $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
 
