@@ -19,37 +19,11 @@ import {
     DxEvent,
     Cancelable,
     EventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-/** @public */
-export type ContentReadyEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
-
-/** @public */
-export type DisposingEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
-
-/** @public */
-export type HiddenEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
-
-/** @public */
-export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxOverlay<TKey>>;
-
-/** @public */
-export type InitializedEvent<TKey = any> = InitializedEventInfo<dxOverlay<TKey>>;
-
-/** @public */
-export type ShowingEvent<TKey = any> = Cancelable & EventInfo<dxOverlay<TKey>>;
-
-/** @public */
-export type OptionChangedEvent<TKey = any> = EventInfo<dxOverlay<TKey>> & ChangedOptionInfo;
-
-/** @public */
-export type ShownEvent<TKey = any> = EventInfo<dxOverlay<TKey>>;
 
 /** @namespace DevExpress.ui */
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
@@ -146,7 +120,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onHidden?: ((e: HiddenEvent<TComponent>) => void);
+    onHidden?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -156,7 +130,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onHiding?: ((e: HidingEvent<TComponent>) => void);
+    onHiding?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -166,7 +140,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onShowing?: ((e: ShowingEvent<TComponent>) => void);
+    onShowing?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -174,7 +148,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @action
      * @public
      */
-    onShown?: ((e: ShownEvent<TComponent>) => void);
+    onShown?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
@@ -289,61 +263,3 @@ interface OverlayInstance extends dxOverlay<Properties> { }
 type Properties = dxOverlayOptions<OverlayInstance>;
 
 export type Options = Properties;
-
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
-
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
-
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
-
-type Events = {
-/**
- * @skip
- * @docid dxOverlayOptions.onContentReady
- * @type_function_param1 e:{ui/overlay:ContentReadyEvent}
- */
-onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onDisposing
- * @type_function_param1 e:{ui/overlay:DisposingEvent}
- */
-onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onHidden
- * @type_function_param1 e:{ui/overlay:HiddenEvent}
- */
-onHidden?: ((e: HiddenEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onHiding
- * @type_function_param1 e:{ui/overlay:HidingEvent}
- */
-onHiding?: ((e: HidingEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onInitialized
- * @type_function_param1 e:{ui/overlay:InitializedEvent}
- */
-onInitialized?: ((e: InitializedEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onOptionChanged
- * @type_function_param1 e:{ui/overlay:OptionChangedEvent}
- */
-onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onShowing
- * @type_function_param1 e:{ui/overlay:ShowingEvent}
- */
-onShowing?: ((e: ShowingEvent) => void);
-/**
- * @skip
- * @docid dxOverlayOptions.onShown
- * @type_function_param1 e:{ui/overlay:ShownEvent}
- */
-onShown?: ((e: ShownEvent) => void);
-};
