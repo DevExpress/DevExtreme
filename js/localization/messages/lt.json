@@ -115,6 +115,7 @@
         "dxDataGrid-filterRowOperationBetween": "Tarp",
         "dxDataGrid-filterRowOperationBetweenStartText": "Pradėti",
         "dxDataGrid-filterRowOperationBetweenEndText": "Pabaiga",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Taikyti filtrą",
         "dxDataGrid-trueText": "tiesa",
         "dxDataGrid-falseText": "melaginga",

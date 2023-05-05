@@ -115,6 +115,7 @@
         "dxDataGrid-filterRowOperationBetween": "之间",
         "dxDataGrid-filterRowOperationBetweenStartText": "开始",
         "dxDataGrid-filterRowOperationBetweenEndText": "结束",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "应用过滤器",
         "dxDataGrid-trueText": "真",
         "dxDataGrid-falseText": "假",

@@ -115,6 +115,7 @@
         "dxDataGrid-filterRowOperationBetween": "Välillä",
         "dxDataGrid-filterRowOperationBetweenStartText": "Alkaa",
         "dxDataGrid-filterRowOperationBetweenEndText": "Loppu",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Käytä suodatinta",
         "dxDataGrid-trueText": "tosi",
         "dxDataGrid-falseText": "epätosi",
