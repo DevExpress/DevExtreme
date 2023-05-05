@@ -3371,9 +3371,10 @@ if(devices.real().deviceType === 'desktop') {
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                let listAttributes = {
+                const listAttributes = {
                     id: helper.widget._listId,
-                    role: 'application'
+                    role: 'group',
+                    'aria-roledescription': 'list'
                 };
 
                 const listItemContainerAttributes = {
@@ -3423,10 +3424,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 helper.widget.option('searchEnabled', !searchEnabled);
 
-                listAttributes = {
-                    id: helper.widget._listId,
-                    role: 'application'
-                };
+                listAttributes.id = helper.widget._listId;
 
                 fieldAttributes = {
                     role: 'combobox',

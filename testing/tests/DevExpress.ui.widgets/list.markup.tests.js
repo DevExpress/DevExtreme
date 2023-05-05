@@ -264,10 +264,11 @@ if(devices.real().deviceType === 'desktop') {
                 this.expectedItemContainerAttrs = {
                     role: 'listbox',
                     tabindex: '0',
-                    'aria-label': 'List'
+                    'aria-label': 'Items'
                 };
                 this.expectedListAttrs = {
-                    role: 'application'
+                    role: 'group',
+                    'aria-roledescription': 'list',
                 };
             },
             afterEach: function() {
@@ -327,7 +328,7 @@ if(devices.real().deviceType === 'desktop') {
                     assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
 
                     helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'List');
+                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'Items');
 
                     helper.widget.option(dataSourcePropertyName, []);
                     assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
