@@ -1307,6 +1307,21 @@ const Calendar = Editor.inherit({
         this._afterView?.option(optionName, newValue);
     },
 
+    _setViewsMinOption: function(min) {
+        this._restoreViewsMinMaxOptions();
+        this._updateViewsOption('min', this._convertToDate(min));
+    },
+
+    _setViewsMaxOption: function(max) {
+        this._restoreViewsMinMaxOptions();
+        this._updateViewsOption('max', this._convertToDate(max));
+    },
+
+    _restoreViewsMinMaxOptions: function() {
+        this._updateViewsOption('min', this._getMinDate());
+        this._updateViewsOption('max', this._getMaxDate());
+    },
+
     _updateAriaSelected: function(value, previousValue) {
         previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
         value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
