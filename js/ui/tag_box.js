@@ -511,8 +511,10 @@ const TagBox = SelectBox.inherit({
 
         let newValue;
 
-        if(isRemoved) {
-            newValue = value.split(' ').filter(item => item !== id).join(' ');
+        if(!id) {
+            newValue = undefined;
+        } else if(isRemoved) {
+            newValue = value?.split(' ').filter(item => item !== id).join(' ');
         } else {
             newValue = [value, id].filter(Boolean).join(' ');
         }
@@ -1103,6 +1105,8 @@ const TagBox = SelectBox.inherit({
                 }
             });
         }
+
+        this._updateElementAria();
     },
 
     _renderEmptyState: function() {
@@ -1148,6 +1152,7 @@ const TagBox = SelectBox.inherit({
             }
 
             $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
+            this._updateElementAria($tag.attr('id'));
         } else {
             const tagId = `dx-${new Guid()}`;
 
