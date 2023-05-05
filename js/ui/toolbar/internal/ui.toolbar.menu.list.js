@@ -110,10 +110,6 @@ export default class ToolbarMenuList extends ListBase {
         }
     }
 
-    _getAriaTarget() {
-        return this.option('_areaTarget') ?? super._getAriaTarget();
-    }
-
     _clean() {
         this._getSections().empty();
         super._clean();

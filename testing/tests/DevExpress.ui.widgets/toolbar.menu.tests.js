@@ -545,7 +545,8 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             this.instance.option('focusStateEnabled', true);
             assert.ok(this.overflowMenu.list().option('focusStateEnabled'));
 
-            assert.equal(this.overflowMenu.$list().attr('tabindex'), -1, 'tabindex for list is -1');
+            const $listItemContainer = this.overflowMenu.$list().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+            assert.equal($listItemContainer.attr('tabindex'), -1, 'tabindex for list is -1');
         });
 
         QUnit.test('enter/space keys', function(assert) {
@@ -686,10 +687,12 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         const $listItem = this.$element.find('.dx-list-item:first');
 
         this.overflowMenu.click();
-        this.overflowMenu.list().option('focusedElement', $listItem);
+        const list = this.overflowMenu.list();
+        list.option('focusedElement', $listItem);
 
-        assert.notEqual(this.$element.attr('aria-activedescendant'), undefined);
-        assert.strictEqual(this.$element.attr('aria-activedescendant'), $listItem.attr('id'));
+        const $listItemContainer = list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+        assert.notEqual($listItemContainer.attr('aria-activedescendant'), undefined);
+        assert.strictEqual($listItemContainer.attr('aria-activedescendant'), $listItem.attr('id'));
     });
 
     QUnit.test('aria-expanded property', function(assert) {

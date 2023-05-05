@@ -636,7 +636,7 @@ const TagBox = SelectBox.inherit({
 
     _getFirstPopupElement: function() {
         return this.option('showSelectionControls')
-            ? this._list.$element()
+            ? this._list._focusTarget()
             : this.callBase();
     },
 

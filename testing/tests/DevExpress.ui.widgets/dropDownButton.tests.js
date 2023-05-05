@@ -29,6 +29,7 @@ const FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 QUnit.testStart(() => {
     const markup =
@@ -45,6 +46,10 @@ const getPopup = (instance) => {
 
 const getList = (instance) => {
     return instance._list;
+};
+
+const getListKeyboard = (dropDownButton) => {
+    return keyboardMock($(getList(dropDownButton).element()).find('[tabindex=0]'));
 };
 
 const getButtonGroup = (instance) => {
@@ -2229,7 +2234,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
@@ -2250,7 +2255,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
@@ -2271,7 +2276,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'selectionChanged is raised');
@@ -2290,7 +2295,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
 
@@ -2312,7 +2317,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'onSelectionChanged is raised');
@@ -2373,7 +2378,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('esc');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2398,7 +2403,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('left');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2413,7 +2418,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('right');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2436,7 +2441,7 @@ QUnit.module('keyboard navigation', {
             .press('down')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('enter');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2462,7 +2467,7 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(this.dropDownButton.option('dropDownOptions.visible'), 'popup is opened');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         const event = listKeyboard.press('tab').event;
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2703,13 +2708,13 @@ QUnit.module('Accessibility', {
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
             const instance = this.createInstance({ opened: true });
 
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
         });
 
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is empty on init`, function(assert) {
@@ -2718,13 +2723,13 @@ QUnit.module('Accessibility', {
                 opened: true,
             });
 
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
-            assert.strictEqual($(`.${LIST_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
         });
 
         [[1, 2, 3], []].forEach(items => {
