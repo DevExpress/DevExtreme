@@ -73,7 +73,7 @@
   cursor: pointer;
 
   &::before {
-    content: ".";
+    content: "";
     color: transparent;
     display: inline-block;
     width: 0;
