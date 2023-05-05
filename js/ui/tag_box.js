@@ -19,6 +19,7 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/u
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
+import Guid from '../core/guid';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -42,7 +43,6 @@ const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -181,11 +181,18 @@ const TagBox = SelectBox.inherit({
         return position.start === 0 && position.end === 0;
     },
 
+    _updateInputAriaActiveDescendant(id) {
+        this.setAria('activedescendant', id, this._input());
+    },
+
     _moveTagFocus: function(direction, clearOnBoundary) {
         if(!this._$focusedTag) {
             const tagElements = this._tagElements();
+
             this._$focusedTag = direction === 'next' ? tagElements.first() : tagElements.last();
+
             this._toggleFocusClass(true, this._$focusedTag);
+            this._updateInputAriaActiveDescendant(this._$focusedTag.attr('id'));
             return;
         }
 
@@ -193,8 +200,10 @@ const TagBox = SelectBox.inherit({
 
         if($nextFocusedTag.length > 0) {
             this._replaceFocusedTag($nextFocusedTag);
+            this._updateInputAriaActiveDescendant($nextFocusedTag.attr('id'));
         } else if(clearOnBoundary || (direction === 'next' && this._isEditable())) {
             this._clearTagFocus();
+            this._updateInputAriaActiveDescendant();
         }
     },
 
@@ -210,6 +219,7 @@ const TagBox = SelectBox.inherit({
         }
 
         this._toggleFocusClass(false, this._$focusedTag);
+        this._updateInputAriaActiveDescendant();
         delete this._$focusedTag;
     },
 
@@ -226,9 +236,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _setLabelContainerAria: function() {
-        const $input = this.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        this.setAria('labelledby', this._label.getId(), $input);
+        this.setAria('labelledby', this._label.getId(), this._input());
     },
 
     _scrollContainer: function(direction) {
@@ -492,9 +500,49 @@ const TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option('searchEnabled') || this.option('acceptCustomValue')))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
+        const elementAria = {
+            'role': 'group',
+            'roledescription': 'tagbox',
+        };
+
+        this.setAria(elementAria, this.$element());
+
         this._initTagTemplate();
 
         this.callBase();
+    },
+
+    _getNewLabelId(actualId, newId, shouldRemove) {
+        if(!actualId) {
+            return newId;
+        }
+
+        if(shouldRemove) {
+            if(actualId === newId) {
+                return undefined;
+            }
+
+            return actualId
+                .split(' ')
+                .filter(id => id !== newId)
+                .join(' ');
+        }
+
+        return `${actualId} ${newId}`;
+    },
+
+    _updateElementAria(id, shouldRemove) {
+        const shouldClearLabel = !id;
+
+        if(shouldClearLabel) {
+            this.setAria('labelledby', undefined, this.$element());
+            return;
+        }
+
+        const labelId = this.$element().attr('aria-labelledby');
+        const newLabelId = this._getNewLabelId(labelId, id, shouldRemove);
+
+        this.setAria('labelledby', newLabelId, this.$element());
     },
 
     _render: function() {
@@ -1080,6 +1128,8 @@ const TagBox = SelectBox.inherit({
                 }
             });
         }
+
+        this._updateElementAria();
     },
 
     _renderEmptyState: function() {
@@ -1125,8 +1175,11 @@ const TagBox = SelectBox.inherit({
             }
 
             $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
+            this._updateElementAria($tag.attr('id'));
         } else {
-            $tag = this._createTag(value, $input);
+            const tagId = `dx-${new Guid()}`;
+
+            $tag = this._createTag(value, $input, tagId);
 
             if(isDefined(item)) {
                 this._applyTagTemplate(itemModel, $tag);
@@ -1134,6 +1187,8 @@ const TagBox = SelectBox.inherit({
                 $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
                 this._applyTagTemplate(value, $tag);
             }
+
+            this._updateElementAria(tagId);
         }
     },
 
@@ -1162,8 +1217,9 @@ const TagBox = SelectBox.inherit({
         return result;
     },
 
-    _createTag: function(value, $input) {
+    _createTag: function(value, $input, tagId) {
         return $('<div>')
+            .attr('id', tagId)
             .addClass(TAGBOX_TAG_CLASS)
             .data(TAGBOX_TAG_DATA_KEY, value)
             .insertBefore($input);
@@ -1199,7 +1255,10 @@ const TagBox = SelectBox.inherit({
         }
 
         const itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
+        const itemId = $tag.attr('id');
+
         this._removeTagWithUpdate(itemValue);
+        this._updateElementAria(itemId, true);
         this._refreshTagElements();
     },
 
