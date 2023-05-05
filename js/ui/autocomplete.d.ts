@@ -136,3 +136,125 @@ export type Properties = dxAutocompleteOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxAutocompleteOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onChange
+ * @type_function_param1 e:{ui/autocomplete:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onClosed
+ * @type_function_param1 e:{ui/autocomplete:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onContentReady
+ * @type_function_param1 e:{ui/autocomplete:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onCopy
+ * @type_function_param1 e:{ui/autocomplete:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onCut
+ * @type_function_param1 e:{ui/autocomplete:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onDisposing
+ * @type_function_param1 e:{ui/autocomplete:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onEnterKey
+ * @type_function_param1 e:{ui/autocomplete:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onFocusIn
+ * @type_function_param1 e:{ui/autocomplete:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onFocusOut
+ * @type_function_param1 e:{ui/autocomplete:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onInitialized
+ * @type_function_param1 e:{ui/autocomplete:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onInput
+ * @type_function_param1 e:{ui/autocomplete:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onItemClick
+ * @type_function_param1 e:{ui/autocomplete:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onKeyDown
+ * @type_function_param1 e:{ui/autocomplete:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onKeyUp
+ * @type_function_param1 e:{ui/autocomplete:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onOpened
+ * @type_function_param1 e:{ui/autocomplete:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onOptionChanged
+ * @type_function_param1 e:{ui/autocomplete:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onPaste
+ * @type_function_param1 e:{ui/autocomplete:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/autocomplete:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxAutocompleteOptions.onValueChanged
+ * @type_function_param1 e:{ui/autocomplete:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};

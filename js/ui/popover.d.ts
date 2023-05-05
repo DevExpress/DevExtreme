@@ -207,3 +207,67 @@ export type Properties = dxPopoverOptions<PopoverInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onResize' | 'onResizeEnd' | 'onResizeStart'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxPopoverOptions.onContentReady
+ * @type_function_param1 e:{ui/popover:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onDisposing
+ * @type_function_param1 e:{ui/popover:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onHidden
+ * @type_function_param1 e:{ui/popover:HiddenEvent}
+ */
+onHidden?: ((e: HiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onHiding
+ * @type_function_param1 e:{ui/popover:HidingEvent}
+ */
+onHiding?: ((e: HidingEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onInitialized
+ * @type_function_param1 e:{ui/popover:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onOptionChanged
+ * @type_function_param1 e:{ui/popover:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onShowing
+ * @type_function_param1 e:{ui/popover:ShowingEvent}
+ */
+onShowing?: ((e: ShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onShown
+ * @type_function_param1 e:{ui/popover:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onTitleRendered
+ * @type_function_param1 e:{ui/popover:TitleRenderedEvent}
+ */
+onTitleRendered?: ((e: TitleRenderedEvent) => void);
+};

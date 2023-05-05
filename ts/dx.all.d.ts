@@ -19681,10 +19681,24 @@ declare module DevExpress.ui {
    */
   export class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> {}
   module dxRecurrenceEditor {
+    export type ContentReadyEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor>;
+    export type DisposingEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxRecurrenceEditor>;
+    export type OptionChangedEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor> &
+        DevExpress.events.ChangedOptionInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type Properties = dxRecurrenceEditorOptions;
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxRecurrenceEditor,
+      Event
+    > &
+      DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
