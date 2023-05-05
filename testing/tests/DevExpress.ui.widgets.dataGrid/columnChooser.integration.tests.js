@@ -612,6 +612,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'visible', false);
         dataGrid.columnOption(1, 'visible', false);
         dataGrid.endUpdate();
+
         // assert
         assert.roughEqual(treeView.getScrollable().scrollTop(), 50, 5, 'scroll position');
     });
