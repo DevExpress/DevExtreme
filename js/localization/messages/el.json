@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Ανάμεσα",
         "dxDataGrid-filterRowOperationBetweenStartText": "Εκκίνηση",
         "dxDataGrid-filterRowOperationBetweenEndText": "Τέλος",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Εισαγωγή φίλτρου",
         "dxDataGrid-trueText": "Αληθές",
         "dxDataGrid-falseText": "Ψευδές",

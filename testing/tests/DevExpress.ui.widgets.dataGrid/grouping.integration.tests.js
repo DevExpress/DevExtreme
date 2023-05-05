@@ -742,6 +742,102 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.getCellElement(1, 1)).get(0), cell1_1, 'expand cell in the second row is not re-rendered');
         assert.strictEqual($(dataGrid.getCellElement(1, 2)).text(), 'Name: Name 1 (100)', 'second group row text');
     });
+
+    QUnit.test('Load options should contain the \'langParams\' parameter after expanding groups', function(assert) {
+        // arrange
+        const arrayStore = new ArrayStore({
+            key: 'id',
+            data: [
+                { id: 0, text1: 'izmir', text2: 'test', groupId: 0 },
+                { id: 1, text1: 'İzmi̇r', text2: 'test', groupId: 0 },
+                { id: 2, text1: 'İZMİR', text2: 'iz', groupId: 0 },
+                { id: 3, text1: 'İZMİR', text2: 'İz', groupId: 0 },
+                { id: 4, text1: 'İZMİR', text2: 'İZ', groupId: 0 },
+                { id: 5, text1: 'Test', text2: 'test', groupId: 1 },
+            ]
+        });
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: {
+                key: 'id',
+                sort: 'text2',
+                langParams: {
+                    locale: 'tr',
+                    collatorOptions: { caseFirst: 'upper' }
+                },
+                load: function(options) {
+                    const d = $.Deferred();
+
+                    // assert
+                    assert.notEqual(options.langParams, undefined, 'loadOptions.langParams is defined');
+
+                    setTimeout(function() {
+                        const result = {};
+                        arrayStore.load(options).done(function(data) {
+                            result.data = data;
+
+                            if(options.group) {
+                                data.forEach(item => {
+                                    item.count = item.items.length;
+                                    item.items = null;
+                                });
+                            }
+                        });
+                        if(options.requireGroupCount) {
+                            arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                                result.groupCount = groupedData.length;
+                            });
+                        }
+                        if(options.requireTotalCount) {
+                            arrayStore.totalCount(options).done(function(totalCount) {
+                                result.totalCount = totalCount;
+                            });
+                        }
+
+                        d.resolve(result);
+                    });
+
+                    return d;
+                },
+                group: [{
+                    selector: 'groupId',
+                    isExpanded: false
+                }, {
+                    selector: 'text1',
+                    isExpanded: false
+                }]
+            },
+            remoteOperations: {
+                groupPaging: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            grouping: {
+                autoExpandAll: false
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'row count');
+        assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.data.key), [0, 1], 'visible rows');
+
+        // act
+        dataGrid.expandRow([0]);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 5, 'row count');
+        assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.data.key), [0, 'İZMİR', 'izmir', 'İzmi̇r', 1], 'visible rows');
+
+        dataGrid.expandRow([0, 'İZMİR']);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 8, 'row count');
+        assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.rowType === 'group' ? row.data.key : row.data.text2), [0, 'İZMİR', 'İZ', 'İz', 'iz', 'izmir', 'İzmi̇r', 1], 'visible rows');
+    });
 });
 
 

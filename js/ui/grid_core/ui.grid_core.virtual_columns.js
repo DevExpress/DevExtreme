@@ -206,7 +206,7 @@ const ColumnsControllerExtender = (function() {
 
             if(rowCount > 1 && typeof rowIndex === 'number') {
                 const columnsInfo = [];
-                for(let i = 0; i < rowCount; i++) {
+                for(let i = 0; i <= rowCount; i++) {
                     columnsInfo.push(this.callBase(i));
                 }
                 beginFixedColumns = createColumnsInfo(columnsInfo, 0, beginFixedColumns.length)[rowIndex] || [];

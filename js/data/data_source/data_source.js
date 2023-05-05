@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import { isString, isNumeric, isBoolean, isDefined, isObject } from '../../core/utils/type';
+import { isString, isNumeric, isBoolean, isDefined, isObject, isEmptyObject } from '../../core/utils/type';
 import { throttleChanges } from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
@@ -169,7 +169,7 @@ export const DataSource = Class.inherit({
 
     _extractLoadOptions(options) {
         const result = {};
-        let names = ['sort', 'filter', 'select', 'group', 'requireTotalCount'];
+        let names = ['sort', 'filter', 'langParams', 'select', 'group', 'requireTotalCount'];
         const customNames = this._store._customLoadOptions();
 
         if(customNames) {
@@ -242,7 +242,6 @@ export const DataSource = Class.inherit({
         if(newFilter === undefined) {
             return this._storeLoadOptions.filter;
         }
-
         this._storeLoadOptions.filter = newFilter;
         this.pageIndex(0);
     },
@@ -498,6 +497,10 @@ export const DataSource = Class.inherit({
         const operationId = this._operationManager.add(deferred);
         const storeLoadOptions = this._createStoreLoadOptions();
 
+        if(this._store && !isEmptyObject(storeLoadOptions?.langParams)) {
+            this._store._langParams = { ...this._store._langParams, ...storeLoadOptions.langParams };
+        }
+
         deferred.always(() => this._operationManager.remove(operationId));
 
         return {
@@ -539,6 +542,7 @@ export const DataSource = Class.inherit({
 
     _createStoreLoadOptions() {
         const result = extend({}, this._storeLoadOptions);
+
         this._addSearchOptions(result);
 
         if(this._paginate) {

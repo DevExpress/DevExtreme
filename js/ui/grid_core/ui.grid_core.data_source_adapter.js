@@ -137,9 +137,11 @@ export default modules.Controller.inherit((function() {
                 if(skips.length) {
                     result.isContinuation = true;
                 }
-                if(takes.length) {
-                    result.isContinuationOnNextPage = true;
+
+                if(take) {
+                    result.isContinuationOnNextPage = cacheItem.count > take;
                 }
+
                 for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
                     const childCacheItem = items[i + skip];
                     const isLast = i + 1 === take;
@@ -565,7 +567,8 @@ export default modules.Controller.inherit((function() {
                 summary: !remoteOperations.summary,
                 skip: !remoteOperations.paging,
                 take: !remoteOperations.paging,
-                requireTotalCount: cachedExtra && 'totalCount' in cachedExtra || !remoteOperations.paging
+                requireTotalCount: cachedExtra && 'totalCount' in cachedExtra || !remoteOperations.paging,
+                langParams: !remoteOperations.filtering || !remoteOperations.sorting
             };
 
             each(options.storeLoadOptions, function(optionName, optionValue) {
@@ -836,7 +839,7 @@ export default modules.Controller.inherit((function() {
                 const store = dataSource.store();
                 const dataSourceLoadOptions = dataSource.loadOptions();
                 const loadResult = {
-                    storeLoadOptions: options,
+                    storeLoadOptions: extend({}, options, { langParams: dataSourceLoadOptions?.langParams }),
                     isCustomLoading: true
                 };
 

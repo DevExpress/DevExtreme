@@ -2792,6 +2792,21 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.ok(true, 'no exceptions');
     });
 
+    // T1047481
+    QUnit.test('Search box should render aria-label attribute', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        this.options.filterRow.visible = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // assert
+        assert.equal(this.columnHeadersView.element().find('.dx-menu').first().attr('aria-label'), 'Search box');
+    });
+
     if(device.deviceType === 'desktop') {
     // T306751
         QUnit.testInActiveWindow('Filter range - keyboard navigation', function(assert) {
