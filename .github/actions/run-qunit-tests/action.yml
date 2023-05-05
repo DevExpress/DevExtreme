@@ -16,9 +16,6 @@ inputs:
   userAgent:
     description: "User agent string to be passed to the browser"
     default: ""
-  useShadowDom:
-    description: "Specifies if shadow DOM should be utilized"
-    default: "false"
   timezone:
     description: "Timezone for the test environment"
     default: ""
@@ -27,9 +24,6 @@ inputs:
     default: "false"
   headless:
     description: "Specifies if the browser should run in headless mode"
-    default: "true"
-  useCsp:
-    description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
 
 runs:
@@ -100,11 +94,9 @@ runs:
         BROWSER: ${{ inputs.browser }}
         JQUERY: ${{ inputs.useJQuery }}
         MOBILE_UA: ${{ inputs.userAgent }}
-        SHADOW_DOM: ${{ inputs.useShadowDom }}
         TZ: ${{ inputs.timezone }}
         PERF: ${{ inputs.isPerformance }}
         NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}
-        NO_CSP: ${{ inputs.useCsp == 'false' && 'true' || 'false' }}
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
