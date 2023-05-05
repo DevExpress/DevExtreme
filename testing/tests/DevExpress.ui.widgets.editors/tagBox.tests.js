@@ -7662,10 +7662,11 @@ QUnit.module('accessibility', () => {
         assert.strictEqual($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
     });
 
-    QUnit.test('TagBox element should have a role=application', function(assert) {
+    QUnit.test('TagBox element should have a correctly aria attributes', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox();
 
-        assert.strictEqual($tagBox.attr('role'), 'application', 'role was set correctly');
+        assert.strictEqual($tagBox.attr('role'), 'group', 'role is set correctly');
+        assert.strictEqual($tagBox.attr('aria-roledescription'), 'tagbox', 'aria-roledescription is set correctly');
     });
 
     QUnit.test('TagBox element should have an aria-labelledby attribute with correct ids', function(assert) {

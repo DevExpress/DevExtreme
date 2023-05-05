@@ -496,10 +496,16 @@ const TagBox = SelectBox.inherit({
         const isSingleLineMode = !this.option('multiline');
 
         this.$element()
-            .attr('role', 'application')
             .addClass(TAGBOX_CLASS)
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option('searchEnabled') || this.option('acceptCustomValue')))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
+
+        const elementAria = {
+            'role': 'group',
+            'roledescription': 'tagbox',
+        };
+
+        this.setAria(elementAria, this.$element());
 
         this._initTagTemplate();
 
