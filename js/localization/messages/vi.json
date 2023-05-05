@@ -119,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Giữa",
         "dxDataGrid-filterRowOperationBetweenStartText": "Bắt đầu",
         "dxDataGrid-filterRowOperationBetweenEndText": "Kết thúc",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Áp dụng bộ lọc",
         "dxDataGrid-trueText": "đúng",
         "dxDataGrid-falseText": "sai",

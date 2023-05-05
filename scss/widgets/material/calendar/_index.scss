@@ -20,6 +20,11 @@ $material-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !
   height: $material-calendar-legacy-height;
   min-height: $material-calendar-legacy-height;
   background-color: $calendar-bg;
+
+  &.dx-calendar-multiview {
+    width: $material-calendar-legacy-width * 2;
+    min-width: $material-calendar-legacy-width * 2;
+  }
 }
 
 .dx-calendar-navigator-previous-view,

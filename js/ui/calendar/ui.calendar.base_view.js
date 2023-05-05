@@ -369,6 +369,8 @@ const BaseView = Widget.inherit({
             case 'onCellHover':
                 this._createCellHoverAction();
                 break;
+            case 'min':
+            case 'max':
             case 'disabledDates':
             case 'cellTemplate':
                 this._invalidate();

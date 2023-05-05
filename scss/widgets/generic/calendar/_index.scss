@@ -17,6 +17,11 @@ $generic-week-number-cell-bg-color: color.change(darken($base-bg, 12%), $alpha: 
   height: $generic-calendar-legacy-height;
   min-height: $generic-calendar-legacy-height;
   background-color: $calendar-bg;
+
+  &.dx-calendar-multiview {
+    width: $generic-calendar-legacy-width * 2;
+    min-width: $generic-calendar-legacy-width * 2;
+  }
 }
 
 .dx-calendar-navigator {
