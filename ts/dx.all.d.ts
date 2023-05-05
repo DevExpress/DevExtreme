@@ -18306,30 +18306,6 @@ declare module DevExpress.ui {
      */
     toggle(showing: boolean): DevExpress.core.utils.DxPromise<boolean>;
   }
-  module dxOverlay {
-    export type ContentReadyEvent<TKey = any> = DevExpress.events.EventInfo<
-      dxOverlay<TKey>
-    >;
-    export type DisposingEvent<TKey = any> = DevExpress.events.EventInfo<
-      dxOverlay<TKey>
-    >;
-    export type HiddenEvent<TKey = any> = DevExpress.events.EventInfo<
-      dxOverlay<TKey>
-    >;
-    export type HidingEvent<TKey = any> = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxOverlay<TKey>>;
-    export type InitializedEvent<TKey = any> =
-      DevExpress.events.InitializedEventInfo<dxOverlay<TKey>>;
-    export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
-      dxOverlay<TKey>
-    > &
-      DevExpress.events.ChangedOptionInfo;
-    export type ShowingEvent<TKey = any> = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxOverlay<TKey>>;
-    export type ShownEvent<TKey = any> = DevExpress.events.EventInfo<
-      dxOverlay<TKey>
-    >;
-  }
   /**
    * [descr:dxOverlayAnimation]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -18423,19 +18399,23 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.onHidden]
      */
-    onHidden?: (e: DevExpress.ui.dxOverlay.HiddenEvent<TComponent>) => void;
+    onHidden?: (e: DevExpress.events.EventInfo<TComponent>) => void;
     /**
      * [descr:dxOverlayOptions.onHiding]
      */
-    onHiding?: (e: DevExpress.ui.dxOverlay.HidingEvent<TComponent>) => void;
+    onHiding?: (
+      e: DevExpress.events.Cancelable & DevExpress.events.EventInfo<TComponent>
+    ) => void;
     /**
      * [descr:dxOverlayOptions.onShowing]
      */
-    onShowing?: (e: DevExpress.ui.dxOverlay.ShowingEvent<TComponent>) => void;
+    onShowing?: (
+      e: DevExpress.events.Cancelable & DevExpress.events.EventInfo<TComponent>
+    ) => void;
     /**
      * [descr:dxOverlayOptions.onShown]
      */
-    onShown?: (e: DevExpress.ui.dxOverlay.ShownEvent<TComponent>) => void;
+    onShown?: (e: DevExpress.events.EventInfo<TComponent>) => void;
     /**
      * [descr:dxOverlayOptions.position]
      */
