@@ -111,7 +111,7 @@
 
     &.dx-state-active {
       span {
-        background-color: cell-active-bg;
+        background-color: $cell-active-bg;
       }
 
       &.dx-calendar-empty-cell {
