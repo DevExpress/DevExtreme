@@ -512,20 +512,37 @@ const TagBox = SelectBox.inherit({
         this.callBase();
     },
 
-    _updateElementAria(id, isRemoved) {
-        const value = this.$element().attr('aria-labelledby');
-
-        let newValue;
-
-        if(!id) {
-            newValue = undefined;
-        } else if(isRemoved) {
-            newValue = value?.split(' ').filter(item => item !== id).join(' ');
-        } else {
-            newValue = [value, id].filter(Boolean).join(' ');
+    _getNewLabelId(actualId, newId, shouldRemove) {
+        if(!actualId) {
+            return newId;
         }
 
-        this.setAria('labelledby', newValue || undefined, this.$element());
+        if(shouldRemove) {
+            if(actualId === newId) {
+                return undefined;
+            }
+
+            return actualId
+                .split(' ')
+                .filter(id => id !== newId)
+                .join(' ');
+        }
+
+        return `${actualId} ${newId}`;
+    },
+
+    _updateElementAria(id, shouldRemove) {
+        const shouldClearLabel = !id;
+
+        if(shouldClearLabel) {
+            this.setAria('labelledby', undefined, this.$element());
+            return;
+        }
+
+        const labelId = this.$element().attr('aria-labelledby');
+        const newLabelId = this._getNewLabelId(labelId, id, shouldRemove);
+
+        this.setAria('labelledby', newLabelId, this.$element());
     },
 
     _render: function() {

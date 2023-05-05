@@ -7662,7 +7662,7 @@ QUnit.module('accessibility', () => {
         assert.strictEqual($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
     });
 
-    QUnit.test('TagBox element should have a correctly aria attributes', function(assert) {
+    QUnit.test('TagBox element should have correct aria attributes', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox();
 
         assert.strictEqual($tagBox.attr('role'), 'group', 'role is set correctly');
@@ -7717,11 +7717,11 @@ QUnit.module('accessibility', () => {
         assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
     });
 
-    QUnit.test('input should have aria-activedescendant with correct id if tag focused', function(assert) {
+    QUnit.test('input should have aria-activedescendant with correct id if tag is focused', function(assert) {
         const items = [1, 2];
         const $tagBox = $('#tagBox').dxTagBox({
             items,
-            value: [items[0], items[1]],
+            value: items,
         });
         const tagBox = $tagBox.dxTagBox('instance');
 
