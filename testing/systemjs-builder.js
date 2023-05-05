@@ -290,6 +290,10 @@ const transpileJsVendors = async(Builder) => {
         {
             filePath: path.join(root, 'node_modules/angular/index.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/angular.js')
+        },
+        {
+            filePath: path.join(root, 'node_modules/intl/index.js'),
+            destPath: path.join(root, 'artifacts/js-systemjs/intl.js')
         }
     ];
 
@@ -340,7 +344,7 @@ const updateBuilder = () => {
     patchBuilder(
         'trace.js',
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        `load.depMap[dep] = normalized.includes('node_modules/angular') ?
+        `load.depMap[dep] = normalized.includes('node_modules/angular') || normalized.includes('node_modules/intl') ?
             getCanonicalName(loader, normalized) :
             dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")
                 .replace("/node_modules/", "/../node_modules/")`
