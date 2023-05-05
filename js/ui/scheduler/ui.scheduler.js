@@ -1851,9 +1851,8 @@ class Scheduler extends Widget {
                 { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
             ],
             popupOptions: {
-                copyRootClassesToWrapper: true,
-                _ignoreCopyRootClassesToWrapperDeprecation: true
-            },
+                wrapperAttr: { class: 'dx-dialog' }
+            }
         });
 
         return this._recurrenceDialog.show();
