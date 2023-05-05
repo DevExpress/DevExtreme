@@ -50,6 +50,12 @@ $calendar-cell-selected-bg: null !default;
 $calendar-cell-active-bg: null !default;
 
 /**
+* $name 80. Border color
+* $type color
+*/
+$calendar-border-color: $base-border-color !default;
+
+/**
 * $name 40. Date navigator border color
 * $type color
 */

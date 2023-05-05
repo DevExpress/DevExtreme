@@ -6,17 +6,19 @@
   $week-number-cell-border-radius,
   $cell-font-size,
   $header-color,
+  $border-color
 ) {
   .dx-calendar-body {
     table {
       .dx-week-number-header {
         font-size: $cell-font-size;
-        width: 2em;
+        width: calc(2em + 8px);
       }
 
       .dx-calendar-week-number-cell {
         color: $cell-other-color;
         background: $week-number-cell-bg-color;
+        width: 2em;
       }
     }
 
@@ -26,6 +28,7 @@
       }
 
       th {
+        box-shadow: inset 0 -1px 0 $border-color;
         color: $header-color;
       }
     }
