@@ -48,22 +48,8 @@ $calendar-cell-selected-bg: null !default;
 * $type color
 */
 $calendar-cell-active-bg: null !default;
-
-/**
-* $name 40. Date navigator border color
-* $type color
-*/
-$calendar-navigator-border-color: null !default;
 $calendar-navigator-border-radius: null !default;
-
-/**
-* $name 50. Hovered state date navigator border color
-* $type color
-*/
-$calendar-navigator-hover-border-color: null !default;
 $calendar-cell-contoured-border-color: null !default;
-$calendar-button-caption-active-bg: null !default;
-$calendar-button-caption-color: null !default;
 $calendar-cell-contoured-border-radius: $base-border-radius !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
@@ -75,12 +61,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: lighten($base-accent, 14%) !default; // #f05b41 => #fa9887
-  $calendar-navigator-border-color: $base-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $base-accent !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 
 @if $color == "contrast" {
@@ -90,12 +72,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-other-hover-color: $base-text-color !default;
   $calendar-cell-selected-bg: $base-inverted-bg !default;
   $calendar-cell-active-bg: $base-accent !default;
-  $calendar-navigator-border-color: $base-border-color !default;
   $calendar-navigator-border-radius: $base-border-radius !default;
-  $calendar-navigator-hover-border-color: $base-border-color !default;
   $calendar-cell-contoured-border-color: $base-border-color !default;
-  $calendar-button-caption-active-bg: $base-inverted-bg !default;
-  $calendar-button-caption-color: $base-text-color !default;
 }
 
 @if $color == "dark" {
@@ -105,12 +83,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change(lighten($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 
 @if $color == "darkmoon" {
@@ -120,12 +94,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change(lighten($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 
 @if $color == "darkviolet" {
@@ -135,12 +105,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change(lighten($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $base-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 
 @if $color == "greenmist" {
@@ -150,12 +116,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 
 @if $color == "light" {
@@ -165,12 +127,8 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 
 @if $color == "softblue" {
@@ -180,11 +138,7 @@ $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $base-border-color !default;
   $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $base-border-color !default;
   $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
 }
 

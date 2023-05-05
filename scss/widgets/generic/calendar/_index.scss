@@ -22,25 +22,10 @@ $generic-week-number-cell-bg-color: color.change(darken($base-bg, 12%), $alpha: 
 .dx-calendar-navigator {
   .dx-button {
     border-radius: 0;
-    border-color: $calendar-navigator-border-color;
-
-    &.dx-state-hover {
-      border-color: $calendar-navigator-hover-border-color;
-    }
   }
 
   .dx-calendar-caption-button {
     font-weight: 600;
-
-    &.dx-button {
-      &.dx-state-active {
-        background-color: $calendar-button-caption-active-bg;
-      }
-
-      .dx-button-content {
-        color: $calendar-button-caption-color;
-      }
-    }
   }
 
   .dx-calendar-navigator-previous-view {
