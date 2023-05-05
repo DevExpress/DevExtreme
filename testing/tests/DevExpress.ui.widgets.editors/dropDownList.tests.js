@@ -1709,7 +1709,7 @@ QUnit.module('aria accessibility', moduleConfig, () => {
             assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
             assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
