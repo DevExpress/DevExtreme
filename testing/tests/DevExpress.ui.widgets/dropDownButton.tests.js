@@ -2708,13 +2708,13 @@ QUnit.module('Accessibility', {
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
             const instance = this.createInstance({ opened: true });
 
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
             assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
         });
 
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is empty on init`, function(assert) {
@@ -2726,7 +2726,7 @@ QUnit.module('Accessibility', {
             assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'List');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
             assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
