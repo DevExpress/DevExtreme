@@ -16,7 +16,7 @@
 
       .dx-calendar-week-number-cell {
         color: $cell-other-color;
-        background: $week-number-cell-bg-color;
+        background-color: $week-number-cell-bg-color;
         width: 2em;
         margin-right: 0.5em;
 
@@ -69,7 +69,6 @@
   $cell-hover-color,
   $cell-active-bg,
   $cell-selected-bg,
-  $cell-selected-color,
   $cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
@@ -123,8 +122,14 @@
 
     &.dx-calendar-selected-date {
       span {
-        color: $cell-selected-color;
         background-color: $cell-selected-bg;
+      }
+
+      &.dx-state-hover,
+      &.dx-state-active {
+        span {
+          background-color: $cell-active-bg;
+        }
       }
     }
 
@@ -139,6 +144,13 @@
       span {
         color: $base-inverted-text-color;
         background-color: $base-accent;
+      }
+
+      &.dx-state-hover,
+      &.dx-state-active {
+        span {
+          background-color: $base-accent;
+        }
       }
     }
 
@@ -247,11 +259,9 @@
 
     &.dx-calendar-empty-cell {
       cursor: default;
-      color: color.change($cell-text-color, $alpha: 0.25);
+      color: color.change($cell-text-color, $alpha: 0.24);
 
-      &.dx-state-hover:not(.dx-calendar-selected-date) {
-        color: color.change($cell-text-color, $alpha: 0.25);
-
+      &.dx-state-hover {
         span {
           background-color: transparent;
         }

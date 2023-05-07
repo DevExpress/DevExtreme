@@ -8,7 +8,7 @@
 
 // adduse
 
-$material-week-number-cell-bg-color: color.change(darken($base-bg, 12%), $alpha: 0.5) !default;
+$material-week-number-cell-bg-color: color.change(darken($base-bg, 12%), $alpha: 0.4) !default;
 $material-calendar-cell-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
 $material-calendar-cell-selected-bg: color.change($calendar-cell-selected-bg, $alpha: 0.32) !default;
 $material-calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
@@ -54,7 +54,6 @@ $material-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !
   $calendar-cell-hover-color,
   $material-calendar-cell-active-bg,
   $material-calendar-cell-selected-bg,
-  $calendar-color,
   $material-cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
