@@ -16,6 +16,13 @@ export default class CalendarView extends Widget {
     return this.element.find(`td[data-value='${dateSerialization.serializeDate(date, dateUtils.getShortDateFormat())}']`);
   }
 
+  getMonthCellByDate(date: Date): Selector {
+    const foundDate = new Date(date);
+    foundDate.setDate(1);
+
+    return this.element.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+  }
+
   // eslint-disable-next-line class-methods-use-this
   getDateByOffset(date: Date, offset: number): Date {
     const newDate = new Date(date);
