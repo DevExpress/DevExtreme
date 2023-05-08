@@ -1270,6 +1270,7 @@ const Calendar = Editor.inherit({
     },
 
     _refreshViews: function() {
+        this._resetActiveState();
         this._disposeViews();
         this._renderViews();
     },
