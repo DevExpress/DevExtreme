@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPieChartModule, DxSelectBoxModule } from 'devextreme-angular';
 import { getPalette } from 'devextreme/viz/palette';
@@ -44,6 +44,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxPieChartModule,
     DxSelectBoxModule,
   ],

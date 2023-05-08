@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule } from 'devextreme-angular';
 
@@ -67,6 +67,7 @@ function customizeText(arg: any) {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxChartModule,
   ],
   declarations: [AppComponent],

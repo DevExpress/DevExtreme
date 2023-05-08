@@ -1,7 +1,7 @@
 import {
   NgModule, Component, enableProdMode, AfterViewInit,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxFormModule,
@@ -88,6 +88,7 @@ export class AppComponent implements AfterViewInit {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxFormModule,
   ],
   declarations: [AppComponent],

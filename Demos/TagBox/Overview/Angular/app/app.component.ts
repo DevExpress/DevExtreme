@@ -1,5 +1,5 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTagBoxModule, DxTemplateModule } from 'devextreme-angular';
 import ArrayStore from 'devextreme/data/array_store';
@@ -46,6 +46,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxTemplateModule,
     DxTagBoxModule,
   ],
