@@ -177,6 +177,7 @@ const columnChooserMembers = {
 
     setPopupAttributes: function() {
         const isSelectMode = this.isSelectMode();
+        const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
 
         this._popupContainer.setAria({
             role: 'dialog',
@@ -189,7 +190,7 @@ const columnChooserMembers = {
 
         this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
 
-        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
+        if(isSelectMode && !isBandColumnsUsed) {
             this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
         }
     },
@@ -374,9 +375,9 @@ const columnChooserMembers = {
         const isRecursiveWithColumns = isRecursive && column.hasColumns;
 
         if(!isRecursiveWithColumns) {
-            column.visible ?
-                this._columnChooserList.selectItem(columnIndex) :
-                this._columnChooserList.unselectItem(columnIndex);
+            column.visible
+                ? this._columnChooserList.selectItem(columnIndex)
+                : this._columnChooserList.unselectItem(columnIndex);
         }
     },
 
