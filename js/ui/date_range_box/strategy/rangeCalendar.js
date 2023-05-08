@@ -17,6 +17,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return extend(true, super.popupConfig(popupConfig), {
             position: { of: this.dateRangeBox.$element() },
             onShowing: () => {
+                this._widget._restoreViewsMinMaxOptions();
                 this._widget.option('_currentSelection', 'startDate');
             }
         });
@@ -105,6 +106,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
             }
             this.getDateRangeBox().getEndDateBox().focus();
             this._widget.option('_currentSelection', 'endDate');
+            this._widget._setViewsMinOption(value[0]);
 
             if(value[1]) {
                 this._widget.option('currentDate', value[1]);
@@ -120,6 +122,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 this.getDateRangeBox().getStartDateBox().focus();
             }
             this._widget.option('_currentSelection', 'startDate');
+            this._widget._setViewsMaxOption(value[1]);
         }
     }
 

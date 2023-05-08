@@ -1163,3 +1163,121 @@ export interface dxSchedulerScrolling {
    */
   mode?: ScrollMode;
 }
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentAdded
+ * @type_function_param1 e:{ui/scheduler:AppointmentAddedEvent}
+ */
+onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentAdding
+ * @type_function_param1 e:{ui/scheduler:AppointmentAddingEvent}
+ */
+onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentClick
+ * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
+ */
+onAppointmentClick?: ((e: AppointmentClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentContextMenu
+ * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
+ */
+onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentDblClick
+ * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
+ */
+onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentDeleted
+ * @type_function_param1 e:{ui/scheduler:AppointmentDeletedEvent}
+ */
+onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentDeleting
+ * @type_function_param1 e:{ui/scheduler:AppointmentDeletingEvent}
+ */
+onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentFormOpening
+ * @type_function_param1 e:{ui/scheduler:AppointmentFormOpeningEvent}
+ */
+onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentRendered
+ * @type_function_param1 e:{ui/scheduler:AppointmentRenderedEvent}
+ */
+onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentTooltipShowing
+ * @type_function_param1 e:{ui/scheduler:AppointmentTooltipShowingEvent}
+ */
+onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentUpdated
+ * @type_function_param1 e:{ui/scheduler:AppointmentUpdatedEvent}
+ */
+onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentUpdating
+ * @type_function_param1 e:{ui/scheduler:AppointmentUpdatingEvent}
+ */
+onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onCellClick
+ * @type_function_param1 e:{ui/scheduler:CellClickEvent}
+ */
+onCellClick?: ((e: CellClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onCellContextMenu
+ * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
+ */
+onCellContextMenu?: ((e: CellContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onContentReady
+ * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onDisposing
+ * @type_function_param1 e:{ui/scheduler:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onInitialized
+ * @type_function_param1 e:{ui/scheduler:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onOptionChanged
+ * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};

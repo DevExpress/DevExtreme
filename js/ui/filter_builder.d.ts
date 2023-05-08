@@ -481,3 +481,55 @@ export type Properties = dxFilterBuilderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFilterBuilderOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onContentReady
+ * @type_function_param1 e:{ui/filter_builder:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onDisposing
+ * @type_function_param1 e:{ui/filter_builder:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onEditorPrepared
+ * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
+ */
+onEditorPrepared?: ((e: EditorPreparedEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onEditorPreparing
+ * @type_function_param1 e:{ui/filter_builder:EditorPreparingEvent}
+ */
+onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onInitialized
+ * @type_function_param1 e:{ui/filter_builder:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onOptionChanged
+ * @type_function_param1 e:{ui/filter_builder:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onValueChanged
+ * @type_function_param1 e:{ui/filter_builder:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};

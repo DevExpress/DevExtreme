@@ -246,3 +246,43 @@ export type Properties = dxPivotGridFieldChooserOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPivotGridFieldChooserOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxPivotGridFieldChooserOptions.onContentReady
+ * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxPivotGridFieldChooserOptions.onContextMenuPreparing
+ * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContextMenuPreparingEvent}
+ */
+onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxPivotGridFieldChooserOptions.onDisposing
+ * @type_function_param1 e:{ui/pivot_grid_field_chooser:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxPivotGridFieldChooserOptions.onInitialized
+ * @type_function_param1 e:{ui/pivot_grid_field_chooser:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxPivotGridFieldChooserOptions.onOptionChanged
+ * @type_function_param1 e:{ui/pivot_grid_field_chooser:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};

@@ -268,7 +268,7 @@ const MultiView = CollectionWidget.inherit({
         this._updateItemsVisibility(this.option('selectedIndex'));
     },
 
-    _setAriaSelected: noop,
+    _setAriaSelectionAttribute: noop,
 
     _updateSelection: function(addedSelection, removedSelection) {
         const newIndex = addedSelection[0];

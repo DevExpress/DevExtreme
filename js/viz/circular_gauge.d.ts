@@ -184,3 +184,71 @@ export type Properties = dxCircularGaugeOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxCircularGaugeOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onDisposing
+ * @type_function_param1 e:{viz/circular_gauge:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onDrawn
+ * @type_function_param1 e:{viz/circular_gauge:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onExported
+ * @type_function_param1 e:{viz/circular_gauge:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onExporting
+ * @type_function_param1 e:{viz/circular_gauge:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onFileSaving
+ * @type_function_param1 e:{viz/circular_gauge:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/circular_gauge:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onInitialized
+ * @type_function_param1 e:{viz/circular_gauge:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onOptionChanged
+ * @type_function_param1 e:{viz/circular_gauge:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/circular_gauge:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onTooltipShown
+ * @type_function_param1 e:{viz/circular_gauge:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+};

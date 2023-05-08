@@ -74,6 +74,7 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -5930,7 +5931,20 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({ opened: true });
 
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
+                const listItemContainerAttrs = {
+                    'aria-label': 'No data to display',
+                    role: 'listbox'
+                };
+                const listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'group',
+                    'aria-roledescription': 'list'
+                };
+
+                helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
+
+                const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+                helper.checkAttributes($listItemContainer, listItemContainerAttrs, 'scrollview content');
 
                 const inputAttributes = {
                     role: 'combobox',
@@ -5957,7 +5971,10 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
+
+                listAttributes.id = helper.widget._listId;
+                helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
+                helper.checkAttributes($listItemContainer, listItemContainerAttrs, 'scrollview content');
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;

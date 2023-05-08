@@ -175,3 +175,61 @@ export type Properties = dxLoadPanelOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLoadPanelOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onContentReady
+ * @type_function_param1 e:{ui/load_panel:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onDisposing
+ * @type_function_param1 e:{ui/load_panel:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onHidden
+ * @type_function_param1 e:{ui/load_panel:HiddenEvent}
+ */
+onHidden?: ((e: HiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onHiding
+ * @type_function_param1 e:{ui/load_panel:HidingEvent}
+ */
+onHiding?: ((e: HidingEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onInitialized
+ * @type_function_param1 e:{ui/load_panel:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onOptionChanged
+ * @type_function_param1 e:{ui/load_panel:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onShowing
+ * @type_function_param1 e:{ui/load_panel:ShowingEvent}
+ */
+onShowing?: ((e: ShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxLoadPanelOptions.onShown
+ * @type_function_param1 e:{ui/load_panel:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+};
