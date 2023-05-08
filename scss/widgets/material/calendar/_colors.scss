@@ -20,15 +20,17 @@ $calendar-header-color: $calendar-color !default;
 $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
 $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
 $calendar-bg: $base-bg !default;
-$calendar-hover-bg: $base-hover-bg !default;
+$calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
 $calendar-cell-hover-color: $calendar-color !default;
 
 /**
 * $name 40. Selected cell background color
 * $type color
 */
-$calendar-cell-selected-bg: $base-accent !default;
-$calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
+$calendar-cell-selected-bg: color.change($base-accent, $alpha: 0.32) !default;
+$calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
 $calendar-cell-contoured-border-radius: 50% !default;
+$calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.4) !default;
