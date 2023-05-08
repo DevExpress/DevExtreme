@@ -316,13 +316,13 @@ const BaseView = Widget.inherit({
 
         this._$rangeCells = range.map((value) => this._getCellByDate(value));
 
-        if(this.option('rtlEnabled')) {
-            this._$rangeStartHoverCell = this._getCellByDate(range[range.length - 1]);
-            this._$rangeEndHoverCell = this._getCellByDate(range[0]);
-        } else {
-            this._$rangeStartHoverCell = this._getCellByDate(range[0]);
-            this._$rangeEndHoverCell = this._getCellByDate(range[range.length - 1]);
-        }
+        // if(this.option('rtlEnabled')) {
+        //     this._$rangeStartHoverCell = this._getCellByDate(range[range.length - 1]);
+        //     this._$rangeEndHoverCell = this._getCellByDate(range[0]);
+        // } else {
+        this._$rangeStartHoverCell = this._getCellByDate(range[0]);
+        this._$rangeEndHoverCell = this._getCellByDate(range[range.length - 1]);
+        // }
 
 
         this._$rangeStartDateCell = this._getCellByDate(value[0]);
