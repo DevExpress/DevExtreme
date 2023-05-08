@@ -15,11 +15,13 @@ $material-calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !defa
 $material-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 
 .dx-calendar {
+  background-color: $calendar-bg;
   width: $material-calendar-legacy-width;
   min-width: $material-calendar-legacy-width;
-  height: $material-calendar-legacy-height;
-  min-height: $material-calendar-legacy-height;
-  background-color: $calendar-bg;
+
+  .dx-calendar-body {
+    height: $material-calendar-body-legacy-height;
+  }
 
   &.dx-calendar-multiview {
     width: $material-calendar-legacy-width * 2;

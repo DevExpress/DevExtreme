@@ -18,9 +18,11 @@ $generic-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !d
 .dx-calendar {
   width: $generic-calendar-legacy-width;
   min-width: $generic-calendar-legacy-width;
-  height: $generic-calendar-legacy-height;
-  min-height: $generic-calendar-legacy-height;
   background-color: $calendar-bg;
+
+  .dx-calendar-body {
+    height: $material-calendar-body-legacy-height;
+  }
 
   &.dx-calendar-multiview {
     width: $generic-calendar-legacy-width * 2;
