@@ -542,7 +542,7 @@ QUnit.test('case 3', function(assert) {
 QUnit.module('Graphic objects render', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects', function() {
+        this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects').callsFake(function() {
             return {
                 'id_1': { type: 'linear', colors: 'colors_1', rotationAngle: 30 },
                 'id_2': { type: 'radial', colors: 'colors_2' },

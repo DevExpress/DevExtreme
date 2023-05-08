@@ -211,3 +211,71 @@ export type Properties = dxSparklineOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSparklineOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxSparklineOptions.onDisposing
+ * @type_function_param1 e:{viz/sparkline:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onDrawn
+ * @type_function_param1 e:{viz/sparkline:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onExported
+ * @type_function_param1 e:{viz/sparkline:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onExporting
+ * @type_function_param1 e:{viz/sparkline:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onFileSaving
+ * @type_function_param1 e:{viz/sparkline:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/sparkline:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onInitialized
+ * @type_function_param1 e:{viz/sparkline:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onOptionChanged
+ * @type_function_param1 e:{viz/sparkline:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/sparkline:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onTooltipShown
+ * @type_function_param1 e:{viz/sparkline:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+};

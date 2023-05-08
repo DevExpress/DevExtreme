@@ -560,7 +560,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             recursiveExpansion: this.option('expandNodesRecursive'),
             selectionRequired: this.option('selectionRequired'),
             dataType: this.option('dataStructure'),
-            sort: this._dataSource && this._dataSource.sort()
+            sort: this._dataSource && this._dataSource.sort(),
+            langParams: this._dataSource?.loadOptions?.()?.langParams
         };
     },
 
@@ -718,7 +719,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _setAriaSelected: function() {},
+    _setAriaSelectionAttribute: noop,
 
     _renderChildren: function($node, node) {
         if(!this._hasChildren(node)) {

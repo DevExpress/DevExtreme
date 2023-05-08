@@ -215,3 +215,49 @@ export type Properties = dxDraggableOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDraggableOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onDrop'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+type Events = {
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDisposing
+ * @type_function_param1 e:{ui/draggable:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDragEnd
+ * @type_function_param1 e:{ui/draggable:DragEndEvent}
+ */
+onDragEnd?: ((e: DragEndEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDragMove
+ * @type_function_param1 e:{ui/draggable:DragMoveEvent}
+ */
+onDragMove?: ((e: DragMoveEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDragStart
+ * @type_function_param1 e:{ui/draggable:DragStartEvent}
+ */
+onDragStart?: ((e: DragStartEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onInitialized
+ * @type_function_param1 e:{ui/draggable:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onOptionChanged
+ * @type_function_param1 e:{ui/draggable:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};

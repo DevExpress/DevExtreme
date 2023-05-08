@@ -7649,16 +7649,108 @@ QUnit.module('accessibility', () => {
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $label = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`);
 
-        assert.equal($input.attr('aria-labelledby'), $label.attr('id'), 'aria-labelledby was set correctly');
+        assert.strictEqual($input.attr('aria-labelledby'), $label.attr('id'), 'aria-labelledby was set correctly');
 
         tagBox.option('label', null);
-        assert.equal($input.attr('aria-labelledby'), undefined, 'aria-labelledby was not set');
+        assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby was not set');
     });
 
     QUnit.test('select should have a correct aria-label', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox();
         const $select = $tagBox.find(TAGBOX_SELECT_SELECTOR);
 
-        assert.equal($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
+        assert.strictEqual($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
+    });
+
+    QUnit.test('TagBox element should have correct aria attributes', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox();
+
+        assert.strictEqual($tagBox.attr('role'), 'group', 'role is set correctly');
+        assert.strictEqual($tagBox.attr('aria-roledescription'), 'tagbox', 'aria-roledescription is set correctly');
+    });
+
+    QUnit.test('TagBox element should have an aria-labelledby attribute with correct ids', function(assert) {
+        const items = [1, 2, 3];
+        const $tagBox = $('#tagBox').dxTagBox({ items });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), undefined, 'aria-labelledby is undefined');
+
+        tagBox.option('value', [items[0]]);
+        let tagId = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).attr('id');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
+
+        tagBox.option('value', []);
+        assert.strictEqual($tagBox.attr('aria-labelledby'), undefined, 'aria-labelledby is set correctly');
+
+        tagBox.option('value', [items[0], items[1]]);
+
+        const tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).toArray().map(($tag) => {
+            return $($tag).attr('id');
+        }).join(' ');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagIds, 'aria-labelledby is set correctly');
+
+        tagBox.option('value', [items[1]]);
+        tagId = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).attr('id');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
+    });
+
+    QUnit.test('TagBox element should have aria-labelledby with correct ids if tag was deleted by keyboard', function(assert) {
+        const items = [1, 2];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items,
+            value: [items[0], items[1]],
+        });
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .press('right')
+            .press('backspace');
+
+        const tagId = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).attr('id');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
+    });
+
+    QUnit.test('input should have aria-activedescendant with correct id if tag is focused', function(assert) {
+        const items = [1, 2];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items,
+            value: items,
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+        const firstTagId = $tags.eq(0).attr('id');
+        const secondTagId = $tags.eq(1).attr('id');
+
+        keyboard.press('right');
+        assert.strictEqual($input.attr('aria-activedescendant'), firstTagId, 'aria-activedescendant is set correctly');
+
+        keyboard.press('right');
+        assert.strictEqual($input.attr('aria-activedescendant'), secondTagId, 'aria-activedescendant is set correctly');
+
+        keyboard.press('backspace');
+        assert.strictEqual($input.attr('aria-activedescendant'), firstTagId, 'aria-activedescendant is set correctly');
+
+        keyboard.press('backspace');
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is set correctly');
+
+        tagBox.option('value', [items[0], items[1]]);
+
+        keyboard
+            .press('right')
+            .press('backspace');
+
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is set correctly');
     });
 });

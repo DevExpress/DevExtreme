@@ -1,11 +1,8 @@
+require('../../helpers/trackerMock.js');
+
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
-const mock = require('../../helpers/mockModule.js').mock;
-const { ChartTracker } = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
-});
+const trackerModule = require('viz/chart_components/tracker');
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const legendModule = require('viz/components/legend');
 const seriesModule = require('viz/series/base_series');

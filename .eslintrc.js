@@ -94,6 +94,12 @@ module.exports = {
                         ],
                     },
                 ],
+                'spellcheck/spell-checker': [1,
+                    {
+                        'skipWords': [
+                            'langParams',
+                        ],
+                    }],
                 'brace-style': ['error', '1tbs', { allowSingleLine: true }],
                 'curly': ['error', 'multi-line', 'consistent'],
                 'unicode-bom': ['error', 'never'],

@@ -19,7 +19,11 @@ $generic-calendar-table-header-font-size: 10px;
   height: $generic-calendar-legacy-height;
   min-height: $generic-calendar-legacy-height;
   background-color: $calendar-bg;
-  border: 1px solid transparent;
+
+  &.dx-calendar-multiview {
+    width: $generic-calendar-legacy-width * 2;
+    min-width: $generic-calendar-legacy-width * 2;
+  }
 
   &.dx-calendar-with-footer {
     .dx-calendar-footer {
