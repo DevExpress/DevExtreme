@@ -3,13 +3,14 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { changeTheme } from '../../helpers/changeTheme';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { Themes } from './helpers/themes';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../container.html'));
 
 // T1046688
-test.skip('searchPanel has correct view inside masterDetail', async (t) => {
+safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -26,7 +27,7 @@ test.skip('searchPanel has correct view inside masterDetail', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [800, 800]).before(async () => {
   await changeTheme(Themes.materialBlue);
 
   return createWidget('dxDataGrid', {
@@ -50,3 +51,28 @@ test.skip('searchPanel has correct view inside masterDetail', async (t) => {
     },
   });
 }).after(async () => { await changeTheme(Themes.genericLight); });
+
+/*
+Source size: W:1504, H:430
+Target size: W:752, H:215
+
+ORIGINAL TARGET 23_1 error:
+Source size: W:737, H:215
+Target size: W:752, H:215
+
+UPDATED TARGET 23_1 error:
+Source size: W:752, H:215
+Target size: W:737, H:215
+
+22_2 error:
+Source size: W:752, H:215
+Target size: W:737, H:215
+
+22_1 error:
+Source size: W:752, H:215
+Target size: W:737, H:215
+
+еще мигалки:
+https://github.com/DevExpress/DevExtreme/actions/runs/4894076866/jobs/8737947880?pr=24508
+
+*/
