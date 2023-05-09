@@ -117,6 +117,8 @@ export interface StoreOptions<
 type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
+ * @docid Store
+ * @hidden
  * @namespace DevExpress.data
  * @options StoreOptions
  */
@@ -224,8 +226,6 @@ export class Store<
 }
 
   /**
-   * @docid Store
-   * @hidden
    * @namespace DevExpress.data
    */
   export default class AbstractStore<
