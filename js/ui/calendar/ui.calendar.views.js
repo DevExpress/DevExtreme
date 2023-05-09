@@ -82,8 +82,7 @@ const Views = {
                     scope: 'col',
                     abbr: 'WeekNumber',
                     class: 'dx-week-number-header'
-                })
-                .text('#');
+                });
 
             const rtlEnabled = this.option('rtlEnabled');
 

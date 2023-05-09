@@ -24,7 +24,6 @@ const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
-const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -180,6 +179,25 @@ QUnit.module('List markup', {}, () => {
 
         assert.equal($groupBody.length, 1, 'group items wrapper exists');
         assert.equal($groupBody.children('.' + LIST_ITEM_CLASS).length, 1, 'there are items in items wrapper');
+    });
+
+    QUnit.test('Group should have aria-labelledby attribute equal to caption id', function(assert) {
+        const $list = $('#list').dxList({
+            items: [
+                {
+                    key: 'a',
+                    items: ['0', '1']
+                }
+            ],
+            grouped: true,
+        });
+
+        const $groups = $list.find(`.${LIST_GROUP_CLASS}`);
+        const $caption = $groups.eq(0).find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        assert.strictEqual($groups.length, 1);
+        assert.ok($groups.get(0).hasAttribute('aria-labelledby'), 'group has aria-labelledby attribute');
+        assert.strictEqual($groups.eq(0).attr('aria-labelledby'), $caption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
     });
 
     QUnit.test('next button showing', function(assert) {

@@ -1,13 +1,12 @@
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import domAdapter from '../../core/dom_adapter';
-import { resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
 import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
-import Widget from '../widget/ui.widget';
+import Editor from '../editor/editor';
 import MultiselectDateBox from './ui.multiselect_date_box';
 import TextEditorButtonCollection from '../text_box/texteditor_button_collection/index';
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
@@ -39,7 +38,7 @@ const EVENTS_LIST = [
 
 // STYLE dateRangeBox
 
-class DateRangeBox extends Widget {
+class DateRangeBox extends Editor {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             acceptCustomValue: true,
@@ -570,7 +569,7 @@ class DateRangeBox extends Widget {
             case 'displayFormat':
             case 'max':
             case 'min':
-            case 'rtlEnabled':
+            case 'rtlEnabled': // super() call for rtlEnabled?
             case 'labelMode':
             case 'spellcheck':
             case 'useMaskBehavior':
@@ -619,8 +618,6 @@ class DateRangeBox extends Widget {
                 this.updateValue([this.option('value')[0], value]);
                 break;
             case 'invalidDateMessage':
-            case 'isValid':
-                break;
             case 'startDateLabel':
                 this.getStartDateBox().option('label', value);
                 break;
@@ -676,14 +673,12 @@ class DateRangeBox extends Widget {
             case 'readOnly':
                 this._updateButtons();
 
-                this._toggleReadOnlyState();
-                this._refreshFocusState();
+                super._optionChanged(args);
 
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
                 break;
             case 'disabled':
-                // TODO: understand the scenario where it needs and add test
                 this._updateButtons();
 
                 super._optionChanged(args);
@@ -700,11 +695,11 @@ class DateRangeBox extends Widget {
             case 'startDateText':
             case 'endDateText':
             case 'useHiddenSubmitElement':
-            case 'validationError':
-            case 'validationErrors':
-            case 'validationMessageMode':
-            case 'validationMessagePosition':
-            case 'validationStatus':
+            // case 'validationError':
+            // case 'validationErrors':
+            // case 'validationMessageMode':
+            // case 'validationMessagePosition':
+            // case 'validationStatus':
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);
@@ -713,10 +708,16 @@ class DateRangeBox extends Widget {
                     this._setOptionWithoutOptionChange('startDate', newValue[0]);
                     this._setOptionWithoutOptionChange('endDate', newValue[1]);
 
+                    this.validationRequest.fire({
+                        value: newValue,
+                        editor: this
+                    });
+
                     this._raiseValueChangeAction(newValue, previousValue);
                     this._saveValueChangeEvent(undefined);
                     this._updateDateBoxesValue(newValue);
                 }
+
                 break;
             }
             default:
@@ -754,12 +755,6 @@ class DateRangeBox extends Widget {
 
     focus() {
         this.getStartDateBox().focus();
-    }
-
-    blur() {
-        if(this._hasActiveElement()) {
-            resetActiveElement();
-        }
     }
 
     reset() {

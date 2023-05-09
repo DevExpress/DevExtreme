@@ -1,4 +1,4 @@
-@use "./mixins" as *;
+@use "../mixins" as *;
 
 // adduse
 
@@ -52,7 +52,7 @@
 .dx-calendar-body {
   overflow: hidden;
   display: flex;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
 
   .dx-widget {
     position: absolute;
@@ -65,14 +65,26 @@
     height: 100%;
     direction: ltr;
     table-layout: fixed;
+    border-spacing: 0;
+  }
 
-    .dx-calendar-week-number-cell {
-      text-align: center;
-    }
+  td,
+  th {
+    padding: 0;
   }
 
   thead th {
+    font-weight: 500;
+    font-size: 10px;
+
     @include dx-overflow();
+  }
+
+  .dx-calendar-week-number-cell {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -80,7 +92,6 @@
   cursor: pointer;
   position: relative;
   text-align: center;
-  padding: 0;
 
   span {
     display: inline-flex;
@@ -88,16 +99,6 @@
     justify-content: center;
     position: relative;
     z-index: 2;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    inset-inline-start: 50%;
-    inset-inline-end: 0;
-    transform: translateY(-50%);
   }
 }
 
@@ -130,6 +131,16 @@
 
     table {
       padding: 0 10px;
+    }
+  }
+
+  .dx-calendar-cell {
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      inset-inline-start: 50%;
+      inset-inline-end: 0;
     }
   }
 }
