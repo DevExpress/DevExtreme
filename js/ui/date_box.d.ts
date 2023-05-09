@@ -266,6 +266,7 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
  * @inherits dxDropDownEditor
  * @namespace DevExpress.ui
  * @hidden
+ * @options DateBoxBaseOptions
  */
 export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
     /**
