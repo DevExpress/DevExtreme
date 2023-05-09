@@ -70,8 +70,7 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
 export default class dxSlider extends dxTrackBar<dxSliderOptions> { }
 
 /**
- * @docid dxSliderBase
- * @inherits dxTrackBar
+ * @docid
  * @hidden
  * @namespace DevExpress.ui
  */
