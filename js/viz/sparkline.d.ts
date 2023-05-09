@@ -60,6 +60,7 @@ export type TooltipShownEvent = EventInfo<dxSparkline>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**

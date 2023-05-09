@@ -13,7 +13,11 @@ import {
     CollectionWidgetItem,
 } from '../collection/ui.collection_widget.base';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**

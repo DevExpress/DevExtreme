@@ -18,7 +18,10 @@ import {
     TextEditorButtonLocation,
 } from '../../common';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid

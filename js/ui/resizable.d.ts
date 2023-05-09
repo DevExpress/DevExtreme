@@ -39,6 +39,7 @@ export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEven
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**

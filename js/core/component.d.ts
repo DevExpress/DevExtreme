@@ -1,4 +1,7 @@
-/** @namespace DevExpress */
+/**
+ * @namespace DevExpress
+ * @docid
+ */
 export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionChangedEvent> {
   /**
    * @docid

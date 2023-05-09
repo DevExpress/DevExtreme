@@ -51,6 +51,7 @@ export type ValueChangeMode = SliderValueChangeMode;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**

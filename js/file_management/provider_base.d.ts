@@ -5,7 +5,10 @@ import {
     DxPromise,
 } from '../core/utils/deferred';
 
-/** @namespace DevExpress.fileManagement */
+/**
+ * @namespace DevExpress.fileManagement
+ * @docid
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**

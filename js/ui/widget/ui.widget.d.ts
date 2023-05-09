@@ -7,7 +7,10 @@ import {
     EventInfo,
 } from '../../events/index';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid

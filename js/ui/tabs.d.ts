@@ -64,6 +64,7 @@ export interface dxTabsOptions<
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid dxTabsOptions
  */
 export interface dxTabsBaseOptions<
     TComponent extends dxTabs<any, TItem, TKey> = dxTabs<any, any, any>,

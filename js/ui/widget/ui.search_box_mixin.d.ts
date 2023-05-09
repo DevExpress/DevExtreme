@@ -6,7 +6,11 @@ import {
     SearchMode,
 } from '../../common';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface SearchBoxMixinOptions {
     /**
      * @docid

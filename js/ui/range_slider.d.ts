@@ -37,6 +37,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | M
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**

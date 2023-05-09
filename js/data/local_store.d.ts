@@ -11,6 +11,7 @@ export type Options<
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface LocalStoreOptions<
     TItem = any,

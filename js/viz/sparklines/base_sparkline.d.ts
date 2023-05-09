@@ -19,7 +19,11 @@ import BaseWidget, {
     BaseWidgetTooltip,
 } from '../core/base_widget';
 
-/** @namespace DevExpress.viz */
+/**
+ * @namespace DevExpress.viz
+ * @docid
+ * @hidden
+ */
 export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid

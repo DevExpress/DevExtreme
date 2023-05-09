@@ -3,7 +3,10 @@ import CollectionWidget, {
     ItemLike,
 } from '../collection/ui.collection_widget.base';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface HierarchicalCollectionWidgetOptions<
     TComponent extends HierarchicalCollectionWidget<any, TItem, TKey>,
     TItem extends ItemLike = any,

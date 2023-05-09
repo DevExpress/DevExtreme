@@ -56,6 +56,7 @@ export interface dxMultiViewOptions<
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid dxMultiViewOptions
  */
 export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<any, TItem, TKey> = dxMultiView<any, any, any>,

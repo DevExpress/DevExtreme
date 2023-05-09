@@ -45,6 +45,7 @@ export type OptionChangedEvent<
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxValidationSummaryOptions<
     TItem extends ItemLike = any,

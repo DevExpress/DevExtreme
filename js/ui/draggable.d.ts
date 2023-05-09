@@ -27,6 +27,7 @@ import {
 
 /**
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
@@ -154,6 +155,7 @@ export type DragTemplateData = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**

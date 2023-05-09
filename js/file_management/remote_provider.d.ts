@@ -8,6 +8,7 @@ export type Options = RemoteFileSystemProviderOptions;
 /**
  * @deprecated Use Options instead
  * @namespace DevExpress.fileManagement
+ * @docid
  */
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**

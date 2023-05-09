@@ -165,6 +165,7 @@ export type Options = PivotGridDataSourceOptions;
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface PivotGridDataSourceOptions {
     /**

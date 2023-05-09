@@ -106,6 +106,7 @@ export type FieldEditorTemplate = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**

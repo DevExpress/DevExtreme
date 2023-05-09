@@ -134,6 +134,7 @@ export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**

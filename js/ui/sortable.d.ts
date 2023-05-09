@@ -142,6 +142,7 @@ export interface DragTemplateData {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**

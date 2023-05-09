@@ -45,6 +45,7 @@ type LoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface CustomStoreOptions<
     TItem = any,

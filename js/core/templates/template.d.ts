@@ -2,6 +2,9 @@ import {
     UserDefinedElement,
 } from '../element';
 
+/**
+ * @docid
+ */
 export interface dxTemplateOptions {
     /**
      * @docid

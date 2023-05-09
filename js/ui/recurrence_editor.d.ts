@@ -24,7 +24,10 @@ export type OptionChangedEvent = EventInfo<dxRecurrenceEditor> & ChangedOptionIn
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxRecurrenceEditor, Event> & ValueChangedInfo;
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
     /**
      * @docid

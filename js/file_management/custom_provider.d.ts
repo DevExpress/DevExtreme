@@ -11,6 +11,7 @@ export type Options = CustomFileSystemProviderOptions;
 /**
  * @deprecated Use Options instead
  * @namespace DevExpress.fileManagement
+ * @docid
  */
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**

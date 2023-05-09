@@ -26,7 +26,10 @@ export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     readonly removedItems: Array<TItem>;
 }
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface CollectionWidgetOptions<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
     TItem extends ItemLike = any,

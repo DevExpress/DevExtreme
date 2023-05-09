@@ -673,6 +673,7 @@ type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'edit
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
     /**

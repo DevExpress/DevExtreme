@@ -25,7 +25,10 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid

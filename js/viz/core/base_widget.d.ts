@@ -51,7 +51,10 @@ export type FileSavingEventInfo<T> = Cancelable & {
   readonly data: Blob;
 };
 
-/** @namespace DevExpress.viz */
+/**
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
