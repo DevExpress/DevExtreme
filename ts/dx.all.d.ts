@@ -4477,7 +4477,6 @@ declare module DevExpress.core.utils {
 }
 declare module DevExpress.data {
   /**
-   * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class AbstractStore<TItem = any, TKey = any> extends Store<
@@ -5937,6 +5936,7 @@ declare module DevExpress.data {
    */
   export type SortDescriptor<T> = GroupDescriptor<T>;
   /**
+   * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
@@ -6015,7 +6015,8 @@ declare module DevExpress.data {
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:StoreOptions]
+   * @deprecated [depNote:StoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface StoreOptions<TItem = any, TKey = any> {
@@ -6136,9 +6137,6 @@ declare module DevExpress.data.utils {
     | ArrayStore<TItem, TKey>
     | LocalStore<TItem, TKey>
     | ODataStore<TItem, TKey>;
-  /**
-   * [descr:StoreOptions]
-   */
   export type StoreOptions<TItem = any, TKey = any> =
     | DevExpress.data.CustomStore.Options<TItem, TKey>
     | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
@@ -18303,7 +18301,7 @@ declare module DevExpress.ui {
     export type Properties<
       TItem extends ItemLike = any,
       TKey = any
-    > = dxMultiViewBaseOptions<MultiViewInstance<TItem, TKey>, TItem, TKey>;
+    > = dxMultiViewOptions<TItem, TKey>;
     export type SelectionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -18363,12 +18361,17 @@ declare module DevExpress.ui {
    */
   export interface dxMultiViewItem extends CollectionWidgetItem {}
   /**
-   * @deprecated use DevExpress.ui.dxMultiView.Properties instead
+   * [descr:dxMultiViewOptions]
+   * @deprecated [depNote:dxMultiViewOptions]
    */
   export interface dxMultiViewOptions<
     TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
     TKey = any
-  > extends DevExpress.ui.dxMultiView.Properties<TItem, TKey> {}
+  > extends dxMultiViewBaseOptions<
+      DevExpress.ui.dxMultiView.MultiViewInstance<TItem, TKey>,
+      TItem,
+      TKey
+    > {}
   /**
    * [descr:dxNumberBox]
    */
@@ -21458,6 +21461,11 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
+   * [descr:dxSliderBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface dxSliderBase {}
+  /**
    * [descr:dxSliderBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -22204,7 +22212,8 @@ declare module DevExpress.ui {
     icon?: string;
   }
   /**
-   * @deprecated use DevExpress.ui.dxTabs.Properties instead
+   * [descr:dxTabsOptions]
+   * @deprecated [depNote:dxTabsOptions]
    */
   export interface dxTabsOptions<
     TItem extends DevExpress.ui.dxTabs.ItemLike = any,
