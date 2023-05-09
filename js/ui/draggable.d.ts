@@ -28,6 +28,7 @@ import {
 /**
  * @namespace DevExpress.ui
  * @docid
+ * @type object
  */
 export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**

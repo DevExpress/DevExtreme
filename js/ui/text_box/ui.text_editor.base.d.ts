@@ -21,6 +21,7 @@ import {
 /**
  * @namespace DevExpress.ui
  * @docid
+ * @type object
  */
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {
     /**

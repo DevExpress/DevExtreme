@@ -8,6 +8,7 @@ import {
 /**
  * @namespace DevExpress.fileManagement
  * @docid
+ * @type object
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {

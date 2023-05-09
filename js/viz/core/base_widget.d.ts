@@ -54,6 +54,7 @@ export type FileSavingEventInfo<T> = Cancelable & {
 /**
  * @namespace DevExpress.viz
  * @docid
+ * @type object
  */
 export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**

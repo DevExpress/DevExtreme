@@ -27,6 +27,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRecurrenceEditor, Event> & Val
 /**
  * @namespace DevExpress.ui
  * @docid
+ * @type object
  */
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
     /**

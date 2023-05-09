@@ -19,6 +19,7 @@ export interface ODataRequestOptions {
 /**
  * @docid
  * @namespace DevExpress.data
+ * @type object
  */
 export interface ODataContextOptions {
     /**

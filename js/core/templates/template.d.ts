@@ -4,6 +4,7 @@ import {
 
 /**
  * @docid
+ * @type object
  */
 export interface dxTemplateOptions {
     /**

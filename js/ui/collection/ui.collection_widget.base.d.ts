@@ -29,6 +29,7 @@ export interface SelectionChangedInfo<TItem extends ItemLike = any> {
 /**
  * @namespace DevExpress.ui
  * @docid
+ * @type object
  */
 export interface CollectionWidgetOptions<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,

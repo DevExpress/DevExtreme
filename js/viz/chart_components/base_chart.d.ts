@@ -59,6 +59,7 @@ export interface TooltipInfo {
 /**
  * @namespace DevExpress.viz
  * @docid
+ * @type object
  */
 export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**

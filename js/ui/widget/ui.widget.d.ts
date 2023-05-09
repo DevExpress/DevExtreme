@@ -10,6 +10,7 @@ import {
 /**
  * @namespace DevExpress.ui
  * @docid
+ * @type object
  */
 export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
