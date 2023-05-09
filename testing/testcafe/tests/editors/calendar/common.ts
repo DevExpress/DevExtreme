@@ -18,6 +18,22 @@ const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 fixture.disablePageReloads`Calendar`
   .page(url(__dirname, '../../container.html'));
 
+test('Cells on month view should have hover state class after hover when zoomLevel has been changed from "year" to "month" by click on cell', async (t) => {
+  const calendar = new Calendar('#container');
+
+  await t
+    .click(calendar.getView().getMonthCellByDate(new Date(2021, 9, 17)));
+
+  const targetCell = calendar.getView().getCellByDate(new Date(2021, 9, 19));
+  await t
+    .hover(targetCell)
+    .expect(targetCell.hasClass(STATE_HOVER_CLASS))
+    .eql(true);
+}).before(async () => createWidget('dxCalendar', {
+  zoomLevel: 'year',
+  value: new Date(2021, 9, 17),
+}));
+
 test('Calendar with showWeekNumbers rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
