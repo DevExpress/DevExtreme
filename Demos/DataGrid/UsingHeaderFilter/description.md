@@ -1,13 +1,13 @@
-A header filter allows users to select values from a predefined set and filter rows by these values. The values are listed in a pop-up menu. To open this menu, users can click header filter icons in column headers.
+A header filter allows users to filter rows by values selected in a pop-up menu. To display such a menu, users can click a header filter icon in a column header.
 
 ### Display Header Filter Icons
 
-Enable the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/#visible) property to display header filter icons for all columns. If you want to hide the icon for a specific column, disable the column's [allowHeaderFiltering](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#allowHeaderFiltering) property.
+Assign **true** to the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/headerFilter/#visible) property to display header filter icons for all columns. To hide the icon for a specific column, set the column's [allowHeaderFiltering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#allowHeaderFiltering) property to **false**.
 
-### Enable Search Within Header Filters
+### Enable Search UI Within Header Filters
 
-Users can search values within header filters. To display the search bar, assign **true** to the [allowSearch](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/#allowSearch) property in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/) object or in a column's [headerFilter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/) object. At the column level, you can also specify a comparison operation used to search header filter values ([searchMode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/#searchMode)).
+Users can search values within a header filter. To configure the search panel, define the [search](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/headerFilter/search/) property in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/headerFilter/) object or in a **columns**.[headerFilter](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/headerFilter/) object. 
 
-### Change Available Filter Values
+The search panel's default behavior looks for values only within the same data field. You can include additional fields in the search. Specify the **search**.[searchExpr](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/headerFilter/search/#searchExpr) property. For example, this demo allows you to enter a state name in the City column's header filter. You can then see a list of all cities within the specified state, and select city names that you want to use as a filter.
 
-Filter values are generated automatically based on column values. You can group them by a custom [groupInterval](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/#groupInterval) or specify an entirely different [dataSource](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/headerFilter/#dataSource) for an individual header filter. Refer to the property descriptions for more information.
+To apply a comparison operation used to search header filter values, specify the **search**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/headerFilter/search/#mode) property.
