@@ -6,6 +6,10 @@ import {
 } from '../events/index';
 
 import {
+  DxElement,
+} from '../core/element';
+
+import {
   ComponentDisabledDate,
 } from './calendar';
 
@@ -138,6 +142,12 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     multiView?: boolean;
     /**
+     * @docid
+     * @default true
+     * @public
+     */
+    openOnFieldClick?: boolean;
+    /**
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
@@ -188,7 +198,20 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends DateBoxBase<Properties> { }
+export default class dxDateRangeBox extends DateBoxBase<Properties> {
+  /**
+   * @docid
+   * @publicName endDateField()
+   * @public
+   */
+  endDateField(): DxElement;
+  /**
+   * @docid
+   * @publicName startDateField()
+   * @public
+   */
+  startDateField(): DxElement;
+}
 
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;

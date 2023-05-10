@@ -10707,7 +10707,16 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateRangeBox]
    */
-  export class dxDateRangeBox extends DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties> {}
+  export class dxDateRangeBox extends DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties> {
+    /**
+     * [descr:dxDateRangeBox.endDateField()]
+     */
+    endDateField(): DevExpress.core.DxElement;
+    /**
+     * [descr:dxDateRangeBox.startDateField()]
+     */
+    startDateField(): DevExpress.core.DxElement;
+  }
   module dxDateRangeBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxDateRangeBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
@@ -10796,6 +10805,10 @@ declare module DevExpress.ui {
        * [descr:dxDateRangeBoxOptions.multiView]
        */
       multiView?: boolean;
+      /**
+       * [descr:Properties.openOnFieldClick]
+       */
+      openOnFieldClick?: boolean;
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
