@@ -6,10 +6,6 @@ import {
 } from '../events/index';
 
 import {
-  ViewsCount,
- } from '../common';
-
-import {
   ComponentDisabledDate,
 } from './calendar';
 
@@ -134,6 +130,14 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     endDateText?: string;
     /**
+     * @docid dxDateRangeBoxOptions.multiView
+     * @default true
+     * @default false &for(iOS)
+     * @default false &for(Android)
+     * @public
+     */
+    multiView?: boolean;
+    /**
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
@@ -175,14 +179,6 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      * @public
      */
     value?: Array<Date | number | string>;
-    /**
-     * @docid dxDateRangeBoxOptions.viewsCount
-     * @default 2
-     * @default 1 &for(iOS)
-     * @default 1 &for(Android)
-     * @public
-     */
-    viewsCount?: ViewsCount;
 };
 
 /**
