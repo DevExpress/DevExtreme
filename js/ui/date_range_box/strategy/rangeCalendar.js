@@ -44,17 +44,17 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _getWidgetOptions() {
-        let { disabledDates } = this.dateRangeBox.option();
+        const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
 
-        disabledDates = isFunction(disabledDates)
-            ? this._injectComponent(disabledDates)
+        const disabledDates = isFunction(disabledDatesValue)
+            ? this._injectComponent(disabledDatesValue)
             : disabledDates;
 
         return extend(super._getWidgetOptions(), {
             disabledDates,
-            values: this.dateRangeBox.option('value'),
+            values: value,
             selectionMode: 'range',
-            viewsCount: 2,
+            viewsCount: multiView ? 2 : 1,
             width: 260,
             _allowChangeSelectionOrder: true,
             _currentSelection: 'startDate',

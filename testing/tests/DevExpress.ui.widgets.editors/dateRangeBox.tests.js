@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
+import devices from 'core/devices';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';
@@ -44,6 +45,7 @@ const moduleConfig = {
         const init = (options) => {
             this.$element = $('#dateRangeBox').dxDateRangeBox(options);
             this.instance = this.$element.dxDateRangeBox('instance');
+            this.getCalendar = () => this.instance.getStartDateBox()._strategy._widget;
         };
 
         this.reinit = (options) => {
@@ -99,6 +101,32 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
         assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '0', 'startDateBox input tabIndex value');
         assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '0', 'endDateBox input tabIndex value');
+    });
+
+    QUnit.test('Calendar should have one view by default on mobile device', function(assert) {
+        if(devices.real().deviceType === 'desktop') {
+            assert.ok(true, 'test does not actual for desktop devices');
+            return;
+        }
+
+        this.instance.open();
+
+        const calendar = this.getCalendar();
+
+        assert.strictEqual(calendar.option('viewsCount'), 1);
+    });
+
+    QUnit.test('Calendar should have two views by default on desktop device', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        this.instance.open();
+
+        const calendar = this.getCalendar();
+
+        assert.strictEqual(calendar.option('viewsCount'), 2);
     });
 
     QUnit.module('Default options (temporary module)', () => {
@@ -962,6 +990,32 @@ QUnit.module('Behavior', moduleConfig, () => {
             this.instance.getEndDateBox().option('value', '2023/01/01');
 
             this.testValue(assert, ['2023/01/01', '2023/02/02']);
+        });
+    });
+
+    [false, true].forEach((multiView) => {
+        QUnit.test(`Calendar should have ${multiView ? 2 : 1} views when multiView is set to ${multiView} on init`, function(assert) {
+            this.reinit({
+                multiView,
+                opened: true
+            });
+
+            const calendar = this.getCalendar();
+
+            assert.strictEqual(calendar.option('viewsCount'), multiView ? 2 : 1);
+        });
+
+        QUnit.test(`Calendar should have ${multiView ? 2 : 1} views when multiView is set to ${multiView} on runtime`, function(assert) {
+            this.reinit({
+                multiView: !multiView,
+                opened: true
+            });
+
+            this.instance.option('multiView', multiView);
+
+            const calendar = this.getCalendar();
+
+            assert.strictEqual(calendar.option('viewsCount'), multiView ? 2 : 1);
         });
     });
 });

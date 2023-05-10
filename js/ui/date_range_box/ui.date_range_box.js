@@ -4,6 +4,7 @@ import domAdapter from '../../core/dom_adapter';
 import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
+import devices from '../../core/devices';
 import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
 import Editor from '../editor/editor';
@@ -68,6 +69,7 @@ class DateRangeBox extends Editor {
             labelMode: 'static',
             max: undefined,
             min: undefined,
+            multiView: true,
             onChange: null,
             onClosed: null,
             onCopy: null,
@@ -117,7 +119,17 @@ class DateRangeBox extends Editor {
                     stylingMode: config().editorStylingMode || 'filled',
                     labelMode: 'floating'
                 }
-            }
+            },
+            {
+                device: function() {
+                    const realDevice = devices.real();
+                    const platform = realDevice.platform;
+                    return platform === 'ios' || platform === 'android';
+                },
+                options: {
+                    multiView: false
+                }
+            },
         ]);
     }
 
@@ -641,6 +653,9 @@ class DateRangeBox extends Editor {
                 break;
             case 'endDateName':
                 this.getEndDateBox().option('name', value);
+                break;
+            case 'multiView':
+                this.getStartDateBox().option('calendarOptions.viewsCount', value ? 2 : 1);
                 break;
             case 'tabIndex':
             case 'focusStateEnabled':
