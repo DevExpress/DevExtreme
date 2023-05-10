@@ -144,7 +144,7 @@ jobs:
           - userAgent: ''
             constel: 'ui'
           - userAgent: ''
-            constel: 'scheduler'
+            constel: 'ui.scheduler'
           - userAgent: ''
             constel: 'viz'
 
