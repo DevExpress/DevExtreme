@@ -2,7 +2,8 @@
 import { PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
-import DataGrid, { Properties } from '@js/ui/data_grid';
+import { GridBase, GridBaseOptions } from '@js/common/grids';
+import Widget from '@js/ui/widget/ui.widget';
 
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
@@ -19,8 +20,9 @@ type OptionsMethod<TOptions> =
     ) => void
   );
 
-export interface InternalGrid
-  extends Omit<DataGrid<unknown, unknown>, 'option'> {
+type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
+
+export interface InternalGrid extends GridBaseType {
   option: OptionsMethod<InternalGridOptions>;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
@@ -52,9 +54,9 @@ export interface InternalGrid
   ) => TComponent;
 }
 
-export type InternalGridOptions = Properties & {
+export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown> {
   loadingTimeout?: number;
-};
+}
 
 export interface OptionChangedArgs<T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
