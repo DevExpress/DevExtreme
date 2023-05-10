@@ -117,6 +117,7 @@ jobs:
         userAgent: [ 'ios10', 'android6' ]
         include:
           - headless: false
+          - useJQuery: false
           - constel: 'ui'
             headless: true
           - constel: 'viz'
@@ -134,7 +135,7 @@ jobs:
           name: ${{ matrix.constel }}-${{ matrix.userAgent }}
           constel: ${{ matrix.constel }}
           browser: 'chrome'
-          useJQuery: ${{ matrix.useJquery || 'false' }}
+          useJQuery: ${{ matrix.useJQuery }}
           userAgent: ${{ matrix.userAgent }}
           headless: ${{ matrix.headless }}
 
