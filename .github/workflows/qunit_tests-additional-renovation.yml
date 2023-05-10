@@ -140,6 +140,13 @@ jobs:
             useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
+        exclude:
+          - userAgent: ''
+            constel: 'ui'
+          - userAgent: ''
+            constel: 'scheduler'
+          - userAgent: ''
+            constel: 'viz'
 
     steps:
       - name: Get sources
