@@ -119,6 +119,7 @@ jobs:
           - userAgent: ''
             useShadowDom: true
           - headless: false
+          - useJQuery: false
           - constel: 'ui'
             headless: true
           - constel: 'viz'
@@ -143,7 +144,7 @@ jobs:
           name: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
           constel: ${{ matrix.constel }}
           browser: 'chrome'
-          useJQuery: ${{ matrix.useJquery || 'false' }}
+          useJQuery: ${{ matrix.useJQuery }}
           userAgent: ${{ matrix.userAgent }}
           useShadowDom: ${{ matrix.useShadowDom }}
           headless: ${{ matrix.headless }}
