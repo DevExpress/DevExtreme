@@ -9,6 +9,7 @@ import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
 
+import 'ui/validator';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -27,6 +28,7 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const CLEAR_BUTTON = 'dx-clear-button-area';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const STATE_HOVER_CLASS = 'dx-state-hover';
+const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -2004,5 +2006,59 @@ QUnit.module('Dimensions', moduleConfig, () => {
 
         assert.strictEqual($(this.instance.getStartDateBox().$element()).width(), initialDateBoxWidth + 10);
         assert.strictEqual($(this.instance.getEndDateBox().$element()).width(), initialDateBoxWidth + 10);
+    });
+});
+
+QUnit.module('validation', moduleConfig, () => {
+    // TODO: research how to improve this behavior
+    QUnit.test('validation should be failed after startDate change if "required" rule is used', function(assert) {
+        this.reinit({ value: [null, null] });
+
+        this.$element.dxValidator({
+            validationRules: [{
+                type: 'required',
+                message: 'Both dates are required'
+            }]
+        });
+
+
+        this.instance.option('startDate', '2023/01/01');
+
+        assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
+    });
+
+    QUnit.test('validation message should be rendered above the inputs if popup is opened', function(assert) {
+        this.reinit({
+            isValid: false,
+            validationError: {
+                message: 'Error message'
+            },
+            validationMessageMode: 'always',
+        });
+
+        this.instance.open();
+
+        const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+        const validationMessage = $validationMessage.dxValidationMessage('instance');
+
+        assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
+    });
+
+    QUnit.test('validation message should be rendered below the inputs if popup is closed', function(assert) {
+        this.reinit({
+            isValid: false,
+            validationError: {
+                message: 'Error message'
+            },
+            validationMessageMode: 'always',
+            opened: true
+        });
+
+        this.instance.close();
+
+        const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+        const validationMessage = $validationMessage.dxValidationMessage('instance');
+
+        assert.strictEqual(validationMessage.option('positionSide'), 'bottom', 'validation message is rendered below the inputs');
     });
 });

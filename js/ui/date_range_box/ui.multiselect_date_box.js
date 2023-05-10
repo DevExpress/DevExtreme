@@ -14,6 +14,18 @@ class MultiselectDateBox extends DateBox {
         this.close();
         this.option('focusStateEnabled') && this.focus();
     }
+
+    _popupShownHandler() {
+        super._popupShownHandler(arguments);
+
+        this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
+    }
+
+    _popupHiddenHandler() {
+        super._popupHiddenHandler(arguments);
+
+        this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
+    }
 }
 
 export default MultiselectDateBox;
