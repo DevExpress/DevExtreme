@@ -25,12 +25,13 @@ Object.keys(widgets).forEach(function(widget) {
         assert.ok(true, 'it\'s possible to create ' + widget);
 
         const options = this.instance.option();
-        const clock = widget === 'DataGrid' || widget === 'TreeList' ? sinon.useFakeTimers() : null;
 
         if(!options || Object.keys(options).length === 0) {
             assert.ok(false, 'options is not defined ' + widget);
         }
         for(const optionName in options) {
+            const clock = widget === 'DataGrid' || widget === 'TreeList' ? sinon.useFakeTimers() : null;
+
             let prevValue = options[optionName];
             let newValue = prevValue;
 
@@ -61,10 +62,10 @@ Object.keys(widgets).forEach(function(widget) {
             this.instance.endUpdate();
 
             assert.ok(true, 'it\'s possible to change option ' + optionName);
-        }
 
-        if(clock) {
-            clock.restore();
+            if(clock) {
+                clock.restore();
+            }
         }
     });
 });
