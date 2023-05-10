@@ -121,6 +121,36 @@ QUnit.module('General', () => {
         assert.equal(tabsInstance.option('selectedIndex'), 2);
     });
 
+    QUnit.test('dxpointerdown event should not call changing active tab', function(assert) {
+        const $tabs = $('#tabs').dxTabs({
+            items: [
+                { text: '1' },
+                { text: '2' },
+            ]
+        });
+
+        const $tabElements = $tabs.find(`.${TABS_ITEM_CLASS}`);
+
+        $tabElements.eq(2).trigger('dxpointerdown');
+
+        assert.strictEqual($tabElements.eq(2).hasClass(TAB_SELECTED_CLASS), false);
+    });
+
+    QUnit.test('dxpointerup event should call changing active tab', function(assert) {
+        const $tabs = $('#tabs').dxTabs({
+            items: [
+                { text: '1' },
+                { text: '2' },
+            ]
+        });
+
+        const $tabElements = $tabs.find(`.${TABS_ITEM_CLASS}`);
+
+        $tabElements.eq(2).trigger('dxpointerup');
+
+        assert.strictEqual($tabElements.eq(2).hasClass(TAB_SELECTED_CLASS), false);
+    });
+
     QUnit.test('regression: wrong selectedIndex in tab mouseup handler', function(assert) {
         let selectedIndex;
 
