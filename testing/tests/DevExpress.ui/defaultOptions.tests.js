@@ -269,6 +269,14 @@ testComponentDefaults(DateBox,
         { platform: 'generic', deviceType: 'desktop' },
     ],
     { pickerType: 'calendar' },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
 );
 
 testComponentDefaults(ValidationMessage,
