@@ -698,7 +698,7 @@ const CollectionWidget = Widget.inherit({
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
         const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-        const pointerEventNamespace = addNamespace(pointerEvents.up, this.NAME);
+        const pointerEventNamespace = addNamespace(this._getPointerEventName(), this.NAME);
         const that = this;
 
         const pointerAction = new Action(function(args) {
