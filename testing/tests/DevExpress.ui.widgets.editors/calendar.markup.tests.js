@@ -17,6 +17,7 @@ const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
 const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
+const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 
 const toSelector = function(className) {
     return '.' + className;
@@ -388,6 +389,7 @@ QUnit.module('CellTemplate option', {
         assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), true);
     });
 
+
     QUnit.test('calendar should toggle multiview class name after change viewsCount option value', function(assert) {
         this.reinit({
             viewsCount: 1
@@ -402,6 +404,36 @@ QUnit.module('CellTemplate option', {
         this.calendar.option('viewsCount', 1);
 
         assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false, 'calendar element has not multiview class');
+    });
+
+    QUnit.test('calendar should have range class if selectionMode is range', function(assert) {
+        this.reinit({
+            selectionMode: 'range'
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+    });
+
+    QUnit.test('calendar should toggle range class after change selectionMode option value in runtime', function(assert) {
+        this.reinit({});
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'range');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+
+        this.calendar.option('selectionMode', 'multiple');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'single');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'range');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
     });
 });
 

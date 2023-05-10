@@ -36,6 +36,7 @@ const CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
+const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
@@ -657,6 +658,7 @@ const Calendar = Editor.inherit({
 
         const $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
+        $element.toggleClass(CALENDAR_RANGE_CLASS, this.option('selectionMode') === 'range');
 
         this._renderBody();
         $element.append(this.$body);
