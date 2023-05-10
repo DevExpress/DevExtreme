@@ -10,22 +10,24 @@ type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
   ? any
   : _PropertyType<O, K>;
 
-type GetOptionValueType = (<TPropertyName extends string>(
-  optionName: TPropertyName) =>
-  PropertyType<InternalGridOptions, TPropertyName>);
-
-type SetOptionValueType = (<TPropertyName extends string>(
-  optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>) => void);
-
-type SetOptionsType = ((options: InternalGridOptions) => void);
+// todo: move to upper .d.ts
+type OptionsMethod<TOptions> =
+  (() => TOptions) &
+  ((options: TOptions) => void) &
+  (
+    <TPropertyName extends string>(
+      optionName: TPropertyName
+    ) => PropertyType<TOptions, TPropertyName>
+  ) & (
+    <TPropertyName extends string>(
+      optionName: TPropertyName,
+      optionValue: PropertyType<TOptions, TPropertyName>
+    ) => void
+  );
 
 export interface InternalGrid
   extends Omit<DataGrid<unknown, unknown>, 'option'> {
-  option: GetOptionValueType &
-  SetOptionValueType &
-  (() => InternalGridOptions) &
-  SetOptionsType;
+  option: OptionsMethod<InternalGridOptions>;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
