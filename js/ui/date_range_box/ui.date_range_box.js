@@ -698,8 +698,11 @@ class DateRangeBox extends Editor {
             // case 'validationError':
             // case 'validationErrors':
             // case 'validationMessageMode':
-            // case 'validationMessagePosition':
             // case 'validationStatus':
+                break;
+            case 'validationMessagePosition':
+                this.getStartDateBox().option(name, value);
+                super._optionChanged(args);
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);

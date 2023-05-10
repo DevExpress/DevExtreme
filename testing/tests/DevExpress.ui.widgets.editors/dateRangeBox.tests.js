@@ -2027,38 +2027,78 @@ QUnit.module('validation', moduleConfig, () => {
         assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
     });
 
-    QUnit.test('validation message should be rendered above the inputs if popup is opened', function(assert) {
-        this.reinit({
-            isValid: false,
-            validationError: {
-                message: 'Error message'
-            },
-            validationMessageMode: 'always',
+    QUnit.module('validation message', {
+        beforeEach: function() {
+            this.reinit({
+                isValid: false,
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+            });
+        },
+        getValidationMessage: function() {
+            const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+            return $validationMessage.dxValidationMessage('instance');
+        }
+    }, () => {
+        QUnit.test('validation message should be rendered above the inputs if popup is opened', function(assert) {
+            this.instance.open();
+
+            const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+            const validationMessage = $validationMessage.dxValidationMessage('instance');
+
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
         });
 
-        this.instance.open();
+        QUnit.test('validation message should be rendered below the inputs if popup is closed', function(assert) {
+            this.instance.open();
+            this.instance.close();
 
-        const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
-        const validationMessage = $validationMessage.dxValidationMessage('instance');
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'bottom', 'validation message is rendered below the inputs');
+        });
 
-        assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
+        QUnit.test('validation message should be rendered below the inputs even is popup is opened if validationMessagePosition="bottom"', function(assert) {
+            this.reinit({
+                isValid: false,
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+                validationMessagePosition: 'bottom',
+            });
+
+            this.instance.open();
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'bottom', 'validation message is rendered below the inputs');
+        });
+
+        QUnit.test('validation message should be rendered above the inputs even is popup is close if validationMessagePosition="top"', function(assert) {
+            this.reinit({
+                isValid: false,
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+                validationMessagePosition: 'top',
+            });
+
+            this.instance.open();
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered below the inputs');
+        });
     });
 
-    QUnit.test('validation message should be rendered below the inputs if popup is closed', function(assert) {
-        this.reinit({
-            isValid: false,
-            validationError: {
-                message: 'Error message'
-            },
-            validationMessageMode: 'always',
-            opened: true
+    QUnit.module('options', () => {
+        QUnit.test('validationMessagePosition option is passed to the first dateBox on runtime change', function(assert) {
+            const validationMessagePosition = 'bottom';
+            this.instance.option({ validationMessagePosition });
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            assert.strictEqual(startDateBox.option('validationMessagePosition'), validationMessagePosition, 'option is passed');
         });
-
-        this.instance.close();
-
-        const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
-        const validationMessage = $validationMessage.dxValidationMessage('instance');
-
-        assert.strictEqual(validationMessage.option('positionSide'), 'bottom', 'validation message is rendered below the inputs');
     });
 });
