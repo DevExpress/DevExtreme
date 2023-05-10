@@ -1,14 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import {
-  PropertyType as _PropertyType,
-} from '@js/core/index';
+import { PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
 import DataGrid, { Properties } from '@js/ui/data_grid';
-
-type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
-  ? any
-  : _PropertyType<O, K>;
 
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
