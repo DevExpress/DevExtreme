@@ -757,7 +757,6 @@ class DateRangeBox extends Editor {
     }
 
     reset() {
-        // TODO: add test
         // this.getEndDateBox().reset();
         // this.getStartDateBox().reset();
 
