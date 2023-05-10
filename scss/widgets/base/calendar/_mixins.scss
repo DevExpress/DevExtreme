@@ -113,12 +113,6 @@
       span {
         background-color: $cell-active-bg;
       }
-
-      &.dx-calendar-empty-cell {
-        span {
-          background-color: transparent;
-        }
-      }
     }
 
     &.dx-calendar-selected-date {
@@ -247,9 +241,16 @@
       cursor: default;
       color: color.change($cell-text-color, $alpha: 0.24);
 
-      &.dx-state-hover {
+      &.dx-state-hover,
+      &.dx-state-active {
         span {
           background-color: transparent;
+        }
+
+        &.dx-calendar-selected-date {
+          span {
+            background-color: $cell-selected-bg;
+          }
         }
       }
     }
