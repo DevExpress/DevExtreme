@@ -9,6 +9,7 @@ function capitalizeFirstLetter(string) {
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
+
 function roundToFourDecimals(value) {
     return Math.round(value * 10000) / 10000;
 }
