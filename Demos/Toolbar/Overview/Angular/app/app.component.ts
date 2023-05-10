@@ -65,6 +65,7 @@ export class AppComponent {
       valueExpr: 'id',
       displayExpr: 'text',
       value: this.productTypes[0].id,
+      inputAttr: { 'aria-label': 'Categories' },
       onValueChanged: (args) => {
         if (args.value > 1) {
           this.productsStore.filter('type', '=', args.value);

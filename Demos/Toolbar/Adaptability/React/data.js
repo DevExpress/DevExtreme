@@ -100,3 +100,6 @@ export const listTypes = [
     hint: 'Bullet',
   },
 ];
+
+export const fontInputAttr = { 'aria-label': 'Font' };
+export const textStyleInputAttr = { 'aria-label': 'Text Style' };

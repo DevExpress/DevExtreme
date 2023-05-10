@@ -69,6 +69,7 @@
           <dx-select-box
             placeholder="Font"
             displayExpr="text"
+            [inputAttr]="{ 'aria-label': 'Font' }"
             [items]="fontFamilies"
             (onItemClick)="onFontFamilyClick()"
           ></dx-select-box>
@@ -147,6 +148,7 @@
           <dx-select-box
             displayExpr="text"
             valueExpr="text"
+            [inputAttr]="{ 'aria-label': 'Text Style' }"
             [value]="heading"
             [items]="headings"
             (onItemClick)="onHeadingClick()"

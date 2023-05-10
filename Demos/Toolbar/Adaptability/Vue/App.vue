@@ -82,6 +82,7 @@
             <DxSelectBox
               placeholder="Font"
               display-expr="text"
+              :input-attr="{ 'aria-label': 'Font' }"
               :data-source="fontFamilies"
               :on-item-click="onFontFamilyClick"
             />
@@ -141,6 +142,7 @@
             <DxSelectBox
               display-expr="text"
               value-expr="text"
+              :input-attr="{ 'aria-label': 'Text Style' }"
               :data-source="headings"
               :value="heading"
               :on-item-click="onHeadingClick"

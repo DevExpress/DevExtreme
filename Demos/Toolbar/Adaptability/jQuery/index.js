@@ -97,6 +97,7 @@ const toolbarItems = [
       placeholder: 'Font',
       displayExpr: 'text',
       dataSource: fontFamilies,
+      inputAttr: { 'aria-label': 'Font' },
       onItemClick() {
         onFontFamilyClick();
       },
@@ -177,6 +178,7 @@ const toolbarItems = [
       valueExpr: 'text',
       value: headings[0].text,
       dataSource: headings,
+      inputAttr: { 'aria-label': 'Text Style' },
       onItemClick() {
         onHeadingClick();
       },
