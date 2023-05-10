@@ -114,8 +114,11 @@ if(Globalize && Globalize.formatDate) {
             return Globalize.locale().main('dates/calendars/gregorian/' + path);
         },
 
-        getPeriodNames: function(format) {
-            const json = Globalize.locale().main(`dates/calendars/gregorian/dayPeriods/stand-alone/${format || 'wide'}`);
+        getPeriodNames: function(format, type) {
+            format = format || 'wide';
+            type = type === 'format' ? type : 'stand-alone';
+
+            const json = Globalize.locale().main(`dates/calendars/gregorian/dayPeriods/${type}/${format}`);
             return [json['am'], json['pm']];
         },
 
