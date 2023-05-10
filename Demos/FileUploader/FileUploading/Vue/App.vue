@@ -21,7 +21,7 @@
           >
             <span>Name: {{ file.name }}<br></span>
             <span>Size {{ file.size }}<br></span>
-            <span>Type {{ file.size }}<br></span>
+            <span>Type {{ file.type }}<br></span>
             <span>Last Modified Date: {{ file.lastModifiedDate }}</span>
           </div>
         </div>
