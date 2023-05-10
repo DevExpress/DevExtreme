@@ -250,14 +250,14 @@ testComponentDefaults(DateRangeBox,
 );
 
 testComponentDefaults(DateRangeBox,
-    { deviceType: 'desktop' },
+    { platform: 'generic', deviceType: 'desktop' },
     {
         multiView: true,
     },
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ deviceType: 'desktop' });
+        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
     },
     function() {
         devices.real(this._origDevice);

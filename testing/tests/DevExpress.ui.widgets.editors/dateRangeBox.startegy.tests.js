@@ -313,6 +313,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         this.reinit({
             applyValueMode: 'instantly',
             value: [null, null],
+            multiView: true,
         });
 
         this.instance.open();

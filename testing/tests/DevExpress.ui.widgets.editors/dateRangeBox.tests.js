@@ -111,7 +111,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             return;
         }
 
-        this.reinit({ });
+        this.reinit({});
+        this.instance.open();
 
         const calendar = this.getCalendar();
 
