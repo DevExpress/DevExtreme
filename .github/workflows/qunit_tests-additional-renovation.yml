@@ -132,8 +132,6 @@ jobs:
             headless: true
           - userAgent: 'android6'
             useJQuery: true
-          - constel: 'ui'
-            useCsp: false
           - constel: 'ui.widgets(1/3)'
             useCsp: false
           - constel: 'ui.widgets(2/3)'
@@ -182,8 +180,6 @@ jobs:
           - constel: 'export'
             useCsp: false
           - constel: 'misc'
-            useCsp: false
-          - constel: 'ui'
             useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false

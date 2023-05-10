@@ -1,4 +1,4 @@
-window.includeThemesLinks();
+require('../../helpers/includeThemesLinks.js');
 
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
