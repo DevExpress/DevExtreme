@@ -219,19 +219,56 @@ testComponentDefaults(DateRangeBox,
     }
 );
 
+testComponentDefaults(DateRangeBox,
+    { platform: 'android' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'ios' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'ios' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { deviceType: 'desktop' },
+    {
+        multiView: true,
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ deviceType: 'desktop' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
 testComponentDefaults(DateBox,
     [
         { platform: 'generic', deviceType: 'desktop' },
     ],
     { pickerType: 'calendar' },
-    function() {
-        this._origDevice = devices.real();
-
-        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
 );
 
 testComponentDefaults(ValidationMessage,

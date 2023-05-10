@@ -55,7 +55,8 @@ const moduleConfig = {
         };
 
         init({
-            value: ['2023/01/05', '2023/02/14']
+            value: ['2023/01/05', '2023/02/14'],
+            multiView: true,
         });
     },
     afterEach: function() {
@@ -98,6 +99,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
     QUnit.test('StartDateBox & endDateBox inputs should have the same default value of tabIndex attribute', function(assert) {
         this.reinit({});
+        this.instance.open();
 
         assert.strictEqual($(this.instance.getStartDateBox().field()).attr('tabIndex'), '0', 'startDateBox input tabIndex value');
         assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '0', 'endDateBox input tabIndex value');
@@ -109,7 +111,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             return;
         }
 
-        this.instance.open();
+        this.reinit({ });
 
         const calendar = this.getCalendar();
 
@@ -122,6 +124,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             return;
         }
 
+        this.reinit({ });
         this.instance.open();
 
         const calendar = this.getCalendar();

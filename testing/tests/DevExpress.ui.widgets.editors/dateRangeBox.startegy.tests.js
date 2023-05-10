@@ -41,7 +41,8 @@ const moduleConfig = {
         };
 
         init({
-            value: ['2023/01/05', '2023/02/14']
+            value: ['2023/01/05', '2023/02/14'],
+            multiView: true,
         });
     },
     afterEach: function() {
