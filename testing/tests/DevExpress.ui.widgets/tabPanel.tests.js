@@ -603,7 +603,7 @@ QUnit.module('keyboard navigation', {
         assert.expect(3);
 
         this.instance.focus();
-        $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
+        $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerup');
         this.clock.tick(10);
 
         const tabsFocusedIndex = $(this.instance.option('focusedElement')).index();
