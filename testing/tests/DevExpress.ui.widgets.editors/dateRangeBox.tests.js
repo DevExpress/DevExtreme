@@ -1075,7 +1075,6 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(this.onValueChangedHandler.callCount, 0);
         });
 
-        // TODO: now onValueChanged event calls twice because we clear dateboxes sequentially
         QUnit.test('should be called once after click on clear button', function(assert) {
             this.reinit({
                 showClearButton: true,
@@ -1085,10 +1084,9 @@ QUnit.module('Events', moduleConfig, () => {
 
             getClearButton(this.$element).trigger('dxclick');
 
-            assert.strictEqual(this.onValueChangedHandler.callCount, 2);
+            assert.strictEqual(this.onValueChangedHandler.callCount, 1);
         });
 
-        // TODO: now onValueChanged event calls twice
         QUnit.test('should be called once after click on reset method call', function(assert) {
             this.reinit({
                 showClearButton: true,
@@ -1098,7 +1096,8 @@ QUnit.module('Events', moduleConfig, () => {
 
             this.instance.reset();
 
-            assert.strictEqual(this.onValueChangedHandler.callCount, 2);
+            assert.strictEqual(this.onValueChangedHandler.callCount, 1);
+            assert.strictEqual(this.instance.option('value'), [null, null], 'value is correct');
         });
 
         QUnit.test('keybord events should be attached if readonly is false', function(assert) {
@@ -1140,6 +1139,25 @@ QUnit.module('Events', moduleConfig, () => {
             $(this.instance.field()[0]).trigger($.Event('keydown'));
 
             assert.strictEqual(keyboardHandledStub.callCount, 0, 'keyboard events are detached');
+        });
+
+        QUnit.test('should have correct event on change value after click on clear button', function(assert) {
+            const onValueChangedHandler = sinon.stub();
+
+            this.reinit({
+                value: ['2023/02/23', '2023/03/24'],
+                showClearButton: true,
+                onValueChanged: onValueChangedHandler,
+            });
+
+            $(this.instance.getButton('clear')).trigger('dxclick');
+
+            assert.strictEqual(onValueChangedHandler.callCount, 1, 'handler has been called once');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
+
+            this.instance.option('value', [new Date(2021, 9, 17), new Date(2021, 9, 19)]);
+            assert.strictEqual(onValueChangedHandler.callCount, 2, 'handler has been called twice');
+            assert.strictEqual(onValueChangedHandler.getCall(1).args[0].event, undefined, 'event has been cleared');
         });
     });
 
@@ -1845,6 +1863,35 @@ QUnit.module('Option synchronization', moduleConfig, () => {
     });
 
     ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+        QUnit.test(`onValueChanged should have correct event on change value in ${dateBoxName}`, function(assert) {
+            const onValueChangedHandler = sinon.stub();
+
+            this.reinit({
+                value: ['2023/02/23', '2023/03/24'],
+                valueChangeEvent: 'change',
+                onValueChanged: onValueChangedHandler,
+            });
+
+            const dateBox = dateBoxName === 'startDateBox'
+                ? getStartDateBoxInstance(this.instance)
+                : getEndDateBoxInstance(this.instance);
+
+            const $input = $(dateBox.field());
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .caret({ start: 0, end: 1 })
+                .type('1')
+                .change();
+
+            assert.strictEqual(onValueChangedHandler.callCount, 1, 'handler has been called once');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'change', 'event is correct');
+
+            this.instance.option('value', [new Date(2021, 9, 17), new Date(2021, 9, 19)]);
+            assert.strictEqual(onValueChangedHandler.callCount, 2, 'handler has been called twice');
+            assert.strictEqual(onValueChangedHandler.getCall(1).args[0].event, undefined, 'event has been cleared');
+        });
+
         QUnit.test(`value should change on keyup in ${dateBoxName} if valueChangeEvent is set to keyup on init`, function(assert) {
             assert.expect(1);
 
