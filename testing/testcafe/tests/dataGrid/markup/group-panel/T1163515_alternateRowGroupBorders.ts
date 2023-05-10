@@ -39,12 +39,12 @@ const getScreenshotParams = ({
   hasMasterDetail,
 }) => [
   `${theme === Themes.materialBlue ? 'material' : ''}`,
-  `${rowAlternationEnabled ? 'alt-rows' : ''}`,
-  `${showColumnLines ? 'column-lines' : ''}`,
-  `${showRowLines ? 'row-lines' : ''}`,
+  `${rowAlternationEnabled ? 'r-alt' : ''}`,
+  `${showColumnLines ? 'lines-c' : ''}`,
+  `${showRowLines ? 'lines-r' : ''}`,
   `${showBorders ? 'borders' : ''}`,
-  `${hasFixedColumn ? 'fixed-columns' : ''}`,
-  `${hasMasterDetail ? 'master-detail' : ''}`,
+  `${hasFixedColumn ? 'f-columns' : ''}`,
+  `${hasMasterDetail ? 'm-detail' : ''}`,
 ].filter((value) => !!value)
   .join('_');
 const createDataGrid = async ({
@@ -151,9 +151,11 @@ const markupTest = (matrixOptions) => {
       ? dataGrid.getFixedDataRow(rowIdx).getCommandCell(colIdx).element
       : dataGrid.getDataRow(rowIdx).getCommandCell(colIdx).element;
 
-    await takeScreenshot(`borders_${getScreenshotParams(matrixOptions)}.png`, dataGrid.element);
+    const screenshotParams = getScreenshotParams(matrixOptions);
+    const additionalScreenshotName = screenshotParams.length ? `_${screenshotParams}` : '';
+    await takeScreenshot(`borders${additionalScreenshotName}.png`, dataGrid.element);
     await t.click(deleteBtn);
-    await takeScreenshot(`borders-repaint_${getScreenshotParams(matrixOptions)}.png`, dataGrid.element);
+    await takeScreenshot(`borders-repaint${additionalScreenshotName}.png`, dataGrid.element);
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
