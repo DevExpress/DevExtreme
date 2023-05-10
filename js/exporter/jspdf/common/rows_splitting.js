@@ -1,7 +1,7 @@
 import { isDefined } from '../../../core/utils/type';
 import { getPageWidth, getPageHeight } from './pdf_utils';
 
-import { roundToThreeDecimals } from './draw_utils';
+import { roundToThreeDecimals, roundToFourDecimals } from './draw_utils';
 
 import { getMultiPageRowPages, checkPageContainsOnlyHeader } from './rows_spliting_utils/get_multipage_row_pages';
 import { createOnSplitMultiPageRow } from './rows_spliting_utils/create_on_split_multipage_row';
@@ -12,7 +12,20 @@ function convertToCellsArray(rows) {
             return rowInfo.cells
                 .filter(cell => !isDefined(cell.pdfCell.isMerged))
                 .map(cellInfo => {
-                    return Object.assign({}, cellInfo.pdfCell._rect, { sourceCellInfo: { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell } });
+                    const rect = cellInfo.pdfCell._rect;
+                    return Object.assign(
+                        {},
+                        {
+                            w: roundToFourDecimals(rect.w),
+                            h: roundToFourDecimals(rect.h),
+                            x: roundToFourDecimals(rect.x),
+                            y: roundToFourDecimals(rect.y)
+                        },
+                        { sourceCellInfo: {
+                            ...cellInfo.pdfCell,
+                            gridCell: cellInfo.gridCell
+                        }
+                        });
                 });
         })
     );
