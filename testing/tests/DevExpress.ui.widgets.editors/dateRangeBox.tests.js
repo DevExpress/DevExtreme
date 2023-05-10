@@ -1097,7 +1097,7 @@ QUnit.module('Events', moduleConfig, () => {
             this.instance.reset();
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 1);
-            assert.strictEqual(this.instance.option('value'), [null, null], 'value is correct');
+            assert.deepEqual(this.instance.option('value'), [null, null], 'value is correct');
         });
 
         QUnit.test('keybord events should be attached if readonly is false', function(assert) {
