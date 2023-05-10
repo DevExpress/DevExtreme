@@ -3,23 +3,22 @@
 // adduse
 
 $generic-calendar-legacy-width: null !default;
+$generic-calendar-legacy-height: null !default;
 
-$material-calendar-body-legacy-height: null !default;
+$generic-calendar-footer-button-height: null !default;
 
-$generic-calendar-cell-base-size: null !default;
+$generic-calendar-element-padding: 8px !default;
 
 @if $size == "default" {
-  $generic-calendar-legacy-width: 282px;
+  $generic-calendar-legacy-height: 268px !default;
+  $generic-calendar-legacy-width: 282px !default;
 
-  $material-calendar-body-legacy-height: 222.59px !default;
-
-  $generic-calendar-cell-base-size: 2em;
+  $generic-calendar-footer-button-height: 36px !default;
 }
 
 @else if $size == "compact" {
-  $generic-calendar-legacy-width: 232px;
+  $generic-calendar-legacy-height: 226px !default;
+  $generic-calendar-legacy-width: 232px !default;
 
-  $material-calendar-body-legacy-height: 189.4px !default;
-
-  $generic-calendar-cell-base-size: 2em;
+  $generic-calendar-footer-button-height: 28px !default;
 }

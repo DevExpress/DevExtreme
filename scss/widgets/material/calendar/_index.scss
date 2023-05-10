@@ -8,20 +8,15 @@
 
 // adduse
 
-.dx-calendar {
-  background-color: $calendar-bg;
-  width: $material-calendar-legacy-width;
-  min-width: $material-calendar-legacy-width;
-
-  .dx-calendar-body {
-    height: $material-calendar-body-legacy-height;
-  }
-
-  &.dx-calendar-multiview {
-    width: $material-calendar-legacy-width * 2;
-    min-width: $material-calendar-legacy-width * 2;
-  }
-}
+@include dx-calendar-mixin(
+  $calendar-bg,
+  $material-calendar-legacy-width,
+  $material-calendar-legacy-height,
+  $material-calendar-element-padding,
+  $material-calendar-footer-button-height,
+  $calendar-invalid-faded-border-color,
+  $calendar-invalid-focused-border-color,
+);
 
 .dx-calendar-navigator-previous-view,
 .dx-calendar-navigator-next-view {
@@ -56,13 +51,3 @@
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
 );
-
-.dx-invalid {
-  &.dx-calendar {
-    border-color: $calendar-invalid-faded-border-color;
-
-    &.dx-state-focused {
-      border-color: $calendar-invalid-focused-border-color;
-    }
-  }
-}

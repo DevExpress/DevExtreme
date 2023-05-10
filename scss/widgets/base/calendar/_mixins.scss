@@ -1,5 +1,42 @@
 @use "sass:color";
 
+@mixin dx-calendar-mixin(
+  $calendar-bg,
+  $calendar-width,
+  $calendar-height,
+  $calendar-element-padding,
+  $footer-button-height,
+  $calendar-invalid-faded-border-color,
+  $calendar-invalid-focused-border-color,
+) {
+  .dx-calendar {
+    width: $calendar-width;
+    min-width: $calendar-width;
+    height: $calendar-height;
+    min-height: $calendar-height;
+    background-color: $calendar-bg;
+    gap: $calendar-element-padding;
+
+    &.dx-calendar-with-footer {
+      height: $calendar-height + $calendar-element-padding + $footer-button-height;
+      min-height: $calendar-height + $calendar-element-padding + $footer-button-height;
+    }
+
+    &.dx-calendar-multiview {
+      width: $calendar-width * 2;
+      min-width: $calendar-width * 2;
+    }
+
+    &.dx-invalid {
+      border-color: $calendar-invalid-faded-border-color;
+
+      &.dx-state-focused {
+        border-color: $calendar-invalid-focused-border-color;
+      }
+    }
+  }
+}
+
 @mixin dx-calendar-body-mixin(
   $cell-other-color,
   $week-number-cell-color,

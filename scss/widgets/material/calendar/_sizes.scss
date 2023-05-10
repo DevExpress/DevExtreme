@@ -3,26 +3,26 @@
 // adduse
 
 $material-calendar-legacy-width: null !default;
-$material-calendar-footer-height: null !default;
+$material-calendar-legacy-height: null !default;
 
-$material-calendar-body-legacy-height: null !default;
-
+$material-calendar-footer-button-height: null !default;
 $material-calendar-cell-font-size: null !default;
 
-@if $size == "default" {
-  $material-calendar-legacy-width: 226px !default;
+$material-calendar-element-padding: 8px !default;
 
-  $material-calendar-body-legacy-height: 218.4px !default;
+@if $size == "default" {
+  $material-calendar-legacy-width: 272px !default;
+  $material-calendar-legacy-height: 264px !default;
 
   $material-calendar-cell-font-size: 14px !default;
-  $material-calendar-footer-height: 36px !default;
+
+  $material-calendar-footer-button-height: 36px !default;
 }
 
 @else if $size == "compact" {
-  $material-calendar-legacy-width: 250px !default;
-
-  $material-calendar-body-legacy-height: 222.4px !default;
+  $material-calendar-legacy-width: 252px !default;
+  $material-calendar-legacy-height: 260px !default;
 
   $material-calendar-cell-font-size: 12px !default;
-  $material-calendar-footer-height: 28px !default;
+  $material-calendar-footer-button-height: 28px !default;
 }
