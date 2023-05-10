@@ -1745,6 +1745,7 @@ declare module DevExpress.common {
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
+  export type ViewsCount = 1 | 2;
 }
 declare module DevExpress.common.charts {
   export type AnimationEaseMode = 'easeOutCubic' | 'linear';
@@ -7566,12 +7567,6 @@ declare module DevExpress.ui {
      */
     dateSerializationFormat?: string;
     /**
-     * [descr:DateBoxBaseOptions.disabledDates]
-     */
-    disabledDates?:
-      | Array<Date>
-      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
-    /**
      * [descr:DateBoxBaseOptions.displayFormat]
      */
     displayFormat?: Format;
@@ -7587,10 +7582,6 @@ declare module DevExpress.ui {
      * [descr:DateBoxBaseOptions.min]
      */
     min?: Date | number | string;
-    /**
-     * [descr:DateBoxBaseOptions.placeholder]
-     */
-    placeholder?: string;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -10664,17 +10655,47 @@ declare module DevExpress.ui {
      */
     adaptivityEnabled?: boolean;
     /**
+     * [descr:dxDateBoxOptions.disabledDates]
+     */
+    disabledDates?:
+      | Array<Date>
+      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
+    /**
+     * [descr:dxDateBoxOptions.inputAttr]
+     */
+    inputAttr?: any;
+    /**
      * [descr:dxDateBoxOptions.interval]
      */
     interval?: number;
+    /**
+     * [descr:dxDateBoxOptions.label]
+     */
+    label?: string;
+    /**
+     * [descr:dxDateBoxOptions.maxLength]
+     */
+    maxLength?: string | number;
+    /**
+     * [descr:dxDateBoxOptions.name]
+     */
+    name?: string;
     /**
      * [descr:dxDateBoxOptions.pickerType]
      */
     pickerType?: DevExpress.ui.dxDateBox.DatePickerType;
     /**
+     * [descr:dxDateBoxOptions.placeholder]
+     */
+    placeholder?: string;
+    /**
      * [descr:dxDateBoxOptions.showAnalogClock]
      */
     showAnalogClock?: boolean;
+    /**
+     * [descr:dxDateBoxOptions.text]
+     */
+    text?: string;
     /**
      * [descr:dxDateBoxOptions.type]
      */
@@ -10700,7 +10721,8 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type DateRangePickerType = 'calendar' | 'native';
+    export type DateRangeDisabledDate =
+      DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateRangeBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
@@ -10744,21 +10766,65 @@ declare module DevExpress.ui {
     >;
     export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
       /**
+       * [descr:Properties.disabledDates]
+       */
+      disabledDates?: Array<Date> | ((data: DateRangeDisabledDate) => boolean);
+      /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
       endDate?: Date | number | string;
       /**
-       * [descr:dxDateRangeBoxOptions.pickerType]
+       * [descr:dxDateRangeBoxOptions.endDateInputAttr]
        */
-      pickerType?: DateRangePickerType;
+      endDateInputAttr?: any;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateLabel]
+       */
+      endDateLabel?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateName]
+       */
+      endDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDatePlaceholder]
+       */
+      endDatePlaceholder?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateText]
+       */
+      endDateText?: string;
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
       startDate?: Date | number | string;
       /**
+       * [descr:dxDateRangeBoxOptions.startDateInputAttr]
+       */
+      startDateInputAttr?: any;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateLabel]
+       */
+      startDateLabel?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateName]
+       */
+      startDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDatePlaceholder]
+       */
+      startDatePlaceholder?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateText]
+       */
+      startDateText?: string;
+      /**
        * [descr:dxDateRangeBoxOptions.value]
        */
       value?: Array<Date | number | string>;
+      /**
+       * [descr:dxDateRangeBoxOptions.viewsCount]
+       */
+      viewsCount?: DevExpress.common.ViewsCount;
     };
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxDateRangeBox,
