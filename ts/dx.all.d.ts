@@ -1745,7 +1745,6 @@ declare module DevExpress.common {
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
-  export type ViewsCount = 1 | 2;
 }
 declare module DevExpress.common.charts {
   export type AnimationEaseMode = 'easeOutCubic' | 'linear';
@@ -10794,6 +10793,10 @@ declare module DevExpress.ui {
        */
       endDateText?: string;
       /**
+       * [descr:dxDateRangeBoxOptions.multiView]
+       */
+      multiView?: boolean;
+      /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
       startDate?: Date | number | string;
@@ -10821,10 +10824,6 @@ declare module DevExpress.ui {
        * [descr:dxDateRangeBoxOptions.value]
        */
       value?: Array<Date | number | string>;
-      /**
-       * [descr:dxDateRangeBoxOptions.viewsCount]
-       */
-      viewsCount?: DevExpress.common.ViewsCount;
     };
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxDateRangeBox,
