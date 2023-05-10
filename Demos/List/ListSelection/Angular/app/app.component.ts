@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSelectBoxModule, DxListModule } from 'devextreme-angular';
+import { DxSelectBoxModule, DxListModule, DxCheckBoxModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 
@@ -25,6 +25,8 @@ export class AppComponent {
 
   selectionModeValue = 'all';
 
+  selectByClick = false;
+
   constructor(service: Service) {
     this.tasks = new DataSource({
       store: new ArrayStore({
@@ -41,6 +43,7 @@ export class AppComponent {
     BrowserTransferStateModule,
     DxSelectBoxModule,
     DxListModule,
+    DxCheckBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -2,6 +2,7 @@ import React from 'react';
 
 import SelectBox from 'devextreme-react/select-box';
 import List from 'devextreme-react/list';
+import CheckBox from 'devextreme-react/check-box';
 
 import ArrayStore from 'devextreme/data/array_store';
 
@@ -17,6 +18,7 @@ const selectAllModes = ['page', 'allPages'];
 export default function App() {
   const [selectionMode, setSelectionMode] = React.useState('all');
   const [selectAllMode, setSelectAllMode] = React.useState('page');
+  const [selectByClick, setSelectByClick] = React.useState(false);
   const [selectedItemKeys, setSelectedItemKeys] = React.useState([]);
 
   const onSelectedItemKeysChange = React.useCallback(({ name, value }) => {
@@ -35,6 +37,10 @@ export default function App() {
     setSelectAllMode(value);
   }, [setSelectAllMode]);
 
+  const onSelectByClickChange = React.useCallback((value) => {
+    setSelectByClick(value);
+  }, [setSelectByClick]);
+
   return (
     <React.Fragment>
       <div className="widget-container">
@@ -45,6 +51,7 @@ export default function App() {
           selectionMode={selectionMode}
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
+          selectByClick={selectByClick}
           onOptionChanged={onSelectedItemKeysChange}>
         </List>
         <div className="selected-data">
@@ -72,6 +79,14 @@ export default function App() {
             value={selectAllMode}
             onValueChange={onSelectAllModeChange}>
           </SelectBox>
+        </div>
+        <div className="option">
+          <span>Select By Click</span>
+            &nbsp;
+          <CheckBox
+            value={selectByClick}
+            onValueChange={onSelectByClickChange}>
+          </CheckBox>
         </div>
       </div>
     </React.Fragment>

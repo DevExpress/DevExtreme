@@ -8,6 +8,7 @@
       [selectAllMode]="selectAllModeValue"
       [showSelectionControls]="true"
       [selectedItemKeys]="[]"
+      [selectByClick]="selectByClick"
     ></dx-list>
     <div class="selected-data">
       <span class="caption">Selected IDs: </span>
@@ -32,6 +33,10 @@
         [(value)]="selectAllModeValue"
       >
       </dx-select-box>
+    </div>
+    <div class="option">
+      <span>Select By Click</span>
+      <dx-check-box [(value)]="selectByClick"></dx-check-box>
     </div>
   </div>
 </div>

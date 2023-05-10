@@ -7,6 +7,7 @@
         :show-selection-controls="true"
         :selection-mode="selectionMode"
         :select-all-mode="selectAllMode"
+        :select-by-click="selectByClick"
         v-model:selected-item-keys="selectedItemKeys"
       />
       <div class="selected-data">
@@ -31,6 +32,12 @@
           v-model:value="selectAllMode"
         />
       </div>
+      <div class="option">
+        <span>Select By Click</span>
+        <DxCheckBox
+          v-model:value="selectByClick"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -38,6 +45,7 @@
 
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
+import DxCheckBox from 'devextreme-vue/check-box';
 
 import ArrayStore from 'devextreme/data/array_store';
 
@@ -47,6 +55,8 @@ export default {
   components: {
     DxSelectBox,
     DxList,
+    DxCheckBox,
+
   },
   data() {
     return {
@@ -57,6 +67,7 @@ export default {
       selectedItemKeys: [],
       selectionMode: 'all',
       selectAllMode: 'page',
+      selectByClick: false,
     };
   },
 };
