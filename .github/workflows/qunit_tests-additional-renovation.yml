@@ -98,7 +98,7 @@ jobs:
   qunit-tests-mobile:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
+    name: ${{ matrix.constel }}-${{ matrix.userAgent }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
