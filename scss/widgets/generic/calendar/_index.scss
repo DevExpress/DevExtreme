@@ -48,6 +48,7 @@
 
 @include dx-calendar-body-mixin(
   $calendar-cell-other-color,
+  $calendar-week-number-cell-color,
   $calendar-week-number-cell-bg,
   0,
   $generic-base-font-size,
@@ -62,10 +63,10 @@
   $calendar-cell-hover-color,
   $calendar-cell-active-bg,
   $calendar-cell-selected-bg,
+  $calendar-cell-selected-color,
   $calendar-cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
-  $base-inverted-text-color,
 );
 
 .dx-invalid {

@@ -2,7 +2,8 @@
 
 @mixin dx-calendar-body-mixin(
   $cell-other-color,
-  $week-number-cell-bg-color,
+  $week-number-cell-color,
+  $week-number-cell-bg,
   $week-number-cell-border-radius,
   $cell-font-size,
   $header-color,
@@ -15,8 +16,8 @@
       }
 
       .dx-calendar-week-number-cell {
-        color: $cell-other-color;
-        background-color: $week-number-cell-bg-color;
+        color: $week-number-cell-color;
+        background-color: $week-number-cell-bg;
         width: 2em;
         margin-right: 0.5em;
 
@@ -69,10 +70,10 @@
   $cell-hover-color,
   $cell-active-bg,
   $cell-selected-bg,
+  $cell-selected-color,
   $cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
-  $base-inverted-text-color,
 ) {
   .dx-calendar-cell {
     color: $cell-text-color;
@@ -122,35 +123,14 @@
 
     &.dx-calendar-selected-date {
       span {
+        color: $cell-selected-color;
         background-color: $cell-selected-bg;
-      }
-
-      &.dx-state-hover,
-      &.dx-state-active {
-        span {
-          background-color: $cell-active-bg;
-        }
       }
     }
 
     &.dx-calendar-contoured-date {
       span {
         box-shadow: 0 0 0 2px $cell-contoured-border-color;
-      }
-    }
-
-    &.dx-calendar-range-start-date,
-    &.dx-calendar-range-end-date {
-      span {
-        color: $base-inverted-text-color;
-        background-color: $base-accent;
-      }
-
-      &.dx-state-hover,
-      &.dx-state-active {
-        span {
-          background-color: $base-accent;
-        }
       }
     }
 
@@ -238,6 +218,12 @@
       &.dx-state-active {
         span {
           color: $calendar-cell-other-hover-color;
+        }
+      }
+
+      &.dx-calendar-selected-date {
+        span {
+          color: $cell-selected-color;
         }
       }
     }
