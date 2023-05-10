@@ -691,22 +691,26 @@ const CollectionWidget = Widget.inherit({
         this._attachContextMenuEvent();
     },
 
+    _getPointerEventName() {
+        return pointerEvents.down;
+    },
+
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
         const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-        const pointerUpEventNamespace = addNamespace(pointerEvents.up, this.NAME);
+        const pointerEventNamespace = addNamespace(pointerEvents.up, this.NAME);
         const that = this;
 
-        const pointerUpAction = new Action(function(args) {
+        const pointerAction = new Action(function(args) {
             const event = args.event;
             that._itemPointerDownHandler(event);
         });
 
         eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
-        eventsEngine.off(this._itemContainer(), pointerUpEventNamespace, itemSelector);
+        eventsEngine.off(this._itemContainer(), pointerEventNamespace, itemSelector);
         eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
-        eventsEngine.on(this._itemContainer(), pointerUpEventNamespace, itemSelector, function(e) {
-            pointerUpAction.execute({
+        eventsEngine.on(this._itemContainer(), pointerEventNamespace, itemSelector, function(e) {
+            pointerAction.execute({
                 element: $(e.target),
                 event: e
             });
