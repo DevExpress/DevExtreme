@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import DataGrid from '../../../model/dataGrid';
-import { Themes } from '../helpers/themes';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import createWidget from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import DataGrid from '../../../../model/dataGrid';
+import { Themes } from '../../helpers/themes';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';
 
@@ -38,14 +38,15 @@ const getScreenshotParams = ({
   hasFixedColumn,
   hasMasterDetail,
 }) => [
-  `alt-rows-${rowAlternationEnabled}`,
-  `column-lines-${showColumnLines}`,
-  `row-lines-${showRowLines}`,
-  `borders-${showBorders}`,
-  `fixed-columns-${hasFixedColumn}`,
-  `master-detail-${hasMasterDetail}`,
-  `(${theme})`,
-].join('_');
+  `${theme === Themes.materialBlue ? 'material' : ''}`,
+  `${rowAlternationEnabled ? 'alt-rows' : ''}`,
+  `${showColumnLines ? 'column-lines' : ''}`,
+  `${showRowLines ? 'row-lines' : ''}`,
+  `${showBorders ? 'borders' : ''}`,
+  `${hasFixedColumn ? 'fixed-columns' : ''}`,
+  `${hasMasterDetail ? 'master-detail' : ''}`,
+].filter((value) => !!value)
+  .join('_');
 const createDataGrid = async ({
   rowAlternationEnabled,
   showColumnLines,
@@ -150,9 +151,9 @@ const markupTest = (matrixOptions) => {
       ? dataGrid.getFixedDataRow(rowIdx).getCommandCell(colIdx).element
       : dataGrid.getDataRow(rowIdx).getCommandCell(colIdx).element;
 
-    await takeScreenshot(`group-panel_borders_${getScreenshotParams(matrixOptions)}.png`, dataGrid.element);
+    await takeScreenshot(`borders_${getScreenshotParams(matrixOptions)}.png`, dataGrid.element);
     await t.click(deleteBtn);
-    await takeScreenshot(`group-panel_borders-after-repaint_${getScreenshotParams(matrixOptions)}.png`, dataGrid.element);
+    await takeScreenshot(`borders-repaint_${getScreenshotParams(matrixOptions)}.png`, dataGrid.element);
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
