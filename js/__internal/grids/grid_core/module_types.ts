@@ -2,32 +2,24 @@
 import {
   PropertyType as _PropertyType,
 } from '@js/core/index';
-import { Component } from '@js/core/component';
-import { dxElementWrapper } from '@js/core/renderer';
 import DataGrid, { Properties } from '@js/ui/data_grid';
+import type {
+  ModuleItem, ViewController,
+} from './modules';
 
 type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
   ? any
   : _PropertyType<O, K>;
 
-type GetOptionValueType = (<TPropertyName extends string>(
-  optionName: TPropertyName) =>
-  PropertyType<InternalGridOptions, TPropertyName>);
-
-type SetOptionValueType = (<TPropertyName extends string>(
-  optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>) => void);
-
-type SetOptionsType = ((options: InternalGridOptions) => void);
-
 export interface InternalGrid
   extends Omit<DataGrid<unknown, unknown>, 'option'> {
-  option: GetOptionValueType &
-  SetOptionValueType &
-  (() => InternalGridOptions) &
-  SetOptionsType;
+  option: ModuleItem['option'];
 
   NAME: 'dxDataGrid' | 'dxTreeList';
+
+  _views: any;
+
+  isReady: () => boolean;
 
   _updateLockCount: number;
 
@@ -35,25 +27,27 @@ export interface InternalGrid
 
   _optionCache: any;
 
+  _setOptionWithoutOptionChange: any;
+
+  _createAction: any;
+
+  _createActionByOption: any;
+
   _fireContentReadyAction: any;
 
   setAria: any;
 
   _renderDimensions: any;
 
-  getView: <T extends keyof Views>(name: T) => Views[T];
+  getView: ViewController['getView'];
 
-  getController: <T extends keyof Controllers>(name: T) => Controllers[T];
+  getController: ViewController['getController'];
 
   _optionsByReference: any;
 
   _disposed: any;
 
-  _createComponent: <TComponent extends Component<any>>(
-    $container: dxElementWrapper,
-    component: new (...args) => TComponent,
-    options: TComponent extends Component<infer TOptions> ? TOptions : never
-  ) => TComponent;
+  _createComponent: ModuleItem['_createComponent'];
 }
 
 export type InternalGridOptions = Properties & {
@@ -98,110 +92,13 @@ type ViewTypes = {
   [ P in keyof Views ]: new(component: any) => Views[P];
 };
 
-type SilentOptionType = <TPropertyName extends string>(
-  optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>
-) => void;
-
 export interface ClassStaticMembers {
   inherit: (obj: any) => any;
   subclassOf: (obj: any) => any;
 }
+
 export type ModuleType<T extends ModuleItem> = (new (component: any) => T) & ClassStaticMembers;
-declare class ModuleItem {
-  _updateLockCount?: number;
 
-  component: InternalGrid;
-
-  name: string;
-
-  callBase: any;
-
-  _createComponent: InternalGrid['_createComponent'];
-
-  getController: InternalGrid['getController'];
-
-  option: InternalGrid['option'];
-
-  _silentOption: SilentOptionType;
-
-  _endUpdateCore(): void;
-
-  ctor(): void;
-
-  init(): void;
-
-  callbackNames(): string[];
-
-  callbackFlags(name?: string): any | undefined;
-
-  publicMethods(): string[];
-
-  beginUpdate(): void;
-
-  endUpdate(): void;
-
-  localize(str: string): string;
-
-  on(...args: any[]): void;
-
-  off(...args: any[]): void;
-
-  optionChanged(e: OptionChangedArgs): void;
-
-  getAction(name: string): any;
-
-  setAria(...args: any[]): void;
-
-  createAction(...args: any[]): void;
-
-  executeAction(...args: any[]): void;
-
-  dispose(): void;
-
-  addWidgetPrefix(className: string): string;
-
-  getWidgetContainerClass(): string;
-
-  elementIsInsideGrid(element: any): boolean;
-
-  static inherit(obj: any): any;
-  static subclassOf(obj: any): any;
-}
-
-export declare class Controller extends ModuleItem {}
-
-export declare class ViewController extends Controller {
-  getView: InternalGrid['getView'];
-
-  getViews(): View[];
-}
-
-export declare class View extends ModuleItem {
-  _endUpdateCore(): void;
-
-  _invalidate(requireResize?: any, requireReady?: any): void;
-
-  _renderCore(): void;
-
-  _resizeCore(): void;
-
-  _parentElement(): any;
-
-  element(): any;
-
-  getElementHeight(): number;
-
-  isVisible(): boolean;
-
-  getTemplate(name: string): any;
-
-  render($parent?: any, options?: any): void;
-
-  resize(): void;
-
-  focus(preventScroll?: boolean): void;
-}
 type ControllersExtender = {
   [P in keyof Controllers]: ((Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>)
   | Record<string, any>;

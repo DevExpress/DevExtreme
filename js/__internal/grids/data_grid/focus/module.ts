@@ -8,7 +8,7 @@ import { extend } from '@js/core/utils/extend';
 import { createGroupFilter } from '../module_utils';
 import gridCore from '../module_core';
 import type { ModuleType } from '../../grid_core/module_types';
-import type { DataController } from '../../grid_core/data_controller/module';
+import { DataController } from '../../grid_core/data_controller/module';
 import type { GroupingDataControllerExtension } from '../grouping/module';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;

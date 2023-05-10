@@ -12,9 +12,11 @@ import { when, Deferred } from '@js/core/utils/deferred';
 import { findChanges } from '@js/core/utils/array_compare';
 import errors from '@js/ui/widget/ui.errors';
 import gridCoreUtils from '../module_utils';
-import modules from '../modules';
+import modules, {
+  Controller,
+} from '../modules';
 import type {
-  Module, ModuleType, Controllers, Controller as ControllerType,
+  Module, ModuleType, Controllers,
 } from '../module_types';
 import type { SearchDataControllerExtension } from '../search/module';
 
@@ -77,9 +79,11 @@ interface DataHelperMixinType {
   _initDataSource(): any;
 }
 
-type DataControllerBaseType = ModuleType<ControllerType
-& DataHelperMixinType
-& SearchDataControllerExtension>;
+type DataControllerBaseType = ModuleType<
+Controller &
+DataHelperMixinType &
+SearchDataControllerExtension
+>;
 
 const ControllerWithDataMixin: DataControllerBaseType = modules.Controller.inherit(DataHelperMixin);
 

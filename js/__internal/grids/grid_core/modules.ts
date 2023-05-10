@@ -1,5 +1,9 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
-import $ from '@js/core/renderer';
+/* eslint-disable max-classes-per-file */
+/* eslint-disable prefer-spread */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import $, { dxElementWrapper } from '@js/core/renderer';
 import Class from '@js/core/class';
 import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
@@ -9,27 +13,37 @@ import { each } from '@js/core/utils/iterator';
 import messageLocalization from '@js/localization/message';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
+import { PropertyType } from '@js/core';
+import { Component } from '@js/core/component';
+import { DeferredObj } from '@js/core/utils/deferred';
 import type {
-  Module, ModuleType,
-  Controller as ControllerType,
-  ViewController as ViewControllerType,
-  View as ViewType,
+  Module,
+  Controllers,
+  Views,
 } from './module_types';
+import { InternalGrid, InternalGridOptions } from './module_types';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
-const ModuleItem = Class.inherit({
-  _endUpdateCore() { },
+export class ModuleItem extends (Class as any as new() => object) {
+  static inherit: any;
 
-  ctor(component) {
-    const that = this;
-    that._updateLockCount = 0;
-    that.component = component;
-    that._actions = {};
-    that._actionConfigs = {};
+  static subclassOf: any;
 
-    each(this.callbackNames() || [], function (index, name) {
-      const flags = that.callbackFlags(name) || {};
+  component: InternalGrid;
+
+  _updateLockCount = 0;
+
+  _actions = {};
+
+  _actionConfigs = {};
+
+  constructor(component) {
+    super();
+    this.component = component;
+
+    each(this.callbackNames(), (index, name) => {
+      const flags = this.callbackFlags(name) || {};
 
       flags.unique = true;
       flags.syncStrategy = true;
@@ -37,30 +51,45 @@ const ModuleItem = Class.inherit({
       // @ts-expect-error
       that[this] = Callbacks(flags);
     });
-  },
+  }
 
-  init() { },
+  _endUpdateCore(): void { }
 
-  callbackNames() { },
+  init(): void { }
 
-  callbackFlags() { },
+  callbackNames(): string[] {
+    return [];
+  }
 
-  publicMethods() { },
+  callbackFlags(name: string): any { }
 
-  beginUpdate() {
-    this._updateLockCount++;
-  },
+  publicMethods(): string[] {
+    return [];
+  }
 
-  endUpdate() {
+  beginUpdate(): void {
+    this._updateLockCount += 1;
+  }
+
+  endUpdate(): void {
     if (this._updateLockCount > 0) {
-      this._updateLockCount--;
+      this._updateLockCount -= 1;
       if (!this._updateLockCount) {
         this._endUpdateCore();
       }
     }
-  },
+  }
 
-  option(name) {
+  option(): InternalGridOptions;
+  option(options: InternalGridOptions): void;
+  option<TOption extends string>(
+    name: TOption
+  ): PropertyType<InternalGridOptions, TOption>;
+  option<TOption extends string>(
+    name: TOption,
+    value: PropertyType<InternalGridOptions, TOption>
+  ): void;
+  option(name?: any, value?: any) {
     const { component } = this;
     const optionCache = component._optionCache;
 
@@ -71,10 +100,14 @@ const ModuleItem = Class.inherit({
       return optionCache[name];
     }
 
+    // @ts-expect-error
     return component.option.apply(component, arguments);
-  },
+  }
 
-  _silentOption(name, value) {
+  _silentOption<TPropertyName extends string>(
+    name: TPropertyName,
+    value: PropertyType<InternalGridOptions, TPropertyName>,
+  ) {
     const { component } = this;
     const optionCache = component._optionCache;
 
@@ -83,9 +116,9 @@ const ModuleItem = Class.inherit({
     }
 
     return component._setOptionWithoutOptionChange(name, value);
-  },
+  }
 
-  localize(name) {
+  localize(name: string): string {
     const optionCache = this.component._optionCache;
 
     if (optionCache) {
@@ -96,28 +129,30 @@ const ModuleItem = Class.inherit({
     }
 
     return messageLocalization.format(name);
-  },
+  }
 
   on() {
+    // @ts-expect-error
     return this.component.on.apply(this.component, arguments);
-  },
+  }
 
   off() {
+    // @ts-expect-error
     return this.component.off.apply(this.component, arguments);
-  },
+  }
 
   optionChanged(args) {
     if (args.name in this._actions) {
       this.createAction(args.name, this._actionConfigs[args.name]);
       args.handled = true;
     }
-  },
+  }
 
-  getAction(actionName) {
+  getAction(actionName): any {
     return this._actions[actionName];
-  },
+  }
 
-  setAria(name, value, $target) {
+  setAria(name: string, value: string, $target) {
     const target = $target.get(0);
     const prefix = name !== 'role' && name !== 'id' ? 'aria-' : '';
 
@@ -126,17 +161,21 @@ const ModuleItem = Class.inherit({
     } else {
       $target.attr(prefix + name, value);
     }
-  },
+  }
 
-  _createComponent() {
-    return this.component._createComponent.apply(this.component, arguments);
-  },
+  _createComponent<TComponent extends Component<any>>(
+    $container: dxElementWrapper,
+    component: new (...args) => TComponent,
+    options: TComponent extends Component<infer TOptions> ? TOptions : never,
+  ): TComponent {
+    return this.component._createComponent($container, component, options);
+  }
 
-  getController(name) {
-    return this.component._controllers[name];
-  },
+  getController<T extends keyof Controllers>(name: T): Controllers[T] {
+    return this.component.getController(name);
+  }
 
-  createAction(actionName, config) {
+  createAction(actionName, config?) {
     if (isFunction(actionName)) {
       const action = this.component._createAction(actionName.bind(this), config);
       return function (e) {
@@ -147,59 +186,75 @@ const ModuleItem = Class.inherit({
     this._actionConfigs[actionName] = config;
 
     return undefined;
-  },
+  }
 
   executeAction(actionName, options) {
     const action = this._actions[actionName];
 
     return action && action(options);
-  },
+  }
 
   dispose() {
     const that = this;
     each(that.callbackNames() || [], function () {
       that[this].empty();
     });
-  },
+  }
 
-  addWidgetPrefix(className) {
+  addWidgetPrefix(className: string | null): string {
     const componentName = this.component.NAME;
 
     return `dx-${componentName.slice(2).toLowerCase()}${className ? `-${className}` : ''}`;
-  },
+  }
 
   getWidgetContainerClass() {
     const containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
     return this.addWidgetPrefix(containerName);
-  },
+  }
 
   elementIsInsideGrid($element) {
     const $gridElement = $element.closest(`.${this.getWidgetContainerClass()}`).parent();
 
     return $gridElement.is(this.component.$element());
-  },
-});
+  }
+}
 
-const Controller: ModuleType<ControllerType> = ModuleItem as any;
+export class Controller extends ModuleItem {
 
-const ViewController: ModuleType<ViewControllerType> = Controller.inherit({
-  getView(name) {
-    return this.component._views[name];
-  },
+}
+
+export class ViewController extends Controller {
+  getView<T extends keyof Views>(name: T): Views[T] {
+    return this.component.getView(name);
+  }
 
   getViews() {
     return this.component._views;
-  },
-});
+  }
+}
 
-const View: ModuleType<ViewType> = ModuleItem.inherit({
-  _isReady() {
+export class View extends ModuleItem {
+  _requireReady: boolean | undefined;
+
+  _requireRender: boolean | undefined;
+
+  isResizing: boolean | undefined;
+
+  renderCompleted = Callbacks();
+
+  resizeCompleted = Callbacks();
+
+  _$parent: dxElementWrapper | undefined;
+
+  _$element: dxElementWrapper | undefined;
+
+  _isReady(): boolean {
     return this.component.isReady();
-  },
+  }
 
-  _endUpdateCore() {
-    this.callBase();
+  _endUpdateCore(): void {
+    super._endUpdateCore();
 
     if (!this._isReady() && this._requireReady) {
       this._requireRender = false;
@@ -209,53 +264,53 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
       this._requireRender = false;
       this.render(this._$parent);
     }
-  },
+  }
 
   _invalidate(requireResize, requireReady) {
     this._requireRender = true;
     this.component._requireResize = hasWindow() && (this.component._requireResize || requireResize);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this._requireReady = this._requireReady || requireReady;
-  },
+  }
 
-  _renderCore() { },
+  _renderCore(options: any): DeferredObj<any> | undefined {
+    return undefined;
+  }
 
-  _resizeCore() { },
+  _resizeCore() { }
 
   _parentElement() {
     return this._$parent;
-  },
-
-  ctor(component) {
-    this.callBase(component);
-    this.renderCompleted = Callbacks();
-    this.resizeCompleted = Callbacks();
-  },
+  }
 
   element() {
     return this._$element;
-  },
+  }
 
   getElementHeight() {
     const $element = this.element();
 
     if (!$element) return 0;
 
+    // @ts-expect-error
     const marginTop = parseFloat($element.css('marginTop')) || 0;
+    // @ts-expect-error
     const marginBottom = parseFloat($element.css('marginBottom')) || 0;
+    // @ts-expect-error
     const { offsetHeight } = $element.get(0);
 
     return offsetHeight + marginTop + marginBottom;
-  },
+  }
 
   isVisible() {
     return true;
-  },
+  }
 
   getTemplate(name) {
     return this.component._getTemplate(name);
-  },
+  }
 
-  render($parent, options) {
+  render($parent?, options?) {
     let $element = this._$element;
     const isVisible = this.isVisible();
 
@@ -281,19 +336,20 @@ const View: ModuleType<ViewType> = ModuleItem.inherit({
         this.renderCompleted.fire(options);
       }
     }
-  },
+  }
 
   resize() {
     this.isResizing = true;
     this._resizeCore();
     this.resizeCompleted.fire();
     this.isResizing = false;
-  },
+  }
 
   focus(preventScroll) {
+    // @ts-expect-error
     this.element().get(0).focus({ preventScroll });
-  },
-}) as any;
+  }
+}
 
 const MODULES_ORDER_MAX_INDEX = 1000000;
 

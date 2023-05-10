@@ -1,4 +1,4 @@
-import { ViewController } from '../module_types';
+import { ViewController } from '../modules';
 
 interface State {
   _isFocusOverlay: any;
