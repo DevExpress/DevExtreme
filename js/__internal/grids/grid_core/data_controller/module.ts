@@ -1277,6 +1277,7 @@ export class DataController extends ControllerWithDataMixin {
       filtering: true, sorting: true, paging: true, grouping: true, summary: true,
     };
 
+    // @ts-expect-error
     if (isObject(remoteOperations) && remoteOperations.groupPaging) {
       remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
     }

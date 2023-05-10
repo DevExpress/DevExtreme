@@ -13,13 +13,13 @@ import { each } from '@js/core/utils/iterator';
 import messageLocalization from '@js/localization/message';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { PropertyType } from '@js/core';
 import { Component } from '@js/core/component';
 import { DeferredObj } from '@js/core/utils/deferred';
 import type {
   Module,
   Controllers,
   Views,
+  PropertyType,
 } from './module_types';
 import { InternalGrid, InternalGridOptions } from './module_types';
 

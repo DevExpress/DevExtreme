@@ -1186,7 +1186,6 @@ export class KeyboardNavigationController extends modules.ViewController {
         activeElementSelector
           += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';
       }
-      // @ts-expect-error
       element = this.component.$element().find(activeElementSelector).first();
     }
 

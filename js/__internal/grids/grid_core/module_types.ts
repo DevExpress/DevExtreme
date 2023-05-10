@@ -2,22 +2,30 @@
 import {
   PropertyType as _PropertyType,
 } from '@js/core/index';
-import DataGrid, { Properties } from '@js/ui/data_grid';
+import { GridBase, GridBaseOptions } from '@js/common/grids';
+import { dxElementWrapper } from '@js/core/renderer';
 import type {
   ModuleItem, ViewController,
 } from './modules';
 
-type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
+export type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
   ? any
   : _PropertyType<O, K>;
 
 export interface InternalGrid
-  extends Omit<DataGrid<unknown, unknown>, 'option'> {
+  extends Omit<GridBase<unknown, unknown>, 'option'> {
   option: ModuleItem['option'];
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
   _views: any;
+
+  _getTemplate: any;
+
+  $element: () => dxElementWrapper;
+
+  beginUpdate: () => void;
+  endUpdate: () => void;
 
   isReady: () => boolean;
 
@@ -50,7 +58,7 @@ export interface InternalGrid
   _createComponent: ModuleItem['_createComponent'];
 }
 
-export type InternalGridOptions = Properties & {
+export type InternalGridOptions = GridBaseOptions<InternalGrid, unknown, unknown > & {
   loadingTimeout?: number;
 };
 
