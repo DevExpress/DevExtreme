@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
 import { PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
@@ -56,15 +57,57 @@ export interface InternalGrid extends GridBaseType {
 
 export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown> {
   loadingTimeout?: number;
+
+  useLegacyKeyboardNavigation?: boolean;
 }
 
-export interface OptionChangedArgs<T extends string = string> {
+// todo: move to upper .d.ts files
+type DotPrefix<T extends string> = T extends '' ? '' : `.${T}`;
+
+// todo: move to upper .d.ts files
+type DecrementalCounter = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+// todo: move to upper .d.ts files
+type IsObject<T> =
+  0 extends (1 & T)
+    ? false
+    : T extends any[]
+      ? false
+      : string extends keyof T
+        ? false
+        : T extends object
+          ? true
+          : false;
+
+// todo: move to upper .d.ts files
+type DotNestedKeys<T, RLIMIT extends number = 10> =
+(
+  IsObject<T> extends true ?
+    (
+      RLIMIT extends 1 ? keyof T :
+        {
+          [K in Exclude<keyof T, symbol>]: `${K}${DotPrefix<DotNestedKeys<T[K], DecrementalCounter[RLIMIT]>>}` | K
+        }[Exclude<keyof T, symbol>]
+    ) :
+    ''
+) extends infer D ? Extract<D, string> : never;
+
+// todo: move to upper .d.ts files
+interface OptionChangedArgs<T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
   previousValue: PropertyType<InternalGridOptions, T>;
   value: PropertyType<InternalGridOptions, T>;
   handled: boolean;
 }
+
+// todo: move to upper .d.ts files
+type OptionNames = DotNestedKeys<Required<InternalGridOptions>>;
+
+// todo: move to upper .d.ts files
+export type OptionChanged = {
+  [P in OptionNames]: OptionChangedArgs<P>;
+}[OptionNames];
 
 export interface Controllers {
   data: import('./data_controller/module').DataController;
@@ -145,7 +188,7 @@ declare class ModuleItem {
 
   off(...args: any[]): void;
 
-  optionChanged(e: OptionChangedArgs): void;
+  optionChanged(e: OptionChanged): void;
 
   getAction(name: string): any;
 
