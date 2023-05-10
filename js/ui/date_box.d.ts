@@ -106,10 +106,42 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     adaptivityEnabled?: boolean;
     /**
      * @docid
+     * @default null
+     * @type_function_param1 data:object
+     * @type_function_param1_field component:dxDateBox
+     * @public
+     */
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
+    /**
+     * @docid
+     * @default {}
+     * @public
+     */
+    inputAttr?: any;
+    /**
+     * @docid
      * @default 30
      * @public
      */
     interval?: number;
+    /**
+     * @docid
+     * @default ''
+     * @public
+     */
+    label?: string;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    maxLength?: string | number;
+    /**
+     * @docid
+     * @default ""
+     * @public
+     */
+    name?: string;
     /**
      * @docid
      * @default 'calendar'
@@ -120,10 +152,22 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     pickerType?: DatePickerType;
     /**
      * @docid
+     * @default ""
+     * @public
+     */
+    placeholder?: string;
+    /**
+     * @docid
      * @default true
      * @public
      */
     showAnalogClock?: boolean;
+    /**
+     * @docid
+     * @readonly
+     * @public
+     */
+    text?: string;
     /**
      * @docid
      * @default "date"
@@ -175,14 +219,6 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 data:object
-     * @type_function_param1_field component:dxDateBox
-     * @public
-     */
-    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
-    /**
-     * @docid
-     * @default null
      * @public
      */
     displayFormat?: Format;
@@ -204,12 +240,6 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @public
      */
     min?: Date | number | string;
-    /**
-     * @docid
-     * @default ""
-     * @public
-     */
-    placeholder?: string;
     /**
      * @docid
      * @default "Today"

@@ -6,6 +6,14 @@ import {
 } from '../events/index';
 
 import {
+  ViewsCount,
+ } from '../common';
+
+import {
+  ComponentDisabledDate,
+} from './calendar';
+
+import {
   DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
@@ -14,9 +22,6 @@ import { DateBoxBase, DateBoxBaseOptions } from './date_box';
 import {
   ValueChangedInfo,
 } from './editor/editor';
-
-/** @public */
-export type DateRangePickerType = 'calendar' | 'native';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateRangeBox>;
@@ -75,6 +80,9 @@ export type ValueChangedEvent =
     & ValueChangedInfo;
 
 /** @public */
+export type DateRangeDisabledDate = ComponentDisabledDate<dxDateRangeBox>;
+
+/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
@@ -82,19 +90,49 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  */
 export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
     /**
+       * @docid
+       * @default null
+       * @type_function_param1 data:object
+       * @type_function_param1_field component:dxDateRangeBox
+       * @public
+       */
+    disabledDates?: Array<Date> | ((data: DateRangeDisabledDate) => boolean);
+    /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
      */
     endDate?: Date | number | string;
     /**
-     * @docid dxDateRangeBoxOptions.pickerType
-     * @default 'calendar'
-     * @default 'native' &for(iOS)
-     * @default 'native' &for(Android)
+     * @docid dxDateRangeBoxOptions.endDateInputAttr
+     * @default {}
      * @public
      */
-    pickerType?: DateRangePickerType;
+    endDateInputAttr?: any;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateLabel
+     * @default "End Date"
+     * @public
+     */
+    endDateLabel?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateName
+     * @default ""
+     * @public
+     */
+    endDateName?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDatePlaceholder
+     * @default ""
+     * @public
+     */
+    endDatePlaceholder?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateText
+     * @readonly
+     * @public
+     */
+    endDateText?: string;
     /**
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
@@ -102,11 +140,49 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     startDate?: Date | number | string;
     /**
+     * @docid dxDateRangeBoxOptions.startDateInputAttr
+     * @default {}
+     * @public
+     */
+    startDateInputAttr?: any;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateLabel
+     * @default "Start Date"
+     * @public
+     */
+    startDateLabel?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateName
+     * @default ""
+     * @public
+     */
+    startDateName?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDatePlaceholder
+     * @default ""
+     * @public
+     */
+    startDatePlaceholder?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateText
+     * @readonly
+     * @public
+     */
+    startDateText?: string;
+    /**
      * @docid dxDateRangeBoxOptions.value
      * @default [null, null]
      * @public
      */
     value?: Array<Date | number | string>;
+    /**
+     * @docid dxDateRangeBoxOptions.viewsCount
+     * @default 2
+     * @default 1 &for(iOS)
+     * @default 1 &for(Android)
+     * @public
+     */
+    viewsCount?: ViewsCount;
 };
 
 /**

@@ -782,3 +782,9 @@ export type VerticalAlignment = 'bottom' | 'center' | 'top';
  * @namespace DevExpress.common
  */
 export type VerticalEdge = 'bottom' | 'top';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ViewsCount = 1 | 2;
