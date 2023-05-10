@@ -7,6 +7,7 @@ import CollectionWidget, {
  * @namespace DevExpress.ui
  * @docid
  * @type object
+ * @hidden
  */
 export interface HierarchicalCollectionWidgetOptions<
     TComponent extends HierarchicalCollectionWidget<any, TItem, TKey>,
