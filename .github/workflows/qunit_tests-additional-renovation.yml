@@ -138,6 +138,13 @@ jobs:
             useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
+        exclude:
+          - userAgent: ''
+            constel: 'ui'
+          - userAgent: ''
+            constel: 'ui.scheduler'
+          - userAgent: ''
+            constel: 'viz'
 
     steps:
       - name: Get sources
@@ -146,7 +153,8 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          constel: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
+          name: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
+          constel: ${{ matrix.constel }}
           browser: 'chrome'
           useJQuery: ${{ matrix.useJquery || 'false' }}
           userAgent: ${{ matrix.userAgent }}
