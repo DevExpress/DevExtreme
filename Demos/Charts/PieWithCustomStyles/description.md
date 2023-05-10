@@ -18,8 +18,6 @@ An object with gradient options.
 
 ## Pattern
 
-This demo uses patterns for two pie slices: Grid and Stripes. 
-
 To get the pattern ID, call the [registerPattern()](/Documentation/ApiReference/Common/Utils/viz/#registerPatternoptions) method. Specify method arguments:
 
 - `options`    
