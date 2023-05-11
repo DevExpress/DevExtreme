@@ -3,38 +3,23 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button/mixins" as *;
-@use "../button/colors" as *;
-@use "../../base/calendar";
+@use "../../base/calendar/calendar";
+@use "../../base/calendar/mixins" as *;
 
 // adduse
 
-$material-calendar-navigator-fontsize: 14px;
-$material-calendar-navigator-line-height: 1.6;
-$material-calendar-width: $material-calendar-body-width;
-$material-calendar-height: $material-calendar-body-height + $material-calendar-navigator-fontsize * $material-calendar-navigator-line-height + $material-calendar-navigator-vertical-padding * 2;
-
 .dx-calendar {
-  width: $material-calendar-width;
-  min-width: $material-calendar-width;
-  height: $material-calendar-height + 20px;
-  min-height: $material-calendar-height + 20px;
   background-color: $calendar-bg;
-  border: 1px solid transparent;
+  width: $material-calendar-legacy-width;
+  min-width: $material-calendar-legacy-width;
 
-  &.dx-calendar-with-footer {
-    height: $material-calendar-height + $material-calendar-footer-height + 10px + 20px;
-    min-height: $material-calendar-height + $material-calendar-footer-height;
+  .dx-calendar-body {
+    height: $material-calendar-body-legacy-height;
+  }
 
-    .dx-calendar-body {
-      bottom: $material-calendar-footer-height + 10px;
-    }
-
-    .dx-calendar-footer {
-      text-align: center;
-      height: $material-calendar-footer-height;
-      width: 100%;
-    }
+  &.dx-calendar-multiview {
+    width: $material-calendar-legacy-width * 2;
+    min-width: $material-calendar-legacy-width * 2;
   }
 }
 
@@ -42,160 +27,34 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
 .dx-calendar-navigator-next-view {
   &.dx-button {
     .dx-icon {
-      color: $calendar-shevron-icon-color;
+      width: $material-base-icon-size;
+      height: $material-base-icon-size;
+      font-size: $material-base-icon-size;
     }
   }
 }
 
-.dx-calendar-body {
-  top: $material-calendar-body-top;
-
-  thead {
-    font-size: 11px;
-    line-height: 1.2;
-
-    tr {
-      height: 25px;
-      padding-bottom: 10px;
-    }
-  }
-
-  table {
-    border-spacing: 0;
-
-    th {
-      color: $calendar-header-color;
-      font-weight: 500;
-      text-align: center;
-      padding: 1px 0 $material-calendar-header-bottom-padding 0;
-    }
-
-    .dx-week-number-header {
-      color: $calendar-cell-selected-bg;
-    }
-
-    .dx-calendar-week-number-cell {
-      padding: $material-calendar-cell-vertical-padding 0;
-      color: $calendar-cell-selected-bg;
-      font-size: $material-calendar-week-number-cell-font-size;
-      width: $material-calendar-cell-width;
-      border-radius: $calendar-cell-contoured-border-radius;
-    }
-  }
-}
-
-.dx-calendar-cell {
-  text-align: center;
-  padding: $material-calendar-cell-vertical-padding 0;
-  color: $calendar-color;
-  font-size: $material-calendar-cell-font-size;
-  width: $material-calendar-cell-width;
-  border-radius: $calendar-cell-contoured-border-radius;
-
-  .dx-calendar-view-decade &,
-  .dx-calendar-view-year & {
-    span {
-      line-height: 400%;
-      width: 48px;
-    }
-  }
-
-
-  .dx-calendar-view-century & {
-    span {
-      line-height: 200%;
-      width: 48px;
-    }
-  }
-
-
-  span {
-    display: inline-block;
-    width: $material-calendar-cell-diameter;
-    line-height: $material-calendar-cell-diameter;
-    border-radius: 50%;
-  }
-
-  &.dx-calendar-today {
-    font-weight: bold;
-    color: $calendar-cell-selected-bg;
-  }
-
-  &.dx-state-hover,
-  &.dx-calendar-contoured-date:not(.dx-calendar-today):not(.dx-calendar-selected-date):not(.dx-calendar-empty-cell) {
-    color: $calendar-cell-hover-color;
-
-    span {
-      background-color: $calendar-hover-bg;
-    }
-  }
-
-  &.dx-calendar-other-view,
-  &.dx-calendar-empty-cell {
-    color: $calendar-cell-other-color;
-
-
-    &.dx-state-hover,
-    &.dx-state-active {
-      color: $calendar-cell-other-hover-color;
-    }
-  }
-
-  &.dx-calendar-empty-cell {
-    cursor: default;
-    color: color.change($calendar-color, $alpha: 0.25);
-
-    &.dx-state-hover:not(.dx-calendar-selected-date) {
-      color: color.change($calendar-color, $alpha: 0.25);
-
-      span {
-        background-color: transparent;
-      }
-    }
-  }
-
-  &.dx-state-active {
-    &:not(.dx-calendar-empty-cell) {
-      &:not(.dx-calendar-selected-date) {
-        span {
-          background-color: $calendar-cell-active-bg;
-        }
-      }
-    }
-  }
-
-  &.dx-calendar-selected-date:not(.dx-calendar-other-view) {
-    &,
-    &.dx-calendar-today {
-      span {
-        color: $base-inverted-text-color;
-        background-color: $calendar-cell-selected-bg;
-        font-weight: normal;
-      }
-    }
-  }
-
-  &.dx-calendar-range-date:not(.dx-calendar-other-view) {
-    background-color: color.change($calendar-cell-selected-bg, $alpha: 0.08);
-    box-shadow: inset 0 2px $calendar-bg, inset 0 -2px $calendar-bg;
-    font-weight: normal;
-    border-radius: 0;
-  }
-}
-
-.dx-calendar-views-wrapper {
-  .dx-widget:not(.dx-rtl) .dx-calendar-range-start-date:not(.dx-calendar-other-view),
-  .dx-widget.dx-rtl .dx-calendar-range-end-date:not(.dx-calendar-other-view) {
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
-  }
-
-  .dx-widget:not(.dx-rtl) .dx-calendar-range-end-date:not(.dx-calendar-other-view),
-  .dx-widget.dx-rtl .dx-calendar-range-start-date:not(.dx-calendar-other-view) {
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-  }
-}
+@include dx-calendar-body-mixin(
+  $calendar-cell-other-color,
+  $calendar-week-number-cell-bg,
+  $base-border-radius,
+  $material-calendar-cell-font-size,
+  $calendar-header-color,
+);
+@include dx-calendar-cell-mixin(
+  $calendar-cell-contoured-border-radius,
+  $calendar-color,
+  $base-border-radius,
+  $base-accent,
+  $calendar-hover-bg,
+  $calendar-cell-hover-color,
+  $calendar-cell-active-bg,
+  $calendar-cell-selected-bg,
+  $calendar-cell-contoured-border-color,
+  $calendar-cell-other-color,
+  $calendar-cell-other-hover-color,
+  $base-inverted-text-color,
+);
 
 .dx-invalid {
   &.dx-calendar {

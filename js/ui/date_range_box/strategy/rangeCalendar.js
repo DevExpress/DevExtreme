@@ -17,6 +17,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return extend(true, super.popupConfig(popupConfig), {
             position: { of: this.dateRangeBox.$element() },
             onShowing: () => {
+                this._widget._restoreViewsMinMaxOptions();
                 this._widget.option('_currentSelection', 'startDate');
             }
         });
@@ -43,17 +44,17 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _getWidgetOptions() {
-        let { disabledDates } = this.dateRangeBox.option();
+        const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
 
-        disabledDates = isFunction(disabledDates)
-            ? this._injectComponent(disabledDates)
+        const disabledDates = isFunction(disabledDatesValue)
+            ? this._injectComponent(disabledDatesValue)
             : disabledDates;
 
         return extend(super._getWidgetOptions(), {
             disabledDates,
-            values: this.dateRangeBox.option('value'),
+            values: value,
             selectionMode: 'range',
-            viewsCount: 2,
+            viewsCount: multiView ? 2 : 1,
             width: 260,
             _allowChangeSelectionOrder: true,
             _currentSelection: 'startDate',
@@ -91,25 +92,37 @@ class RangeCalendarStrategy extends CalendarStrategy {
             return;
         }
 
-        if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
-            if(event) {
-                if(this._widget.option('_currentSelection') === 'startDate') {
-                    this.dateRangeBox.updateValue(value);
-                    this.getDateRangeBox().getEndDateBox().focus();
-                    this._widget.option('_currentSelection', 'endDate');
+        const isInstantlyMode = this.dateRangeBox.option('applyValueMode') === 'instantly';
 
-                    if(value[1]) {
-                        this._widget.option('currentDate', value[1]);
-                    }
-                } else {
-                    this.setActiveEndDateBox();
-                    this.dateRangeBox.updateValue(value);
-                    this.getDateRangeBox().close();
-                    this._widget.option('_currentSelection', 'startDate');
-                }
-            } else {
-                this.dateRangeBox.updateValue(value);
+        if(!isInstantlyMode && !event) {
+            this.dateRangeBox.updateValue(value);
+
+            return;
+        }
+
+        if(this._widget.option('_currentSelection') === 'startDate') {
+            if(isInstantlyMode) {
+                this.dateRangeBox.updateValue(value, event);
             }
+            this.getDateRangeBox().getEndDateBox().focus();
+            this._widget.option('_currentSelection', 'endDate');
+            this._widget._setViewsMinOption(value[0]);
+
+            if(value[1]) {
+                this._widget.option('currentDate', value[1]);
+            }
+        } else {
+            this.setActiveEndDateBox();
+
+            if(isInstantlyMode) {
+                this.dateRangeBox.updateValue(value, event);
+                this.getDateRangeBox().close();
+            } else {
+                this.setActiveStartDateBox();
+                this.getDateRangeBox().getStartDateBox().focus();
+            }
+            this._widget.option('_currentSelection', 'startDate');
+            this._widget._setViewsMaxOption(value[1]);
         }
     }
 

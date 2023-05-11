@@ -181,7 +181,7 @@ export const compileSetter = function(expr) {
     };
 };
 
-export const toComparable = function(value, caseSensitive) {
+export const toComparable = function(value, caseSensitive, options = {}) {
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -191,7 +191,13 @@ export const toComparable = function(value, caseSensitive) {
     }
 
     if(!caseSensitive && typeof value === 'string') {
-        return value.toLowerCase();
+        if(options?.collatorOptions?.sensitivity === 'base') {
+            const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
+
+            value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+        }
+
+        return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
     }
 
     return value;

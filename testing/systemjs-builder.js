@@ -362,7 +362,8 @@ const updateBuilder = () => {
         `load.depMap[dep] = normalized.includes('node_modules/angular') || normalized.includes('node_modules/intl') ?
             getCanonicalName(loader, normalized) :
             dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")
-                .replace("/node_modules/", "/../node_modules/")`
+                .replace("../../../../artifacts/js/", "../../../../../artifacts/js")
+                .replace("/node_modules/", "/../node_modules/");`
     );
 
     patchBuilder(

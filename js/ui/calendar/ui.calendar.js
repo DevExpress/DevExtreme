@@ -24,7 +24,6 @@ import { isCommandKeyPressed } from '../../events/utils/index';
 import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
 import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
-import { isMaterial } from '../themes';
 
 // STYLE calendar
 
@@ -37,6 +36,7 @@ const CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
+const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
@@ -658,6 +658,7 @@ const Calendar = Editor.inherit({
 
         const $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
+        $element.toggleClass(CALENDAR_RANGE_CLASS, this.option('selectionMode') === 'range');
 
         this._renderBody();
         $element.append(this.$body);
@@ -700,6 +701,9 @@ const Calendar = Editor.inherit({
         this.$element().addClass(CALENDAR_VIEW_CLASS + '-' + this.option('zoomLevel'));
 
         const { currentDate, viewsCount } = this.option();
+
+        this.$element().toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
+
         this._view = this._renderSpecificView(currentDate);
 
         if(hasWindow()) {
@@ -714,11 +718,6 @@ const Calendar = Editor.inherit({
 
         if(viewsCount > 1) {
             this._additionalView = this._renderSpecificView(this._getDateByOffset(1, currentDate));
-
-            const viewWidth = this._viewWidth();
-            const elementWidth = viewWidth * viewsCount;
-
-            this.$element().css('width', elementWidth);
         }
 
         this._translateViews();
@@ -874,11 +873,13 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorConfig: function() {
+        const { rtlEnabled } = this.option();
+
         return {
-            text: this._view.getNavigatorCaption(),
+            text: this._getViewsCaption(this._view, this._additionalView),
             onClick: this._navigatorClickHandler.bind(this),
             onCaptionClick: this._navigateUp.bind(this),
-            rtlEnabled: this.option('rtlEnabled')
+            rtlEnabled,
         };
     },
 
@@ -996,7 +997,7 @@ const Calendar = Editor.inherit({
 
     _viewWidth: function() {
         if(!this._viewWidthValue) {
-            this._viewWidthValue = getWidth(this.$element());
+            this._viewWidthValue = getWidth(this.$element()) / this.option('viewsCount');
         }
 
         return this._viewWidthValue;
@@ -1060,8 +1061,8 @@ const Calendar = Editor.inherit({
                     onClick: (args) => {
                         this._toTodayView(args);
                     },
-                    type: isMaterial() ? 'default' : 'normal',
-                    stylingMode: isMaterial() ? 'text' : 'contained',
+                    type: 'default',
+                    stylingMode: 'text',
                     integrationOptions: {}
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);
@@ -1242,7 +1243,6 @@ const Calendar = Editor.inherit({
 
     _clean: function() {
         this.callBase();
-        this._clearInlineWidth();
         this._clearViewWidthCache();
 
         delete this._$viewsWrapper;
@@ -1252,10 +1252,6 @@ const Calendar = Editor.inherit({
 
     _clearViewWidthCache: function() {
         delete this._viewWidthValue;
-    },
-
-    _clearInlineWidth: function() {
-        this.$element().css('width', '');
     },
 
     _disposeViews: function() {
@@ -1276,7 +1272,7 @@ const Calendar = Editor.inherit({
     },
 
     _refreshViews: function() {
-        this._clearInlineWidth();
+        this._resetActiveState();
         this._disposeViews();
         this._renderViews();
     },
@@ -1301,6 +1297,21 @@ const Calendar = Editor.inherit({
         this._additionalView?.option(optionName, newValue);
         this._beforeView?.option(optionName, newValue);
         this._afterView?.option(optionName, newValue);
+    },
+
+    _setViewsMinOption: function(min) {
+        this._restoreViewsMinMaxOptions();
+        this._updateViewsOption('min', this._convertToDate(min));
+    },
+
+    _setViewsMaxOption: function(max) {
+        this._restoreViewsMinMaxOptions();
+        this._updateViewsOption('max', this._convertToDate(max));
+    },
+
+    _restoreViewsMinMaxOptions: function() {
+        this._updateViewsOption('min', this._getMinDate());
+        this._updateViewsOption('max', this._getMaxDate());
     },
 
     _updateAriaSelected: function(value, previousValue) {

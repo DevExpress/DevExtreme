@@ -2488,7 +2488,7 @@ QUnit.test('keyboard navigation should work with without selectAll checkbox', fu
         selectionMode: 'single'
     });
     const instance = $list.dxList('instance');
-    const keyboard = keyboardMock($list);
+    const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
     keyboard
         .press('down')

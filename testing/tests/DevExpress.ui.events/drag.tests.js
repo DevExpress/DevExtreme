@@ -9,7 +9,7 @@ const pointerMock = require('../../helpers/pointerMock.js');
 $('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {
     const markup =
-        '<style>\
+        '<style nonce="qunit-test">\
             #container {\
                 position: relative;\
             }\

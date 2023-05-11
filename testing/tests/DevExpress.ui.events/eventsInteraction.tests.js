@@ -22,9 +22,10 @@ QUnit.testStart(function() {
         '<div id="parent">\
             <div id="child"></div>\
         </div>\
-        <div id="element" style="cursor: move"></div>';
+        <div id="element"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#element').css('cursor', 'move');
 });
 
 const moduleConfig = {

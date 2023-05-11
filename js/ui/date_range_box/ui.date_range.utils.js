@@ -19,3 +19,12 @@ export const isSameDateArrays = (value, previousValue) => {
 
     return isSameDates(startDate, previousStartDate) && isSameDates(endDate, previousEndDate);
 };
+
+export const sortDatesArray = (value) => {
+    const [startDate, endDate] = value;
+    if(startDate && endDate && getDeserializedDate(startDate) > getDeserializedDate(endDate)) {
+        return [endDate, startDate];
+    } else {
+        return value;
+    }
+};

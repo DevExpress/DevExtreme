@@ -71,13 +71,6 @@
   min-width: 30px;
   text-align: center;
   cursor: pointer;
-
-  &::before {
-    content: ".";
-    color: transparent;
-    display: inline-block;
-    width: 0;
-  }
 }
 
 .dx-tag-remove-button {
