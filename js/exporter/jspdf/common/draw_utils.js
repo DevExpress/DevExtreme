@@ -10,10 +10,6 @@ function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
-function roundToFourDecimals(value) {
-    return Math.round(value * 10000) / 10000;
-}
-
 function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
         const { _rect, gridCell, ...pdfCell } = cell;
@@ -274,4 +270,4 @@ function clipOutsideRectContent(doc, x, y, w, h) {
     doc.discardPath(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#discardPath - Consumes the current path without any effect. Mainly used in combination with clip or clipEvenOdd.
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals, roundToFourDecimals, addNewPage };
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals, addNewPage };
