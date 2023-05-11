@@ -6,7 +6,7 @@ import { roundToThreeDecimals } from './draw_utils';
 import { getMultiPageRowPages, checkPageContainsOnlyHeader } from './rows_spliting_utils/get_multipage_row_pages';
 import { createOnSplitMultiPageRow } from './rows_spliting_utils/create_on_split_multipage_row';
 
-const ERROR = 0.001;
+const COORDINATE_EPSILON = 0.001;
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],
@@ -146,7 +146,7 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, isFitToPag
             // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
             const currentRectLeft = rect[coordinate];
             const currentRectRight = rect[coordinate] + rect[dimension];
-            return (currentPageMaxRectCoordinate - currentRectLeft) > ERROR && (currentRectRight - currentPageMaxRectCoordinate) > ERROR;
+            return (currentPageMaxRectCoordinate - currentRectLeft) > COORDINATE_EPSILON && (currentRectRight - currentPageMaxRectCoordinate) > COORDINATE_EPSILON;
         });
         rectsToSeparate.forEach(rect => {
             onSeparateCallback(rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit);
