@@ -2088,7 +2088,22 @@ QUnit.module('validation', moduleConfig, () => {
             this.instance.open();
 
             const validationMessage = this.getValidationMessage();
-            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered below the inputs');
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
+        });
+
+        QUnit.test('validation message should be rendered above the inputs if validation is failed when popup is already opened', function(assert) {
+            this.reinit({
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+            });
+
+            this.instance.open();
+            this.instance.option('isValid', false);
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
         });
     });
 

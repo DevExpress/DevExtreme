@@ -487,6 +487,16 @@ class DateRangeBox extends Editor {
         };
     }
 
+    _getValidationMessagePosition() {
+        const { validationMessagePosition } = this.option();
+
+        if(validationMessagePosition === 'auto') {
+            return this.option('opened') ? 'top' : 'bottom';
+        }
+
+        return validationMessagePosition;
+    }
+
     updateValue(newValue) {
         if(!isSameDateArrays(newValue, this.option('value'))) {
             this.option('value', newValue);
