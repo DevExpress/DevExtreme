@@ -2237,7 +2237,7 @@ QUnit.module('Options', {
                 [null, null],
                 [new Date(2021, 9, 17), null],
                 [null, new Date(2021, 10, 25)],
-                [new Date(2021, 9, 17), new Date(2021, 10, 25)]
+                [new Date(2021, 9, 10), new Date(2021, 9, 17)]
             ].forEach((values) => {
                 QUnit.test(`Click by cell should change startDate value if _allowChangeSelectionOrder is true and _currentSelection is startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
                     this.reinit({
@@ -2253,11 +2253,41 @@ QUnit.module('Options', {
 
                     assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
 
-                    $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(15);
                     startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
                     $startDateCell.trigger('dxclick');
 
                     assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+                });
+
+                QUnit.test(`Click by cell should change startDate value and reselect endDate if _allowChangeSelectionOrder is true and _currentSelection is startDate, startDate > endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'startDate',
+                    });
+
+                    const $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, null]);
+                });
+
+                QUnit.test(`Click by cell should change endDate value and reselect startDate if _allowChangeSelectionOrder is true and _currentSelection is endDate, endDate < startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    const $endCellDate = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(7);
+                    const endCellDate = dataUtils.data($endCellDate.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endCellDate.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [null, endCellDate]);
                 });
 
                 QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(values)}`, function(assert) {

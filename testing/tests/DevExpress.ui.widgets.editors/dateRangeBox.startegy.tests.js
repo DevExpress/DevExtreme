@@ -41,7 +41,8 @@ const moduleConfig = {
         };
 
         init({
-            value: ['2023/01/05', '2023/02/14']
+            value: ['2023/01/05', '2023/02/14'],
+            multiView: true,
         });
     },
     afterEach: function() {
@@ -134,7 +135,8 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             QUnit.test(`max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode = ${applyValueMode})`, function(assert) {
                 this.reinit({
-                    applyValueMode
+                    applyValueMode,
+                    multiView: true,
                 });
 
                 this.instance.open();
@@ -155,7 +157,8 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode = ${applyValueMode})`, function(assert) {
                 this.reinit({
-                    applyValueMode
+                    applyValueMode,
+                    multiView: true,
                 });
 
                 this.instance.open();
@@ -207,6 +210,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             this.reinit({
                 applyValueMode: 'instantly',
                 value: initialValue,
+                multiView: true,
             });
 
             this.instance.open();
@@ -235,7 +239,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
         });
 
-        QUnit.test(`onValueChanged should be called once on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+        QUnit.test(`onValueChanged should be called once with correct event argument on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
             const onValueChangedHandler = sinon.spy();
 
             this.reinit({
@@ -243,18 +247,22 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
                 value: initialValue,
                 onValueChanged: onValueChangedHandler,
                 opened: true,
+                multiView: true,
             });
 
             const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             $cell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select start date');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
+
             onValueChangedHandler.reset();
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             $endDateCell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select end date');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
         });
     });
 
@@ -279,6 +287,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             this.reinit({
                 applyValueMode: 'instantly',
                 value: [null, null],
+                multiView: true,
             });
 
             this.instance.open();
@@ -307,6 +316,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         this.reinit({
             applyValueMode: 'instantly',
             value: [null, null],
+            multiView: true,
         });
 
         this.instance.open();
@@ -331,6 +341,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
                 applyValueMode: 'instantly',
                 value: [null, null],
                 openOnFieldClick: true,
+                multiView: true,
             });
 
             $(this.instance.field()[index]).trigger('dxclick');
@@ -364,6 +375,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             applyValueMode: 'instantly',
             value: [null, null],
             focusStateEnabled: true,
+            multiView: true,
         });
 
         this.instance.open();
@@ -418,6 +430,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             this.reinit({
                 applyValueMode: 'useButtons',
                 value: initialValue,
+                multiView: true,
             });
 
             this.instance.open();
@@ -458,6 +471,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             this.reinit({
                 applyValueMode: 'useButtons',
                 value: initialValue,
+                multiView: true,
             });
 
             this.instance.open();
@@ -494,6 +508,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
                 value: initialValue,
                 onValueChanged: onValueChangedHandler,
                 opened: true,
+                multiView: true,
             });
 
             const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
@@ -603,6 +618,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             applyValueMode: 'useButtons',
             value: [null, null],
             focusStateEnabled: true,
+            multiView: true,
         });
 
         this.instance.open();

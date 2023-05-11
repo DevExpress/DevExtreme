@@ -237,7 +237,7 @@ const iconSet = {
   sun: '\f159',
   send: '\f160', // material only
   pinmap: '\f161', // material only
-  photooutline: '\f162', // material only
+  photooutline: '\f162',
   panelright: '\f163',
   panelleft: '\f164',
   optionsgear: '\f165', // material only
@@ -247,7 +247,7 @@ const iconSet = {
   eyeclose: '\f169',
   expandform: '\f170',
   description: '\f171',
-  belloutline: '\f172', // material only
+  belloutline: '\f172',
   to: '\f173',
 };
 
