@@ -294,6 +294,10 @@ const transpileJsVendors = async(Builder) => {
         {
             filePath: path.join(root, 'node_modules/intl/index.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/intl.js')
+        },
+        {
+            filePath: path.join(root, 'node_modules/knockout/build/output/knockout-latest.debug.js'),
+            destPath: path.join(root, 'artifacts/js-systemjs/knockout.js')
         }
     ];
     const cldrDataList = getFileList(path.join(root, 'node_modules/devextreme-cldr-data'));
