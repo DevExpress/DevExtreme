@@ -98,7 +98,7 @@ jobs:
     - name: Prepare artifacts
       run: |
         mkdir -p ./artifacts/npm
-        cp $(ls ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-*.tgz) ./artifacts/npm/devextreme.tgz
+        cp ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-installer.tgz ./artifacts/npm/devextreme.tgz
         cd ./artifacts/npm
         tar -xzf devextreme.tgz
         mv package devextreme
@@ -328,7 +328,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
-      run: npm install --legacy-peer-deps devextreme-dist-installer.tgz
+      run: npm install --legacy-peer-deps devextreme-installer.tgz devextreme-dist-installer.tgz
 
     - name: Prepare JS
       working-directory: ./devextreme-demos
