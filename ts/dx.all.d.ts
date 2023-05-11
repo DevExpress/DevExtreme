@@ -1136,10 +1136,6 @@ declare module DevExpress {
     componentClass: DevExpress.core.ComponentFactory<TComponent>
   ): void;
   /**
-   * [descr:setTemplateEngine(name)]
-   */
-  export function setTemplateEngine(templateEngineName: string): void;
-  /**
    * [descr:setTemplateEngine(options)]
    */
   export function setTemplateEngine(templateEngineOptions: {
