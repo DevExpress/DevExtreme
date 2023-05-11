@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-const scrollView = require('ui/scroll_view');
-require('integration/knockout');
+import scrollView from 'ui/scroll_view';
+import 'integration/knockout';
 
-require('../../helpers/skipScpTest.js');
+import '../../helpers/skipScpTest.js';
 
 QUnit.testStart(function() {
     const markup =
