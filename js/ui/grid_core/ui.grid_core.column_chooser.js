@@ -245,10 +245,14 @@ const columnChooserMembers = {
             }
 
             this._columnChooserList.option(treeViewConfig);
+            // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+            this._updateItems();
         } else {
             this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);
+            // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+            this._updateItems();
 
-            let scrollTop;
+            let scrollTop = 0;
 
             this._columnChooserList.on('optionChanged', e => {
                 const scrollable = e.component.getScrollable();
@@ -265,9 +269,6 @@ const columnChooserMembers = {
                 });
             });
         }
-
-        // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
-        this._updateItems();
     },
 
     _prepareDragModeConfig: function() {
