@@ -5059,7 +5059,13 @@ declare module DevExpress.data {
    * [descr:LangParams]
    */
   export type LangParams = {
+    /**
+     * [descr:LangParams.locale]
+     */
     locale: string;
+    /**
+     * [descr:LangParams.collatorOptions]
+     */
     collatorOptions?: Intl.CollatorOptions;
   };
   /**
