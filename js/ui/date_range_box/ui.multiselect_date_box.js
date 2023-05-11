@@ -24,6 +24,22 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
+    _popupShownHandler() {
+        super._popupShownHandler();
+
+        const dateRangeBox = this._strategy.dateRangeBox;
+
+        dateRangeBox._validationMessage?.option('positionSide', dateRangeBox._getValidationMessagePositionSide());
+    }
+
+    _popupHiddenHandler() {
+        super._popupHiddenHandler();
+
+        const dateRangeBox = this._strategy.dateRangeBox;
+
+        dateRangeBox._validationMessage?.option('positionSide', dateRangeBox._getValidationMessagePositionSide());
+    }
+
     _closeOutsideDropDownHandler(e) {
         const { target } = e;
         const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
