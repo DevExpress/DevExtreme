@@ -12190,28 +12190,6 @@ QUnit.module('RTL support', moduleConfig, () => {
                 dataSource: companies,
                 keyExpr: 'ID',
                 showBorders: true,
-                export: {
-                    enabled: true,
-                    formats: ['pdf']
-                },
-                onExporting(e) {
-                    DevExpress.pdfExporter
-                        .exportDataGrid({
-                            jsPDFDocument: doc,
-                            component: e.component,
-                            customizeCell({
-                                gridCell,
-                                pdfCell
-                            }) {
-                                if(gridCell.rowType === 'data' && gridCell.column.dataField === 'City') {
-                                    pdfCell.wordWrapEnabled = true;
-                                }
-                            }
-                        })
-                        .then(() => {
-                            doc.save('Companies.pdf');
-                        });
-                },
                 columns: [{
                     dataField: 'Name',
                     width: 200
