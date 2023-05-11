@@ -2704,6 +2704,89 @@ QUnit.module('Accessibility', {
         assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
     });
 
+    [{
+        name: 'text',
+        value: 'text',
+        updatedValue: 'new text'
+    }, {
+        name: 'icon',
+        value: 'icon',
+        updatedValue: 'newIcon'
+    }, {
+        name: 'focusStateEnabled',
+        value: false,
+        updatedValue: true
+    }, {
+        name: 'hoverStateEnabled',
+        value: false,
+        updatedValue: true
+    }, {
+        name: 'stylingMode',
+        value: 'text',
+        updatedValue: 'outlined'
+    }, {
+        name: 'tabIndex',
+        value: 0,
+        updatedValue: 1
+    }].forEach((option) => {
+        QUnit.test(`button should have aria-haspopup, aria-label and aria-expanded attributes after update ${option.name} option`, function(assert) {
+            const instance = this.createInstance({ [option.name]: option.value });
+
+            instance.option(option.name, option.updatedValue);
+
+            const $button = this.getButtons().eq(0);
+
+            assert.strictEqual($button.attr('aria-haspopup'), 'listbox');
+            assert.strictEqual($button.attr('aria-label'), option.name === 'text' ? 'new text' : 'Text');
+            assert.strictEqual($button.attr('aria-expanded'), 'false');
+        });
+
+        QUnit.test(`buttons should have aria-haspopup, aria-label and aria-expanded attributes if splitButton is set and after update ${option.name} option`, function(assert) {
+            const instance = this.createInstance({ splitButton: true, [option.name]: option.value });
+
+            instance.option(option.name, option.updatedValue);
+
+            const $firstButton = this.getButtons().eq(0);
+            const $secondButton = this.getButtons().eq(1);
+
+            assert.strictEqual($firstButton.attr('aria-haspopup'), 'listbox');
+            assert.strictEqual($firstButton.attr('aria-label'), option.name === 'text' ? 'new text' : 'Text');
+            assert.strictEqual($firstButton.attr('aria-expanded'), 'false');
+
+            assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
+            assert.strictEqual($secondButton.attr('aria-label'), 'spindown');
+            assert.strictEqual($secondButton.attr('aria-expanded'), 'false');
+        });
+    });
+
+    QUnit.test('button should have correct aria-label attribute if text is not specified', function(assert) {
+        this.createInstance({ text: '' });
+
+        const $button = this.getButtons().eq(0);
+
+        assert.strictEqual($button.attr('aria-label'), 'dropdownbutton');
+    });
+
+    QUnit.test('button should have correct aria-label attribute if text updated from empty value', function(assert) {
+        const instance = this.createInstance({ text: '' });
+
+        instance.option('text', 'new text');
+
+        const $button = this.getButtons().eq(0);
+
+        assert.strictEqual($button.attr('aria-label'), 'new text');
+    });
+
+    QUnit.test('buttons should have correct aria-label attributes if text is not specified and splitButton is set', function(assert) {
+        this.createInstance({ splitButton: true, text: '' });
+
+        const $firstButton = this.getButtons().eq(0);
+        const $secondButton = this.getButtons().eq(1);
+
+        assert.strictEqual($firstButton.attr('aria-label'), 'dropdownbutton');
+        assert.strictEqual($secondButton.attr('aria-label'), 'spindown');
+    });
+
     ['items', 'dataSource'].forEach(dataSource => {
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
             const instance = this.createInstance({ opened: true });
