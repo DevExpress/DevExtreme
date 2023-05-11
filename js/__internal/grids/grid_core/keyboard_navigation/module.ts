@@ -32,6 +32,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_FORM_CLASS,
 } from '@js/ui/grid_core/ui.grid_core.editing_constants';
+import { EMPTY_ROWS_VIEW_CLASS } from '@js/ui/grid_core/ui.grid_core.rows';
 import gridCoreUtils from '../module_utils';
 import { GridCoreKeyboardNavigationDom } from './dom';
 import {
@@ -552,11 +553,12 @@ export class KeyboardNavigationController extends modules.ViewController {
       ) {
         this._selectionController.startSelectionWithCheckboxes();
       }
-      if (
+      const isSelectableRow = !$target.hasClass(EMPTY_ROWS_VIEW_CLASS) && (
         isFocusedRowElement
         || $target.parent().hasClass(DATA_ROW_CLASS)
         || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))
-      ) {
+      );
+      if (isSelectableRow) {
         this._selectionController.changeItemSelection(rowIndex, {
           shift: eventArgs.shift,
           control: eventArgs.ctrl,
