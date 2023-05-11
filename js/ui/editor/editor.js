@@ -90,7 +90,9 @@ const Editor = Widget.inherit({
 
             validationMessageOffset: { h: 0, v: 0 },
 
-            validationTooltipOptions: {}
+            validationTooltipOptions: {},
+
+            _showValidationMessage: true
         });
     },
 
@@ -230,7 +232,7 @@ const Editor = Widget.inherit({
 
         this._toggleValidationClasses(!isValid);
 
-        if(!hasWindow()) {
+        if(!hasWindow() || this.option('_showValidationMessage') === false) {
             return;
         }
 

@@ -6297,9 +6297,9 @@ QUnit.module('validation', {
         assert.strictEqual(validationCallbackStub.getCall(0).args[0].value, value, 'validation callback value parameter is correct');
     });
 
-    QUnit.test('validation icon should not be shown if _shouldHideValidationIcon=true', function(assert) {
+    QUnit.test('validation icon should not be shown if _showValidationIcon=false', function(assert) {
         this.dateBox.option({
-            _shouldHideValidationIcon: true,
+            _showValidationIcon: false,
             isValid: false,
         });
 

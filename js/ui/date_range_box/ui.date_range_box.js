@@ -393,6 +393,8 @@ class DateRangeBox extends Editor {
             onPaste: options.onPaste,
             onEnterKey: options.onEnterKey,
             _dateRangeBoxInstance: this,
+            _showValidationIcon: false,
+            _showValidationMessage: false,
         };
 
         each(EVENTS_LIST, (_, eventName) => {
@@ -446,8 +448,7 @@ class DateRangeBox extends Editor {
             label: options.startDateLabel,
             placeholder: options.startDatePlaceholder,
             inputAttr: options.startDateInputAttr,
-            name: options.startDateName,
-            _shouldHideValidationIcon: true
+            name: options.startDateName
         };
     }
 
