@@ -27,17 +27,13 @@ class MultiselectDateBox extends DateBox {
     _popupShownHandler() {
         super._popupShownHandler();
 
-        const dateRangeBox = this._strategy.dateRangeBox;
-
-        dateRangeBox._validationMessage?.option('positionSide', dateRangeBox._getValidationMessagePositionSide());
+        this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     }
 
     _popupHiddenHandler() {
         super._popupHiddenHandler();
 
-        const dateRangeBox = this._strategy.dateRangeBox;
-
-        dateRangeBox._validationMessage?.option('positionSide', dateRangeBox._getValidationMessagePositionSide());
+        this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     }
 
     _closeOutsideDropDownHandler(e) {

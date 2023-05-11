@@ -5,7 +5,6 @@ import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
 import devices from '../../core/devices';
-import animationPosition from '../../animation/position';
 import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
 import Editor from '../editor/editor';
@@ -355,26 +354,6 @@ class DateRangeBox extends Editor {
 
     _isClearButtonVisible() {
         return this.option('showClearButton') && !this.option('readOnly');
-    }
-
-    _getValidationMessagePositionSide() {
-        const validationMessagePosition = this.option('validationMessagePosition');
-
-        if(validationMessagePosition !== 'auto') {
-            return validationMessagePosition;
-        }
-
-        let positionSide = 'bottom';
-        const popup = this.getStartDateBox()._popup;
-
-        if(popup && popup.option('visible')) {
-            const { top: myTop } = animationPosition.setup(this.$element());
-            const { top: popupTop } = animationPosition.setup(popup.$content());
-
-            positionSide = (myTop + this.getStartDateBox().option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';
-        }
-
-        return positionSide;
     }
 
     _focusInHandler(e) {
