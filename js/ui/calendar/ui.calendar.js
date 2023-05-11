@@ -231,15 +231,17 @@ const Calendar = Editor.inherit({
                 this._waitRenderView(1 * this._getRtlCorrection());
             },
             tab: noop,
-            enter: function(e) {
-                if(!this._isMaxZoomLevel()) {
-                    this._navigateDown();
-                } else if(!this._view.isDateDisabled(this.option('currentDate'))) {
-                    const value = this._updateTimeComponent(this.option('currentDate'));
-                    this._selectionStrategy.selectValue(value, e);
-                }
-            }
+            enter: this._enterKeyHandler
         });
+    },
+
+    _enterKeyHandler: function(e) {
+        if(!this._isMaxZoomLevel()) {
+            this._navigateDown();
+        } else if(!this._view.isDateDisabled(this.option('currentDate'))) {
+            const value = this._updateTimeComponent(this.option('currentDate'));
+            this._selectionStrategy.selectValue(value, e);
+        }
     },
 
     _getSerializationFormat: function(optionName) {

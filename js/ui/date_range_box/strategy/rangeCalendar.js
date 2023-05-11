@@ -39,10 +39,16 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 if(this.dateRangeBox.option('opened')) {
                     return true;
                 }
-            }
+            },
+            enter: (e) => {
+                if(this.dateBox.option('opened')) {
+                    this._widget._enterKeyHandler(e);
+                    this.dateBox._valueChangeEventHandler(e);
+                    this._widget.option('values', this.dateRangeBox.option('value'));
+                    return false;
+                }
+            },
         };
-
-        delete supportedKeys.enter;
 
         return supportedKeys;
     }
