@@ -102,7 +102,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         if(this._widget.option('_currentSelection') === 'startDate') {
             if(isInstantlyMode) {
-                this.dateRangeBox.updateValue(value);
+                this.dateRangeBox.updateValue(value, event);
             }
             this.getDateRangeBox().getEndDateBox().focus();
             this._widget.option('_currentSelection', 'endDate');
@@ -115,7 +115,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
             this.setActiveEndDateBox();
 
             if(isInstantlyMode) {
-                this.dateRangeBox.updateValue(value);
+                this.dateRangeBox.updateValue(value, event);
                 this.getDateRangeBox().close();
             } else {
                 this.setActiveStartDateBox();

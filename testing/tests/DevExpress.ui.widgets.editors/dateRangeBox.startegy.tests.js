@@ -239,7 +239,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
         });
 
-        QUnit.test(`onValueChanged should be called once on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+        QUnit.test(`onValueChanged should be called once with correct event argument on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
             const onValueChangedHandler = sinon.spy();
 
             this.reinit({
@@ -254,12 +254,15 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             $cell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select start date');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
+
             onValueChangedHandler.reset();
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             $endDateCell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select end date');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
         });
     });
 

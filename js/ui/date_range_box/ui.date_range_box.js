@@ -173,12 +173,6 @@ class DateRangeBox extends Editor {
         this._closeAction();
     }
 
-    _createValueChangeAction() {
-        this._valueChangeAction = this._createActionByOption('onValueChanged', {
-            excludeValidators: ['disabled', 'readOnly']
-        });
-    }
-
     _createEventAction(eventName) {
         this[`_${camelize(eventName)}Action`] = this._createActionByOption(`on${eventName}`, {
             excludeValidators: ['readOnly']
@@ -191,25 +185,6 @@ class DateRangeBox extends Editor {
             this._createEventAction(eventName);
         }
         this[`_${camelize(eventName)}Action`]({ event });
-    }
-
-    _raiseValueChangeAction(value, previousValue) {
-        if(!this._valueChangeAction) {
-            this._createValueChangeAction();
-        }
-        this._valueChangeAction(this._valueChangeArgs(value, previousValue));
-    }
-
-    _valueChangeArgs(value, previousValue) {
-        return {
-            value: value,
-            previousValue: previousValue,
-            event: this._valueChangeEventInstance
-        };
-    }
-
-    _saveValueChangeEvent(e) {
-        this._valueChangeEventInstance = e;
     }
 
     _initTemplates() {
@@ -348,8 +323,14 @@ class DateRangeBox extends Editor {
     }
 
     _clearValueHandler(e) {
+        this._saveValueChangeEvent(e);
+
+        this._shouldSuppressValueSync = true;
         this.getEndDateBox()._clearValueHandler(e);
         this.getStartDateBox()._clearValueHandler(e);
+        this._shouldSuppressValueSync = false;
+
+        this.reset();
     }
 
     _isClearButtonVisible() {
@@ -433,9 +414,12 @@ class DateRangeBox extends Editor {
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
-            onValueChanged: ({ value }) => {
-                const newValue = [value, this.option('value')[1]];
-                this.updateValue(newValue);
+            onValueChanged: ({ value, event }) => {
+                if(!this._shouldSuppressValueSync) {
+                    const newValue = [value, this.option('value')[1]];
+
+                    this.updateValue(newValue, event);
+                }
             },
             opened: options.opened,
             onOpened: () => {
@@ -479,9 +463,12 @@ class DateRangeBox extends Editor {
                     this.getEndDateBox().option('opened', false);
                 }
             },
-            onValueChanged: ({ value }) => {
-                const newValue = [this.option('value')[0], value];
-                this.updateValue(newValue);
+            onValueChanged: ({ value, event }) => {
+                if(!this._shouldSuppressValueSync) {
+                    const newValue = [this.option('value')[0], value];
+
+                    this.updateValue(newValue, event);
+                }
             },
             onOptionChanged: ({ name, value }) => {
                 if(name === 'text') {
@@ -499,8 +486,12 @@ class DateRangeBox extends Editor {
         };
     }
 
-    updateValue(newValue) {
+    updateValue(newValue, event) {
         if(!isSameDateArrays(newValue, this.option('value'))) {
+            if(event) {
+                this._saveValueChangeEvent(event);
+            }
+
             this.option('value', newValue);
         }
     }
@@ -765,7 +756,15 @@ class DateRangeBox extends Editor {
     }
 
     field() {
-        return [this.getStartDateBox().field(), this.getEndDateBox().field()];
+        return [this.startDateField(), this.endDateField()];
+    }
+
+    startDateField() {
+        return this.getStartDateBox().field();
+    }
+
+    endDateField() {
+        return this.getEndDateBox().field();
     }
 
     focus() {
@@ -773,9 +772,10 @@ class DateRangeBox extends Editor {
     }
 
     reset() {
-        // TODO: add test
-        this.getEndDateBox().reset();
-        this.getStartDateBox().reset();
+        // this.getEndDateBox().reset();
+        // this.getStartDateBox().reset();
+
+        super.reset();
     }
 }
 
