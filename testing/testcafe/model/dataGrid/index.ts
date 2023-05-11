@@ -1,4 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
+import DataGridInstance from '../../../../js/ui/data_grid';
 import Widget from '../internal/widget';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
@@ -462,7 +463,7 @@ export default class DataGrid extends Widget {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).option('grouping.autoExpandAll', false),
+      () => (getInstance() as DataGridInstance).option('grouping.autoExpandAll', false),
       {
         dependencies: {
           getInstance,

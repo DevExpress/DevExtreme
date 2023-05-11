@@ -873,7 +873,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _removeContent: function(isFixedTableRendering) {
         const $scrollContainer = this._getContent(isFixedTableRendering);
 
-        $scrollContainer?.length && $scrollContainer.remove();
+        if($scrollContainer?.length) {
+            $scrollContainer.remove();
+        }
     },
 
     _wrapTableInScrollContainer: function($table) {
