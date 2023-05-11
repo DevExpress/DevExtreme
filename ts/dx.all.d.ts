@@ -9779,6 +9779,43 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type OverriddenKeys =
+      | 'columns'
+      | 'customizeColumns'
+      | 'dataRowTemplate'
+      | 'editing'
+      | 'export'
+      | 'grouping'
+      | 'groupPanel'
+      | 'keyExpr'
+      | 'masterDetail'
+      | 'onCellClick'
+      | 'onCellDblClick'
+      | 'onCellHoverChanged'
+      | 'onCellPrepared'
+      | 'onContextMenuPreparing'
+      | 'onEditingStart'
+      | 'onEditorPrepared'
+      | 'onEditorPreparing'
+      | 'onExporting'
+      | 'onFocusedCellChanged'
+      | 'onFocusedCellChanging'
+      | 'onFocusedRowChanged'
+      | 'onFocusedRowChanging'
+      | 'onRowClick'
+      | 'onRowDblClick'
+      | 'onRowPrepared'
+      | 'remoteOperations'
+      | 'rowTemplate'
+      | 'scrolling'
+      | 'selection'
+      | 'selectionFilter'
+      | 'sortByGroupSummaryInfo'
+      | 'summary'
+      | 'toolbar';
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -10362,13 +10399,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxDataGridOptions<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.common.grids.GridBaseOptions<
-    dxDataGrid<TRowData, TKey>,
-    TRowData,
-    TKey
+  export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<
+    DevExpress.common.grids.GridBaseOptions<
+      dxDataGrid<TRowData, TKey>,
+      TRowData,
+      TKey
+    >,
+    DevExpress.ui.dxDataGrid.OverriddenKeys
   > & {
     /**
      * [descr:dxDataGridOptions.columns]
@@ -23576,6 +23613,44 @@ declare module DevExpress.ui {
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type OverriddenKeys =
+      | 'autoExpandAll'
+      | 'columns'
+      | 'customizeColumns'
+      | 'dataStructure'
+      | 'editing'
+      | 'expandedRowKeys'
+      | 'expandNodesOnFiltering'
+      | 'filterMode'
+      | 'hasItemsExpr'
+      | 'itemsExpr'
+      | 'keyExpr'
+      | 'onCellClick'
+      | 'onCellDblClick'
+      | 'onCellHoverChanged'
+      | 'onCellPrepared'
+      | 'onContextMenuPreparing'
+      | 'onEditingStart'
+      | 'onEditorPrepared'
+      | 'onEditorPreparing'
+      | 'onFocusedCellChanged'
+      | 'onFocusedCellChanging'
+      | 'onFocusedRowChanged'
+      | 'onFocusedRowChanging'
+      | 'onNodesInitialized'
+      | 'onRowClick'
+      | 'onRowDblClick'
+      | 'onRowPrepared'
+      | 'paging'
+      | 'parentIdExpr'
+      | 'remoteOperations'
+      | 'rootValue'
+      | 'scrolling'
+      | 'selection'
+      | 'toolbar';
+    /**
      * [descr:Paging]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -23989,13 +24064,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxTreeListOptions<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.common.grids.GridBaseOptions<
-    dxTreeList<TRowData, TKey>,
-    TRowData,
-    TKey
+  export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<
+    DevExpress.common.grids.GridBaseOptions<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    >,
+    DevExpress.ui.dxTreeList.OverriddenKeys
   > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
