@@ -203,7 +203,7 @@ jobs:
   qunit-tests-no-csp:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-no-csp
+    name: ${{ matrix.constel }}-nocsp
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -217,7 +217,7 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          name: ${{ matrix.constel }}-no-csp
+          name: ${{ matrix.constel }}-nocsp
           constel: ${{ matrix.constel }}
           browser: 'chrome'
           useJQuery: 'true'

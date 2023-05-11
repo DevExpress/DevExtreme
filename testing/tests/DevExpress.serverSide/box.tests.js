@@ -2,6 +2,8 @@ import '../DevExpress.ui.widgets/box.markup.tests.js';
 import Box from 'ui/box';
 import DOMAdapter from 'core/dom_adapter';
 
+import '../../helpers/skipScpTest.js';
+
 const BOX_ITEM_CLASS = 'dx-box-item';
 
 const emulateServerSideFlexBehavior = function(element) {
