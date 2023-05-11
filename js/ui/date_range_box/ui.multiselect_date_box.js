@@ -46,25 +46,32 @@ class MultiselectDateBox extends DateBox {
     _focusInHandler(e) {
         super._focusInHandler(e);
 
-        // const { target } = e;
-        // const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
+        const { target } = e;
+        const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
 
-        // if(!this._strategy.dateRangeBox.getStartDateBox()._strategy._widget) {
-        //     return;
-        // }
+        if($(target).is(startDateInput)) {
+            this._strategy.dateRangeBox.option('_currentSelection', 'startDate');
+        }
+        if($(target).is(endDateInput)) {
+            this._strategy.dateRangeBox.option('_currentSelection', 'endDate');
+        }
 
-        // const value = this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('values');
+        if(!this._strategy.dateRangeBox.getStartDateBox()._strategy._widget) {
+            return;
+        }
 
-        // if($(target).is(startDateInput)) {
-        //     this._strategy.setActiveStartDateBox();
-        //     this._strategy._widget.option('_currentSelection', 'startDate');
-        //     this._strategy._widget._setViewsMinOption(value[0]);
-        // }
-        // if($(target).is(endDateInput)) {
-        //     this._strategy.dateRangeBox.getStartDateBox()._strategy.setActiveEndDateBox();
-        //     this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('_currentSelection', 'endDate');
-        //     this._strategy.dateRangeBox.getStartDateBox()._strategy._widget._setViewsMaxOption(value[1]);
-        // }
+        const value = this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('values');
+
+        if($(target).is(startDateInput)) {
+            this._strategy.setActiveStartDateBox();
+            this._strategy._widget.option('_currentSelection', 'startDate');
+            this._strategy._widget._setViewsMinOption(value[0]);
+        }
+        if($(target).is(endDateInput)) {
+            this._strategy.dateRangeBox.getStartDateBox()._strategy.setActiveEndDateBox();
+            this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('_currentSelection', 'endDate');
+            this._strategy.dateRangeBox.getStartDateBox()._strategy._widget._setViewsMaxOption(value[1]);
+        }
     }
 }
 

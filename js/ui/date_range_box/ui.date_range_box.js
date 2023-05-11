@@ -105,6 +105,8 @@ class DateRangeBox extends Editor {
             validationStatus: 'valid',
             value: [null, null],
             valueChangeEvent: 'change',
+
+            _currentSelection: 'startDate',
         });
     }
 
@@ -456,7 +458,6 @@ class DateRangeBox extends Editor {
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
-                    this.getStartDateBox().focus();
                     this.getStartDateBox().open();
 
                     // TODO: datebox doesn't clear opened state after prevent of opening
@@ -701,11 +702,6 @@ class DateRangeBox extends Editor {
             case 'startDateText':
             case 'endDateText':
             case 'useHiddenSubmitElement':
-            // case 'validationError':
-            // case 'validationErrors':
-            // case 'validationMessageMode':
-            // case 'validationMessagePosition':
-            // case 'validationStatus':
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);
@@ -726,6 +722,9 @@ class DateRangeBox extends Editor {
 
                 break;
             }
+            case '_currentSelection':
+                // TODO: change calendar option here?
+                break;
             default:
                 super._optionChanged(args);
         }
