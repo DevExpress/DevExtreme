@@ -74,7 +74,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
               result = this._dataController.getCachedStoreData();
             }
 
-            // @ts-expect-error
             result ||= plainItems.apply(this, arguments).map((item) => item.data);
             return result || [];
           };
@@ -150,6 +149,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
           } if (selectedVisibleKeys.length === visibleKeys.length) {
             return true;
           }
+
+          return undefined;
         },
 
         selectAll() {

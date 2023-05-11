@@ -2939,42 +2939,6 @@ QUnit.module('Supported editors', () => {
         assert.ok(!layoutManager._isValueChangedCalled);
     });
 
-    test('Check that inner widgets change readOnly option at layoutManager optionChange', function(assert) {
-        const layoutManager = createFormWithSupportedEditors();
-        const $testContainer = layoutManager.$element();
-
-        checkSupportedEditors((editor, className) => {
-            assert.notOk($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is not read only`);
-        });
-
-        layoutManager.option('readOnly', true);
-
-        checkSupportedEditors((editor, className) => {
-            assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
-        });
-    });
-
-    test('Check readOnly state for editor when readOnly is enabled in the editorOptions', function(assert) {
-        const layoutManager = createFormWithSupportedEditors({ readOnly: true });
-        const $testContainer = layoutManager.$element();
-
-        checkSupportedEditors((editor, className) => {
-            assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
-        });
-    });
-
-    test('Editor\'s read only state should not be reset on the dxForm \'readOnly\' option changing', function(assert) {
-        const layoutManager = createFormWithSupportedEditors({ readOnly: true });
-        const $testContainer = layoutManager.$element();
-
-        layoutManager.option('readOnly', true);
-        layoutManager.option('readOnly', false);
-
-        checkSupportedEditors((editor, className) => {
-            assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
-        });
-    });
-
     test('Check the Html Editor with a value and toolbar items', function(assert) {
         const expectedText = 'This <b>text</b> for testing the <i>Html Editor</i>';
         const layoutManager = $('#container').dxLayoutManager({
@@ -3025,5 +2989,137 @@ QUnit.module('Supported editors', () => {
         } else {
             assert.deepEqual(layoutManager.option('layoutData'), { description: 'new <b>value</b>' }, 'layoutData');
         }
+    });
+});
+
+QUnit.module('ReadOnly option', () => {
+    const getEditorClassName = (editorName) => (
+        `dx-${editorName.substr(2, editorName.length - 1).toLowerCase()}`
+    );
+
+    const checkSupportedEditors = (callBack) => (
+        supportedEditors.forEach((supportedEditor) => (
+            callBack(supportedEditor, getEditorClassName(supportedEditor)))
+        )
+    );
+
+    const isEditorReadOnly = ($container, editorClassName) => (
+        $container
+            .find(`.${FIELD_ITEM_CLASS} .${editorClassName}`)
+            .hasClass(READONLY_STATE_CLASS)
+    );
+
+    test('editors should be read only when readOnly option is enabled in the editorOptions', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: true }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+    });
+
+    test('editors should not be read only when readOnly option is enabled in form, but in the editorOptions it is set to false', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: false }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should be read only when readOnly option is enabled in form and in the editorOptions is not set', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+    });
+
+    test('editors should change their readonly state after change readOnly option in form if editorOptions.readOnly is not specified', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+
+        $testContainer.dxLayoutManager('instance').option('readOnly', false);
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should not change their readonly state after change readOnly option in form if readOnly option is also set in editors options', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: false,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: false }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+
+        $testContainer.dxLayoutManager('instance').option('readOnly', true);
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should not has readonly state if editorOptions.readOnly is null', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: null }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should has readonly state if editorOptions.readOnly is undefined and form readOnly is true', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: undefined }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
     });
 });

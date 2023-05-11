@@ -83,9 +83,10 @@
         "dxNumberBox-invalidValueMessage": "Värdet måste vara ett nummer",
         "dxNumberBox-noDataText": "Inget data",
 
-        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use column chooser to display columns",
+        "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} to display columns",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
-        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use column chooser or drag a column from the group panel",
+        "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} or drag a column from the group panel",
+        "dxDataGrid-emptyHeaderColumnChooserText": "column chooser",
         "dxDataGrid-columnChooserTitle": "Kolumnväljare",
         "dxDataGrid-columnChooserEmptyText": "Dra en kolumn hit för att dölja den",
         "dxDataGrid-groupContinuesMessage": "Fortsätter på nästa sida",
@@ -118,6 +119,7 @@
         "dxDataGrid-filterRowOperationBetween": "Mellan",
         "dxDataGrid-filterRowOperationBetweenStartText": "Start",
         "dxDataGrid-filterRowOperationBetweenEndText": "Slut",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Använd filter",
         "dxDataGrid-trueText": "sant",
         "dxDataGrid-falseText": "falskt",
@@ -182,6 +184,8 @@
         "dxPager-prevPage": "Previous Page",
         "dxPager-nextPage": "Next Page",
         "dxPager-ariaLabel": "Page Navigation",
+        "dxPager-ariaPageSize": "Page size",
+        "dxPager-ariaPageNumber": "Page number",
 
         "dxPivotGrid-grandTotal": "Totalsumma",
         "dxPivotGrid-total": "{0} Summa",
@@ -261,6 +265,7 @@
 
         "dxCalendar-todayButtonText": "I dag",
         "dxCalendar-ariaWidgetName": "Kalender",
+        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
 
         "dxColorView-ariaRed": "Röd",
         "dxColorView-ariaGreen": "Grön",

@@ -1136,10 +1136,6 @@ declare module DevExpress {
     componentClass: DevExpress.core.ComponentFactory<TComponent>
   ): void;
   /**
-   * [descr:setTemplateEngine(name)]
-   */
-  export function setTemplateEngine(templateEngineName: string): void;
-  /**
    * [descr:setTemplateEngine(options)]
    */
   export function setTemplateEngine(templateEngineOptions: {
@@ -2484,6 +2480,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnChooser.mode]
      */
     mode?: ColumnChooserMode;
+    /**
+     * [descr:GridBaseOptions.columnChooser.position]
+     */
+    position?: PositionConfig;
     /**
      * [descr:GridBaseOptions.columnChooser.search]
      */
@@ -4936,6 +4936,10 @@ declare module DevExpress.data {
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
+     * [descr:DataSourceOptions.langParams]
+     */
+    langParams?: LangParams;
+    /**
      * [descr:DataSourceOptions.map]
      */
     map?: (dataItem: TStoreItem) => TMappedItem;
@@ -5051,6 +5055,13 @@ declare module DevExpress.data {
   type KeySelector<T> =
     | string
     | ((source: T) => string | number | Date | Object);
+  /**
+   * [descr:LangParams]
+   */
+  export type LangParams = {
+    locale: string;
+    collatorOptions?: Intl.CollatorOptions;
+  };
   /**
    * [descr:LoadOptions]
    */
@@ -6490,7 +6501,6 @@ declare module DevExpress.excelExporter {
   }
   /**
    * [descr:ExcelExportDataGridProps]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     /**
@@ -19667,10 +19677,24 @@ declare module DevExpress.ui {
    */
   export class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> {}
   module dxRecurrenceEditor {
+    export type ContentReadyEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor>;
+    export type DisposingEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxRecurrenceEditor>;
+    export type OptionChangedEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor> &
+        DevExpress.events.ChangedOptionInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type Properties = dxRecurrenceEditorOptions;
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxRecurrenceEditor,
+      Event
+    > &
+      DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

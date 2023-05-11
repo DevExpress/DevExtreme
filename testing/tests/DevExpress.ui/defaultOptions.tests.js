@@ -1,4 +1,4 @@
-window.includeThemesLinks();
+require('../../helpers/includeThemesLinks.js');
 
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
@@ -169,8 +169,38 @@ testComponentDefaults(DateBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
-        stylingMode: 'outlined',
+        activeStateEnabled: true,
+        applyValueMode: 'instantly',
+        deferRendering: true,
+        disabled: false,
+        endDateInputAttr: {},
+        endDateLabel: 'End Date',
+        endDateName: '',
+        endDatePlaceholder: '',
+        endDateText: '',
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
         labelMode: 'static',
+        onChange: null,
+        onClosed: null,
+        onCopy: null,
+        onCut: null,
+        onEnterKey: null,
+        onInput: null,
+        onKeyDown: null,
+        onKeyUp: null,
+        onOpened: null,
+        onPaste: null,
+        onValueChanged: null,
+        openOnFieldClick: true,
+        readOnly: false,
+        startDateInputAttr: {},
+        startDateLabel: 'Start Date',
+        startDateName: '',
+        startDatePlaceholder: '',
+        startDateText: '',
+        stylingMode: 'outlined',
+        tabIndex: 0,
     }
 );
 
@@ -186,6 +216,51 @@ testComponentDefaults(DateRangeBox,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'android' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'ios' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'ios' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'generic', deviceType: 'desktop' },
+    {
+        multiView: true,
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
+    },
+    function() {
+        devices.real(this._origDevice);
     }
 );
 

@@ -34,7 +34,7 @@ const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 
 // calendar view
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
-const CALENDAR_RANGE_DATE_CLASS = 'dx-calendar-range-date';
+const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
@@ -254,6 +254,22 @@ QUnit.module('Navigator integration', {
         });
     });
 
+    QUnit.test('calendar width should not be changed after change zoom level by click on caption button if width option is set', function(assert) {
+        const initialWidthValue = '400px';
+
+        this.reinit({
+            width: '400px',
+            value: new Date(2021, 9, 17)
+        });
+
+        const $navigatorCaptionButton = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+
+        $navigatorCaptionButton.trigger('dxclick');
+
+        assert.strictEqual(this.calendar.option('zoomLevel'), 'year', 'zoom level is changed');
+        assert.strictEqual(this.$element.css('width'), initialWidthValue, 'width is correct');
+    });
+
     QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
         const calendar = this.calendar;
         const $navigatorPrev = this.$navigatorPrev;
@@ -469,7 +485,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'May 2015 - June 2015',
+            expectedText: 'May 2015June 2015',
             isLeftSwipe: false
         },
         {
@@ -479,7 +495,7 @@ QUnit.module('Navigator integration', {
         },
         {
             viewsCount: 2,
-            expectedText: 'July 2015 - August 2015',
+            expectedText: 'July 2015August 2015',
             isLeftSwipe: true
         },
     ].forEach(({ viewsCount, expectedText, isLeftSwipe }) => {
@@ -1734,7 +1750,7 @@ QUnit.module('Options', {
         this.calendar.option('showTodayButton', true);
 
         let $todayButton = getTodayButton();
-        assert.strictEqual($todayButton.text, 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
+        assert.strictEqual($($todayButton).text(), 'Today', 'todayButton is rendered after showTodayButton runtime change to true');
 
         this.calendar.option('showTodayButton', false);
         $todayButton = getTodayButton();
@@ -2120,10 +2136,10 @@ QUnit.module('Options', {
                 assert.ok($cell.hasClass(CALENDAR_RANGE_END_DATE_CLASS));
             });
 
-            QUnit.test(`Cells between startDate and endDate should have ${CALENDAR_RANGE_DATE_CLASS} class`, function(assert) {
+            QUnit.test(`Cells between startDate and endDate should have ${CALENDAR_CELL_IN_RANGE_CLASS} class`, function(assert) {
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/15"]'));
 
-                assert.ok($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
 
             QUnit.test('Should reselect startDate and clear endDate on click when both values are defined', function(assert) {
@@ -2171,7 +2187,7 @@ QUnit.module('Options', {
                     scenario: 'when both values are defined'
                 }
             ].forEach(({ values, scenario }) => {
-                QUnit.test(`Cells should not have ${CALENDAR_RANGE_DATE_CLASS} class on hover ${scenario}`, function(assert) {
+                QUnit.test(`Cells should not have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover ${scenario}`, function(assert) {
                     if(devices.real().deviceType !== 'desktop') {
                         assert.ok(true, 'test does not actual for mobile devices');
                         return;
@@ -2185,11 +2201,11 @@ QUnit.module('Options', {
 
                     $cell.trigger('mouseenter');
 
-                    assert.notOk($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                    assert.notOk($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
                 });
             });
 
-            QUnit.test(`Cells should have ${CALENDAR_RANGE_DATE_CLASS} class on hover when only startDate is defined`, function(assert) {
+            QUnit.test(`Cells should have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover when only startDate is defined`, function(assert) {
                 if(devices.real().deviceType !== 'desktop') {
                     assert.ok(true, 'test does not actual for mobile devices');
                     return;
@@ -2203,7 +2219,7 @@ QUnit.module('Options', {
 
                 $cell.trigger('mouseenter');
 
-                assert.ok($cell.hasClass(CALENDAR_RANGE_DATE_CLASS));
+                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
 
             QUnit.test('Selected range should be reduced when difference between startDate and endDate is bigger than four mounths', function(assert) {
@@ -2215,6 +2231,123 @@ QUnit.module('Options', {
                 const selectedRange = getCurrentViewInstance(this.calendar).option('range');
 
                 assert.ok(selectedRange.length < 240);
+            });
+
+            [
+                [null, null],
+                [new Date(2021, 9, 17), null],
+                [null, new Date(2021, 10, 25)],
+                [new Date(2021, 9, 10), new Date(2021, 9, 17)]
+            ].forEach((values) => {
+                QUnit.test(`Click by cell should change startDate value if _allowChangeSelectionOrder is true and _currentSelection is startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'startDate',
+                    });
+
+                    let $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                    let startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+
+                    $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(15);
+                    startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, values[1]]);
+                });
+
+                QUnit.test(`Click by cell should change startDate value and reselect endDate if _allowChangeSelectionOrder is true and _currentSelection is startDate, startDate > endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'startDate',
+                    });
+
+                    const $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, null]);
+                });
+
+                QUnit.test(`Click by cell should change endDate value and reselect startDate if _allowChangeSelectionOrder is true and _currentSelection is endDate, endDate < startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    const $endCellDate = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(7);
+                    const endCellDate = dataUtils.data($endCellDate.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endCellDate.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [null, endCellDate]);
+                });
+
+                QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    let $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(25);
+                    let endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+
+                    $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+                });
+
+                QUnit.test(`Click by cell should change endDate then startDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate then startDate, initial value: ${JSON.stringify(values)}`, function(assert) {
+                    this.reinit({
+                        values,
+                        selectionMode: 'range',
+                        _allowChangeSelectionOrder: true,
+                        _currentSelection: 'endDate',
+                    });
+
+                    const $endDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(30);
+                    const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $endDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [values[0], endCellDate]);
+
+                    this.calendar.option('_currentSelection', 'startDate');
+
+                    const $startDateCell = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(10);
+                    const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                    $startDateCell.trigger('dxclick');
+
+                    assert.deepEqual(this.calendar.option('values'), [startCellDate, endCellDate]);
+                });
+            });
+
+            QUnit.test('Range should not be displayed on cell hover if only startDate is defined and _allowChangeSelectionOrder is true and _currentSelection is startDate', function(assert) {
+                this.reinit({
+                    values: ['2023/04/01', null],
+                    selectionMode: 'range',
+                    _allowChangeSelectionOrder: true,
+                    _currentSelection: 'startDate',
+                });
+
+                const $cellToHover = $(this.calendar.$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+
+                $cellToHover.trigger('mouseenter');
+
+                assert.notOk($cellToHover.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
         });
     });
@@ -4066,6 +4199,12 @@ QUnit.module('Aria accessibility', {
         assert.equal($element.attr('aria-activedescendant'), $cell.attr('id'), 'cell\'s id and element\'s activedescendant are equal');
     });
 
+    QUnit.test('calendar should have role=application attribute', function(assert) {
+        this.$element.dxCalendar();
+
+        assert.strictEqual(this.$element.attr('role'), 'application');
+    });
+
     QUnit.test('onContouredChanged action on init', function(assert) {
         assert.expect(2);
 
@@ -4307,6 +4446,16 @@ QUnit.module('Aria accessibility', {
         const calendar = this.$element.dxCalendar().dxCalendar('instance');
         const $navigatorNext = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS));
 
+        const expectedLabel = `
+            Calendar.
+            To navigate between views, press Control, and then Left Arrow or Right Arrow.
+            To zoom in on a view, press Control, and then Down Arrow.
+            To zoom out, press Control, and then Up Arrow.
+        `
+            .replace(/(\r\n|\n|\r)/gm, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
         ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
             calendar.option({ zoomLevel });
             $navigatorNext.trigger('dxclick');
@@ -4318,7 +4467,7 @@ QUnit.module('Aria accessibility', {
                 const label = tableElement.getAttribute('aria-label');
 
                 assert.strictEqual(role, 'grid', `zoomLevel: ${zoomLevel}, role is correct`);
-                assert.equal(label, 'Calendar', `zoomLevel: ${zoomLevel}, label is correct`);
+                assert.strictEqual(label, expectedLabel, 'label is correct');
             });
         });
     });

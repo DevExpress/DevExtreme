@@ -132,7 +132,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         return ITEM_CLASS;
     }
 
-    _setAriaSelected() {}
+    _setAriaSelectionAttribute() {}
 
     _selectedItemClass() {
         return DX_MENU_SELECTED_ITEM_CLASS;
@@ -165,7 +165,20 @@ class MenuBase extends HierarchicalCollectionWidget {
         return extend(super._supportedKeys(), {
             space: selectItem,
             pageUp: noop,
-            pageDown: noop
+            pageDown: noop,
+            enter: function(e) {
+                const $itemElement = $(this.option('focusedElement'));
+                if(!$itemElement.length) {
+                    return;
+                }
+                this._enterKeyHandler(e);
+
+                const itemData = this._getItemData($itemElement);
+                if(itemData.url) {
+                    const link = $itemElement.get(0).getElementsByClassName(DX_ITEM_URL_CLASS)[0];
+                    link?.click();
+                }
+            },
         });
     }
 
@@ -521,7 +534,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         const selectedIndex = this._dataAdapter.getSelectedNodesKeys();
 
         if(!selectedIndex.length || !this._selectedGetter(args.itemData) || !this._isItemSelectable(args.itemData)) {
-            this._setAriaSelected($itemElement, 'false');
+            this._setAriaSelectionAttribute($itemElement, 'false');
             return;
         }
 
@@ -529,9 +542,9 @@ class MenuBase extends HierarchicalCollectionWidget {
 
         if(node.internalFields.key === selectedIndex[0]) {
             $itemElement.addClass(this._selectedItemClass());
-            this._setAriaSelected($itemElement, 'true');
+            this._setAriaSelectionAttribute($itemElement, 'true');
         } else {
-            this._setAriaSelected($itemElement, 'false');
+            this._setAriaSelectionAttribute($itemElement, 'false');
         }
     }
 

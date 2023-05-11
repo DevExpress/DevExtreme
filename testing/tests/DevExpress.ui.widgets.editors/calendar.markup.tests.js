@@ -17,6 +17,7 @@ const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
 const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
+const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 
 const toSelector = function(className) {
     return '.' + className;
@@ -64,11 +65,10 @@ QUnit.module('Calendar markup', {
             this.getViews = () => this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
         }
     }, () => {
-        QUnit.test('calendar should have inline width equals  viewsCount * view width', function(assert) {
-            const viewWidth = this.calendar._viewWidth();
-            const elementWidth = this.$element[0].style.width;
+        QUnit.test('calendar should have width equals viewsCount * view width', function(assert) {
+            const elementWidth = $(this.calendar.$element()).width();
 
-            assert.strictEqual(elementWidth, `${viewWidth * 2}px`);
+            assert.strictEqual(elementWidth, this.viewWidth * 2);
         });
 
         QUnit.test('calendar should not have inline width after multiview runtime disable', function(assert) {
@@ -77,12 +77,6 @@ QUnit.module('Calendar markup', {
             const elementWidth = this.$element[0].style.width;
 
             assert.strictEqual(elementWidth, '');
-        });
-
-        QUnit.test('views should have multiview class', function(assert) {
-            this.getViews().each((_, element) => {
-                assert.ok($(element).hasClass(CALENDAR_MULTIVIEW_CLASS),);
-            });
         });
     });
 
@@ -175,7 +169,7 @@ QUnit.module('Navigator', {
     QUnit.test('Calendar with two views should display 2 months', function(assert) {
         this.calendar.option('viewsCount', 2);
         const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
-        assert.equal(navigatorCaption.text(), 'June 2015 - July 2015');
+        assert.equal(navigatorCaption.text(), 'June 2015July 2015');
     });
 
     QUnit.test('Calendar with two views and rtlEnabled should display 2 months in reverse order', function(assert) {
@@ -183,8 +177,9 @@ QUnit.module('Navigator', {
             viewsCount: 2,
             rtlEnabled: true
         });
+
         const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
-        assert.equal(navigatorCaption.text(), 'July 2015 - June 2015');
+        assert.equal(navigatorCaption.text(), 'July 2015June 2015');
     });
 });
 
@@ -377,6 +372,69 @@ QUnit.module('CellTemplate option', {
             });
         }).bind(this));
     });
+
+    QUnit.test('calendar should not have multiview class name if viewsCount = 1', function(assert) {
+        this.reinit({
+            viewsCount: 1
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false);
+    });
+
+    QUnit.test('calendar should have multiview class name if viewsCount > 1', function(assert) {
+        this.reinit({
+            viewsCount: 2
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), true);
+    });
+
+
+    QUnit.test('calendar should toggle multiview class name after change viewsCount option value', function(assert) {
+        this.reinit({
+            viewsCount: 1
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false, 'calendar element has not multiview class');
+
+        this.calendar.option('viewsCount', 2);
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), true, 'calendar element has multiview class');
+
+        this.calendar.option('viewsCount', 1);
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false, 'calendar element has not multiview class');
+    });
+
+    QUnit.test('calendar should have range class if selectionMode is range', function(assert) {
+        this.reinit({
+            selectionMode: 'range'
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+    });
+
+    QUnit.test('calendar should toggle range class after change selectionMode option value in runtime', function(assert) {
+        this.reinit({});
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'range');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+
+        this.calendar.option('selectionMode', 'multiple');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'single');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'range');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+    });
 });
 
 QUnit.module('Aria accessibility', {
@@ -387,17 +445,36 @@ QUnit.module('Aria accessibility', {
         this.$element.remove();
     }
 }, () => {
-    QUnit.test('role for calendar widget', function(assert) {
+    QUnit.test('table should have a role "grid"', function(assert) {
         this.$element.dxCalendar();
 
         const $tables = this.$element.find('table');
 
         $tables.each((index, tableElement) => {
             const role = tableElement.getAttribute('role');
-            const label = tableElement.getAttribute('aria-label');
 
             assert.strictEqual(role, 'grid', 'role is correct');
-            assert.equal(label, 'Calendar', 'label is correct');
+        });
+    });
+
+    QUnit.test('table should have an aria-label describing specific hotkeys (T1158729)', function(assert) {
+        this.$element.dxCalendar();
+
+        const $tables = this.$element.find('table');
+
+        $tables.each((index, tableElement) => {
+            const label = tableElement.getAttribute('aria-label');
+            const expectedLabel = `
+                Calendar.
+                To navigate between views, press Control, and then Left Arrow or Right Arrow.
+                To zoom in on a view, press Control, and then Down Arrow.
+                To zoom out, press Control, and then Up Arrow.
+            `
+                .replace(/(\r\n|\n|\r)/gm, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            assert.strictEqual(label, expectedLabel, 'label is correct');
         });
     });
 });

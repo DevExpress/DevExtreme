@@ -21,7 +21,9 @@ const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
-const CALENDAR_RANGE_DATE_CLASS = 'dx-calendar-range-date';
+const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
+const CALENDAR_CELL_RANGE_HOVER_START_CLASS = 'dx-calendar-cell-range-hover-start';
+const CALENDAR_CELL_RANGE_HOVER_END_CLASS = 'dx-calendar-cell-range-hover-end';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
@@ -73,8 +75,11 @@ const BaseView = Widget.inherit({
     _createTable: function() {
         this._$table = $('<table>');
 
+        const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
+        const localizedHotKeysInfo = messageLocalization.format('dxCalendar-ariaHotKeysInfo');
+
         this.setAria({
-            label: messageLocalization.format('dxCalendar-ariaWidgetName'),
+            label: `${localizedWidgetName}. ${localizedHotKeysInfo}`,
             role: 'grid'
         }, this._$table);
 
@@ -288,6 +293,10 @@ const BaseView = Widget.inherit({
             value = [value];
         }
 
+        this._updateSelectedClass(value);
+    },
+
+    _updateSelectedClass: function(value) {
         this._$selectedCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_SELECTED_DATE_CLASS); });
         this._$selectedCells = value.map((value) => this._getCellByDate(value));
         this._$selectedCells.forEach(($cell) => { $cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
@@ -299,15 +308,29 @@ const BaseView = Widget.inherit({
             return;
         }
 
-        this._$rangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_RANGE_DATE_CLASS); });
+        this._$rangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_IN_RANGE_CLASS); });
         this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
         this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
+        this._$rangeStartHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
+        this._$rangeEndHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
 
         this._$rangeCells = range.map((value) => this._getCellByDate(value));
+
+        if(this.option('rtlEnabled')) {
+            this._$rangeStartHoverCell = this._getCellByDate(range[range.length - 1]);
+            this._$rangeEndHoverCell = this._getCellByDate(range[0]);
+        } else {
+            this._$rangeStartHoverCell = this._getCellByDate(range[0]);
+            this._$rangeEndHoverCell = this._getCellByDate(range[range.length - 1]);
+        }
+
+
         this._$rangeStartDateCell = this._getCellByDate(value[0]);
         this._$rangeEndDateCell = this._getCellByDate(value[1]);
 
-        this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_RANGE_DATE_CLASS); });
+        this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_IN_RANGE_CLASS); });
+        this._$rangeStartHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
+        this._$rangeEndHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
         this._$rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
         this._$rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
     },
@@ -346,6 +369,8 @@ const BaseView = Widget.inherit({
             case 'onCellHover':
                 this._createCellHoverAction();
                 break;
+            case 'min':
+            case 'max':
             case 'disabledDates':
             case 'cellTemplate':
                 this._invalidate();

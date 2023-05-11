@@ -4,25 +4,18 @@ import 'ui/data_grid';
 import 'ui/tag_box';
 import ArrayStore from 'data/array_store';
 
-import hogan from 'hogan.js';
-
-window.Hogan = hogan;
-
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 
 const device = devices.real();
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
-
-setTemplateEngine('hogan');
 
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass('dx-viewport'));
@@ -2797,6 +2790,21 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // assert
         assert.ok(true, 'no exceptions');
+    });
+
+    // T1047481
+    QUnit.test('Search box should render aria-label attribute', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        this.options.filterRow.visible = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // assert
+        assert.equal(this.columnHeadersView.element().find('.dx-menu').first().attr('aria-label'), 'Search box');
     });
 
     if(device.deviceType === 'desktop') {

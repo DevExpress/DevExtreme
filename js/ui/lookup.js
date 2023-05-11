@@ -394,6 +394,8 @@ const Lookup = DropDownList.inherit({
         });
 
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
+        this._applyInputAttributes(this.option('inputAttr'));
+
         eventsEngine.on(this._$field, addNamespace(clickEventName, this.NAME), e => {
             fieldClickAction({ event: e });
         });
@@ -404,6 +406,10 @@ const Lookup = DropDownList.inherit({
             .append(this._$field)
             .append($arrow)
             .appendTo(this.$element());
+    },
+
+    _applyInputAttributes(attributes) {
+        this._$field.attr(attributes);
     },
 
     _getInputContainer() {
@@ -469,6 +475,7 @@ const Lookup = DropDownList.inherit({
             this._popup.option('position').of = $(window);
         }
     },
+
     _popupShownHandler: function() {
         const scrollToSelectedItemEnabled = this.option('_scrollToSelectedItemEnabled');
         const fullScreen = this.option('dropDownOptions.fullScreen');
@@ -847,16 +854,19 @@ const Lookup = DropDownList.inherit({
 
             let isKeyboardListeningEnabled = false;
 
-            this._searchBox = this._createComponent($searchBox, TextBox, {
-                onDisposing: () => isKeyboardListeningEnabled = false,
-                onFocusIn: () => isKeyboardListeningEnabled = true,
-                onFocusOut: () => isKeyboardListeningEnabled = false,
-                onKeyboardHandled: opts => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
+            const textBoxOptions = {
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option('searchStartEvent'),
-                onValueChanged: (e) => { this._searchHandler(e); }
-            });
+                inputAttr: { 'aria-label': 'Search' },
+                onDisposing: () => isKeyboardListeningEnabled = false,
+                onFocusIn: () => isKeyboardListeningEnabled = true,
+                onFocusOut: () => isKeyboardListeningEnabled = false,
+                onKeyboardHandled: (opts) => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
+                onValueChanged: (e) => this._searchHandler(e),
+            };
+
+            this._searchBox = this._createComponent($searchBox, TextBox, textBoxOptions);
 
             this._registerSearchKeyHandlers();
 
@@ -983,7 +993,7 @@ const Lookup = DropDownList.inherit({
             if(this.option('searchEnabled')) {
                 this._searchBox.focus();
             } else {
-                eventsEngine.trigger(this._$list, 'focus');
+                this._list.focus();
             }
         });
     },
@@ -1069,6 +1079,9 @@ const Lookup = DropDownList.inherit({
             case 'minSearchLength':
                 this._setSearchPlaceholder();
                 this.callBase(...arguments);
+                break;
+            case 'inputAttr':
+                this._applyInputAttributes(value);
                 break;
             case 'usePopover':
             case 'placeholder':

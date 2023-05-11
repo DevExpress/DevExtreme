@@ -721,7 +721,6 @@ const DataController = Class.inherit((function () {
         });
       }
 
-      // @ts-expect-error
       that._stateStoringController = new stateStoring.StateStoringController(options.component).init();
 
       that._columnsInfo = [];

@@ -35,6 +35,8 @@ const IS_LEAF = `${NODE_CLASS}-is-leaf`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
 const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
 const ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS = `${ITEM_CLASS}-with-custom-expander-icon`;
+const CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS = `${WIDGET_CLASS}-custom-expander-icon-item-container`;
+
 const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
@@ -558,7 +560,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             recursiveExpansion: this.option('expandNodesRecursive'),
             selectionRequired: this.option('selectionRequired'),
             dataType: this.option('dataStructure'),
-            sort: this._dataSource && this._dataSource.sort()
+            sort: this._dataSource && this._dataSource.sort(),
+            langParams: this._dataSource?.loadOptions?.()?.langParams
         };
     },
 
@@ -697,6 +700,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._hasCustomExpanderIcons()) {
             $node.addClass(ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS);
+            $nodeContainer.addClass(CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS);
         }
 
         showCheckBox && this._renderCheckBox($node, node);
@@ -715,7 +719,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _setAriaSelected: function() {},
+    _setAriaSelectionAttribute: noop,
 
     _renderChildren: function($node, node) {
         if(!this._hasChildren(node)) {
@@ -1144,7 +1148,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const value = this._dataAdapter.isAllSelected();
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
-            tabIndex: 1,
             elementAttr: { 'aria-label': 'Select All' },
             text: this.option('selectAllText'),
             onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
@@ -1442,6 +1445,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._updateItemSelection(true, $item.find('.' + ITEM_CLASS).get(0));
             itemIndex++;
         }
+    },
+
+    focus: function() {
+        if(this._selectAllEnabled()) {
+            eventsEngine.trigger(this._$selectAllItem, 'focus');
+            return;
+        }
+
+        this.callBase();
     },
 
     _focusInHandler: function(e) {

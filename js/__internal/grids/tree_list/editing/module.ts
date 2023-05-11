@@ -6,7 +6,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
-// @ts-expect-error
 import { editingModule } from '@js/ui/grid_core/ui.grid_core.editing';
 import treeListCore from '../module_core';
 

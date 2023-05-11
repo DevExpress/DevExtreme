@@ -106,19 +106,37 @@ export default function() {
             assert.notOk($element.hasClass(HTML_EDITOR_OUTLINED_CLASS), 'has no old styling mode class');
             assert.ok($element.hasClass(HTML_EDITOR_FILLED_CLASS), 'has new styling mode class');
         });
+    });
 
+    QUnit.module('Accessibility', () => {
         test('accessibility roles', function(assert) {
             const $element = $('#htmlEditor');
+
             $element.dxHtmlEditor({
                 value: '<p>Test</p>'
             });
+
             const $editorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
             const isQuillRendered = !!$editorContent.length;
 
             assert.expect(isQuillRendered ? 2 : 1);
             assert.strictEqual($element.attr('role'), 'application');
+
             if(isQuillRendered) {
                 assert.strictEqual($editorContent.attr('role'), 'textbox');
+            }
+        });
+
+        test('aria-label on textbox', function(assert) {
+            const $htmlEditor = $('#htmlEditor').dxHtmlEditor();
+
+            const $editorContent = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            const isQuillRendered = !!$editorContent.length;
+
+            assert.expect(isQuillRendered ? 1 : 0);
+
+            if(isQuillRendered) {
+                assert.strictEqual($editorContent.attr('aria-label'), 'Editor content');
             }
         });
     });

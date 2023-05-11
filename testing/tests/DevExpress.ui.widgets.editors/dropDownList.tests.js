@@ -30,6 +30,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const TIME_TO_WAIT = 500;
 
@@ -1700,15 +1701,19 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
     });
 
-    QUnit.test('list\'s aria-target should point to the widget\'s input (T247414)', function(assert) {
-        assert.expect(2);
 
-        const dropDownList = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
-        const list = $(`.${LIST_CLASS}`).dxList('instance');
-        const $input = $('#dropDownList').find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    ['items', 'dataSource'].forEach(dataSource => {
+        QUnit.test(`list focusable element should have aria-label if data source is ${dataSource}`, function(assert) {
+            const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
 
-        assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
-        assert.strictEqual($input.attr('role'), 'combobox', 'input.role');
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
+        });
     });
 });
 

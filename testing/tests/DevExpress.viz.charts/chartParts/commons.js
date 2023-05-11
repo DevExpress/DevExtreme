@@ -1,5 +1,6 @@
+require('../../../helpers/trackerMock.js');
+
 const $ = require('jquery');
-const mock = require('../../../helpers/mockModule.js').mock;
 const vizMocks = require('../../../helpers/vizMocks.js');
 const { Label } = require('viz/series/points/label');
 const LabelCtor = new vizMocks.ObjectPool(Label);
@@ -18,9 +19,7 @@ const Crosshair = crosshairModule.Crosshair;
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const scrollBarClassModule = require('viz/chart_components/scroll_bar');
 const ScrollBarClass = scrollBarClassModule.ScrollBar;
-const { ChartTracker, PieTracker } = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
-const PieTrackerSub = vizMocks.stubClass(PieTracker);
+const trackerModule = require('viz/chart_components/tracker');
 const dataValidatorModule = require('viz/components/data_validator');
 const chartMocks = require('../../../helpers/chartMocks.js');
 const insertMockFactory = chartMocks.insertMockFactory;
@@ -96,11 +95,6 @@ legendModule.Legend = sinon.spy(function(parameters) {
         return [];
     });
     return legend;
-});
-
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters)),
-    PieTracker: sinon.spy((parameters) => new PieTrackerSub(parameters))
 });
 
 const resetModules = exports.resetModules = function() {
@@ -179,11 +173,11 @@ exports.environment = {
         that.layoutManager.layoutElements = sinon.spy(function() {
             arguments[2]();
         });
-        this.StubLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+        this.StubLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
             return that.layoutManager;
         });
 
-        sinon.stub(scrollBarClassModule, 'ScrollBar', function() {
+        sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
             const ScrollBar = vizMocks.stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
@@ -210,11 +204,11 @@ exports.environment = {
             }, options.argumentAxis));
             return createChartInstance(options, this.$container);
         };
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         const family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
-        this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
+        this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily').callsFake(function() {
             family.pane = 'default';
             family.adjustSeriesDimensions = sinon.stub();
             family.adjustSeriesValues = sinon.stub();
@@ -222,14 +216,14 @@ exports.environment = {
             return family;
         });
         this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
-        this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair', function() {
+        this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair').callsFake(function() {
             return sinon.createStubInstance(Crosshair);
         });
 
         tooltipModule.DEBUG_set_tooltip(sinon.spy(function(parameters) {
             return that.tooltip;
         }));
-        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
+        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });

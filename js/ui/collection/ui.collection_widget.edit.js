@@ -492,7 +492,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _processSelectableItem: function($itemElement, isSelected) {
         $itemElement.toggleClass(this._selectedItemClass(), isSelected);
-        this._setAriaSelected($itemElement, String(isSelected));
+        this._setAriaSelectionAttribute($itemElement, String(isSelected));
     },
 
     _updateSelectedItems: function(args) {
@@ -540,7 +540,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _updateSelection: noop,
 
-    _setAriaSelected: function($target, value) {
+    _setAriaSelectionAttribute: function($target, value) {
         this.setAria('selected', value, $target);
     },
 

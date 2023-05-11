@@ -2714,7 +2714,7 @@ module('Virtual scrolling integration', () => {
             }, () => {
                 module('Regular appointmens', () => {
                     test('Scroll Right', function(assert) {
-                        const $style = $('<style>');
+                        const $style = $('<style nonce="qunit-test">');
                         const styleBefore = $style.text();
 
                         $style
@@ -3218,7 +3218,7 @@ module('Virtual scrolling integration', () => {
         module('Vertical orientation', () => {
             supportedViews.forEach(viewName => {
                 test(`Cell height should be correct in "${viewName}" view`, function(assert) {
-                    const $style = $('<style>');
+                    const $style = $('<style nonce="qunit-test">');
                     const styleBefore = $style.text();
 
                     $style
@@ -3249,7 +3249,7 @@ module('Virtual scrolling integration', () => {
         module('Horizontal orientation', () => {
             supportedViews.forEach(viewName => {
                 test(`Cell width should be correct in "${viewName}" view`, function(assert) {
-                    const $style = $('<style>');
+                    const $style = $('<style nonce="qunit-test">');
                     const styleBefore = $style.text();
 
                     $style

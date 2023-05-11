@@ -85,6 +85,7 @@ const APPLY_BUTTON_CLASS = 'dx-popup-done';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
+const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const FOCUSED_CLASS = 'dx-state-focused';
 
@@ -1660,8 +1661,8 @@ QUnit.module('options', {
 
         assert.equal(searchBox.option('value'), '', 'search value has been cleared');
 
-        $($list).trigger('focusin');
-        assert.equal($list.find('.dx-state-focused').eq(0).text(), $listItems.eq(0).text(), 'list focused item has been refreshed');
+        $list.dxList('focus');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}.${FOCUSED_CLASS}`).eq(0).text(), $listItems.eq(0).text(), 'list focused item has been refreshed');
     });
 
     QUnit.test('click on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -2048,6 +2049,20 @@ QUnit.module('options', {
         lookup.option('showClearButton', false);
         $clearButton = getClearButton(lookup);
         assert.notOk($clearButton, 'clearButton is not rendered after option runtime change');
+    });
+
+    QUnit.test('user inputAttr should set attributes to lookup', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            inputAttr: { custom: true },
+        }).dxLookup('instance');
+
+        const $field = lookup.$element().find(`.${LOOKUP_FIELD_CLASS}`);
+
+        assert.strictEqual($field.attr('custom'), 'true', 'custom attribute is set correctly');
+
+        lookup.option({ inputAttr: { custom: null } });
+
+        assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
     });
 });
 
@@ -2694,6 +2709,7 @@ QUnit.module('focus policy', {
 
         $($listItems.eq(1)).trigger('dxclick');
         instance.open();
+        list.focus();
 
         assert.equal($(list.option('focusedElement')).text(), $listItems.eq(1).text(), 'clicked item is focused after popup is reopened');
     });
@@ -2841,10 +2857,11 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        $(instance._$list).focus();
+        instance._$list.dxList('focus');
         assert.ok(instance._$list.find('.dx-list-item').eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
 
-        const keyboard = keyboardMock(instance._$list);
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find('.dx-list-item').eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
@@ -2910,10 +2927,11 @@ QUnit.module('keyboard navigation', {
 
         instance.option('searchEnabled', false);
 
-        const keyboard = keyboardMock(instance._$list);
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find('.dx-list-item').first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
     });
 
     QUnit.test('space key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -2977,7 +2995,9 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true,
             searchEnabled: false
         }).dxLookup('instance');
-        const keyboard = keyboardMock(instance._$list);
+
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
@@ -3351,28 +3371,96 @@ if(devices.real().deviceType === 'desktop') {
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
-                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+                const listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'group',
+                    'aria-roledescription': 'list'
+                };
+
+                const listItemContainerAttributes = {
+                    'aria-label': 'No data to display',
+                    tabindex: '0',
+                    role: 'listbox'
+                };
+
+                let fieldAttributes = {
+                    role: 'combobox',
+                    tabindex: '0',
+                    'aria-owns': helper.widget._popupContentId,
+                    'aria-expanded': 'true',
+                    'aria-controls': helper.widget._listId
+                };
+
+                let widgetAttributes = {
+                    'aria-owns': helper.widget._popupContentId,
+                };
+
+                let popupContentAttributes = {
+                    id: helper.widget._popupContentId,
+                };
+
+                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
+                helper.checkAttributes($field, fieldAttributes, 'field');
+                helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
+
                 if($input.length) {
-                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' };
+                    const expectedAttributes = {
+                        autocomplete: 'off',
+                        type: 'text',
+                        spellcheck: 'false',
+                        tabindex: '0',
+                        role: 'textbox',
+                        'aria-label': 'Search',
+                    };
+
                     if(this.isMac) {
                         expectedAttributes.placeholder = ' ';
                     }
+
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
-                helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
-                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+
+                listAttributes.id = helper.widget._listId;
+
+                fieldAttributes = {
+                    role: 'combobox',
+                    tabindex: '0',
+                    'aria-owns': helper.widget._popupContentId,
+                    'aria-expanded': 'true',
+                    'aria-controls': helper.widget._listId,
+                };
+
+                widgetAttributes = {
+                    'aria-owns': helper.widget._popupContentId,
+                };
+
+                popupContentAttributes = {
+                    id: helper.widget._popupContentId,
+                };
+
+                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
+                helper.checkAttributes($field, fieldAttributes, 'field');
+                helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
+
                 if($input.length) {
-                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' };
+                    const expectedAttributes = {
+                        autocomplete: 'off',
+                        type: 'text',
+                        spellcheck: 'false',
+                        role: 'textbox',
+                        'aria-label': 'Search',
+                    };
+
                     if(this.isMac) {
                         expectedAttributes.placeholder = ' ';
                     }
+
                     helper.checkAttributes($input, expectedAttributes, 'input');
                 }
             });
@@ -3388,13 +3476,6 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.$widget, {}, 'widget');
                 helper.checkAttributes($field, { role: 'combobox', 'aria-expanded': 'false', tabindex: '0' }, 'field');
-            });
-
-            QUnit.test('aria-target for lookup\'s list should point to the list\'s focusTarget', function(assert) {
-                helper.createWidget({ opened: true });
-
-                const list = $(`.${LIST_CLASS}`).dxList('instance');
-                assert.deepEqual(list._getAriaTarget(), list.$element(), 'aria target for nested list is correct');
             });
         });
     });

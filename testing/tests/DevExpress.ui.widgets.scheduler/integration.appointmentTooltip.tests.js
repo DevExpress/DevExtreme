@@ -1191,7 +1191,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
 
                 assert.notOk(checkFocusedState(0), 'On first show tooltip, list item shouldn\'t focused');
 
-                const keyboard = keyboardMock(scheduler.tooltip.getContentElement());
+                const keyboard = keyboardMock(scheduler.tooltip.getContentElement().find('[tabindex=0]'));
                 keyboard.keyDown('down');
 
                 assert.ok(checkFocusedState(0), 'After press key down, list item should focused');
@@ -1214,7 +1214,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
                 scheduler.appointments.click();
 
                 const buttonCount = scheduler.appointments.compact.getButtonCount();
-                const keyboard = keyboardMock(scheduler.tooltip.getContentElement());
+                const keyboard = keyboardMock(scheduler.tooltip.getContentElement().find('[tabindex=0]'));
                 const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
 
                 scheduler.option('focusStateEnabled', false);
