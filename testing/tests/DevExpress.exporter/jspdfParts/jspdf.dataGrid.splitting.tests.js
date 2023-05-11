@@ -12160,5 +12160,86 @@ QUnit.module('RTL support', moduleConfig, () => {
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
+
+        QUnit.test('7 pages, 3 rows, pdfCell.wordWrapEnabled = true', function(assert) {
+            const companies = [
+                {
+                    ID: 1,
+                    Name: 'Super Mart of the West',
+                    Address: '702 SW 8th Street',
+                    City: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Fusce id velit ut tortor pretium viverra. Maecenas accumsan lacus vel facilisis volutpat est velit egestas. Amet venenatis urna cursus eget nunc scelerisque viverra mauris in. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. At elementum eu facilisis sed odio morbi quis. Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Facilisi morbi tempus iaculis urna id volutpat lacus. Diam quam nulla porttitor massa id neque. Pellentesque dignissim enim sit amet venenatis urna. Cursus risus at ultrices mi tempus imperdiet nulla. Elit scelerisque mauris pellentesque pulvinar pellentesque. Dictum fusce ut placerat orci. Suspendisse interdum consectetur libero id faucibus nisl tincidunt eget nullam. Nec feugiat in fermentum posuere urna nec tincidunt praesent semper. Felis eget nunc lobortis mattis aliquam. Dolor sed viverra ipsum nunc aliquet bibendum enim facilisis. Eu ultrices vitae auctor eu augue ut lectus arcu bibendum. Sed libero enim sed faucibus turpis in eu mi. Velit egestas dui id ornare arcu odio ut sem. Quam pellentesque nec nam aliquam sem et tortor. Augue ut lectus arcu bibendum at varius vel. Aliquet nibh praesent tristique magna sit. Amet porttitor eget dolor morbi non arcu risus quis varius. Ullamcorper sit amet risus nullam eget.'
+                },
+                {
+                    ID: 2,
+                    Name: 'Electronics Depot',
+                    Address: '2455 Paces Ferry Road NW',
+                    City: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Fusce id velit ut tortor pretium viverra. Maecenas accumsan lacus vel facilisis volutpat est velit egestas. Amet venenatis urna cursus eget nunc scelerisque viverra mauris in. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. At elementum eu facilisis sed odio morbi quis. Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Facilisi morbi tempus iaculis urna id volutpat lacus. Diam quam nulla porttitor massa id neque. Pellentesque dignissim enim sit amet venenatis urna. Cursus risus at ultrices mi tempus imperdiet nulla.',
+                },
+                {
+                    ID: 3,
+                    Name: 'K&S Music',
+                    Address: '1000 Nicllet Mall',
+                    City: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Fusce id velit ut tortor pretium viverra. Maecenas accumsan lacus vel facilisis volutpat est velit egestas. Amet venenatis urna cursus eget nunc scelerisque viverra mauris in. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. At elementum eu facilisis sed odio morbi quis. Pellentesque pulvinar pellentesque habitant morbi tristique senectus. Facilisi morbi tempus iaculis urna id volutpat lacus. Diam quam nulla porttitor massa id neque. Pellentesque dignissim enim sit amet venenatis urna. Cursus risus at ultrices mi tempus imperdiet nulla.',
+                }
+            ];
+            const done = assert.async();
+            const doc = createMockPdfDoc();
+            const spy = sinon.spy();
+            doc.addPage = spy;
+            const dataGrid = createDataGrid({
+                dataSource: companies,
+                keyExpr: 'ID',
+                showBorders: true,
+                export: {
+                    enabled: true,
+                    formats: ['pdf']
+                },
+                onExporting(e) {
+                    DevExpress.pdfExporter
+                        .exportDataGrid({
+                            jsPDFDocument: doc,
+                            component: e.component,
+                            customizeCell({
+                                gridCell,
+                                pdfCell
+                            }) {
+                                if(gridCell.rowType === 'data' && gridCell.column.dataField === 'City') {
+                                    pdfCell.wordWrapEnabled = true;
+                                }
+                            }
+                        })
+                        .then(() => {
+                            doc.save('Companies.pdf');
+                        });
+                },
+                columns: [{
+                    dataField: 'Name',
+                    width: 200
+                },
+                {
+                    dataField: 'Address',
+                    width: 200
+                }, {
+                    dataField: 'City',
+                    width: 50
+                },
+                ],
+            });
+
+            exportDataGrid({ jsPDFDocument: doc,
+                component: dataGrid,
+                customizeCell({
+                    gridCell,
+                    pdfCell
+                }) {
+                    if(gridCell.rowType === 'data' && gridCell.column.dataField === 'City') {
+                        pdfCell.wordWrapEnabled = true;
+                    }
+                } }
+            ).then(() => {
+                assert.equal(spy.callCount, 6);
+                done();
+            });
+        });
     });
 });
