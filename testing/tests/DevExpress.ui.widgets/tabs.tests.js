@@ -125,6 +125,7 @@ QUnit.module('General', () => {
         const clock = sinon.useFakeTimers();
 
         const $tabs = $('#tabs').dxTabs({
+            focusStateEnabled: true,
             items: [1, 2],
         });
         const $secondTab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
