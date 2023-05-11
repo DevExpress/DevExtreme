@@ -351,6 +351,18 @@ if(devices.real().deviceType === 'desktop') {
                     helper.widget.option(dataSourcePropertyName, []);
                     assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
                 });
+
+                QUnit.test(`list should have correct role if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
+                    helper.createWidget({ items: [] });
+
+                    assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+
+                    helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                    assert.strictEqual(helper.$itemContainer.attr('role'), 'listbox');
+
+                    helper.widget.option(dataSourcePropertyName, []);
+                    assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+                });
             });
 
             QUnit.test('noDataText should be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
