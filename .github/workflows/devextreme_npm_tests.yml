@@ -45,11 +45,17 @@ jobs:
       working-directory: ./artifacts/npm/devextreme
       run: npm pack
 
+    - name: Pack devextreme-dist package
+      working-directory: ./artifacts/npm/devextreme-dist
+      run: npm pack
+
     - name: Copy build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: devextreme-npm
-        path: ./artifacts/npm/devextreme/devextreme-*.tgz
+        path: |
+          ./artifacts/npm/devextreme/devextreme-*.tgz
+          ./artifacts/npm/devextreme-dist/devextreme-*.tgz
         retention-days: 1
 
   test_npm_renovation:
@@ -317,7 +323,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
-      run: npm install --legacy-peer-deps $(find . -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install --legacy-peer-deps $(find . -maxdepth 1 -name "devextreme-dist-*.tgz")
 
     - name: Prepare JS
       working-directory: ./devextreme-demos
