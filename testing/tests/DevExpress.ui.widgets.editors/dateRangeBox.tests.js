@@ -826,15 +826,26 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox is closed');
     });
 
-    QUnit.testInActiveWindow('StartDateBox should be focused on attempt to open endDateBox', function(assert) {
+    QUnit.testInActiveWindow('StartDateBox should be focused after opening by click on input', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
         const endDateBox = getEndDateBoxInstance(this.instance);
 
-        endDateBox.open();
+        $(startDateBox.field()).trigger('dxclick');
 
         assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
         assert.strictEqual(startDateBox.$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
         assert.strictEqual(endDateBox.$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('EndDateBox should be focused after opening by click on input', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        $(endDateBox.field()).trigger('dxclick');
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(startDateBox.$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(endDateBox.$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
     });
 
     QUnit.test('Popup of startDateBox should open if dateRangeBox opened option is true on initialization', function(assert) {

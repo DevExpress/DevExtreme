@@ -105,6 +105,8 @@ class DateRangeBox extends Editor {
             validationStatus: 'valid',
             value: [null, null],
             valueChangeEvent: 'change',
+
+            _currentSelection: 'startDate',
         });
     }
 
@@ -472,7 +474,6 @@ class DateRangeBox extends Editor {
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
-                    this.getStartDateBox().focus();
                     this.getStartDateBox().open();
 
                     // TODO: datebox doesn't clear opened state after prevent of opening

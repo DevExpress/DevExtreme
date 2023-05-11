@@ -18,9 +18,13 @@ class RangeCalendarStrategy extends CalendarStrategy {
             position: { of: this.dateRangeBox.$element() },
             onShowing: () => {
                 this._widget._restoreViewsMinMaxOptions();
-                this._widget.option('_currentSelection', 'startDate');
+                // this._widget.option('_currentSelection', 'startDate');
             }
         });
+    }
+
+    _getPopup() {
+        return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
     }
 
     supportedKeys() {
@@ -57,7 +61,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
             viewsCount: multiView ? 2 : 1,
             width: 260,
             _allowChangeSelectionOrder: true,
-            _currentSelection: 'startDate',
+            _currentSelection: this.getCurrentSelection(),
         });
     }
 
@@ -84,10 +88,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
-        if(!this.isStartDateBoxActive()) {
-            this.setActiveStartDateBox();
-        }
-
         if(isSameDateArrays(value, previousValue)) {
             return;
         }
@@ -105,7 +105,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 this.dateRangeBox.updateValue(value);
             }
             this.getDateRangeBox().getEndDateBox().focus();
-            this._widget.option('_currentSelection', 'endDate');
+            // this._widget.option('_currentSelection', 'endDate');
             this._widget._setViewsMinOption(value[0]);
 
             if(value[1]) {
@@ -121,9 +121,13 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 this.setActiveStartDateBox();
                 this.getDateRangeBox().getStartDateBox().focus();
             }
-            this._widget.option('_currentSelection', 'startDate');
+            // this._widget.option('_currentSelection', 'startDate');
             this._widget._setViewsMaxOption(value[1]);
         }
+    }
+
+    getCurrentSelection() {
+        return this.dateRangeBox.option('_currentSelection');
     }
 
     isStartDateBoxActive() {
