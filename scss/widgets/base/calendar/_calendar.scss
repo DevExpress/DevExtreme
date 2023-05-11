@@ -65,6 +65,7 @@
     direction: ltr;
     table-layout: fixed;
     border-spacing: 0;
+    line-height: normal;
   }
 
   td,
@@ -91,7 +92,6 @@
   cursor: pointer;
   position: relative;
   text-align: center;
-  line-height: normal;
 
   span {
     display: inline-flex;
