@@ -691,14 +691,10 @@ const CollectionWidget = Widget.inherit({
         this._attachContextMenuEvent();
     },
 
-    _getPointerEventName() {
-        return pointerEvents.down;
-    },
-
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
         const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-        const pointerEventNamespace = addNamespace(this._getPointerEventName(), this.NAME);
+        const pointerEventNamespace = addNamespace(pointerEvents.up, this.NAME);
         const that = this;
 
         const pointerAction = new Action(function(args) {
