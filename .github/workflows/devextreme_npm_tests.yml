@@ -49,13 +49,18 @@ jobs:
       working-directory: ./artifacts/npm/devextreme-dist
       run: npm pack
 
+    - name: Copy packages
+      run: |
+        cp ./artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+        cp ./artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+
     - name: Copy build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: devextreme-npm
         path: |
-          ./artifacts/npm/devextreme/devextreme-*.tgz
-          ./artifacts/npm/devextreme-dist/devextreme-*.tgz
+          devextreme-installer.tgz
+          devextreme-dist-installer.tgz
         retention-days: 1
 
   test_npm_renovation:
@@ -189,7 +194,7 @@ jobs:
       working-directory: ../devextreme-angular-repo
       run: |
         pushd devextreme-setup
-        installerName=$(realpath .)/$(ls *.tgz)
+        installerName=$(realpath .)/devextreme-installer.tgz
         popd
         cd ./packages/devextreme-angular
         npm install --save-dev $installerName
@@ -239,7 +244,7 @@ jobs:
 
     - name: Install DevExtreme package
       working-directory: ./testing/bundlers
-      run: npm install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install --save-dev devextreme-installer.tgz
 
     - name: Generate entry files
       working-directory: ./testing/bundlers
@@ -323,7 +328,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
-      run: npm install --legacy-peer-deps $(find . -maxdepth 1 -name "devextreme-dist-*.tgz")
+      run: npm install --legacy-peer-deps devextreme-dist-installer.tgz
 
     - name: Prepare JS
       working-directory: ./devextreme-demos
