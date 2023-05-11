@@ -1,4 +1,4 @@
-window.includeThemesLinks();
+import '../../helpers/includeThemesLinks.js';
 
 import $ from 'jquery';
 import domAdapter from 'core/dom_adapter';

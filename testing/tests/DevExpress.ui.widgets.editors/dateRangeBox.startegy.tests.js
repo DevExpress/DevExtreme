@@ -41,7 +41,8 @@ const moduleConfig = {
         };
 
         init({
-            value: ['2023/01/05', '2023/02/14']
+            value: ['2023/01/05', '2023/02/14'],
+            multiView: true,
         });
     },
     afterEach: function() {
@@ -134,7 +135,8 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             QUnit.test(`max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode = ${applyValueMode})`, function(assert) {
                 this.reinit({
-                    applyValueMode
+                    applyValueMode,
+                    multiView: true,
                 });
 
                 this.instance.open();
@@ -155,7 +157,8 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode = ${applyValueMode})`, function(assert) {
                 this.reinit({
-                    applyValueMode
+                    applyValueMode,
+                    multiView: true,
                 });
 
                 this.instance.open();
@@ -207,6 +210,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             this.reinit({
                 applyValueMode: 'instantly',
                 value: initialValue,
+                multiView: true,
             });
 
             this.instance.open();
@@ -235,7 +239,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
         });
 
-        QUnit.test(`onValueChanged should be called once on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+        QUnit.test(`onValueChanged should be called once with correct event argument on select start date and end date in calendar, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
             const onValueChangedHandler = sinon.spy();
 
             this.reinit({
@@ -243,18 +247,79 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
                 value: initialValue,
                 onValueChanged: onValueChangedHandler,
                 opened: true,
+                multiView: true,
             });
 
             const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             $cell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select start date');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
+
             onValueChangedHandler.reset();
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             $endDateCell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select end date');
+            assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
+        });
+
+        QUnit.test(`StartDate value should be choosed first after opening by click on startDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+            this.reinit({
+                applyValueMode: 'instantly',
+                value: initialValue,
+                openOnFieldClick: true,
+                multiView: true,
+            });
+
+            $(this.instance.field()[0]).trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $startDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, initialValue[1]], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), initialValue[1], 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, initialValue[1]], 'calendar value is correct');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $endDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
+
+            assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
+        });
+
+        QUnit.test(`EndDate value should be choosed first after opening by click on endDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+            this.reinit({
+                applyValueMode: 'instantly',
+                value: initialValue,
+                openOnFieldClick: true,
+                multiView: true,
+            });
+
+            $(this.instance.field()[1]).trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $endDateCell.trigger('dxclick');
+
+            assert.deepEqual(this.instance.option('value'), [initialValue[0], endCellDate], 'dateRangeBox value is correct');
+            assert.deepEqual(this.startDateBox.option('value'), initialValue[0], 'startDateBox value is correct');
+            assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
+            assert.deepEqual(this.getCalendar().option('values'), [initialValue[0], endCellDate], 'calendar value is correct');
+
+            assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
         });
     });
 
@@ -279,6 +344,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             this.reinit({
                 applyValueMode: 'instantly',
                 value: [null, null],
+                multiView: true,
             });
 
             this.instance.open();
@@ -307,6 +373,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         this.reinit({
             applyValueMode: 'instantly',
             value: [null, null],
+            multiView: true,
         });
 
         this.instance.open();
@@ -322,48 +389,12 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
     });
 
-    [
-        { field: 'startDate', index: 0 },
-        { field: 'endDate', index: 1 },
-    ].forEach(({ field, index }) => {
-        QUnit.test(`StartDate value should be choosed first after opening by click on ${field} field if openOnFieldClick is true`, function(assert) {
-            this.reinit({
-                applyValueMode: 'instantly',
-                value: [null, null],
-                openOnFieldClick: true,
-            });
-
-            $(this.instance.field()[index]).trigger('dxclick');
-
-            assert.deepEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
-
-            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
-            const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
-            $startDateCell.trigger('dxclick');
-
-            assert.deepEqual(this.instance.option('value'), [startCellDate, null], 'dateRangeBox value is correct');
-            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
-            assert.deepEqual(this.endDateBox.option('value'), null, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, null], 'calendar value is correct');
-
-            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
-            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
-            $endDateCell.trigger('dxclick');
-
-            assert.deepEqual(this.instance.option('value'), [startCellDate, endCellDate], 'dateRangeBox value is correct');
-            assert.deepEqual(this.startDateBox.option('value'), startCellDate, 'startDateBox value is correct');
-            assert.deepEqual(this.endDateBox.option('value'), endCellDate, 'endDateBox value is correct');
-            assert.deepEqual(this.getCalendar().option('values'), [startCellDate, endCellDate], 'calendar value is correct');
-
-            assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
-        });
-    });
-
     QUnit.testInActiveWindow('DateRangeBox & End DateBox should have focus class after select end date', function(assert) {
         this.reinit({
             applyValueMode: 'instantly',
             value: [null, null],
             focusStateEnabled: true,
+            multiView: true,
         });
 
         this.instance.open();
@@ -418,6 +449,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             this.reinit({
                 applyValueMode: 'useButtons',
                 value: initialValue,
+                multiView: true,
             });
 
             this.instance.open();
@@ -458,6 +490,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             this.reinit({
                 applyValueMode: 'useButtons',
                 value: initialValue,
+                multiView: true,
             });
 
             this.instance.open();
@@ -494,6 +527,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
                 value: initialValue,
                 onValueChanged: onValueChangedHandler,
                 opened: true,
+                multiView: true,
             });
 
             const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
@@ -603,6 +637,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             applyValueMode: 'useButtons',
             value: [null, null],
             focusStateEnabled: true,
+            multiView: true,
         });
 
         this.instance.open();

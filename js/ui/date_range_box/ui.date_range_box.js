@@ -4,6 +4,7 @@ import domAdapter from '../../core/dom_adapter';
 import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
 import config from '../../core/config';
+import devices from '../../core/devices';
 import messageLocalization from '../../localization/message';
 import { current, isMaterial } from '../themes';
 import Editor from '../editor/editor';
@@ -68,6 +69,7 @@ class DateRangeBox extends Editor {
             labelMode: 'static',
             max: undefined,
             min: undefined,
+            multiView: true,
             onChange: null,
             onClosed: null,
             onCopy: null,
@@ -103,6 +105,8 @@ class DateRangeBox extends Editor {
             validationStatus: 'valid',
             value: [null, null],
             valueChangeEvent: 'change',
+
+            _currentSelection: 'startDate',
         });
     }
 
@@ -117,7 +121,17 @@ class DateRangeBox extends Editor {
                     stylingMode: config().editorStylingMode || 'filled',
                     labelMode: 'floating'
                 }
-            }
+            },
+            {
+                device: function() {
+                    const realDevice = devices.real();
+                    const platform = realDevice.platform;
+                    return platform === 'ios' || platform === 'android';
+                },
+                options: {
+                    multiView: false
+                }
+            },
         ]);
     }
 
@@ -161,12 +175,6 @@ class DateRangeBox extends Editor {
         this._closeAction();
     }
 
-    _createValueChangeAction() {
-        this._valueChangeAction = this._createActionByOption('onValueChanged', {
-            excludeValidators: ['disabled', 'readOnly']
-        });
-    }
-
     _createEventAction(eventName) {
         this[`_${camelize(eventName)}Action`] = this._createActionByOption(`on${eventName}`, {
             excludeValidators: ['readOnly']
@@ -179,25 +187,6 @@ class DateRangeBox extends Editor {
             this._createEventAction(eventName);
         }
         this[`_${camelize(eventName)}Action`]({ event });
-    }
-
-    _raiseValueChangeAction(value, previousValue) {
-        if(!this._valueChangeAction) {
-            this._createValueChangeAction();
-        }
-        this._valueChangeAction(this._valueChangeArgs(value, previousValue));
-    }
-
-    _valueChangeArgs(value, previousValue) {
-        return {
-            value: value,
-            previousValue: previousValue,
-            event: this._valueChangeEventInstance
-        };
-    }
-
-    _saveValueChangeEvent(e) {
-        this._valueChangeEventInstance = e;
     }
 
     _initTemplates() {
@@ -336,8 +325,14 @@ class DateRangeBox extends Editor {
     }
 
     _clearValueHandler(e) {
+        this._saveValueChangeEvent(e);
+
+        this._shouldSuppressValueSync = true;
         this.getEndDateBox()._clearValueHandler(e);
         this.getStartDateBox()._clearValueHandler(e);
+        this._shouldSuppressValueSync = false;
+
+        this.reset();
     }
 
     _isClearButtonVisible() {
@@ -421,9 +416,12 @@ class DateRangeBox extends Editor {
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
-            onValueChanged: ({ value }) => {
-                const newValue = [value, this.option('value')[1]];
-                this.updateValue(newValue);
+            onValueChanged: ({ value, event }) => {
+                if(!this._shouldSuppressValueSync) {
+                    const newValue = [value, this.option('value')[1]];
+
+                    this.updateValue(newValue, event);
+                }
             },
             opened: options.opened,
             onOpened: () => {
@@ -460,16 +458,18 @@ class DateRangeBox extends Editor {
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
-                    this.getStartDateBox().focus();
                     this.getStartDateBox().open();
 
                     // TODO: datebox doesn't clear opened state after prevent of opening
                     this.getEndDateBox().option('opened', false);
                 }
             },
-            onValueChanged: ({ value }) => {
-                const newValue = [this.option('value')[0], value];
-                this.updateValue(newValue);
+            onValueChanged: ({ value, event }) => {
+                if(!this._shouldSuppressValueSync) {
+                    const newValue = [this.option('value')[0], value];
+
+                    this.updateValue(newValue, event);
+                }
             },
             onOptionChanged: ({ name, value }) => {
                 if(name === 'text') {
@@ -487,8 +487,12 @@ class DateRangeBox extends Editor {
         };
     }
 
-    updateValue(newValue) {
+    updateValue(newValue, event) {
         if(!isSameDateArrays(newValue, this.option('value'))) {
+            if(event) {
+                this._saveValueChangeEvent(event);
+            }
+
             this.option('value', newValue);
         }
     }
@@ -642,6 +646,9 @@ class DateRangeBox extends Editor {
             case 'endDateName':
                 this.getEndDateBox().option('name', value);
                 break;
+            case 'multiView':
+                this.getStartDateBox().option('calendarOptions.viewsCount', value ? 2 : 1);
+                break;
             case 'tabIndex':
             case 'focusStateEnabled':
                 super._optionChanged(args);
@@ -695,11 +702,6 @@ class DateRangeBox extends Editor {
             case 'startDateText':
             case 'endDateText':
             case 'useHiddenSubmitElement':
-            // case 'validationError':
-            // case 'validationErrors':
-            // case 'validationMessageMode':
-            // case 'validationMessagePosition':
-            // case 'validationStatus':
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);
@@ -720,6 +722,9 @@ class DateRangeBox extends Editor {
 
                 break;
             }
+            case '_currentSelection':
+                // TODO: change calendar option here?
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -750,7 +755,15 @@ class DateRangeBox extends Editor {
     }
 
     field() {
-        return [this.getStartDateBox().field(), this.getEndDateBox().field()];
+        return [this.startDateField(), this.endDateField()];
+    }
+
+    startDateField() {
+        return this.getStartDateBox().field();
+    }
+
+    endDateField() {
+        return this.getEndDateBox().field();
     }
 
     focus() {
@@ -758,9 +771,10 @@ class DateRangeBox extends Editor {
     }
 
     reset() {
-        // TODO: add test
-        this.getEndDateBox().reset();
-        this.getStartDateBox().reset();
+        // this.getEndDateBox().reset();
+        // this.getStartDateBox().reset();
+
+        super.reset();
     }
 }
 
