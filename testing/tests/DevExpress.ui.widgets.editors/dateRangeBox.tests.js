@@ -2195,7 +2195,8 @@ QUnit.module('validation', moduleConfig, () => {
                     .type('f')
                     .change();
 
-                assert.deepEqual(this.instance.option('validationError'), { message: 'Value must be a date or time' }, 'dateRangeBox validationError is updated');
+                const expectedErrors = [{ editorSpecific: true, message: 'Value must be a date or time' }];
+                assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
             });
 
             QUnit.test('internal date validation fail should update dateRangeBox validationErrors even if it is not empty', function(assert) {
@@ -2214,7 +2215,31 @@ QUnit.module('validation', moduleConfig, () => {
                     .type('f')
                     .change();
 
-                const expectedErrors = [externalError, { message: 'Value must be a date or time' }];
+                const expectedErrors = [externalError, { editorSpecific: true, message: 'Value must be a date or time' }];
+                assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+            });
+
+            QUnit.test('internal date validation success should remove internal errors from dateRangeBox validationErrors', function(assert) {
+                const externalError = { message: 'external validation failed' };
+                this.instance.option('validationError', externalError);
+
+                const dateBox = dateBoxName === 'startDateBox'
+                    ? getStartDateBoxInstance(this.instance)
+                    : getEndDateBoxInstance(this.instance);
+
+                const $dateBoxInput = $(dateBox.field());
+                const keyboard = keyboardMock($dateBoxInput);
+
+                keyboard
+                    .press('backspace')
+                    .type('f')
+                    .change();
+
+                keyboard
+                    .press('backspace')
+                    .change();
+
+                const expectedErrors = [externalError];
                 assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
             });
         });

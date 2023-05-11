@@ -103,6 +103,7 @@ class DateRangeBox extends Editor {
             validationStatus: 'valid',
             value: [null, null],
             valueChangeEvent: 'change',
+            _internalValidationErrors: []
         });
     }
 
@@ -353,6 +354,32 @@ class DateRangeBox extends Editor {
         return ['calendar', 'native'].includes(pickerType) ? pickerType : 'calendar';
     }
 
+    _xorValidationErrors(optionName, previousValue) {
+        if(!previousValue) {
+            return;
+        }
+
+        const errors = this.option(optionName) || [];
+        const updatedErrors = errors.filter((error) => {
+            return !previousValue.some((prevError) => {
+                return error.message === prevError.message;
+            });
+        });
+
+        this.option(optionName, updatedErrors);
+    }
+
+    _validationErrorsChangedHandler(optionName, { value, previousValue }) {
+        this._xorValidationErrors(optionName, previousValue);
+
+        if(!value) {
+            return;
+        }
+
+        const internalValidationErrors = this.option(optionName) || [];
+        this.option(optionName, [...internalValidationErrors, ...value]);
+    }
+
     _getDateBoxConfig() {
         const options = this.option();
 
@@ -436,9 +463,13 @@ class DateRangeBox extends Editor {
 
                 this._raiseCloseAction();
             },
-            onOptionChanged: ({ name, value }) => {
+            onOptionChanged: (args) => {
+                const { name, value } = args;
                 if(name === 'text') {
                     this.option('startDateText', value);
+                }
+                if(name === 'validationErrors') {
+                    this._validationErrorsChangedHandler('_internalValidationErrors', args);
                 }
             },
             todayButtonText: options.todayButtonText,
@@ -471,9 +502,13 @@ class DateRangeBox extends Editor {
                 const newValue = [this.option('value')[0], value];
                 this.updateValue(newValue);
             },
-            onOptionChanged: ({ name, value }) => {
+            onOptionChanged: (args) => {
+                const { name, value } = args;
                 if(name === 'text') {
                     this.option('endDateText', value);
+                }
+                if(name === 'validationErrors') {
+                    this._validationErrorsChangedHandler('_internalValidationErrors', args);
                 }
             },
             showClearButton: false,
@@ -713,6 +748,9 @@ class DateRangeBox extends Editor {
             case 'validationMessagePosition':
                 this.getStartDateBox().option(name, value);
                 super._optionChanged(args);
+                break;
+            case '_internalValidationErrors':
+                this._validationErrorsChangedHandler('validationErrors', args);
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);
