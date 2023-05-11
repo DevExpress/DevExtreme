@@ -198,15 +198,15 @@ $grid-masterdetail-padding: 16px;
     .dx-row-alt {
       & > td {
         background-color: $datagrid-row-alternation-bg;
-
-        // T838734
-        border-top: 1px solid $datagrid-row-alternation-bg;
-        border-bottom: 1px solid $datagrid-row-alternation-bg;
       }
 
       &.dx-row:not(.dx-row-removed) {
         border-bottom-color: transparent;
       }
+
+      // T838734
+      border-top: 1px solid $datagrid-row-alternation-bg;
+      border-bottom: 1px solid $datagrid-row-alternation-bg;
     }
 
     .dx-link {
