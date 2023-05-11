@@ -27,8 +27,9 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const isRenovatedScrollView = !!scrollView.IS_RENOVATED_WIDGET;
-QUnit[isRenovatedScrollView ? 'test' : 'skip']('Scrollview content is not recreated on initializing', function(assert) {
+const renovatedScrollViewTest = scrollView.IS_RENOVATED_WIDGET ? QUnit.test : QUnit.skip;
+
+renovatedScrollViewTest('Scrollview content is not recreated on initializing', function(assert) {
     const contentInit = $('#text').get(0);
     const contentInitJq = $('#textJquery').get(0);
 
