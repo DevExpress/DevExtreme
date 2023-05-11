@@ -298,7 +298,7 @@ QUnit.test('items reordering by keyboard', function(assert) {
 
     let $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
 
-    $lastItem.trigger('dxpointerdown');
+    $lastItem.trigger('dxpointerup');
     this.clock.tick(10);
     keyboard.keyDown('arrowUp', { shiftKey: true });
 
@@ -307,7 +307,7 @@ QUnit.test('items reordering by keyboard', function(assert) {
     list.option('itemDragging.allowReordering', true);
 
     $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
-    $lastItem.trigger('dxpointerdown');
+    $lastItem.trigger('dxpointerup');
     this.clock.tick(10);
     keyboard.keyDown('arrowUp', { shiftKey: true });
 
