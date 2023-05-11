@@ -473,19 +473,32 @@ const DropDownButton = Widget.inherit({
     },
 
     _setButtonsAria(value) {
-        const buttonAria = {
+        const commonButtonAria = {
             expanded: value,
             haspopup: 'listbox',
         };
+        const firstButtonAria = {};
 
-        this._$buttonElements.each((_, $button) => {
-            this.setAria(buttonAria, $($button));
+        if(!this.option('text')) {
+            firstButtonAria.label = 'dropdownbutton';
+        }
+
+        this._getButtons().each((index, $button) => {
+            if(index === 0) {
+                this.setAria({ ...firstButtonAria, ...commonButtonAria }, $($button));
+            } else {
+                this.setAria(commonButtonAria, $($button));
+            }
         });
     },
 
     _updateAriaAttributes(value) {
         this._setElementAria(value);
         this._setButtonsAria(value);
+    },
+
+    _getButtons() {
+        return this._buttonGroup.$element().find(`.${DX_BUTTON_CLASS}`);
     },
 
     _renderButtonGroup() {
@@ -495,8 +508,6 @@ const DropDownButton = Widget.inherit({
         }
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
-
-        this._$buttonElements = this._buttonGroup.$element().find(`.${DX_BUTTON_CLASS}`);
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -554,8 +565,6 @@ const DropDownButton = Widget.inherit({
     _clean() {
         this._list && this._list.$element().remove();
         this._popup && this._popup.$element().remove();
-
-        this._$buttonElements = null;
     },
 
     _selectedItemKeyChanged(value) {
@@ -573,10 +582,15 @@ const DropDownButton = Widget.inherit({
         });
     },
 
+    _updateButtonGroup(name, value) {
+        this._buttonGroup.option(name, value);
+        this._updateAriaAttributes(this.option('opened'));
+    },
+
     _actionButtonOptionChanged({ name, value }) {
         const newConfig = {};
         newConfig[name] = value;
-        this._buttonGroup.option('items[0]', extend({}, this._actionButtonConfig(), newConfig));
+        this._updateButtonGroup('items[0]', extend({}, this._actionButtonConfig(), newConfig));
         this._popup && this._popup.repaint();
     },
 
@@ -665,7 +679,7 @@ const DropDownButton = Widget.inherit({
             case 'focusStateEnabled':
             case 'hoverStateEnabled':
                 this._setListOption(name, value);
-                this._buttonGroup.option(name, value);
+                this._updateButtonGroup(name, value);
                 this.callBase(args);
                 break;
             case 'items':
@@ -696,7 +710,7 @@ const DropDownButton = Widget.inherit({
                 this._popup?.repaint();
                 break;
             case 'stylingMode':
-                this._buttonGroup.option(name, value);
+                this._updateButtonGroup(name, value);
                 break;
             case 'itemTemplate':
             case 'grouped':
@@ -727,7 +741,7 @@ const DropDownButton = Widget.inherit({
                 this.toggle(this.option('opened'));
                 break;
             case 'tabIndex':
-                this._buttonGroup.option(name, value);
+                this._updateButtonGroup(name, value);
                 break;
             default:
                 this.callBase(args);

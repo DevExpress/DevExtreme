@@ -372,7 +372,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
                     useMaskBehavior,
                     type,
                     pickerType: 'calendar',
-                    penOnFieldClick: true
+                    openOnFieldClick: true
                 });
             });
         });
