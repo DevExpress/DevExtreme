@@ -6,6 +6,8 @@ const CollectionWidgetItem = require('ui/collection/item');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
 QUnit.module('observables', {

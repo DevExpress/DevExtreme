@@ -3,6 +3,8 @@ const noop = require('core/utils/common').noop;
 const ko = require('knockout');
 const KoTemplate = require('integration/knockout/template').KoTemplate;
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.module('rendering', {
     beforeEach: function() {
         const that = this;

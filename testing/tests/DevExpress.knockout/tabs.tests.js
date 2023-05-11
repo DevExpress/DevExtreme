@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/tabs');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.test('regression: B250529', function(assert) {
     let itemClickFired = false;
 

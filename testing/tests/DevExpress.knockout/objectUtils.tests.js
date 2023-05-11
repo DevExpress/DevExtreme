@@ -4,6 +4,8 @@ const objectUtils = require('core/utils/object');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.test('deepExtendArraySafe works correctly with array contain observables', function(assert) {
     const testObj = { id: 4, name: ko.observable('John') };
     const resultObj = objectUtils.deepExtendArraySafe(testObj, { name: 'Sue' });

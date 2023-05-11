@@ -9,6 +9,8 @@ const swipeEvents = require('events/swipe');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="eventContext" data-bind="dxtestevent: handle"></div>';

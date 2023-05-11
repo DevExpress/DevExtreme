@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/tree_list');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 const testArray = [
     { Id: 1, Head_ID: 0, Name: 'Name1' },
     { Id: 2, Head_ID: 1, Name: 'Name2' },

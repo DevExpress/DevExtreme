@@ -7,6 +7,8 @@ require('../../../helpers/executeAsyncMock.js');
 require('integration/knockout');
 require('bundles/modules/parts/widgets-web');
 
+require('../../../helpers/skipScpTest.js');
+
 const LABEL = '.dx-field-label';
 const VALUE = '.dx-field-value';
 

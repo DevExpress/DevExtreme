@@ -11,6 +11,8 @@ import ko from 'knockout';
 import 'integration/knockout';
 import 'ui/date_box';
 
+import '../../helpers/skipScpTest.js';
+
 QUnit.testStart(function() {
     const markup =
         '<div id="dateBox"></div>\

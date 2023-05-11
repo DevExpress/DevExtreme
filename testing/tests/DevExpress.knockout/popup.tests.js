@@ -7,6 +7,8 @@ const ko = require('knockout');
 require('ui/popup');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {

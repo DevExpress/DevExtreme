@@ -7,6 +7,8 @@ require('ui/validation_group');
 require('ui/validator');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="testcaseSingleGroup" data-bind="dxValidationGroup: {}">\

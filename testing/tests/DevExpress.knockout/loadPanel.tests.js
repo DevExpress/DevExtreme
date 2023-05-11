@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/load_panel');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="target" style="position: absolute; top: 0; left: 0; width: 100px; height: 100px;">\

@@ -4,6 +4,8 @@ import ko from 'knockout';
 import 'ui/button';
 import 'integration/knockout';
 
+import '../../helpers/skipScpTest.js';
+
 QUnit.module('Render', () => {
     // T831205
     QUnit.test('Widget rendering when buttonTemplate is used', function(assert) {

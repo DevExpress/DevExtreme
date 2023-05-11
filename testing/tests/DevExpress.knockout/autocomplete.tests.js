@@ -5,6 +5,8 @@ const Autocomplete = require('ui/autocomplete');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="T131530" data-bind="dxAutocomplete: { items: [{}, {}], itemTemplate: \'item\', searchTimeout: 0 }">\

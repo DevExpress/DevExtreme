@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/pivot_grid/ui.pivot_grid');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="view">\

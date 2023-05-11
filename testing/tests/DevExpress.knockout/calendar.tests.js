@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/calendar');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="T354951" data-bind="dxCalendar: {}">\

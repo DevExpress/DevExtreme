@@ -6,6 +6,8 @@ const Scheduler = require('ui/scheduler');
 
 require('generic_light.css!');
 
+require('../../helpers/skipScpTest.js');
+
 const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 QUnit.test('Appointment should have right date format', function(assert) {

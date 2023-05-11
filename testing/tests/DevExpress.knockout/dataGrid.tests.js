@@ -6,9 +6,10 @@ import fx from 'animation/fx';
 import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
-
 import 'ui/data_grid';
 import 'integration/knockout';
+
+import '../../helpers/skipScpTest.js';
 
 QUnit.testStart(function() {
     const markup =

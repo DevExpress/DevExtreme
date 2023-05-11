@@ -6,6 +6,8 @@ const dataUtils = require('core/element_data');
 
 require('ui/defer_rendering');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="renderDelegateWithWithBinding">\

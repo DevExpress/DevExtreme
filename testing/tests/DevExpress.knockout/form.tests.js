@@ -12,6 +12,8 @@ import 'ui/select_box';
 import 'ui/tag_box';
 import 'integration/knockout';
 
+import '../../helpers/skipScpTest.js';
+
 QUnit.testStart(() => {
     const markup =
         `<div id="simpleDataForm" data-bind="dxForm: { formData: formData }"></div>

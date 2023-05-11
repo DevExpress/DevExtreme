@@ -5,6 +5,8 @@ const ko = require('knockout');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="tagBoxWithFieldTemplate" data-bind="dxTagBox: { dataSource: dataSource, fieldTemplate: \'field\', valueExpr: \'key\', value: value }">\

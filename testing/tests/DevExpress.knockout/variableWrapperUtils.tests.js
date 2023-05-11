@@ -4,6 +4,8 @@ const { logger } = require('core/utils/console');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.test('wrapped value', function(assert) {
     const observableValue = ko.observable(3);
     const computedValue = ko.computed(function() { return '4'; });

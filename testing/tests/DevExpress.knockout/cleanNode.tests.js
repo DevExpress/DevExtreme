@@ -4,6 +4,8 @@ const $ = require('jquery');
 const ko = require('knockout');
 const dataUtils = require('core/element_data');
 
+require('../../helpers/skipScpTest.js');
+
 const FIXTURE_ELEMENT = $('#qunit-fixture');
 
 const setTestData = function($element) {

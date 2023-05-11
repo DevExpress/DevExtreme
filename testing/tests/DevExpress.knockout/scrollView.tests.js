@@ -4,6 +4,8 @@ const ko = require('knockout');
 const scrollView = require('ui/scroll_view');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         `<div id="scrollview" data-bind="dxScrollView: scrollViewOptions">

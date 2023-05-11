@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/box');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="nestedBox" data-bind="dxBox: {}">\

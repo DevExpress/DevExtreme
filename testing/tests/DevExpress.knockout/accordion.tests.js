@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/accordion');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="templated-accordion" data-bind="dxAccordion: {\

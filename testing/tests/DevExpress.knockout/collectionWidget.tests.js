@@ -6,6 +6,8 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="cmp"></div>\

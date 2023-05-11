@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/context_menu/ui.context_menu');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.test('context menu should change it\'s position if it\'s part was changed by viewmodel', function(assert) {
     const vm = {
         my: ko.observable('top')

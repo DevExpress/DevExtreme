@@ -4,6 +4,8 @@ import ko from 'knockout';
 import 'integration/knockout';
 import 'ui/drop_down_box';
 
+import '../../helpers/skipScpTest.js';
+
 QUnit.testStart(function() {
     const markup =
         '<div id="dropDownBoxWithContentTemplate" data-bind="dxDropDownBox: { contentTemplate: \'content\', value: value, opened: true }">\

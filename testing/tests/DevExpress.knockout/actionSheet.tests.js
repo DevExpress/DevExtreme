@@ -5,6 +5,8 @@ const ko = require('knockout');
 require('ui/action_sheet');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="testItemTemplate">\

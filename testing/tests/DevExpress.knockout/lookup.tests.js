@@ -6,6 +6,8 @@ const ko = require('knockout');
 require('ui/lookup');
 require('integration/knockout');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="T131530" data-bind="dxLookup: { items: [{ }, { }], itemTemplate: \'item\' }">\

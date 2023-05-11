@@ -10,6 +10,8 @@ import { Deferred } from 'core/utils/deferred';
 import 'ui/button';
 import 'integration/knockout';
 
+import '../../helpers/skipScpTest.js';
+
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
 QUnit.module('Ko Extender');

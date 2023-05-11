@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/drop_down_editor/ui.drop_down_editor');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="dropDownEditorWithFieldTemplate" data-bind="dxDropDownEditor: { fieldTemplate: \'field\', value: \'test\'}">\

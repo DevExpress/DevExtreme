@@ -8,6 +8,8 @@ require('integration/knockout');
 
 require('generic_light.css!');
 
+require('../../helpers/skipScpTest.js');
+
 QUnit.testStart(function() {
     const markup =
         '<div id="Q509956">\
