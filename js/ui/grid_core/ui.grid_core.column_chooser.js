@@ -119,51 +119,16 @@ const columnChooserMembers = {
         return !!devices.real().win;
     },
 
-    _updateList: function(change) {
-        let items;
-        const $popupContent = this._popupContainer.$content();
-        const isSelectMode = this.isSelectMode();
-        const columnChooserList = this._columnChooserList;
-        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
-
-        this._popupContainer.setAria({
-            role: 'dialog',
-            label: messageLocalization.format('dxDataGrid-columnChooserTitle')
-        });
-
-        // T726413
-        if(isSelectMode && columnChooserList && change && change.changeType === 'selection') {
-            items = processItems(this, chooserColumns);
-            for(let i = 0; i < items.length; i++) {
-                const selected = items[i].selected;
-                const id = items[i].id;
-
-                if(id === change.columnIndex) {
-                    if(selected) {
-                        columnChooserList.selectItem(id, selected);
-                    } else {
-                        columnChooserList.unselectItem(id, selected);
-                    }
-                }
-            }
-        } else if(!isSelectMode || !columnChooserList || change === 'full') {
-            this._popupContainer.$wrapper()
-                .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
-                .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
-
-            items = processItems(this, chooserColumns);
-            this._renderTreeView($popupContent, items);
-        }
-    },
-
     _initializePopupContainer: function() {
         const that = this;
         const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
         const $element = that.element().addClass(columnChooserClass);
         const columnChooserOptions = that.option('columnChooser');
+
         const themeName = current();
         const isGenericTheme = isGeneric(themeName);
         const isMaterial = isMaterialTheme(themeName);
+
         const dxPopupOptions = {
             visible: false,
             shading: false,
@@ -206,16 +171,46 @@ const columnChooserMembers = {
         } else {
             this._popupContainer.option(dxPopupOptions);
         }
+
+        this.setPopupAttributes();
+    },
+
+    setPopupAttributes: function() {
+        const isSelectMode = this.isSelectMode();
+        const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
+
+        this._popupContainer.setAria({
+            role: 'dialog',
+            label: messageLocalization.format('dxDataGrid-columnChooserTitle')
+        });
+
+        this._popupContainer.$wrapper()
+            .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
+            .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
+
+        this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
+
+        if(isSelectMode && !isBandColumnsUsed) {
+            this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+        }
     },
 
     _renderCore: function(change) {
         if(this._popupContainer) {
-            this._updateList(change);
+            const isDragMode = !this.isSelectMode();
+
+            if(!this._columnChooserList || change === 'full') {
+                this._renderTreeView();
+            } else if(isDragMode) {
+                this._updateItems();
+            }
         }
     },
 
-    _renderTreeView: function($container, items) {
+    _renderTreeView: function() {
         const that = this;
+        const $container = this._popupContainer.$content();
+
         const columnChooser = this.option('columnChooser');
         const isSelectMode = this.isSelectMode();
 
@@ -238,37 +233,11 @@ const columnChooserMembers = {
             searchEditorOptions: columnChooser.search?.editorOptions,
         };
 
-        const scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
-        const scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-
-        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
-            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
-        }
-
-        treeViewConfig.onContentReady = function(e) {
-            deferUpdate(function() {
-                if(scrollTop) {
-                    /**
-                     * @type {import('../scroll_view/ui.scrollable').default}
-                    */
-                    // @ts-expect-error
-                    const scrollable = $(e.element).find('.dx-scrollable').data('dxScrollable');
-                    scrollable && scrollable.scrollTo({ y: scrollTop });
-                }
-
-                // @ts-expect-error
-                that.renderCompleted.fire();
-            });
-        };
-
-
         if(this._isWinDevice()) {
             treeViewConfig.useNativeScrolling = false;
         }
-        extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
-        // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
-        treeViewConfig.items = items;
+        extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
         if(this._columnChooserList) {
             if(!treeViewConfig.searchEnabled) {
@@ -276,9 +245,29 @@ const columnChooserMembers = {
             }
 
             this._columnChooserList.option(treeViewConfig);
+            // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+            this._updateItems();
         } else {
             this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);
-            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
+            // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+            this._updateItems();
+
+            let scrollTop = 0;
+
+            this._columnChooserList.on('optionChanged', e => {
+                const scrollable = e.component.getScrollable();
+                scrollTop = scrollable.scrollTop();
+            });
+
+            this._columnChooserList.on('contentReady', e => {
+                deferUpdate(function() {
+                    const scrollable = e.component.getScrollable();
+                    scrollable.scrollTo({ y: scrollTop });
+
+                    // @ts-expect-error
+                    that.renderCompleted.fire();
+                });
+            });
         }
     },
 
@@ -344,21 +333,23 @@ const columnChooserMembers = {
 
             const nodes = getFlatNodes(e.component.getNodes());
 
-            isUpdatingSelection = true;
             e.component.beginUpdate();
+            isUpdatingSelection = true;
 
             updateSelection(e, nodes);
 
-            isUpdatingSelection = false;
             e.component.endUpdate();
+            isUpdatingSelection = false;
 
             clearTimeout(updateColumnVisibilityTimeout);
             updateColumnVisibilityTimeout = setTimeout(() => {
                 that.component.beginUpdate();
+                this._isUpdatingColumnVisibility = true;
 
                 updateColumnVisibility(nodes);
 
                 that.component.endUpdate();
+                this._isUpdatingColumnVisibility = false;
             }, CLICK_TIMEOUT);
         };
 
@@ -370,24 +361,46 @@ const columnChooserMembers = {
         };
     },
 
+    _updateItems: function() {
+        const isSelectMode = this.isSelectMode();
+        const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
+        const items = processItems(this, chooserColumns);
+
+        this._columnChooserList.option('items', items);
+    },
+
+    _updateItemSelection: function(columnIndex) {
+        const isRecursive = this.option('columnChooser.selection.recursive');
+        const column = this._columnsController.columnOption(columnIndex);
+
+        const isRecursiveWithColumns = isRecursive && column.hasColumns;
+
+        if(!isRecursiveWithColumns) {
+            column.visible
+                ? this._columnChooserList.selectItem(columnIndex)
+                : this._columnChooserList.unselectItem(columnIndex);
+        }
+    },
+
     _columnOptionChanged: function(e) {
+        this.callBase(e);
+
         const changeTypes = e.changeTypes;
         const optionNames = e.optionNames;
         const isSelectMode = this.isSelectMode();
 
-        this.callBase(e);
+        if(isSelectMode && this._columnChooserList && this._isUpdatingColumnVisibility !== true) {
+            const onlyOneColumnChanged = e.columnIndex !== undefined;
+            const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
+            const isDraggedFromGroupPanel = optionNames.visible && optionNames.groupIndex && optionNames.length === 2;
 
-        if(isSelectMode) {
-            const needPartialRender = optionNames.visible && optionNames.length === 1 && e.columnIndex !== undefined;
-            const needFullRender = optionNames.showInColumnChooser || optionNames.caption || optionNames.visible || changeTypes.columns && optionNames.all;
+            const optionsUsedInItems = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
+            const needFullRender = optionsUsedInItems.some(optionName => optionNames[optionName]) || (changeTypes.columns && optionNames.all);
 
-            if(needPartialRender) {
-                this.render(null, {
-                    changeType: 'selection',
-                    columnIndex: e.columnIndex
-                });
+            if(onlyOneColumnChanged && (onlyVisibleChanged || isDraggedFromGroupPanel)) {
+                this._updateItemSelection(e.columnIndex);
             } else if(needFullRender) {
-                this.render(null, 'full');
+                this._updateItems();
             }
         }
     },
@@ -396,6 +409,7 @@ const columnChooserMembers = {
         switch(args.name) {
             case 'columnChooser':
                 this._initializePopupContainer();
+
                 this.render(null, 'full');
                 break;
             default:
@@ -405,7 +419,7 @@ const columnChooserMembers = {
 
     getColumnElements: function() {
         const result = [];
-        let $node;
+
         const isSelectMode = this.isSelectMode();
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
         const $content = this._popupContainer && this._popupContainer.$content();
@@ -413,7 +427,7 @@ const columnChooserMembers = {
 
         if($nodes) {
             chooserColumns.forEach(function(column) {
-                $node = $nodes.filter('[data-item-id = \'' + column.index + '\']');
+                const $node = $nodes.filter('[data-item-id = \'' + column.index + '\']');
                 const item = $node.length ? $node.children('.' + COLUMN_CHOOSER_ITEM_CLASS).get(0) : null;
                 result.push(item);
             });
@@ -468,6 +482,7 @@ const columnChooserMembers = {
         ///#ENDDEBUG
         if(!this._popupContainer) {
             this._initializePopupContainer();
+
             this.render();
         }
         this._popupContainer.show();

@@ -2231,7 +2231,7 @@ QUnit.module('Header Filter', {
             that.headerFilterController.showHeaderFilterMenu(0);
 
             // assert
-            assert.deepEqual(that.headerFilterView.getListContainer().option('items'), [
+            assert.deepEqual(that.headerFilterView.getListComponent().option('items'), [
                 {
                     'text': '(Blanks)',
                     'value': null
@@ -3693,7 +3693,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        const listInstance = that.headerFilterView.getListContainer();
+        const listInstance = that.headerFilterView.getListComponent();
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
         const $listItems = $popupContent.find('.dx-list-item');
 
@@ -3800,7 +3800,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.headerFilterController.showHeaderFilterMenu(0);
 
 
-        const listInstance = that.headerFilterView.getListContainer();
+        const listInstance = that.headerFilterView.getListComponent();
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
         const $listItems = $popupContent.find('.dx-list-item');
 
@@ -4819,6 +4819,46 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(list.option('items').length, 2);
+    });
+
+    QUnit.test('Filter should apply if allowSelectAll is false and first item was checked', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [
+            {
+                dataField: 'field1',
+                headerFilter: {
+                    allowSelectAll: false
+                }
+            }
+        ];
+
+        this.options.dataSource = [
+            { field1: 'aaa' }, { field1: 'bbb' }, { field1: 'ccc' },
+        ];
+
+        this.setupDataGrid();
+        this.columnHeadersView.render($testElement);
+        this.headerFilterView.render($testElement);
+
+        // act
+        this.headerFilterController.showHeaderFilterMenu(0);
+
+        const $popupContent = $(this.headerFilterView.getPopupContainer().$overlayContent());
+        const checkbox = $popupContent.find('.dx-checkbox').first().dxCheckBox('instance');
+        const applyButton = $popupContent.find('.dx-button').first();
+
+        checkbox.option('value', true);
+        applyButton.trigger('dxclick');
+
+        this.clock.tick(500);
+
+        // assert
+        const column = this.columnsController.getVisibleColumns()[0];
+
+        assert.strictEqual(column.filterValues.length, 1, 'filterValues length of the first column');
+        assert.strictEqual(column.filterValues[0], 'aaa', 'filterValues of the first column');
     });
 });
 
