@@ -4,7 +4,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule, DxPieChartModule } from 'devextreme-angular';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { GdpInfo, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

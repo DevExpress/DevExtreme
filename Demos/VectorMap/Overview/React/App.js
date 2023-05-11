@@ -12,7 +12,7 @@ import Map, {
   Size,
 } from 'devextreme-react/vector-map';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countriesGDP } from './data.js';
 import TooltipTemplate from './TooltipTemplate.js';
 

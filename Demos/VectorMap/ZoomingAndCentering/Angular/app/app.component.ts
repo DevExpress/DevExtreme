@@ -5,7 +5,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapComponent, DxVectorMapModule, DxButtonModule } from 'devextreme-angular';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { Marker, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

@@ -8,7 +8,7 @@ import VectorMap, {
   Font,
 } from 'devextreme-react/vector-map';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { streamsData } from './data.js';
 
 const colorGroups = [0, 1, 2];

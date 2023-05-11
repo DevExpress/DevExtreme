@@ -5,7 +5,7 @@ import VectorMap, {
   Annotation,
 } from 'devextreme-react/vector-map';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/usa.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
 import { statesData } from './data.js';
 import AnnotationTemplate from './AnnotationTemplate.js';
 

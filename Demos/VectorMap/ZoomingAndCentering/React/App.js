@@ -7,7 +7,7 @@ import VectorMap, {
 
 import Button from 'devextreme-react/button';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { markers } from './data.js';
 
 const bounds = [-180, 85, 180, -60];

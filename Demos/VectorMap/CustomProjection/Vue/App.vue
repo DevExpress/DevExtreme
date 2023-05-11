@@ -25,7 +25,7 @@ import {
   DxExport,
 } from 'devextreme-vue/vector-map';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { coordLinesData } from './data.js';
 
 const RADIANS = Math.PI / 180;

@@ -13,7 +13,7 @@ window.config = {
     },
     /**/
     /** vectormap */
-    'devextreme/dist/js/vectormap-data/*': {
+    'devextreme-dist/js/vectormap-data/*': {
       'esModule': true,
     },
     /**/
@@ -87,7 +87,7 @@ window.config = {
     /**/
 
     /** vectormap */
-    'devextreme/dist/js/vectormap-data': 'npm:devextreme/dist/js/vectormap-data',
+    'devextreme-dist/js/vectormap-data': 'npm:devextreme-dist/js/vectormap-data',
     /**/
 
     'mitt': 'npm:mitt/dist/mitt.umd.js',

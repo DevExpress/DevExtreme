@@ -8,7 +8,7 @@ import VectorMap, {
   Tooltip,
 } from 'devextreme-react/vector-map';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { populations, markers } from './data.js';
 
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];

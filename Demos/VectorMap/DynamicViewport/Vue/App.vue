@@ -73,7 +73,7 @@ import TextBox from 'devextreme-vue/text-box';
 import SelectBox from 'devextreme-vue/select-box';
 import Switch from 'devextreme-vue/switch';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { viewportCoordinates } from './data.js';
 
 export default {

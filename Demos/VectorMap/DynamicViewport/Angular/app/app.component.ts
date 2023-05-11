@@ -7,7 +7,7 @@ import {
   DxVectorMapModule, DxSelectBoxModule, DxTextBoxModule, DxVectorMapComponent, DxSwitchModule,
 } from 'devextreme-angular';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { ViewportCoordinate, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

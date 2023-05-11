@@ -7,7 +7,7 @@ import VectorMap, {
   Tooltip,
 } from 'devextreme-react/vector-map';
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { names, markers } from './data.js';
 
 const bounds = [-180, 85, 180, -60];

@@ -6,7 +6,7 @@ import VectorMap, {
 } from 'devextreme-react/vector-map';
 import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
-import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import Switch from 'devextreme-react/switch';
 import { viewportCoordinates } from './data.js';
 

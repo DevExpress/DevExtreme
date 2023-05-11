@@ -26,7 +26,7 @@
 </template>
 <script>
 
-import * as mapsData from 'devextreme/dist/js/vectormap-data/usa.js';
+import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
 
 import {
   DxVectorMap,
