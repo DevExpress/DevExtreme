@@ -574,6 +574,7 @@ class DateRangeBox extends Editor {
     }
 
     _focusEventTarget() {
+        return this.element();
     }
 
     _focusClassTarget() {
