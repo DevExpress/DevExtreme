@@ -15,7 +15,8 @@ QUnit.testStart(() => {
 
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
-const POPUP_DONE_BUTTON = 'dx-popup-done.dx-button';
+const POPUP_APPLY_BUTTON_CLASS = 'dx-popup-done';
+const POPUP_DONE_BUTTON = `${POPUP_APPLY_BUTTON_CLASS}.dx-button`;
 const POPUP_CANCEL_BUTTON = 'dx-popup-cancel.dx-button';
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
@@ -131,6 +132,37 @@ QUnit.module('Strategy', moduleConfig, () => {
 
                 assert.deepEqual(viewMin, startCellDate, 'view min option equals start date');
                 assert.strictEqual(calendarMax, viewMax, 'view max option is not changed');
+            });
+
+            QUnit.testInActiveWindow(`min option in views should be equal to startDate after focus startDate input (applyValueMode = ${applyValueMode})`, function(assert) {
+                const initialValue = [new Date(2021, 9, 17), new Date(2021, 9, 20)];
+
+                this.reinit({
+                    applyValueMode,
+                    value: initialValue,
+                });
+
+                $(this.instance.endDateField()).trigger('dxclick');
+
+                const { calendarMin, calendarMax } = this.getCalendarMinMax();
+
+                assert.strictEqual(this.getViewMinMax().viewMin, calendarMin, 'view min option equals calendarMin');
+                assert.strictEqual(this.getViewMinMax().viewMax, calendarMax, 'view max option equals calendarMax');
+
+                $(this.instance.startDateField()).focusin();
+
+                assert.strictEqual(this.getViewMinMax().viewMin, calendarMin, 'view min option is not changed');
+                assert.deepEqual(this.getViewMinMax().viewMax, initialValue[1], 'view max option is changed');
+
+                $(this.instance.endDateField()).focusin();
+
+                assert.strictEqual(this.getViewMinMax().viewMin, initialValue[0], 'view min option is changed');
+                assert.deepEqual(this.getViewMinMax().viewMax, calendarMax, 'view max option is restored');
+
+                $(this.instance.startDateField()).focusin();
+
+                assert.strictEqual(this.getViewMinMax().viewMin, calendarMin, 'view min option is restored');
+                assert.deepEqual(this.getViewMinMax().viewMax, initialValue[1], 'view max option is changed');
             });
 
             QUnit.test(`max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode = ${applyValueMode})`, function(assert) {
@@ -533,13 +565,56 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
             $cell.trigger('dxclick');
 
-            assert.strictEqual(onValueChangedHandler.callCount, 0, 'onValueChanged was called once after select start date');
+            assert.strictEqual(onValueChangedHandler.callCount, 0, 'onValueChanged was not called after select start date');
             onValueChangedHandler.reset();
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             $endDateCell.trigger('dxclick');
 
-            assert.strictEqual(onValueChangedHandler.callCount, 0, 'onValueChanged was called once after select end date');
+            assert.strictEqual(onValueChangedHandler.callCount, 0, 'onValueChanged was not called after select end date');
+        });
+
+        QUnit.test(`onValueChanged should be called with correct event argument on select start date and end date in calendar and click apply button, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+            const onValueChangedHandler = sinon.spy();
+
+            this.reinit({
+                applyValueMode: 'useButtons',
+                value: initialValue,
+                onValueChanged: onValueChangedHandler,
+                opened: true,
+                multiView: true,
+            });
+
+            const checkEventHandlerArgs = (event) => {
+                const { type, target } = event;
+
+                assert.strictEqual(type, 'dxclick', 'event is correct');
+                assert.strictEqual($(target).hasClass(POPUP_APPLY_BUTTON_CLASS), true, 'event target is correct');
+            };
+
+            const $cell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            $cell.trigger('dxclick');
+
+            let $applyButton = $(this.instance.getStartDateBox().content()).parent().find(`.${POPUP_DONE_BUTTON}`);
+            $applyButton.trigger('dxclick');
+
+            assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select start date and click on apply button');
+
+            checkEventHandlerArgs(onValueChangedHandler.getCall(0).args[0].event);
+
+            onValueChangedHandler.reset();
+
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+            $endDateCell.trigger('dxclick');
+
+            $applyButton = $(this.instance.getStartDateBox().content()).parent().find(`.${POPUP_DONE_BUTTON}`);
+            $applyButton.trigger('dxclick');
+
+            assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select end date and click on apply button');
+
+            checkEventHandlerArgs(onValueChangedHandler.getCall(0).args[0].event);
         });
     });
 
