@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Tarih seç",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Tarih ve saati seçin",
         "dxDateBox-validation-datetime": "Değer bir tarih veya saat olmalıdır",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Dosya seç",
         "dxFileUploader-dropFile": "veya Dosyayı buraya bırakın",

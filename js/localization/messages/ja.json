@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "日付を選択してください。",
         "dxDateBox-simulatedDataPickerTitleDateTime": "日付と時刻を選択してください。",
         "dxDateBox-validation-datetime": "日付または時刻を指定してください。",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "ファイルを選択",
         "dxFileUploader-dropFile": "またはファイルをこちらにドロップしてください。",

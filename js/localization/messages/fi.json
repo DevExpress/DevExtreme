@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Valitse päivämäärä",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Valitse päivämäärä ja kellonaika",
         "dxDateBox-validation-datetime": "Arvon on oltava päiväys tai aika",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Valitse tiedosto",
         "dxFileUploader-dropFile": "tai vedä ja pudota tiedosto tähän",

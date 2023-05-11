@@ -63,7 +63,8 @@ class DateRangeBox extends Editor {
             endDateText: undefined,
             focusStateEnabled: true,
             hoverStateEnabled: true,
-            invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
+            invalidStartDateMessage: messageLocalization.format('dxDateBox-invalid-start-date-message'),
+            invalidEndDateMessage: messageLocalization.format('dxDateBox-invalid-end-date-message'),
             isValid: true,
             labelMode: 'static',
             max: undefined,
@@ -396,7 +397,6 @@ class DateRangeBox extends Editor {
             tabIndex: options.tabIndex,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
-            invalidDateMessage: options.invalidDateMessage,
             labelMode: options.labelMode,
             max: options.max,
             min: options.min,
@@ -448,6 +448,7 @@ class DateRangeBox extends Editor {
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
+            invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value }) => {
                 const newValue = [value, this.option('value')[1]];
                 this.updateValue(newValue);
@@ -488,6 +489,7 @@ class DateRangeBox extends Editor {
 
         return {
             ...this._getDateBoxConfig(),
+            invalidDateMessage: options.invalidEndDateMessage,
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
@@ -662,7 +664,6 @@ class DateRangeBox extends Editor {
             case 'endDate':
                 this.updateValue([this.option('value')[0], value]);
                 break;
-            case 'invalidDateMessage':
             case 'startDateLabel':
                 this.getStartDateBox().option('label', value);
                 break;
@@ -744,6 +745,12 @@ class DateRangeBox extends Editor {
             // case 'validationErrors':
             // case 'validationMessageMode':
             // case 'validationStatus':
+                break;
+            case 'invalidStartDateMessage':
+                this.getStartDateBox().option('invalidDateMessage', value);
+                break;
+            case 'invalidEndDateMessage':
+                this.getEndDateBox().option('invalidDateMessage', value);
                 break;
             case 'validationMessagePosition':
                 this.getStartDateBox().option(name, value);

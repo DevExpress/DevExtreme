@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Vyberte datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Vyberte datum a čas",
         "dxDateBox-validation-datetime": "Hodnota musí být datum nebo čas",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Vyberte soubor",
         "dxFileUploader-dropFile": "nebo přeneste soubor sem",

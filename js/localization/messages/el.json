@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Επιλέξτε ημερομηνία",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Επιλέξτε ώρα και ημερομηνία",
         "dxDateBox-validation-datetime": "Η τιμή πρέπει να αναπαριστά ημερομηνία",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Επιλέξτε αρχείο",
         "dxFileUploader-dropFile": "ή σύρετε το αρχείο εδώ",

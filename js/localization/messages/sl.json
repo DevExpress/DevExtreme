@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Izberi datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Izberi datum in čas",
         "dxDateBox-validation-datetime": "Vrednost mora biti datum ali čas",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Izberi datoteko",
         "dxFileUploader-dropFile": "ali spusti datoteko tukaj",

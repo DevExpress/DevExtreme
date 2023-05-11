@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Selectează data",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Selectează data și timpul",
         "dxDateBox-validation-datetime": "Valoarea trebuie să fie o dată sau timp",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Selectează fișierul",
         "dxFileUploader-dropFile": "sau plasați fișierul aici",

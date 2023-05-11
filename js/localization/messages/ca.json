@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Seleccioneu Data",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Seleccioneu la data i l'hora",
         "dxDateBox-validation-datetime": "El valor ha de ser una data o hora",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Seleccioneu un fitxer",
         "dxFileUploader-dropFile": "o deixar un fitxer aquí",

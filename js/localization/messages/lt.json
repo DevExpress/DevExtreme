@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Pasirinkite Datą",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Pasirinkite datą ir laiką",
         "dxDateBox-validation-datetime": "Vertė turi būti data ar laikas",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Pasirinkite failą",
         "dxFileUploader-dropFile": "Arba atsisakykite failo čia",

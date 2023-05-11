@@ -56,6 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Selecteer datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Selecteer datum and tijd",
         "dxDateBox-validation-datetime": "Waarde moet een datum of tijd zijn",
+        "dxDateBox-invalid-start-date-message": "Start value must be a date",
+        "dxDateBox-invalid-end-date-message": "End value must be a date",
 
         "dxFileUploader-selectFile": "Selecteer bestand",
         "dxFileUploader-dropFile": "of sleep bestand hier",

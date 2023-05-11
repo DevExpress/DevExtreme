@@ -132,6 +132,8 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 focusStateEnabled: true,
                 height: undefined,
                 hoverStateEnabled: true,
+                invalidStartDateMessage: 'Start value must be a date',
+                invalidEndDateMessage: 'End value must be a date',
                 isValid: true,
                 labelMode: 'static',
                 max: undefined,
@@ -227,6 +229,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
                 disabledDates: null,
+                invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
                 opened: false,
             };
@@ -242,6 +245,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
             const expectedOptions = {
                 ...expectedDateBoxOptions,
+                invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -2181,67 +2185,89 @@ QUnit.module('validation', moduleConfig, () => {
 
 
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
-            QUnit.test('internal date validation fail should update dateRangeBox validationErrors', function(assert) {
+            QUnit.module(dateBoxName, () => {
+                QUnit.test('internal date validation fail should update dateRangeBox validationErrors', function(assert) {
 
-                const dateBox = dateBoxName === 'startDateBox'
-                    ? getStartDateBoxInstance(this.instance)
-                    : getEndDateBoxInstance(this.instance);
+                    const dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
 
-                const $dateBoxInput = $(dateBox.field());
-                const keyboard = keyboardMock($dateBoxInput);
+                    const $dateBoxInput = $(dateBox.field());
+                    const keyboard = keyboardMock($dateBoxInput);
 
-                keyboard
-                    .press('backspace')
-                    .type('f')
-                    .change();
+                    keyboard
+                        .press('backspace')
+                        .type('f')
+                        .change();
 
-                const expectedErrors = [{ editorSpecific: true, message: 'Value must be a date or time' }];
-                assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                    const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
+                    const expectedErrors = [{ editorSpecific: true, message }];
+                    assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                });
+
+                QUnit.test('internal date validation fail should update dateRangeBox validationErrors even if it is not empty', function(assert) {
+                    const externalError = { message: 'external validation failed' };
+                    this.instance.option('validationError', externalError);
+
+                    const dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+
+                    const $dateBoxInput = $(dateBox.field());
+                    const keyboard = keyboardMock($dateBoxInput);
+
+                    keyboard
+                        .press('backspace')
+                        .type('f')
+                        .change();
+
+                    const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
+                    const expectedErrors = [externalError, { editorSpecific: true, message }];
+                    assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                });
+
+                QUnit.test('internal date validation success should remove internal errors from dateRangeBox validationErrors', function(assert) {
+                    const externalError = { message: 'external validation failed' };
+                    this.instance.option('validationError', externalError);
+
+                    const dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+
+                    const $dateBoxInput = $(dateBox.field());
+                    const keyboard = keyboardMock($dateBoxInput);
+
+                    keyboard
+                        .press('backspace')
+                        .type('f')
+                        .change();
+
+                    keyboard
+                        .press('backspace')
+                        .change();
+
+                    const expectedErrors = [externalError];
+                    assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                });
             });
+        });
 
-            QUnit.test('internal date validation fail should update dateRangeBox validationErrors even if it is not empty', function(assert) {
-                const externalError = { message: 'external validation failed' };
-                this.instance.option('validationError', externalError);
+        QUnit.test('invalidStartDateMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('invalidStartDateMessage', newInvalidMessage);
 
-                const dateBox = dateBoxName === 'startDateBox'
-                    ? getStartDateBoxInstance(this.instance)
-                    : getEndDateBoxInstance(this.instance);
+            const startDateBox = getStartDateBoxInstance(this.instance);
 
-                const $dateBoxInput = $(dateBox.field());
-                const keyboard = keyboardMock($dateBoxInput);
+            assert.strictEqual(startDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
 
-                keyboard
-                    .press('backspace')
-                    .type('f')
-                    .change();
+        QUnit.test('invalidEndDateMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('invalidEndDateMessage', newInvalidMessage);
 
-                const expectedErrors = [externalError, { editorSpecific: true, message: 'Value must be a date or time' }];
-                assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
-            });
+            const endDateBox = getEndDateBoxInstance(this.instance);
 
-            QUnit.test('internal date validation success should remove internal errors from dateRangeBox validationErrors', function(assert) {
-                const externalError = { message: 'external validation failed' };
-                this.instance.option('validationError', externalError);
-
-                const dateBox = dateBoxName === 'startDateBox'
-                    ? getStartDateBoxInstance(this.instance)
-                    : getEndDateBoxInstance(this.instance);
-
-                const $dateBoxInput = $(dateBox.field());
-                const keyboard = keyboardMock($dateBoxInput);
-
-                keyboard
-                    .press('backspace')
-                    .type('f')
-                    .change();
-
-                keyboard
-                    .press('backspace')
-                    .change();
-
-                const expectedErrors = [externalError];
-                assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
-            });
+            assert.strictEqual(endDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
         });
     });
 });
