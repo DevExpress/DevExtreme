@@ -702,11 +702,6 @@ class DateRangeBox extends Editor {
             case 'startDateText':
             case 'endDateText':
             case 'useHiddenSubmitElement':
-            // case 'validationError':
-            // case 'validationErrors':
-            // case 'validationMessageMode':
-            // case 'validationMessagePosition':
-            // case 'validationStatus':
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);
@@ -727,6 +722,9 @@ class DateRangeBox extends Editor {
 
                 break;
             }
+            case '_currentSelection':
+                // TODO: change calendar option here?
+                break;
             default:
                 super._optionChanged(args);
         }
