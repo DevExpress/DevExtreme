@@ -721,7 +721,7 @@ QUnit.module('Menu tests', {
         });
         const $itemsContainer = menu.instance.itemsContainer();
         const $rootItem = menu.instance.itemElements().eq(0);
-        const e = $.Event('dxpointerdown', { target: $rootItem.get(0) });
+        const e = $.Event('dxpointerup', { target: $rootItem.get(0) });
 
         $($itemsContainer).trigger(e);
         assert.notOk(e.isDefaultPrevented(), 'item pointerdown should not be prevented');
@@ -784,7 +784,7 @@ QUnit.module('Menu tests', {
         submenu = getSubMenuInstance($itemA);
         assert.ok(submenu._overlay.option('visible'));
 
-        $(document).trigger('dxpointerdown'); // it needs to trigger closeOnOutsideClick
+        $(document).trigger('dxpointerup'); // it needs to trigger closeOnOutsideClick
         assert.ok(submenu._overlay.option('visible'));
         assert.equal(i, 1, 'event triggered');
     });
@@ -879,7 +879,7 @@ QUnit.module('Menu tests', {
         const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($rootItem).trigger('dxclick');
-        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxpointerup');
 
         assert.equal(hiddenHandler.callCount, 1, 'only 1 submenu was hidden');
     });
@@ -1116,7 +1116,7 @@ QUnit.module('Menu tests', {
         assert.ok(menu);
         assert.equal(calls, 1, 'onItemRendered called once');
         $rootMenuItem
-            .trigger('dxpointerdown') // it needs to trigger closeOnOutsideClick
+            .trigger('dxpointerup') // it needs to trigger closeOnOutsideClick
             .trigger('dxclick');
 
         assert.equal(calls, 2, 'onItemRendered called twice');
@@ -1840,7 +1840,7 @@ QUnit.module('keyboard navigation', {
         this.instance.focus();
         assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item was focused');
 
-        $($items.eq(1)).trigger('dxpointerdown');
+        $($items.eq(1)).trigger('dxpointerup');
         this.clock.tick(0);
 
         assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'item was not focused');
@@ -2573,7 +2573,7 @@ QUnit.module('adaptivity: behavior', {
         const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
-        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxpointerup');
 
         assert.ok($treeview.is(':hidden'), 'treeview is hidden');
         assert.notOk($button.hasClass(DX_STATE_ACTIVE_CLASS), 'button has no active class');
@@ -2589,7 +2589,7 @@ QUnit.module('adaptivity: behavior', {
         const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
-        $($button).trigger('dxpointerdown');
+        $($button).trigger('dxpointerup');
 
         assert.ok($treeview.is(':visible'), 'treeview is visible');
     });

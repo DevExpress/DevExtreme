@@ -741,6 +741,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
         const groupHeaderElement = this.element.find('.' + LIST_GROUP_HEADER_CLASS);
         groupHeaderElement.trigger('dxpointerup');
+        this.clock.tick(10);
 
         assert.ok(instance.downInkRippleHandler.calledOnce);
 
@@ -3627,6 +3628,7 @@ QUnit.module('keyboard navigation', {
 
         const instance = $element.dxList('instance');
         let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerup');
+        this.clock.tick(10);
         let keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
         this.clock.tick(10);
