@@ -270,6 +270,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
                 applyValueMode: 'instantly',
                 value: initialValue,
                 openOnFieldClick: true,
+                multiView: true,
             });
 
             $(this.instance.field()[0]).trigger('dxclick');
@@ -302,6 +303,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
                 applyValueMode: 'instantly',
                 value: initialValue,
                 openOnFieldClick: true,
+                multiView: true,
             });
 
             $(this.instance.field()[1]).trigger('dxclick');
