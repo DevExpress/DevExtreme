@@ -2255,6 +2255,33 @@ QUnit.module('validation', moduleConfig, () => {
             assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
         });
 
+        QUnit.test('validationMessage should have correct position when validationMessagePosition is set on runtime change', function(assert) {
+            this.instance.option('validationMessagePosition', 'left');
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'left');
+        });
+
+        QUnit.test('validationMessage should have correct mode when validationMessageMode is set on init', function(assert) {
+            this.reinit({
+                validationMessageMode: 'always',
+                isValid: false,
+                validationError: {
+                    message: 'error'
+                }
+            });
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('mode'), 'always');
+        });
+
+        QUnit.test('validationMessage should have correct mode when validationMessageMode is set on runtime change', function(assert) {
+            this.instance.option('validationMessageMode', 'always');
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('mode'), 'always');
+        });
+
         QUnit.test('start dateBox validation message should not be shown even if internal validation is failed', function(assert) {
             this.instance.option('isValid', true);
 
@@ -2410,117 +2437,6 @@ QUnit.module('validation', moduleConfig, () => {
             const endDateBox = getEndDateBoxInstance(this.instance);
 
             assert.strictEqual(endDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
-        });
-    });
-});
-QUnit.module('Validation', moduleConfig, () => {
-    QUnit.module('ValidationMessage', {
-        beforeEach: function() {
-            this.getValidationMessage = () => {
-                return this.$element
-                    .find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0)
-                    .dxValidationMessage()
-                    .dxValidationMessage('instance');
-            };
-        }
-    }, () => {
-        QUnit.test('ValidationMessage should have correct mode when validationMessageMode is set on init', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                }
-            });
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('mode'), 'always');
-        });
-
-        QUnit.test('ValidationMessage should have correct mode when validationMessageMode is set on runtime change', function(assert) {
-            this.reinit({
-                validationMessageMode: 'auto',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                }
-            });
-
-            this.instance.option('validationMessageMode', 'always');
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('mode'), 'always');
-        });
-
-        QUnit.test('ValidationMessage should have correct position when validationMessagePosition is set on init', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-                validationMessagePosition: 'left',
-            });
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('positionSide'), 'left');
-        });
-
-        QUnit.test('ValidationMessage should have correct position when validationMessagePosition is set on runtime change', function(assert) {
-            this.reinit({
-                validationMessageMode: 'auto',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-                validationMessagePosition: 'right',
-            });
-
-            this.instance.option('validationMessagePosition', 'left');
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('positionSide'), 'left');
-        });
-
-        QUnit.test('validationMessagePosition should be auto by default', function(assert) {
-            assert.strictEqual(this.instance.option('validationMessagePosition'), 'auto');
-        });
-
-        QUnit.test('ValidationMessage should be on top when validationMessagePosition is auto and popup is opened', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-            });
-
-            this.instance.open();
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('positionSide'), 'top');
-        });
-
-        QUnit.test('ValidationMessage should be on bottom when validationMessagePosition is auto and popup is closed', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-            });
-
-            this.instance.open();
-            this.instance.close();
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('positionSide'), 'bottom');
         });
     });
 });
