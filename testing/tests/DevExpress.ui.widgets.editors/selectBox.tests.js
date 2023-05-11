@@ -5913,27 +5913,23 @@ QUnit.module('focus policy', {
 
 let helper;
 if(devices.real().deviceType === 'desktop') {
-    [true, false].forEach((searchEnabled) => {
-        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: function() {
-                this.isMac = devices.real().mac;
-                helper = new ariaAccessibilityTestHelper({
-                    createWidget: ($element, options) => new SelectBox($element,
-                        $.extend({
-                            searchEnabled: searchEnabled
-                        }, options))
-                });
-            },
-            afterEach: function() {
-                helper.$widget.remove();
-            }
-        }, () => {
+    QUnit.module('Aria accessibility', {
+        beforeEach: function() {
+            this.isMac = devices.real().mac;
+            helper = new ariaAccessibilityTestHelper({
+                createWidget: ($element, options) => new SelectBox($element, options)
+            });
+        },
+        afterEach: function() {
+            helper.$widget.remove();
+        }
+    }, () => {
+        [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: true });
+                helper.createWidget({ opened: true, searchEnabled: searchEnabled });
 
                 const listItemContainerAttrs = {
                     'aria-label': 'No data to display',
-                    role: 'listbox'
                 };
                 const listAttributes = {
                     id: helper.widget._listId,
@@ -5990,7 +5986,7 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: false, deferRendering: true });
+                helper.createWidget({ opened: false, deferRendering: true, searchEnabled: searchEnabled });
 
                 const inputAttributes = {
                     role: 'combobox',
@@ -6019,6 +6015,21 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+            });
+        });
+
+        ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+            QUnit.test(`should have correct role and area-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
+                helper.createWidget({ opened: true });
+                const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+
+                helper.checkAttributes($listItemContainer, { 'aria-label': 'No data to display' });
+
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                helper.checkAttributes($listItemContainer, { 'aria-label': 'Items', role: 'listbox' });
+
+                helper.widget.option(dataSourcePropertyName, []);
+                helper.checkAttributes($listItemContainer, { 'aria-label': 'No data to display' });
             });
         });
     });
