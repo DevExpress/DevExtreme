@@ -20,6 +20,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 @mixin tabpanel-tabs-shadow-mixin($accent-color) {
   .dx-tabs {
+    // box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left;
     box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
   }
 
@@ -38,12 +39,20 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
   }
 
-  #{$tabs-expanded}:last-of-type {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
-  }
+  // #{$tabs-expanded}:last-of-type {
+  //   box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
+  // }
 
   #{$tabs-expanded}:first-of-type {
     box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
+  }
+
+  #{$tabs-expanded}:last-of-type {
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
+  }
+
+  .dx-tabs-stretched#{$tabs-expanded}:last-of-type {
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
   }
 }
 
@@ -52,11 +61,16 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   & > .dx-tabpanel-tabs {
     .dx-tabs {
       display: block;
+      padding-right: 1px;
     }
 
     .dx-tab {
       &.#{$target-class} {
         box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
+      }
+
+      &.#{$target-class}:last-of-type {
+        box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
       }
     }
 
