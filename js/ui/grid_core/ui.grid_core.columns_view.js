@@ -866,6 +866,18 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
+    _getContent: function() {
+        return this._tableElement?.parent();
+    },
+
+    _removeContent: function(isFixedTableRendering) {
+        const $scrollContainer = this._getContent(isFixedTableRendering);
+
+        if($scrollContainer?.length) {
+            $scrollContainer.remove();
+        }
+    },
+
     _wrapTableInScrollContainer: function($table) {
         const $scrollContainer = $('<div>');
         const useNative = this.option('scrolling.useNative');
@@ -924,6 +936,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _updateContent: function($newTableElement, change, isFixedTableRendering) {
         return this.waitAsyncTemplates().done(() => {
+            this._removeContent(isFixedTableRendering);
             this.setTableElement($newTableElement, isFixedTableRendering);
             this._wrapTableInScrollContainer($newTableElement, isFixedTableRendering);
         });
