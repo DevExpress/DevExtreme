@@ -101,7 +101,9 @@ const DateBox = DropDownEditor.inherit({
 
             calendarOptions: {},
 
-            useHiddenSubmitElement: true
+            useHiddenSubmitElement: true,
+
+            _shouldHideValidationIcon: false
         });
     },
 
@@ -287,7 +289,7 @@ const DateBox = DropDownEditor.inherit({
         const clearButtonWidth = this._getClearButtonWidth();
         const longestElementDimensions = this._getLongestElementDimensions();
         const curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
-        const shouldHideValidationIcon = (longestElementDimensions.width > curWidth);
+        const shouldHideValidationIcon = this.option('_shouldHideValidationIcon') || (longestElementDimensions.width > curWidth);
         const style = inputElement.style;
 
         this.$element().toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);

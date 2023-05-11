@@ -29,6 +29,7 @@ const CLEAR_BUTTON = 'dx-clear-button-area';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const STATE_HOVER_CLASS = 'dx-state-hover';
 const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
+const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -2115,21 +2116,20 @@ QUnit.module('validation', moduleConfig, () => {
             const startDateBox = getStartDateBoxInstance(this.instance);
             assert.strictEqual(startDateBox.option('validationMessagePosition'), validationMessagePosition, 'option is passed');
         });
+    });
 
-        QUnit.test('dateBoxes "isValid" should always be true to not render a validation icon', function(assert) {
+    QUnit.module('internal validation', () => {
+        QUnit.test('start dateBox validation icon should be shown even if internal validation is failed', function(assert) {
             const startDateBox = getStartDateBoxInstance(this.instance);
-            const endDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            const keyboard = keyboardMock($startDateBoxInput);
 
-            assert.strictEqual(startDateBox.option('isValid'), true, 'start dateBox isValid=true although validation is failed');
-            assert.strictEqual(endDateBox.option('isValid'), true, 'end dateBox isValid=true although validation is failed');
-        });
+            keyboard
+                .press('backspace')
+                .type('f')
+                .change();
 
-        QUnit.test('dateBoxes "validationStatus" should always be true to not render a validation icon', function(assert) {
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const endDateBox = getStartDateBoxInstance(this.instance);
-
-            assert.strictEqual(startDateBox.option('validationStatus'), 'valid', 'start dateBox validationStatus="valid" although validation is failed');
-            assert.strictEqual(endDateBox.option('validationStatus'), 'valid', 'end dateBox validationStatus="valid" although validation is failed');
+            assert.strictEqual(startDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is now shown');
         });
     });
 });

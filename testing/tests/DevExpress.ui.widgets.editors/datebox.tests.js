@@ -70,6 +70,7 @@ const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
+const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
@@ -1533,13 +1534,13 @@ QUnit.module('widget sizing render', {}, () => {
         });
         const instance = $element.dxDateBox('instance');
 
-        assert.notOk($element.hasClass('dx-show-invalid-badge'), 'validation icon\'s hidden');
+        assert.notOk($element.hasClass(SHOW_INVALID_BADGE_CLASS), 'validation icon\'s hidden');
         $('#containerWithWidth').get(0).style.width = '200px';
         const kb = keyboardMock(instance._input());
         kb.type('a');
         kb.keyDown('enter');
 
-        assert.ok($element.hasClass('dx-show-invalid-badge'), 'validation icon\'s visible');
+        assert.ok($element.hasClass(SHOW_INVALID_BADGE_CLASS), 'validation icon\'s visible');
     });
 
     QUnit.test('component should have correct width when it was rendered in a scaled container (T584097)', function(assert) {
@@ -6294,5 +6295,14 @@ QUnit.module('validation', {
         this.keyboard.press('enter');
 
         assert.strictEqual(validationCallbackStub.getCall(0).args[0].value, value, 'validation callback value parameter is correct');
+    });
+
+    QUnit.test('validation icon should not be shown if _shouldHideValidationIcon=true', function(assert) {
+        this.dateBox.option({
+            _shouldHideValidationIcon: true,
+            isValid: false,
+        });
+
+        assert.strictEqual(this.$dateBox.hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is be hidden');
     });
 });

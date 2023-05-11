@@ -370,7 +370,6 @@ class DateRangeBox extends Editor {
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
             invalidDateMessage: options.invalidDateMessage,
-            isValid: true,
             labelMode: options.labelMode,
             max: options.max,
             min: options.min,
@@ -384,7 +383,6 @@ class DateRangeBox extends Editor {
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
-            validationStatus: 'valid',
             valueChangeEvent: options.valueChangeEvent,
             onKeyDown: options.onKeyUp,
             onKeyUp: options.onKeyUp,
@@ -449,6 +447,7 @@ class DateRangeBox extends Editor {
             placeholder: options.startDatePlaceholder,
             inputAttr: options.startDateInputAttr,
             name: options.startDateName,
+            _shouldHideValidationIcon: true
         };
     }
 
