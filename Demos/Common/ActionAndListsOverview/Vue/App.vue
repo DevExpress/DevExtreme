@@ -55,10 +55,10 @@
         no-data-text=""
       >
         <template #item="{ data: item }">
-          <div
-            :style="{ 'background-image': 'url(../../../../images/hotels/' + item.FileName + ')' }"
+          <img
             class="tile-image"
-          />
+            :src="'../../../../images/hotels/' + item.FileName"
+          >
         </template>
       </DxTileView>
       <div class="address">{{ currentHotel.Postal_Code }}, {{ currentHotel.Address }}</div>

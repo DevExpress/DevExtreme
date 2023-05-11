@@ -56,13 +56,10 @@
     [itemMargin]="12"
   >
     <div *dxTemplate="let item of 'item'">
-      <div
+      <img
         class="tile-image"
-        [ngStyle]="{
-          'background-image':
-            'url(../../../../images/hotels/' + item.FileName + ')'
-        }"
-      ></div>
+        src="../../../../images/hotels/{{ item.FileName }}"
+      />
     </div>
   </dx-tile-view>
   <div class="address"

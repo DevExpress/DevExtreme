@@ -7,9 +7,7 @@
 .dx-tile-content > .image {
   height: 100%;
   width: 100%;
-  background-position: center;
-  background-size: cover;
-  padding: 10px;
+  object-fit: cover;
 }
 
 .dx-tile {

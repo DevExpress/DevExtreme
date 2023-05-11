@@ -119,9 +119,9 @@ function renderListItem(item) {
 
 function renderTile(item) {
   return (
-    <div
+    <img
       className="tile-image"
-      style={{ backgroundImage: `url(../../../../images/hotels/${item.FileName})` }}
+      src={ `../../../../images/hotels/${item.FileName}` }
     />
   );
 }
