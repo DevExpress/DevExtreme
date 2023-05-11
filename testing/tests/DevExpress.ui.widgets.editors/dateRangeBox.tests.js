@@ -159,6 +159,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 endDateInputAttr: {},
                 endDateLabel: 'End Date',
                 endDateName: '',
+                endDateOutOfRangeMessage: 'End date is out of range',
                 endDatePlaceholder: '',
                 endDateText: '',
                 focusStateEnabled: true,
@@ -189,6 +190,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 startDateInputAttr: {},
                 startDateLabel: 'Start Date',
                 startDateName: '',
+                startDateOutOfRangeMessage: 'Start date is out of range',
                 startDatePlaceholder: '',
                 startDateText: '',
                 stylingMode: 'outlined',
@@ -260,6 +262,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 applyButtonText: 'OK',
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
+                dateOutOfRangeMessage: 'Start date is out of range',
                 disabledDates: null,
                 invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
@@ -277,6 +280,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
             const expectedOptions = {
                 ...expectedDateBoxOptions,
+                dateOutOfRangeMessage: 'End date is out of range',
                 invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
             };
@@ -2430,13 +2434,31 @@ QUnit.module('validation', moduleConfig, () => {
             assert.strictEqual(startDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
         });
 
-        QUnit.test('invalidEndDateMessage runtime change should pass new value to the start dateBox', function(assert) {
+        QUnit.test('invalidEndDateMessage runtime change should pass new value to the end dateBox', function(assert) {
             const newInvalidMessage = 'new invalid message';
             this.instance.option('invalidEndDateMessage', newInvalidMessage);
 
             const endDateBox = getEndDateBoxInstance(this.instance);
 
             assert.strictEqual(endDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('startDateOutOfRangeMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('startDateOutOfRangeMessage', newInvalidMessage);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('endDateOutOfRangeMessage runtime change should pass new value to the end dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('endDateOutOfRangeMessage', newInvalidMessage);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.strictEqual(endDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
         });
     });
 });

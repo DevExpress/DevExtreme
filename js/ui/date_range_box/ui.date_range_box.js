@@ -49,7 +49,7 @@ class DateRangeBox extends Editor {
             buttons: undefined,
             calendarOptions: {},
             cancelButtonText: messageLocalization.format('Cancel'),
-            dateOutOfRangeMessage: messageLocalization.format('validation-range'),
+            endDateOutOfRangeMessage: messageLocalization.format('dxDateBox-endDateOutOfRangeMessage'),
             dateSerializationFormat: undefined,
             deferRendering: true,
             disabledDates: null,
@@ -64,8 +64,8 @@ class DateRangeBox extends Editor {
             endDateText: undefined,
             focusStateEnabled: true,
             hoverStateEnabled: true,
-            invalidStartDateMessage: messageLocalization.format('dxDateBox-invalid-start-date-message'),
-            invalidEndDateMessage: messageLocalization.format('dxDateBox-invalid-end-date-message'),
+            invalidStartDateMessage: messageLocalization.format('dxDateBox-invalidStartDateMessage'),
+            invalidEndDateMessage: messageLocalization.format('dxDateBox-invalidEndDateMessage'),
             isValid: true,
             labelMode: 'static',
             max: undefined,
@@ -93,6 +93,7 @@ class DateRangeBox extends Editor {
             startDateInputAttr: {},
             startDateLabel: 'Start Date',
             startDateName: '',
+            startDateOutOfRangeMessage: messageLocalization.format('dxDateBox-startDateOutOfRangeMessage'),
             startDatePlaceholder: '',
             startDateText: undefined,
             stylingMode: config().editorStylingMode || 'outlined',
@@ -439,6 +440,7 @@ class DateRangeBox extends Editor {
             applyButtonText: options.applyButtonText,
             calendarOptions: options.calendarOptions,
             cancelButtonText: options.cancelButtonText,
+            dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
@@ -487,6 +489,7 @@ class DateRangeBox extends Editor {
         return {
             ...this._getDateBoxConfig(),
             invalidDateMessage: options.invalidEndDateMessage,
+            dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
@@ -752,6 +755,12 @@ class DateRangeBox extends Editor {
                 break;
             case 'invalidEndDateMessage':
                 this.getEndDateBox().option('invalidDateMessage', value);
+                break;
+            case 'startDateOutOfRangeMessage':
+                this.getStartDateBox().option('dateOutOfRangeMessage', value);
+                break;
+            case 'endDateOutOfRangeMessage':
+                this.getEndDateBox().option('dateOutOfRangeMessage', value);
                 break;
             case 'validationMessagePosition':
                 this.getStartDateBox().option(name, value);

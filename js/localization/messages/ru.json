@@ -56,8 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Выберите дату",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Выберите дату и время",
         "dxDateBox-validation-datetime": "Значение должно быть датой/временем",
-        "dxDateBox-invalid-start-date-message": "Start value must be a date",
-        "dxDateBox-invalid-end-date-message": "End value must be a date",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Выберите файл",
         "dxFileUploader-dropFile": "или Перетащите файл сюда",

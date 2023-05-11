@@ -56,8 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "選擇日期",
         "dxDateBox-simulatedDataPickerTitleDateTime": "選擇日期和時間",
         "dxDateBox-validation-datetime": "值必須是日期或時間",
-        "dxDateBox-invalid-start-date-message": "Start value must be a date",
-        "dxDateBox-invalid-end-date-message": "End value must be a date",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "選擇文件",
         "dxFileUploader-dropFile": "或者把文件放在此處",
