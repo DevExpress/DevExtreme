@@ -30,7 +30,6 @@ Object.keys(widgets).forEach(function(widget) {
         if(!options || Object.keys(options).length === 0) {
             assert.ok(false, 'options is not defined ' + widget);
         }
-
         for(const optionName in options) {
             let prevValue = options[optionName];
             let newValue = prevValue;
