@@ -555,7 +555,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       if (
         isFocusedRowElement
         || $target.parent().hasClass(DATA_ROW_CLASS)
-        || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
+        || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))
+      ) {
         this._selectionController.changeItemSelection(rowIndex, {
           shift: eventArgs.shift,
           control: eventArgs.ctrl,
