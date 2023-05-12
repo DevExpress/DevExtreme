@@ -7560,27 +7560,13 @@ declare module DevExpress.ui {
      */
     cancelButtonText?: string;
     /**
-     * [descr:DateBoxBaseOptions.dateOutOfRangeMessage]
-     */
-    dateOutOfRangeMessage?: string;
-    /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
      */
     dateSerializationFormat?: string;
     /**
-     * [descr:DateBoxBaseOptions.disabledDates]
-     */
-    disabledDates?:
-      | Array<Date>
-      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
-    /**
      * [descr:DateBoxBaseOptions.displayFormat]
      */
     displayFormat?: Format;
-    /**
-     * [descr:DateBoxBaseOptions.invalidDateMessage]
-     */
-    invalidDateMessage?: string;
     /**
      * [descr:DateBoxBaseOptions.max]
      */
@@ -7589,10 +7575,6 @@ declare module DevExpress.ui {
      * [descr:DateBoxBaseOptions.min]
      */
     min?: Date | number | string;
-    /**
-     * [descr:DateBoxBaseOptions.placeholder]
-     */
-    placeholder?: string;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -10710,17 +10692,55 @@ declare module DevExpress.ui {
      */
     adaptivityEnabled?: boolean;
     /**
+     * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
+     */
+    dateOutOfRangeMessage?: string;
+    /**
+     * [descr:dxDateBoxOptions.disabledDates]
+     */
+    disabledDates?:
+      | Array<Date>
+      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
+    /**
+     * [descr:dxDateBoxOptions.inputAttr]
+     */
+    inputAttr?: any;
+    /**
      * [descr:dxDateBoxOptions.interval]
      */
     interval?: number;
+    /**
+     * [descr:dxDateBoxOptions.invalidDateMessage]
+     */
+    invalidDateMessage?: string;
+    /**
+     * [descr:dxDateBoxOptions.label]
+     */
+    label?: string;
+    /**
+     * [descr:dxDateBoxOptions.maxLength]
+     */
+    maxLength?: string | number;
+    /**
+     * [descr:dxDateBoxOptions.name]
+     */
+    name?: string;
     /**
      * [descr:dxDateBoxOptions.pickerType]
      */
     pickerType?: DevExpress.ui.dxDateBox.DatePickerType;
     /**
+     * [descr:dxDateBoxOptions.placeholder]
+     */
+    placeholder?: string;
+    /**
      * [descr:dxDateBoxOptions.showAnalogClock]
      */
     showAnalogClock?: boolean;
+    /**
+     * [descr:dxDateBoxOptions.text]
+     */
+    text?: string;
     /**
      * [descr:dxDateBoxOptions.type]
      */
@@ -10755,7 +10775,8 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type DateRangePickerType = 'calendar' | 'native';
+    export type DisabledDate =
+      DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateRangeBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
@@ -10799,17 +10820,81 @@ declare module DevExpress.ui {
     >;
     export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
       /**
+       * [descr:Properties.disabledDates]
+       */
+      disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
+      /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
       endDate?: Date | number | string;
       /**
-       * [descr:dxDateRangeBoxOptions.pickerType]
+       * [descr:dxDateRangeBoxOptions.endDateInputAttr]
        */
-      pickerType?: DateRangePickerType;
+      endDateInputAttr?: any;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateLabel]
+       */
+      endDateLabel?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateName]
+       */
+      endDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateOutOfRangeMessage]
+       */
+      endDateOutOfRangeMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDatePlaceholder]
+       */
+      endDatePlaceholder?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateText]
+       */
+      endDateText?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.invalidEndDateMessage]
+       */
+      invalidEndDateMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.invalidStartDateMessage]
+       */
+      invalidStartDateMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.multiView]
+       */
+      multiView?: boolean;
+      /**
+       * [descr:Properties.openOnFieldClick]
+       */
+      openOnFieldClick?: boolean;
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
       startDate?: Date | number | string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateInputAttr]
+       */
+      startDateInputAttr?: any;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateLabel]
+       */
+      startDateLabel?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateName]
+       */
+      startDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateOutOfRangeMessage]
+       */
+      startDateOutOfRangeMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDatePlaceholder]
+       */
+      startDatePlaceholder?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateText]
+       */
+      startDateText?: string;
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */

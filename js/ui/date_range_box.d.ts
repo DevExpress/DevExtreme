@@ -10,6 +10,10 @@ import {
 } from '../core/element';
 
 import {
+  ComponentDisabledDate,
+} from './calendar';
+
+import {
   DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
@@ -18,9 +22,6 @@ import { DateBoxBase, DateBoxBaseOptions } from './date_box';
 import {
   ValueChangedInfo,
 } from './editor/editor';
-
-/** @public */
-export type DateRangePickerType = 'calendar' | 'native';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateRangeBox>;
@@ -79,6 +80,9 @@ export type ValueChangedEvent =
     & ValueChangedInfo;
 
 /** @public */
+export type DisabledDate = ComponentDisabledDate<dxDateRangeBox>;
+
+/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
@@ -86,25 +90,123 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  */
 export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
     /**
+       * @docid
+       * @default null
+       * @type_function_param1 data:object
+       * @type_function_param1_field component:dxDateRangeBox
+       * @public
+       */
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
+    /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
      */
     endDate?: Date | number | string;
     /**
-     * @docid dxDateRangeBoxOptions.pickerType
-     * @default 'calendar'
-     * @default 'native' &for(iOS)
-     * @default 'native' &for(Android)
+     * @docid dxDateRangeBoxOptions.endDateInputAttr
+     * @default {}
      * @public
      */
-    pickerType?: DateRangePickerType;
+    endDateInputAttr?: any;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateLabel
+     * @default "End Date"
+     * @public
+     */
+    endDateLabel?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateName
+     * @default ""
+     * @public
+     */
+    endDateName?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateOutOfRangeMessage
+     * @default "End date is out of range"
+     * @public
+     */
+    endDateOutOfRangeMessage?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDatePlaceholder
+     * @default ""
+     * @public
+     */
+    endDatePlaceholder?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.endDateText
+     * @readonly
+     * @public
+     */
+    endDateText?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.invalidEndDateMessage
+     * @default "End value must be a date"
+     * @public
+     */
+    invalidEndDateMessage?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.invalidStartDateMessage
+     * @default "Start value must be a date"
+     * @public
+     */
+    invalidStartDateMessage?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.multiView
+     * @default true
+     * @default false &for(iOS)
+     * @default false &for(Android)
+     * @public
+     */
+    multiView?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    openOnFieldClick?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
      */
     startDate?: Date | number | string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateInputAttr
+     * @default {}
+     * @public
+     */
+    startDateInputAttr?: any;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateLabel
+     * @default "Start Date"
+     * @public
+     */
+    startDateLabel?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateName
+     * @default ""
+     * @public
+     */
+    startDateName?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateOutOfRangeMessage
+     * @default "Start date is out of range"
+     * @public
+     */
+    startDateOutOfRangeMessage?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDatePlaceholder
+     * @default ""
+     * @public
+     */
+    startDatePlaceholder?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateText
+     * @readonly
+     * @public
+     */
+    startDateText?: string;
     /**
      * @docid dxDateRangeBoxOptions.value
      * @default [null, null]
