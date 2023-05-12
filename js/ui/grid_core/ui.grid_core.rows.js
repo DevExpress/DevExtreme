@@ -18,8 +18,6 @@ import { removeEvent } from '../../events/remove';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
 
-export const EMPTY_ROWS_VIEW_CLASS = 'dx-empty';
-
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
 const NOWRAP_CLASS = 'nowrap';
@@ -31,6 +29,7 @@ const ROW_LINES_CLASS = 'dx-row-lines';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const ROW_ALTERNATION_CLASS = 'dx-row-alt';
 const LAST_ROW_BORDER = 'dx-last-row-border';
+const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
@@ -701,7 +700,7 @@ export const rowsModule = {
                     const $element = this.element();
 
                     $element.addClass(this.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
-                    $element.toggleClass(EMPTY_ROWS_VIEW_CLASS, this._dataController.isEmpty());
+                    $element.toggleClass(EMPTY_CLASS, this._dataController.isEmpty());
 
                     this.setAria('role', 'presentation', $element);
 

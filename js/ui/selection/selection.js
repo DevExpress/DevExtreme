@@ -120,7 +120,7 @@ export default Class.inherit({
 
         const itemIsNotInLoadedRange = (index) => index >= 0 && !items.filter(it => it.loadIndex === index).length;
 
-        if(allowLoadByRange) {
+        if(allowLoadByRange && item) {
             indexOffset = item.loadIndex - itemIndex;
             itemIndex = item.loadIndex;
             focusedItemNotInLoadedRange = itemIsNotInLoadedRange(this._focusedItemIndex);
