@@ -32,68 +32,13 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="tabpanel-container"></div>
-
+    <div id="button"></div>
     <script>
-        $(() => {
-            const tabPanelItems = [
-                {
-                    title: 'SuprMart',
-                    text: '702 SW 8th Street',
-                },
-                {
-                    title: "El'Depot",
-                    text: '2455 Paces Ferry Road NW',
-                }, 
-                {
-                    title: 'K&S Music',
-                    text: '1000 Nicllet Mall',
-                },
-                {
-                    title: 'Tom Club',
-                    text: '999 Lake Drive',
-                },
-                // {
-                //     title: 'SuprMart',
-                //     text: '702 SW 8th Street',
-                // },
-                // {
-                //     title: "El'Depot",
-                //     text: '2455 Paces Ferry Road NW',
-                // }, 
-                // {
-                //     title: 'K&S Music',
-                //     text: '1000 Nicllet Mall',
-                // },
-                // {
-                //     title: 'Tom Club',
-                //     text: '999 Lake Drive',
-                // }
-            ];
-
-            // const longtabs = [
-            //     { text: 'user' },
-            //     { text: 'analytics' },
-            //     { text: 'customers' },
-            //     { text: 'search' },
-            //     { text: 'favorites' },
-            //     { text: 'additional' },
-            //     { text: 'clients' },
-            //     { text: 'orders' },
-            //     { text: 'shipment' },
-            // ];
-
-            const tabPanel = $('#tabpanel-container').dxTabPanel({
-            // const tabs = $('#tabpanel-container').dxTabs({
-                height: 260,
-                dataSource: tabPanelItems,
-                // dataSource: longtabs,
-                // width: 300,
-                // scrollByContent: true,
-                // showNavButtons: true,
-                selectedIndex: tabPanelItems.length - 1,
-            }).dxTabPanel('instance');
-            // }).dxTabs('instance');
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
