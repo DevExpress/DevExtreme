@@ -331,9 +331,15 @@ class DateRangeBox extends Editor {
     }
 
     _toggleOpenState() {
-        this.getStartDateBox().focus();
+        const { opened } = this.option();
 
-        this.option('opened', !this.option('opened'));
+        if(!opened) {
+            this.getStartDateBox()._focusInput();
+        }
+
+        if(!this.option('readOnly')) {
+            this.option('opened', !this.option('opened'));
+        }
     }
 
     _clearValueHandler(e) {
@@ -351,8 +357,27 @@ class DateRangeBox extends Editor {
         return this.option('showClearButton') && !this.option('readOnly');
     }
 
-    _focusInHandler(e) {
-        super._focusInHandler(e);
+    _focusInHandler(event) {
+        if(this._shouldSkipFocusEvent(event)) {
+            return;
+        }
+
+        super._focusInHandler(event);
+    }
+
+    _focusOutHandler(event) {
+        if(this._shouldSkipFocusEvent(event)) {
+            return;
+        }
+
+        super._focusOutHandler(event);
+    }
+
+    _shouldSkipFocusEvent(event) {
+        const { target, relatedTarget } = event;
+
+        return $(target).is(this.startDateField()) && $(relatedTarget).is(this.endDateField())
+            || $(target).is(this.endDateField()) && $(relatedTarget).is(this.startDateField());
     }
 
     _getPickerType() {

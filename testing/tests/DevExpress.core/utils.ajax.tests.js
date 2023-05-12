@@ -2,6 +2,8 @@ const $ = require('jquery');
 const ajax = require('core/utils/ajax');
 const compareVersion = require('core/utils/version').compare;
 
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 QUnit.module('sendRequest', {
     beforeEach: function() {
         this.xhr = sinon.useFakeXMLHttpRequest();
