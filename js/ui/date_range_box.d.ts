@@ -6,6 +6,10 @@ import {
 } from '../events/index';
 
 import {
+  DxElement,
+} from '../core/element';
+
+import {
   DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
@@ -110,13 +114,31 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
 };
 
 /**
+ * @namespace DevExpress.ui
+ */
+declare const DateRangeBoxBase: new() => Omit<DateBoxBase<Properties>, 'field'>;
+
+/**
  * @docid
  * @isEditor
  * @inherits DateBoxBase
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends DateBoxBase<Properties> { }
+export default class dxDateRangeBox extends DateRangeBoxBase {
+  /**
+   * @docid
+   * @publicName endDateField()
+   * @public
+   */
+  endDateField(): DxElement;
+  /**
+   * @docid
+   * @publicName startDateField()
+   * @public
+   */
+  startDateField(): DxElement;
+}
 
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
