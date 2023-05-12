@@ -73,6 +73,19 @@ class MultiselectDateBox extends DateBox {
             this._strategy.dateRangeBox.getStartDateBox()._strategy._widget._setViewsMaxOption(value[1]);
         }
     }
+
+    _updateInternalValidationState(isValid, validationMessage) {
+        this.option({
+            isValid,
+            validationError: isValid ? null : {
+                message: validationMessage
+            }
+        });
+    }
+
+    _recallInternalValidation(value) {
+        this._applyInternalValidation(value);
+    }
 }
 
 export default MultiselectDateBox;

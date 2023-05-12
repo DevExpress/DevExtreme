@@ -2190,8 +2190,8 @@ QUnit.module('validation', moduleConfig, () => {
                 validationMessageMode: 'always',
             });
         },
-        getValidationMessage: function() {
-            const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+        getValidationMessage: function($element = this.$element) {
+            const $validationMessage = $element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
             return $validationMessage.dxValidationMessage('instance');
         }
     }, () => {
@@ -2298,7 +2298,7 @@ QUnit.module('validation', moduleConfig, () => {
                 .type('f')
                 .change();
 
-            const validationMessage = this.getValidationMessage();
+            const validationMessage = this.getValidationMessage(startDateBox.$element());
             assert.strictEqual(validationMessage, undefined, 'validationMessage is not rendered');
         });
 
@@ -2314,7 +2314,7 @@ QUnit.module('validation', moduleConfig, () => {
                 .type('f')
                 .change();
 
-            const validationMessage = this.getValidationMessage();
+            const validationMessage = this.getValidationMessage(endDateBox.$element());
             assert.strictEqual(validationMessage, undefined, 'validationMessage is not rendered');
         });
     });
@@ -2356,10 +2356,148 @@ QUnit.module('validation', moduleConfig, () => {
             assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is now shown');
         });
 
+        QUnit.test('validationErrors should have all internal validation errors combined', function(assert) {
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            let keyboard = keyboardMock($startDateBoxInput);
+
+            keyboard
+                .press('backspace')
+                .type('f')
+                .change();
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+
+            keyboard
+                .press('backspace')
+                .type('f')
+                .change();
+
+            const expectedErrors = [
+                { message: 'Start value must be a date' },
+                { message: 'End value must be a date' }
+            ];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'validationErrors has both internal errors');
+        });
+
+        QUnit.test('validationErrors option change should not restore internal validation errors', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            keyboard
+                .press('backspace')
+                .type('f')
+                .change();
+
+            const externalError = [{ message: 'external error' }];
+            this.instance.option('validationErrors', [externalError]);
+
+            const expectedErrors = [externalError, { message: 'End value must be a date' }];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'internal errors are not restored');
+        });
+
+        QUnit.test('external validation raise on value change should not restore internal validation errors', function(assert) {
+            const externalError = { message: 'external error' };
+            this.instance.option('validationError', externalError);
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            let keyboard = keyboardMock($startDateBoxInput);
+
+            keyboard
+                .press('backspace')
+                .type('f')
+                .change();
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+
+            keyboard
+                .caret({ start: 0, end: 10 })
+                .type('5/5/2023')
+                .change();
+
+            const { validationErrors } = this.instance.option();
+            assert.strictEqual(validationErrors[0].message, 'external error', 'external error is added');
+            assert.deepEqual(validationErrors[1], { message: 'Start value must be a date' }, 'internal error is not restored');
+        });
+
+        QUnit.test('external validation raise using "validate" method should not restore internal validation errors', function(assert) {
+            const externalError = { message: 'external error' };
+            this.instance.option('validationError', externalError);
+
+            const validator = this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            }).dxValidator('instance');
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+
+            startDateBoxKeyboard
+                .press('backspace')
+                .type('f')
+                .change();
+
+            validator.validate();
+
+            const { validationErrors } = this.instance.option();
+            assert.strictEqual(validationErrors[0].message, 'external error', 'external error is added');
+            assert.deepEqual(validationErrors[1], { message: 'Start value must be a date' }, 'internal error is not restored');
+        });
 
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
             QUnit.module(dateBoxName, () => {
-                QUnit.test('internal date validation fail should update dateRangeBox validationErrors', function(assert) {
+                QUnit.test('internal validation fail should set dateRangeBox isValid to false', function(assert) {
+                    const dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+
+                    const $dateBoxInput = $(dateBox.field());
+                    const keyboard = keyboardMock($dateBoxInput);
+
+                    keyboard
+                        .press('backspace')
+                        .type('f')
+                        .change();
+
+                    assert.deepEqual(this.instance.option('isValid'), false, 'isValid is updated');
+                });
+
+                QUnit.test('internal validation success should set dateRangeBox isValid to true if there is no other errors', function(assert) {
+                    const dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+
+                    const $dateBoxInput = $(dateBox.field());
+                    const keyboard = keyboardMock($dateBoxInput);
+
+                    keyboard
+                        .press('backspace')
+                        .type('f')
+                        .change();
+
+                    keyboard
+                        .press('backspace')
+                        .change();
+
+                    assert.deepEqual(this.instance.option('isValid'), true, 'isValid is updated');
+                });
+
+                QUnit.test('internal validation success should not set dateRangeBox isValid to true if there is an other error', function(assert) {
+                    this.instance.option('isValid', false);
+                    this.instance.option('validationError', { message: 'external error' });
 
                     const dateBox = dateBoxName === 'startDateBox'
                         ? getStartDateBoxInstance(this.instance)
@@ -2373,8 +2511,28 @@ QUnit.module('validation', moduleConfig, () => {
                         .type('f')
                         .change();
 
+                    keyboard
+                        .press('backspace')
+                        .change();
+
+                    assert.strictEqual(this.instance.option('isValid'), false, 'isValid=false while there is an other error');
+                });
+
+                QUnit.test('internal date validation fail should update dateRangeBox validationErrors', function(assert) {
+                    const dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+
+                    const $dateBoxInput = $(dateBox.field());
+                    const keyboard = keyboardMock($dateBoxInput);
+
+                    keyboard
+                        .press('backspace')
+                        .type('f')
+                        .change();
+
                     const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
-                    const expectedErrors = [{ editorSpecific: true, message }];
+                    const expectedErrors = [{ message }];
                     assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
                 });
 
@@ -2395,7 +2553,7 @@ QUnit.module('validation', moduleConfig, () => {
                         .change();
 
                     const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
-                    const expectedErrors = [externalError, { editorSpecific: true, message }];
+                    const expectedErrors = [externalError, { message }];
                     assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
                 });
 
