@@ -3,7 +3,7 @@
 import { PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
-import { GridBase, GridBaseOptions } from '@js/common/grids';
+import { GridBase, GridBaseOptions } from '@js/ui/data_grid';
 import Widget from '@js/ui/widget/ui.widget';
 
 // todo: move to upper .d.ts
