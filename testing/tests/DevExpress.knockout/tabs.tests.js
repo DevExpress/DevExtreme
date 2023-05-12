@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('ui/tabs');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('tabs');
+} else {
+    QUnit.module.skip('tabs');
+}
+
 QUnit.test('regression: B250529', function(assert) {
     let itemClickFired = false;
 

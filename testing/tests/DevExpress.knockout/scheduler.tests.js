@@ -6,6 +6,12 @@ const Scheduler = require('ui/scheduler');
 
 require('generic_light.css!');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('scheduler');
+} else {
+    QUnit.module.skip('scheduler');
+}
+
 const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 QUnit.test('Appointment should have right date format', function(assert) {

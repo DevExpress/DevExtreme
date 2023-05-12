@@ -15,8 +15,8 @@ import 'viz/sparkline';
 import 'viz/bullet';
 import 'viz/tree_map';
 
-import '../../../artifacts/js/vectormap-data/world.js';
-import '../../../artifacts/js/vectormap-data/usa.js';
+import '/artifacts/js/vectormap-data/world.js';
+import '/artifacts/js/vectormap-data/usa.js';
 
 const chartTestsSignature = {
     getInitOptions() {
@@ -194,9 +194,13 @@ function domNodesCount(node) {
 }
 
 QUnit.testStart(function() {
-    const markup = '<div id="widgetContainer" style="width: 300px; height: 150px;"></div>';
+    const markup = '<div id="widgetContainer"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widgetContainer').css({
+        width: '300px',
+        height: '150px'
+    });
 });
 
 QUnit.module('options updating', environment);

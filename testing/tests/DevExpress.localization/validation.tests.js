@@ -4,7 +4,7 @@ require('localization/globalize/currency');
 require('localization/globalize/date');
 require('localization/globalize/message');
 const cldrData = [
-    require('../../../node_modules/devextreme-cldr-data/ru.json!json')
+    require('devextreme-cldr-data/ru.json!json')
 ];
 
 const ValidationEngine = require('ui/validation_engine');

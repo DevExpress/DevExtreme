@@ -10,11 +10,15 @@ const SCROLLVIEW_LOADPANEL_CLASS = 'dx-scrollview-loadpanel';
 
 QUnit.testStart(function() {
     const markup = '\
-        <div id="scrollView" style="height: 50px; width: 50px;">\
+        <div id="scrollView"">\
             <div class="content1">ScrollView content</div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#scrollView').css({
+        height: '50px',
+        width: '50px'
+    });
 });
 
 QUnit.module('ScrollView server markup');

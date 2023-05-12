@@ -5,6 +5,12 @@ const Autocomplete = require('ui/autocomplete');
 
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('autocomplete');
+} else {
+    QUnit.module.skip('autocomplete');
+}
+
 QUnit.testStart(function() {
     const markup =
         '<div id="T131530" data-bind="dxAutocomplete: { items: [{}, {}], itemTemplate: \'item\', searchTimeout: 0 }">\
