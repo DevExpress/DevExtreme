@@ -42,7 +42,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
             },
             enter: (e) => {
                 if(this.dateRangeBox.option('opened')) {
-                    // this._widget._enterKeyHandler(e);
                     this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
                     this.dateBox._valueChangeEventHandler(e);
                     this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
