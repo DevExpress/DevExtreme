@@ -216,18 +216,13 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
 };
 
 /**
- * @namespace DevExpress.ui
- */
-declare const DateRangeBoxBase: new() => Omit<DateBoxBase<Properties>, 'field'>;
-
-/**
  * @docid
  * @isEditor
  * @inherits DateBoxBase
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends DateRangeBoxBase {
+export default class dxDateRangeBox extends DateBoxBase<Properties> {
   /**
    * @docid
    * @publicName endDateField()

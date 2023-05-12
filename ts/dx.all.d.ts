@@ -7587,13 +7587,6 @@ declare module DevExpress.ui {
     dropDownOptions?: DevExpress.ui.dxPopup.Properties;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export const DateRangeBoxBase: new () => Omit<
-    DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties>,
-    'field'
-  >;
-  /**
    * [descr:DraggableBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -10714,7 +10707,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateRangeBox]
    */
-  export class dxDateRangeBox extends DateRangeBoxBase {
+  export class dxDateRangeBox extends DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties> {
     /**
      * [descr:dxDateRangeBox.endDateField()]
      */
