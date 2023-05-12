@@ -703,6 +703,26 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.equal(this.instance.getButton('dropDown'), getButtons(this.$element).dxButton('instance'), 'drop down button is rendered');
         assert.equal(this.instance.getButton('dropDown').option('disabled'), false, 'drop down button is not disabled');
     });
+
+    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is false', function(assert) {
+        $(this.instance.getButton('dropDown').$element()).trigger('dxclick');
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is false', function(assert) {
+        this.reinit({
+            disabled: true,
+        });
+
+        $(this.instance.getButton('dropDown').$element()).trigger('dxclick');
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), false, 'dateRangeBox has no focus state class');
+        assert.strictEqual(this.instance.getStartDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
 });
 
 QUnit.module('Clear button', moduleConfig, () => {
@@ -1068,6 +1088,30 @@ QUnit.module('Behavior', moduleConfig, () => {
         this.instance.open();
 
         assert.strictEqual(onContentReady.callCount, 1, 'onContentReady did not fire after Popup render');
+    });
+
+    [false, true].forEach((opened) => {
+        ['startDateBox', 'endDateBox'].forEach((dateBox) => {
+            QUnit.test(`Calendar enter handler should ${opened ? '' : 'not'} fire on enter key when Popup is ${opened ? '' : 'not'} opened and ${dateBox} is focused`, function(assert) {
+                this.reinit({
+                    opened: true
+                });
+
+                const dateBoxInstance = dateBox === 'startDateBox' ? this.instance.getStartDateBox() : this.instance.getEndDateBox();
+                const calendar = this.getCalendar();
+                const calendarEnterHandler = sinon.spy(calendar, '_enterKeyHandler');
+                const $input = $(dateBoxInstance.field());
+                const keyboard = keyboardMock($input);
+
+                if(!opened) {
+                    this.instance.close();
+                }
+
+                keyboard.press('enter');
+
+                assert.strictEqual(calendarEnterHandler.called, opened, 'onContentReady fired after DateRangeBox render');
+            });
+        });
     });
 });
 
@@ -1556,7 +1600,7 @@ QUnit.module('Public methods', moduleConfig, () => {
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox opened option has correct value');
     });
 
-    QUnit.test('Close() methos should set opened option value to false', function(assert) {
+    QUnit.test('Close() method should set opened option value to false', function(assert) {
         this.reinit({
             opened: true,
         });
