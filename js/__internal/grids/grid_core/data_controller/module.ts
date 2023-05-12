@@ -1268,12 +1268,13 @@ export class DataController extends ControllerWithDataMixin {
   }
 
   _createDataSourceAdapter(dataSource) {
-    let remoteOperations = this.option('remoteOperations');
+    let remoteOperations: any = this.option('remoteOperations');
     const store = dataSource.store();
     const enabledRemoteOperations = {
       filtering: true, sorting: true, paging: true, grouping: true, summary: true,
     };
 
+    // @ts-expect-error
     if (isObject(remoteOperations) && remoteOperations.groupPaging) {
       remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
     }
