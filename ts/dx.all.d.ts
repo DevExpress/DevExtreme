@@ -7558,10 +7558,6 @@ declare module DevExpress.ui {
      */
     cancelButtonText?: string;
     /**
-     * [descr:DateBoxBaseOptions.dateOutOfRangeMessage]
-     */
-    dateOutOfRangeMessage?: string;
-    /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
      */
     dateSerializationFormat?: string;
@@ -7569,10 +7565,6 @@ declare module DevExpress.ui {
      * [descr:DateBoxBaseOptions.displayFormat]
      */
     displayFormat?: Format;
-    /**
-     * [descr:DateBoxBaseOptions.invalidDateMessage]
-     */
-    invalidDateMessage?: string;
     /**
      * [descr:DateBoxBaseOptions.max]
      */
@@ -10654,6 +10646,10 @@ declare module DevExpress.ui {
      */
     adaptivityEnabled?: boolean;
     /**
+     * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
+     */
+    dateOutOfRangeMessage?: string;
+    /**
      * [descr:dxDateBoxOptions.disabledDates]
      */
     disabledDates?:
@@ -10667,6 +10663,10 @@ declare module DevExpress.ui {
      * [descr:dxDateBoxOptions.interval]
      */
     interval?: number;
+    /**
+     * [descr:dxDateBoxOptions.invalidDateMessage]
+     */
+    invalidDateMessage?: string;
     /**
      * [descr:dxDateBoxOptions.label]
      */
@@ -10794,6 +10794,10 @@ declare module DevExpress.ui {
        */
       endDateName?: string;
       /**
+       * [descr:dxDateRangeBoxOptions.endDateOutOfRangeMessage]
+       */
+      endDateOutOfRangeMessage?: string;
+      /**
        * [descr:dxDateRangeBoxOptions.endDatePlaceholder]
        */
       endDatePlaceholder?: string;
@@ -10801,6 +10805,14 @@ declare module DevExpress.ui {
        * [descr:dxDateRangeBoxOptions.endDateText]
        */
       endDateText?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.invalidEndDateMessage]
+       */
+      invalidEndDateMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.invalidStartDateMessage]
+       */
+      invalidStartDateMessage?: string;
       /**
        * [descr:dxDateRangeBoxOptions.multiView]
        */
@@ -10825,6 +10837,10 @@ declare module DevExpress.ui {
        * [descr:dxDateRangeBoxOptions.startDateName]
        */
       startDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateOutOfRangeMessage]
+       */
+      startDateOutOfRangeMessage?: string;
       /**
        * [descr:dxDateRangeBoxOptions.startDatePlaceholder]
        */
