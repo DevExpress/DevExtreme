@@ -7,7 +7,7 @@ require('../../../helpers/executeAsyncMock.js');
 require('integration/knockout');
 require('bundles/modules/parts/widgets-web');
 
-require('../../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 const LABEL = '.dx-field-label';
 const VALUE = '.dx-field-value';
