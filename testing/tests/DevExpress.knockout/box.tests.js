@@ -4,7 +4,11 @@ const ko = require('knockout');
 require('ui/box');
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('box');
+} else {
+    QUnit.module.skip('box');
+}
 
 QUnit.testStart(function() {
     const markup =

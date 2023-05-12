@@ -4,9 +4,9 @@ import ko from 'knockout';
 import 'ui/button';
 import 'integration/knockout';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
-QUnit.module('Render', () => {
+moduleWithoutCsp('Render', () => {
     // T831205
     QUnit.test('Widget rendering when buttonTemplate is used', function(assert) {
         const markup =

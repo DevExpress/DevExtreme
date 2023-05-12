@@ -12,7 +12,7 @@ import 'ui/select_box';
 import 'ui/tag_box';
 import 'integration/knockout';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(() => {
     const markup =
@@ -53,7 +53,7 @@ const moduleSetup = {
     }
 };
 
-QUnit.module('Knockout integration', moduleSetup);
+moduleWithoutCsp('Knockout integration', moduleSetup);
 
 QUnit.test('Generate items from layoutData with unacceptable data', function(assert) {
     const viewModel = {
@@ -522,7 +522,7 @@ QUnit.test('Editor doesn\'t update the field data if it\'s already up to date', 
 });
 
 
-QUnit.module('Templates');
+moduleWithoutCsp('Templates');
 
 QUnit.test('Render template', function(assert) {
     const viewModel = {

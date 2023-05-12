@@ -3,9 +3,9 @@ const noop = require('core/utils/common').noop;
 const ko = require('knockout');
 const KoTemplate = require('integration/knockout/template').KoTemplate;
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
-QUnit.module('rendering', {
+moduleWithoutCsp('rendering', {
     beforeEach: function() {
         const that = this;
 

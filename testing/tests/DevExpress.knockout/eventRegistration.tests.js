@@ -9,7 +9,7 @@ const swipeEvents = require('events/swipe');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -18,7 +18,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('custom events with Ko approach', {
+moduleWithoutCsp('custom events with Ko approach', {
     beforeEach: function() {
 
     },
@@ -99,7 +99,7 @@ QUnit.test('event with option binding', function(assert) {
 });
 
 
-QUnit.module('event bindings', {
+moduleWithoutCsp('event bindings', {
     beforeEach: function() {
         registerEvent('dxtestevent', {});
     },

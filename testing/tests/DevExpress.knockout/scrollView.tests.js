@@ -4,7 +4,11 @@ import ko from 'knockout';
 import scrollView from 'ui/scroll_view';
 import 'integration/knockout';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('scrollView');
+} else {
+    QUnit.module.skip('scrollView');
+}
 
 QUnit.testStart(function() {
     const markup =

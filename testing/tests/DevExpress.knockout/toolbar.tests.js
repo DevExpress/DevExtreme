@@ -4,11 +4,11 @@ const ko = require('knockout');
 require('ui/toolbar');
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 $('#qunit-fixture').html('<div id="toolbar" data-bind="dxToolbar: { items: items }"></div>');
 
-QUnit.module('regression', {
+moduleWithoutCsp('regression', {
     beforeEach: function() {
         this.$element = $('#toolbar');
     }

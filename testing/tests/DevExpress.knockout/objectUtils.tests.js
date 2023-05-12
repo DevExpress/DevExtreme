@@ -4,7 +4,11 @@ const objectUtils = require('core/utils/object');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('objectUtils');
+} else {
+    QUnit.module.skip('objectUtils');
+}
 
 QUnit.test('deepExtendArraySafe works correctly with array contain observables', function(assert) {
     const testObj = { id: 4, name: ko.observable('John') };

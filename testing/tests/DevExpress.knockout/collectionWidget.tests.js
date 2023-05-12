@@ -6,7 +6,7 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -117,7 +117,7 @@ const TestComponent = CollectionWidget.inherit({
 });
 
 
-QUnit.module('render', {
+moduleWithoutCsp('render', {
     beforeEach: function() {
         this.element = $('#cmp');
         this.clock = sinon.useFakeTimers();
@@ -275,7 +275,7 @@ QUnit.test('$index is available in markup (T542335)', function(assert) {
 });
 
 
-QUnit.module('items via markup', {
+moduleWithoutCsp('items via markup', {
     beforeEach: function() {
         registerComponent('dxTestComponent', TestComponent);
     },
@@ -352,7 +352,7 @@ QUnit.test('$parent should be correct for collection item', function(assert) {
 });
 
 
-QUnit.module('deleting MVVM support', {
+moduleWithoutCsp('deleting MVVM support', {
     beforeEach: function() {
         registerComponent('dxTestComponent', TestComponent);
     },
@@ -362,7 +362,7 @@ QUnit.module('deleting MVVM support', {
 });
 
 
-QUnit.module('selecting MVVM support', {
+moduleWithoutCsp('selecting MVVM support', {
     beforeEach: function() {
         registerComponent('dxTestComponent', TestComponent);
     },

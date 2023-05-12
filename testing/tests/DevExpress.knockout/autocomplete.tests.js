@@ -5,7 +5,11 @@ const Autocomplete = require('ui/autocomplete');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('autocomplete');
+} else {
+    QUnit.module.skip('autocomplete');
+}
 
 QUnit.testStart(function() {
     const markup =

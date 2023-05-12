@@ -5,7 +5,11 @@ const ko = require('knockout');
 require('ui/action_sheet');
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('actionSheet');
+} else {
+    QUnit.module.skip('actionSheet');
+}
 
 QUnit.testStart(function() {
     const markup =

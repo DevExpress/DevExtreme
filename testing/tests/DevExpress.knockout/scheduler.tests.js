@@ -6,7 +6,11 @@ const Scheduler = require('ui/scheduler');
 
 require('generic_light.css!');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('scheduler');
+} else {
+    QUnit.module.skip('scheduler');
+}
 
 const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 

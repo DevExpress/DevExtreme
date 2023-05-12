@@ -9,7 +9,7 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid';
 import 'integration/knockout';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -79,7 +79,7 @@ const createDataSource = function(context, config, remoteOperations) {
 
 fx.off = true;
 
-QUnit.module('Assign options', {
+moduleWithoutCsp('Assign options', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -129,7 +129,7 @@ const teardownModule = function() {
     this.dispose();
 };
 
-QUnit.module('initialization from dataSource', {
+moduleWithoutCsp('initialization from dataSource', {
     beforeEach: setupModule,
     afterEach: teardownModule
 }, function() {
@@ -185,7 +185,7 @@ QUnit.module('initialization from dataSource', {
 });
 
 
-QUnit.module('Work with knockout', {
+moduleWithoutCsp('Work with knockout', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -340,7 +340,7 @@ QUnit.module('Work with knockout', {
 });
 
 
-QUnit.module('Editing', {
+moduleWithoutCsp('Editing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 

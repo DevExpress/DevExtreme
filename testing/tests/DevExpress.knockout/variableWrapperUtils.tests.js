@@ -4,7 +4,11 @@ const { logger } = require('core/utils/console');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('variableWrapperUtils');
+} else {
+    QUnit.module.skip('variableWrapperUtils');
+}
 
 QUnit.test('wrapped value', function(assert) {
     const observableValue = ko.observable(3);

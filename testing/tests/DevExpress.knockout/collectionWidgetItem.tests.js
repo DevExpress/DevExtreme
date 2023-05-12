@@ -6,11 +6,11 @@ const CollectionWidgetItem = require('ui/collection/item');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
-QUnit.module('observables', {
+moduleWithoutCsp('observables', {
     beforeEach: function() {
         const TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
             _renderWatchers: function() {

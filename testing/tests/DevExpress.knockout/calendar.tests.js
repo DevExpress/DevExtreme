@@ -4,7 +4,11 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/calendar');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('calendar');
+} else {
+    QUnit.module.skip('calendar');
+}
 
 QUnit.testStart(function() {
     const markup =

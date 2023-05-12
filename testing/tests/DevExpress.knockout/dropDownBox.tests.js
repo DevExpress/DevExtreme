@@ -4,7 +4,7 @@ import ko from 'knockout';
 import 'integration/knockout';
 import 'ui/drop_down_box';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -17,7 +17,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Templates');
+moduleWithoutCsp('Templates');
 
 QUnit.test('contentTemplate', function(assert) {
     const vm = {

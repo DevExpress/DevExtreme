@@ -10,11 +10,11 @@ import { Deferred } from 'core/utils/deferred';
 import 'ui/button';
 import 'integration/knockout';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
-QUnit.module('Ko Extender');
+moduleWithoutCsp('Ko Extender');
 
 QUnit.test('dxValidator should be stuck to observable', function(assert) {
     const vm = {

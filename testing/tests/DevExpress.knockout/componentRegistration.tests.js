@@ -13,7 +13,7 @@ require('ui/select_box');
 require('ui/lookup');
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
@@ -25,7 +25,7 @@ const cleanComponentRegistrations = function() {
 };
 
 
-QUnit.module(
+moduleWithoutCsp(
     'simple component tests', {
         beforeEach: function() {
             const TestComponent = DOMComponent.inherit({
@@ -724,7 +724,7 @@ QUnit.module(
     }
 );
 
-QUnit.module(
+moduleWithoutCsp(
     'nested Widget with templates enabled',
     {
         beforeEach: function() {
@@ -884,7 +884,7 @@ QUnit.module(
     }
 );
 
-QUnit.module('Widget & CollectionWidget with templates enabled', function() {
+moduleWithoutCsp('Widget & CollectionWidget with templates enabled', function() {
     const TestContainer = Widget.inherit({
         _renderContentImpl: function() {
             if(this.option('integrationOptions.templates').template) {
@@ -1067,7 +1067,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
 });
 
 
-QUnit.module(
+moduleWithoutCsp(
     'component disposing on node removing',
     {
         beforeEach: function() {
@@ -1244,7 +1244,7 @@ QUnit.module(
 );
 
 
-QUnit.module(
+moduleWithoutCsp(
     'component action context',
     {
         beforeEach: function() {
@@ -1327,7 +1327,7 @@ QUnit.module(
 );
 
 
-QUnit.module('Template w/o ko scenario', function() {
+moduleWithoutCsp('Template w/o ko scenario', function() {
 
     QUnit.test('widget with templates enabled', function(assert) {
         const TestContainer = Widget.inherit({
@@ -1393,7 +1393,7 @@ QUnit.module('Template w/o ko scenario', function() {
     });
 });
 
-QUnit.module('predicate for manual option binding control', {
+moduleWithoutCsp('predicate for manual option binding control', {
     beforeEach: function() {
         config({
             knockout: {

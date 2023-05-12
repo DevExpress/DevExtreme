@@ -4,7 +4,7 @@ const ko = require('knockout');
 require('ui/load_panel');
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -18,7 +18,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('regressions');
+moduleWithoutCsp('regressions');
 
 QUnit.test('B234630 - targetContainer with ko', function(assert) {
     const vm = {

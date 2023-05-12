@@ -5,7 +5,7 @@ const ko = require('knockout');
 
 require('integration/knockout');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -39,7 +39,7 @@ const moduleSetup = {
 };
 
 
-QUnit.module('basic', moduleSetup);
+moduleWithoutCsp('basic', moduleSetup);
 
 QUnit.test('fieldTemplate is bound to selected items', function(assert) {
     const viewModel = {
@@ -58,7 +58,7 @@ QUnit.test('fieldTemplate is bound to selected items', function(assert) {
 });
 
 
-QUnit.module('ko integration');
+moduleWithoutCsp('ko integration');
 
 QUnit.test('values should be provided to ko.observableArray', function(assert) {
     assert.expect(1);

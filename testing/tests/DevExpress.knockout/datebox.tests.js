@@ -11,7 +11,7 @@ import ko from 'knockout';
 import 'integration/knockout';
 import 'ui/date_box';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -70,7 +70,7 @@ const getExpectedResult = function(date, mode, stringDate) {
 };
 
 
-QUnit.module('options changed callbacks', moduleConfig);
+moduleWithoutCsp('options changed callbacks', moduleConfig);
 
 QUnit.test('several editors for same value', function(assert) {
     const value = new Date(2012, 10, 26, 16, 40, 0);
@@ -143,7 +143,7 @@ QUnit.test('several editors for same value', function(assert) {
 });
 
 
-QUnit.module('dateView integration', {
+moduleWithoutCsp('dateView integration', {
     beforeEach: function() {
         fx.off = true;
 

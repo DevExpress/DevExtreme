@@ -4,7 +4,7 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/drop_down_editor/ui.drop_down_editor');
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -23,7 +23,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Templates');
+moduleWithoutCsp('Templates');
 
 QUnit.test('fieldTemplate', function(assert) {
     const vm = {};
@@ -53,7 +53,7 @@ QUnit.test('fieldTemplate is rendered after changing value', function(assert) {
 });
 
 
-QUnit.module('options');
+moduleWithoutCsp('options');
 
 QUnit.test('openOnFieldClick option with custom template', function(assert) {
     const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
