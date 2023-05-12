@@ -826,15 +826,26 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(startDateBox.option('opened'), false, 'startDateBox is closed');
     });
 
-    QUnit.testInActiveWindow('StartDateBox should be focused on attempt to open endDateBox', function(assert) {
+    QUnit.testInActiveWindow('StartDateBox should be focused after opening by click on input', function(assert) {
         const startDateBox = getStartDateBoxInstance(this.instance);
         const endDateBox = getEndDateBoxInstance(this.instance);
 
-        endDateBox.open();
+        $(startDateBox.field()).trigger('dxclick');
 
         assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
         assert.strictEqual(startDateBox.$element().hasClass(STATE_FOCUSED_CLASS), true, 'startDateBox has focus state class');
         assert.strictEqual(endDateBox.$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
+    });
+
+    QUnit.testInActiveWindow('EndDateBox should be focused after opening by click on input', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const endDateBox = getEndDateBoxInstance(this.instance);
+
+        $(endDateBox.field()).trigger('dxclick');
+
+        assert.strictEqual(this.$element.hasClass(STATE_FOCUSED_CLASS), true, 'dateRangeBox has focus state class');
+        assert.strictEqual(startDateBox.$element().hasClass(STATE_FOCUSED_CLASS), false, 'startDateBox has no focus state class');
+        assert.strictEqual(endDateBox.$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
     });
 
     QUnit.test('Popup of startDateBox should open if dateRangeBox opened option is true on initialization', function(assert) {
@@ -930,71 +941,92 @@ QUnit.module('Behavior', moduleConfig, () => {
         beforeEach: function() {
             this.onValueChangedHandler = sinon.stub();
 
-            this.testValue = (assert, value) => {
+            this.testValue = (assert, value, callCount) => {
                 assert.deepEqual(this.instance.option('value'), value, 'value is correct');
                 assert.strictEqual(this.instance.option('startDate'), value[0], 'startDate is correct');
                 assert.strictEqual(this.instance.option('endDate'), value[1], 'end is correct');
                 assert.strictEqual(this.instance.getStartDateBox().option('value'), value[0], 'startDateBox value is correct');
                 assert.strictEqual(this.instance.getEndDateBox().option('value'), value[1], 'endDateBox value is correct');
 
-                const { value: eventValue } = this.onValueChangedHandler.getCall(0).args[0];
+                assert.strictEqual(this.onValueChangedHandler.callCount, callCount, `onValueChanged called ${callCount} time`);
+                if(callCount) {
+                    const { value: eventValue } = this.onValueChangedHandler.getCall(0).args[0];
 
-                assert.strictEqual(this.onValueChangedHandler.callCount, 1, 'onValueChanged called one time');
-                assert.deepEqual(eventValue, value, 'onValueChanged handler got correct value field');
+                    assert.deepEqual(eventValue, value, 'onValueChanged handler got correct value field');
+                }
             };
         },
         afterEach: function() {
             this.onValueChangedHandler.reset();
         }
     }, () => {
-        QUnit.test('dates should be swapped if passed value has dates in wrong order', function(assert) {
+        QUnit.test('dates should be swapped if passed value has dates in wrong order on init', function(assert) {
+            this.reinit({
+                value: ['2023/02/02', '2023/01/01'],
+                onValueChanged: this.onValueChangedHandler
+            });
+
+            this.testValue(assert, ['2023/01/01', '2023/02/02'], 0);
+        });
+
+        QUnit.test('dates should be swapped if passed value has dates in wrong order on runtime', function(assert) {
             this.reinit({
                 onValueChanged: this.onValueChangedHandler
             });
 
             this.instance.option('value', ['2023/02/02', '2023/01/01']);
 
-            this.testValue(assert, ['2023/01/01', '2023/02/02']);
+            this.testValue(assert, ['2023/01/01', '2023/02/02'], 1);
         });
 
-        QUnit.test('dates should be swapped if passed startDate is bigger than endDate', function(assert) {
+        QUnit.test('dates should be swapped if passed startDate is bigger than endDate on init', function(assert) {
+            this.reinit({
+                onValueChanged: this.onValueChangedHandler,
+                startDate: '2023/03/03',
+                endDate: '2023/02/02',
+            });
+
+            this.testValue(assert, ['2023/02/02', '2023/03/03'], 0);
+        });
+
+        QUnit.test('dates should be swapped if passed startDate is bigger than endDate on runtime', function(assert) {
             this.reinit({
                 onValueChanged: this.onValueChangedHandler,
                 value: ['2023/01/01', '2023/02/02']
             });
             this.instance.option('startDate', '2023/03/03');
 
-            this.testValue(assert, ['2023/02/02', '2023/03/03']);
+            this.testValue(assert, ['2023/02/02', '2023/03/03'], 1);
         });
 
-        QUnit.test('dates should be swapped if passed endDate is smaller than endDate', function(assert) {
+        QUnit.test('dates should be swapped if passed endDate is smaller than startDate on runtime', function(assert) {
             this.reinit({
                 onValueChanged: this.onValueChangedHandler,
                 value: ['2023/02/02', '2023/03/03']
             });
             this.instance.option('endDate', '2023/01/01');
 
-            this.testValue(assert, ['2023/01/01', '2023/02/02']);
+            this.testValue(assert, ['2023/01/01', '2023/02/02'], 1);
         });
 
-        QUnit.test('dates should be swapped if startDateBox got value bigger than endDateBox value', function(assert) {
+        QUnit.test('dates should be swapped if startDateBox got value bigger than endDateBox value on runtime', function(assert) {
             this.reinit({
                 onValueChanged: this.onValueChangedHandler,
                 value: ['2023/01/01', '2023/02/02']
             });
             this.instance.getStartDateBox().option('value', '2023/03/03');
 
-            this.testValue(assert, ['2023/02/02', '2023/03/03']);
+            this.testValue(assert, ['2023/02/02', '2023/03/03'], 1);
         });
 
-        QUnit.test('dates should be swapped if endDateBox got value smaller than startDateBox value', function(assert) {
+        QUnit.test('dates should be swapped if endDateBox got value smaller than startDateBox value on runtime', function(assert) {
             this.reinit({
                 onValueChanged: this.onValueChangedHandler,
                 value: ['2023/02/02', '2023/03/03']
             });
             this.instance.getEndDateBox().option('value', '2023/01/01');
 
-            this.testValue(assert, ['2023/01/01', '2023/02/02']);
+            this.testValue(assert, ['2023/01/01', '2023/02/02'], 1);
         });
     });
 

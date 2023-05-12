@@ -64,8 +64,8 @@ gulp.task('install-devextreme-renovation', (cb) => {
 gulp.task('install-all', (cb)=>{
     glob(path.join(dirname(), 'devextreme*.tgz'), (_, matches) => {
         const packageNames = matches.map(pkg => path.relative(dirname(), pkg));
-        if(packageNames.length !== 2) {
-            cb(new Error(`Expected 2 packages but got ${packageNames.length}:\n ${JSON.stringify(packageNames, null, 2)}`));
+        if(packageNames.length !== 3) {
+            cb(new Error(`Expected 3 packages but got ${packageNames.length}:\n ${JSON.stringify(packageNames, null, 2)}`));
             return;
         }
         run(`npm i --no-package-lock ./${packageNames.map(x => `./${x}`).join(' ')}`, cb);
