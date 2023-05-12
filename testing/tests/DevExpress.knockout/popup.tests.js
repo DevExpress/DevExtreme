@@ -7,7 +7,7 @@ const ko = require('knockout');
 require('ui/popup');
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 themes.setDefaultTimeout(0);
 

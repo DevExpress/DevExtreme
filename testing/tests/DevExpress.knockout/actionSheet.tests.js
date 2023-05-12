@@ -5,7 +5,7 @@ const ko = require('knockout');
 require('ui/action_sheet');
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =

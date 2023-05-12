@@ -4,7 +4,7 @@ const ko = require('knockout');
 require('ui/pivot_grid/ui.pivot_grid');
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =

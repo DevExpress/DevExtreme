@@ -4,7 +4,7 @@ const ko = require('knockout');
 require('ui/toolbar');
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 $('#qunit-fixture').html('<div id="toolbar" data-bind="dxToolbar: { items: items }"></div>');
 

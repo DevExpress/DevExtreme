@@ -4,7 +4,7 @@ const ko = require('knockout');
 require('ui/tree_list');
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 const testArray = [
     { Id: 1, Head_ID: 0, Name: 'Name1' },

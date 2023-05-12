@@ -4,7 +4,7 @@ const { logger } = require('core/utils/console');
 
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.test('wrapped value', function(assert) {
     const observableValue = ko.observable(3);

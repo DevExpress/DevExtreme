@@ -3,7 +3,7 @@ const noop = require('core/utils/common').noop;
 const ko = require('knockout');
 const KoTemplate = require('integration/knockout/template').KoTemplate;
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.module('rendering', {
     beforeEach: function() {

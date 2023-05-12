@@ -4,7 +4,7 @@ const $ = require('jquery');
 const ko = require('knockout');
 const dataUtils = require('core/element_data');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 const FIXTURE_ELEMENT = $('#qunit-fixture');
 

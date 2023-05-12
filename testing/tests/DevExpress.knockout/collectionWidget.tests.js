@@ -6,7 +6,7 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('integration/knockout');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =

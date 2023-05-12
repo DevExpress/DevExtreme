@@ -2,7 +2,7 @@ const $ = require('jquery');
 const ajax = require('core/utils/ajax');
 const compareVersion = require('core/utils/version').compare;
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.module('sendRequest', {
     beforeEach: function() {

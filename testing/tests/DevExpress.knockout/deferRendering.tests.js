@@ -6,7 +6,7 @@ const dataUtils = require('core/element_data');
 
 require('ui/defer_rendering');
 
-require('../../helpers/skipScpTest.js');
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =
