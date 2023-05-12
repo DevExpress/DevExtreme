@@ -1089,6 +1089,30 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         assert.strictEqual(onContentReady.callCount, 1, 'onContentReady did not fire after Popup render');
     });
+
+    [false, true].forEach((opened) => {
+        ['startDateBox', 'endDateBox'].forEach((dateBox) => {
+            QUnit.test(`Calendar enter handler should ${opened ? '' : 'not'} fire on enter key when Popup is ${opened ? '' : 'not'} opened and ${dateBox} is focused`, function(assert) {
+                this.reinit({
+                    opened: true
+                });
+
+                const dateBoxInstance = dateBox === 'startDateBox' ? this.instance.getStartDateBox() : this.instance.getEndDateBox();
+                const calendar = this.getCalendar();
+                const calendarEnterHandler = sinon.spy(calendar, '_enterKeyHandler');
+                const $input = $(dateBoxInstance.field());
+                const keyboard = keyboardMock($input);
+
+                if(!opened) {
+                    this.instance.close();
+                }
+
+                keyboard.press('enter');
+
+                assert.strictEqual(calendarEnterHandler.called, opened, 'onContentReady fired after DateRangeBox render');
+            });
+        });
+    });
 });
 
 QUnit.module('Events', moduleConfig, () => {
