@@ -786,6 +786,22 @@ class DateRangeBox extends Editor {
                 this.option('isValid', !value.length && !otherErrors.length);
                 break;
             }
+            case 'isValid': {
+                if(this._shouldSkipIsValidChange) {
+                    super._optionChanged(args);
+                    return;
+                }
+                const isValid = value && !this.option('_internalValidationErrors').length;
+
+                this._shouldSkipIsValidChange = true;
+                this.option('isValid', isValid);
+                this._shouldSkipIsValidChange = false;
+
+                if(isValid === value) {
+                    super._optionChanged(args);
+                }
+                break;
+            }
             case 'validationErrors': {
                 if(this._shouldSkipErrorsChange) {
                     super._optionChanged(args);
