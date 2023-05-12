@@ -80,7 +80,7 @@ export type ValueChangedEvent =
     & ValueChangedInfo;
 
 /** @public */
-export type DateRangeDisabledDate = ComponentDisabledDate<dxDateRangeBox>;
+export type DisabledDate = ComponentDisabledDate<dxDateRangeBox>;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
