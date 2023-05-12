@@ -1,4 +1,5 @@
 define(function(require) {
+    require('../../helpers/skipScpTest.js');
     require('bundles/dx.all.js');
 
     QUnit.module('config.useJQuery');
