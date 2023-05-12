@@ -2017,7 +2017,7 @@ QUnit.module('events', moduleSetup, () => {
 
         const $item = $element.find(toSelector(LIST_ITEM_CLASS));
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick(10);
         getListKeyboard($element).keyDown('enter');
     });
@@ -3626,7 +3626,8 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerdown');
+        let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerup');
+        this.clock.tick(10);
         let keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
         this.clock.tick(10);
@@ -3637,7 +3638,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(instance.scrollTop(), itemHeight, 'item scrolled to visible area at bottom when down arrow were pressed');
 
         $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(1);
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick(10);
         keyboard = getListKeyboard($element);
         keyboard.keyDown('up');
@@ -3662,7 +3663,7 @@ QUnit.module('keyboard navigation', {
         const $selectAllItem = $element.find('.dx-list-select-all');
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
 
-        $firstItem.trigger('dxpointerdown');
+        $firstItem.trigger('dxpointerup');
         this.clock.tick(10);
 
         keyboard.keyDown('up');
@@ -3696,7 +3697,7 @@ QUnit.module('keyboard navigation', {
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
         const $lastItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
 
-        $firstItem.trigger('dxpointerdown');
+        $firstItem.trigger('dxpointerup');
         this.clock.tick(10);
 
         keyboard.keyDown('up');
@@ -3752,7 +3753,7 @@ QUnit.module('keyboard navigation', {
         instance.option('height', itemHeight * 2.5);
         assert.equal(instance.scrollTop(), 0, 'list scrolled to zero');
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick(10);
 
         assert.equal(instance.scrollTop(), 0, 'item was not scrolled to half-visible item by click on it');
@@ -4168,7 +4169,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 const $item_2 = $(helper.getItems().eq(2));
                 eventsEngine.trigger($item_2, 'dxclick');
-                eventsEngine.trigger($item_2, 'dxpointerdown');
+                eventsEngine.trigger($item_2, 'dxpointerup');
                 this.clock.tick(10);
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
@@ -4187,7 +4188,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 const $item_1 = $(helper.getItems().eq(1));
                 eventsEngine.trigger($item_1, 'dxclick');
-                eventsEngine.trigger($item_1, 'dxpointerdown');
+                eventsEngine.trigger($item_1, 'dxpointerup');
                 this.clock.tick(10);
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
@@ -4241,7 +4242,7 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
         });
 
         QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('mouseup'));
             $(this.root).trigger(this.createEvent('touchstart'));
 
             this.clock.tick(10);

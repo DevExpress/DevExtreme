@@ -47,7 +47,16 @@ export type FilterDescriptor = any;
  * @public
  */
 export type LangParams = {
+  /**
+   * @docid
+   * @public
+   */
   locale: string;
+  /**
+   * @docid
+   * @public
+   * @type object
+   */
   collatorOptions?: Intl.CollatorOptions;
 };
  /**
