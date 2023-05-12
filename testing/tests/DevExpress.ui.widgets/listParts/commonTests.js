@@ -740,8 +740,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         }
 
         const groupHeaderElement = this.element.find('.' + LIST_GROUP_HEADER_CLASS);
-        groupHeaderElement.trigger('dxpointerup');
-        this.clock.tick(10);
+        groupHeaderElement.trigger('dxpointerdown');
 
         assert.ok(instance.downInkRippleHandler.calledOnce);
 

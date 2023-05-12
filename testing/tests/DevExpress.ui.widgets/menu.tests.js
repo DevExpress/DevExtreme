@@ -784,7 +784,7 @@ QUnit.module('Menu tests', {
         submenu = getSubMenuInstance($itemA);
         assert.ok(submenu._overlay.option('visible'));
 
-        $(document).trigger('dxpointerup'); // it needs to trigger closeOnOutsideClick
+        $(document).trigger('dxpointerdown'); // it needs to trigger closeOnOutsideClick
         assert.ok(submenu._overlay.option('visible'));
         assert.equal(i, 1, 'event triggered');
     });
@@ -879,7 +879,7 @@ QUnit.module('Menu tests', {
         const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($rootItem).trigger('dxclick');
-        $(document).trigger('dxpointerup');
+        $(document).trigger('dxpointerdown');
 
         assert.equal(hiddenHandler.callCount, 1, 'only 1 submenu was hidden');
     });
@@ -2573,7 +2573,7 @@ QUnit.module('adaptivity: behavior', {
         const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
-        $(document).trigger('dxpointerup');
+        $(document).trigger('dxpointerdown');
 
         assert.ok($treeview.is(':hidden'), 'treeview is hidden');
         assert.notOk($button.hasClass(DX_STATE_ACTIVE_CLASS), 'button has no active class');

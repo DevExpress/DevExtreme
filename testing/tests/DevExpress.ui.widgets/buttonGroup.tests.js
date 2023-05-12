@@ -319,12 +319,14 @@ QUnit.module('Events', () => {
         createButtonGroup() {
             if(this.isItemClickInInitialOption) {
                 this.buttonGroup = $('#widget').dxButtonGroup({
+                    focusStateEnabled: true,
                     items: [{ text: 'item1', disabled: this.isItemDisabled, custom: 1 }],
                     disabled: this.isDisabled,
                     onItemClick: this.handler
                 }).dxButtonGroup('instance');
             } else {
                 this.buttonGroup = $('#widget').dxButtonGroup({
+                    focusStateEnabled: true,
                     items: [{ text: 'item1', disabled: this.isItemDisabled, custom: 1 }],
                     disabled: this.isDisabled
                 }).dxButtonGroup('instance');
