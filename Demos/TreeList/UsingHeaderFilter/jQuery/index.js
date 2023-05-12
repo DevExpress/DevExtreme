@@ -31,7 +31,7 @@ $(() => {
             searchExpr: ['City', 'State'],
           },
         },
-      }, 'Mobile_Phone', {
+      }, 'State', 'Mobile_Phone', {
         dataField: 'Hire_Date',
         dataType: 'date',
       },

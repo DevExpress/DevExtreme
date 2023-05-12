@@ -41,6 +41,9 @@
         </DxHeaderFilter>
       </DxColumn>
       <DxColumn
+        data-field="State"
+      />
+      <DxColumn
         data-field="HomePhone"
       />
       <DxColumn

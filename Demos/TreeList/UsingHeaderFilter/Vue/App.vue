@@ -43,6 +43,9 @@
         </DxHeaderFilter>
       </DxColumn>
       <DxColumn
+        data-field="State"
+      />
+      <DxColumn
         data-field="Mobile_Phone"
       />
       <DxColumn

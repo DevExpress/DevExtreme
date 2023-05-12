@@ -35,6 +35,7 @@ class App extends React.Component {
               editorOptions={searchEditorOptions} />
           </HeaderFilter>
         </Column>
+        <Column dataField="State" />
         <Column dataField="HomePhone" />
         <Column dataField="HireDate" dataType="date" />
       </DataGrid>

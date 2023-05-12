@@ -40,6 +40,7 @@ class App extends React.Component {
               editorOptions={searchEditorOptions} />
           </HeaderFilter>
         </Column>
+        <Column dataField="State" />
         <Column dataField="Mobile_Phone" />
         <Column dataField="Hire_Date" dataType="date" />
       </TreeList>
