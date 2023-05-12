@@ -96,7 +96,7 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
        * @type_function_param1_field component:dxDateRangeBox
        * @public
        */
-    disabledDates?: Array<Date> | ((data: DateRangeDisabledDate) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null

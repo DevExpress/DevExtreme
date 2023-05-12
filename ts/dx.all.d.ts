@@ -10783,7 +10783,7 @@ declare module DevExpress.ui {
       /**
        * [descr:Properties.disabledDates]
        */
-      disabledDates?: Array<Date> | ((data: DateRangeDisabledDate) => boolean);
+      disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
