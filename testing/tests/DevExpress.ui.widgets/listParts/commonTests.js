@@ -4242,7 +4242,7 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
         });
 
         QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('mouseup'));
             $(this.root).trigger(this.createEvent('touchstart'));
 
             this.clock.tick(10);
