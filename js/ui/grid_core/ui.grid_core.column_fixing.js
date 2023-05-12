@@ -243,6 +243,10 @@ const baseFixedColumns = {
         return $cell;
     },
 
+    _getContent: function(isFixedTableRendering) {
+        return isFixedTableRendering ? this._fixedTableElement?.parent() : this.callBase.apply(this, arguments);
+    },
+
     _wrapTableInScrollContainer: function($table, isFixedTableRendering) {
         const $scrollContainer = this.callBase.apply(this, arguments);
 
