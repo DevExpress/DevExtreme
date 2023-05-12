@@ -38,6 +38,7 @@ const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
 const POP_ANIMATION_FROM = 0.6;
@@ -945,8 +946,14 @@ const Calendar = Editor.inherit({
         fx.stop(this._$viewsWrapper, true);
         const { viewsCount } = this.option();
 
+        this._toggleGestureCoverCursor('grabbing');
+
         e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
         e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
+    },
+
+    _toggleGestureCoverCursor: function(cursor) {
+        $(`.${GESTURE_COVER_CLASS}`).css('cursor', cursor);
     },
 
     _getRequiredView: function(name) {
@@ -970,6 +977,8 @@ const Calendar = Editor.inherit({
     },
 
     _swipeEndHandler: function(e) {
+        this._toggleGestureCoverCursor('auto');
+
         const { currentDate, rtlEnabled } = this.option();
         const targetOffset = e.event.targetOffset;
         const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
