@@ -44,10 +44,11 @@ const commonEnvironment = {
                 `<div id="dateBox"></div>
                 <div id="numberBox"></div>
                 <div id="dateBoxWithPicker"></div>
-                <div id="widthRootStyle" style="width: 300px;"></div>
+                <div id="widthRootStyle"></div>
                 <div id="calendar"></div>`;
 
         $('#qunit-fixture').html(markup);
+        $('#widthRootStyle').css({ width: '300px' });
     },
 
     afterEach: function() {
