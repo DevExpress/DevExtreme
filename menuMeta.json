@@ -2443,7 +2443,11 @@
             "Title": "Drill-Down Chart",
             "Name": "ChartsDrillDown",
             "Widget": "Charts",
-            "DemoType": "Viz"
+            "DemoType": "Viz",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/WorldPopulationDataController.cs",
+              "/Models/SampleData/WorldPopulationData.cs"
+            ]
           },
           {
             "Title": "Side-by-Side Full-Stacked Bar",
