@@ -106,6 +106,12 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     adaptivityEnabled?: boolean;
     /**
      * @docid
+     * @default "Value is out of range"
+     * @public
+     */
+    dateOutOfRangeMessage?: string;
+    /**
+     * @docid
      * @default null
      * @type_function_param1 data:object
      * @type_function_param1_field component:dxDateBox
@@ -124,6 +130,12 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
      * @public
      */
     interval?: number;
+    /**
+     * @docid
+     * @default "Value must be a date or time"
+     * @public
+     */
+    invalidDateMessage?: string;
     /**
      * @docid
      * @default ''
@@ -206,12 +218,6 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     cancelButtonText?: string;
     /**
      * @docid
-     * @default "Value is out of range"
-     * @public
-     */
-    dateOutOfRangeMessage?: string;
-    /**
-     * @docid
      * @default undefined
      * @public
      */
@@ -222,12 +228,6 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @public
      */
     displayFormat?: Format;
-    /**
-     * @docid
-     * @default "Value must be a date or time"
-     * @public
-     */
-    invalidDateMessage?: string;
     /**
      * @docid
      * @default undefined

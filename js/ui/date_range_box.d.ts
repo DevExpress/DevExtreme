@@ -122,6 +122,12 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     endDateName?: string;
     /**
+     * @docid dxDateRangeBoxOptions.endDateOutOfRangeMessage
+     * @default "End date is out of range"
+     * @public
+     */
+    endDateOutOfRangeMessage?: string;
+    /**
      * @docid dxDateRangeBoxOptions.endDatePlaceholder
      * @default ""
      * @public
@@ -133,6 +139,18 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      * @public
      */
     endDateText?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.invalidEndDateMessage
+     * @default "End value must be a date"
+     * @public
+     */
+    invalidEndDateMessage?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.invalidStartDateMessage
+     * @default "Start value must be a date"
+     * @public
+     */
+    invalidStartDateMessage?: string;
     /**
      * @docid dxDateRangeBoxOptions.multiView
      * @default true
@@ -171,6 +189,12 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      * @public
      */
     startDateName?: string;
+    /**
+     * @docid dxDateRangeBoxOptions.startDateOutOfRangeMessage
+     * @default "Start date is out of range"
+     * @public
+     */
+    startDateOutOfRangeMessage?: string;
     /**
      * @docid dxDateRangeBoxOptions.startDatePlaceholder
      * @default ""
