@@ -3362,7 +3362,10 @@ if(devices.real().deviceType === 'desktop') {
     }, () => {
         [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, function() {
-                helper.createWidget({ opened: true, searchEnabled: searchEnabled });
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled
+                });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
@@ -3375,7 +3378,6 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 const listItemContainerAttributes = {
-                    'aria-label': 'No data to display',
                     tabindex: '0',
                 };
 
@@ -3462,7 +3464,10 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, function() {
-                helper.createWidget({ opened: false, searchEnabled: searchEnabled });
+                helper.createWidget({
+                    opened: false,
+                    searchEnabled
+                });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
 
@@ -3481,13 +3486,13 @@ if(devices.real().deviceType === 'desktop') {
                 const $list = $(`.${LIST_CLASS}`);
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '0', 'aria-label': 'No data to display' });
+                helper.checkAttributes($scrollView, { tabindex: '0' });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
                 helper.checkAttributes($scrollView, { tabindex: '0', 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '0', 'aria-label': 'No data to display' });
+                helper.checkAttributes($scrollView, { tabindex: '0' });
             });
         });
     });

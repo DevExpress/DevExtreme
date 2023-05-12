@@ -5926,11 +5926,11 @@ if(devices.real().deviceType === 'desktop') {
     }, () => {
         [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: true, searchEnabled: searchEnabled });
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled
+                });
 
-                const listItemContainerAttrs = {
-                    'aria-label': 'No data to display',
-                };
                 const listAttributes = {
                     id: helper.widget._listId,
                     role: 'group',
@@ -5940,7 +5940,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
 
                 const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
-                helper.checkAttributes($listItemContainer, listItemContainerAttrs, 'scrollview content');
+                helper.checkAttributes($listItemContainer, {}, 'scrollview content');
 
                 const inputAttributes = {
                     role: 'combobox',
@@ -5970,7 +5970,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 listAttributes.id = helper.widget._listId;
                 helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
-                helper.checkAttributes($listItemContainer, listItemContainerAttrs, 'scrollview content');
+                helper.checkAttributes($listItemContainer, {}, 'scrollview content');
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
@@ -5986,7 +5986,11 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: false, deferRendering: true, searchEnabled: searchEnabled });
+                helper.createWidget({
+                    opened: false,
+                    deferRendering: true,
+                    searchEnabled
+                });
 
                 const inputAttributes = {
                     role: 'combobox',
@@ -6023,13 +6027,13 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({ opened: true });
                 const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
 
-                helper.checkAttributes($listItemContainer, { 'aria-label': 'No data to display' });
+                helper.checkAttributes($listItemContainer, {});
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
                 helper.checkAttributes($listItemContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($listItemContainer, { 'aria-label': 'No data to display' });
+                helper.checkAttributes($listItemContainer, {});
             });
         });
     });

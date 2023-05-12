@@ -662,10 +662,10 @@ export const ListBase = CollectionWidget.inherit({
         };
         this.setAria(elementAria, this.$element());
 
-        this._setListAriaLabel();
+        this._setListAria();
     },
 
-    _setListAriaLabel() {
+    _setListAria() {
         const { items } = this.option();
 
         const listArea = items?.length ? {
@@ -673,7 +673,7 @@ export const ListBase = CollectionWidget.inherit({
             label: 'Items'
         } : {
             role: undefined,
-            label: this.option('noDataText')
+            label: undefined
         };
 
         this.setAria(listArea);
