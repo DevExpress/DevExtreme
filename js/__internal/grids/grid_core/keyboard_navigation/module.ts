@@ -553,11 +553,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       ) {
         this._selectionController.startSelectionWithCheckboxes();
       }
-      const isSelectableRow = !$target.hasClass(EMPTY_ROWS_VIEW_CLASS) && (
-        isFocusedRowElement
+      const isSelectableRow = isFocusedRowElement
         || $target.parent().hasClass(DATA_ROW_CLASS)
         || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))
-      );
+           && !$target.hasClass(EMPTY_ROWS_VIEW_CLASS);
       if (isSelectableRow) {
         this._selectionController.changeItemSelection(rowIndex, {
           shift: eventArgs.shift,
