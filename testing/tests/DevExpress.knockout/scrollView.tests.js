@@ -4,7 +4,7 @@ import ko from 'knockout';
 import scrollView from 'ui/scroll_view';
 import 'integration/knockout';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =

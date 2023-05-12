@@ -10,7 +10,7 @@ import { Deferred } from 'core/utils/deferred';
 import 'ui/button';
 import 'integration/knockout';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 

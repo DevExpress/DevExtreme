@@ -2,7 +2,7 @@ import '../DevExpress.ui.widgets/box.markup.tests.js';
 import Box from 'ui/box';
 import DOMAdapter from 'core/dom_adapter';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 const BOX_ITEM_CLASS = 'dx-box-item';
 

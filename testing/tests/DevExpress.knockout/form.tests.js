@@ -12,7 +12,7 @@ import 'ui/select_box';
 import 'ui/tag_box';
 import 'integration/knockout';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(() => {
     const markup =

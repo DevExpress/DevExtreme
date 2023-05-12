@@ -4,7 +4,7 @@ import ko from 'knockout';
 import 'integration/knockout';
 import 'ui/drop_down_box';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =

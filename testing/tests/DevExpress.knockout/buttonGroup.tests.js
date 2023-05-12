@@ -4,7 +4,7 @@ import ko from 'knockout';
 import 'ui/button_group';
 import 'integration/knockout';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.module('Render', () => {
     // T831205

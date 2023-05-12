@@ -9,7 +9,7 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid';
 import 'integration/knockout';
 
-import '../../helpers/skipScpTest.js';
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
 QUnit.testStart(function() {
     const markup =
