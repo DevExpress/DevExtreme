@@ -2905,4 +2905,42 @@ QUnit.module('Validation', {
             assert.strictEqual(this.instance.option('isValid'), false, 'custom validation is failed');
         });
     });
+
+    QUnit.module('value clear', () => {
+        QUnit.test('clear button press should raise external validation', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            const $clearButton = this.$element.find(`.${CLEAR_BUTTON}`);
+            $clearButton.trigger('dxclick');
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
+        });
+
+        QUnit.test('reset method call should raise external validation', function(assert) {
+            this.reinit({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            this.instance.reset();
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
+        });
+    });
 });
