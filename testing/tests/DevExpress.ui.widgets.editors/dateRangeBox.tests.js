@@ -2681,14 +2681,10 @@ QUnit.module('Validation', {
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
             QUnit.module(dateBoxName, {
                 beforeEach: function() {
-                    moduleConfig.beforeEach.apply(this, arguments);
                     this.dateBox = dateBoxName === 'startDateBox'
                         ? getStartDateBoxInstance(this.instance)
                         : getEndDateBoxInstance(this.instance);
                     this.$dateBoxInput = $(this.dateBox.field());
-                },
-                afterEach: function() {
-                    moduleConfig.afterEach.apply(this, arguments);
                 }
             }, () => {
                 QUnit.test('internal validation fail should set dateRangeBox isValid to false', function(assert) {
@@ -2763,8 +2759,6 @@ QUnit.module('Validation', {
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
             QUnit.module(dateBoxName, {
                 beforeEach: function() {
-                    moduleConfig.beforeEach.apply(this, arguments);
-
                     this.reinit({
                         value: [new Date('2023/5/5'), new Date('2023/5/5')]
                     });
@@ -2774,9 +2768,6 @@ QUnit.module('Validation', {
                         : getEndDateBoxInstance(this.instance);
                     this.$dateBoxInput = $(this.dateBox.field());
                     this.$dateBoxSubmitInput = $(this.dateBox.$element().find('input[type=hidden]'));
-                },
-                afterEach: function() {
-                    moduleConfig.afterEach.apply(this, arguments);
                 }
             }, () => {
                 QUnit.test('submit value should be updated if internal validation is failed', function(assert) {
@@ -2866,15 +2857,11 @@ QUnit.module('Validation', {
 
     QUnit.module('applyValueMode="useButtons"', {
         beforeEach: function() {
-            moduleConfig.beforeEach.apply(this, arguments);
-
             this.instance.option({
                 applyValueMode: 'useButtons',
-                opened: true
+                opened: true,
+                value: [new Date('2023/5/5'), null]
             });
-        },
-        afterEach: function() {
-            moduleConfig.afterEach.apply(this, arguments);
         },
         clickApplyValueButton: function() {
             $(APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
@@ -2898,11 +2885,11 @@ QUnit.module('Validation', {
                 validationRules: [{
                     type: 'custom',
                     validationCallback: () => false,
+                    message: 'external error'
                 }]
             });
 
-            this.instance.open();
-            $(`.${CALENDAR_CELL_CLASS}`).eq(0).click();
+            $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
             $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
             assert.strictEqual(this.instance.option('isValid'), false, 'custom validation is failed');
@@ -2919,11 +2906,11 @@ QUnit.module('Validation', {
             this.$element.dxValidator({
                 validationRules: [{
                     type: 'custom',
-                    validationCallback: () => false
+                    validationCallback: () => false,
                 }]
             });
 
-            getClearButton(this.$element).eq(0).trigger('click');
+            getClearButton(this.$element).eq(0).trigger('dxclick');
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
