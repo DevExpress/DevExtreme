@@ -2673,14 +2673,20 @@ QUnit.module('Validation', {
         });
 
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
-            QUnit.module(dateBoxName, () => {
-                QUnit.test('internal validation fail should set dateRangeBox isValid to false', function(assert) {
-                    const dateBox = dateBoxName === 'startDateBox'
+            QUnit.module(dateBoxName, {
+                beforeEach: function() {
+                    moduleConfig.beforeEach.apply(this, arguments);
+                    this.dateBox = dateBoxName === 'startDateBox'
                         ? getStartDateBoxInstance(this.instance)
                         : getEndDateBoxInstance(this.instance);
-
-                    const $dateBoxInput = $(dateBox.field());
-                    const keyboard = keyboardMock($dateBoxInput);
+                    this.$dateBoxInput = $(this.dateBox.field());
+                },
+                afterEach: function() {
+                    moduleConfig.afterEach.apply(this, arguments);
+                }
+            }, () => {
+                QUnit.test('internal validation fail should set dateRangeBox isValid to false', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
 
                     this.failInternalValidation(keyboard);
 
@@ -2688,12 +2694,7 @@ QUnit.module('Validation', {
                 });
 
                 QUnit.test('internal validation success should set dateRangeBox isValid to true if there is no other errors', function(assert) {
-                    const dateBox = dateBoxName === 'startDateBox'
-                        ? getStartDateBoxInstance(this.instance)
-                        : getEndDateBoxInstance(this.instance);
-
-                    const $dateBoxInput = $(dateBox.field());
-                    const keyboard = keyboardMock($dateBoxInput);
+                    const keyboard = keyboardMock(this.$dateBoxInput);
 
                     this.failInternalValidation(keyboard);
                     this.successInternalValidation(keyboard);
@@ -2705,12 +2706,7 @@ QUnit.module('Validation', {
                     this.instance.option('isValid', false);
                     this.instance.option('validationError', { message: 'external error' });
 
-                    const dateBox = dateBoxName === 'startDateBox'
-                        ? getStartDateBoxInstance(this.instance)
-                        : getEndDateBoxInstance(this.instance);
-
-                    const $dateBoxInput = $(dateBox.field());
-                    const keyboard = keyboardMock($dateBoxInput);
+                    const keyboard = keyboardMock(this.$dateBoxInput);
 
                     this.failInternalValidation(keyboard);
                     this.successInternalValidation(keyboard);
@@ -2719,12 +2715,7 @@ QUnit.module('Validation', {
                 });
 
                 QUnit.test('internal date validation fail should update dateRangeBox validationErrors', function(assert) {
-                    const dateBox = dateBoxName === 'startDateBox'
-                        ? getStartDateBoxInstance(this.instance)
-                        : getEndDateBoxInstance(this.instance);
-
-                    const $dateBoxInput = $(dateBox.field());
-                    const keyboard = keyboardMock($dateBoxInput);
+                    const keyboard = keyboardMock(this.$dateBoxInput);
 
                     this.failInternalValidation(keyboard);
 
@@ -2737,12 +2728,7 @@ QUnit.module('Validation', {
                     const externalError = { message: 'external validation failed' };
                     this.instance.option('validationError', externalError);
 
-                    const dateBox = dateBoxName === 'startDateBox'
-                        ? getStartDateBoxInstance(this.instance)
-                        : getEndDateBoxInstance(this.instance);
-
-                    const $dateBoxInput = $(dateBox.field());
-                    const keyboard = keyboardMock($dateBoxInput);
+                    const keyboard = keyboardMock(this.$dateBoxInput);
 
                     this.failInternalValidation(keyboard);
 
@@ -2755,12 +2741,7 @@ QUnit.module('Validation', {
                     const externalError = { message: 'external validation failed' };
                     this.instance.option('validationError', externalError);
 
-                    const dateBox = dateBoxName === 'startDateBox'
-                        ? getStartDateBoxInstance(this.instance)
-                        : getEndDateBoxInstance(this.instance);
-
-                    const $dateBoxInput = $(dateBox.field());
-                    const keyboard = keyboardMock($dateBoxInput);
+                    const keyboard = keyboardMock(this.$dateBoxInput);
 
                     this.failInternalValidation(keyboard);
                     this.successInternalValidation(keyboard);
