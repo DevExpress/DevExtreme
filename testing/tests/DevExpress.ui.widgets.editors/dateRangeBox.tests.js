@@ -2752,4 +2752,43 @@ QUnit.module('Validation', {
             });
         });
     });
+
+    QUnit.module('submit value', () => {
+        ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+            QUnit.module(dateBoxName, {
+                beforeEach: function() {
+                    moduleConfig.beforeEach.apply(this, arguments);
+
+                    this.reinit({
+                        value: [new Date('2023/5/5'), new Date('2023/5/5')]
+                    });
+
+                    this.dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+                    this.$dateBoxInput = $(this.dateBox.field());
+                    this.$dateBoxSubmitInput = $(this.dateBox.$element().find('input[type=hidden]'));
+                },
+                afterEach: function() {
+                    moduleConfig.afterEach.apply(this, arguments);
+                }
+            }, () => {
+                QUnit.test('submit value should be updated if internal validation is failed', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+
+                    assert.strictEqual(this.$dateBoxSubmitInput.val(), '2023-05-05', 'submit value is updated');
+                });
+
+                QUnit.test('submit value should be updated if external validation is failed', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.raiseExternalValidation(keyboard);
+
+                    assert.strictEqual(this.$dateBoxSubmitInput.val(), '2023-05-05', 'submit value is updated');
+                });
+            });
+        });
+    });
 });
