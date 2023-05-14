@@ -368,16 +368,14 @@ class DateRangeBox extends Editor {
         });
     }
 
-    _internalValidationErrorsChangedHandler({ value, previousValue }) {
-        const allInternalErrors = this.option('_internalValidationErrors');
+    _syncValidationErrors(optionName, newPartialErrors, previousPartialErrors) {
+        newPartialErrors ||= [];
+        previousPartialErrors ||= [];
 
-        // NOTE: "partial" here means that we have only internal errors for one of the dateBoxes
-        const newPartialInternalErrors = value || [];
-        const previousPartialInternalErrors = previousValue || [];
+        const allErrors = this.option(optionName) || [];
+        const otherErrors = this._getRestErrors(allErrors, previousPartialErrors);
 
-        const otherErrors = this._getRestErrors(allInternalErrors, previousPartialInternalErrors);
-
-        this.option('_internalValidationErrors', [...otherErrors, ...newPartialInternalErrors]);
+        this.option(optionName, [...otherErrors, ...newPartialErrors]);
     }
 
     _getDateBoxConfig() {
@@ -467,12 +465,12 @@ class DateRangeBox extends Editor {
                 this._raiseCloseAction();
             },
             onOptionChanged: (args) => {
-                const { name, value } = args;
+                const { name, value, previousValue } = args;
                 if(name === 'text') {
                     this.option('startDateText', value);
                 }
                 if(name === 'validationErrors') {
-                    this._internalValidationErrorsChangedHandler(args);
+                    this._syncValidationErrors('_internalValidationErrors', value, previousValue);
                 }
             },
             todayButtonText: options.todayButtonText,
@@ -511,12 +509,12 @@ class DateRangeBox extends Editor {
                 }
             },
             onOptionChanged: (args) => {
-                const { name, value } = args;
+                const { name, value, previousValue } = args;
                 if(name === 'text') {
                     this.option('endDateText', value);
                 }
                 if(name === 'validationErrors') {
-                    this._internalValidationErrorsChangedHandler(args);
+                    this._syncValidationErrors('_internalValidationErrors', value, previousValue);
                 }
             },
             showClearButton: false,
@@ -779,13 +777,10 @@ class DateRangeBox extends Editor {
                 super._optionChanged(args);
                 break;
             case '_internalValidationErrors': {
-                const allErrors = this.option('validationErrors') || [];
+                this._syncValidationErrors('validationErrors', value, previousValue);
 
-                const newInternalErrors = value || [];
-                const previousInternalErrors = previousValue || [];
-                const otherErrors = this._getRestErrors(allErrors, previousInternalErrors);
-                this.option('validationErrors', [ ...otherErrors, ...newInternalErrors ]);
-                this.option('isValid', !value.length && !otherErrors.length);
+                const validationErrors = this.option('validationErrors');
+                this.option('isValid', !validationErrors?.length);
                 break;
             }
             case 'isValid': {
@@ -812,8 +807,8 @@ class DateRangeBox extends Editor {
                 this._shouldSkipErrorsChange = true;
                 const internalValidationErrors = this.option('_internalValidationErrors') || [];
                 const allErrors = value || [];
-                const otherErrors = this._getRestErrors(allErrors, internalValidationErrors);
-                this.option('validationErrors', [...otherErrors, ...internalValidationErrors]);
+                const externalErrors = this._getRestErrors(allErrors, internalValidationErrors);
+                this.option('validationErrors', [...externalErrors, ...internalValidationErrors]);
                 this._shouldSkipErrorsChange = false;
                 break;
             }
