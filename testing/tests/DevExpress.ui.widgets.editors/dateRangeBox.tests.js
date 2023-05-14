@@ -2873,6 +2873,9 @@ QUnit.module('Validation', {
                 opened: true
             });
         },
+        afterEach: function() {
+            moduleConfig.afterEach.apply(this, arguments);
+        },
         clickApplyValueButton: function() {
             $(APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
         }
@@ -2920,8 +2923,7 @@ QUnit.module('Validation', {
                 }]
             });
 
-            const $clearButton = this.$element.find(`.${CLEAR_BUTTON}`);
-            $clearButton.trigger('dxclick');
+            getClearButton(this.$element).eq(0).trigger('click');
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
