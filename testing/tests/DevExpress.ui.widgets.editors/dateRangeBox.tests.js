@@ -2222,6 +2222,19 @@ QUnit.module('Validation', {
         assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
     });
 
+    QUnit.test('dateRangeBox should not be re-validated after readOnly option change', function(assert) {
+        this.$element.dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback: () => false
+            }]
+        });
+
+        this.instance.option('readOnly', true);
+
+        assert.strictEqual(this.instance.option('isValid'), true, 'validation is not failed');
+    });
+
     QUnit.module('validation message', {
         beforeEach: function() {
             this.reinit({
