@@ -33,6 +33,8 @@ const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
 const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 const INVALID_CLASS = 'dx-invalid';
 
+const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
+
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
 const getEndDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getEndDateBox();
@@ -2789,6 +2791,99 @@ QUnit.module('Validation', {
                     assert.strictEqual(this.$dateBoxSubmitInput.val(), '2023-05-05', 'submit value is updated');
                 });
             });
+        });
+    });
+
+    QUnit.module('min-max validation', () => {
+        QUnit.test('validation should be success if min/max is specified on init', function(assert) {
+            this.reinit({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/8'),
+                value: [new Date('2023/4/6'), new Date('2023/4/7')]
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'validation is success');
+        });
+
+        QUnit.test('validation should be success if min/max is specified on runtime', function(assert) {
+            this.reinit({ value: [new Date('2023/4/6'), new Date('2023/4/7')] });
+
+
+            this.instance.option({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'validation is success');
+        });
+
+        QUnit.test('validation should be not failed if value is out of range specified on init', function(assert) {
+            this.reinit({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')],
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'validation is success');
+        });
+
+        QUnit.test('validation should be failed if value is out of range specified on runtime', function(assert) {
+            this.reinit({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            this.instance.option({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
+
+            const expectedErrors = [{ message: 'Start date is out of range' }, { message: 'End date is out of range' }];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors);
+        });
+
+        QUnit.test('validation should be failed after value change to the date out of range', function(assert) {
+            this.reinit({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            this.instance.option({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
+
+            const expectedErrors = [{ message: 'Start date is out of range' }, { message: 'End date is out of range' }];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors);
+        });
+    });
+
+    QUnit.module('applyValueMode="useButtons"', {
+        beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
+            this.instance.option({
+                applyValueMode: 'useButtons',
+                opened: true
+            });
+        },
+        clickApplyValueButton: function() {
+            $(APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
+        }
+    }, () => {
+        QUnit.test('should not raise validation error on "Ok" button click without date selecting', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                }]
+            });
+
+            $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.ok(this.instance.option('isValid'), 'dateBox is still valid');
         });
     });
 });
