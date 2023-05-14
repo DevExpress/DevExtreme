@@ -4,7 +4,9 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import Calendar from '../../../model/calendar';
-import { appendElementTo, setClassAttribute, setStyleAttribute } from '../../../helpers/domUtils';
+import {
+  appendElementTo, insertStylesheetRulesToPage, setClassAttribute, setStyleAttribute,
+} from '../../../helpers/domUtils';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -19,6 +21,21 @@ const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
 fixture.disablePageReloads`Calendar`
   .page(url(__dirname, '../../container.html'));
+
+test('Caption button text should be ellipsis when width is limit', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await insertStylesheetRulesToPage('#container { min-width: 0 }');
+
+  await testScreenshot(t, takeScreenshot, 'Calendar with limit width.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCalendar', {
+  width: 150,
+  value: new Date(2021, 9, 17),
+}));
 
 test('Grabbing cursor should be shown during swipe', async (t) => {
   const calendar = new Calendar('#container');
