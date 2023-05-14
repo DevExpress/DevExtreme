@@ -15,8 +15,42 @@ const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
+
 fixture.disablePageReloads`Calendar`
   .page(url(__dirname, '../../container.html'));
+
+test('Grabbing cursor should be shown during swipe', async (t) => {
+  const calendar = new Calendar('#container');
+
+  await calendar.showGestureCover();
+
+  const gestureCover = Selector(`.${GESTURE_COVER_CLASS}`);
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('auto');
+
+  await calendar.swipeStart();
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('grabbing');
+
+  await calendar.swipe(0.4);
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('grabbing');
+
+  await calendar.swipeEnd();
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('auto');
+}).before(async () => createWidget('dxCalendar', {
+  value: new Date(2021, 9, 17),
+}));
 
 test('Cells on month view should have hover state class after hover when zoomLevel has been changed from "year" to "month" by click on cell', async (t) => {
   const calendar = new Calendar('#container');

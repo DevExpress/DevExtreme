@@ -16,41 +16,41 @@ jobs:
     timeout-minutes: 15
 
     steps:
-    - name: Get sources
-      uses: actions/checkout@v3
+      - name: Get sources
+        uses: actions/checkout@v3
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '15'
 
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+      - name: Run npm install
+        run: npm install --no-audit --no-fund
 
-    - name: Build
-      env:
-        DEVEXTREME_TEST_CI: "true"
-        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: npm run build:dev
+      - name: Build
+        env:
+          DEVEXTREME_TEST_CI: "true"
+          DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+        run: npm run build:dev
 
-    - name: Zip artifacts
-      run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+      - name: Zip artifacts
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: artifacts.zip
-        retention-days: 1
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: devextreme-artifacts
+          path: artifacts.zip
+          retention-days: 1
 
   qunit-tests-timezones:
     needs: build
@@ -62,10 +62,6 @@ jobs:
       matrix:
         constel: [ 'misc', 'ui.editors', 'ui.grid', 'ui.scheduler' ]
         timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
-        include:
-          - useCsp: true
-          - constel: 'misc'
-            useCsp: false
 
     steps:
       - name: Get sources
@@ -80,7 +76,7 @@ jobs:
           timezone: ${{ matrix.timezone }}
           headless: 'true'
           useJQuery: 'false'
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-performance:
     needs: build
@@ -187,8 +183,6 @@ jobs:
           - useCsp: true
           - constel: 'export'
             useCsp: false
-          - constel: 'misc'
-            useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
 
@@ -206,6 +200,30 @@ jobs:
           headless: 'true'
           useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
 
+  qunit-tests-no-csp:
+    needs: build
+    runs-on: devextreme-shr2
+    name: ${{ matrix.constel }}-nocsp
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        constel: [ 'misc' ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          name: ${{ matrix.constel }}-nocsp
+          constel: ${{ matrix.constel }}
+          browser: 'chrome'
+          useJQuery: 'true'
+          headless: 'true'
+          useCsp: 'false'
+
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
@@ -214,7 +232,8 @@ jobs:
       qunit-tests-timezones,
       qunit-tests-performance,
       qunit-tests-mobile-and-shadow-dom,
-      qunit-tests-firefox
+      qunit-tests-firefox,
+      qunit-tests-no-csp
     ]
     if: always() && contains(needs.*.result, 'failure')
 

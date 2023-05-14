@@ -23,10 +23,10 @@ SystemJS.config({
 
 define(function(require, exports, module) {
     const cldrData = [
-        require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/de.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/da.json!json')
+        require('devextreme-cldr-data/ar.json!json'),
+        require('devextreme-cldr-data/ru.json!json'),
+        require('devextreme-cldr-data/de.json!json'),
+        require('devextreme-cldr-data/da.json!json')
     ];
 
     require('localization/globalize/core');
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 
     const ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');
 
-    const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
+    const likelySubtags = require('cldr-core/supplemental/likelySubtags.json!');
     Globalize.load(likelySubtags);
 
     cldrData.forEach(localeCldrData => {

@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('ui/accordion');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('accordion');
+} else {
+    QUnit.module.skip('accordion');
+}
+
 QUnit.testStart(function() {
     const markup =
         '<div id="templated-accordion" data-bind="dxAccordion: {\

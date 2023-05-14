@@ -1,12 +1,12 @@
-const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
-const numberingSystems = require('../../../node_modules/cldr-core/supplemental/numberingSystems.json!');
+const likelySubtags = require('cldr-core/supplemental/likelySubtags.json!');
+const numberingSystems = require('cldr-core/supplemental/numberingSystems.json!');
 const Globalize = require('globalize');
 
 const cldrData = [
-    require('../../../node_modules/devextreme-cldr-data/fa.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/de.json!json'),
+    require('devextreme-cldr-data/fa.json!json'),
+    require('devextreme-cldr-data/mr.json!json'),
+    require('devextreme-cldr-data/ar.json!json'),
+    require('devextreme-cldr-data/de.json!json'),
 ];
 
 Globalize.load(likelySubtags);
@@ -45,10 +45,11 @@ const commonEnvironment = {
                 `<div id="dateBox"></div>
                 <div id="numberBox"></div>
                 <div id="dateBoxWithPicker"></div>
-                <div id="widthRootStyle" style="width: 300px;"></div>
+                <div id="widthRootStyle"></div>
                 <div id="calendar"></div>`;
 
         $('#qunit-fixture').html(markup);
+        $('#widthRootStyle').css({ width: '300px' });
     },
 
     afterEach: function() {
