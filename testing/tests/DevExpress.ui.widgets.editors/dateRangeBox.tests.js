@@ -29,10 +29,12 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const CLEAR_BUTTON = 'dx-clear-button-area';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const STATE_HOVER_CLASS = 'dx-state-hover';
+
 const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
 const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 const INVALID_CLASS = 'dx-invalid';
 
+const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
@@ -2496,6 +2498,8 @@ QUnit.module('Validation', {
     });
 
     QUnit.module('internal validation', () => {
+        // NOTE: In DateRangeBox we always keep both internal and external validation errors.
+
         QUnit.test('validationErrors should have all internal validation errors combined', function(assert) {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             let keyboard = keyboardMock($startDateBoxInput);
@@ -2883,7 +2887,22 @@ QUnit.module('Validation', {
 
             $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
-            assert.ok(this.instance.option('isValid'), 'dateBox is still valid');
+            assert.strictEqual(this.instance.option('isValid'), true, 'dateBox is still valid');
+        });
+
+        QUnit.test('should raise external validation on value change by "Ok" button click', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                }]
+            });
+
+            this.instance.open();
+            $(`.${CALENDAR_CELL_CLASS}`).eq(0).click();
+            $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'custom validation is failed');
         });
     });
 });
