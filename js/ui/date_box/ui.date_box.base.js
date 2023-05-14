@@ -707,6 +707,7 @@ const DateBox = DropDownEditor.inherit({
             case 'dateOutOfRangeMessage':
             case 'adaptivityEnabled':
             case 'showAnalogClock':
+            case '_showValidationIcon':
                 break;
             default:
                 this.callBase.apply(this, arguments);
