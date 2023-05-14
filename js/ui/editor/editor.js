@@ -372,6 +372,8 @@ const Editor = Widget.inherit({
             case 'validationTooltipOptions':
                 this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
+            case '_showValidationMessage':
+                break;
             default:
                 this.callBase(args);
         }
