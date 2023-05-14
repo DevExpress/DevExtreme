@@ -31,6 +31,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const STATE_HOVER_CLASS = 'dx-state-hover';
 const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
 const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
+const INVALID_CLASS = 'dx-invalid';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -251,7 +252,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             validationStatus: 'valid',
             valueChangeEvent: 'change',
             _showValidationMessage: false,
-            _showValidationIcon: false
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -267,6 +267,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
                 opened: false,
+                _showValidationIcon: false
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -283,6 +284,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 dateOutOfRangeMessage: 'End date is out of range',
                 invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
+                _showValidationIcon: true
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -2361,10 +2363,10 @@ QUnit.module('validation', moduleConfig, () => {
                 .type('f')
                 .change();
 
-            assert.strictEqual(startDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is now shown');
+            assert.strictEqual(startDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is not shown');
         });
 
-        QUnit.test('end dateBox validation icon should not be shown even if internal validation is failed', function(assert) {
+        QUnit.test('end dateBox validation icon should be shown if internal validation is failed', function(assert) {
             const endDateBox = getEndDateBoxInstance(this.instance);
             const $endDateBoxInput = $(endDateBox.field());
             const keyboard = keyboardMock($endDateBoxInput);
@@ -2374,7 +2376,70 @@ QUnit.module('validation', moduleConfig, () => {
                 .type('f')
                 .change();
 
-            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is now shown');
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if external validation is failed', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            keyboard
+                .caret({ start: 0, end: 10 })
+                .type('5/5/2023')
+                .change();
+
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if start dateBox internal validation is failed', function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            const keyboard = keyboardMock($startDateBoxInput);
+
+            keyboard
+                .press('backspace')
+                .type('f')
+                .change();
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if external validation is failed after end dateBox second value change', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            keyboard
+                .caret({ start: 0, end: 10 })
+                .type('5/5/2023')
+                .change()
+                .caret({ start: 0, end: 10 })
+                .type('4/5/2023')
+                .change();
+
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
         });
 
         QUnit.test('validationErrors should have all internal validation errors combined', function(assert) {

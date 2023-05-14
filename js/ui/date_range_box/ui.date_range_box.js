@@ -419,7 +419,6 @@ class DateRangeBox extends Editor {
             onPaste: options.onPaste,
             onEnterKey: options.onEnterKey,
             _dateRangeBoxInstance: this,
-            _showValidationIcon: false,
             _showValidationMessage: false,
         };
 
@@ -483,7 +482,8 @@ class DateRangeBox extends Editor {
             label: options.startDateLabel,
             placeholder: options.startDatePlaceholder,
             inputAttr: options.startDateInputAttr,
-            name: options.startDateName
+            name: options.startDateName,
+            _showValidationIcon: false,
         };
     }
 
@@ -787,6 +787,8 @@ class DateRangeBox extends Editor {
                 break;
             }
             case 'isValid': {
+                this.getEndDateBox().option(name, value);
+
                 if(this._shouldSkipIsValidChange) {
                     super._optionChanged(args);
                     return;
