@@ -2185,7 +2185,26 @@ QUnit.module('Dimensions', moduleConfig, () => {
     });
 });
 
-QUnit.module('validation', moduleConfig, () => {
+QUnit.module('Validation', {
+    ...moduleConfig,
+    failInternalValidation(keyboard) {
+        keyboard
+            .press('backspace')
+            .type('f')
+            .change();
+    },
+    successInternalValidation(keyboard) {
+        keyboard
+            .press('backspace')
+            .change();
+    },
+    raiseExternalValidation(keyboard) {
+        keyboard
+            .caret({ start: 0, end: 10 })
+            .type('5/5/2023')
+            .change();
+    }
+}, () => {
     // TODO: research how to improve this behavior
     QUnit.test('validation should be failed after startDate change if "required" rule is used', function(assert) {
         this.reinit({ value: [null, null] });
@@ -2316,10 +2335,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(startDateBox.field());
             const keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const validationMessage = this.getValidationMessage(startDateBox.$element());
             assert.strictEqual(validationMessage, undefined, 'validationMessage is not rendered');
@@ -2332,10 +2348,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $endDateBoxInput = $(endDateBox.field());
             const keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const validationMessage = this.getValidationMessage(endDateBox.$element());
             assert.strictEqual(validationMessage, undefined, 'validationMessage is not rendered');
@@ -2350,18 +2363,51 @@ QUnit.module('validation', moduleConfig, () => {
             const startDateBox = getStartDateBoxInstance(this.instance);
             assert.strictEqual(startDateBox.option('validationMessagePosition'), validationMessagePosition, 'option is passed');
         });
+
+        QUnit.test('invalidStartDateMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('invalidStartDateMessage', newInvalidMessage);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('invalidEndDateMessage runtime change should pass new value to the end dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('invalidEndDateMessage', newInvalidMessage);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.strictEqual(endDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('startDateOutOfRangeMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('startDateOutOfRangeMessage', newInvalidMessage);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('endDateOutOfRangeMessage runtime change should pass new value to the end dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('endDateOutOfRangeMessage', newInvalidMessage);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.strictEqual(endDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
     });
 
-    QUnit.module('internal validation', () => {
+    QUnit.module('validation icon', () => {
         QUnit.test('start dateBox validation icon should not be shown even if internal validation is failed', function(assert) {
             const startDateBox = getStartDateBoxInstance(this.instance);
             const $startDateBoxInput = $(startDateBox.field());
             const keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             assert.strictEqual(startDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is not shown');
         });
@@ -2371,10 +2417,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $endDateBoxInput = $(endDateBox.field());
             const keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
             assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
@@ -2393,10 +2436,7 @@ QUnit.module('validation', moduleConfig, () => {
                 }]
             });
 
-            keyboard
-                .caret({ start: 0, end: 10 })
-                .type('5/5/2023')
-                .change();
+            this.raiseExternalValidation(keyboard);
 
             assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
             assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
@@ -2407,10 +2447,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(startDateBox.field());
             const keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const endDateBox = getEndDateBoxInstance(this.instance);
             assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
@@ -2441,23 +2478,19 @@ QUnit.module('validation', moduleConfig, () => {
             assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
             assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
         });
+    });
 
+    QUnit.module('internal validation', () => {
         QUnit.test('validationErrors should have all internal validation errors combined', function(assert) {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             let keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
             keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const expectedErrors = [
                 { message: 'Start value must be a date' },
@@ -2471,10 +2504,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $endDateBoxInput = $(endDateBox.field());
             const keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const externalError = [{ message: 'external error' }];
             this.instance.option('validationErrors', [externalError]);
@@ -2498,18 +2528,12 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             let keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
             keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .caret({ start: 0, end: 10 })
-                .type('5/5/2023')
-                .change();
+            this.raiseExternalValidation(keyboard);
 
             const { validationErrors } = this.instance.option();
             assert.strictEqual(validationErrors[0].message, 'external error', 'external error is added');
@@ -2520,10 +2544,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             const keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             assert.strictEqual(this.instance.option('isValid'), false, 'isValid is changed to false');
         });
@@ -2532,12 +2553,8 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             const keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change()
-                .press('backspace')
-                .change();
+            this.failInternalValidation(keyboard);
+            this.successInternalValidation(keyboard);
 
             assert.strictEqual(this.instance.option('isValid'), true, 'isValid is changed to true');
         });
@@ -2554,18 +2571,12 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             let keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(keyboard);
 
             const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
             keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .caret({ start: 0, end: 10 })
-                .type('5/5/2023')
-                .change();
+            this.raiseExternalValidation(keyboard);
 
             assert.strictEqual(this.instance.option('isValid'), false, 'isValid is still false');
         });
@@ -2582,20 +2593,13 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             let keyboard = keyboardMock($startDateBoxInput);
 
-            keyboard
-                .press('backspace')
-                .type('f')
-                .change()
-                .press('backspace')
-                .change();
+            this.failInternalValidation(keyboard);
+            this.successInternalValidation(keyboard);
 
             const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
             keyboard = keyboardMock($endDateBoxInput);
 
-            keyboard
-                .caret({ start: 0, end: 10 })
-                .type('5/5/2023')
-                .change();
+            this.raiseExternalValidation(keyboard);
 
             assert.strictEqual(this.instance.option('isValid'), false, 'isValid is set to false');
         });
@@ -2646,10 +2650,7 @@ QUnit.module('validation', moduleConfig, () => {
             const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
             const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
 
-            startDateBoxKeyboard
-                .press('backspace')
-                .type('f')
-                .change();
+            this.failInternalValidation(startDateBoxKeyboard);
 
             validator.validate();
 
@@ -2668,10 +2669,7 @@ QUnit.module('validation', moduleConfig, () => {
                     const $dateBoxInput = $(dateBox.field());
                     const keyboard = keyboardMock($dateBoxInput);
 
-                    keyboard
-                        .press('backspace')
-                        .type('f')
-                        .change();
+                    this.failInternalValidation(keyboard);
 
                     assert.deepEqual(this.instance.option('isValid'), false, 'isValid is updated');
                 });
@@ -2684,14 +2682,8 @@ QUnit.module('validation', moduleConfig, () => {
                     const $dateBoxInput = $(dateBox.field());
                     const keyboard = keyboardMock($dateBoxInput);
 
-                    keyboard
-                        .press('backspace')
-                        .type('f')
-                        .change();
-
-                    keyboard
-                        .press('backspace')
-                        .change();
+                    this.failInternalValidation(keyboard);
+                    this.successInternalValidation(keyboard);
 
                     assert.deepEqual(this.instance.option('isValid'), true, 'isValid is updated');
                 });
@@ -2707,14 +2699,8 @@ QUnit.module('validation', moduleConfig, () => {
                     const $dateBoxInput = $(dateBox.field());
                     const keyboard = keyboardMock($dateBoxInput);
 
-                    keyboard
-                        .press('backspace')
-                        .type('f')
-                        .change();
-
-                    keyboard
-                        .press('backspace')
-                        .change();
+                    this.failInternalValidation(keyboard);
+                    this.successInternalValidation(keyboard);
 
                     assert.strictEqual(this.instance.option('isValid'), false, 'isValid=false while there is an other error');
                 });
@@ -2727,10 +2713,7 @@ QUnit.module('validation', moduleConfig, () => {
                     const $dateBoxInput = $(dateBox.field());
                     const keyboard = keyboardMock($dateBoxInput);
 
-                    keyboard
-                        .press('backspace')
-                        .type('f')
-                        .change();
+                    this.failInternalValidation(keyboard);
 
                     const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
                     const expectedErrors = [{ message }];
@@ -2748,10 +2731,7 @@ QUnit.module('validation', moduleConfig, () => {
                     const $dateBoxInput = $(dateBox.field());
                     const keyboard = keyboardMock($dateBoxInput);
 
-                    keyboard
-                        .press('backspace')
-                        .type('f')
-                        .change();
+                    this.failInternalValidation(keyboard);
 
                     const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
                     const expectedErrors = [externalError, { message }];
@@ -2769,55 +2749,13 @@ QUnit.module('validation', moduleConfig, () => {
                     const $dateBoxInput = $(dateBox.field());
                     const keyboard = keyboardMock($dateBoxInput);
 
-                    keyboard
-                        .press('backspace')
-                        .type('f')
-                        .change();
-
-                    keyboard
-                        .press('backspace')
-                        .change();
+                    this.failInternalValidation(keyboard);
+                    this.successInternalValidation(keyboard);
 
                     const expectedErrors = [externalError];
                     assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
                 });
             });
-        });
-
-        QUnit.test('invalidStartDateMessage runtime change should pass new value to the start dateBox', function(assert) {
-            const newInvalidMessage = 'new invalid message';
-            this.instance.option('invalidStartDateMessage', newInvalidMessage);
-
-            const startDateBox = getStartDateBoxInstance(this.instance);
-
-            assert.strictEqual(startDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
-        });
-
-        QUnit.test('invalidEndDateMessage runtime change should pass new value to the end dateBox', function(assert) {
-            const newInvalidMessage = 'new invalid message';
-            this.instance.option('invalidEndDateMessage', newInvalidMessage);
-
-            const endDateBox = getEndDateBoxInstance(this.instance);
-
-            assert.strictEqual(endDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
-        });
-
-        QUnit.test('startDateOutOfRangeMessage runtime change should pass new value to the start dateBox', function(assert) {
-            const newInvalidMessage = 'new invalid message';
-            this.instance.option('startDateOutOfRangeMessage', newInvalidMessage);
-
-            const startDateBox = getStartDateBoxInstance(this.instance);
-
-            assert.strictEqual(startDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
-        });
-
-        QUnit.test('endDateOutOfRangeMessage runtime change should pass new value to the end dateBox', function(assert) {
-            const newInvalidMessage = 'new invalid message';
-            this.instance.option('endDateOutOfRangeMessage', newInvalidMessage);
-
-            const endDateBox = getEndDateBoxInstance(this.instance);
-
-            assert.strictEqual(endDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
         });
     });
 });
