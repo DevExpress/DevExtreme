@@ -90,20 +90,16 @@ class MultiselectDateBox extends DateBox {
     _optionChanged(args) {
         switch(args.name) {
             case 'isValid': {
-                if(this._skipIsValidOptionChange) {
+                const isValid = this._strategy.dateRangeBox.option('isValid');
+
+                if(this._skipIsValidOptionChange || isValid === args.value) {
                     super._optionChanged(args);
                     return;
                 }
 
-                const isValid = this._strategy.dateRangeBox.option('isValid');
-
                 this._skipIsValidOptionChange = true;
                 this.option({ isValid });
                 this._skipIsValidOptionChange = false;
-
-                if(isValid === args.value) {
-                    super._optionChanged(args);
-                }
                 break;
             }
             default:

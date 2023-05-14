@@ -369,9 +369,9 @@ class DateRangeBox extends Editor {
     }
 
     _internalValidationErrorsChangedHandler({ value, previousValue }) {
-
         const allInternalErrors = this.option('_internalValidationErrors');
 
+        // NOTE: "partial" here means that we have only internal errors for one of the dateBoxes
         const newPartialInternalErrors = value || [];
         const previousPartialInternalErrors = previousValue || [];
 
@@ -780,28 +780,27 @@ class DateRangeBox extends Editor {
                 break;
             case '_internalValidationErrors': {
                 const allErrors = this.option('validationErrors') || [];
+
+                const newInternalErrors = value || [];
                 const previousInternalErrors = previousValue || [];
                 const otherErrors = this._getRestErrors(allErrors, previousInternalErrors);
-                this.option('validationErrors', [ ...otherErrors, ...value ]);
+                this.option('validationErrors', [ ...otherErrors, ...newInternalErrors ]);
                 this.option('isValid', !value.length && !otherErrors.length);
                 break;
             }
             case 'isValid': {
                 this.getEndDateBox().option(name, value);
 
-                if(this._shouldSkipIsValidChange) {
+                const isValid = value && !this.option('_internalValidationErrors').length;
+
+                if(this._shouldSkipIsValidChange || isValid === value) {
                     super._optionChanged(args);
                     return;
                 }
-                const isValid = value && !this.option('_internalValidationErrors').length;
 
                 this._shouldSkipIsValidChange = true;
                 this.option('isValid', isValid);
                 this._shouldSkipIsValidChange = false;
-
-                if(isValid === value) {
-                    super._optionChanged(args);
-                }
                 break;
             }
             case 'validationErrors': {
