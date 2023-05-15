@@ -1705,14 +1705,28 @@ QUnit.module('aria accessibility', moduleConfig, () => {
     ['items', 'dataSource'].forEach(dataSource => {
         QUnit.test(`list focusable element should have aria-label if data source is ${dataSource}`, function(assert) {
             const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
+            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
 
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($scrollView.attr('aria-label'), undefined);
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'Items');
+            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
-            assert.strictEqual($(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`).attr('aria-label'), 'No data to display');
+            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+        });
+
+        QUnit.test(`list should have correct role if data sourse is set with ${dataSource} property`, function(assert) {
+            const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
+            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
+
+            assert.strictEqual($scrollView.attr('role'), undefined);
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($scrollView.attr('role'), 'listbox');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($scrollView.attr('role'), undefined);
         });
     });
 });

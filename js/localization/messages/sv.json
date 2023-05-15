@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Välj datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Välj datum och tid",
         "dxDateBox-validation-datetime": "Värdet måste vara ett datum eller en tid",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Välj fil",
         "dxFileUploader-dropFile": "eller släpp filen här",

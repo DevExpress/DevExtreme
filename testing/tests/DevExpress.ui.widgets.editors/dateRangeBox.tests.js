@@ -10,6 +10,7 @@ import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
 
+import 'ui/validator';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -28,7 +29,13 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const CLEAR_BUTTON = 'dx-clear-button-area';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const STATE_HOVER_CLASS = 'dx-state-hover';
-const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
+
+const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
+const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
+const INVALID_CLASS = 'dx-invalid';
+
+const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -157,11 +164,14 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 endDateInputAttr: {},
                 endDateLabel: 'End Date',
                 endDateName: '',
+                endDateOutOfRangeMessage: 'End date is out of range',
                 endDatePlaceholder: '',
                 endDateText: '',
                 focusStateEnabled: true,
                 height: undefined,
                 hoverStateEnabled: true,
+                invalidStartDateMessage: 'Start value must be a date',
+                invalidEndDateMessage: 'End value must be a date',
                 isValid: true,
                 labelMode: 'static',
                 max: undefined,
@@ -185,6 +195,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 startDateInputAttr: {},
                 startDateLabel: 'Start Date',
                 startDateName: '',
+                startDateOutOfRangeMessage: 'Start date is out of range',
                 startDatePlaceholder: '',
                 startDateText: '',
                 stylingMode: 'outlined',
@@ -244,6 +255,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             validationMessagePosition: 'auto',
             validationStatus: 'valid',
             valueChangeEvent: 'change',
+            _showValidationMessage: false,
         };
 
         QUnit.test('StartDateBox has expected defaults', function(assert) {
@@ -254,9 +266,12 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 applyButtonText: 'OK',
                 calendarOptions: {},
                 cancelButtonText: 'Cancel',
+                dateOutOfRangeMessage: 'Start date is out of range',
                 disabledDates: null,
+                invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
                 opened: false,
+                _showValidationIcon: false
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
@@ -270,7 +285,10 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 
             const expectedOptions = {
                 ...expectedDateBoxOptions,
+                dateOutOfRangeMessage: 'End date is out of range',
+                invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
+                _showValidationIcon: true
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
@@ -1308,6 +1326,28 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(onValueChangedHandler.callCount, 2, 'handler has been called twice');
             assert.strictEqual(onValueChangedHandler.getCall(1).args[0].event, undefined, 'event has been cleared');
         });
+
+        QUnit.test('should allow to patch value without any errors', function(assert) {
+            this.reinit({
+                value: ['2023/02/23', '2023/03/24'],
+                showClearButton: true,
+                onValueChanged(e) {
+                    if(!(e.value[0])) {
+                        e.component.option({
+                            value: [new Date('2021/10/17'), new Date('2021/10/24')]
+                        });
+                    }
+                },
+            });
+
+            try {
+                this.instance.option('value', [null, '2023/03/24']);
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.deepEqual(this.instance.option('value'), [new Date(2021, 9, 17), new Date(2021, 9, 24)], 'value was changed');
+            }
+        });
     });
 
     QUnit.module('onOpened & onClosed events', {
@@ -2215,114 +2255,1242 @@ QUnit.module('Dimensions', moduleConfig, () => {
     });
 });
 
-QUnit.module('Validation', moduleConfig, () => {
-    QUnit.module('ValidationMessage', {
+QUnit.module('Validation', {
+    ...moduleConfig,
+    failInternalValidation(keyboard) {
+        keyboard
+            .press('backspace')
+            .type('f')
+            .change();
+    },
+    successInternalValidation(keyboard) {
+        keyboard
+            .press('backspace')
+            .change();
+    },
+    raiseExternalValidation(keyboard) {
+        keyboard
+            .caret({ start: 0, end: 10 })
+            .type('5/5/2023')
+            .change();
+    }
+}, () => {
+    // TODO: research how to improve this behavior
+    QUnit.test('validation should be failed after startDate change if "required" rule is used', function(assert) {
+        this.reinit({ value: [null, null] });
+
+        this.$element.dxValidator({
+            validationRules: [{
+                type: 'required',
+                message: 'Both dates are required'
+            }]
+        });
+
+
+        this.instance.option('startDate', '2023/01/01');
+
+        assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
+    });
+
+    QUnit.test('dateRangeBox should not be re-validated after readOnly option change', function(assert) {
+        this.$element.dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback: () => false
+            }]
+        });
+
+        this.instance.option('readOnly', true);
+
+        assert.strictEqual(this.instance.option('isValid'), true, 'validation is not failed');
+    });
+
+    QUnit.module('validation message', {
         beforeEach: function() {
-            this.getValidationMessage = () => {
-                return this.$element
-                    .find(`.${INVALID_MESSAGE_CLASS}`).eq(0)
-                    .dxValidationMessage()
-                    .dxValidationMessage('instance');
-            };
+            this.reinit({
+                isValid: false,
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+            });
+        },
+        getValidationMessage: function($element = this.$element) {
+            const $validationMessage = $element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+            return $validationMessage.dxValidationMessage('instance');
         }
     }, () => {
-        QUnit.test('ValidationMessage should have correct mode when validationMessageMode is set on init', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                }
-            });
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('mode'), 'always');
-        });
-
-        QUnit.test('ValidationMessage should have correct mode when validationMessageMode is set on runtime change', function(assert) {
-            this.reinit({
-                validationMessageMode: 'auto',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                }
-            });
-
-            this.instance.option('validationMessageMode', 'always');
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('mode'), 'always');
-        });
-
-        QUnit.test('ValidationMessage should have correct position when validationMessagePosition is set on init', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-                validationMessagePosition: 'left',
-            });
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('positionSide'), 'left');
-        });
-
-        QUnit.test('ValidationMessage should have correct position when validationMessagePosition is set on runtime change', function(assert) {
-            this.reinit({
-                validationMessageMode: 'auto',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-                validationMessagePosition: 'right',
-            });
-
-            this.instance.option('validationMessagePosition', 'left');
-
-            const validationMessage = this.getValidationMessage();
-
-            assert.strictEqual(validationMessage.option('positionSide'), 'left');
-        });
-
-        QUnit.test('validationMessagePosition should be auto by default', function(assert) {
-            assert.strictEqual(this.instance.option('validationMessagePosition'), 'auto');
-        });
-
-        QUnit.test('ValidationMessage should be on top when validationMessagePosition is auto and popup is opened', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-            });
-
+        QUnit.test('validation message should be rendered above the inputs if popup is opened', function(assert) {
             this.instance.open();
 
-            const validationMessage = this.getValidationMessage();
+            const $validationMessage = this.$element.find(`.${VALIDATION_MESSAGE_CLASS}`).eq(0);
+            const validationMessage = $validationMessage.dxValidationMessage('instance');
 
-            assert.strictEqual(validationMessage.option('positionSide'), 'top');
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
         });
 
-        QUnit.test('ValidationMessage should be on bottom when validationMessagePosition is auto and popup is closed', function(assert) {
-            this.reinit({
-                validationMessageMode: 'always',
-                isValid: false,
-                validationError: {
-                    message: 'error'
-                },
-            });
-
+        QUnit.test('validation message should be rendered below the inputs if popup is closed', function(assert) {
             this.instance.open();
             this.instance.close();
 
             const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'bottom', 'validation message is rendered below the inputs');
+        });
 
-            assert.strictEqual(validationMessage.option('positionSide'), 'bottom');
+        QUnit.test('validation message should be rendered below the inputs even is popup is opened if validationMessagePosition="bottom"', function(assert) {
+            this.reinit({
+                isValid: false,
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+                validationMessagePosition: 'bottom',
+            });
+
+            this.instance.open();
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'bottom', 'validation message is rendered below the inputs');
+        });
+
+        QUnit.test('validation message should be rendered above the inputs even is popup is close if validationMessagePosition="top"', function(assert) {
+            this.reinit({
+                isValid: false,
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+                validationMessagePosition: 'top',
+            });
+
+            this.instance.open();
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
+        });
+
+        QUnit.test('validation message should be rendered above the inputs if validation is failed when popup is already opened', function(assert) {
+            this.reinit({
+                validationError: {
+                    message: 'Error message'
+                },
+                validationMessageMode: 'always',
+            });
+
+            this.instance.open();
+            this.instance.option('isValid', false);
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'top', 'validation message is rendered above the inputs');
+        });
+
+        QUnit.test('validationMessage should have correct position when validationMessagePosition is set on runtime change', function(assert) {
+            this.instance.option('validationMessagePosition', 'left');
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('positionSide'), 'left');
+        });
+
+        QUnit.test('validationMessage should have correct mode when validationMessageMode is set on init', function(assert) {
+            this.reinit({
+                validationMessageMode: 'always',
+                isValid: false,
+                validationError: {
+                    message: 'error'
+                }
+            });
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('mode'), 'always');
+        });
+
+        QUnit.test('validationMessage should have correct mode when validationMessageMode is set on runtime change', function(assert) {
+            this.instance.option('validationMessageMode', 'always');
+
+            const validationMessage = this.getValidationMessage();
+            assert.strictEqual(validationMessage.option('mode'), 'always');
+        });
+
+        QUnit.test('start dateBox validation message should not be shown even if internal validation is failed', function(assert) {
+            this.instance.option('isValid', true);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            const keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const validationMessage = this.getValidationMessage(startDateBox.$element());
+            assert.strictEqual(validationMessage, undefined, 'validationMessage is not rendered');
+        });
+
+        QUnit.test('end dateBox validation message should not be shown even if internal validation is failed', function(assert) {
+            this.instance.option('isValid', true);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const validationMessage = this.getValidationMessage(endDateBox.$element());
+            assert.strictEqual(validationMessage, undefined, 'validationMessage is not rendered');
+        });
+    });
+
+    QUnit.module('options', () => {
+        QUnit.test('validationMessagePosition option is passed to the first dateBox on runtime change', function(assert) {
+            const validationMessagePosition = 'bottom';
+            this.instance.option({ validationMessagePosition });
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            assert.strictEqual(startDateBox.option('validationMessagePosition'), validationMessagePosition, 'option is passed');
+        });
+
+        QUnit.test('invalidStartDateMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('invalidStartDateMessage', newInvalidMessage);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('invalidEndDateMessage runtime change should pass new value to the end dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('invalidEndDateMessage', newInvalidMessage);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.strictEqual(endDateBox.option('invalidDateMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('startDateOutOfRangeMessage runtime change should pass new value to the start dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('startDateOutOfRangeMessage', newInvalidMessage);
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            assert.strictEqual(startDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.test('endDateOutOfRangeMessage runtime change should pass new value to the end dateBox', function(assert) {
+            const newInvalidMessage = 'new invalid message';
+            this.instance.option('endDateOutOfRangeMessage', newInvalidMessage);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.strictEqual(endDateBox.option('dateOutOfRangeMessage'), newInvalidMessage, 'invalidDateMessage is updated');
+        });
+
+        QUnit.module('validationErrors option change', () => {
+            QUnit.test('should be raised only once on internal validation fail', function(assert) {
+                assert.expect(3);
+
+                this.reinit({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'validationErrors') {
+                            assert.strictEqual(previousValue, null, 'validationErrors previousValue');
+                            assert.strictEqual(value.length, 1, 'validationErrors length');
+                            assert.strictEqual(value[0].message, 'Start value must be a date', 'message');
+                        }
+                    }
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.failInternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on external validation fail', function(assert) {
+                assert.expect(3);
+
+                this.reinit({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'validationErrors') {
+                            assert.strictEqual(previousValue, null, 'validationErrors previousValue');
+                            assert.strictEqual(value.length, 1, 'validationErrors length');
+                            assert.strictEqual(value[0].message, 'external error', 'message');
+                        }
+                    }
+                });
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.raiseExternalValidation(keyboard);
+            });
+
+            QUnit.skip('should be raised only once on external validation fail after internal validation fail', function(assert) {
+                assert.expect(3);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.failInternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, previousValue, value }) => {
+                        if(name === 'validationErrors') {
+                            assert.deepEqual(previousValue, [{ message: 'Start value must be a date' }], 'validationErrors previousValue');
+                            assert.strictEqual(value.length, 2, 'validationErrors length');
+                            assert.strictEqual(value[1].message, 'external error', 'message');
+                        }
+                    }
+                });
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                this.raiseExternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on internal validation fail after external validation fail', function(assert) {
+                assert.expect(4);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+                this.raiseExternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, previousValue, value }) => {
+                        if(name === 'validationErrors') {
+                            assert.strictEqual(previousValue.length, 1, 'previousValue length');
+                            assert.strictEqual(previousValue[0].message, 'external error', 'previousValue message');
+                            assert.strictEqual(value.length, 2, 'value length');
+                            assert.strictEqual(value[1].message, 'Start value must be a date', 'value[1] message');
+                        }
+                    }
+                });
+
+                this.failInternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on internal validation success after fail', function(assert) {
+                assert.expect(2);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.failInternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'validationErrors') {
+                            assert.deepEqual(previousValue, [{ message: 'Start value must be a date' }], 'validationErrors previousValue');
+                            assert.deepEqual(value, [], 'validationErrors value');
+                        }
+                    }
+                });
+
+                this.successInternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on external validation success after fail', function(assert) {
+                assert.expect(3);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                let validationCallbackCallCount = 0;
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => {
+                            ++validationCallbackCallCount;
+                            return validationCallbackCallCount === 2;
+                        },
+                        message: 'external error'
+                    }]
+                });
+                this.raiseExternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'validationErrors') {
+                            assert.strictEqual(previousValue.length, 1, 'previousValue length');
+                            assert.strictEqual(previousValue[0].message, 'external error', 'previousValue[0] message');
+                            assert.strictEqual(value, null, 'validationErrors value');
+                        }
+                    }
+                });
+
+                this.raiseExternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on internal validation fail if other internal validation is already failed', function(assert) {
+                assert.expect(2);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+                this.failInternalValidation(startDateBoxKeyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, previousValue, value }) => {
+                        if(name === 'validationErrors') {
+                            assert.deepEqual(previousValue, [{ message: 'Start value must be a date' }], 'validationErrors previousValue');
+                            const updatedErrors = [{ message: 'Start value must be a date' }, { message: 'End value must be a date' }];
+                            assert.deepEqual(value, updatedErrors, 'validationErrors value');
+                        }
+                    }
+                });
+
+                const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+                this.failInternalValidation(endDateBoxKeyboard);
+            });
+
+            QUnit.test('should be raised only once on internal validation fail if other external validation is already failed', function(assert) {
+                assert.expect(4);
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+                this.raiseExternalValidation(startDateBoxKeyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, previousValue, value }) => {
+                        if(name === 'validationErrors') {
+                            assert.strictEqual(previousValue.length, 1, 'previousValue length');
+                            assert.strictEqual(previousValue[0].message, 'external error', 'previousValue[0] message');
+                            assert.strictEqual(value.length, 2, 'value length');
+                            assert.deepEqual(value[1], { message: 'End value must be a date' }, 'value[1]');
+                        }
+                    }
+                });
+
+                const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+                this.failInternalValidation(endDateBoxKeyboard);
+            });
+
+            QUnit.skip('should be raised only once on external validation fail if other internal validation is already failed', function(assert) {
+                assert.expect(4);
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+                this.failInternalValidation(startDateBoxKeyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, previousValue, value }) => {
+                        if(name === 'validationErrors') {
+                            assert.strictEqual(previousValue.length, 1, 'previousValue length');
+                            assert.strictEqual(previousValue[0].message, 'Start value must be a date', 'previousValue[0] message');
+                            assert.strictEqual(value.length, 2, 'value length');
+                            assert.deepEqual(value[1].message, 'external error', 'value[1]');
+                        }
+                    }
+                });
+
+                const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+                this.raiseExternalValidation(endDateBoxKeyboard);
+            });
+        });
+
+        QUnit.module('isValid option change', () => {
+            QUnit.test('should be raised only once on internal validation fail', function(assert) {
+                assert.expect(2);
+
+                this.reinit({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'isValid') {
+                            assert.strictEqual(previousValue, true, 'isValid previousValue');
+                            assert.strictEqual(value, false, 'isValid value');
+                        }
+                    }
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.failInternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on external validation fail', function(assert) {
+                assert.expect(2);
+
+                this.reinit({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'isValid') {
+                            assert.strictEqual(previousValue, true, 'isValid previousValue');
+                            assert.strictEqual(value, false, 'isValid value');
+                        }
+                    }
+                });
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.raiseExternalValidation(keyboard);
+            });
+
+            QUnit.skip('should not be raised on external validation fail after internal validation fail', function(assert) {
+                assert.expect(0);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.failInternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name }) => {
+                        if(name === 'isValid') {
+                            assert.ok(false, 'should not be fired');
+                        }
+                    }
+                });
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                this.raiseExternalValidation(keyboard);
+            });
+
+            QUnit.test('should not be raised on internal validation fail after external validation fail', function(assert) {
+                assert.expect(0);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+                this.raiseExternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name }) => {
+                        if(name === 'isValid') {
+                            assert.ok(false, 'should not be fired');
+                        }
+                    }
+                });
+
+                this.failInternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on internal validation success after fail', function(assert) {
+                assert.expect(2);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                this.failInternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'isValid') {
+                            assert.strictEqual(previousValue, false, 'isValid previousValue');
+                            assert.strictEqual(value, true, 'isValid value');
+                        }
+                    }
+                });
+
+                this.successInternalValidation(keyboard);
+            });
+
+            QUnit.test('should be raised only once on external validation success after fail', function(assert) {
+                assert.expect(2);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const keyboard = keyboardMock($startDateBoxInput);
+
+                let validationCallbackCallCount = 0;
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => {
+                            ++validationCallbackCallCount;
+                            return validationCallbackCallCount === 2;
+                        },
+                        message: 'external error'
+                    }]
+                });
+                this.raiseExternalValidation(keyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name, value, previousValue }) => {
+                        if(name === 'isValid') {
+                            assert.strictEqual(previousValue, false, 'isValid previousValue');
+                            assert.strictEqual(value, true, 'isValid value');
+                        }
+                    }
+                });
+
+                this.raiseExternalValidation(keyboard);
+            });
+
+            QUnit.test('should not be raised on internal validation fail if other internal validation is already failed', function(assert) {
+                assert.expect(0);
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+                this.failInternalValidation(startDateBoxKeyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name }) => {
+                        if(name === 'isValid') {
+                            assert.ok(false, 'should not be fired');
+                        }
+                    }
+                });
+
+                const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+                this.failInternalValidation(endDateBoxKeyboard);
+            });
+
+            QUnit.test('should not be raised on internal validation fail if other external validation is already failed', function(assert) {
+                assert.expect(0);
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+                this.raiseExternalValidation(startDateBoxKeyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name }) => {
+                        if(name === 'isValid') {
+                            assert.ok(false, 'should not be fired');
+                        }
+                    }
+                });
+
+                const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+                this.failInternalValidation(endDateBoxKeyboard);
+            });
+
+            QUnit.test('should not be raised on external validation fail if other internal validation is already failed', function(assert) {
+                assert.expect(0);
+
+                this.$element.dxValidator({
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: () => false,
+                        message: 'external error'
+                    }]
+                });
+
+                const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+                const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+                this.failInternalValidation(startDateBoxKeyboard);
+
+                this.instance.option({
+                    onOptionChanged: ({ name }) => {
+                        if(name === 'isValid') {
+                            assert.ok(false, 'should not be fired');
+                        }
+                    }
+                });
+
+                const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+                this.raiseExternalValidation(endDateBoxKeyboard);
+            });
+        });
+    });
+
+    QUnit.module('validation icon', () => {
+        QUnit.test('start dateBox validation icon should not be shown even if internal validation is failed', function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            const keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            assert.strictEqual(startDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is not shown');
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if internal validation is failed', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if external validation is failed', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            this.raiseExternalValidation(keyboard);
+
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if start dateBox internal validation is failed', function(assert) {
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            const keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+
+        QUnit.test('end dateBox validation icon should be shown if external validation is failed after end dateBox second value change', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            keyboard
+                .caret({ start: 0, end: 10 })
+                .type('5/5/2023')
+                .change()
+                .caret({ start: 0, end: 10 })
+                .type('4/5/2023')
+                .change();
+
+            assert.strictEqual(endDateBox.$element().hasClass(SHOW_INVALID_BADGE_CLASS), true, `${SHOW_INVALID_BADGE_CLASS} class is added`);
+            assert.strictEqual(endDateBox.$element().hasClass(INVALID_CLASS), true, `${INVALID_CLASS} class is added`);
+        });
+    });
+
+    QUnit.module('internal validation', () => {
+        // NOTE: In DateRangeBox we always keep both internal and external validation errors.
+
+        QUnit.test('validationErrors should have all internal validation errors combined', function(assert) {
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            let keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const expectedErrors = [
+                { message: 'Start value must be a date' },
+                { message: 'End value must be a date' }
+            ];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'validationErrors has both internal errors');
+        });
+
+        QUnit.test('validationErrors option change should not restore internal validation errors', function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const externalError = [{ message: 'external error' }];
+            this.instance.option('validationErrors', [externalError]);
+
+            const expectedErrors = [externalError, { message: 'End value must be a date' }];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'internal errors are not restored');
+        });
+
+        QUnit.test('external validation raise on value change should not restore internal validation errors', function(assert) {
+            const externalError = { message: 'external error' };
+            this.instance.option('validationError', externalError);
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            let keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+
+            this.raiseExternalValidation(keyboard);
+
+            const { validationErrors } = this.instance.option();
+            assert.strictEqual(validationErrors[0].message, 'external error', 'external error is added');
+            assert.deepEqual(validationErrors[1], { message: 'Start value must be a date' }, 'internal error is not restored');
+        });
+
+        QUnit.test('internal validation fail should set isValid to false', function(assert) {
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            const keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'isValid is changed to false');
+        });
+
+        QUnit.test('internal validation success after fail should set isValid to true', function(assert) {
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            const keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+            this.successInternalValidation(keyboard);
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'isValid is changed to true');
+        });
+
+        QUnit.test('external validation success should not set isValid to true if internal validation is failed', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => true,
+                    message: 'external error'
+                }]
+            });
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            let keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+
+            this.raiseExternalValidation(keyboard);
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'isValid is still false');
+        });
+
+        QUnit.test('external validation fail should set isValid to false even if internal validation is passed', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            let keyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(keyboard);
+            this.successInternalValidation(keyboard);
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+
+            this.raiseExternalValidation(keyboard);
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'isValid is set to false');
+        });
+
+        QUnit.test('external validation success after fail should set isValid to true', function(assert) {
+            let validationCallCount = 0;
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => {
+                        validationCallCount++;
+                        if(validationCallCount === 2) {
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    message: 'external error'
+                }]
+            });
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            const keyboard = keyboardMock($endDateBoxInput);
+
+            keyboard
+                .caret({ start: 0, end: 10 })
+                .type('5/5/2023')
+                .change()
+                .caret({ start: 0, end: 10 })
+                .type('5/4/2023')
+                .change();
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'isValid is set to true');
+        });
+
+        QUnit.test('external validation fail should update validationErrors if other internal validation is already failed', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => {
+                        return false;
+                    },
+                    message: 'external error'
+                }]
+            });
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+            this.failInternalValidation(startDateBoxKeyboard);
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            const endDateBoxKeyboard = keyboardMock($endDateBoxInput);
+            this.raiseExternalValidation(endDateBoxKeyboard);
+
+            const errors = this.instance.option('validationErrors');
+            assert.strictEqual(errors.length, 2, 'there are 2 validation errors');
+            assert.strictEqual(errors[0].message, 'external error', 'first error is external');
+            assert.deepEqual(errors[1].message, 'Start value must be a date', 'second error is internal');
+        });
+
+        QUnit.test('external validation raise using "validate" method should not restore internal validation errors', function(assert) {
+            const externalError = { message: 'external error' };
+            this.instance.option('validationError', externalError);
+
+            const validator = this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            }).dxValidator('instance');
+
+            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
+            const startDateBoxKeyboard = keyboardMock($startDateBoxInput);
+
+            this.failInternalValidation(startDateBoxKeyboard);
+
+            validator.validate();
+
+            const { validationErrors } = this.instance.option();
+            assert.strictEqual(validationErrors[0].message, 'external error', 'external error is added');
+            assert.deepEqual(validationErrors[1], { message: 'Start value must be a date' }, 'internal error is not restored');
+        });
+
+        ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+            QUnit.module(dateBoxName, {
+                beforeEach: function() {
+                    this.dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+                    this.$dateBoxInput = $(this.dateBox.field());
+                }
+            }, () => {
+                QUnit.test('internal validation fail should set dateRangeBox isValid to false', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+
+                    assert.deepEqual(this.instance.option('isValid'), false, 'isValid is updated');
+                });
+
+                QUnit.test('internal validation success should set dateRangeBox isValid to true if there is no other errors', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+                    this.successInternalValidation(keyboard);
+
+                    assert.deepEqual(this.instance.option('isValid'), true, 'isValid is updated');
+                });
+
+                QUnit.test('internal validation success should not set dateRangeBox isValid to true if there is an other error', function(assert) {
+                    this.instance.option('isValid', false);
+                    this.instance.option('validationError', { message: 'external error' });
+
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+                    this.successInternalValidation(keyboard);
+
+                    assert.strictEqual(this.instance.option('isValid'), false, 'isValid=false while there is an other error');
+                });
+
+                QUnit.test('internal date validation fail should update dateRangeBox validationErrors', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+
+                    const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
+                    const expectedErrors = [{ message }];
+                    assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                });
+
+                QUnit.test('internal date validation fail should update dateRangeBox validationErrors even if it is not empty', function(assert) {
+                    const externalError = { message: 'external validation failed' };
+                    this.instance.option('validationError', externalError);
+
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+
+                    const message = dateBoxName === 'startDateBox' ? 'Start value must be a date' : 'End value must be a date';
+                    const expectedErrors = [externalError, { message }];
+                    assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                });
+
+                QUnit.test('internal date validation success should remove internal errors from dateRangeBox validationErrors', function(assert) {
+                    const externalError = { message: 'external validation failed' };
+                    this.instance.option('validationError', externalError);
+
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+                    this.successInternalValidation(keyboard);
+
+                    const expectedErrors = [externalError];
+                    assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
+                });
+            });
+        });
+    });
+
+    QUnit.module('submit value', () => {
+        ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+            QUnit.module(dateBoxName, {
+                beforeEach: function() {
+                    this.reinit({
+                        value: [new Date('2023/5/5'), new Date('2023/5/5')]
+                    });
+
+                    this.dateBox = dateBoxName === 'startDateBox'
+                        ? getStartDateBoxInstance(this.instance)
+                        : getEndDateBoxInstance(this.instance);
+                    this.$dateBoxInput = $(this.dateBox.field());
+                    this.$dateBoxSubmitInput = $(this.dateBox.$element().find('input[type=hidden]'));
+                }
+            }, () => {
+                QUnit.test('submit value should be updated if internal validation is failed', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.failInternalValidation(keyboard);
+
+                    assert.strictEqual(this.$dateBoxSubmitInput.val(), '2023-05-05', 'submit value is updated');
+                });
+
+                QUnit.test('submit value should be updated if external validation is failed', function(assert) {
+                    const keyboard = keyboardMock(this.$dateBoxInput);
+
+                    this.raiseExternalValidation(keyboard);
+
+                    assert.strictEqual(this.$dateBoxSubmitInput.val(), '2023-05-05', 'submit value is updated');
+                });
+            });
+        });
+    });
+
+    QUnit.module('min-max validation', () => {
+        QUnit.test('validation should be success if min/max is specified on init', function(assert) {
+            this.reinit({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/8'),
+                value: [new Date('2023/4/6'), new Date('2023/4/7')]
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'validation is success');
+        });
+
+        QUnit.test('validation should be success if min/max is specified on runtime', function(assert) {
+            this.reinit({ value: [new Date('2023/4/6'), new Date('2023/4/7')] });
+
+
+            this.instance.option({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'validation is success');
+        });
+
+        QUnit.test('validation should be not failed if value is out of range specified on init', function(assert) {
+            this.reinit({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')],
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'validation is success');
+        });
+
+        QUnit.test('validation should be failed if value is out of range specified on runtime', function(assert) {
+            this.reinit({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            this.instance.option({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
+
+            const expectedErrors = [{ message: 'Start date is out of range' }, { message: 'End date is out of range' }];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors);
+        });
+
+        QUnit.test('validation should be failed after value change to the date out of range', function(assert) {
+            this.reinit({
+                min: new Date('2023/4/5'),
+                max: new Date('2023/4/7'),
+            });
+
+            this.instance.option({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'validation is failed');
+
+            const expectedErrors = [{ message: 'Start date is out of range' }, { message: 'End date is out of range' }];
+            assert.deepEqual(this.instance.option('validationErrors'), expectedErrors);
+        });
+    });
+
+    QUnit.module('applyValueMode="useButtons"', {
+        beforeEach: function() {
+            this.instance.option({
+                applyValueMode: 'useButtons',
+                opened: true,
+                value: [new Date('2023/5/5'), null]
+            });
+        },
+        clickApplyValueButton: function() {
+            $(APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
+        }
+    }, () => {
+        QUnit.test('should not raise validation error on "Ok" button click without date selecting', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                }]
+            });
+
+            $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.strictEqual(this.instance.option('isValid'), true, 'dateBox is still valid');
+        });
+
+        QUnit.test('should raise external validation on value change by "Ok" button click', function(assert) {
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                    message: 'external error'
+                }]
+            });
+
+            $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
+            $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'custom validation is failed');
+        });
+    });
+
+    QUnit.module('value clear', () => {
+        QUnit.test('clear button press should raise external validation', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false,
+                }]
+            });
+
+            getClearButton(this.$element).eq(0).trigger('dxclick');
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
+        });
+
+        QUnit.test('reset method call should raise external validation', function(assert) {
+            this.reinit({
+                value: [new Date('2023/4/4'), new Date('2023/4/8')]
+            });
+
+            this.$element.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            this.instance.reset();
+
+            assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
     });
 });

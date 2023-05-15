@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Select date",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Select date and time",
         "dxDateBox-validation-datetime": "Value must be a date or time",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Select a file",
         "dxFileUploader-dropFile": "or Drop a file here",

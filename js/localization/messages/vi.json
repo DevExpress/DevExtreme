@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Lựa chọn ngày",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Chọn ngày và giờ",
         "dxDateBox-validation-datetime": "Giá trị phải là ngày hoặc giờ",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Chọn tập tin",
         "dxFileUploader-dropFile": "hoặc Thả tập tin vào đây",
