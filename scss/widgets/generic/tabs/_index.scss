@@ -124,6 +124,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
 
+  .dx-tab-text {
+    color: $tabs-tab-color;
+  }
+
   .dx-icon {
     color: $tabs-tab-icon-color;
     display: inline-block;
@@ -141,6 +145,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     background-color: $tabs-tab-selected-bg;
     color: $tabs-tab-selected-color;
 
+    .dx-tab-text {
+      color: $tabs-tab-selected-color;
+    }
+
     .dx-icon {
       color: $tabs-tab-icon-selected-color;
     }
@@ -149,6 +157,14 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   &.dx-state-active {
     background-color: $tabs-tab-active-bg;
     color: $tabs-tab-selected-color;
+
+    .dx-tab-text {
+      color: $tabs-tab-selected-color;
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
   }
 }
 
