@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
@@ -15,6 +15,10 @@ test('Tabs icon alignment', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Tabs items alignment.png', { element: '#tabs', shouldTestInCompact: true });
+
+  if (!isMaterial()) {
+    await testScreenshot(t, takeScreenshot, 'Tabs in contrast theme.png', { element: '#tabs', theme: 'generic.contrast' });
+  }
 
   await t
     .expect(compareResults.isValid())
