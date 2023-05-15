@@ -415,7 +415,7 @@ class DateRangeBox extends Editor {
             deferRendering: options.deferRendering,
             disabled: options.disabled,
             displayFormat: options.displayFormat,
-            focusStateEnabled: options.focusStateEnabled,
+            focusStateEnabled: true,
             tabIndex: options.tabIndex,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
