@@ -752,9 +752,10 @@ class DateRangeBox extends Editor {
                         editor: this
                     });
 
+                    this._updateDateBoxesValue(newValue);
+
                     this._raiseValueChangeAction(newValue, previousValue);
                     this._saveValueChangeEvent(undefined);
-                    this._updateDateBoxesValue(newValue);
                 }
 
                 break;

@@ -1308,6 +1308,28 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(onValueChangedHandler.callCount, 2, 'handler has been called twice');
             assert.strictEqual(onValueChangedHandler.getCall(1).args[0].event, undefined, 'event has been cleared');
         });
+
+        QUnit.test('should allow to patch value without any errors', function(assert) {
+            this.reinit({
+                value: ['2023/02/23', '2023/03/24'],
+                showClearButton: true,
+                onValueChanged(e) {
+                    if(!(e.value[0])) {
+                        e.component.option({
+                            value: [new Date('2021/10/17'), new Date('2021/10/24')]
+                        });
+                    }
+                },
+            });
+
+            try {
+                this.instance.option('value', [null, '2023/03/24']);
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.deepEqual(this.instance.option('value'), [new Date(2021, 9, 17), new Date(2021, 9, 24)], 'value was changed');
+            }
+        });
     });
 
     QUnit.module('onOpened & onClosed events', {
