@@ -13,7 +13,7 @@ import TextEditorButtonCollection from '../text_box/texteditor_button_collection
 import DropDownButton from '../drop_down_editor/ui.drop_down_button';
 import ClearButton from '../text_box/ui.text_editor.clear';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import { isSameDates, isSameDateArrays, sortDatesArray } from './ui.date_range.utils';
+import { isSameDates, isSameDateArrays, sortDatesArray, getDeserializedDate } from './ui.date_range.utils';
 import { each } from '../../core/utils/iterator';
 import { camelize } from '../../core/utils/inflector';
 
@@ -105,6 +105,8 @@ class DateRangeBox extends Editor {
             validationStatus: 'valid',
             value: [null, null],
             valueChangeEvent: 'change',
+
+            _currentSelection: 'startDate',
         });
     }
 
@@ -137,14 +139,26 @@ class DateRangeBox extends Editor {
         super._initOptions(options);
 
         const { value: initialValue } = this.initialOption();
-        const { value, startDate, endDate } = this.option();
+        let { value, startDate, endDate } = this.option();
+
+        if(value[0] && value[1] && getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+            value = [value[1], value[0]];
+        }
+        if(startDate && endDate && getDeserializedDate(startDate) > getDeserializedDate(endDate)) {
+            [startDate, endDate] = [endDate, startDate];
+        }
 
         if(isSameDateArrays(initialValue, value)) {
-            this.option('value', [startDate, endDate]);
+            value = [startDate, endDate];
         } else {
-            const [startDate, endDate] = value;
-            this.option({ startDate, endDate });
+            [startDate, endDate] = value;
         }
+
+        this.option({
+            startDate,
+            endDate,
+            value
+        });
     }
 
     _createOpenAction() {
@@ -317,9 +331,15 @@ class DateRangeBox extends Editor {
     }
 
     _toggleOpenState() {
-        this.getStartDateBox().focus();
+        const { opened } = this.option();
 
-        this.option('opened', !this.option('opened'));
+        if(!opened) {
+            this.getStartDateBox()._focusInput();
+        }
+
+        if(!this.option('readOnly')) {
+            this.option('opened', !this.option('opened'));
+        }
     }
 
     _clearValueHandler(e) {
@@ -337,8 +357,27 @@ class DateRangeBox extends Editor {
         return this.option('showClearButton') && !this.option('readOnly');
     }
 
-    _focusInHandler(e) {
-        super._focusInHandler(e);
+    _focusInHandler(event) {
+        if(this._shouldSkipFocusEvent(event)) {
+            return;
+        }
+
+        super._focusInHandler(event);
+    }
+
+    _focusOutHandler(event) {
+        if(this._shouldSkipFocusEvent(event)) {
+            return;
+        }
+
+        super._focusOutHandler(event);
+    }
+
+    _shouldSkipFocusEvent(event) {
+        const { target, relatedTarget } = event;
+
+        return $(target).is(this.startDateField()) && $(relatedTarget).is(this.endDateField())
+            || $(target).is(this.endDateField()) && $(relatedTarget).is(this.startDateField());
     }
 
     _getPickerType() {
@@ -456,7 +495,6 @@ class DateRangeBox extends Editor {
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
-                    this.getStartDateBox().focus();
                     this.getStartDateBox().open();
 
                     // TODO: datebox doesn't clear opened state after prevent of opening
@@ -701,11 +739,6 @@ class DateRangeBox extends Editor {
             case 'startDateText':
             case 'endDateText':
             case 'useHiddenSubmitElement':
-            // case 'validationError':
-            // case 'validationErrors':
-            // case 'validationMessageMode':
-            // case 'validationMessagePosition':
-            // case 'validationStatus':
                 break;
             case 'value': {
                 const newValue = sortDatesArray(value);
@@ -719,13 +752,17 @@ class DateRangeBox extends Editor {
                         editor: this
                     });
 
+                    this._updateDateBoxesValue(newValue);
+
                     this._raiseValueChangeAction(newValue, previousValue);
                     this._saveValueChangeEvent(undefined);
-                    this._updateDateBoxesValue(newValue);
                 }
 
                 break;
             }
+            case '_currentSelection':
+                // TODO: change calendar option here?
+                break;
             default:
                 super._optionChanged(args);
         }

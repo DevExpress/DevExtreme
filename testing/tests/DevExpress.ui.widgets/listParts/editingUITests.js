@@ -1577,7 +1577,14 @@ QUnit.test('rtlEnabled option should be passed to overlay', function(assert) {
 });
 
 
-QUnit.module('item select decorator');
+QUnit.module('item select decorator', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach() {
+        this.clock.restore();
+    },
+});
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
 const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
@@ -1824,9 +1831,11 @@ QUnit.test('click on delete toggle should not change selected state', function(a
     const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });
 
@@ -1844,10 +1853,12 @@ QUnit.test('click on item ready to delete with toggle mode should not change sel
     const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     $item.find($item).trigger('dxclick');
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     $item.find($item1).trigger('dxclick');
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });

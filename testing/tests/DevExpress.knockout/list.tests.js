@@ -9,6 +9,8 @@ require('integration/knockout');
 
 require('generic_light.css!');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 QUnit.testStart(function() {
     const markup =
         '<div id="list"></div>\
@@ -53,7 +55,7 @@ const moduleSetup = {
     }
 };
 
-QUnit.module('rendering', moduleSetup);
+moduleWithoutCsp('rendering', moduleSetup);
 
 QUnit.test('default with ko approach', function(assert) {
     const vm = {
@@ -76,7 +78,7 @@ QUnit.test('default with ko approach', function(assert) {
 });
 
 
-QUnit.module('regressions', moduleSetup);
+moduleWithoutCsp('regressions', moduleSetup);
 
 QUnit.test('scrollView size updated on onContentReady (B253584)', function(assert) {
     this.clock.restore();
@@ -147,7 +149,7 @@ QUnit.test('B233222. List - group header uses item template', function(assert) {
 });
 
 
-QUnit.module('deleting in grouped list MVVM support');
+moduleWithoutCsp('deleting in grouped list MVVM support');
 
 QUnit.test('deleteItem should correctly be handled by ko subscriptions with isolated items', function(assert) {
     assert.expect(2);
@@ -178,7 +180,7 @@ QUnit.test('deleteItem should correctly be handled by ko subscriptions with isol
 });
 
 
-QUnit.module('selecting MVVM support');
+moduleWithoutCsp('selecting MVVM support');
 
 QUnit.test('grouped list should respond on outside selectedItems changes', function(assert) {
     const items = [

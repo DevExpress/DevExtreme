@@ -36,12 +36,19 @@ gulp.task('transpile-systemjs-css', (callback) => {
         .on('close', code => code ? callback(new Error(code)) : callback());
 });
 
+gulp.task('transpile-systemjs-js-vendors', (callback) => {
+    spawn('node', [path.resolve(root, 'testing/systemjs-builder.js'), '--transpile=js-vendors'], { stdio: 'inherit' })
+        .on('error', callback)
+        .on('close', code => code ? callback(new Error(code)) : callback());
+});
+
 gulp.task('transpile-systemjs', gulp.series(
     'transpile-systemjs-builder',
     gulp.parallel(
         'transpile-systemjs-modules',
         'transpile-systemjs-modules-renovation',
         'transpile-systemjs-testing',
-        'transpile-systemjs-css'
+        'transpile-systemjs-css',
+        'transpile-systemjs-js-vendors'
     )
 ));

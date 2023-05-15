@@ -50,7 +50,7 @@ const StateStoringController = modules.ViewController.inherit((function () {
       try {
         // @ts-expect-error
         return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
-      } catch (e) {
+      } catch (e: any) {
         errors.log(e.message);
       }
     },
@@ -64,7 +64,7 @@ const StateStoringController = modules.ViewController.inherit((function () {
       }
       try {
         getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
-      } catch (e) {
+      } catch (e: any) {
         errors.log(e.message);
       }
     },

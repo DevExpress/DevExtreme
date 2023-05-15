@@ -8,9 +8,10 @@ QUnit.testStart(() => {
     const markup =
         '<div id="tabs"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 QUnit.test('tabs should have overflow-hidden class on server', function(assert) {

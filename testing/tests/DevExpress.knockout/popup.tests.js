@@ -7,6 +7,8 @@ const ko = require('knockout');
 require('ui/popup');
 require('integration/knockout');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
@@ -42,7 +44,7 @@ QUnit.testStart(function() {
 
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 
-QUnit.module('rendering', {
+moduleWithoutCsp('rendering', {
     beforeEach: function() {
         this.element = $('#popup').dxPopup();
         this.instance = this.element.dxPopup('instance');
@@ -58,7 +60,7 @@ QUnit.test('\'title\' option has higher priority that the \'titleTemplate\' opti
 });
 
 
-QUnit.module('templates');
+moduleWithoutCsp('templates');
 
 QUnit.test('popup should not crash with KO (T180280)', function(assert) {
     assert.expect(0);

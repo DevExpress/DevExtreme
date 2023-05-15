@@ -1,5 +1,4 @@
 export {
-  DateRangePickerType,
   ChangeEvent,
   ClosedEvent,
   ContentReadyEvent,
@@ -18,6 +17,7 @@ export {
   OptionChangedEvent,
   PasteEvent,
   ValueChangedEvent,
+  DisabledDate,
   DropDownButtonTemplateData,
   Properties,
 } from './date_range_box';

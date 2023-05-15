@@ -9,7 +9,7 @@ QUnit.module('Widget creation', {
         fixture.appendChild(this.element);
     },
     afterEach: function() {
-        this.instance?.dispose();
+        this.instance.dispose();
     }
 });
 
