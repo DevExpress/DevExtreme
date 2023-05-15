@@ -1024,8 +1024,6 @@ const CollectionWidget = Widget.inherit({
             } else {
                 this._$noData.html(noDataText);
             }
-
-            this.setAria('label', noDataText);
         }
         this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
     },

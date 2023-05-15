@@ -53,7 +53,7 @@ class DateRangeBox extends Editor {
             buttons: undefined,
             calendarOptions: {},
             cancelButtonText: messageLocalization.format('Cancel'),
-            dateOutOfRangeMessage: messageLocalization.format('validation-range'),
+            endDateOutOfRangeMessage: messageLocalization.format('dxDateBox-endDateOutOfRangeMessage'),
             dateSerializationFormat: undefined,
             deferRendering: true,
             disabledDates: null,
@@ -68,7 +68,8 @@ class DateRangeBox extends Editor {
             endDateText: undefined,
             focusStateEnabled: true,
             hoverStateEnabled: true,
-            invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
+            invalidStartDateMessage: messageLocalization.format('dxDateBox-invalidStartDateMessage'),
+            invalidEndDateMessage: messageLocalization.format('dxDateBox-invalidEndDateMessage'),
             isValid: true,
             labelMode: 'static',
             max: undefined,
@@ -96,6 +97,7 @@ class DateRangeBox extends Editor {
             startDateInputAttr: {},
             startDateLabel: 'Start Date',
             startDateName: '',
+            startDateOutOfRangeMessage: messageLocalization.format('dxDateBox-startDateOutOfRangeMessage'),
             startDatePlaceholder: '',
             startDateText: undefined,
             stylingMode: config().editorStylingMode || 'outlined',
@@ -109,7 +111,7 @@ class DateRangeBox extends Editor {
             validationStatus: 'valid',
             value: [null, null],
             valueChangeEvent: 'change',
-
+            _internalValidationErrors: [],
             _currentSelection: 'startDate',
         });
     }
@@ -385,6 +387,22 @@ class DateRangeBox extends Editor {
         return ['calendar', 'native'].includes(pickerType) ? pickerType : 'calendar';
     }
 
+    _getRestErrors(allErrors, partialErrors) {
+        return allErrors.filter((error) => {
+            return !partialErrors.some((prevError) => error.message === prevError.message);
+        });
+    }
+
+    _syncValidationErrors(optionName, newPartialErrors, previousPartialErrors) {
+        newPartialErrors ||= [];
+        previousPartialErrors ||= [];
+
+        const allErrors = this.option(optionName) || [];
+        const otherErrors = this._getRestErrors(allErrors, previousPartialErrors);
+
+        this.option(optionName, [...otherErrors, ...newPartialErrors]);
+    }
+
     _getDateBoxConfig() {
         const options = this.option();
 
@@ -401,8 +419,6 @@ class DateRangeBox extends Editor {
             tabIndex: options.tabIndex,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
-            invalidDateMessage: options.invalidDateMessage,
-            isValid: options.isValid,
             labelMode: options.labelMode,
             max: options.max,
             min: options.min,
@@ -416,7 +432,6 @@ class DateRangeBox extends Editor {
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
-            validationStatus: options.validationStatus,
             valueChangeEvent: options.valueChangeEvent,
             onKeyDown: options.onKeyUp,
             onKeyUp: options.onKeyUp,
@@ -427,6 +442,7 @@ class DateRangeBox extends Editor {
             onPaste: options.onPaste,
             onEnterKey: options.onEnterKey,
             _dateRangeBoxInstance: this,
+            _showValidationMessage: false,
         };
 
         each(EVENTS_LIST, (_, eventName) => {
@@ -450,9 +466,11 @@ class DateRangeBox extends Editor {
             applyButtonText: options.applyButtonText,
             calendarOptions: options.calendarOptions,
             cancelButtonText: options.cancelButtonText,
+            dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
             dropDownOptions: options.dropDownOptions,
+            invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
                 if(!this._shouldSuppressValueSync) {
                     const newValue = [value, this.option('value')[1]];
@@ -471,9 +489,13 @@ class DateRangeBox extends Editor {
 
                 this._raiseCloseAction();
             },
-            onOptionChanged: ({ name, value }) => {
+            onOptionChanged: (args) => {
+                const { name, value, previousValue } = args;
                 if(name === 'text') {
                     this.option('startDateText', value);
+                }
+                if(name === 'validationErrors') {
+                    this._syncValidationErrors('_internalValidationErrors', value, previousValue);
                 }
             },
             todayButtonText: options.todayButtonText,
@@ -484,6 +506,7 @@ class DateRangeBox extends Editor {
             placeholder: options.startDatePlaceholder,
             inputAttr: options.startDateInputAttr,
             name: options.startDateName,
+            _showValidationIcon: false,
         };
     }
 
@@ -492,6 +515,8 @@ class DateRangeBox extends Editor {
 
         return {
             ...this._getDateBoxConfig(),
+            invalidDateMessage: options.invalidEndDateMessage,
+            dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             dropDownOptions: {
                 onShowing: (e) => {
                     e.cancel = true;
@@ -508,9 +533,13 @@ class DateRangeBox extends Editor {
                     this.updateValue(newValue, event);
                 }
             },
-            onOptionChanged: ({ name, value }) => {
+            onOptionChanged: (args) => {
+                const { name, value, previousValue } = args;
                 if(name === 'text') {
                     this.option('endDateText', value);
+                }
+                if(name === 'validationErrors') {
+                    this._syncValidationErrors('_internalValidationErrors', value, previousValue);
                 }
             },
             showClearButton: false,
@@ -522,6 +551,16 @@ class DateRangeBox extends Editor {
             inputAttr: options.endDateInputAttr,
             name: options.endDateName,
         };
+    }
+
+    _getValidationMessagePosition() {
+        const { validationMessagePosition } = this.option();
+
+        if(validationMessagePosition === 'auto') {
+            return this.option('opened') ? 'top' : 'bottom';
+        }
+
+        return validationMessagePosition;
     }
 
     updateValue(newValue, event) {
@@ -589,6 +628,13 @@ class DateRangeBox extends Editor {
         this._buttonCollection.clean();
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
+    }
+
+    _applyCustomValidation(value) {
+        this.validationRequest.fire({
+            editor: this,
+            value
+        });
     }
 
     _clean() {
@@ -667,7 +713,6 @@ class DateRangeBox extends Editor {
             case 'endDate':
                 this.updateValue([this.option('value')[0], value]);
                 break;
-            case 'invalidDateMessage':
             case 'startDateLabel':
                 this._toggleEditorLabelClass();
                 this.getStartDateBox().option('label', value);
@@ -751,6 +796,54 @@ class DateRangeBox extends Editor {
             case 'endDateText':
             case 'useHiddenSubmitElement':
                 break;
+            case 'invalidStartDateMessage':
+                this.getStartDateBox().option('invalidDateMessage', value);
+                break;
+            case 'invalidEndDateMessage':
+                this.getEndDateBox().option('invalidDateMessage', value);
+                break;
+            case 'startDateOutOfRangeMessage':
+                this.getStartDateBox().option('dateOutOfRangeMessage', value);
+                break;
+            case 'endDateOutOfRangeMessage':
+                this.getEndDateBox().option('dateOutOfRangeMessage', value);
+                break;
+            case 'validationMessagePosition':
+                this.getStartDateBox().option(name, value);
+                super._optionChanged(args);
+                break;
+            case '_internalValidationErrors': {
+                this._syncValidationErrors('validationErrors', value, previousValue);
+
+                const validationErrors = this.option('validationErrors');
+                this.option('isValid', !validationErrors?.length);
+                break;
+            }
+            case 'isValid': {
+                this.getEndDateBox().option(name, value);
+
+                const isValid = value && !this.option('_internalValidationErrors').length;
+
+                if(this._shouldSkipIsValidChange || isValid === value) {
+                    super._optionChanged(args);
+                    return;
+                }
+
+                this._shouldSkipIsValidChange = true;
+                this.option('isValid', isValid);
+                this._shouldSkipIsValidChange = false;
+                break;
+            }
+            case 'validationErrors': {
+                const internalValidationErrors = this.option('_internalValidationErrors') || [];
+                const allErrors = value || [];
+                const externalErrors = this._getRestErrors(allErrors, internalValidationErrors);
+                const errors = [...externalErrors, ...internalValidationErrors];
+                const newValue = errors.length ? errors : null;
+                this._options.silent('validationErrors', newValue);
+                super._optionChanged({ ...args, value: newValue });
+                break;
+            }
             case 'value': {
                 const newValue = sortDatesArray(value);
                 if(!isSameDateArrays(newValue, previousValue)) {
@@ -758,14 +851,12 @@ class DateRangeBox extends Editor {
                     this._setOptionWithoutOptionChange('startDate', newValue[0]);
                     this._setOptionWithoutOptionChange('endDate', newValue[1]);
 
-                    this.validationRequest.fire({
-                        value: newValue,
-                        editor: this
-                    });
+                    this._applyCustomValidation(newValue);
+
+                    this._updateDateBoxesValue(newValue);
 
                     this._raiseValueChangeAction(newValue, previousValue);
                     this._saveValueChangeEvent(undefined);
-                    this._updateDateBoxesValue(newValue);
                 }
 
                 break;

@@ -101,7 +101,9 @@ const DateBox = DropDownEditor.inherit({
 
             calendarOptions: {},
 
-            useHiddenSubmitElement: true
+            useHiddenSubmitElement: true,
+
+            _showValidationIcon: true
         });
     },
 
@@ -290,7 +292,7 @@ const DateBox = DropDownEditor.inherit({
         const shouldHideValidationIcon = (longestElementDimensions.width > curWidth);
         const style = inputElement.style;
 
-        this.$element().toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);
+        this.$element().toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon && this.option('_showValidationIcon'));
 
         if(shouldHideValidationIcon) {
             if(this._storedPadding === undefined) {
@@ -483,10 +485,7 @@ const DateBox = DropDownEditor.inherit({
         const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
-            if(!validationError || validationError.editorSpecific) {
-                this._applyInternalValidation(currentValue);
-                this._applyCustomValidation(currentValue);
-            }
+            this._recallInternalValidation(currentValue, validationError);
             return;
         }
 
@@ -503,6 +502,13 @@ const DateBox = DropDownEditor.inherit({
             } else {
                 this.dateValue(newValue, e);
             }
+        }
+    },
+
+    _recallInternalValidation(value, validationError) {
+        if(!validationError || validationError.editorSpecific) {
+            this._applyInternalValidation(value);
+            this._applyCustomValidation(value);
         }
     },
 
@@ -531,6 +537,15 @@ const DateBox = DropDownEditor.inherit({
             validationMessage = this.option('dateOutOfRangeMessage');
         }
 
+        this._updateInternalValidationState(isValid, validationMessage);
+
+        return {
+            isValid,
+            isDate
+        };
+    },
+
+    _updateInternalValidationState(isValid, validationMessage) {
         this.option({
             isValid: isValid,
             validationError: isValid ? null : {
@@ -538,11 +553,6 @@ const DateBox = DropDownEditor.inherit({
                 message: validationMessage
             }
         });
-
-        return {
-            isValid,
-            isDate
-        };
     },
 
     _applyCustomValidation: function(value) {
@@ -697,6 +707,7 @@ const DateBox = DropDownEditor.inherit({
             case 'dateOutOfRangeMessage':
             case 'adaptivityEnabled':
             case 'showAnalogClock':
+            case '_showValidationIcon':
                 break;
             default:
                 this.callBase.apply(this, arguments);

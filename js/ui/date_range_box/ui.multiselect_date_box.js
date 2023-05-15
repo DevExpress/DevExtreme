@@ -81,6 +81,40 @@ class MultiselectDateBox extends DateBox {
             this._strategy.dateRangeBox.getStartDateBox()._strategy._widget._setViewsMinOption(value[0]);
         }
     }
+
+    _updateInternalValidationState(isValid, validationMessage) {
+        this.option({
+            isValid,
+            validationError: isValid ? null : {
+                message: validationMessage
+            }
+        });
+    }
+
+    _recallInternalValidation(value) {
+        this._applyInternalValidation(value);
+    }
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case 'isValid': {
+                const isValid = this._strategy.dateRangeBox.option('isValid');
+
+                if(this._skipIsValidOptionChange || isValid === args.value) {
+                    super._optionChanged(args);
+                    return;
+                }
+
+                this._skipIsValidOptionChange = true;
+                this.option({ isValid });
+                this._skipIsValidOptionChange = false;
+                break;
+            }
+            default:
+                super._optionChanged(args);
+                break;
+        }
+    }
 }
 
 export default MultiselectDateBox;
