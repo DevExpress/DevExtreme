@@ -411,7 +411,7 @@ class DateRangeBox extends Editor {
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
-            stylingMode: options.stylingMode, // options.stylingMode === 'filled' ? 'underlined' : options.stylingMode,
+            stylingMode: options.stylingMode,
             type: 'date',
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
