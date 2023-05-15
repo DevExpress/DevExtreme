@@ -105,6 +105,7 @@ export {
     ValueErrorBarType,
     VerticalAlignment,
     VisualRangeUpdateMode,
+    ValueAxisVisualRangeUpdateMode,
     WordWrap,
     ZoomPanAction,
 };
