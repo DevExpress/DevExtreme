@@ -246,7 +246,6 @@ class DateRangeBox extends Editor {
         super._initMarkup();
     }
 
-
     _attachKeyboardEvents() {
         if(!this.option('readOnly')) {
             super._attachKeyboardEvents();
@@ -601,7 +600,7 @@ class DateRangeBox extends Editor {
     }
 
     _focusEventTarget() {
-        return this.$element();
+        return this.element();
     }
 
     _focusClassTarget() {
