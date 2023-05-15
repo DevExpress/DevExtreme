@@ -38,6 +38,7 @@ stylingModes.forEach((stylingMode) => {
     ) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
+        await setClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
       }
 
       await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
@@ -71,7 +72,9 @@ stylingModes.forEach((stylingMode) => {
             value,
             labelMode,
             rtlEnabled,
+            stylingMode,
             endDateLabel: labelMode,
+            startDateLabel: 'qwertyQWERTYg',
             showClearButton: true,
           };
 
