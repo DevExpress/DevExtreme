@@ -74,6 +74,7 @@ import {
     WordWrap,
     ZoomPanAction,
     ChartsColor,
+    ValueAxisVisualRangeUpdateMode,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {
@@ -2509,7 +2510,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @default 'auto'
      * @public
      */
-    visualRangeUpdateMode?: VisualRangeUpdateMode;
+    visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
     /**
      * @docid dxChartOptions.valueAxis.wholeRange
      * @default undefined

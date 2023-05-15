@@ -2170,6 +2170,7 @@ declare module DevExpress.common.charts {
         years?: number;
       }
     | TimeInterval;
+  export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -2194,7 +2195,7 @@ declare module DevExpress.common.charts {
      */
     startValue?: number | Date | string;
   };
-  export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
+  export type VisualRangeUpdateMode = ValueAxisVisualRangeUpdateMode | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
 }
@@ -31242,7 +31243,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
      */
-    visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
+    visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
     /**
      * [descr:dxChartOptions.valueAxis.wholeRange]
      */
