@@ -248,7 +248,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showClearButton: false,
             showDropDownButton: false,
             spellcheck: false,
-            stylingMode: 'underlined',
             tabIndex: 0,
             useMaskBehavior: false,
             validationMessageMode: 'auto',
@@ -271,6 +270,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
                 opened: false,
+                stylingMode: this.instance.option('stylingMode'),
                 _showValidationIcon: false
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
@@ -288,6 +288,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 dateOutOfRangeMessage: 'End date is out of range',
                 invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
+                stylingMode: this.instance.option('stylingMode'),
                 _showValidationIcon: true
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -2033,21 +2034,15 @@ QUnit.module('Option synchronization', moduleConfig, () => {
                 [optionName]: optionValue
             });
 
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const endDateBox = getEndDateBoxInstance(this.instance);
-
-            assert.strictEqual(startDateBox.option(optionName), optionValue);
-            assert.strictEqual(endDateBox.option(optionName), optionValue);
+            assert.strictEqual(this.instance.getStartDateBox().option(optionName), optionValue);
+            assert.strictEqual(this.instance.getEndDateBox().option(optionName), optionValue);
         });
 
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on runtime change`, function(assert) {
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const endDateBox = getEndDateBoxInstance(this.instance);
-
             this.instance.option(optionName, optionValue);
 
-            assert.strictEqual(startDateBox.option(optionName), optionValue);
-            assert.strictEqual(endDateBox.option(optionName), optionValue);
+            assert.strictEqual(this.instance.getStartDateBox().option(optionName), optionValue);
+            assert.strictEqual(this.instance.getEndDateBox().option(optionName), optionValue);
         });
     });
 
