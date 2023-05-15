@@ -11,6 +11,7 @@
           span {
             background-color: $base-bg;
             box-shadow: $horizontal-padding 0 $base-bg, -$horizontal-padding 0 $base-bg !important; // stylelint-disable-line declaration-no-important
+            height: $label-height;
           }
         }
       }
