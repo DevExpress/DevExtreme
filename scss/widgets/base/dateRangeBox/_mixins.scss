@@ -1,6 +1,6 @@
 @use "sass:math";
 
-@mixin dx-outlined-mixin($base-bg, $horizontal-padding, $texteditor-label-font-size, $label-offset-y) {
+@mixin dx-outlined-mixin($base-bg, $horizontal-padding, $texteditor-label-font-size, $label-offset-y, $label-height) {
   .dx-daterangebox-with-label,
   .dx-daterangebox-with-floating-label {
     &.dx-editor-outlined {
@@ -29,8 +29,21 @@
               font-size: $texteditor-label-font-size;
               margin-top: 0;
               top: 0;
-              height: $texteditor-label-font-size;
+              height: $label-height;
               line-height: $texteditor-label-font-size;
+            }
+          }
+        }
+      }
+
+      .dx-start-datebox,
+      .dx-end-datebox {
+        &.dx-invalid {
+          .dx-label {
+            padding: 0 $horizontal-padding;
+
+            span {
+              height: $label-height;
             }
           }
         }
@@ -39,15 +52,15 @@
   }
 }
 
-@mixin dx-underlined-mixin($texteditor-label-font-size) {
+@mixin dx-underlined-mixin($texteditor-label-font-size, $label-height, $line-height) {
   $label-offset-y: math.div($texteditor-label-font-size, 2);
   $label-transform: translate(0, 0);
 
   .dx-daterangebox-with-floating-label {
     &.dx-editor-underlined {
       .dx-texteditor-label {
-        height: $texteditor-label-font-size;
-        line-height: $texteditor-label-font-size;
+        height: $label-height;
+        line-height: $line-height;
       }
 
       &.dx-dropdowneditor-active,
@@ -55,8 +68,8 @@
         .dx-texteditor-label {
           transform: $label-transform;
           font-size: $texteditor-label-font-size;
-          height: $texteditor-label-font-size;
-          line-height: $texteditor-label-font-size;
+          height: $label-height;
+          line-height: $line-height;
           top: 0;
           margin-top: 0;
         }
@@ -65,20 +78,20 @@
   }
 }
 
-@mixin dx-filled-mixin($label-position-top, $texteditor-label-font-size) {
+@mixin dx-filled-mixin($label-position-top, $texteditor-label-font-size, $label-height, $line-height) {
   .dx-daterangebox-with-floating-label {
     &.dx-editor-filled {
       .dx-texteditor-label {
-        height: $texteditor-label-font-size;
-        line-height: $texteditor-label-font-size;
+        height: $label-height;
+        line-height: $line-height;
       }
 
       &.dx-dropdowneditor-active,
       &.dx-state-focused {
         .dx-texteditor-label {
           font-size: $texteditor-label-font-size;
-          height: $texteditor-label-font-size;
-          line-height: $texteditor-label-font-size;
+          height: $label-height;
+          line-height: $line-height;
           top: $label-position-top;
           margin-top: 0;
         }

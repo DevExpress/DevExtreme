@@ -14,9 +14,9 @@
 $border-width: 1px;
 $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
-@include dx-filled-mixin(0, $generic-texteditor-label-size);
-@include dx-underlined-mixin($generic-texteditor-label-size);
-@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y);
+@include dx-filled-mixin(0, $generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
+@include dx-underlined-mixin($generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
+@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y, $generic-daterangebox-label-height,);
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
