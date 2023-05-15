@@ -44,6 +44,7 @@ const getEndDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getEn
 const getButtonsContainers = $element => $element.find(`> .${DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS}`);
 const getButtons = $element => $element.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
 const getClearButton = $element => getButtonsContainers($element).find(`.${CLEAR_BUTTON}`);
+const getPopup = dateBox => dateBox._popup;
 
 
 const moduleConfig = {
@@ -1729,11 +1730,49 @@ QUnit.module('Popup integration', moduleConfig, () => {
         assert.ok(this.$element.is(popup.option('position.of')));
     });
 
-    QUnit.test('Popup should not have a title', function(assert) {
-        const startDateBox = getStartDateBoxInstance(this.instance);
+    QUnit.module('Popup title', () => {
+        QUnit.test('Popup should not have a title by default', function(assert) {
+            this.instance.open();
 
-        assert.strictEqual(startDateBox.option('dropDownOption.showTitle'), false, 'title showing is disabled');
-        assert.strictEqual(startDateBox.option('dropDownOption.title'), '', 'title is empty');
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), false, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), '', 'title is empty');
+        });
+
+        QUnit.test('Popup title can be configured by dropDownOptions on init', function(assert) {
+            this.reinit({
+                dropDownOptions: {
+                    showTitle: true,
+                    title: 'title'
+                }
+            });
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), true, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), 'title', 'title is empty');
+        });
+
+        QUnit.test('Popup title can be configured by dropDownOptions on runtime change', function(assert) {
+            this.instance.option({
+                dropDownOptions: {
+                    showTitle: true,
+                    title: 'title'
+                }
+            });
+
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), true, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), 'title', 'title is empty');
+        });
     });
 });
 
