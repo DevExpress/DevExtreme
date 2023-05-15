@@ -18,6 +18,8 @@ import { each } from '../../core/utils/iterator';
 import { camelize } from '../../core/utils/inflector';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
+const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-daterangebox-with-label';
+const DATERANGEBOX_WITH_FLOATING_LABEL_CLASS = 'dx-daterangebox-with-floating-label';
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
@@ -25,9 +27,11 @@ const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 
+const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
+const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
+const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 
 const SEPARATOR_ICON_NAME = 'to';
 
@@ -221,10 +225,11 @@ class DateRangeBox extends Editor {
     _initMarkup() {
         this.$element()
             .addClass(DATERANGEBOX_CLASS)
-            // TODO: remove next classes after adding styles
-            .addClass('dx-texteditor')
-            .addClass('dx-datebox-date')
-            .addClass('dx-dropdowneditor');
+            .addClass(TEXTEDITOR_CLASS)
+            .addClass(DROP_DOWN_EDITOR_CLASS);
+
+        this._toggleDropDownEditorActiveClass();
+        this._toggleEditorLabelClass();
 
         this._toggleReadOnlyState();
         this._renderStylingMode();
@@ -239,6 +244,7 @@ class DateRangeBox extends Editor {
         super._initMarkup();
     }
 
+
     _attachKeyboardEvents() {
         if(!this.option('readOnly')) {
             super._attachKeyboardEvents();
@@ -252,31 +258,27 @@ class DateRangeBox extends Editor {
         // TODO: should we add area readonly here?
     }
 
-    _getStylingModePrefix() {
-        return `${DATERANGEBOX_CLASS}-`;
+    _toggleDropDownEditorActiveClass(state) {
+        const { opened } = this.option();
+
+        this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE_CLASS, state ?? opened);
     }
 
-    // TODO: extract this part from Editor to separate file and use it here
-    _renderStylingMode() {
-        const optionName = 'stylingMode';
-        const optionValue = this.option(optionName);
-        const prefix = this._getStylingModePrefix();
+    _toggleEditorLabelClass() {
+        const { startDateLabel, endDateLabel, labelMode } = this.option();
 
-        const allowedStylingClasses = ALLOWED_STYLING_MODES.map((mode) => {
-            return prefix + mode;
-        });
+        const isLabelVisible = (!!startDateLabel || !!endDateLabel) && labelMode !== 'hidden';
 
-        allowedStylingClasses.forEach(className => this.$element().removeClass(className));
+        this.$element()
+            .removeClass(DATERANGEBOX_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(DATERANGEBOX_WITH_LABEL_CLASS);
 
-        let stylingModeClass = prefix + optionValue;
-
-        if(allowedStylingClasses.indexOf(stylingModeClass) === -1) {
-            const defaultOptionValue = this._getDefaultOptions()[optionName];
-            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
-            stylingModeClass = prefix + (platformOptionValue || defaultOptionValue);
+        if(isLabelVisible) {
+            this.$element()
+                .addClass(labelMode === 'floating'
+                    ? DATERANGEBOX_WITH_FLOATING_LABEL_CLASS
+                    : DATERANGEBOX_WITH_LABEL_CLASS);
         }
-
-        this.$element().addClass(stylingModeClass);
     }
 
     _renderStartDateBox() {
@@ -296,8 +298,6 @@ class DateRangeBox extends Editor {
     }
 
     _renderSeparator() {
-        // TODO: request design for rtl mode and research rtl mode appearance
-        // TODO: add transform: scale(-1, 1) for mirror of the icon in rtl mode
         const $icon = getImageContainer(SEPARATOR_ICON_NAME);
         this._$separator = $('<div>')
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
@@ -411,7 +411,7 @@ class DateRangeBox extends Editor {
             readOnly: options.readOnly,
             rtlEnabled: options.rtlEnabled,
             spellcheck: options.spellcheck,
-            stylingMode: 'underlined',
+            stylingMode: options.stylingMode, // options.stylingMode === 'filled' ? 'underlined' : options.stylingMode,
             type: 'date',
             useMaskBehavior: options.useMaskBehavior,
             validationMessageMode: options.validationMessageMode,
@@ -562,7 +562,7 @@ class DateRangeBox extends Editor {
     }
 
     _focusEventTarget() {
-        return this.element();
+        return this.$element();
     }
 
     _focusClassTarget() {
@@ -610,11 +610,17 @@ class DateRangeBox extends Editor {
             case 'displayFormat':
             case 'max':
             case 'min':
-            case 'rtlEnabled': // super() call for rtlEnabled?
-            case 'labelMode':
             case 'spellcheck':
             case 'useMaskBehavior':
             case 'valueChangeEvent':
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
+                break;
+            case 'rtlEnabled':
+                super._optionChanged(args);
+                break;
+            case 'labelMode':
+                this._toggleEditorLabelClass();
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
                 break;
@@ -624,6 +630,9 @@ class DateRangeBox extends Editor {
             case 'deferRendering':
             case 'disabledDates':
             case 'opened':
+                this._toggleDropDownEditorActiveClass(value);
+                this.getStartDateBox().option(name, value);
+                break;
             case 'todayButtonText':
                 this.getStartDateBox().option(name, value);
                 break;
@@ -660,9 +669,11 @@ class DateRangeBox extends Editor {
                 break;
             case 'invalidDateMessage':
             case 'startDateLabel':
+                this._toggleEditorLabelClass();
                 this.getStartDateBox().option('label', value);
                 break;
             case 'endDateLabel':
+                this._toggleEditorLabelClass();
                 this.getEndDateBox().option('label', value);
                 break;
             case 'startDatePlaceholder':

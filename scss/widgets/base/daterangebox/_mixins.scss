@@ -1,0 +1,111 @@
+@use "sass:math";
+
+@mixin dx-outlined-mixin($base-bg, $horizontal-padding, $texteditor-label-font-size, $label-offset-y) {
+  .dx-daterangebox-with-label,
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-outlined {
+      margin-top: $label-offset-y;
+
+      .dx-texteditor-label {
+        .dx-label {
+          span {
+            background-color: $base-bg;
+            box-shadow: $horizontal-padding 0 $base-bg, -$horizontal-padding 0 $base-bg !important; // stylelint-disable-line declaration-no-important
+          }
+        }
+      }
+
+      &.dx-dropdowneditor-active,
+      &.dx-dropdowneditor-active.dx-state-focused,
+      &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
+      &.dx-state-focused,
+      &.dx-state-focused.dx-state-hover {
+        .dx-texteditor-label {
+          .dx-label {
+            padding: 0 $horizontal-padding;
+
+            span {
+              transform: translate(0, -$label-offset-y);
+              font-size: $texteditor-label-font-size;
+              margin-top: 0;
+              top: 0;
+              height: $texteditor-label-font-size;
+              line-height: $texteditor-label-font-size;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-underlined-mixin($texteditor-label-font-size) {
+  $label-offset-y: math.div($texteditor-label-font-size, 2);
+  $label-transform: translate(0, 0);
+
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-underlined {
+      .dx-texteditor-label {
+        height: $texteditor-label-font-size;
+        line-height: $texteditor-label-font-size;
+      }
+
+      &.dx-dropdowneditor-active,
+      &.dx-state-focused {
+        .dx-texteditor-label {
+          transform: $label-transform;
+          font-size: $texteditor-label-font-size;
+          height: $texteditor-label-font-size;
+          line-height: $texteditor-label-font-size;
+          top: 0;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-filled-mixin($label-position-top, $texteditor-label-font-size) {
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-filled {
+      .dx-texteditor-label {
+        height: $texteditor-label-font-size;
+        line-height: $texteditor-label-font-size;
+      }
+
+      &.dx-dropdowneditor-active,
+      &.dx-state-focused {
+        .dx-texteditor-label {
+          font-size: $texteditor-label-font-size;
+          height: $texteditor-label-font-size;
+          line-height: $texteditor-label-font-size;
+          top: $label-position-top;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color) {
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    &.dx-invalid {
+      .dx-start-datebox,
+      .dx-end-datebox {
+        &.dx-state-hover {
+          &::before {
+            border-color: $texteditor-invalid-faded-border-color;
+          }
+        }
+
+        &.dx-state-focused {
+          &::before {
+            border-color: $texteditor-invalid-focused-border-color;
+          }
+        }
+      }
+    }
+  }
+}
