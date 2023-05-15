@@ -363,6 +363,21 @@ QUnit.module('validation', {
         });
 
         QUnit.module('options', () => {
+            if(!Editor.IS_RENOVATED_WIDGET) {
+                QUnit.test('validationMessage should not be rendered if _showValidationMessage=false', function(assert) {
+                    this.reinitEditor({
+                        _showValidationMessage: false,
+                        validationError: {
+                            message: '2'
+                        },
+                        isValid: false,
+                    });
+
+                    const validationMessage = this.getValidationMessage();
+                    assert.strictEqual(validationMessage, undefined, 'validation message is not rendered');
+                });
+            }
+
             QUnit.test('propagateOutsideClick=true', function(assert) {
                 const validationMessage = this.getValidationMessage();
                 assert.strictEqual(validationMessage.option('propagateOutsideClick'), true, '"propagateOutsideClick" option has correct value');
