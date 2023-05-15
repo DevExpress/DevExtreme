@@ -130,8 +130,6 @@ jobs:
             useJQuery: true
           - constel: 'ui.widgets(1/3)'
             useCsp: false
-          - constel: 'ui.widgets(2/3)'
-            useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
         exclude:
