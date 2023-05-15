@@ -85,7 +85,7 @@ function createDefaultBatch(dev) {
         tasks.push('discover-declarations');
     }
 
-    if(dev) {
+    if(dev || env.TEST_CI) {
         tasks.push('transpile-systemjs');
     }
     return gulp.series(tasks);
