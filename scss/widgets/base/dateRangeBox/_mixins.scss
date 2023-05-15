@@ -51,7 +51,11 @@
 
       .dx-start-datebox,
       .dx-end-datebox {
-        &.dx-invalid {
+        &.dx-invalid,
+        &.dx-invalid.dx-state-hover,
+        &.dx-state-readonly,
+        &.dx-state-disabled,
+        &.dx-state-readonly.dx-state-hover {
           .dx-label {
             padding: 0 $horizontal-padding;
 
