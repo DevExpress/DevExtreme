@@ -824,17 +824,13 @@ class DateRangeBox extends Editor {
                 break;
             }
             case 'validationErrors': {
-                if(this._shouldSkipErrorsChange) {
-                    super._optionChanged(args);
-                    return;
-                }
-
-                this._shouldSkipErrorsChange = true;
                 const internalValidationErrors = this.option('_internalValidationErrors') || [];
                 const allErrors = value || [];
                 const externalErrors = this._getRestErrors(allErrors, internalValidationErrors);
-                this.option('validationErrors', [...externalErrors, ...internalValidationErrors]);
-                this._shouldSkipErrorsChange = false;
+                const errors = [...externalErrors, ...internalValidationErrors];
+                const newValue = errors.length ? errors : null;
+                this._options.silent('validationErrors', newValue);
+                super._optionChanged({ ...args, value: newValue });
                 break;
             }
             case 'value': {
