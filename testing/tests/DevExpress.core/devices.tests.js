@@ -20,6 +20,8 @@ const userAgents = {
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
 };
 
+themes.setDefaultTimeout(0);
+
 QUnit.module('devices', {
     beforeEach: function() {
         this._savedDevice = devices.current();

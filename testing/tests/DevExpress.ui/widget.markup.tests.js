@@ -18,7 +18,8 @@ require('generic_light.css!');
             <div id="widget"></div>
             <div id="widthRootStyle"></div>
             <div id="widthRootStylePercent"></div>
-            </div>`;
+            </div>
+        `;
 
         $('#qunit-fixture').html(markup);
         $('#widthRootStyle').css('width', '300px');
