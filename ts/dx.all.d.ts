@@ -10775,8 +10775,6 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type DisabledDate =
-      DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateRangeBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
@@ -10819,10 +10817,6 @@ declare module DevExpress.ui {
       ClipboardEvent
     >;
     export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
-      /**
-       * [descr:Properties.disabledDates]
-       */
-      disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
