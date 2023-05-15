@@ -6,6 +6,8 @@ const ko = require('knockout');
 require('ui/lookup');
 require('integration/knockout');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 QUnit.testStart(function() {
     const markup =
         '<div id="T131530" data-bind="dxLookup: { items: [{ }, { }], itemTemplate: \'item\' }">\
@@ -29,7 +31,7 @@ const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
 };
 
-QUnit.module('list options', {
+moduleWithoutCsp('list options', {
     beforeEach: function() {
         fx.off = true;
         executeAsyncMock.setup();
