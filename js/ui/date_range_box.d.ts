@@ -11,10 +11,6 @@ import {
 } from '../core/element';
 
 import {
-  ComponentDisabledDate,
-} from './calendar';
-
-import {
   DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
@@ -81,23 +77,12 @@ export type ValueChangedEvent =
     & ValueChangedInfo;
 
 /** @public */
-export type DisabledDate = ComponentDisabledDate<dxDateRangeBox>;
-
-/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
  * @public
  */
 export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
-    /**
-       * @docid
-       * @default null
-       * @type_function_param1 data:object
-       * @type_function_param1_field component:dxDateRangeBox
-       * @public
-       */
-    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null

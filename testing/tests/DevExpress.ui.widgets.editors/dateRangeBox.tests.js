@@ -44,6 +44,7 @@ const getEndDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getEn
 const getButtonsContainers = $element => $element.find(`> .${DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS}`);
 const getButtons = $element => $element.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
 const getClearButton = $element => getButtonsContainers($element).find(`.${CLEAR_BUTTON}`);
+const getPopup = dateBox => dateBox._popup;
 
 
 const moduleConfig = {
@@ -248,7 +249,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showClearButton: false,
             showDropDownButton: false,
             spellcheck: false,
-            stylingMode: 'underlined',
             tabIndex: 0,
             useMaskBehavior: false,
             validationMessageMode: 'auto',
@@ -271,6 +271,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
                 opened: false,
+                stylingMode: this.instance.option('stylingMode'),
                 _showValidationIcon: false
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
@@ -288,6 +289,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 dateOutOfRangeMessage: 'End date is out of range',
                 invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
+                stylingMode: this.instance.option('stylingMode'),
                 _showValidationIcon: true
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
@@ -1728,6 +1730,90 @@ QUnit.module('Popup integration', moduleConfig, () => {
 
         assert.ok(this.$element.is(popup.option('position.of')));
     });
+
+    QUnit.module('Popup title', () => {
+        QUnit.test('Popup should not have a title by default', function(assert) {
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), false, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), '', 'title is empty');
+        });
+
+        QUnit.test('Popup title can be configured by dropDownOptions on init', function(assert) {
+            this.reinit({
+                dropDownOptions: {
+                    showTitle: true,
+                    title: 'title'
+                }
+            });
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), true, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), 'title', 'title is empty');
+        });
+
+        QUnit.test('Popup title can be configured by dropDownOptions on runtime change', function(assert) {
+            this.instance.option({
+                dropDownOptions: {
+                    showTitle: true,
+                    title: 'title'
+                }
+            });
+
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), true, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), 'title', 'title is empty');
+        });
+    });
+
+    QUnit.module('IOS', () => {
+        QUnit.test('Popup should not be closed after focus is moved to the end dateBox, especially on IOS', function(assert) {
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            $startDateBoxInput.trigger('focusin');
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+
+            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $endDateBoxInput }));
+
+            assert.strictEqual(this.instance.option('opened'), true, 'popup is not closed');
+        });
+
+        QUnit.test('Popup should be closed after focus is moved to other editor using IOs special nextButton', function(assert) {
+            const isIOs = devices.current().platform === 'ios';
+            if(!isIOs) {
+                assert.ok(true, 'test is actual only for ios');
+                return;
+            }
+
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            $startDateBoxInput.trigger('focusin');
+
+            const otherDateRangeBox = $('#dateRangeBox2').dxDateRangeBox({}).dxDateRangeBox('instance');
+            const otherStartDateBox = getStartDateBoxInstance(otherDateRangeBox);
+            const $otherStartDateBoxInput = $(otherStartDateBox.field());
+
+            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $otherStartDateBoxInput }));
+
+            assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
+        });
+    });
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
@@ -2033,21 +2119,15 @@ QUnit.module('Option synchronization', moduleConfig, () => {
                 [optionName]: optionValue
             });
 
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const endDateBox = getEndDateBoxInstance(this.instance);
-
-            assert.strictEqual(startDateBox.option(optionName), optionValue);
-            assert.strictEqual(endDateBox.option(optionName), optionValue);
+            assert.strictEqual(this.instance.getStartDateBox().option(optionName), optionValue);
+            assert.strictEqual(this.instance.getEndDateBox().option(optionName), optionValue);
         });
 
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on runtime change`, function(assert) {
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const endDateBox = getEndDateBoxInstance(this.instance);
-
             this.instance.option(optionName, optionValue);
 
-            assert.strictEqual(startDateBox.option(optionName), optionValue);
-            assert.strictEqual(endDateBox.option(optionName), optionValue);
+            assert.strictEqual(this.instance.getStartDateBox().option(optionName), optionValue);
+            assert.strictEqual(this.instance.getEndDateBox().option(optionName), optionValue);
         });
     });
 

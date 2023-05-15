@@ -24,6 +24,14 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
+    _renderOpenedState() {
+        const opened = this._strategy.dateRangeBox.getStartDateBox()?.option('opened') ?? this.option('opened');
+
+        this._strategy.dateRangeBox._toggleDropDownEditorActiveClass(opened);
+
+        super._renderOpenedState();
+    }
+
     _popupShownHandler() {
         super._popupShownHandler();
 
@@ -85,6 +93,13 @@ class MultiselectDateBox extends DateBox {
 
     _recallInternalValidation(value) {
         this._applyInternalValidation(value);
+    }
+
+    _isTargetOutOfComponent(target) {
+        const $dateRangeBox = this._strategy.dateRangeBox.$element();
+        const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
+
+        return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
     }
 
     _optionChanged(args) {
