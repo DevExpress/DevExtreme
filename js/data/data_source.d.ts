@@ -50,14 +50,13 @@ export interface DataSourceOptions<
      * @type Group expression
      * @public
      */
-       group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
-     /**
-      * @docid
-      * @type object
-      * @public
-      */
-     // eslint-disable-next-line spellcheck/spell-checker
-     langParams?: LangParams;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    /**
+     * @docid
+     * @public
+     */
+    // eslint-disable-next-line spellcheck/spell-checker
+    langParams?: LangParams;
     /**
      * @docid
      * @type_function_param1 dataItem:object

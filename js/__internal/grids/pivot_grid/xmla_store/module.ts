@@ -71,7 +71,7 @@ const XmlaStore = Class.inherit((function () {
         if (!xml || xml.getElementsByTagName('parsererror').length || xml.childNodes.length === 0) {
           throw new errors.Error('E4023', text);
         }
-      } catch (e) {
+      } catch (e: any) {
         deferred.reject({
           statusText: e.message,
           stack: e.stack,

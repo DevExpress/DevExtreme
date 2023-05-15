@@ -4,6 +4,12 @@ const { logger } = require('core/utils/console');
 
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('variableWrapperUtils');
+} else {
+    QUnit.module.skip('variableWrapperUtils');
+}
+
 QUnit.test('wrapped value', function(assert) {
     const observableValue = ko.observable(3);
     const computedValue = ko.computed(function() { return '4'; });

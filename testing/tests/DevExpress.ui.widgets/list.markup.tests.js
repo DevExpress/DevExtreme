@@ -10,12 +10,13 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         '<div id="list"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="templated-list">\
             <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const LIST_CLASS = 'dx-list';
@@ -268,34 +269,33 @@ QUnit.module('nested rendering', {}, () => {
 
 let helper;
 if(devices.real().deviceType === 'desktop') {
-    [true, false].forEach((searchEnabled) => {
-        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: function() {
-                helper = new ariaAccessibilityTestHelper({
-                    createWidget: ($element, options) => new List($element,
-                        $.extend({
-                            items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
-                            searchEnabled: searchEnabled
-                        }, options))
-                });
-                this.clock = sinon.useFakeTimers();
-                this.expectedItemContainerAttrs = {
-                    role: 'listbox',
-                    tabindex: '0',
-                    'aria-label': 'Items'
-                };
-                this.expectedListAttrs = {
-                    role: 'group',
-                    'aria-roledescription': 'list',
-                };
-            },
-            afterEach: function() {
-                this.clock.restore();
-                helper.$widget.remove();
-            }
-        }, () => {
+    QUnit.module('Aria accessibility', {
+        beforeEach: function() {
+            helper = new ariaAccessibilityTestHelper({
+                createWidget: ($element, options) => new List($element,
+                    $.extend({
+                        items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
+                    }, options))
+            });
+            this.clock = sinon.useFakeTimers();
+            this.expectedItemContainerAttrs = {
+                role: 'listbox',
+                tabindex: '0',
+                'aria-label': 'Items'
+            };
+            this.expectedListAttrs = {
+                role: 'group',
+                'aria-roledescription': 'list',
+            };
+        },
+        afterEach: function() {
+            this.clock.restore();
+            helper.$widget.remove();
+        }
+    }, () => {
+        [true, false].forEach((searchEnabled) => {
             QUnit.test('Selected: [], selectionMode: "none"', function() {
-                helper.createWidget();
+                helper.createWidget({ searchEnabled });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
@@ -303,7 +303,12 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test('Selected: ["Item_2"], change searchEnabled after initialize', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_2'],
+                    keyExpr: 'text',
+                    selectionMode: 'single'
+                });
                 helper.widget.option('searchEnabled', !searchEnabled);
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
@@ -312,7 +317,12 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test('Selected: ["Item_2"], selectionMode: "single"', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_2'],
+                    keyExpr: 'text',
+                    selectionMode: 'single'
+                });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
@@ -320,7 +330,12 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test('Selected: ["Item_2", "Item_3"], selectionMode: "multiple"', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_2', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_2', 'Item_3'],
+                    keyExpr: 'text',
+                    selectionMode: 'multiple'
+                });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
@@ -328,7 +343,12 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test('Selected: ["Item_1"] -> set focusedElement -> clean focusedElement', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_1'], keyExpr: 'text', selectionMode: 'single' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_1'],
+                    keyExpr: 'text',
+                    selectionMode: 'single'
+                });
 
                 helper.widget.option('focusedElement', helper.getItems().eq(0));
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
@@ -338,37 +358,49 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkItemsAttributes([0], { attributes: ['aria-selected'], role: 'option' });
             });
+        });
 
-            ['items', 'dataSource'].forEach(dataSourcePropertyName => {
-                QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
-                    helper.createWidget({ items: [] });
-
-                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
-
-                    helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'Items');
-
-                    helper.widget.option(dataSourcePropertyName, []);
-                    assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'No data to display');
-                });
-            });
-
-            QUnit.test('noDataText should be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
-                const noDataText = 'Custom no data text';
-
-                helper.createWidget({ noDataText, items: [] });
-
-                assert.strictEqual(helper.$itemContainer.attr('aria-label'), noDataText);
-            });
-
-            QUnit.test('aria-label of empty list should be updated after noDataText option change', function(assert) {
+        ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+            QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ items: [] });
 
-                const noDataText = 'Custom no data text';
-                helper.widget.option('noDataText', noDataText);
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
 
-                assert.strictEqual(helper.$itemContainer.attr('aria-label'), noDataText);
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'Items');
+
+                helper.widget.option(dataSourcePropertyName, []);
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
             });
+
+            QUnit.test(`list should have correct role if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
+                helper.createWidget({ items: [] });
+
+                assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                assert.strictEqual(helper.$itemContainer.attr('role'), 'listbox');
+
+                helper.widget.option(dataSourcePropertyName, []);
+                assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+            });
+        });
+
+        QUnit.test('noDataText should not be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
+            const noDataText = 'Custom no data text';
+
+            helper.createWidget({ noDataText, items: [] });
+
+            assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+        });
+
+        QUnit.test('aria-label of empty list should be empty after noDataText option change', function(assert) {
+            helper.createWidget({ items: [] });
+
+            const noDataText = 'Custom no data text';
+            helper.widget.option('noDataText', noDataText);
+
+            assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
         });
     });
 }

@@ -6,6 +6,8 @@ const dataUtils = require('core/element_data');
 
 require('ui/defer_rendering');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 QUnit.testStart(function() {
     const markup =
         '<div id="renderDelegateWithWithBinding">\
@@ -20,7 +22,7 @@ QUnit.testStart(function() {
 });
 
 
-QUnit.module('dxDeferRendering');
+moduleWithoutCsp('dxDeferRendering');
 
 QUnit.test('render with the \'with\' binding', function(assert) {
     const done = assert.async();

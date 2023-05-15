@@ -14,8 +14,8 @@ SystemJS.config({
 
 define(function(require) {
     window.DevExpress_ui_widget_errors = require('ui/widget/ui.errors');
-    window.ajaxMock = require('/testing/helpers/ajaxMock.js');
+    window.ajaxMock = require('../../helpers/ajaxMock.js');
     require('bundles/dx.web.js');
     require('aspnet.js');
-    require('/testing/tests/DevExpress.aspnet/aspnet.tests.js');
+    require('./aspnet.tests.js');
 });

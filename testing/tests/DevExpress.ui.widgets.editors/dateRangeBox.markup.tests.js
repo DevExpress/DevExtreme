@@ -295,5 +295,27 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
         // assert.strictEqual($(this.instance.field()[0]).attr('tabIndex'), '2', 'startDateBox input tabIndex value');
         // assert.strictEqual($(this.instance.field()[1]).attr('tabIndex'), '2', 'endDateBox input tabIndex value');
     });
+
+    QUnit.test('DateRangeBox inside flex container should not be change width after change min option', function(assert) {
+        const $flexContainer = $('<div>').css({ display: 'flex' });
+
+        try {
+            const $dateRangeBox = $('<div>');
+
+            $dateRangeBox.appendTo($flexContainer);
+            $flexContainer.appendTo('#qunit-fixture');
+
+            const dateRangeBox = $dateRangeBox.dxDateRangeBox({}).dxDateRangeBox('instance');
+
+            const width = $dateRangeBox.width();
+
+            dateRangeBox.option('min', new Date(2021, 9, 17));
+
+            assert.strictEqual($dateRangeBox.width(), width, 'width is not changed');
+        } finally {
+            $flexContainer.remove();
+        }
+
+    });
 });
 

@@ -23,6 +23,7 @@ const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 const COLLECTION_CLASS = 'dx-collection';
 const FOCUSED_ITEM_CLASS = 'dx-state-focused';
 const ACTIVE_ITEM_CLASS = 'dx-state-active';
+const ITEM_CUSTOM_CLASS = 'item';
 
 const { module, test, testInActiveWindow } = QUnit;
 
@@ -33,7 +34,7 @@ class TestComponent extends CollectionWidget {
         this._activeStateUnit = '.item';
     }
 
-    _itemClass() { return 'item'; }
+    _itemClass() { return ITEM_CUSTOM_CLASS; }
     _itemDataKey() { return '123'; }
     _itemContainer() { return this.$element(); }
     _allowDynamicItemsAppend() { return true; }
@@ -837,7 +838,7 @@ module('events', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
 
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus state was not toggled for disabled item');
@@ -1083,6 +1084,25 @@ module('events', {
         assert.ok(args.event, 'jQuery event provided');
         assert.ok(args.itemElement, 'item element provided');
     });
+
+    QUnit.test('dxpointerup event should call changing focused item', function(assert) {
+        const $element = $('#cmp');
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [1, 2],
+        });
+
+        const $secondItem = $element.find(`.${ITEM_CUSTOM_CLASS}`).eq(1);
+
+        $secondItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+        assert.strictEqual($secondItem.hasClass(FOCUSED_ITEM_CLASS), false);
+
+        $secondItem.trigger('dxpointerup');
+        this.clock.tick(10);
+        assert.strictEqual($secondItem.hasClass(FOCUSED_ITEM_CLASS), true);
+    });
 });
 
 module('option change', () => {
@@ -1218,7 +1238,7 @@ module('keyboard navigation', {
         const $item = $element.find('.item').eq(0);
         const keyboard = keyboardMock($element);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
         keyboard.keyDown('enter');
         assert.equal(itemClicked, 1, 'press enter on item call item click action');
@@ -1258,7 +1278,7 @@ module('keyboard navigation', {
             }
         });
 
-        $element.find('.item').eq(0).trigger('dxpointerdown');
+        $element.find('.item').eq(0).trigger('dxpointerup');
         this.clock.tick();
 
         keyboardMock($element).keyDown('space');
@@ -1304,7 +1324,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
 
         keyboard.keyDown('left');
@@ -1330,7 +1350,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
 
         keyboard.keyDown('down');
@@ -1358,7 +1378,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $element.find('.item').eq(3).trigger('dxpointerdown');
+        $element.find('.item').eq(3).trigger('dxpointerup');
         this.clock.tick();
 
         $items.eq(2).toggle(false);
@@ -1385,7 +1405,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
 
         keyboard.keyDown('up');
@@ -1411,7 +1431,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
 
         keyboard.keyDown('pagedown');
@@ -1438,7 +1458,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.focusin();
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
         keyboard.keyDown('end');
         $item = $items.last();
@@ -1465,7 +1485,7 @@ module('keyboard navigation', {
 
         $element.focusin();
         $items.last().toggle(false);
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
         keyboard.keyDown('end');
         $item = $items.last().prev();
@@ -1495,7 +1515,7 @@ module('keyboard navigation', {
         $element.focusin();
         assert.strictEqual($element.attr('aria-activedescendant'), String(focusedItemId), 'element has attribute aria-activedescendant, whose value active');
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
         assert.ok($item.attr('id').match(focusedItemId), 'first item has id active');
 
@@ -1523,7 +1543,7 @@ module('keyboard navigation', {
         const $item = $items.first();
         const keyboard = keyboardMock($element);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
 
         this.clock.tick();
         keyboard.keyDown('right');
@@ -1565,7 +1585,7 @@ module('keyboard navigation', {
         const $items = $element.find('.item');
         const $item = $items.first();
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         assert.equal(instance.option('focusedElement'), null, 'focus isn\'t set');
 
         this.clock.tick();
@@ -1583,7 +1603,7 @@ module('keyboard navigation', {
         const $items = $element.find('.item');
         const $item = $items.eq(1);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         instance.focus();
         assert.equal($(instance.option('focusedElement')).get(0), $item.get(0), 'focus isn\'t set');
     });
@@ -1599,7 +1619,7 @@ module('keyboard navigation', {
         const $items = $element.find('.item');
         const $item = $items.first();
 
-        const event = $.Event('dxpointerdown');
+        const event = $.Event('dxpointerup');
         $item.trigger(event);
         event.preventDefault();
         this.clock.tick();
@@ -1623,7 +1643,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.focusin();
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
 
         this.clock.tick();
 
@@ -1651,12 +1671,12 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.focusin();
-        $firstItem.trigger('dxpointerdown');
+        $firstItem.trigger('dxpointerup');
         this.clock.tick();
         keyboard.keyDown('left');
         assert.ok($firstItem.hasClass(FOCUSED_ITEM_CLASS), 'First item must stay focused when we press \'left\' button on the keyboard');
 
-        $lastItem.trigger('dxpointerdown');
+        $lastItem.trigger('dxpointerup');
         this.clock.tick();
         keyboard.keyDown('right');
         assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), 'Last item must stay focused when we press \'right\' button on the keyboard');
@@ -1680,7 +1700,7 @@ module('keyboard navigation', {
                     const keyboard = keyboardMock($element);
 
                     $element.trigger('focusin');
-                    $element.find('.item').eq(3).trigger('dxpointerdown');
+                    $element.find('.item').eq(3).trigger('dxpointerup');
                     this.clock.tick();
 
                     keyboard.keyDown(key, { ctrlKey, metaKey });
@@ -1713,7 +1733,7 @@ module('focus policy', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick();
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
     });
@@ -1733,7 +1753,7 @@ module('focus policy', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger($.Event('dxpointerdown', { target: $item.find('input').get(0) }));
+        $item.trigger($.Event('dxpointerup', { target: $item.find('input').get(0) }));
         this.clock.tick();
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
     });
@@ -1753,7 +1773,7 @@ module('focus policy', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger($.Event('dxpointerdown', { target: $item.find('span').get(0) }));
+        $item.trigger($.Event('dxpointerup', { target: $item.find('span').get(0) }));
         this.clock.tick();
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.equal($(instance.option('focusedElement')).get(0), $item.get(0), 'focus set to first item');
@@ -2028,14 +2048,14 @@ QUnit.module('Aria accessibility', {
     test('Attributes on initialize', function() {
         helper.createWidget({ items: [] });
 
-        helper.checkAttributes(helper.$widget, { tabindex: '0', 'aria-label': 'No data to display' });
+        helper.checkAttributes(helper.$widget, { tabindex: '0' });
         helper.checkItemsAttributes([], { });
     });
 
     test('Items[] -> Items[\'Item_1\', \'Item_2\', \'Item_3\' ]', function(assert) {
         helper.createWidget({ items: [] });
 
-        helper.checkAttributes(helper.$widget, { tabindex: '0', 'aria-label': 'No data to display' });
+        helper.checkAttributes(helper.$widget, { tabindex: '0' });
         helper.checkItemsAttributes([], { });
 
         helper.widget.option('items', this.items);

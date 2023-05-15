@@ -39,10 +39,16 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 if(this.dateRangeBox.option('opened')) {
                     return true;
                 }
-            }
+            },
+            enter: (e) => {
+                if(this.dateRangeBox.option('opened')) {
+                    this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
+                    this.dateBox._valueChangeEventHandler(e);
+                    this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                    return false;
+                }
+            },
         };
-
-        delete supportedKeys.enter;
 
         return supportedKeys;
     }
@@ -108,9 +114,9 @@ class RangeCalendarStrategy extends CalendarStrategy {
             // this._widget.option('_currentSelection', 'endDate');
             this._widget._setViewsMinOption(value[0]);
 
-            if(value[1]) {
-                this._widget.option('currentDate', value[1]);
-            }
+            // if(value[1]) {
+            //     this._widget.option('currentDate', value[1]);
+            // }
         } else {
             this.setActiveEndDateBox();
 

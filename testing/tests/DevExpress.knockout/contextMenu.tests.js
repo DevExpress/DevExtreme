@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('ui/context_menu/ui.context_menu');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('contextMenu');
+} else {
+    QUnit.module.skip('contextMenu');
+}
+
 QUnit.test('context menu should change it\'s position if it\'s part was changed by viewmodel', function(assert) {
     const vm = {
         my: ko.observable('top')

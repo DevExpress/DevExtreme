@@ -1,7 +1,7 @@
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 
-const getDeserializedDate = (value) => {
+export const getDeserializedDate = (value) => {
     return dateSerialization.deserializeDate(value);
 };
 
