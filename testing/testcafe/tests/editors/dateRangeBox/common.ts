@@ -41,6 +41,7 @@ stylingModes.forEach((stylingMode) => {
       READONLY_STATE_CLASS,
       DISABLED_STATE_CLASS,
       INVALID_STATE_CLASS,
+      `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
     ] as any[]
     ) {
       for (const id of t.ctx.ids) {
