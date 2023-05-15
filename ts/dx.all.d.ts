@@ -2195,7 +2195,7 @@ declare module DevExpress.common.charts {
      */
     startValue?: number | Date | string;
   };
-  export type VisualRangeUpdateMode = ValueAxisVisualRangeUpdateMode | 'shift';
+  export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
 }

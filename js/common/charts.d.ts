@@ -270,7 +270,7 @@ export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type VisualRangeUpdateMode = ValueAxisVisualRangeUpdateMode | 'shift';
+export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
 
 /**
  * @public
