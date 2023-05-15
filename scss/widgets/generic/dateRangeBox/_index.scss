@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "../../base/dateRangeBox/dateRangeBox";
+@use "../../base/dateRangeBox/dateRangeBox" as *;
 @use "../../base/dateRangeBox/mixins" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
