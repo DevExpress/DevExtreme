@@ -18,12 +18,9 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
   // act
   await t.click(dataGrid.getDataRow(0).getCommandCell(0).element);
 
-  const masterRow = dataGrid.getMasterRow(0);
-  const masterGrid = masterRow.getDataGrid();
-
   // assert
   await t
-    .expect(await takeScreenshot('T1046688.searchPanel.png', masterGrid.element))
+    .expect(await takeScreenshot('T1046688.searchPanel.png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -51,28 +48,3 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
     },
   });
 }).after(async () => { await changeTheme(Themes.genericLight); });
-
-/*
-Source size: W:1504, H:430
-Target size: W:752, H:215
-
-ORIGINAL TARGET 23_1 error:
-Source size: W:737, H:215
-Target size: W:752, H:215
-
-UPDATED TARGET 23_1 error:
-Source size: W:752, H:215
-Target size: W:737, H:215
-
-22_2 error:
-Source size: W:752, H:215
-Target size: W:737, H:215
-
-22_1 error:
-Source size: W:752, H:215
-Target size: W:737, H:215
-
-еще мигалки:
-https://github.com/DevExpress/DevExtreme/actions/runs/4894076866/jobs/8737947880?pr=24508
-
-*/
