@@ -38,9 +38,6 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
-/**
- * @type {import('./ui.grid_core.modules').Module}
- */
 export const columnsControllerModule = {
   defaultOptions() {
     return {
@@ -62,9 +59,6 @@ export const columnsControllerModule = {
 
       columns: undefined,
       regenerateColumnsByVisibleItems: false,
-      /**
-       * @type {undefined}
-       */
       customizeColumns: null,
       dateSerializationFormat: undefined,
     };
@@ -345,9 +339,6 @@ export const columnsControllerModule = {
         }
       };
 
-      /**
-       * @this {import('./ui.grid_core.columns_controller').Column}
-       */
       const customizeTextForBooleanDataType = function (e) {
         if (e.value === true) {
           return this.trueText || 'true';
@@ -390,9 +381,6 @@ export const columnsControllerModule = {
         return result;
       };
 
-      /**
-       * @param {import('./ui.grid_core.columns_controller').ColumnsController} that
-       */
       const updateColumnIndexes = function (that) {
         each(that._columns, (index, column) => {
           column.index = index;
@@ -844,9 +832,6 @@ export const columnsControllerModule = {
         return column.fixedPosition;
       };
 
-      /**
-       * @this {import('./ui.grid_core.columns_controller').ColumnsController}
-       */
       const processExpandColumns = function (columns, expandColumns, type, columnIndex) {
         let customColumnIndex;
         const rowCount = this.getRowCount();
