@@ -50,6 +50,7 @@ stylingModes.forEach((stylingMode) => {
 
       for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);
+        await removeClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
       }
     }
 
