@@ -16,8 +16,28 @@ test('Tabs icon alignment', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Tabs items alignment.png', { element: '#tabs', shouldTestInCompact: true });
 
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+
+  const dataSource = [
+    { text: 'user' },
+    { text: 'comment', icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource }, '#tabs');
+});
+
+test('Tabs in contrast theme', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
   if (!isMaterial()) {
-    await testScreenshot(t, takeScreenshot, 'Tabs in contrast theme.png', { element: '#tabs', theme: 'generic.contrast' });
+    await testScreenshot(t, takeScreenshot, 'Tabs in contrast theme if first tab is focused.png', { element: '#tabs', theme: 'generic.contrast' });
   }
 
   await t
@@ -34,7 +54,12 @@ test('Tabs icon alignment', async (t) => {
     { icon: 'money' },
   ] as Item[];
 
-  return createWidget('dxTabs', { dataSource }, '#tabs');
+  const tabsOptions = {
+    dataSource,
+    selectedItem: dataSource[0],
+  };
+
+  return createWidget('dxTabs', tabsOptions, '#tabs');
 });
 
 [true, false].forEach((selectOnFocus) => {
