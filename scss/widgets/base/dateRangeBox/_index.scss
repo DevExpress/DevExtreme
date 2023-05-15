@@ -38,7 +38,9 @@
         }
       }
 
-      &.dx-state-focused {
+      &.dx-state-focused,
+      &.dx-state-hover,
+      &.dx-state-focused.dx-state-hover {
         .dx-texteditor-label {
           .dx-label-before,
           .dx-label,

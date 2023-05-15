@@ -17,6 +17,8 @@ const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const HOVER_STATE_CLASS = 'dx-state-focused';
+const READONLY_STATE_CLASS = 'dx-state-readonly';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
@@ -34,7 +36,10 @@ stylingModes.forEach((stylingMode) => {
     for (const state of [
       DROP_DOWN_EDITOR_ACTIVE_CLASS,
       FOCUSED_STATE_CLASS,
-      HOVER_STATE_CLASS] as any[]
+      HOVER_STATE_CLASS,
+      READONLY_STATE_CLASS,
+      DISABLED_STATE_CLASS,
+    ] as any[]
     ) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);

@@ -16,6 +16,18 @@
         }
       }
 
+      &.dx-state-hover {
+        .dx-texteditor-label {
+          .dx-label {
+            padding: 0 $horizontal-padding;
+
+            span {
+              height: $label-height;
+            }
+          }
+        }
+      }
+
       &.dx-dropdowneditor-active,
       &.dx-dropdowneditor-active.dx-state-focused,
       &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
