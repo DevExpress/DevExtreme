@@ -10,7 +10,7 @@ const SCROLLVIEW_LOADPANEL_CLASS = 'dx-scrollview-loadpanel';
 
 QUnit.testStart(function() {
     const markup = '\
-        <div id="scrollView"">\
+        <div id="scrollView">\
             <div class="content1">ScrollView content</div>\
         </div>';
 
