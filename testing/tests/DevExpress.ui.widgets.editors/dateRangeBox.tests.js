@@ -1775,6 +1775,46 @@ QUnit.module('Popup integration', moduleConfig, () => {
             assert.strictEqual(popup.option('title'), 'title', 'title is empty');
         });
     });
+
+    QUnit.module('IOS', () => {
+        QUnit.test('Popup should not be closed after focus is moved to the end dateBox, especially on IOS', function(assert) {
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            $startDateBoxInput.trigger('focusin');
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+
+            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $endDateBoxInput }));
+
+            assert.strictEqual(this.instance.option('opened'), true, 'popup is not closed');
+        });
+
+        QUnit.test('Popup should be closed after focus is moved to other editor using IOs special nextButton', function(assert) {
+            const isIOs = devices.current().platform === 'ios';
+            if(!isIOs) {
+                assert.ok(true, 'test is actual only for ios');
+                return;
+            }
+
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            $startDateBoxInput.trigger('focusin');
+
+
+            const otherDateRangeBox = $('#dateRangeBox2').dxDateRangeBox({}).dxDateRangeBox('instance');
+            const otherStartDateBox = getStartDateBoxInstance(otherDateRangeBox);
+            const $otherStartDateBoxInput = $(otherStartDateBox.field());
+
+            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $otherStartDateBoxInput }));
+
+            assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
+        });
+    });
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {

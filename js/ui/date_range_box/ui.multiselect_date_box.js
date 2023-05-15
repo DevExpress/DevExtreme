@@ -95,6 +95,11 @@ class MultiselectDateBox extends DateBox {
         this._applyInternalValidation(value);
     }
 
+    _isTargetOutOfComponent(target) {
+        const isTargetOutOfDateRangeBox = $(target).closest(this._strategy.dateRangeBox.$element()).length === 0;
+        return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
+    }
+
     _optionChanged(args) {
         switch(args.name) {
             case 'isValid': {
