@@ -1166,7 +1166,7 @@ describe('mapWidget', () => {
   });
   describe('convertToBaseType', () => {
     const types = ['Object', 'MyType', 'Number', 'String', 'Boolean', 'Any'];
-    const expected = ['object', undefined, 'number', 'string', 'boolean', 'any'];
+    const expected = ['Record<string, any>', undefined, 'number', 'string', 'boolean', 'any'];
 
     it('should return base types', () => {
       expect(types.map((t) => convertToBaseType(t))).toEqual(expected);
@@ -1208,7 +1208,7 @@ describe('mapWidget', () => {
       },
     ];
 
-    const expected = 'string | number | object';
+    const expected = 'string | number | Record<string, any>';
 
     it('should return base types', () => {
       expect(getComplexOptionType(types)).toEqual(expected);
@@ -1252,7 +1252,7 @@ describe('mapWidget', () => {
     ];
 
     const typeResolver = createCustomTypeResolver({}, {}, {});
-    const expected = 'string | number | object | MyType';
+    const expected = 'string | number | Record<string, any> | MyType';
 
     it('should return base types', () => {
       expect(getComplexOptionType(types, typeResolver)).toEqual(expected);

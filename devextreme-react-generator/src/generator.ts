@@ -50,7 +50,7 @@ enum BaseTypes {
   String = 'string',
   Number = 'number',
   Boolean = 'boolean',
-  Object = 'object',
+  Object = 'Record<string, any>',
   Null = 'null',
   True = 'true',
   False = 'false',
