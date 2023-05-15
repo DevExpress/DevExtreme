@@ -674,11 +674,11 @@ class DateRangeBox extends Editor {
             case 'cancelButtonText':
             case 'deferRendering':
             case 'disabledDates':
-            case 'opened':
-                this._toggleDropDownEditorActiveClass(value);
+            case 'todayButtonText':
                 this.getStartDateBox().option(name, value);
                 break;
-            case 'todayButtonText':
+            case 'opened':
+                this._toggleDropDownEditorActiveClass(value);
                 this.getStartDateBox().option(name, value);
                 break;
             case 'buttons':
