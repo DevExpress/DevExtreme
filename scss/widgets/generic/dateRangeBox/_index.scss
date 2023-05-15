@@ -1,69 +1,118 @@
-@use "../../base/dateRangeBox";
+@use "sass:math";
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
+@use "../dateBox/mixins" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../colors" as *;
+@use "../../base/dateRangeBox/mixins" as *;
+@use "../../base/dateRangeBox";
 
 // adduse
 
-$shadow-left: $generic-base-border-width 0;
-$shadow-bottom: 0 $generic-base-border-width;
-$shadow-right: (-$generic-base-border-width) 0;
-$shadow-top: 0 (-$generic-base-border-width);
+$border-width: 1px;
+$label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
-@mixin daterangebox-box-shadow-mixin($target-styling-mode-class, $background, $shadow-color, $border-radius) {
-  &.#{$target-styling-mode-class} {
-    background: $background;
-    box-shadow: $shadow-bottom $shadow-color, $shadow-top $shadow-color, $shadow-right $shadow-color, $shadow-left $shadow-color;
-    border-radius: $border-radius;
-  }
-}
+@include dx-filled-mixin(0, $generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
+@include dx-underlined-mixin($generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
+@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y, $generic-daterangebox-label-height,);
 
 .dx-daterangebox {
-  &.dx-daterangebox-outlined {
-    background: $texteditor-bg;
-    box-shadow: $shadow-bottom $texteditor-border-color, $shadow-top $texteditor-border-color, $shadow-right $texteditor-border-color, $shadow-left $texteditor-border-color;
-    border-radius: $texteditor-border-radius;
-  }
+  @include dx-dropdowneditor-button-icon-styling(eventall);
 
-  &.dx-daterangebox-underlined {
-    background: $texteditor-underlined-bg;
-    box-shadow: $shadow-bottom $texteditor-border-color;
-    border-radius: 0;
-  }
-
-  @include daterangebox-box-shadow-mixin('dx-daterangebox-filled', $texteditor-filled-bg, $texteditor-border-color, $texteditor-border-radius);
-
-  &.dx-state-focused,
-  &.dx-state-active {
-    &.dx-daterangebox-filled,
-    &.dx-daterangebox-outlined {
-      box-shadow: $shadow-bottom $texteditor-focused-border-color, $shadow-top $texteditor-focused-border-color, $shadow-right $texteditor-focused-border-color, $shadow-left $texteditor-focused-border-color;
-    }
-
-    &.dx-daterangebox-underlined {
-      box-shadow: $shadow-bottom $texteditor-focused-border-color;
-    }
-
-    &.dx-daterangebox-filled {
-      background-color: transparent;
+  &.dx-editor-outlined {
+    &.dx-daterangebox-with-label,
+    &.dx-daterangebox-with-floating-label {
+      .dx-texteditor-label {
+        .dx-label {
+          span {
+            line-height: normal !important; // stylelint-disable-line declaration-no-important
+          }
+        }
+      }
     }
   }
 
+  .dx-editor-outlined,
+  .dx-editor-filled,
   .dx-editor-underlined {
-    border-color: transparent;
+    &::before {
+      content: '';
+      position: absolute;
+      border: 0;
+      border-bottom-width: 1px;
+      border-style: solid;
+      width: 100%;
+      border-color: transparent;
+      bottom: 0;
+      z-index: 2;
+    }
   }
-}
 
-.dx-daterangebox-outlined,
-.dx-daterangebox-filled {
-  .dx-start-datebox {
-    margin-left: $generic-daterangebox-start-datebox-padding;
+  .dx-editor-outlined,
+  .dx-editor-filled {
+    &::before {
+      width: calc(100% - 2 * $generic-daterangebox-active-bar-horizontal-margin);
+      margin: 0 $generic-daterangebox-active-bar-horizontal-margin;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    .dx-start-datebox,
+    .dx-end-datebox {
+      &::before {
+        border-width: 0;
+      }
+
+      &.dx-state-hover {
+        &::before {
+          border-bottom-width: 1px;
+          border-color: $texteditor-hover-border-color;
+        }
+      }
+
+      &.dx-state-focused {
+        &::before {
+          border-bottom-width: 1px;
+          border-color: $texteditor-focused-border-color;
+        }
+
+        &.dx-invalid {
+          &::before {
+            border-bottom-width: 1px;
+            border-color: $texteditor-invalid-focused-border-color;
+          }
+        }
+      }
+
+      &.dx-state-readonly {
+        &::before {
+          border-bottom-width: 0;
+        }
+      }
+
+      &.dx-invalid {
+        &::before {
+          border-bottom-width: 1px;
+          border-color: $texteditor-invalid-faded-border-color;
+        }
+      }
+    }
+  }
+
+  @include dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color);
+
+  &.dx-editor-underlined {
+    .dx-daterangebox-separator {
+      padding-right: $generic-daterangebox-separator-horizontal-padding;
+    }
   }
 }
 
 .dx-daterangebox-separator {
-  padding: 0 $generic-daterangebox-separator-horizontal-padding;
+  padding-left: $generic-daterangebox-separator-horizontal-padding;
+  opacity: $base-disabled-opacity;
 }

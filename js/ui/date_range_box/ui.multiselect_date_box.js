@@ -24,6 +24,14 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
+    _renderOpenedState() {
+        const opened = this._strategy.dateRangeBox.getStartDateBox()?.option('opened') ?? this.option('opened');
+
+        this._strategy.dateRangeBox._toggleDropDownEditorActiveClass(opened);
+
+        super._renderOpenedState();
+    }
+
     _popupShownHandler() {
         super._popupShownHandler();
 

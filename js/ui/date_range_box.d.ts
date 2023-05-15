@@ -7,6 +7,7 @@ import {
 
 import {
   DxElement,
+  UserDefinedElement,
 } from '../core/element';
 
 import {
@@ -216,13 +217,18 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
 };
 
 /**
+ * @namespace DevExpress.ui
+ */
+declare const DateRangeBoxBase: new(element: UserDefinedElement, options?: Properties) => Omit<DateBoxBase<Properties>, 'field'>;
+
+/**
  * @docid
  * @isEditor
  * @inherits DateBoxBase
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateRangeBox extends DateBoxBase<Properties> {
+export default class dxDateRangeBox extends DateRangeBoxBase {
   /**
    * @docid
    * @publicName endDateField()
