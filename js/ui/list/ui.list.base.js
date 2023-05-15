@@ -662,16 +662,21 @@ export const ListBase = CollectionWidget.inherit({
         };
         this.setAria(elementAria, this.$element());
 
-        this.setAria('role', 'listbox');
-        this._setListAriaLabel();
+        this._setListAria();
     },
 
-    _setListAriaLabel() {
+    _setListAria() {
         const { items } = this.option();
 
-        const label = items?.length ? 'Items' : this.option('noDataText');
+        const listArea = items?.length ? {
+            role: 'listbox',
+            label: 'Items'
+        } : {
+            role: undefined,
+            label: undefined
+        };
 
-        this.setAria('label', label);
+        this.setAria(listArea);
     },
 
     _focusTarget: function() {

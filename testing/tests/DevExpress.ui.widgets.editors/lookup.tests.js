@@ -3349,23 +3349,23 @@ QUnit.module('device and theme specific tests', {
 
 let helper;
 if(devices.real().deviceType === 'desktop') {
-    [true, false].forEach((searchEnabled) => {
-        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: function() {
-                this.isMac = devices.real().mac;
-                helper = new ariaAccessibilityTestHelper({
-                    createWidget: ($element, options) => new Lookup($element,
-                        $.extend({
-                            searchEnabled: searchEnabled
-                        }, options))
-                });
-            },
-            afterEach: function() {
-                helper.$widget.remove();
-            }
-        }, () => {
+    QUnit.module('Aria accessibility', {
+        beforeEach: function() {
+            this.isMac = devices.real().mac;
+            helper = new ariaAccessibilityTestHelper({
+                createWidget: ($element, options) => new Lookup($element, options)
+            });
+        },
+        afterEach: function() {
+            helper.$widget.remove();
+        }
+    }, () => {
+        [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, function() {
-                helper.createWidget({ opened: true });
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled
+                });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
@@ -3378,9 +3378,7 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 const listItemContainerAttributes = {
-                    'aria-label': 'No data to display',
                     tabindex: '0',
-                    role: 'listbox'
                 };
 
                 let fieldAttributes = {
@@ -3466,7 +3464,10 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, function() {
-                helper.createWidget({ opened: false });
+                helper.createWidget({
+                    opened: false,
+                    searchEnabled
+                });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
 
@@ -3476,6 +3477,22 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.$widget, {}, 'widget');
                 helper.checkAttributes($field, { role: 'combobox', 'aria-expanded': 'false', tabindex: '0' }, 'field');
+            });
+        });
+
+        ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+            QUnit.test(`should have correct role and aria-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
+                helper.createWidget({ opened: true });
+                const $list = $(`.${LIST_CLASS}`);
+                const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
+
+                helper.checkAttributes($scrollView, { tabindex: '0' });
+
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                helper.checkAttributes($scrollView, { tabindex: '0', 'aria-label': 'Items', role: 'listbox' });
+
+                helper.widget.option(dataSourcePropertyName, []);
+                helper.checkAttributes($scrollView, { tabindex: '0' });
             });
         });
     });
