@@ -14,9 +14,6 @@ const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
 
 const DEFAULT_TOOLBAR_ITEM_NAMES = ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel'];
 
-/**
- * @type {Partial<import('./ui.grid_core.header_panel').HeaderPanel>}
- */
 const members = {
   _getToolbarItems() {
     return [];
@@ -216,9 +213,6 @@ const members = {
 
 const HeaderPanel = ColumnsView.inherit(members);
 
-/**
- * @type {import('./ui.grid_core.modules').Module}
- */
 export const headerPanelModule = {
   defaultOptions() {
     return {
