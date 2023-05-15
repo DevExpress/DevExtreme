@@ -192,6 +192,42 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(viewMin, calendarMin, 'view min option restored to calendar min option');
                 assert.strictEqual(viewMax, calendarMax, 'view max option restored to calendar max option');
             });
+
+            QUnit.test(`Views min option should not be restored after view refresh (applyValueMode = ${applyValueMode})`, function(assert) {
+                this.reinit({
+                    applyValueMode,
+                    opened: true,
+                });
+
+                const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                $startDateCell.trigger('dxclick');
+
+                this.getCalendar()._refreshViews();
+
+                const { viewMin } = this.getViewMinMax();
+
+                assert.deepEqual(viewMin, startCellDate, 'view min option equals startDate');
+            });
+
+            QUnit.test(`Views max option should not be restored after view refresh (applyValueMode = ${applyValueMode})`, function(assert) {
+                this.reinit({
+                    applyValueMode,
+                    opened: true,
+                });
+
+                $(this.instance.endDateField()).focusin();
+
+                const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+                const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+                $endDateCell.trigger('dxclick');
+
+                this.getCalendar()._refreshViews();
+
+                const { viewMax } = this.getViewMinMax();
+
+                assert.deepEqual(viewMax, endCellDate, 'view max option equals startDate');
+            });
         });
 
         QUnit.test('max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode = "useButtons")', function(assert) {
