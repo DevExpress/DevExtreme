@@ -62,24 +62,6 @@ export const columnsControllerModule = {
       adaptColumnWidthByRatio: true,
 
       columns: undefined,
-      /**
-             * @name dxDataGridColumn.grouped
-             * @type boolean
-             * @hidden
-             * @default false
-             */
-      /**
-             * @name dxDataGridColumn.resized
-             * @type function
-             * @hidden
-             * @default undefined
-             */
-      /**
-             * @name dxDataGridOptions.regenerateColumnsByVisibleItems
-             * @type boolean
-             * @hidden
-             * @default false
-             */
       regenerateColumnsByVisibleItems: false,
       /**
              * @type {undefined}
