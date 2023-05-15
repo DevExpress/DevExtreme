@@ -81,14 +81,19 @@ QUnit.test('dxPopup', function(assert) {
         originalPositionSetup($content, position);
     };
 
-    const $markup = $('\
-        <div dx-popup=\'popupOptions\'>\
-            <div data-options=\'dxTemplate: { name: "custom" }\' style=\'line-height: 18px\'>\
-                {{VeryVeryVeryLongField.value1}}\
-                {{VeryVeryVeryLongField.value2}}\
-            </div>\
-        </div>\
-    ');
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #popup {
+                line-height: 18px;
+            }
+        </style>
+        <div dx-popup="popupOptions">
+            <div id="popup" data-options="dxTemplate: { name: 'custom' }">
+                {{VeryVeryVeryLongField.value1}}
+                {{VeryVeryVeryLongField.value2}}
+            </div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.VeryVeryVeryLongField = {
@@ -119,14 +124,19 @@ QUnit.test('dxPopup', function(assert) {
 });
 
 QUnit.test('dxPopover', function(assert) {
-    const $markup = $('\
-        <a id="link1">testLink</a>\
-        <div id="popover" dx-popover=\'popoverOptions\'>\
-            <div data-options=\'dxTemplate: { name: "content" }\' style=\'line-height: 18px\'>\
-                {{popoverContent}} {{popoverContent}}\
-            </div>\
-        </div>\
-    ');
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #popover-content {
+                line-height: 18px;
+            }
+        </style>
+        <a id="link1">testLink</a>
+        <div id="popover" dx-popover="popoverOptions">
+            <div id="popover-content" data-options="dxTemplate: { name: 'content' }">
+                {{popoverContent}} {{popoverContent}}
+            </div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.popoverOptions = {
@@ -703,11 +713,16 @@ QUnit.test('Component can change itself options on init (T446364)', function(ass
 });
 
 QUnit.test('The hamburger button should be visible on small screen (T377800)', function(assert) {
-    const $markup = $('\
-        <div style=\'width: 100px\'>\
-            <div dx-menu=\'menu\'></div>\
-        </div>'
-    );
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #markup {
+                width: 100px;
+            }
+        </style>
+        <div id="markup">
+            <div dx-menu='menu'></div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.menu = {
@@ -804,13 +819,18 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
 
     const originalAnimate = fx.animate;
 
-    const $markup = $(
-        '<div dx-accordion="accordionOptions" dx-item-alias="veryVeryVeryLongAlias">\
-            <div data-options="dxTemplate : { name: \'item\' } " style=\'line-height: 18px\'>\
-                {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}\
-            </div>\
-        </div>'
-    );
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #accordion-data {
+                line-height: 18px;
+            }
+        </style>
+        <div dx-accordion="accordionOptions" dx-item-alias="veryVeryVeryLongAlias">
+            <div id="accordion-data" data-options="dxTemplate : { name: 'item' }">
+                {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}
+            </div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.accordionOptions = {
@@ -844,14 +864,18 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
 QUnit.test('title height is correct if the title is customized using ng-class (T444379)', function(assert) {
     this.clock = sinon.useFakeTimers();
 
-    const $markup = $(
-        '<style>.test-class { height: 100px; }</style>\
-        <div dx-accordion="accordionOptions" dx-item-alias="item">\
-            <div data-options="dxTemplate : { name: \'title\' } ">\
-                <div ng-class="getClass()">{{item.Value}}</div>\
+    const $markup = $(`
+        <style nonce="qunit-test">
+            .test-class {
+                height: 100px;
+            }
+        </style>
+        <div dx-accordion="accordionOptions" dx-item-alias="item">
+            <div data-options="dxTemplate : { name: 'title' } ">
+                <div ng-class="getClass()">{{item.Value}}</div>
             </div>\
-        </div>'
-    );
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.accordionOptions = {

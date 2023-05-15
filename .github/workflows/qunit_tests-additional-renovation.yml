@@ -16,41 +16,41 @@ jobs:
     timeout-minutes: 15
 
     steps:
-    - name: Get sources
-      uses: actions/checkout@v3
+      - name: Get sources
+        uses: actions/checkout@v3
 
-    - name: Use Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '15'
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '15'
 
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+      - name: Run npm install
+        run: npm install --no-audit --no-fund
 
-    - name: Build
-      env:
-        DEVEXTREME_TEST_CI: "true"
-        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: npm run build:dev
+      - name: Build
+        env:
+          DEVEXTREME_TEST_CI: "true"
+          DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+        run: npm run build:dev
 
-    - name: Zip artifacts
-      run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+      - name: Zip artifacts
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: devextreme-artifacts
-        path: artifacts.zip
-        retention-days: 1
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: devextreme-artifacts
+          path: artifacts.zip
+          retention-days: 1
 
   qunit-tests-timezones:
     needs: build
