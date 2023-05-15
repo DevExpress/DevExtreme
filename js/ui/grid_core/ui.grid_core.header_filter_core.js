@@ -24,11 +24,17 @@ function resetChildrenItemSelection(items) {
     }
 }
 
-function updateSelectAllState(e, filterValues) {
+function getSelectAllCheckBox(listComponent) {
+    const selector = listComponent.NAME === 'dxTreeView' ? '.dx-treeview-select-all-item' : '.dx-list-select-all-checkbox';
+
+    return listComponent.$element().find(selector).dxCheckBox('instance');
+}
+
+function updateListSelectAllState(e, filterValues) {
     if(e.component.option('searchValue')) {
         return;
     }
-    const selectAllCheckBox = $(e.element).find('.dx-list-select-all-checkbox').data('dxCheckBox');
+    const selectAllCheckBox = getSelectAllCheckBox(e.component);
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option('value', undefined);
@@ -58,15 +64,16 @@ export const HeaderFilterView = modules.View.inherit({
         return this._popupContainer;
     },
 
-    getListContainer: function() {
-        return this._listContainer;
+    getListComponent: function() {
+        return this._listComponent;
     },
 
     applyHeaderFilter: function(options) {
         const that = this;
-        const list = that.getListContainer();
+        const list = that.getListComponent();
         const searchValue = list.option('searchValue');
-        const isSelectAll = !searchValue && !options.isFilterBuilder && list.$element().find('.dx-checkbox').eq(0).hasClass('dx-checkbox-checked');
+        const selectAllCheckBox = getSelectAllCheckBox(list);
+        const isAllSelected = !searchValue && !options.isFilterBuilder && selectAllCheckBox?.option('value');
         const filterValues = [];
 
         const fillSelectedItemKeys = function(filterValues, items, isExclude) {
@@ -88,7 +95,7 @@ export const HeaderFilterView = modules.View.inherit({
             });
         };
 
-        if(!isSelectAll) {
+        if(!isAllSelected) {
             if(options.type === 'tree') {
                 if(options.filterType) {
                     options.filterType = 'include';
@@ -235,7 +242,7 @@ export const HeaderFilterView = modules.View.inherit({
                 options.onShowing && options.onShowing(e);
             },
             onShown: function() {
-                that.getListContainer().focus();
+                that.getListComponent().focus();
             },
             onHidden: options.onHidden,
             onInitialized: function(e) {
@@ -287,14 +294,14 @@ export const HeaderFilterView = modules.View.inherit({
         }
 
         if(options.type === 'tree') {
-            that._listContainer = that._createComponent($('<div>').appendTo($content),
+            that._listComponent = that._createComponent($('<div>').appendTo($content),
                 TreeView, extend(widgetOptions, {
                     showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
                     onOptionChanged: onOptionChanged,
                     keyExpr: 'id'
                 }));
         } else {
-            that._listContainer = that._createComponent($('<div>').appendTo($content),
+            that._listComponent = that._createComponent($('<div>').appendTo($content),
                 List, extend(widgetOptions, {
                     searchExpr: that._getSearchExpr(options, headerFilterOptions),
                     pageLoadMode: 'scrollBottom',
@@ -336,7 +343,7 @@ export const HeaderFilterView = modules.View.inherit({
                             }
                         });
 
-                        updateSelectAllState(e, options.filterValues);
+                        updateListSelectAllState(e, options.filterValues);
                     },
                     onContentReady: function(e) {
                         const component = e.component;
@@ -352,7 +359,7 @@ export const HeaderFilterView = modules.View.inherit({
                         component.option('selectedItems', selectedItems);
                         component._selectedItemsUpdating = false;
 
-                        updateSelectAllState(e, options.filterValues);
+                        updateListSelectAllState(e, options.filterValues);
                     }
                 }));
         }

@@ -465,12 +465,14 @@ export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly column: Column<TRowData, TKey>;
 };
 
+type OverriddenKeys = 'autoExpandAll' | 'columns' | 'customizeColumns' | 'dataStructure' | 'editing' | 'expandedRowKeys' | 'expandNodesOnFiltering' | 'filterMode' | 'hasItemsExpr' | 'itemsExpr' | 'keyExpr' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'paging' | 'parentIdExpr' | 'remoteOperations' | 'rootValue' | 'scrolling' | 'selection' | 'toolbar';
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
  */
-export type dxTreeListOptions<TRowData = any, TKey = any> = GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> & {
+export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
     /**
      * @docid
      * @default false

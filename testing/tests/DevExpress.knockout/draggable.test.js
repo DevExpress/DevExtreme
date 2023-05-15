@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('ui/draggable');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('draggable');
+} else {
+    QUnit.module.skip('draggable');
+}
+
 QUnit.testStart(function() {
     const markup =
         `<div id="testItemTemplate">

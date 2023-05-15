@@ -1,12 +1,12 @@
-const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
-const numberingSystems = require('../../../node_modules/cldr-core/supplemental/numberingSystems.json!');
+const likelySubtags = require('cldr-core/supplemental/likelySubtags.json!');
+const numberingSystems = require('cldr-core/supplemental/numberingSystems.json!');
 const Globalize = require('globalize');
 
 const cldrData = [
-    require('../../../node_modules/devextreme-cldr-data/fa.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/de.json!json'),
+    require('devextreme-cldr-data/fa.json!json'),
+    require('devextreme-cldr-data/mr.json!json'),
+    require('devextreme-cldr-data/ar.json!json'),
+    require('devextreme-cldr-data/de.json!json'),
 ];
 
 Globalize.load(likelySubtags);
@@ -45,10 +45,11 @@ const commonEnvironment = {
                 `<div id="dateBox"></div>
                 <div id="numberBox"></div>
                 <div id="dateBoxWithPicker"></div>
-                <div id="widthRootStyle" style="width: 300px;"></div>
+                <div id="widthRootStyle"></div>
                 <div id="calendar"></div>`;
 
         $('#qunit-fixture').html(markup);
+        $('#widthRootStyle').css({ width: '300px' });
     },
 
     afterEach: function() {
@@ -151,6 +152,31 @@ QUnit.module('DateBox', commonEnvironment, () => {
         } finally {
             Globalize.locale(originalCulture);
         }
+    });
+
+    ['h:mm aaa', 'h:mm aaaa', 'h:mm aaaaa'].forEach(displayFormat => {
+        QUnit.test(`DateBox should not raise error when displayFormat="${displayFormat}" and arabic locale is used (T1162346)`, function(assert) {
+            const originalCulture = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('ar');
+
+                const $dateBox = $('#dateBox').dxDateBox({
+                    value: new Date(2015, 10, 10),
+                    displayFormat,
+                    type: 'time',
+                    pickerType: 'calendar',
+                    useMaskBehavior: true
+                });
+
+                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
+                assert.strictEqual(date, '١٢:٠٠ ص', 'date is localized');
+            } catch(e) {
+                assert.ok(false, 'Error occured: ' + e.message);
+            } finally {
+                Globalize.locale(originalCulture);
+            }
+        });
     });
 
     QUnit.test('DateBox should not raise error when digits are not default arabic digits and Fractional Seconds in the "displayFormat"', function(assert) {

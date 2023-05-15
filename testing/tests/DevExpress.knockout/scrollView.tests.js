@@ -1,8 +1,14 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-const scrollView = require('ui/scroll_view');
-require('integration/knockout');
+import scrollView from 'ui/scroll_view';
+import 'integration/knockout';
+
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('scrollView');
+} else {
+    QUnit.module.skip('scrollView');
+}
 
 QUnit.testStart(function() {
     const markup =

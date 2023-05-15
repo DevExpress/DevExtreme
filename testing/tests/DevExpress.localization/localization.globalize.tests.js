@@ -23,9 +23,10 @@ SystemJS.config({
 
 define(function(require, exports, module) {
     const cldrData = [
-        require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/de.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/da.json!json')
+        require('devextreme-cldr-data/ar.json!json'),
+        require('devextreme-cldr-data/ru.json!json'),
+        require('devextreme-cldr-data/de.json!json'),
+        require('devextreme-cldr-data/da.json!json')
     ];
 
     require('localization/globalize/core');
@@ -45,7 +46,7 @@ define(function(require, exports, module) {
 
     const ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');
 
-    const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
+    const likelySubtags = require('cldr-core/supplemental/likelySubtags.json!');
     Globalize.load(likelySubtags);
 
     cldrData.forEach(localeCldrData => {
@@ -138,6 +139,16 @@ define(function(require, exports, module) {
 
         QUnit.test('getPeriodNames', function(assert) {
             assert.deepEqual(dateLocalization.getPeriodNames(), ['AM', 'PM'], 'Array of period names');
+
+            Globalize.locale('ar');
+
+            [null, 'abbreviated', 'wide', 'narrow'].forEach(format => {
+                ['format', null].forEach(type => {
+                    const expect = ([null, 'wide'].includes(format) && type == null) ? ['صباحًا', 'مساءً'] : ['ص', 'م'];
+
+                    assert.deepEqual(dateLocalization.getPeriodNames(format, type), expect, 'Array of correct period names');
+                });
+            });
         });
 
         QUnit.test('getDayNames', function(assert) {
