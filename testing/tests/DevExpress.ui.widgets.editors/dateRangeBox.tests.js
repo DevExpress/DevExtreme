@@ -1805,7 +1805,6 @@ QUnit.module('Popup integration', moduleConfig, () => {
             const $startDateBoxInput = $(startDateBox.field());
             $startDateBoxInput.trigger('focusin');
 
-
             const otherDateRangeBox = $('#dateRangeBox2').dxDateRangeBox({}).dxDateRangeBox('instance');
             const otherStartDateBox = getStartDateBoxInstance(otherDateRangeBox);
             const $otherStartDateBoxInput = $(otherStartDateBox.field());

@@ -96,7 +96,9 @@ class MultiselectDateBox extends DateBox {
     }
 
     _isTargetOutOfComponent(target) {
-        const isTargetOutOfDateRangeBox = $(target).closest(this._strategy.dateRangeBox.$element()).length === 0;
+        const $dateRangeBox = this._strategy.dateRangeBox.$element();
+        const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
+
         return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
     }
 
