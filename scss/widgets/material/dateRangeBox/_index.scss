@@ -1,6 +1,4 @@
 @use "sass:math";
-@use "../../base/dateRangeBox";
-@use "../../base/dateRangeBox/mixins" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../dateBox/mixins" as *;
@@ -8,6 +6,8 @@
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../colors" as *;
+@use "../../base/dateRangeBox/mixins" as *;
+@use "../../base/dateRangeBox";
 
 // adduse
 
