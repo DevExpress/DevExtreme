@@ -3481,7 +3481,7 @@ if(devices.real().deviceType === 'desktop') {
         });
 
         ['items', 'dataSource'].forEach(dataSourcePropertyName => {
-            QUnit.test(`should have correct role and area-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
+            QUnit.test(`should have correct role and aria-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ opened: true });
                 const $list = $(`.${LIST_CLASS}`);
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
