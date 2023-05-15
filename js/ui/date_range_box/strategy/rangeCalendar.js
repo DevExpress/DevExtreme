@@ -18,6 +18,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
             position: { of: this.dateRangeBox.$element() },
             onShowing: () => {
                 this._widget._restoreViewsMinMaxOptions();
+                this._dateSelectedCounter = 0;
                 // this._widget.option('_currentSelection', 'startDate');
             }
         });
@@ -106,29 +107,21 @@ class RangeCalendarStrategy extends CalendarStrategy {
             return;
         }
 
-        if(this._widget.option('_currentSelection') === 'startDate') {
-            if(isInstantlyMode) {
-                this.dateRangeBox.updateValue(value, event);
-            }
-            this.getDateRangeBox().getEndDateBox().focus();
-            // this._widget.option('_currentSelection', 'endDate');
-            this._widget._setViewsMinOption(value[0]);
+        if(isInstantlyMode) {
+            this.dateRangeBox.updateValue(value, event);
+            this._dateSelectedCounter += 1;
 
-            // if(value[1]) {
-            //     this._widget.option('currentDate', value[1]);
-            // }
-        } else {
-            this.setActiveEndDateBox();
-
-            if(isInstantlyMode) {
-                this.dateRangeBox.updateValue(value, event);
+            if(this._dateSelectedCounter === 2) {
                 this.getDateRangeBox().close();
-            } else {
-                this.setActiveStartDateBox();
-                this.getDateRangeBox().getStartDateBox().focus();
+
+                return;
             }
-            // this._widget.option('_currentSelection', 'startDate');
-            this._widget._setViewsMaxOption(value[1]);
+        }
+
+        if(this._widget.option('_currentSelection') === 'startDate') {
+            this.getDateRangeBox().getEndDateBox().focus();
+        } else {
+            this.getDateRangeBox().getStartDateBox().focus();
         }
     }
 
