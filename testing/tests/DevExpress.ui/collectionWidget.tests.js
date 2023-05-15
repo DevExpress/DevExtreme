@@ -2048,14 +2048,14 @@ QUnit.module('Aria accessibility', {
     test('Attributes on initialize', function() {
         helper.createWidget({ items: [] });
 
-        helper.checkAttributes(helper.$widget, { tabindex: '0', 'aria-label': 'No data to display' });
+        helper.checkAttributes(helper.$widget, { tabindex: '0' });
         helper.checkItemsAttributes([], { });
     });
 
     test('Items[] -> Items[\'Item_1\', \'Item_2\', \'Item_3\' ]', function(assert) {
         helper.createWidget({ items: [] });
 
-        helper.checkAttributes(helper.$widget, { tabindex: '0', 'aria-label': 'No data to display' });
+        helper.checkAttributes(helper.$widget, { tabindex: '0' });
         helper.checkItemsAttributes([], { });
 
         helper.widget.option('items', this.items);
