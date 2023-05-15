@@ -1728,6 +1728,13 @@ QUnit.module('Popup integration', moduleConfig, () => {
 
         assert.ok(this.$element.is(popup.option('position.of')));
     });
+
+    QUnit.test('Popup should not have a title', function(assert) {
+        const startDateBox = getStartDateBoxInstance(this.instance);
+
+        assert.strictEqual(startDateBox.option('dropDownOption.showTitle'), false, 'title showing is disabled');
+        assert.strictEqual(startDateBox.option('dropDownOption.title'), '', 'title is empty');
+    });
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
