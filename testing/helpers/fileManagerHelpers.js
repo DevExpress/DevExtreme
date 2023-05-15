@@ -858,7 +858,7 @@ export const createHugeFileSystem = (rootFilesCount = 10, rootDirsCount = 2, ...
         }));
     for(let i = 0; i < rootDirsCount; i++) {
         result.push({
-            name: 'Folder 1',
+            name: `Folder ${i}`,
             isDirectory: true,
             hasDubDirectories: false,
             items: getFiles((filesCount && filesCount[i]) || 100)
