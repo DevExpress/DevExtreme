@@ -176,7 +176,7 @@ export const custom = function(options) {
         .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
     function show() {
-        if(devices.real().platform === 'android') {
+        if(devices.real().deviceType === 'phone') {
             const isPortrait = getHeight(window) > getWidth(window);
             const width = isPortrait ? '80%' : '60%';
             popupInstance.option({ width });
