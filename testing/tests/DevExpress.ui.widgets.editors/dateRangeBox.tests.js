@@ -44,6 +44,7 @@ const getEndDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getEn
 const getButtonsContainers = $element => $element.find(`> .${DROP_DOWN_EDITOR_BUTTONS_CONTAINER_CLASS}`);
 const getButtons = $element => $element.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
 const getClearButton = $element => getButtonsContainers($element).find(`.${CLEAR_BUTTON}`);
+const getPopup = dateBox => dateBox._popup;
 
 
 const moduleConfig = {
@@ -1728,6 +1729,90 @@ QUnit.module('Popup integration', moduleConfig, () => {
         const popup = startDateBox._popup;
 
         assert.ok(this.$element.is(popup.option('position.of')));
+    });
+
+    QUnit.module('Popup title', () => {
+        QUnit.test('Popup should not have a title by default', function(assert) {
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), false, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), '', 'title is empty');
+        });
+
+        QUnit.test('Popup title can be configured by dropDownOptions on init', function(assert) {
+            this.reinit({
+                dropDownOptions: {
+                    showTitle: true,
+                    title: 'title'
+                }
+            });
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), true, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), 'title', 'title is empty');
+        });
+
+        QUnit.test('Popup title can be configured by dropDownOptions on runtime change', function(assert) {
+            this.instance.option({
+                dropDownOptions: {
+                    showTitle: true,
+                    title: 'title'
+                }
+            });
+
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const popup = getPopup(startDateBox);
+
+            assert.strictEqual(popup.option('showTitle'), true, 'title showing is disabled');
+            assert.strictEqual(popup.option('title'), 'title', 'title is empty');
+        });
+    });
+
+    QUnit.module('IOS', () => {
+        QUnit.test('Popup should not be closed after focus is moved to the end dateBox, especially on IOS', function(assert) {
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            $startDateBoxInput.trigger('focusin');
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+            const $endDateBoxInput = $(endDateBox.field());
+
+            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $endDateBoxInput }));
+
+            assert.strictEqual(this.instance.option('opened'), true, 'popup is not closed');
+        });
+
+        QUnit.test('Popup should be closed after focus is moved to other editor using IOs special nextButton', function(assert) {
+            const isIOs = devices.current().platform === 'ios';
+            if(!isIOs) {
+                assert.ok(true, 'test is actual only for ios');
+                return;
+            }
+
+            this.instance.open();
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+            const $startDateBoxInput = $(startDateBox.field());
+            $startDateBoxInput.trigger('focusin');
+
+            const otherDateRangeBox = $('#dateRangeBox2').dxDateRangeBox({}).dxDateRangeBox('instance');
+            const otherStartDateBox = getStartDateBoxInstance(otherDateRangeBox);
+            const $otherStartDateBoxInput = $(otherStartDateBox.field());
+
+            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $otherStartDateBoxInput }));
+
+            assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
+        });
     });
 });
 

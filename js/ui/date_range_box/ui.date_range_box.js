@@ -468,6 +468,8 @@ class DateRangeBox extends Editor {
             dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
+            'dropDownOptions.showTitle': false,
+            'dropDownOptions.title': '',
             dropDownOptions: options.dropDownOptions,
             invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
@@ -523,7 +525,9 @@ class DateRangeBox extends Editor {
 
                     // TODO: datebox doesn't clear opened state after prevent of opening
                     this.getEndDateBox().option('opened', false);
-                }
+                },
+                showTitle: false,
+                title: '',
             },
             onValueChanged: ({ value, event }) => {
                 if(!this._shouldSuppressValueSync) {
