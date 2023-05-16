@@ -319,7 +319,7 @@ export default {
     };
   },
 
-  getDisplayValue(column, value, data, rowType) {
+  getDisplayValue(column, value, data, rowType?) {
     if (column.displayValueMap && column.displayValueMap[value] !== undefined) {
       return column.displayValueMap[value];
     } if (column.calculateDisplayValue && data && rowType !== 'group') {
@@ -389,7 +389,7 @@ export default {
     return result;
   },
 
-  equalSortParameters(sortParameters1, sortParameters2, ignoreIsExpanded) {
+  equalSortParameters(sortParameters1, sortParameters2, ignoreIsExpanded?) {
     sortParameters1 = normalizeSortingInfo(sortParameters1);
     sortParameters2 = normalizeSortingInfo(sortParameters2);
 

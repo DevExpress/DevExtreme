@@ -1,5 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
-import { columnsControllerModule } from '@js/ui/grid_core/ui.grid_core.columns_controller';
+import { columnsControllerModule } from '../grid_core/columns_controller/module';
 import treeListCore from './module_core';
 
 export const ColumnsController = columnsControllerModule.controllers.columns.inherit((function () {
