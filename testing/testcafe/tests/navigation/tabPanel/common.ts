@@ -249,6 +249,13 @@ fixture.disablePageReloads`TabPanel_common`
     await testScreenshot(t, takeScreenshot, `TabPanel with long tabs, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
+      .pressKey('tab')
+      .pressKey('right')
+      .pressKey('right');
+
+    await testScreenshot(t, takeScreenshot, `TabPanel with long tabs, 2 tab is selected, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
+
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -282,6 +289,10 @@ fixture.disablePageReloads`TabPanel_common`
 
   test(`Tab borders in TabPanel with long not stretched tabs if ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .pressKey('tab')
+      .pressKey('right');
 
     await testScreenshot(t, takeScreenshot, `TabPanel with long not stretched tabs, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 

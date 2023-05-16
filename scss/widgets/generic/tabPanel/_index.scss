@@ -61,7 +61,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   }
 
   .dx-tabs-stretched#{$tabs-expanded}:last-of-type {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
+    @include tabpanel-tab-shadow-mixin(
+      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color},
+      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color}
+    );
   }
 }
 
