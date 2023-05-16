@@ -283,9 +283,6 @@ export const columnsControllerModule = {
       };
 
       const getValueDataType = function (value) {
-        /**
-                 * @type {string | undefined}
-                 */
         let dataType: any = type(value);
         if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
           dataType = undefined;
@@ -985,9 +982,6 @@ export const columnsControllerModule = {
         }
       };
 
-      /**
-             * @type {Partial<import('./ui.grid_core.columns_controller').ColumnsController>}
-             */
       const members = {
         _getExpandColumnOptions() {
           return {
@@ -2257,9 +2251,6 @@ export const columnsControllerModule = {
         setUserState(state) {
           const that = this;
           const dataSource = that._dataSource;
-          /**
-                     * @type {any[]}
-                     */
           let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
 
           state?.forEach(this.setName);
@@ -2422,19 +2413,10 @@ export const columnsControllerModule = {
                 }
                 return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
               },
-              /**
-                             * @this {any}
-                             */
               updateValueMap() {
                 this.valueMap = {};
                 if (this.items) {
-                  /**
-                                     * @type {any}
-                                     */
                   const calculateValue: any = compileGetter(this.valueExpr);
-                  /**
-                                     * @type {any}
-                                     */
                   const calculateDisplayValue: any = compileGetter(this.displayExpr);
                   for (let i = 0; i < this.items.length; i++) {
                     const item = this.items[i];
