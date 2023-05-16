@@ -49,8 +49,7 @@
         }
       }
 
-      .dx-start-datebox,
-      .dx-end-datebox {
+      .dx-datebox {
         &.dx-invalid,
         &.dx-invalid.dx-state-hover,
         &.dx-invalid.dx-state-focused,
@@ -124,8 +123,7 @@
   &.dx-editor-filled,
   &.dx-editor-underlined {
     &.dx-invalid {
-      .dx-start-datebox,
-      .dx-end-datebox {
+      .dx-datebox {
         &.dx-state-hover {
           &::before {
             border-color: $texteditor-invalid-faded-border-color;
