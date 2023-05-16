@@ -161,6 +161,9 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
