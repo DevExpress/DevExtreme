@@ -39,9 +39,6 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
-/**
- * @type {import('./ui.grid_core.modules').Module}
- */
 export const columnsControllerModule = {
   defaultOptions() {
     return {
@@ -63,9 +60,6 @@ export const columnsControllerModule = {
 
       columns: undefined,
       regenerateColumnsByVisibleItems: false,
-      /**
-             * @type {undefined}
-             */
       customizeColumns: null,
       dateSerializationFormat: undefined,
     };
@@ -289,9 +283,6 @@ export const columnsControllerModule = {
       };
 
       const getValueDataType = function (value) {
-        /**
-                 * @type {string | undefined}
-                 */
         let dataType: any = type(value);
         if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
           dataType = undefined;
@@ -351,9 +342,6 @@ export const columnsControllerModule = {
         }
       };
 
-      /**
-             * @this {import('./ui.grid_core.columns_controller').Column}
-             */
       const customizeTextForBooleanDataType = function (e) {
         if (e.value === true) {
           return this.trueText || 'true';
@@ -397,9 +385,6 @@ export const columnsControllerModule = {
         return result;
       };
 
-      /**
-             * @param {import('./ui.grid_core.columns_controller').ColumnsController} that
-             */
       const updateColumnIndexes = function (that) {
         each(that._columns, (index, column) => {
           column.index = index;
@@ -782,9 +767,6 @@ export const columnsControllerModule = {
         that.addCommandColumn(options);
       };
 
-      /**
-             * @type {import('./ui.grid_core.columns_controller').Column['setCellValue']}
-             */
       const defaultSetCellValue = function (data, value) {
         if (!this.dataField) {
           return;
@@ -851,9 +833,6 @@ export const columnsControllerModule = {
         return column.fixedPosition;
       };
 
-      /**
-             * @this {import('./ui.grid_core.columns_controller').ColumnsController}
-             */
       const processExpandColumns = function (columns, expandColumns, type, columnIndex) {
         let customColumnIndex;
         const rowCount = this.getRowCount();
@@ -1006,9 +985,6 @@ export const columnsControllerModule = {
         }
       };
 
-      /**
-             * @type {Partial<import('./ui.grid_core.columns_controller').ColumnsController>}
-             */
       const members = {
         _getExpandColumnOptions() {
           return {
@@ -2281,9 +2257,7 @@ export const columnsControllerModule = {
         setUserState(state) {
           const that = this;
           const dataSource = that._dataSource;
-          /**
-                     * @type {any[]}
-                     */
+
           let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
 
           state?.forEach(this.setName);
@@ -2405,9 +2379,6 @@ export const columnsControllerModule = {
           calculatedColumnOptions.defaultFilterOperation = '=';
 
           calculatedColumnOptions.createFilterExpression = function (filterValue, selectedFilterOperation) {
-            /**
-                         * @type {any}
-                         */
             let result;
             if (this.calculateFilterExpression) {
               result = this.calculateFilterExpression.apply(this, arguments);
@@ -2450,19 +2421,11 @@ export const columnsControllerModule = {
                 }
                 return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
               },
-              /**
-                             * @this {any}
-                             */
+
               updateValueMap() {
                 this.valueMap = {};
                 if (this.items) {
-                  /**
-                                     * @type {any}
-                                     */
                   const calculateValue: any = compileGetter(this.valueExpr);
-                  /**
-                                     * @type {any}
-                                     */
                   const calculateDisplayValue: any = compileGetter(this.displayExpr);
                   for (let i = 0; i < this.items.length; i++) {
                     const item = this.items[i];
