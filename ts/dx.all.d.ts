@@ -10815,7 +10815,10 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+    export type Properties = Omit<
+      DateBoxBaseOptions<dxDateRangeBox>,
+      'inputAttr | label | maxLength | name | placeholder | text'
+    > & {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
@@ -10857,7 +10860,7 @@ declare module DevExpress.ui {
        */
       multiView?: boolean;
       /**
-       * [descr:Properties.openOnFieldClick]
+       * [descr:dxDateRangeBoxOptions.openOnFieldClick]
        */
       openOnFieldClick?: boolean;
       /**
