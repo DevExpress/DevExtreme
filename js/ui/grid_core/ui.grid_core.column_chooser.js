@@ -364,16 +364,11 @@ const columnChooserMembers = {
     },
 
     _updateItemSelection: function(columnIndex) {
-        const isRecursive = this.option('columnChooser.selection.recursive');
         const column = this._columnsController.columnOption(columnIndex);
 
-        const isRecursiveWithColumns = isRecursive && column.hasColumns;
-
-        if(!isRecursiveWithColumns) {
-            column.visible
-                ? this._columnChooserList.selectItem(columnIndex)
-                : this._columnChooserList.unselectItem(columnIndex);
-        }
+        column.visible
+            ? this._columnChooserList.selectItem(columnIndex)
+            : this._columnChooserList.unselectItem(columnIndex);
     },
 
     _columnOptionChanged: function(e) {
