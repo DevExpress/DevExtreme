@@ -677,6 +677,7 @@ class DateRangeBox extends Editor {
             case 'displayFormat':
             case 'max':
             case 'min':
+            case 'openOnFieldClick':
             case 'spellcheck':
             case 'useMaskBehavior':
             case 'valueChangeEvent':
@@ -788,8 +789,6 @@ class DateRangeBox extends Editor {
             case 'onPaste':
             case 'onEnterKey':
                 this._createEventAction(name.replace('on', ''));
-                break;
-            case 'openOnFieldClick':
                 break;
             case 'readOnly':
                 this._updateButtons();
