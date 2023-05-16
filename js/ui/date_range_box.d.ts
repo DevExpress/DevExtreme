@@ -146,7 +146,7 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     multiView?: boolean;
     /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.openOnFieldClick
      * @default true
      * @public
      */
