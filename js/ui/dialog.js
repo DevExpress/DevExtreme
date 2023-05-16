@@ -43,6 +43,8 @@ const DX_BUTTON_CLASSNAME = 'dx-button';
 export const custom = function(options) {
     const deferred = new Deferred();
 
+    options = options || {};
+
     const $element = $('<div>')
         .addClass(DX_DIALOG_CLASSNAME)
         .appendTo(getViewport());
