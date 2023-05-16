@@ -11,28 +11,34 @@ type AccessibleOptions = Pick<Properties,
   "buttons" |
   "calendarOptions" |
   "cancelButtonText" |
-  "dateOutOfRangeMessage" |
   "dateSerializationFormat" |
   "deferRendering" |
   "disabled" |
-  "disabledDates" |
   "displayFormat" |
   "dropDownButtonTemplate" |
   "dropDownOptions" |
   "elementAttr" |
   "endDate" |
+  "endDateInputAttr" |
+  "endDateLabel" |
+  "endDateName" |
+  "endDateOutOfRangeMessage" |
+  "endDatePlaceholder" |
+  "endDateText" |
   "focusStateEnabled" |
   "height" |
   "hint" |
   "hoverStateEnabled" |
   "inputAttr" |
-  "invalidDateMessage" |
+  "invalidEndDateMessage" |
+  "invalidStartDateMessage" |
   "isValid" |
   "label" |
   "labelMode" |
   "max" |
   "maxLength" |
   "min" |
+  "multiView" |
   "name" |
   "onChange" |
   "onClosed" |
@@ -53,7 +59,6 @@ type AccessibleOptions = Pick<Properties,
   "onValueChanged" |
   "opened" |
   "openOnFieldClick" |
-  "pickerType" |
   "placeholder" |
   "readOnly" |
   "rtlEnabled" |
@@ -61,6 +66,12 @@ type AccessibleOptions = Pick<Properties,
   "showDropDownButton" |
   "spellcheck" |
   "startDate" |
+  "startDateInputAttr" |
+  "startDateLabel" |
+  "startDateName" |
+  "startDateOutOfRangeMessage" |
+  "startDatePlaceholder" |
+  "startDateText" |
   "stylingMode" |
   "tabIndex" |
   "text" |
@@ -90,28 +101,34 @@ const DxDateRangeBox = createComponent({
     buttons: Array,
     calendarOptions: Object,
     cancelButtonText: String,
-    dateOutOfRangeMessage: String,
     dateSerializationFormat: String,
     deferRendering: Boolean,
     disabled: Boolean,
-    disabledDates: [Array, Function],
     displayFormat: [Object, Function, String],
     dropDownButtonTemplate: {},
     dropDownOptions: Object,
     elementAttr: Object,
     endDate: {},
+    endDateInputAttr: {},
+    endDateLabel: String,
+    endDateName: String,
+    endDateOutOfRangeMessage: String,
+    endDatePlaceholder: String,
+    endDateText: String,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
-    invalidDateMessage: String,
+    invalidEndDateMessage: String,
+    invalidStartDateMessage: String,
     isValid: Boolean,
     label: String,
     labelMode: String,
     max: {},
     maxLength: [Number, String],
     min: {},
+    multiView: Boolean,
     name: String,
     onChange: Function,
     onClosed: Function,
@@ -132,7 +149,6 @@ const DxDateRangeBox = createComponent({
     onValueChanged: Function,
     opened: Boolean,
     openOnFieldClick: Boolean,
-    pickerType: String,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
@@ -140,6 +156,12 @@ const DxDateRangeBox = createComponent({
     showDropDownButton: Boolean,
     spellcheck: Boolean,
     startDate: {},
+    startDateInputAttr: {},
+    startDateLabel: String,
+    startDateName: String,
+    startDateOutOfRangeMessage: String,
+    startDatePlaceholder: String,
+    startDateText: String,
     stylingMode: String,
     tabIndex: Number,
     text: String,
@@ -166,28 +188,34 @@ const DxDateRangeBox = createComponent({
     "update:buttons": null,
     "update:calendarOptions": null,
     "update:cancelButtonText": null,
-    "update:dateOutOfRangeMessage": null,
     "update:dateSerializationFormat": null,
     "update:deferRendering": null,
     "update:disabled": null,
-    "update:disabledDates": null,
     "update:displayFormat": null,
     "update:dropDownButtonTemplate": null,
     "update:dropDownOptions": null,
     "update:elementAttr": null,
     "update:endDate": null,
+    "update:endDateInputAttr": null,
+    "update:endDateLabel": null,
+    "update:endDateName": null,
+    "update:endDateOutOfRangeMessage": null,
+    "update:endDatePlaceholder": null,
+    "update:endDateText": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:inputAttr": null,
-    "update:invalidDateMessage": null,
+    "update:invalidEndDateMessage": null,
+    "update:invalidStartDateMessage": null,
     "update:isValid": null,
     "update:label": null,
     "update:labelMode": null,
     "update:max": null,
     "update:maxLength": null,
     "update:min": null,
+    "update:multiView": null,
     "update:name": null,
     "update:onChange": null,
     "update:onClosed": null,
@@ -208,7 +236,6 @@ const DxDateRangeBox = createComponent({
     "update:onValueChanged": null,
     "update:opened": null,
     "update:openOnFieldClick": null,
-    "update:pickerType": null,
     "update:placeholder": null,
     "update:readOnly": null,
     "update:rtlEnabled": null,
@@ -216,6 +243,12 @@ const DxDateRangeBox = createComponent({
     "update:showDropDownButton": null,
     "update:spellcheck": null,
     "update:startDate": null,
+    "update:startDateInputAttr": null,
+    "update:startDateLabel": null,
+    "update:startDateName": null,
+    "update:startDateOutOfRangeMessage": null,
+    "update:startDatePlaceholder": null,
+    "update:startDateText": null,
     "update:stylingMode": null,
     "update:tabIndex": null,
     "update:text": null,
