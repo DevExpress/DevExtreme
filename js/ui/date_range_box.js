@@ -25,3 +25,7 @@ export default DateRangeBox;
  * @name dxDateRangeBoxOptions.text
  * @hidden
  */
+/**
+ * @name dxDateRangeBox.field()
+ * @hidden
+ */
