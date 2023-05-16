@@ -82,8 +82,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @public
  */
-type HiddenTextEditorProps = 'inputAttr | label | maxLength | name | placeholder | text';
-export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, HiddenTextEditorProps> & {
+export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | label | maxLength | name | placeholder | text'> & {
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
