@@ -65,6 +65,7 @@ fixture.disablePageReloads`TabPanel_common`
             ],
             width: 300,
             showNavButtons: true,
+            rtlEnabled,
           })
           .appendTo(itemElement);
       },
@@ -130,6 +131,7 @@ fixture.disablePageReloads`TabPanel_common`
             ],
             width: 300,
             showNavButtons: true,
+            rtlEnabled,
           })
           .appendTo(itemElement);
       },
