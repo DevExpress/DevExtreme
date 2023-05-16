@@ -717,9 +717,19 @@ QUnit.module('Scenarios', moduleConfig, () => {
             openedStateMode: 'shrink',
             position: 'left',
             template: () =>
-                `<div id="template" data-options="dxTemplate: {name: 'chartDrawerTemplate'}" class="dx-template-wrapper ng-scope">
-                    <div style="width: 150px; display: none !important;"></div>
-                    <div style="width: 150px; height: 100px"></div>
+                `<style nonce="qunit-test">
+                    #data1 {
+                        width: 150px;
+                        display: none !important;
+                    }
+                    #data2 {
+                        width: 150px;
+                        height: 100px
+                    }
+                </style>
+                <div id="template" data-options="dxTemplate: {name: 'chartDrawerTemplate'}" class="dx-template-wrapper ng-scope">
+                    <div id="data1"></div>
+                    <div id="data2"></div>
                 </div>`,
             opened: false,
         });
@@ -735,8 +745,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
             openedStateMode: 'overlap',
             position: 'left',
             template: () =>
-                `<div _ngcontent-qhr-c357="" class="dx-template-wrapper">
-                    <div id="template" style="width: 150px; height: 100px"></div>
+                `<style nonce="qunit-test">
+                    #template {
+                        width: 150px;
+                        height: 100px
+                    }
+                </style>
+                <div _ngcontent-qhr-c357="" class="dx-template-wrapper">
+                    <div id="template"></div>
                 </div>`,
             opened: false,
         });

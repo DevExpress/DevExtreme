@@ -4,27 +4,42 @@ import TransitionExecutorModule from 'animation/transition_executor/transition_e
 import 'ui/defer_rendering';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="animation">\
-            <div class="defer-rendering"></div>\
-        </div>\
-        <div id="staggering-animation" style="position: absolute; width: 100px; height: 100px; top: 0; left: 0">\
-            <div class="defer-rendering" style="position: absolute; width: 100%; height: 100%">\
-                <div class="item1 test-staggering-item"></div>\
-                <div class="item2 test-staggering-item"></div>\
-                <div class="item3 test-no-staggering-item"></div>\
-            </div>\
-        </div>';
+    const markup = `
+        '<div id="animation">
+            <div class="defer-rendering"></div>
+        </div>
+        <div id="staggering-animation">
+            <div class="defer-rendering">
+                <div class="item1 test-staggering-item"></div>
+                <div class="item2 test-staggering-item"></div>
+                <div class="item3 test-no-staggering-item"></div>
+            </div>
+        </div>
+    `;
 
     const style = document.createElement('style');
+    style.setAttribute('nonce', 'qunit-test');
     style.innerHTML =
-        '.test-staggering-item,\
-        test-no-staggering-item {\
-            height: 10px;\
-            width: 10px;\
-        }';
+        `.test-staggering-item,
+        test-no-staggering-item {
+            height: 10px;
+            width: 10px;
+        }`;
 
     $('#qunit-fixture').html(markup);
+    $('#staggering-animation').css({
+        position: 'absolute',
+        width: '100px',
+        height: '100px',
+        top: 0,
+        left: 0
+    });
+    $('#defer-rendering').css({
+        position: 'absolute',
+        width: '100%',
+        height: '100%'
+    });
+
     // NOTE: staggering item is placed in body outside of shadow root
     document.body.appendChild(style);
 });
