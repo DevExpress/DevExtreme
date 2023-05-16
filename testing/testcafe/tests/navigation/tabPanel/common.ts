@@ -11,139 +11,135 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
 
+test('TabPanel borders with scrolling', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel borders with scrolling.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    itemTemplate: (itemData, itemIndex, itemElement) => {
+      ($('<div>').css('marginTop', 10) as any)
+        .dxTabs({
+          items: [
+            {
+              title: 'John Heart',
+              text: 'John Heart',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            }, {
+              title: 'Robert Reagan',
+              text: 'Robert Reagan',
+            }, {
+              title: 'Greta Sims',
+              text: 'Greta Sims',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            },
+          ],
+          width: 300,
+          showNavButtons: true,
+        })
+        .appendTo(itemElement);
+    },
+    height: 120,
+    width: 300,
+    showNavButtons: true,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});
+
+test('TabPanel borders without scrolling', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel borders without scrolling.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    itemTemplate: (itemData, itemIndex, itemElement) => {
+      ($('<div>').css('marginTop', 10) as any)
+        .dxTabs({
+          items: [
+            {
+              title: 'John Heart',
+              text: 'John Heart',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            }, {
+              title: 'Robert Reagan',
+              text: 'Robert Reagan',
+            }, {
+              title: 'Greta Sims',
+              text: 'Greta Sims',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            },
+          ],
+          width: 300,
+          showNavButtons: true,
+        })
+        .appendTo(itemElement);
+    },
+    height: 120,
+    width: 900,
+    showNavButtons: true,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});
+
 [true, false].forEach((rtlEnabled) => {
-  test(`TabPanel borders with scrolling if rtlEnabled=${rtlEnabled}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await testScreenshot(t, takeScreenshot, `TabPanel borders with scrolling, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      itemTemplate: (itemData, itemIndex, itemElement) => {
-        ($('<div>').css('marginTop', 10) as any)
-          .dxTabs({
-            items: [
-              {
-                title: 'John Heart',
-                text: 'John Heart',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              }, {
-                title: 'Robert Reagan',
-                text: 'Robert Reagan',
-              }, {
-                title: 'Greta Sims',
-                text: 'Greta Sims',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              },
-            ],
-            width: 300,
-            showNavButtons: true,
-            rtlEnabled,
-          })
-          .appendTo(itemElement);
-      },
-      height: 120,
-      width: 300,
-      showNavButtons: true,
-      rtlEnabled,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
-  });
-
-  test(`TabPanel borders without scrolling if rtlEnabled=${rtlEnabled}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await testScreenshot(t, takeScreenshot, `TabPanel borders without scrolling, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      itemTemplate: (itemData, itemIndex, itemElement) => {
-        ($('<div>').css('marginTop', 10) as any)
-          .dxTabs({
-            items: [
-              {
-                title: 'John Heart',
-                text: 'John Heart',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              }, {
-                title: 'Robert Reagan',
-                text: 'Robert Reagan',
-              }, {
-                title: 'Greta Sims',
-                text: 'Greta Sims',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              },
-            ],
-            width: 300,
-            showNavButtons: true,
-            rtlEnabled,
-          })
-          .appendTo(itemElement);
-      },
-      height: 120,
-      width: 900,
-      showNavButtons: true,
-      rtlEnabled,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
-  });
-
   test(`TabPanel when its disabled item has focus if rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const tabPanel = new TabPanel('#container');
