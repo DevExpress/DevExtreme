@@ -26,7 +26,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.spy(exporter.image.creator, '_createCanvas');
 
     // image
-    sinon.stub(prototype, 'drawImage', function(img, x, y, width, height) {
+    sinon.stub(prototype, 'drawImage').callsFake(function(img, x, y, width, height) {
         drawnElements.push({
             type: 'image',
             args: {
@@ -44,7 +44,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.spy(canvasPrototype, 'toDataURL');
 
     // stroke, fill
-    sinon.stub(prototype, 'stroke', function() {
+    sinon.stub(prototype, 'stroke').callsFake(function() {
         drawnElements.push({
             type: 'stroke',
             style: {
@@ -55,7 +55,7 @@ function setupCanvasStub(drawnElements, paths) {
             }
         });
     });
-    sinon.stub(prototype, 'fill', function() {
+    sinon.stub(prototype, 'fill').callsFake(function() {
         const style = {
             fillStyle: this.fillStyle,
             globalAlpha: this.globalAlpha
@@ -75,7 +75,7 @@ function setupCanvasStub(drawnElements, paths) {
             style: style
         });
     });
-    sinon.stub(prototype, 'fillRect', function(x, y, w, h) {
+    sinon.stub(prototype, 'fillRect').callsFake(function(x, y, w, h) {
         drawnElements.push({
             type: 'fillRect',
             args: {
@@ -92,24 +92,24 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     // paths, rect, circle
-    sinon.stub(prototype, 'beginPath', function() {
+    sinon.stub(prototype, 'beginPath').callsFake(function() {
         paths.push([]);
     });
-    sinon.stub(prototype, 'moveTo', function(x, y) {
+    sinon.stub(prototype, 'moveTo').callsFake(function(x, y) {
         paths[paths.length - 1].push({
             action: 'M',
             x: x,
             y: y
         });
     });
-    sinon.stub(prototype, 'lineTo', function(x, y) {
+    sinon.stub(prototype, 'lineTo').callsFake(function(x, y) {
         paths[paths.length - 1].push({
             action: 'L',
             x: x,
             y: y
         });
     });
-    sinon.stub(prototype, 'bezierCurveTo', function(x1, y1, x2, y2, x, y) {
+    sinon.stub(prototype, 'bezierCurveTo').callsFake(function(x1, y1, x2, y2, x, y) {
         paths[paths.length - 1].push({
             action: 'C',
             x1: x1,
@@ -120,7 +120,7 @@ function setupCanvasStub(drawnElements, paths) {
             y: y
         });
     });
-    sinon.stub(prototype, 'arc', function(x, y, r, sa, ea, c) {
+    sinon.stub(prototype, 'arc').callsFake(function(x, y, r, sa, ea, c) {
         drawnElements.push({
             type: 'arc',
             args: {
@@ -146,12 +146,12 @@ function setupCanvasStub(drawnElements, paths) {
             });
         }
     });
-    sinon.stub(prototype, 'closePath', function() {
+    sinon.stub(prototype, 'closePath').callsFake(function() {
         paths[paths.length - 1].push({
             action: 'Z'
         });
     });
-    sinon.stub(prototype, 'rect', function(x, y, width, height) {
+    sinon.stub(prototype, 'rect').callsFake(function(x, y, width, height) {
         drawnElements.push({
             type: 'rect',
             args: {
@@ -163,7 +163,7 @@ function setupCanvasStub(drawnElements, paths) {
             style: {}
         });
     });
-    sinon.stub(prototype, 'arcTo', function(x1, y1, x2, y2, radius) {
+    sinon.stub(prototype, 'arcTo').callsFake(function(x1, y1, x2, y2, radius) {
         drawnElements.push({
             action: 'arcTo',
             args: {
@@ -175,7 +175,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    sinon.stub(prototype, 'createLinearGradient', function(x0, y0, x1, y1) {
+    sinon.stub(prototype, 'createLinearGradient').callsFake(function(x0, y0, x1, y1) {
         const addColorStop = sinon.spy();
         drawnElements.push({
             type: 'linearGradient',
@@ -195,7 +195,7 @@ function setupCanvasStub(drawnElements, paths) {
         };
     });
 
-    sinon.stub(prototype, 'createRadialGradient', function(x0, y0, r0, x1, y1, r1) {
+    sinon.stub(prototype, 'createRadialGradient').callsFake(function(x0, y0, r0, x1, y1, r1) {
         const addColorStop = sinon.spy();
         drawnElements.push({
             type: 'radialGradient',
@@ -245,7 +245,7 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     // texts
-    sinon.stub(prototype, 'fillText', function() {
+    sinon.stub(prototype, 'fillText').callsFake(function() {
         const tempFont = this.font.replace(/px\s/g, 'px__');
         const fontParts = tempFont.split('__');
         const style = {
@@ -274,7 +274,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    sinon.stub(prototype, 'strokeText', function() {
+    sinon.stub(prototype, 'strokeText').callsFake(function() {
         const tempFont = this.font.replace(/px\s/g, 'px__');
         const fontParts = tempFont.split('__');
         const style = {
@@ -311,7 +311,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.stub(prototype, 'clip');
     sinon.stub(prototype, 'save');
     sinon.stub(prototype, 'restore');
-    sinon.stub(prototype, 'createPattern', function() {
+    sinon.stub(prototype, 'createPattern').callsFake(function() {
         drawnElements.push({
             type: 'pattern'
         });
@@ -546,7 +546,7 @@ QUnit.module('Svg to canvas', {
     stubGetComputedStyle: function(testElement, testStyle) {
         const getComputedStyle = window.getComputedStyle;
 
-        this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(element) {
+        this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(element) {
             if(element === testElement) {
                 return testStyle;
             }

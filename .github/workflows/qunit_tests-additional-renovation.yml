@@ -181,8 +181,6 @@ jobs:
         ]
         include:
           - useCsp: true
-          - constel: 'export'
-            useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
 
