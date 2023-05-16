@@ -10789,6 +10789,8 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       FocusEvent
     >;
+    type HiddenTextEditorProps =
+      'inputAttr | label | maxLength | name | placeholder | text';
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDateRangeBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
@@ -10815,7 +10817,13 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type Properties = Omit<
+      DateBoxBaseOptions<dxDateRangeBox>,
+      HiddenTextEditorProps
+    > & {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
@@ -10857,7 +10865,7 @@ declare module DevExpress.ui {
        */
       multiView?: boolean;
       /**
-       * [descr:Properties.openOnFieldClick]
+       * [descr:dxDateRangeBoxOptions.openOnFieldClick]
        */
       openOnFieldClick?: boolean;
       /**
