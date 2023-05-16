@@ -16,7 +16,6 @@ const ColorBox = require('ui/color_box');
 const DataGrid = require('ui/data_grid');
 const DateBox = require('ui/date_box');
 const DateRangeBox = require('ui/date_range_box');
-const FakeDialogComponent = require('ui/dialog').FakeDialogComponent;
 const DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor');
 const DropDownBox = require('ui/drop_down_box');
 const DropDownButton = require('ui/drop_down_button');
@@ -258,13 +257,6 @@ testComponentDefaults(ValidationMessage,
         boundary: undefined,
         offset: { h: 0, v: 0 }
     }
-);
-
-testComponentDefaults(FakeDialogComponent,
-    [
-        { platform: 'ios' }
-    ],
-    { width: 276 }
 );
 
 testComponentDefaults(DropDownMenu,

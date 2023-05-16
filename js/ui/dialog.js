@@ -1,6 +1,5 @@
 import { getHeight, getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
-import { Component } from '../core/component';
 import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';
@@ -41,30 +40,8 @@ const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
-export const FakeDialogComponent = Component.inherit({
-    ctor: function(element, options) {
-        this.callBase(options);
-    },
-
-    _defaultOptionsRules: function() {
-
-        return this.callBase().concat([
-            {
-                device: { platform: 'ios' },
-                options: {
-                    width: 276
-                }
-            }
-        ]);
-    }
-});
-
 export const custom = function(options) {
     const deferred = new Deferred();
-
-    const defaultOptions = new FakeDialogComponent().option();
-
-    options = extend(defaultOptions, options);
 
     const $element = $('<div>')
         .addClass(DX_DIALOG_CLASSNAME)
