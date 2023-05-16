@@ -23,17 +23,7 @@ export default modules.Controller.inherit((function () {
     return items;
   }
 
-  /**
-     *
-     * @param {import('./ui.grid_core.data_source_adapter').LoadOptions} loadOptions
-     * @param {import('./ui.grid_core.data_source_adapter').LoadOptions} lastLoadOptions
-     * @param {boolean} [isFullReload]
-     * @returns {import('./ui.grid_core.data_source_adapter').OperationTypes}
-     */
   function calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?) {
-    /**
-         * @type {import('./ui.grid_core.data_source_adapter').OperationTypes}
-         */
     let operationTypes: any = { reload: true, fullReload: true };
 
     if (lastLoadOptions) {
@@ -223,9 +213,6 @@ export default modules.Controller.inherit((function () {
     return loadedItem;
   }
 
-  /**
-     * @type {Partial<import('./ui.grid_core.data_source_adapter').DataSourceAdapter>}
-     */
   const members = {
     init(dataSource, remoteOperations) {
       const that = this;
