@@ -2112,6 +2112,10 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         {
             optionName: 'labelMode',
             optionValue: 'floating'
+        },
+        {
+            optionName: 'openOnFieldClick',
+            optionValue: false,
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
