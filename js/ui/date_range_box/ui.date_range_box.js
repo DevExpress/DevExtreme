@@ -16,6 +16,8 @@ import { FunctionTemplate } from '../../core/templates/function_template';
 import { isSameDates, isSameDateArrays, sortDatesArray, getDeserializedDate } from './ui.date_range.utils';
 import { each } from '../../core/utils/iterator';
 import { camelize } from '../../core/utils/inflector';
+import { addNamespace } from '../../events/utils/index';
+import eventsEngine from '../../events/core/events_engine';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-daterangebox-with-label';
@@ -304,7 +306,23 @@ class DateRangeBox extends Editor {
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
             .appendTo(this.$element());
 
+        this._renderPreventBlurOnSeparatorClick();
+
         $icon.appendTo(this._$separator);
+    }
+
+    _renderPreventBlurOnSeparatorClick() {
+        const eventName = addNamespace('mousedown', 'dxDateRangeBox');
+
+        eventsEngine.off(this._$separator, eventName);
+        eventsEngine.on(this._$separator, eventName, (e) => {
+            if(!this._hasActiveElement()) {
+                this.focus();
+            }
+
+            e.preventDefault();
+
+        });
     }
 
     _renderButtonsContainer() {
