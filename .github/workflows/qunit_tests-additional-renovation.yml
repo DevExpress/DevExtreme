@@ -100,11 +100,12 @@ jobs:
   qunit-tests-mobile-and-shadow-dom:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
+    name: ${{ matrix.constel }}-${{ matrix.kind }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
+        kind: [ 'shadow-dom', 'ios10', 'android6' ]
         constel: [
           'ui',
           'ui.widgets(1/3)',
@@ -116,28 +117,32 @@ jobs:
           'ui.scheduler',
           'viz'
         ]
-        userAgent: [ '', 'ios10', 'android6' ]
         include:
-          - userAgent: ''
+          - kind: 'shadow-dom'
+            userAgent: ''
             useShadowDom: true
+          - kind: 'ios10'
+            userAgent: 'ios10'
+          - kind: 'android6'
+            userAgent: 'android6'
           - headless: false
           - useCsp: true
           - constel: 'ui'
             headless: true
           - constel: 'viz'
             headless: true
-          - userAgent: 'android6'
+          - kind: 'android6'
             useJQuery: true
           - constel: 'ui.widgets(2/3)'
             useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
         exclude:
-          - userAgent: ''
+          - kind: 'shadow-dom'
             constel: 'ui'
-          - userAgent: ''
+          - kind: 'shadow-dom'
             constel: 'ui.scheduler'
-          - userAgent: ''
+          - kind: 'shadow-dom'
             constel: 'viz'
 
     steps:
@@ -147,7 +152,7 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          name: ${{ matrix.constel }}-${{ matrix.userAgent }}${{ matrix.useShadowDom == true && 'shadowdom' || '' }}
+          name: ${{ matrix.constel }}-${{ matrix.kind }}
           constel: ${{ matrix.constel }}
           browser: 'chrome'
           useJQuery: ${{ matrix.useJquery || 'false' }}
