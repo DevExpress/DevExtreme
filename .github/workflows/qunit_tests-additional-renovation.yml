@@ -106,15 +106,20 @@ jobs:
       fail-fast: false
       matrix:
         constel: [
+          'export',
+          'misc',
           'ui',
           'ui.widgets(1/3)',
           'ui.widgets(2/3)',
           'ui.widgets(3/3)',
           'ui.editors',
           'ui.htmlEditor',
-          'ui.grid',
-          'ui.scheduler',
-          'viz'
+          'ui.grid(1/2)',
+          'ui.grid(2/2)',
+          'ui.scheduler(1/2)',
+          'ui.scheduler(2/2)',
+          'viz',
+          'renovation'
         ]
         kind: [ 'shadow-dom', 'ios10', 'android6' ]
         include:
@@ -127,6 +132,8 @@ jobs:
             userAgent: 'android6'
           - headless: false
           - useCsp: true
+          - constel: 'export'
+            useCsp: false
           - constel: 'ui'
             headless: true
           - constel: 'viz'
@@ -173,6 +180,9 @@ jobs:
           'export',
           'misc',
           'ui',
+          'ui.widgets(1/3)',
+          'ui.widgets(2/3)',
+          'ui.widgets(3/3)',
           'ui.editors',
           'ui.htmlEditor',
           'ui.grid(1/2)',
@@ -187,6 +197,8 @@ jobs:
           - constel: 'export'
             useCsp: false
           - constel: 'ui.htmlEditor'
+            useCsp: false
+          - constel: 'ui.widgets(2/3)'
             useCsp: false
 
     steps:
@@ -206,7 +218,7 @@ jobs:
   qunit-tests-no-csp:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-nocsp
+    name: ${{ matrix.constel }}-no-csp
     timeout-minutes: 30
     strategy:
       fail-fast: false
