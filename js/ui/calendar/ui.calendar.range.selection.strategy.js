@@ -38,7 +38,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
                 }
 
             } else {
-                if(this.calendar._convertToDate(selectedValue) > this.calendar._convertToDate(startDate)) {
+                if(this.calendar._convertToDate(selectedValue) >= this.calendar._convertToDate(startDate)) {
                     this.dateValue([startDate, selectedValue], e);
                 } else {
                     this.dateValue([null, selectedValue], e);
