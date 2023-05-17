@@ -38,7 +38,7 @@ function createJQueryElement(markup) {
     const regexResult = markup.match(styleRegex);
     const $element = $(markup.replace(styleRegex, ''));
 
-    if (regexResult != null && regexResult.length > 1) {
+    if(regexResult != null && regexResult.length > 1) {
         $element[0].style = regexResult[1];
     }
 
