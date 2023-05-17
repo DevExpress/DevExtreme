@@ -3955,3 +3955,24 @@ test('Adaptive with batch edit mode - Adaptive cells should be focused by tab ke
     ],
   });
 });
+
+test('DataGrid - An exception should not throw after pressing the space key in an empty grid with virtual scrolling and row selection enabled', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element)
+    .pressKey('tab space tab');
+
+  // there is no js exception
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  keyExpr: 'Test',
+  columns: ['Test'],
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+  },
+  selection: {
+    mode: 'single',
+  },
+}));

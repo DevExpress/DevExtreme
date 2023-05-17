@@ -27,6 +27,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import { Deferred } from '../../core/utils/deferred';
 import DataConverterMixin from '../shared/grouped_data_converter_mixin';
 import { getElementMargin } from '../../renovation/ui/scroll_view/utils/get_element_style';
+import Guid from '../../core/guid';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -190,7 +191,6 @@ export const ListBase = CollectionWidget.inherit({
             activeStateEnabled: true,
 
             _itemAttributes: { 'role': 'option' },
-            _listAttributes: { 'role': 'listbox' },
 
             useInkRipple: false,
 
@@ -656,7 +656,31 @@ export const ListBase = CollectionWidget.inherit({
         this.callBase();
         this.option('useInkRipple') && this._renderInkRipple();
 
-        this.setAria('role', this.option('_listAttributes').role);
+        const elementAria = {
+            'role': 'group',
+            'roledescription': 'list',
+        };
+        this.setAria(elementAria, this.$element());
+
+        this._setListAria();
+    },
+
+    _setListAria() {
+        const { items } = this.option();
+
+        const listArea = items?.length ? {
+            role: 'listbox',
+            label: 'Items'
+        } : {
+            role: undefined,
+            label: undefined
+        };
+
+        this.setAria(listArea);
+    },
+
+    _focusTarget: function() {
+        return this._itemContainer();
     },
 
     _renderInkRipple: function() {
@@ -728,8 +752,17 @@ export const ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_CLASS)
             .appendTo(this._itemContainer());
 
+        const id = `dx-${new Guid().toString()}`;
+        const groupAria = {
+            role: 'group',
+            'labelledby': id,
+        };
+
+        this.setAria(groupAria, $groupElement);
+
         const $groupHeaderElement = $('<div>')
             .addClass(LIST_GROUP_HEADER_CLASS)
+            .attr('id', id)
             .appendTo($groupElement);
 
         const groupTemplateName = this.option('groupTemplate');
@@ -942,7 +975,6 @@ export const ListBase = CollectionWidget.inherit({
                 break;
             case '_swipeEnabled':
                 break;
-            case '_listAttributes':
             case 'selectByClick':
                 break;
             default:

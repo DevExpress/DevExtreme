@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Válasszon dátumot",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Válasszon dátumot és időt",
         "dxDateBox-validation-datetime": "Az érték dátum vagy idő kell legyen",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Válasszon fájlt",
         "dxFileUploader-dropFile": "vagy húzza a fájlt ide",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Között",
         "dxDataGrid-filterRowOperationBetweenStartText": "Kezdete",
         "dxDataGrid-filterRowOperationBetweenEndText": "Vége",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Szűrő alkalmazása",
         "dxDataGrid-trueText": "igaz",
         "dxDataGrid-falseText": "hamis",

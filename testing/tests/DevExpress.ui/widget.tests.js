@@ -1543,12 +1543,9 @@ QUnit.module('aria accessibility', {}, () => {
 
     QUnit.test('aria-hidden', function(assert) {
         const $element = $('#widget').dxWidget({ visible: false });
-        const instance = $element.dxWidget('instance');
 
-        assert.equal($element.attr('aria-hidden'), 'true', 'attribute test on init');
-
-        instance.option('visible', true);
-        assert.equal($element.attr('aria-hidden'), undefined, 'attribute test on option change');
+        // NOTE: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden
+        assert.strictEqual($element.attr('aria-hidden'), undefined, 'attribute should not be set while element has "display:none"');
     });
 
     QUnit.test('setAria function', function(assert) {

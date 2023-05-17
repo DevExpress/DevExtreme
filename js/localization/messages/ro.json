@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Selectează data",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Selectează data și timpul",
         "dxDateBox-validation-datetime": "Valoarea trebuie să fie o dată sau timp",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Selectează fișierul",
         "dxFileUploader-dropFile": "sau plasați fișierul aici",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Între",
         "dxDataGrid-filterRowOperationBetweenStartText": "Începe",
         "dxDataGrid-filterRowOperationBetweenEndText": "Sfârșit",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Aplica filtre",
         "dxDataGrid-trueText": "adevărat",
         "dxDataGrid-falseText": "fals",

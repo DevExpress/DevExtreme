@@ -10,12 +10,13 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         '<div id="list"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="templated-list">\
             <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const LIST_CLASS = 'dx-list';
@@ -181,6 +182,25 @@ QUnit.module('List markup', {}, () => {
         assert.equal($groupBody.children('.' + LIST_ITEM_CLASS).length, 1, 'there are items in items wrapper');
     });
 
+    QUnit.test('Group should have aria-labelledby attribute equal to caption id', function(assert) {
+        const $list = $('#list').dxList({
+            items: [
+                {
+                    key: 'a',
+                    items: ['0', '1']
+                }
+            ],
+            grouped: true,
+        });
+
+        const $groups = $list.find(`.${LIST_GROUP_CLASS}`);
+        const $caption = $groups.eq(0).find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        assert.strictEqual($groups.length, 1);
+        assert.ok($groups.get(0).hasAttribute('aria-labelledby'), 'group has aria-labelledby attribute');
+        assert.strictEqual($groups.eq(0).attr('aria-labelledby'), $caption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
+    });
+
     QUnit.test('next button showing', function(assert) {
         $('#list').dxList({
             dataSource: {
@@ -249,67 +269,138 @@ QUnit.module('nested rendering', {}, () => {
 
 let helper;
 if(devices.real().deviceType === 'desktop') {
-    [true, false].forEach((searchEnabled) => {
-        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: function() {
-                helper = new ariaAccessibilityTestHelper({
-                    createWidget: ($element, options) => new List($element,
-                        $.extend({
-                            items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
-                            searchEnabled: searchEnabled
-                        }, options))
-                });
-                this.clock = sinon.useFakeTimers();
-            },
-            afterEach: function() {
-                this.clock.restore();
-                helper.$widget.remove();
-            }
-        }, () => {
+    QUnit.module('Aria accessibility', {
+        beforeEach: function() {
+            helper = new ariaAccessibilityTestHelper({
+                createWidget: ($element, options) => new List($element,
+                    $.extend({
+                        items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
+                    }, options))
+            });
+            this.clock = sinon.useFakeTimers();
+            this.expectedItemContainerAttrs = {
+                role: 'listbox',
+                tabindex: '0',
+                'aria-label': 'Items'
+            };
+            this.expectedListAttrs = {
+                role: 'group',
+                'aria-roledescription': 'list',
+            };
+        },
+        afterEach: function() {
+            this.clock.restore();
+            helper.$widget.remove();
+        }
+    }, () => {
+        [true, false].forEach((searchEnabled) => {
             QUnit.test('Selected: [], selectionMode: "none"', function() {
-                helper.createWidget();
+                helper.createWidget({ searchEnabled });
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
-                helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, { });
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([], { role: 'option' });
             });
 
             QUnit.test('Selected: ["Item_2"], change searchEnabled after initialize', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_2'],
+                    keyExpr: 'text',
+                    selectionMode: 'single'
+                });
                 helper.widget.option('searchEnabled', !searchEnabled);
 
-                helper.checkAttributes(!searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
-                helper.checkAttributes(!searchEnabled ? helper.$widget : helper.$itemContainer, {});
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
 
             QUnit.test('Selected: ["Item_2"], selectionMode: "single"', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_2'],
+                    keyExpr: 'text',
+                    selectionMode: 'single'
+                });
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
-                helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, {});
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
 
             QUnit.test('Selected: ["Item_2", "Item_3"], selectionMode: "multiple"', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_2', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_2', 'Item_3'],
+                    keyExpr: 'text',
+                    selectionMode: 'multiple'
+                });
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
-                helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, { });
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option' });
             });
 
             QUnit.test('Selected: ["Item_1"] -> set focusedElement -> clean focusedElement', function() {
-                helper.createWidget({ selectedItemKeys: ['Item_1'], keyExpr: 'text', selectionMode: 'single' });
+                helper.createWidget({
+                    searchEnabled,
+                    selectedItemKeys: ['Item_1'],
+                    keyExpr: 'text',
+                    selectionMode: 'single'
+                });
 
                 helper.widget.option('focusedElement', helper.getItems().eq(0));
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([0], { attributes: ['aria-selected'], focusedItemIndex: 0, role: 'option' });
 
                 helper.widget.option('focusedElement', null);
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkItemsAttributes([0], { attributes: ['aria-selected'], role: 'option' });
             });
+        });
+
+        ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+            QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
+                helper.createWidget({ items: [] });
+
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'Items');
+
+                helper.widget.option(dataSourcePropertyName, []);
+                assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+            });
+
+            QUnit.test(`list should have correct role if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
+                helper.createWidget({ items: [] });
+
+                assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                assert.strictEqual(helper.$itemContainer.attr('role'), 'listbox');
+
+                helper.widget.option(dataSourcePropertyName, []);
+                assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+            });
+        });
+
+        QUnit.test('noDataText should not be passed to aria-label of list\'s focusable element if data source is empty', function(assert) {
+            const noDataText = 'Custom no data text';
+
+            helper.createWidget({ noDataText, items: [] });
+
+            assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+        });
+
+        QUnit.test('aria-label of empty list should be empty after noDataText option change', function(assert) {
+            helper.createWidget({ items: [] });
+
+            const noDataText = 'Custom no data text';
+            helper.widget.option('noDataText', noDataText);
+
+            assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
         });
     });
 }

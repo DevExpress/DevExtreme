@@ -4,6 +4,7 @@ window.DevExpress = window.DevExpress || {};
 window.DevExpress.config = { useJQuery: useJQuery };
 
 define(function(require) {
+    QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
     require('bundles/dx.all.js');
 
     QUnit.module('config.useJQuery');

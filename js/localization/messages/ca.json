@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Seleccioneu Data",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Seleccioneu la data i l'hora",
         "dxDateBox-validation-datetime": "El valor ha de ser una data o hora",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Seleccioneu un fitxer",
         "dxFileUploader-dropFile": "o deixar un fitxer aquí",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Entre",
         "dxDataGrid-filterRowOperationBetweenStartText": "Començar",
         "dxDataGrid-filterRowOperationBetweenEndText": "Final",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Aplicar el filtre",
         "dxDataGrid-trueText": "lleial",
         "dxDataGrid-falseText": "fals",

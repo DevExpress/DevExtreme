@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Velg dato",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Velg dato og tid",
         "dxDateBox-validation-datetime": "Verdien må være dato eller tid",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Velg fil",
         "dxFileUploader-dropFile": "eller dropp filen her",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Mellom",
         "dxDataGrid-filterRowOperationBetweenStartText": "Start",
         "dxDataGrid-filterRowOperationBetweenEndText": "Slutt",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Bruk filter",
         "dxDataGrid-trueText": "sant",
         "dxDataGrid-falseText": "usant",

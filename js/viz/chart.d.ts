@@ -5164,3 +5164,140 @@ export type Properties = dxChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxChartOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxChartOptions.onArgumentAxisClick
+ * @type_function_param1 e:{viz/chart:ArgumentAxisClickEvent}
+ */
+onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onDisposing
+ * @type_function_param1 e:{viz/chart:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onDone
+ * @type_function_param1 e:{viz/chart:DoneEvent}
+ */
+onDone?: ((e: DoneEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onDrawn
+ * @type_function_param1 e:{viz/chart:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onExported
+ * @type_function_param1 e:{viz/chart:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onExporting
+ * @type_function_param1 e:{viz/chart:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onFileSaving
+ * @type_function_param1 e:{viz/chart:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/chart:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onInitialized
+ * @type_function_param1 e:{viz/chart:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onLegendClick
+ * @type_function_param1 e:{viz/chart:LegendClickEvent}
+ */
+onLegendClick?: ((e: LegendClickEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onOptionChanged
+ * @type_function_param1 e:{viz/chart:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onPointClick
+ * @type_function_param1 e:{viz/chart:PointClickEvent}
+ */
+onPointClick?: ((e: PointClickEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onPointHoverChanged
+ * @type_function_param1 e:{viz/chart:PointHoverChangedEvent}
+ */
+onPointHoverChanged?: ((e: PointHoverChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onPointSelectionChanged
+ * @type_function_param1 e:{viz/chart:PointSelectionChangedEvent}
+ */
+onPointSelectionChanged?: ((e: PointSelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onSeriesClick
+ * @type_function_param1 e:{viz/chart:SeriesClickEvent}
+ */
+onSeriesClick?: ((e: SeriesClickEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onSeriesHoverChanged
+ * @type_function_param1 e:{viz/chart:SeriesHoverChangedEvent}
+ */
+onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onSeriesSelectionChanged
+ * @type_function_param1 e:{viz/chart:SeriesSelectionChangedEvent}
+ */
+onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/chart:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onTooltipShown
+ * @type_function_param1 e:{viz/chart:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onZoomEnd
+ * @type_function_param1 e:{viz/chart:ZoomEndEvent}
+ */
+onZoomEnd?: ((e: ZoomEndEvent) => void);
+/**
+ * @skip
+ * @docid dxChartOptions.onZoomStart
+ * @type_function_param1 e:{viz/chart:ZoomStartEvent}
+ */
+onZoomStart?: ((e: ZoomStartEvent) => void);
+};

@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "اختر التاريخ",
         "dxDateBox-simulatedDataPickerTitleDateTime": "حدد التاريخ والوقت",
         "dxDateBox-validation-datetime": "يجب أن تكون القيمة تاريخًا أو وقتًا",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "حدد الملف",
         "dxFileUploader-dropFile": "أو إفلات الملف هنا",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "ما بين",
         "dxDataGrid-filterRowOperationBetweenStartText": "بدا",
         "dxDataGrid-filterRowOperationBetweenEndText": "انتهى",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "تطبيق مرشح",
         "dxDataGrid-trueText": "صحيح",
         "dxDataGrid-falseText": "خاطئة",

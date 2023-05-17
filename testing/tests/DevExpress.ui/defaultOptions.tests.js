@@ -1,4 +1,4 @@
-window.includeThemesLinks();
+require('../../helpers/includeThemesLinks.js');
 
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
@@ -215,6 +215,51 @@ testComponentDefaults(DateRangeBox,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'android' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'ios' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'ios' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'generic', deviceType: 'desktop' },
+    {
+        multiView: true,
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
+    },
+    function() {
+        devices.real(this._origDevice);
     }
 );
 

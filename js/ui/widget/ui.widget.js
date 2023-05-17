@@ -187,7 +187,6 @@ const Widget = DOMComponent.inherit({
 
     _toggleVisibility(visible) {
         this.$element().toggleClass('dx-state-invisible', !visible);
-        this.setAria('hidden', !visible || void 0);
     },
 
     _renderFocusState() {

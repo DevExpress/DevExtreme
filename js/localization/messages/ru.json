@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Выберите дату",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Выберите дату и время",
         "dxDateBox-validation-datetime": "Значение должно быть датой/временем",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Выберите файл",
         "dxFileUploader-dropFile": "или Перетащите файл сюда",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "В диапазоне",
         "dxDataGrid-filterRowOperationBetweenStartText": "Начало",
         "dxDataGrid-filterRowOperationBetweenEndText": "Конец",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Применить фильтр",
         "dxDataGrid-trueText": "Да",
         "dxDataGrid-falseText": "Нет",

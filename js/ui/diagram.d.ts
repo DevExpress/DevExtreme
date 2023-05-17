@@ -1584,3 +1584,76 @@ export type Properties = dxDiagramOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDiagramOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxDiagramOptions.onContentReady
+ * @type_function_param1 e:{ui/diagram:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onCustomCommand
+ * @type_function_param1 e:{ui/diagram:CustomCommandEvent}
+ */
+onCustomCommand?: ((e: CustomCommandEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onDisposing
+ * @type_function_param1 e:{ui/diagram:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onInitialized
+ * @type_function_param1 e:{ui/diagram:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onItemClick
+ * @type_function_param1 e:{ui/diagram:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onItemDblClick
+ * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
+ */
+onItemDblClick?: ((e: ItemDblClickEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onOptionChanged
+ * @type_function_param1 e:{ui/diagram:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onRequestEditOperation
+ * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
+ */
+onRequestEditOperation?: ((e: RequestEditOperationEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onRequestLayoutUpdate
+ * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
+ */
+onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void);
+/**
+ * @skip
+ * @docid dxDiagramOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};

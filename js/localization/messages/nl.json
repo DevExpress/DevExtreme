@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Selecteer datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Selecteer datum and tijd",
         "dxDateBox-validation-datetime": "Waarde moet een datum of tijd zijn",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Selecteer bestand",
         "dxFileUploader-dropFile": "of sleep bestand hier",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Tussen",
         "dxDataGrid-filterRowOperationBetweenStartText": "Begin",
         "dxDataGrid-filterRowOperationBetweenEndText": "Einde",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Filter toepassen",
         "dxDataGrid-trueText": "waar",
         "dxDataGrid-falseText": "niet waar",

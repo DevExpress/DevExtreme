@@ -27,9 +27,9 @@ function run_test_impl {
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
-    [ -z "$JQUERY"  ] && url="$url&nojquery=true"
-    [ -n "$SHADOW_DOM" ] && url="$url&shadowDom=true"
-    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+    [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
+    [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
+    [ "$PERF" == "true" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 

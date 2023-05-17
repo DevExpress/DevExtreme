@@ -705,3 +705,86 @@ export type Properties = dxSankeyOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSankeyOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSankeyOptions.onDisposing
+ * @type_function_param1 e:{viz/sankey:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onDrawn
+ * @type_function_param1 e:{viz/sankey:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onExported
+ * @type_function_param1 e:{viz/sankey:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onExporting
+ * @type_function_param1 e:{viz/sankey:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onFileSaving
+ * @type_function_param1 e:{viz/sankey:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/sankey:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onInitialized
+ * @type_function_param1 e:{viz/sankey:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onLinkClick
+ * @type_function_param1 e:{viz/sankey:LinkClickEvent}
+ */
+onLinkClick?: ((e: LinkClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onLinkHoverChanged
+ * @type_function_param1 e:{viz/sankey:LinkHoverChangedEvent}
+ */
+onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onNodeClick
+ * @type_function_param1 e:{viz/sankey:NodeClickEvent}
+ */
+onNodeClick?: ((e: NodeClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onNodeHoverChanged
+ * @type_function_param1 e:{viz/sankey:NodeHoverChangedEvent}
+ */
+onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onOptionChanged
+ * @type_function_param1 e:{viz/sankey:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};

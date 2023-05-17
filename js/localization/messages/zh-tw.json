@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "選擇日期",
         "dxDateBox-simulatedDataPickerTitleDateTime": "選擇日期和時間",
         "dxDateBox-validation-datetime": "值必須是日期或時間",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "選擇文件",
         "dxFileUploader-dropFile": "或者把文件放在此處",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "之間",
         "dxDataGrid-filterRowOperationBetweenStartText": "開始",
         "dxDataGrid-filterRowOperationBetweenEndText": "結束",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "應用過濾器",
         "dxDataGrid-trueText": "真",
         "dxDataGrid-falseText": "假",

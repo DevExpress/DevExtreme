@@ -66,49 +66,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - uses: ./.github/actions/pin-browsers
-
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
-
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '15'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-
-    - name: Unpack artifacts
-      run: 7z x artifacts.zip
-
-    - name: Build dotnet
-      run: dotnet build build/build-dotnet.sln
-
     - name: Run QUnit tests
-      env:
-        CONSTEL: ${{ matrix.CONSTEL }}
-        NORENOVATION: "false"
-        GITHUBACTION: "true"
-        NO_CSP: "true"
-        TARGET: "test"
-      run: |
-        chmod +x ./docker-ci.sh
-        ./docker-ci.sh
+      uses: ./.github/actions/run-qunit-tests
+      with:
+        constel: ${{ matrix.CONSTEL }}
+        useCsp: "false"
 
   notify:
     runs-on: devextreme-shr2

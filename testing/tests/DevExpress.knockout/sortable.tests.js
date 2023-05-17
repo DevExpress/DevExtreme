@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('ui/sortable');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('sortable');
+} else {
+    QUnit.module.skip('sortable');
+}
+
 QUnit.testStart(function() {
     const markup =
         `<div id="testItemTemplate">

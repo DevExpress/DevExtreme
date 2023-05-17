@@ -153,3 +153,112 @@ export type Properties = dxColorBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxColorBoxOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onContentReady'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onChange
+ * @type_function_param1 e:{ui/color_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onClosed
+ * @type_function_param1 e:{ui/color_box:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onCopy
+ * @type_function_param1 e:{ui/color_box:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onCut
+ * @type_function_param1 e:{ui/color_box:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/color_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/color_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/color_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/color_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/color_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onInput
+ * @type_function_param1 e:{ui/color_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/color_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/color_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onOpened
+ * @type_function_param1 e:{ui/color_box:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/color_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onPaste
+ * @type_function_param1 e:{ui/color_box:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxColorBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/color_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};

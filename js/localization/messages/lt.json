@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Pasirinkite Datą",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Pasirinkite datą ir laiką",
         "dxDateBox-validation-datetime": "Vertė turi būti data ar laikas",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Pasirinkite failą",
         "dxFileUploader-dropFile": "Arba atsisakykite failo čia",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Tarp",
         "dxDataGrid-filterRowOperationBetweenStartText": "Pradėti",
         "dxDataGrid-filterRowOperationBetweenEndText": "Pabaiga",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Taikyti filtrą",
         "dxDataGrid-trueText": "tiesa",
         "dxDataGrid-falseText": "melaginga",

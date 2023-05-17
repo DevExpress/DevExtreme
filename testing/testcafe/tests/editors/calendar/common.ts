@@ -4,7 +4,9 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import Calendar from '../../../model/calendar';
-import { appendElementTo, setClassAttribute, setStyleAttribute } from '../../../helpers/domUtils';
+import {
+  appendElementTo, insertStylesheetRulesToPage, setClassAttribute, setStyleAttribute,
+} from '../../../helpers/domUtils';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -15,8 +17,73 @@ const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
+
 fixture.disablePageReloads`Calendar`
   .page(url(__dirname, '../../container.html'));
+
+test('Caption button text should be ellipsis when width is limit', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await insertStylesheetRulesToPage('#container { min-width: 0 }');
+
+  await testScreenshot(t, takeScreenshot, 'Calendar with limit width.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCalendar', {
+  width: 150,
+  value: new Date(2021, 9, 17),
+}));
+
+test('Grabbing cursor should be shown during swipe', async (t) => {
+  const calendar = new Calendar('#container');
+
+  await calendar.showGestureCover();
+
+  const gestureCover = Selector(`.${GESTURE_COVER_CLASS}`);
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('auto');
+
+  await calendar.swipeStart();
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('grabbing');
+
+  await calendar.swipe(0.4);
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('grabbing');
+
+  await calendar.swipeEnd();
+
+  await t
+    .expect(gestureCover.getStyleProperty('cursor'))
+    .eql('auto');
+}).before(async () => createWidget('dxCalendar', {
+  value: new Date(2021, 9, 17),
+}));
+
+test('Cells on month view should have hover state class after hover when zoomLevel has been changed from "year" to "month" by click on cell', async (t) => {
+  const calendar = new Calendar('#container');
+
+  await t
+    .click(calendar.getView().getMonthCellByDate(new Date(2021, 9, 17)));
+
+  const targetCell = calendar.getView().getCellByDate(new Date(2021, 9, 19));
+  await t
+    .hover(targetCell)
+    .expect(targetCell.hasClass(STATE_HOVER_CLASS))
+    .eql(true);
+}).before(async () => createWidget('dxCalendar', {
+  zoomLevel: 'year',
+  value: new Date(2021, 9, 17),
+}));
 
 test('Calendar with showWeekNumbers rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

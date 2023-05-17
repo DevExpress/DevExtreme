@@ -186,3 +186,52 @@ export type Properties = dxButtonGroupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxButtonGroupOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxButtonGroupOptions.onContentReady
+ * @type_function_param1 e:{ui/button_group:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonGroupOptions.onDisposing
+ * @type_function_param1 e:{ui/button_group:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonGroupOptions.onInitialized
+ * @type_function_param1 e:{ui/button_group:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonGroupOptions.onItemClick
+ * @type_function_param1 e:{ui/button_group:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonGroupOptions.onOptionChanged
+ * @type_function_param1 e:{ui/button_group:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonGroupOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/button_group:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};

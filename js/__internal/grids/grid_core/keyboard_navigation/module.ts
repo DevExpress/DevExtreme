@@ -72,7 +72,7 @@ import {
   shouldPreventScroll,
 } from './module_utils';
 import {
-  Controllers, Views,
+  Controllers, OptionChanged, Views,
 } from '../module_types';
 import modules from '../modules';
 
@@ -294,7 +294,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   // #endregion Initialization
 
   // #region Options
-  optionChanged(args) {
+  optionChanged(args: OptionChanged) {
     switch (args.name) {
       case 'keyboardNavigation':
       case 'useLegacyKeyboardNavigation':

@@ -56,6 +56,10 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Izberi datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Izberi datum in čas",
         "dxDateBox-validation-datetime": "Vrednost mora biti datum ali čas",
+        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
 
         "dxFileUploader-selectFile": "Izberi datoteko",
         "dxFileUploader-dropFile": "ali spusti datoteko tukaj",
@@ -119,6 +123,7 @@
         "dxDataGrid-filterRowOperationBetween": "Je med",
         "dxDataGrid-filterRowOperationBetweenStartText": "Začetek",
         "dxDataGrid-filterRowOperationBetweenEndText": "Konec",
+        "dxDataGrid-ariaSearchBox": "Search box",
         "dxDataGrid-applyFilterText": "Uporabi filter",
         "dxDataGrid-trueText": "Da",
         "dxDataGrid-falseText": "Ne",

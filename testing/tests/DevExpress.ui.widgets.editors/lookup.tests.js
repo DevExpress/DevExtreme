@@ -85,6 +85,7 @@ const APPLY_BUTTON_CLASS = 'dx-popup-done';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
+const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const FOCUSED_CLASS = 'dx-state-focused';
 
@@ -1660,8 +1661,8 @@ QUnit.module('options', {
 
         assert.equal(searchBox.option('value'), '', 'search value has been cleared');
 
-        $($list).trigger('focusin');
-        assert.equal($list.find('.dx-state-focused').eq(0).text(), $listItems.eq(0).text(), 'list focused item has been refreshed');
+        $list.dxList('focus');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}.${FOCUSED_CLASS}`).eq(0).text(), $listItems.eq(0).text(), 'list focused item has been refreshed');
     });
 
     QUnit.test('click on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -2708,6 +2709,7 @@ QUnit.module('focus policy', {
 
         $($listItems.eq(1)).trigger('dxclick');
         instance.open();
+        list.focus();
 
         assert.equal($(list.option('focusedElement')).text(), $listItems.eq(1).text(), 'clicked item is focused after popup is reopened');
     });
@@ -2855,10 +2857,11 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        $(instance._$list).focus();
+        instance._$list.dxList('focus');
         assert.ok(instance._$list.find('.dx-list-item').eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
 
-        const keyboard = keyboardMock(instance._$list);
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find('.dx-list-item').eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
@@ -2924,10 +2927,11 @@ QUnit.module('keyboard navigation', {
 
         instance.option('searchEnabled', false);
 
-        const keyboard = keyboardMock(instance._$list);
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find('.dx-list-item').first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
     });
 
     QUnit.test('space key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -2991,7 +2995,9 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true,
             searchEnabled: false
         }).dxLookup('instance');
-        const keyboard = keyboardMock(instance._$list);
+
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const keyboard = keyboardMock($listItemContainer);
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
@@ -3343,33 +3349,36 @@ QUnit.module('device and theme specific tests', {
 
 let helper;
 if(devices.real().deviceType === 'desktop') {
-    [true, false].forEach((searchEnabled) => {
-        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: function() {
-                this.isMac = devices.real().mac;
-                helper = new ariaAccessibilityTestHelper({
-                    createWidget: ($element, options) => new Lookup($element,
-                        $.extend({
-                            searchEnabled: searchEnabled
-                        }, options))
-                });
-            },
-            afterEach: function() {
-                helper.$widget.remove();
-            }
-        }, () => {
+    QUnit.module('Aria accessibility', {
+        beforeEach: function() {
+            this.isMac = devices.real().mac;
+            helper = new ariaAccessibilityTestHelper({
+                createWidget: ($element, options) => new Lookup($element, options)
+            });
+        },
+        afterEach: function() {
+            helper.$widget.remove();
+        }
+    }, () => {
+        [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, function() {
-                helper.createWidget({ opened: true });
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled
+                });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                let listAttributes = {
+                const listAttributes = {
                     id: helper.widget._listId,
-                    role: 'listbox',
+                    role: 'group',
+                    'aria-roledescription': 'list'
+                };
+
+                const listItemContainerAttributes = {
                     tabindex: '0',
-                    'aria-label': 'No data to display',
                 };
 
                 let fieldAttributes = {
@@ -3389,6 +3398,7 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
@@ -3412,12 +3422,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 helper.widget.option('searchEnabled', !searchEnabled);
 
-                listAttributes = {
-                    id: helper.widget._listId,
-                    role: 'listbox',
-                    tabindex: '0',
-                    'aria-label': 'No data to display',
-                };
+                listAttributes.id = helper.widget._listId;
 
                 fieldAttributes = {
                     role: 'combobox',
@@ -3436,6 +3441,7 @@ if(devices.real().deviceType === 'desktop') {
                 };
 
                 helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), popupContentAttributes, 'popupContent');
@@ -3458,7 +3464,10 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, function() {
-                helper.createWidget({ opened: false });
+                helper.createWidget({
+                    opened: false,
+                    searchEnabled
+                });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
 
@@ -3469,12 +3478,21 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$widget, {}, 'widget');
                 helper.checkAttributes($field, { role: 'combobox', 'aria-expanded': 'false', tabindex: '0' }, 'field');
             });
+        });
 
-            QUnit.test('aria-target for lookup\'s list should point to the list\'s focusTarget', function(assert) {
+        ['items', 'dataSource'].forEach(dataSourcePropertyName => {
+            QUnit.test(`should have correct role and aria-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ opened: true });
+                const $list = $(`.${LIST_CLASS}`);
+                const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
 
-                const list = $(`.${LIST_CLASS}`).dxList('instance');
-                assert.deepEqual(list._getAriaTarget(), list.$element(), 'aria target for nested list is correct');
+                helper.checkAttributes($scrollView, { tabindex: '0' });
+
+                helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
+                helper.checkAttributes($scrollView, { tabindex: '0', 'aria-label': 'Items', role: 'listbox' });
+
+                helper.widget.option(dataSourcePropertyName, []);
+                helper.checkAttributes($scrollView, { tabindex: '0' });
             });
         });
     });

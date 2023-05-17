@@ -227,3 +227,64 @@ export type Options<
   TItem extends ItemLike = any,
   TKey = any,
 > = Properties<TItem, TKey>;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onSelectionChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/responsive_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/responsive_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/responsive_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onItemClick
+ * @type_function_param1 e:{ui/responsive_box:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/responsive_box:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onItemHold
+ * @type_function_param1 e:{ui/responsive_box:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onItemRendered
+ * @type_function_param1 e:{ui/responsive_box:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxResponsiveBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/responsive_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};

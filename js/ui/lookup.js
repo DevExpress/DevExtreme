@@ -993,7 +993,7 @@ const Lookup = DropDownList.inherit({
             if(this.option('searchEnabled')) {
                 this._searchBox.focus();
             } else {
-                eventsEngine.trigger(this._$list, 'focus');
+                this._list.focus();
             }
         });
     },
