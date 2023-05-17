@@ -10,7 +10,7 @@ import { getBoundingRect } from 'core/utils/position';
 
 import 'generic_light.css!';
 
-$('<style>.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));
+$('<style nonce="qunit-test">.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));
 
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
@@ -939,7 +939,7 @@ QUnit.module('content positioning', () => {
             const popover = new Popover($popover, {
                 target: $where,
                 visible: true,
-                toolbarItems: [{ toolbar: 'bottom', location: 'center', html: '<div style="height: 30px;"></div>' }],
+                toolbarItems: [{ toolbar: 'bottom', location: 'center', template: $('<div>').css('height', '30px') }],
                 height: 100,
                 position: {
                     my: 'top center',

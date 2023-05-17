@@ -10,15 +10,28 @@ import 'ui/load_panel';
 QUnit.testStart(function() {
     const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
-            <div id="target" style="position: absolute; top: 0; left: 0; width: 100px; height: 100px;">\
+            <div id="target">\
                 <div id="container">\
-                    <div id="loadPanel" style="width: 100px; height: 100px;"></div>\
+                    <div id="loadPanel"></div>\
                     <div id="loadPanel2"></div>\
                 </div>\
             </div>\
         </div>';
 
     $('#qunit-fixture').replaceWith(markup);
+
+    $('#target').css({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100px',
+        height: '100px'
+    });
+
+    $('#loadPanel').css({
+        width: '100px',
+        height: '100px'
+    });
 });
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
