@@ -26,28 +26,28 @@
       <div class="option">
         <span>Label mode:</span>
         <DxSelectBox
-          :items="['outside', 'static', 'floating', 'hidden']"
+          :items="labelModes"
           v-model:value="labelMode"
         />
       </div>
       <div class="option">
         <span>Label location:</span>
         <DxSelectBox
-          :items="['left', 'top']"
+          :items="labelLocations"
           v-model:value="labelLocation"
         />
       </div>
       <div class="option">
         <span>Columns count:</span>
         <DxSelectBox
-          :items="['auto', 1, 2, 3]"
+          :items="columnsCounts"
           v-model:value="colCount"
         />
       </div>
       <div class="option">
         <span>Min column width:</span>
         <DxSelectBox
-          :items="[150, 200, 300]"
+          :items="minColumnWidths"
           v-model:value="minColWidth"
         />
       </div>
@@ -80,6 +80,12 @@ import DxNumberBox from 'devextreme-vue/number-box';
 import DxForm from 'devextreme-vue/form';
 import service from './data.js';
 
+const labelModes = ['outside', 'static', 'floating', 'hidden'];
+const labelLocations = ['left', 'top'];
+const columnsCounts = ['auto', 1, 2, 3];
+const minColumnWidths = [150, 200, 300];
+const companies = service.getCompanies();
+
 export default {
   components: {
     DxCheckBox,
@@ -88,7 +94,6 @@ export default {
     DxForm,
   },
   data() {
-    const companies = service.getCompanies();
     return {
       labelMode: 'floating',
       labelLocation: 'left',
@@ -99,6 +104,10 @@ export default {
       companies,
       company: companies[0],
       width: null,
+      labelModes,
+      labelLocations,
+      columnsCounts,
+      minColumnWidths,
     };
   },
   computed: {
