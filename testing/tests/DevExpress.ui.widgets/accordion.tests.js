@@ -24,7 +24,7 @@ QUnit.testStart(function() {
         </div>\
         \
         <div id="html-template-accordion">\
-            <div style="height: 20px" data-options="dxTemplate: { name: \'title\' }" data-bind="text: title"></div>\
+            <div data-options="dxTemplate: { name: \'title\' }" data-bind="text: title"></div>\
         </div>\
         \
         <div id="templated-accordion">\
@@ -34,6 +34,7 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#html-template-accordion > div').css('height', '20px');
 });
 
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
@@ -476,10 +477,10 @@ QUnit.module('widget options', moduleSetup, () => {
         const $element = $('#html-template-accordion');
         const instance = $element.dxAccordion({
             items: [
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' },
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' }
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') },
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') }
             ],
             height: 'auto',
             selectedIndex: 0
@@ -495,10 +496,10 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('height option in static mode', function(assert) {
         const items = [
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' },
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' }
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') },
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') }
         ];
         const widgetHeight = 500;
         const $element = $('#html-template-accordion');
@@ -522,10 +523,10 @@ QUnit.module('widget options', moduleSetup, () => {
         const $element = $('#html-template-accordion');
         const instance = $element.dxAccordion({
             items: [
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' },
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' }
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') },
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') }
             ],
             height: 'auto',
             selectedIndex: 0,
@@ -540,10 +541,10 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('height option in static mode when widget is multiple', function(assert) {
         const items = [
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' },
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' }
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') },
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') }
         ];
         const widgetHeight = 500;
         const $element = $('#html-template-accordion');

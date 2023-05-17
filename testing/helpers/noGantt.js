@@ -1,4 +1,4 @@
 if(window.DevExpress) {
     window.DevExpress.Gantt = undefined;
 }
-module.exports = undefined;
+module.exports = null;
