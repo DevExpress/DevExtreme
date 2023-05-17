@@ -425,13 +425,13 @@ module('dialog', {
     });
 });
 
-QUnit.module('width on android', {
+QUnit.module('width on phone', {
     beforeEach: function() {
         viewPort('#qunit-fixture');
         fx.off = true;
         this.realDevice = devices.real();
 
-        devices.real({ platform: 'android' });
+        devices.real({ deviceType: 'phone' });
 
         this.dialog = custom();
         this.documentStub = sinon.stub(domAdapter, 'getDocumentElement');
@@ -443,13 +443,13 @@ QUnit.module('width on android', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('should be 80% for portrait orientation', function(assert) {
+    QUnit.test('should be 90% for portrait orientation', function(assert) {
         this.documentStub.returns({ clientWidth: 200, clientHeight: 500 });
 
         this.dialog.show();
 
         const $dialog = this.getDialogElement();
-        assert.strictEqual($dialog.width(), 160, 'width is correct');
+        assert.strictEqual($dialog.width(), 180, 'width is correct');
     });
 
     QUnit.test('should be 60% for landscape orientation', function(assert) {

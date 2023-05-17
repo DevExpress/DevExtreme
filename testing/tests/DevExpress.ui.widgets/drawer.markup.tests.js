@@ -14,7 +14,7 @@ const OPENED_STATE_CLASS = 'dx-drawer-opened';
 
 QUnit.testStart(() => {
     const markup = '\
-    <style>\
+    <style nonce="qunit-test">\
         .dx-drawer-panel-content {\
             width: 200px;\
         }\

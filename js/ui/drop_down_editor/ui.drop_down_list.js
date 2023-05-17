@@ -112,14 +112,7 @@ const DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions.fieldTemplate
             * @hidden
             */
-            /**
-            * @name dxDropDownListOptions.fieldRender
-            * @hidden
-            */
-            /**
-            * @name dxDropDownListOptions.contentRender
-            * @hidden
-            */
+
             /**
             * @name dxDropDownListOptions.applyValueMode
             * @hidden

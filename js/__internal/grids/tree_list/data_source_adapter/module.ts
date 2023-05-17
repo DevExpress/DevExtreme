@@ -8,9 +8,9 @@ import ArrayStore from '@js/data/array_store';
 import query from '@js/data/query';
 import { Deferred, when } from '@js/core/utils/deferred';
 import storeHelper from '@js/data/store_helper';
-import DataSourceAdapter from '@js/ui/grid_core/ui.grid_core.data_source_adapter';
 import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import errors from '@js/ui/widget/ui.errors';
+import DataSourceAdapter from '../../grid_core/data_source_adapter/module';
 import treeListCore from '../module_core';
 
 const { queryByOptions } = storeHelper;

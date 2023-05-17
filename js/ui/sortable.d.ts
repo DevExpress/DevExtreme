@@ -288,6 +288,9 @@ type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

@@ -340,11 +340,6 @@ const TagBox = SelectBox.inherit({
             */
 
             /**
-            * @name dxTagBoxOptions.itemRender
-            * @hidden
-            */
-
-            /**
             * @name dxTagBoxOptions.openAction
             * @hidden
             */

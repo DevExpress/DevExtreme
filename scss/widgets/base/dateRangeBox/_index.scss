@@ -3,8 +3,7 @@
 .dx-daterangebox {
   display: flex;
 
-  .dx-start-datebox,
-  .dx-end-datebox {
+  .dx-datebox {
     flex-grow: 1;
 
     &.dx-editor-underlined {
