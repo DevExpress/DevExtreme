@@ -7,15 +7,21 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxContextMenuModule, DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
 
 import { AppointmentContextMenuEvent, CellContextMenuEvent } from 'devextreme/ui/scheduler';
-import { Item } from 'devextreme/ui/context_menu';
-import { ItemInfo } from 'devextreme/events';
+import { Item, ItemClickEvent, ItemContextMenuEvent } from 'devextreme/ui/context_menu';
 import { Appointment, Resource, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-type ContextMenuItem = Item & { onItemClick?: (e: ItemInfo) => void; };
+type ContextMenuItemClick = ItemClickEvent & {
+  itemData: ContextMenuItem
+};
+type ContextMenuItem = Item & {
+  onItemClick?: (e: ContextMenuItemClick) => void;
+  id?: Resource['id'];
+};
+
 const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 
@@ -128,7 +134,7 @@ export class AppComponent {
     ];
   }
 
-  onContextMenuItemClick(e: ItemInfo) {
+  onContextMenuItemClick(e: ContextMenuItemClick) {
     e.itemData.onItemClick(e);
   }
 }

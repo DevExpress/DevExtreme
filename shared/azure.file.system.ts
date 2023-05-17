@@ -276,7 +276,7 @@ export class AzureGateway {
     while (res.length < 10) {
       res = `0${res}`;
     }
-    return btoa(res);
+    return window.btoa(res);
   }
 
   getUploadAccessUrl(blobName: string): Promise<AccessUrls | any> {
