@@ -27,12 +27,13 @@ QUnit.testStart(function() {
         <div id="boxWithScrollable">\
             <div data-options="dxItem: { ratio: 1 }">\
                 <div id="isScrollable">\
-                    <div style="height: 200px;"></div>\
+                    <div></div>\
                 </div>\
             </div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#isScrollable > div').css('height', '200px');
 });
 
 const BOX_CLASS = 'dx-box';

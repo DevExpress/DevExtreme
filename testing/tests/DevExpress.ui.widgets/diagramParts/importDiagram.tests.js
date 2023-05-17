@@ -1,4 +1,3 @@
-
 SystemJS.config({
     map: {
         'devexpress-diagram': '/testing/helpers/noDiagram.js'
