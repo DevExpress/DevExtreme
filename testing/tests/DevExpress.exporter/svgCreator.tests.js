@@ -110,6 +110,46 @@ QUnit.test('getData', function(assert) {
     });
 });
 
+QUnit.test('getData. markup as a string', function(assert) {
+    if(!checkForBlob.call(this, assert)) return;
+
+    const done = assert.async();
+    const versionXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
+
+    const testingMarkup = `
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            class="dxc dxc-chart"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            width="500"
+            height="250"
+            version="1.1"><path
+            stroke="#ff0000"
+            stroke-width="2"
+            d="M 36 181 L 184 98 L 331 280"
+        />
+        </svg>
+    `;
+
+    const deferred = exporter.getData(testingMarkup, {});
+
+    assert.expect(3);
+    $.when(deferred).done(function(blob) {
+        try {
+            const $resultSvg = createJQueryElement(blob.arrayBuffer[0]);
+
+            assert.ok(blob, 'Blob was created');
+            assert.deepEqual($resultSvg.html(), $(versionXML + testingMarkup).html(), 'Blob content is correct');
+            assert.equal(blob.options.type, 'image/svg+xml', 'Blob type is correct');
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('getData. markup with special symbols', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
