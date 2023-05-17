@@ -1,6 +1,6 @@
 import React from 'react';
 import { TagBox } from 'devextreme-react/tag-box';
-import { products } from './data.js';
+import { products, productLabel } from './data.js';
 
 const defaultValues = {
   severalItems: [1, 2, 3, 4],
@@ -38,6 +38,7 @@ class App extends React.Component {
                 defaultValue={defaultValues.severalItems}
                 showSelectionControls={true}
                 maxDisplayedTags={3}
+                inputAttr={productLabel}
                 displayExpr="Name"
                 valueExpr="ID"
                 selectAllMode="allPages"
@@ -50,6 +51,7 @@ class App extends React.Component {
               <TagBox
                 items={this.items}
                 defaultValue={defaultValues.allItems}
+                inputAttr={productLabel}
                 showSelectionControls={true}
                 maxDisplayedTags={3}
                 displayExpr="Name"
@@ -65,6 +67,7 @@ class App extends React.Component {
                 defaultValue={defaultValues.ordinaryTags}
                 showSelectionControls={true}
                 maxDisplayedTags={2}
+                inputAttr={productLabel}
                 showMultiTagOnly={false}
                 displayExpr="Name"
                 valueExpr="ID"

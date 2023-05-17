@@ -12,7 +12,7 @@ import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
 
 import { jsPDF } from 'jspdf';
 import {
-  tasks, dependencies, resources, resourceAssignments,
+  tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
 } from './data.js';
 
 import 'jspdf-autotable';
@@ -20,6 +20,8 @@ import 'jspdf-autotable';
 const formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];
 const exportModes = ['All', 'Chart', 'Tree List'];
 const dateRanges = ['All', 'Visible', 'Custom'];
+const startTaskIndexLabel = { 'aria-label': 'Start Task Index' };
+const endTaskIndexLabel = { 'aria-label': 'End Task Index' };
 
 class App extends React.Component {
   constructor(props) {
@@ -139,6 +141,7 @@ class App extends React.Component {
                   max={this.state.endTaskIndex}
                   disabled={this.state.customRangeDisabled}
                   showSpinButtons={true}
+                  inputAttr={startTaskIndexLabel}
                   onValueChanged={this.startTaskIndexValueChanged}
                 />
               </div>
@@ -153,6 +156,7 @@ class App extends React.Component {
                   max={tasks.length - 1}
                   disabled={this.state.customRangeDisabled}
                   showSpinButtons={true}
+                  inputAttr={endTaskIndexLabel}
                   onValueChanged={this.endTaskIndexValueChanged}
                 />
               </div>
@@ -164,6 +168,7 @@ class App extends React.Component {
                 <DateBox
                   value={this.state.startDate}
                   max={this.state.endDate}
+                  inputAttr={startDateLabel}
                   disabled={this.state.customRangeDisabled}
                   type="date"
                   onValueChanged={this.startDateValueChanged}
@@ -177,6 +182,7 @@ class App extends React.Component {
                 <DateBox
                   value={this.state.endDate}
                   min={this.state.startDate}
+                  inputAttr={endDateLabel}
                   disabled={this.state.customRangeDisabled}
                   type="date"
                   onValueChanged={this.endDateValueChanged}

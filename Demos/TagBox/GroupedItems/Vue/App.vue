@@ -7,6 +7,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :data-source="products"
+          :input-attr="{ 'aria-label': 'Product' }"
           :value="[17, 19]"
           :grouped="true"
           display-expr="Name"
@@ -23,6 +24,7 @@
           :data-source="products"
           :value="[17, 19]"
           :grouped="true"
+          :input-attr="{ 'aria-label': 'Product' }"
           :search-enabled="true"
           display-expr="Name"
           value-expr="ID"
@@ -36,6 +38,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :data-source="products"
+          :input-attr="{ 'aria-label': 'Product' }"
           :value="[18]"
           :grouped="true"
           display-expr="Name"

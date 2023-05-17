@@ -8,6 +8,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
 const gridColumns = ['CompanyName', 'City', 'Phone'];
+const ownerLabel = { 'aria-label': 'Owner' };
 
 class App extends React.Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class App extends React.Component {
               value={this.state.treeBoxValue}
               opened={this.state.isTreeBoxOpened}
               valueExpr="ID"
+              inputAttr={ownerLabel}
               displayExpr="name"
               placeholder="Select a value..."
               showClearButton={true}
@@ -72,6 +74,7 @@ class App extends React.Component {
               opened={this.state.isGridBoxOpened}
               valueExpr="ID"
               deferRendering={false}
+              inputAttr={ownerLabel}
               displayExpr={this.gridBoxDisplayExpr}
               placeholder="Select a value..."
               showClearButton={true}

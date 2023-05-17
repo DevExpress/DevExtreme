@@ -107,6 +107,7 @@
             :min="0"
             :max="100"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Start Value' }"
           />
         </div>
       </div>
@@ -118,6 +119,7 @@
             :min="0"
             :max="100"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'End Value' }"
           />
         </div>
       </div>

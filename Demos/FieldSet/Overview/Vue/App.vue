@@ -17,6 +17,7 @@
         <div class="dx-field-label">Address</div>
         <DxTextBox
           class="dx-field-value"
+          :input-attr="{ 'aria-label': 'Address' }"
           value="424 N Main St."
         />
       </div>
@@ -24,6 +25,7 @@
         <div class="dx-field-label">City</div>
         <DxTextBox
           class="dx-field-value"
+          :input-attr="{ 'aria-label': 'City' }"
           value="San Diego"
         />
       </div>
@@ -39,6 +41,7 @@
           class="dx-field-value"
           :height="80"
           :value="text"
+          :input-attr="{ 'aria-label': 'Notes' }"
         />
       </div>
     </div>

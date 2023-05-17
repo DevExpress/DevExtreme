@@ -47,6 +47,7 @@
     <dx-tag-box
       [items]="handleValues"
       [(value)]="handles"
+      [inputAttr]="{ 'aria-label': 'Handle' }"
       (onValueChanged)="handlesValueChange($event)"
     ></dx-tag-box>
   </div>

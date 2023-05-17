@@ -161,3 +161,5 @@ export const products = [{
   Category: 'Automation',
   ImageSrc: 'images/products/19.png',
 }];
+
+export const productLabel = { 'aria-label': 'Product' };

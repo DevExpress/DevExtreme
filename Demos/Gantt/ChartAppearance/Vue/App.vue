@@ -44,6 +44,7 @@
           <div class="value">
             <DxDateBox
               v-model:value="startDateRange"
+              :input-attr="{ 'aria-label': 'Start Date' }"
               type="date"
               apply-value-mode="useButtons"
             />
@@ -54,6 +55,7 @@
           <div class="value">
             <DxDateBox
               v-model:value="endDateRange"
+              :input-attr="{ 'aria-label': 'End Date' }"
               type="date"
               apply-value-mode="useButtons"
             />

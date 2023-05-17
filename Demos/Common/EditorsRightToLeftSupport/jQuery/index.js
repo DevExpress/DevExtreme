@@ -8,12 +8,14 @@ $(() => {
 
   const textBoxWidget = $('#text-box').dxTextBox({
     showClearButton: true,
+    inputAttr: { 'aria-label': 'Text Box' },
     value: 'text',
   }).dxTextBox('instance');
 
   const numberBoxWidget = $('#number-box').dxNumberBox({
     showSpinButtons: true,
     value: '123',
+    inputAttr: { 'aria-label': 'Number Box' },
   }).dxNumberBox('instance');
 
   const selectBoxWidget = $('#select-box').dxSelectBox({
@@ -28,11 +30,13 @@ $(() => {
     value: [europeanUnion[0].id],
     placeholder: '...',
     displayExpr: 'nameEn',
+    inputAttr: { 'aria-label': 'Name' },
     valueExpr: 'id',
   }).dxTagBox('instance');
 
   const textAreaWidget = $('#text-area').dxTextArea({
     value: 'text',
+    inputAttr: { 'aria-label': 'Notes' },
   }).dxTextArea('instance');
 
   const autocompleteWidget = $('#autocomplete').dxAutocomplete({

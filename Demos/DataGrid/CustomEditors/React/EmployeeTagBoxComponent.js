@@ -1,6 +1,8 @@
 import React from 'react';
 import TagBox from 'devextreme-react/tag-box';
 
+const nameLabel = { 'aria-label': 'Name' };
+
 export default class EmployeeTagBoxComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -24,6 +26,7 @@ export default class EmployeeTagBoxComponent extends React.Component {
       displayExpr="FullName"
       showSelectionControls={true}
       maxDisplayedTags={3}
+      inputAttr={nameLabel}
       showMultiTagOnly={false}
       applyValueMode="useButtons"
       searchEnabled={true}

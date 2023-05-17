@@ -21,6 +21,7 @@
       <div class="dx-field-value">
         <dx-text-box
           [showClearButton]="true"
+          [inputAttr]="{ 'aria-label': 'Text Box' }"
           [value]="textValue"
           [rtlEnabled]="rtlEnabled"
         >
@@ -34,6 +35,7 @@
           [showSpinButtons]="true"
           [value]="123"
           [rtlEnabled]="rtlEnabled"
+          [inputAttr]="{ 'aria-label': 'Number Box' }"
         >
         </dx-number-box>
       </div>
@@ -58,6 +60,7 @@
           [value]="[europeanUnion[0].id]"
           placeholder="..."
           valueExpr="id"
+          [inputAttr]="{ 'aria-label': 'Name' }"
           [displayExpr]="displayExpr"
           [rtlEnabled]="rtlEnabled"
         ></dx-tag-box>
@@ -66,7 +69,11 @@
     <div class="dx-field">
       <div class="dx-field-label">Text Area</div>
       <div class="dx-field-value">
-        <dx-text-area [value]="textValue" [rtlEnabled]="rtlEnabled">
+        <dx-text-area
+          [value]="textValue"
+          [rtlEnabled]="rtlEnabled"
+          [inputAttr]="{ 'aria-label': 'Notes' }"
+        >
         </dx-text-area>
       </div>
     </div>

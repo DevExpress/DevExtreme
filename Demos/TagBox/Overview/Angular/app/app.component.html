@@ -3,13 +3,20 @@
     <div class="dx-field">
       <div class="dx-field-label">Default mode</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts"></dx-tag-box>
+        <dx-tag-box
+          [items]="simpleProducts"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        ></dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Search mode</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [searchEnabled]="true">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [searchEnabled]="true"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
         </dx-tag-box>
       </div>
     </div>
@@ -20,6 +27,7 @@
           [items]="simpleProducts"
           [showSelectionControls]="true"
           applyValueMode="useButtons"
+          [inputAttr]="{ 'aria-label': 'Product' }"
         >
         </dx-tag-box>
       </div>
@@ -27,14 +35,23 @@
     <div class="dx-field">
       <div class="dx-field-label">Hide selected items</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [hideSelectedItems]="true">
+        <dx-tag-box
+          [items]="simpleProducts"
+          [hideSelectedItems]="true"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
         </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Single line mode</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [multiline]="false"> </dx-tag-box>
+        <dx-tag-box
+          [items]="simpleProducts"
+          [multiline]="false"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
@@ -44,6 +61,7 @@
           [items]="editableProducts"
           [acceptCustomValue]="true"
           (onCustomItemCreating)="onCustomItemCreating($event)"
+          [inputAttr]="{ 'aria-label': 'Product' }"
         >
         </dx-tag-box>
       </div>
@@ -51,7 +69,11 @@
     <div class="dx-field">
       <div class="dx-field-label">With custom placeholder</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" placeholder="Choose Product...">
+        <dx-tag-box
+          [items]="simpleProducts"
+          placeholder="Choose Product..."
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
         </dx-tag-box>
       </div>
     </div>
@@ -62,6 +84,7 @@
           [items]="simpleProducts"
           [value]="[simpleProducts[0]]"
           [disabled]="true"
+          [inputAttr]="{ 'aria-label': 'Product' }"
         >
         </dx-tag-box>
       </div>
@@ -69,7 +92,12 @@
     <div class="dx-field">
       <div class="dx-field-label">Data source</div>
       <div class="dx-field-value">
-        <dx-tag-box [dataSource]="dataSource" displayExpr="Name" valueExpr="Id">
+        <dx-tag-box
+          [dataSource]="dataSource"
+          displayExpr="Name"
+          valueExpr="Id"
+          [inputAttr]="{ 'aria-label': 'Product' }"
+        >
         </dx-tag-box>
       </div>
     </div>
@@ -81,6 +109,7 @@
           displayExpr="Name"
           valueExpr="Id"
           itemTemplate="customItem"
+          [inputAttr]="{ 'aria-label': 'Product' }"
         >
           <div *dxTemplate="let product of 'customItem'">
             <div class="custom-item">

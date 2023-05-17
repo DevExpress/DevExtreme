@@ -7,6 +7,7 @@
     <DxTextBox
       :value="fieldData && fieldData.Name"
       :read-only="true"
+      :input-attr="{ 'aria-label': 'Name' }"
       class="product-name"
     />
   </div>

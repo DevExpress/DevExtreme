@@ -2,6 +2,7 @@ $(() => {
   $('#text-box').dxTextBox({
     value: 'UI Superhero',
     valueChangeEvent: 'keyup',
+    inputAttr: { 'aria-label': 'Type' },
     maxLength: 40,
     onValueChanged(e) {
       $('.text').text(e.value);
@@ -24,6 +25,7 @@ $(() => {
     max: 700,
     min: 70,
     format: '#0px',
+    inputAttr: { 'aria-label': 'Width' },
     onValueChanged(e) {
       const width = e.value;
       $('svg').width(width);
@@ -37,6 +39,7 @@ $(() => {
     max: 700,
     min: 70,
     format: '#0px',
+    inputAttr: { 'aria-label': 'Height' },
     onValueChanged(e) {
       const height = e.value;
       $('svg').height(height);

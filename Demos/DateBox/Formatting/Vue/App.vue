@@ -7,6 +7,7 @@
           <DxDateBox
             :show-clear-button="true"
             :use-mask-behavior="true"
+            :input-attr="{ 'aria-label': 'Date' }"
             type="datetime"
             placeholder="12/31/2018, 2:52 PM"
           />
@@ -19,6 +20,7 @@
             :show-clear-button="true"
             :use-mask-behavior="true"
             :value="date"
+            :input-attr="{ 'aria-label': 'Date' }"
             placeholder="10/16/2018"
             display-format="shortdate"
             type="date"
@@ -31,6 +33,7 @@
           <DxDateBox
             :show-clear-button="true"
             :use-mask-behavior="true"
+            :input-attr="{ 'aria-label': 'Date' }"
             :value="date"
             placeholder="Tuesday, 16 of Oct, 2018 14:52"
             display-format="EEEE, d of MMM, yyyy HH:mm"
@@ -43,6 +46,7 @@
           <DxDateBox
             :show-clear-button="true"
             :use-mask-behavior="true"
+            :input-attr="{ 'aria-label': 'Date' }"
             :value="date"
             placeholder="Year: 2018"
             display-format="'Year': yyyy"

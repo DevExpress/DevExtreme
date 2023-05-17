@@ -7,6 +7,7 @@
           <DxNumberBox
             :value="14500"
             format="#"
+            :input-attr="{ 'aria-label': 'Integer Format' }"
           />
         </div>
       </div>
@@ -16,6 +17,7 @@
           <DxNumberBox
             :value="14500.55"
             format="$ #,##0.##"
+            :input-attr="{ 'aria-label': 'Currency Format' }"
           />
         </div>
       </div>
@@ -25,6 +27,7 @@
           <DxNumberBox
             :value="-2314.12"
             format="$ #,##0.##;($ #,##0.##)"
+            :input-attr="{ 'aria-label': 'Accounting Format' }"
           />
         </div>
       </div>
@@ -35,6 +38,7 @@
             :value="0.15"
             :step="0.01"
             format="#0%"
+            :input-attr="{ 'aria-label': 'Percent Format' }"
           />
         </div>
       </div>
@@ -44,6 +48,7 @@
           <DxNumberBox
             :value="13415.24"
             format="#,##0.00"
+            :input-attr="{ 'aria-label': 'Fixed Point Format' }"
           />
         </div>
       </div>
@@ -53,6 +58,7 @@
           <DxNumberBox
             :value="3.14"
             format="#0.## kg"
+            :input-attr="{ 'aria-label': 'Weight Format' }"
           />
         </div>
       </div>

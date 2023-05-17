@@ -5,6 +5,10 @@ import {
 import { NumberBox } from 'devextreme-react/number-box';
 import { Button } from 'devextreme-react/button';
 
+const mainGeneratorLabel = { 'aria-label': 'Main Generator' };
+const additionalGeneratorOneLabel = { 'aria-label': 'Additional Generator One' };
+const additionalGeneratorTwoLabel = { 'aria-label': 'Additional Generator Two' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -76,6 +80,7 @@ class App extends React.Component {
               max={40}
               width={100}
               showSpinButtons={true}
+              inputAttr={mainGeneratorLabel}
             />
           </div>
           <div className="option">
@@ -88,6 +93,7 @@ class App extends React.Component {
               max={40}
               width={100}
               showSpinButtons={true}
+              inputAttr={additionalGeneratorOneLabel}
             />
           </div>
           <div className="option">
@@ -100,6 +106,7 @@ class App extends React.Component {
               max={40}
               width={100}
               showSpinButtons={true}
+              inputAttr={additionalGeneratorTwoLabel}
             />
           </div>
           <div className="option">

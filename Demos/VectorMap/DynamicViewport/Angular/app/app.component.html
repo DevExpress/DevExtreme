@@ -26,12 +26,18 @@
       </div>
       <div class="option">
         <span>Zoom factor</span>
-        <dx-text-box [value]="zoomFactorValue" [readOnly]="true" [width]="210">
+        <dx-text-box
+          [value]="zoomFactorValue"
+          [readOnly]="true"
+          [width]="210"
+          [inputAttr]="{ 'aria-label': 'Zoom' }"
+        >
         </dx-text-box>
       </div>
       <div class="option">
         <span>Center</span>
         <dx-text-box
+          [inputAttr]="{ 'aria-label': 'Center' }"
           [value]="centerValue"
           [readOnly]="true"
           [width]="210"

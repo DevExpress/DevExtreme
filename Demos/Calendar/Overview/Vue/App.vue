@@ -89,6 +89,7 @@
         <span>Selected date</span>
         <DxDateBox
           v-model:value="currentValue"
+          :input-attr="{ 'aria-label': 'Date' }"
           :min="minDateValue"
           :max="maxDateValue"
         />

@@ -5,6 +5,7 @@
       <dx-text-box
         value="password"
         placeholder="password"
+        [inputAttr]="{ 'aria-label': 'Password' }"
         stylingMode="filled"
         [(mode)]="passwordMode"
       >
@@ -24,6 +25,7 @@
         [(format)]="currencyFormat"
         [showClearButton]="true"
         [showSpinButtons]="true"
+        [inputAttr]="{ 'aria-label': 'Currency Format' }"
       >
         <dxi-button
           name="currency"
@@ -38,7 +40,11 @@
   <div class="dx-field">
     <div class="dx-field-label">Advanced DateBox</div>
     <div class="dx-field-value">
-      <dx-date-box stylingMode="outlined" [(value)]="dateValue">
+      <dx-date-box
+        stylingMode="outlined"
+        [(value)]="dateValue"
+        [inputAttr]="{ 'aria-label': 'Date' }"
+      >
         <dxi-button
           name="today"
           location="before"

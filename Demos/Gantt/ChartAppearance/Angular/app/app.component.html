@@ -46,13 +46,23 @@
       <div class="option">
         <div class="label">Start Date Range:</div>
         <div class="value">
-          <dx-date-box [(value)]="startDateRange" type="date"> </dx-date-box>
+          <dx-date-box
+            [(value)]="startDateRange"
+            type="date"
+            [inputAttr]="{ 'aria-label': 'Start Date Range' }"
+          >
+          </dx-date-box>
         </div>
       </div>
       <div class="option">
         <div class="label">End Date Range:</div>
         <div class="value">
-          <dx-date-box [(value)]="endDateRange" type="date"> </dx-date-box>
+          <dx-date-box
+            [(value)]="endDateRange"
+            type="date"
+            [inputAttr]="{ 'aria-label': 'End Date Range' }"
+          >
+          </dx-date-box>
         </div>
       </div>
       <div class="option">

@@ -18,6 +18,8 @@ const taskEmployees = AspNetData.createStore({
   loadUrl: `${url}/TaskEmployees`,
 });
 
+const focusedRowKeyLabel = { 'aria-label': 'Focused Row Key' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -108,6 +110,7 @@ class App extends React.Component {
               max={182}
               step={0}
               value={this.state.focusedRowKey}
+              inputAttr={focusedRowKeyLabel}
               onValueChanged={this.onTaskIdChanged}>
             </NumberBox>
           </div>

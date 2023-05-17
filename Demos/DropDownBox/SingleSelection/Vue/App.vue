@@ -6,6 +6,7 @@
         <DxDropDownBox
           v-model:value="treeBoxValue"
           v-model:opened="isTreeBoxOpened"
+          :input-attr="{ 'aria-label': 'Owner' }"
           :show-clear-button="true"
           :data-source="treeDataSource"
           value-expr="ID"
@@ -37,6 +38,7 @@
         <DxDropDownBox
           v-model:value="gridBoxValue"
           v-model:opened="isGridBoxOpened"
+          :input-attr="{ 'aria-label': 'Owner' }"
           :defer-rendering="false"
           :display-expr="gridBoxDisplayExpr"
           :show-clear-button="true"

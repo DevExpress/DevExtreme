@@ -25,6 +25,7 @@ $(() => {
     max: 40,
     width: 100,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Main Generator' },
   }).dxNumberBox('instance');
 
   const additionalGeneratorOne = $('#additional-generator-one').dxNumberBox({
@@ -33,6 +34,7 @@ $(() => {
     max: 40,
     width: 100,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Additional Generator One' },
   }).dxNumberBox('instance');
 
   const additionalGeneratorTwo = $('#additional-generator-two').dxNumberBox({
@@ -41,6 +43,7 @@ $(() => {
     max: 40,
     width: 100,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Additional Generator Two' },
   }).dxNumberBox('instance');
 
   $('#edit').dxButton({

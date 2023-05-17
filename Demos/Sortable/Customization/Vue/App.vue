@@ -75,12 +75,14 @@
         <span>Scroll Speed:</span>
         <DxNumberBox
           v-model:value="scrollSpeed"
+          :input-attr="{ 'aria-label': 'Scroll Speed' }"
         />
       </div>
       <div class="option">
         <span>Scroll Sensitivity:</span>
         <DxNumberBox
           v-model:value="scrollSensitivity"
+          :input-attr="{ 'aria-label': 'Scroll Sensitivity' }"
         />
       </div>
       <div class="option">

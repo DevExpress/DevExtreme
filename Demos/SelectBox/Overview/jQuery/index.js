@@ -45,6 +45,7 @@ $(() => {
         .dxTextBox({
           value: data && data.Name,
           readOnly: true,
+          inputAttr: { 'aria-label': 'Name' },
         });
       container.append(result);
     },

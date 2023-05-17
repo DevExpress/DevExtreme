@@ -65,6 +65,7 @@ $(() => {
   $('#width').dxNumberBox({
     value: undefined,
     max: 550,
+    inputAttr: { 'aria-label': 'Width' },
     onValueChanged(data) {
       form.option('width', data.value);
     },

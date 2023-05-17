@@ -2,6 +2,8 @@ import React from 'react';
 import { Slider, Label, Tooltip } from 'devextreme-react/slider';
 import { NumberBox } from 'devextreme-react/number-box';
 
+const sliderValueLabel = { 'aria-label': 'Slider Value' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -84,6 +86,7 @@ class App extends React.Component {
                 max={100}
                 value={this.state.sliderValue}
                 showSpinButtons={true}
+                inputAttr={sliderValueLabel}
                 onValueChanged={this.setSliderValue} />
             </div>
           </div>

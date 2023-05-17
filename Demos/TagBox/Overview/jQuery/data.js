@@ -178,3 +178,5 @@ const products = [{
   Category: 'Automation',
   ImageSrc: '../../../../images/products/19.png',
 }];
+
+const productLabel = { 'aria-label': 'Product' };

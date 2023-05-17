@@ -6,6 +6,7 @@ import TextArea from 'devextreme-react/text-area';
 import service from './data.js';
 
 const { valueChangeEvents } = service;
+const notesLabel = { 'aria-label': 'Notes' };
 
 class App extends React.Component {
   constructor(props) {
@@ -47,6 +48,7 @@ class App extends React.Component {
             height={this.state.height}
             maxLength={this.state.maxLength}
             defaultValue={this.state.value}
+            inputAttr={notesLabel}
             autoResizeEnabled={this.state.autoResizeEnabled} />
         </div>
         <div className="full-width-content">
@@ -69,12 +71,14 @@ class App extends React.Component {
             height={90}
             value={this.state.valueForEditableTestArea}
             valueChangeEvent={this.state.eventValue}
+            inputAttr={notesLabel}
             onValueChanged={this.onTextAreaValueChanged}
           />
           <TextArea
             height={90}
             value={this.state.valueForEditableTestArea}
             readOnly={true}
+            inputAttr={notesLabel}
             valueChangeEvent={this.state.eventValue} />
         </div>
       </React.Fragment>

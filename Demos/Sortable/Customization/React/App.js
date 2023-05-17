@@ -4,7 +4,7 @@ import Sortable from 'devextreme-react/sortable';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import NumberBox from 'devextreme-react/number-box';
-import { tasks } from './data.js';
+import { tasks, scrollSensitivityLabel, scrollSpeedLabel } from './data.js';
 import Item from './Item.js';
 import DragItem from './DragItem.js';
 
@@ -118,6 +118,7 @@ class App extends React.Component {
             <span>Scroll Speed:</span>
             <NumberBox
               value={scrollSpeed}
+              inputAttr={scrollSpeedLabel}
               onValueChanged={this.onScrollSpeedChanged}
             />
           </div>
@@ -125,6 +126,7 @@ class App extends React.Component {
             <span>Scroll Sensitivity:</span>
             <NumberBox
               value={scrollSensitivity}
+              inputAttr={scrollSensitivityLabel}
               onValueChanged={this.onScrollSensitivityChanged}
             />
           </div>

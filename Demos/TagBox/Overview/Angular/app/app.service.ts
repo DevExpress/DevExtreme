@@ -210,3 +210,5 @@ export class Service {
     return simpleProducts;
   }
 }
+
+const productNameLabel = { 'aria-label': 'Product' };

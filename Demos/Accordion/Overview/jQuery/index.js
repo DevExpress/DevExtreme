@@ -9,6 +9,7 @@ $(() => {
     displayExpr: 'CompanyName',
     disabled: true,
     value: [accordionItems[0]],
+    inputAttr: { 'aria-label': 'Company Name' },
     onValueChanged(e) {
       accordion.option('selectedItems', e.value);
     },

@@ -4,13 +4,19 @@
       <div class="dx-field">
         <div class="dx-field-label">Default mode</div>
         <div class="dx-field-value">
-          <DxTextBox value="John Smith"/>
+          <DxTextBox
+            value="John Smith"
+            :input-attr="{ 'aria-label': 'Name' }"
+          />
         </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">With placeholder</div>
         <div class="dx-field-value">
-          <DxTextBox placeholder="Enter full name here..."/>
+          <DxTextBox
+            placeholder="Enter full name here..."
+            :input-attr="{ 'aria-label': 'Full Name' }"
+          />
         </div>
       </div>
       <div class="dx-field">
@@ -18,6 +24,7 @@
         <div class="dx-field-value">
           <DxTextBox
             :show-clear-button="true"
+            :input-attr="{ 'aria-label': 'Name' }"
             value="John Smith"
           />
         </div>
@@ -28,6 +35,7 @@
           <DxTextBox
             :show-clear-button="true"
             mode="password"
+            :input-attr="{ 'aria-label': 'Password' }"
             placeholder="Enter password"
             value="f5lzKs0T"
           />
@@ -38,6 +46,7 @@
         <div class="dx-field-value">
           <DxTextBox
             :mask-rules="rules"
+            :input-attr="{ 'aria-label': 'Mask' }"
             mask="+1 (X00) 000-0000"
           />
         </div>
@@ -47,6 +56,7 @@
         <div class="dx-field-value">
           <DxTextBox
             :disabled="true"
+            :input-attr="{ 'aria-label': 'Name' }"
             value="John Smith"
           />
         </div>
@@ -60,6 +70,7 @@
           <DxTextBox
             :show-clear-button="true"
             value="Smith"
+            :input-attr="{ 'aria-label': 'Full Name' }"
             placeholder="Enter full name"
             value-change-event="keyup"
             @value-changed="valueChanged"
@@ -71,6 +82,7 @@
         <div class="dx-field-value">
           <DxTextBox
             :read-only="true"
+            :input-attr="{ 'aria-label': 'Email' }"
             :hover-state-enabled="false"
             :value="emailValue"
           />

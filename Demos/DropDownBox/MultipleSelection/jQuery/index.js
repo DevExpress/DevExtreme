@@ -29,6 +29,7 @@ $(() => {
     displayExpr: 'name',
     placeholder: 'Select a value...',
     showClearButton: true,
+    inputAttr: { 'aria-label': 'Owner' },
     dataSource: makeAsyncDataSource('treeProducts.json'),
     contentTemplate(e) {
       const v = e.component.option('value');
@@ -68,6 +69,7 @@ $(() => {
     placeholder: 'Select a value...',
     displayExpr: 'CompanyName',
     showClearButton: true,
+    inputAttr: { 'aria-label': 'Owner' },
     dataSource: makeAsyncDataSource('customers.json'),
     contentTemplate(e) {
       const v = e.component.option('value');

@@ -4,6 +4,9 @@ import Button from 'devextreme-react/button';
 import TextBox from 'devextreme-react/text-box';
 import notify from 'devextreme/ui/notify';
 
+const firstNameLabel = { 'aria-label': 'First Name' };
+const lastNameLabel = { 'aria-label': 'Last Name' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -23,11 +26,11 @@ class App extends React.Component {
         <div className="dx-fieldset">
           <div className="dx-field">
             <div className="dx-field-label">First Name:</div>
-            <TextBox name="FirstName" value="John" className="dx-field-value" />
+            <TextBox inputAttr={firstNameLabel} name="FirstName" value="John" className="dx-field-value" />
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Last Name:</div>
-            <TextBox name="LastName" value="Smith" className="dx-field-value" />
+            <TextBox inputAttr={lastNameLabel} name="LastName" value="Smith" className="dx-field-value" />
           </div>
         </div>
         <div className="fileuploader-container">

@@ -32,3 +32,5 @@ export const fields = [{
     dataSource: categories,
   },
 }];
+
+export const categoryLabel = { 'aria-label': 'Category' };

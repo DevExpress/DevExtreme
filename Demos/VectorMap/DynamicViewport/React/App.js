@@ -8,7 +8,7 @@ import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import Switch from 'devextreme-react/switch';
-import { viewportCoordinates } from './data.js';
+import { viewportCoordinates, centerLabel, zoomLabel } from './data.js';
 
 const bounds = [-180, 85, 180, -60];
 
@@ -88,6 +88,7 @@ class App extends React.Component {
                 <span>Zoom factor</span>
                 <TextBox
                   value={this.state.zoomFactor}
+                  inputAttr={zoomLabel}
                   readOnly={true}
                   width={210}
                 />
@@ -97,6 +98,7 @@ class App extends React.Component {
                 <TextBox
                   value={this.state.center}
                   readOnly={true}
+                  inputAttr={centerLabel}
                   width={210}
                 />
               </div>

@@ -37,12 +37,14 @@ $(() => {
   const zoomFactor = $('#zoom-factor').dxTextBox({
     width: 210,
     readOnly: true,
+    inputAttr: { 'aria-label': 'Zoom' },
     value: '1.00',
   }).dxTextBox('instance');
 
   const center = $('#center').dxTextBox({
     width: 210,
     readOnly: true,
+    inputAttr: { 'aria-label': 'Center' },
     value: '0.000, 46.036',
   }).dxTextBox('instance');
 });

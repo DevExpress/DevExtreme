@@ -98,6 +98,7 @@ $(() => {
       value: cellInfo.value,
       valueExpr: 'ID',
       displayExpr: 'FullName',
+      inputAttr: { 'aria-label': 'Owner' },
       contentTemplate(e) {
         return $('<div>').dxDataGrid({
           dataSource: employees,
@@ -128,6 +129,7 @@ $(() => {
       value: cellInfo.value,
       valueExpr: 'ID',
       displayExpr: 'FullName',
+      inputAttr: { 'aria-label': 'Name' },
       showSelectionControls: true,
       maxDisplayedTags: 3,
       showMultiTagOnly: false,

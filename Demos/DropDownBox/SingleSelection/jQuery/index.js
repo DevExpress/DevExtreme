@@ -26,6 +26,7 @@ $(() => {
     displayExpr: 'name',
     placeholder: 'Select a value...',
     showClearButton: true,
+    inputAttr: { 'aria-label': 'Owner' },
     dataSource: makeAsyncDataSource('treeProducts.json'),
     contentTemplate(e) {
       const $treeView = $('<div>').dxTreeView({
@@ -63,6 +64,7 @@ $(() => {
     valueExpr: 'ID',
     deferRendering: false,
     placeholder: 'Select a value...',
+    inputAttr: { 'aria-label': 'Owner' },
     displayExpr(item) {
       return item && `${item.CompanyName} <${item.Phone}>`;
     },

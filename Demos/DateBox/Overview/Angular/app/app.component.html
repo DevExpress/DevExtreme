@@ -8,38 +8,68 @@
   <div class="dx-field">
     <div class="dx-field-label">Time</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="now" type="time"> </dx-date-box>
+      <dx-date-box
+        [value]="now"
+        type="time"
+        [inputAttr]="{ 'aria-label': 'Time' }"
+      >
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Date and time</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="now" type="datetime"> </dx-date-box>
+      <dx-date-box
+        [value]="now"
+        type="datetime"
+        [inputAttr]="{ 'aria-label': 'Date And Time' }"
+      >
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Custom format</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="now" displayFormat="EEEE, MMM dd"> </dx-date-box>
+      <dx-date-box
+        [value]="now"
+        displayFormat="EEEE, MMM dd"
+        [inputAttr]="{ 'aria-label': 'Custom Format' }"
+      >
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Date picker</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="now" pickerType="rollers"> </dx-date-box>
+      <dx-date-box
+        [value]="now"
+        pickerType="rollers"
+        [inputAttr]="{ 'aria-label': 'Date Picker' }"
+      >
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Clear button</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="dateClear" type="time" [showClearButton]="true">
+      <dx-date-box
+        [value]="dateClear"
+        type="time"
+        [showClearButton]="true"
+        [inputAttr]="{ 'aria-label': 'Clear Buttom' }"
+      >
       </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Disabled</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="now" type="datetime" [disabled]="true">
+      <dx-date-box
+        [value]="now"
+        type="datetime"
+        [disabled]="true"
+        [inputAttr]="{ 'aria-label': 'Disabled' }"
+      >
       </dx-date-box>
     </div>
   </div>
@@ -51,6 +81,7 @@
         type="date"
         pickerType="calendar"
         [disabledDates]="disabledDates"
+        [inputAttr]="{ 'aria-label': 'Disable certain dates' }"
       >
       </dx-date-box>
     </div>
@@ -66,6 +97,7 @@
         [(value)]="value"
         [min]="min"
         [max]="now"
+        [inputAttr]="{ 'aria-label': 'Set Birthday' }"
       >
       </dx-date-box>
     </div>

@@ -92,6 +92,7 @@
               :min="0"
               :max="endTaskIndex"
               :show-spin-buttons="true"
+              :input-attr="{ 'aria-label': 'Start Task Index' }"
               @value-changed="startTaskIndexChanged"
             />
           </div>
@@ -105,6 +106,7 @@
               :min="startTaskIndex"
               :max="tasks.length - 1"
               :show-spin-buttons="true"
+              :input-attr="{ 'aria-label': 'End Task Index' }"
               @value-changed="endTaskIndexChanged"
             />
           </div>
@@ -114,6 +116,7 @@
           <div class="value">
             <DxDateBox
               :disabled="customRangeDisabled"
+              :input-attr="{ 'aria-label': 'Start Date' }"
               v-model:value="startDate"
               :max="endDate"
               type="date"
@@ -126,6 +129,7 @@
           <div class="value">
             <DxDateBox
               :disabled="customRangeDisabled"
+              :input-attr="{ 'aria-label': 'End Date' }"
               v-model:value="endDate"
               :min="startDate"
               type="date"

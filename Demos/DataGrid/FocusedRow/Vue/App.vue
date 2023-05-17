@@ -41,6 +41,7 @@
             :max="183"
             :step="0"
             v-model:value="focusedRowKey"
+            :input-attr="{ 'aria-label': 'Focused Row Key' }"
           />
         </div>
         <div class="option">

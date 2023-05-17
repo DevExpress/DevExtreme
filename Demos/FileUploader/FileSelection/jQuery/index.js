@@ -2,11 +2,13 @@ $(() => {
   $('#first-name').dxTextBox({
     value: 'John',
     name: 'FirstName',
+    inputAttr: { 'aria-label': 'First Name' },
   });
 
   $('#last-name').dxTextBox({
     value: 'Smith',
     name: 'LastName',
+    inputAttr: { 'aria-label': 'Last Name' },
   });
 
   $('#file-uploader').dxFileUploader({

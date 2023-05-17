@@ -90,6 +90,7 @@ $(() => {
     min: 1,
     max: 182,
     step: 0,
+    inputAttr: { 'aria-label': 'Focused Row Key' },
     onValueChanged(e) {
       if (e.event && e.value > 0) {
         treeList.option('focusedRowKey', e.value);

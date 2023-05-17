@@ -38,6 +38,7 @@
             :max="40"
             :width="100"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Main Generator' }"
           />
         </div>
         <div class="option">
@@ -49,6 +50,7 @@
             :max="40"
             :width="100"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Additional Generator One' }"
           />
         </div>
         <div class="option">
@@ -60,6 +62,7 @@
             :max="40"
             :width="100"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Additional Generator Two' }"
           />
         </div>
         <div class="option">

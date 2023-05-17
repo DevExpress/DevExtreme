@@ -7,7 +7,8 @@ import Notify from 'devextreme/ui/notify';
 import HideToasts from 'devextreme/ui/toast/hide_toasts';
 
 import {
-  directions, positions, types, radioGroupItems,
+  directions, positions, types, radioGroupItems, positionTopLabel,
+  positionBottomLabel, positionLeftLabel, positionRightLabel,
 } from './data.js';
 
 function App() {
@@ -62,12 +63,14 @@ function App() {
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.bottom}
+          inputAttr={positionTopLabel}
           onValueChange={topNumberBoxValueChanged} />
         <NumberBox
           visible={!isPredefined}
           placeholder='bottom'
           defaultValue=''
           valueChangeEvent='keyup'
+          inputAttr={positionBottomLabel}
           disabled={!!coordinatePosition.top}
           onValueChange={bottomNumberBoxValueChanged} />
       </div>
@@ -77,6 +80,7 @@ function App() {
           placeholder='left'
           defaultValue=''
           valueChangeEvent='keyup'
+          inputAttr={positionLeftLabel}
           disabled={!!coordinatePosition.right}
           onValueChange={leftNumberBoxValueChanged} />
         <NumberBox
@@ -84,6 +88,7 @@ function App() {
           placeholder='right'
           defaultValue=''
           valueChangeEvent='keyup'
+          inputAttr={positionRightLabel}
           disabled={!!coordinatePosition.left}
           onValueChange={rightNumberBoxValueChanged} />
       </div>

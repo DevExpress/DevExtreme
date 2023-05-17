@@ -14,6 +14,7 @@ $(() => {
         return $('<div>').dxTagBox({
           value: conditionInfo.value,
           items: categories,
+          inputAttr: { 'aria-label': 'Category' },
           onValueChanged(e) {
             conditionInfo.setValue(e.value && e.value.length ? e.value : null);
           },

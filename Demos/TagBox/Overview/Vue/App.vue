@@ -3,7 +3,10 @@
     <div class="dx-field">
       <div class="dx-field-label">Default mode</div>
       <div class="dx-field-value">
-        <DxTagBox :items="simpleProducts"/>
+        <DxTagBox
+          :items="simpleProducts"
+          :input-attr="{ 'aria-label': 'Product' }"
+        />
       </div>
     </div>
     <div class="dx-field">
@@ -12,6 +15,7 @@
         <DxTagBox
           :items="simpleProducts"
           :search-enabled="true"
+          :input-attr="{ 'aria-label': 'Product' }"
         />
       </div>
     </div>
@@ -21,6 +25,7 @@
         <DxTagBox
           :items="simpleProducts"
           :show-selection-controls="true"
+          :input-attr="{ 'aria-label': 'Product' }"
           apply-value-mode="useButtons"
         />
       </div>
@@ -30,6 +35,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :items="simpleProducts"
+          :input-attr="{ 'aria-label': 'Product' }"
           :hide-selected-items="true"
         />
       </div>
@@ -39,6 +45,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :items="simpleProducts"
+          :input-attr="{ 'aria-label': 'Product' }"
           :multiline="false"
         />
       </div>
@@ -49,6 +56,7 @@
         <DxTagBox
           :items="editableProducts"
           :accept-custom-value="true"
+          :input-attr="{ 'aria-label': 'Product' }"
           @customItemCreating="onCustomItemCreating"
         />
       </div>
@@ -58,6 +66,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :items="simpleProducts"
+          :input-attr="{ 'aria-label': 'Product' }"
           placeholder="Choose Product..."
         />
       </div>
@@ -67,6 +76,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :items="simpleProducts"
+          :input-attr="{ 'aria-label': 'Product' }"
           :value="[simpleProducts[0]]"
           :disabled="true"
         />
@@ -77,6 +87,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :data-source="products"
+          :input-attr="{ 'aria-label': 'Product' }"
           display-expr="Name"
           value-expr="Id"
         />
@@ -87,6 +98,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :data-source="products"
+          :input-attr="{ 'aria-label': 'Product' }"
           display-expr="Name"
           value-expr="Id"
           item-template="item"

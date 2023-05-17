@@ -9,6 +9,7 @@ const labelModes = ['outside', 'static', 'floating', 'hidden'];
 const labelLocations = ['left', 'top'];
 const columnsCount = ['auto', 1, 2, 3];
 const minColumnWidths = [150, 200, 300];
+const widthLabel = { 'aria-label': 'Width' };
 
 class App extends React.Component {
   constructor() {
@@ -112,6 +113,7 @@ class App extends React.Component {
             <NumberBox
               max={550}
               value={width}
+              inputAttr={widthLabel}
               onValueChanged={this.onFormWidthChanged}
             />
           </div>

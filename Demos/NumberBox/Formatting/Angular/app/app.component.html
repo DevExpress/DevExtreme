@@ -2,13 +2,21 @@
   <div class="dx-field">
     <div class="dx-field-label">Integer format</div>
     <div class="dx-field-value">
-      <dx-number-box format="#" [value]="14500"></dx-number-box>
+      <dx-number-box
+        format="#"
+        [value]="14500"
+        [inputAttr]="{ 'aria-label': 'Integer Format' }"
+      ></dx-number-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Currency format</div>
     <div class="dx-field-value">
-      <dx-number-box format="$ #,##0.##" [value]="14500.55"></dx-number-box>
+      <dx-number-box
+        format="$ #,##0.##"
+        [value]="14500.55"
+        [inputAttr]="{ 'aria-label': 'Currency Format' }"
+      ></dx-number-box>
     </div>
   </div>
   <div class="dx-field">
@@ -17,25 +25,39 @@
       <dx-number-box
         format="$ #,##0.##;($ #,##0.##)"
         [value]="-2314.12"
+        [inputAttr]="{ 'aria-label': 'Accounting Format' }"
       ></dx-number-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Percent format</div>
     <div class="dx-field-value">
-      <dx-number-box format="#0%" [value]="0.15" [step]="0.01"></dx-number-box>
+      <dx-number-box
+        format="#0%"
+        [value]="0.15"
+        [step]="0.01"
+        [inputAttr]="{ 'aria-label': 'Percent Format' }"
+      ></dx-number-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Fixed point format</div>
     <div class="dx-field-value">
-      <dx-number-box format="#,##0.00" [value]="13415.24"></dx-number-box>
+      <dx-number-box
+        format="#,##0.00"
+        [value]="13415.24"
+        [inputAttr]="{ 'aria-label': 'Fixed Point Format' }"
+      ></dx-number-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Weight format</div>
     <div class="dx-field-value">
-      <dx-number-box format="#0.## kg" [value]="3.14"></dx-number-box>
+      <dx-number-box
+        format="#0.## kg"
+        [value]="3.14"
+        [inputAttr]="{ 'aria-label': 'Weight Format' }"
+      ></dx-number-box>
     </div>
   </div>
 </div>

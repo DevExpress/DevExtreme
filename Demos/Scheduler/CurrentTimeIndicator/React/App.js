@@ -3,7 +3,7 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import { Switch } from 'devextreme-react/switch';
 import { NumberBox } from 'devextreme-react/number-box';
 
-import { data, moviesData } from './data.js';
+import { data, moviesData, positionLabel } from './data.js';
 import AppointmentTemplate from './AppointmentTemplate.js';
 
 const currentDate = new Date();
@@ -85,6 +85,7 @@ class App extends React.Component {
                   showSpinButtons={true}
                   width={100}
                   format="#0 s"
+                  inputAttr={positionLabel}
                   onValueChanged={this.onUpdateIntervalChanged}
                 />
               </div>

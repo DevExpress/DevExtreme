@@ -50,6 +50,7 @@ $(() => {
   $('#handles').dxTagBox({
     items: allHandles,
     value: allHandles,
+    inputAttr: { 'aria-label': 'Handle' },
     onValueChanged: ({ value }) => {
       const resizableClasses = allHandles.reduce((classes, handle) => {
         const newClass = value.includes(handle) ? '' : ` no-${handle}-handle`;

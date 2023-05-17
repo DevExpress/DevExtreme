@@ -6,6 +6,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="now"
+            :input-attr="{ 'aria-label': 'Date' }"
             type="date"
           />
         </div>
@@ -15,6 +16,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="now"
+            :input-attr="{ 'aria-label': 'Time' }"
             type="time"
           />
         </div>
@@ -24,6 +26,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="now"
+            :input-attr="{ 'aria-label': 'Date And Time' }"
             type="datetime"
           />
         </div>
@@ -33,6 +36,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="now"
+            :input-attr="{ 'aria-label': 'Custom Format' }"
             display-format="EEEE, MMM dd"
           />
         </div>
@@ -42,6 +46,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="now"
+            :input-attr="{ 'aria-label': 'Picker' }"
             picker-type="rollers"
           />
         </div>
@@ -51,6 +56,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="dateClear"
+            :input-attr="{ 'aria-label': 'Clear' }"
             :show-clear-button="true"
             type="time"
           />
@@ -61,6 +67,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="now"
+            :input-attr="{ 'aria-label': 'Disabled' }"
             :disabled="true"
             type="datetime"
           />
@@ -71,6 +78,7 @@
         <div class="dx-field-value">
           <DxDateBox
             :value="firstWorkDay2017"
+            :input-attr="{ 'aria-label': 'Disable' }"
             :disabled-dates="disabledDates"
             type="date"
             picker-type="calendar"
@@ -86,6 +94,7 @@
           <DxDateBox
             v-model:value="value"
             :min="min"
+            :input-attr="{ 'aria-label': 'Birth Date' }"
             :max="now"
             apply-value-mode="useButtons"
           />

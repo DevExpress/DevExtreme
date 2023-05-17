@@ -4,6 +4,7 @@
     <div class="dx-field-value">
       <dx-drop-down-box
         [(value)]="treeBoxValue"
+        [inputAttr]="{ 'aria-label': 'Owner' }"
         valueExpr="ID"
         displayExpr="name"
         placeholder="Select a value..."
@@ -35,6 +36,7 @@
     <div class="dx-field-value">
       <dx-drop-down-box
         [(value)]="gridBoxValue"
+        [inputAttr]="{ 'aria-label': 'Owner' }"
         valueExpr="ID"
         displayExpr="CompanyName"
         placeholder="Select a value..."

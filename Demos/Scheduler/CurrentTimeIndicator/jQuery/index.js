@@ -54,6 +54,7 @@ $(() => {
     showSpinButtons: true,
     width: '100px',
     format: '#0 s',
+    inputAttr: { 'aria-label': 'Interval' },
     onValueChanged(e) {
       scheduler.option('indicatorUpdateInterval', e.value * 1000);
     },

@@ -26,6 +26,7 @@
             <DxTextBox
               :show-clear-button="true"
               :value="textValue"
+              :input-attr="{ 'aria-label': 'Text Box' }"
               :rtl-enabled="rtlEnabled"
             />
           </div>
@@ -37,6 +38,7 @@
               :show-spin-buttons="true"
               :value="123"
               :rtl-enabled="rtlEnabled"
+              :input-attr="{ 'aria-label': 'Number Box' }"
             />
           </div>
         </div>
@@ -57,6 +59,7 @@
             <DxTagBox
               :items="europeanUnion"
               :value="[europeanUnion[0].id]"
+              :input-attr="{ 'aria-label': 'Name' }"
               :rtl-enabled="rtlEnabled"
               :display-expr="displayExpr"
               placeholder="..."
@@ -70,6 +73,7 @@
             <DxTextArea
               :value="textValue"
               :rtl-enabled="rtlEnabled"
+              :input-attr="{ 'aria-label': 'Notes' }"
             />
           </div>
         </div>

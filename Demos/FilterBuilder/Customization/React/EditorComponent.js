@@ -1,6 +1,6 @@
 import React from 'react';
 import TagBox from 'devextreme-react/tag-box';
-import { categories } from './data.js';
+import { categories, categoryLabel } from './data.js';
 
 export class EditorComponent extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ export class EditorComponent extends React.Component {
   render() {
     return (
       <TagBox
+        inputAttr={categoryLabel}
         defaultValue={this.props.data.value}
         items={categories}
         onValueChanged={this.onValueChanged}

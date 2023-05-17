@@ -99,6 +99,7 @@ $(() => {
   $('#startDateContainer').dxDateBox({
     type: 'date',
     value: new Date(2018, 11, 1),
+    inputAttr: { 'aria-label': 'Start Date' },
     onValueChanged(e) {
       gantt.option('startDateRange', e.value);
     },
@@ -107,6 +108,7 @@ $(() => {
   $('#endDateContainer').dxDateBox({
     type: 'date',
     value: new Date(2019, 11, 1),
+    inputAttr: { 'aria-label': 'End Date' },
     onValueChanged(e) {
       gantt.option('endDateRange', e.value);
     },

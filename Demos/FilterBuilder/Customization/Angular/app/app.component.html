@@ -10,6 +10,7 @@
     *dxTemplate="let condition of 'tagBoxTemplate'"
     [value]="condition.value"
     [items]="categories"
+    [inputAttr]="{ 'aria-label': 'Category' }"
     (onValueChanged)="condition.setValue($event.value)"
     width="auto"
   >

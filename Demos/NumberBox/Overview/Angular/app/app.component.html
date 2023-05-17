@@ -3,7 +3,9 @@
     <div class="dx-field">
       <div class="dx-field-label">Default mode</div>
       <div class="dx-field-value">
-        <dx-number-box></dx-number-box>
+        <dx-number-box
+          [inputAttr]="{ 'aria-label': 'With Spin And Buttons' }"
+        ></dx-number-box>
       </div>
     </div>
     <div class="dx-field">
@@ -13,6 +15,7 @@
           [value]="20.5"
           [showSpinButtons]="true"
           [showClearButton]="true"
+          [inputAttr]="{ 'aria-label': 'With Spin And Buttons' }"
         ></dx-number-box>
       </div>
     </div>
@@ -24,6 +27,7 @@
           [showSpinButtons]="true"
           [showClearButton]="true"
           [disabled]="true"
+          [inputAttr]="{ 'aria-label': 'Disabled' }"
         ></dx-number-box>
       </div>
     </div>
@@ -35,6 +39,7 @@
           [min]="10"
           [max]="20"
           [showSpinButtons]="true"
+          [inputAttr]="{ 'aria-label': 'Min And Max' }"
         ></dx-number-box>
       </div>
     </div>
@@ -49,6 +54,7 @@
           [max]="30"
           [min]="0"
           [showSpinButtons]="true"
+          [inputAttr]="{ 'aria-label': 'Sales' }"
           (onKeyDown)="keyDown($event)"
           [value]="16"
         ></dx-number-box>
@@ -62,6 +68,7 @@
           [showSpinButtons]="false"
           [readOnly]="true"
           [value]="numberBox.max - numberBox.value"
+          [inputAttr]="{ 'aria-label': 'Stock' }"
         ></dx-number-box>
       </div>
     </div>

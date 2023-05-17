@@ -6,7 +6,7 @@ import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import DateBox from 'devextreme-react/date-box';
 import {
-  tasks, dependencies, resources, resourceAssignments,
+  tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
 } from './data.js';
 import TaskTooltipTemplate from './TaskTooltipTemplate.js';
 import TaskProgressTooltipContentTemplate from './TaskProgressTooltipContentTemplate.js';
@@ -81,6 +81,7 @@ function App() {
             {' '}
             <div className="value">
               <DateBox
+                inputAttr={startDateLabel}
                 value={ganttConfig.startDateRange}
                 type="date"
                 onValueChanged={onStartDateValueChanged}
@@ -92,6 +93,7 @@ function App() {
             {' '}
             <div className="value">
               <DateBox
+                inputAttr={endDateLabel}
                 value={ganttConfig.endDateRange}
                 type="date"
                 onValueChanged={onEndDateValueChanged}

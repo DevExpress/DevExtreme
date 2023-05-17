@@ -76,43 +76,64 @@
         <div class="dx-field">
           <div class="dx-field-label">Name</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.Full_Name"/>
+            <DxTextBox
+              v-model:value="currentEmployee.Full_Name"
+              :input-attr="{ 'aria-label': 'Full Name' }"
+            />
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Title</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.Title"/>
+            <DxTextBox
+              v-model:value="currentEmployee.Title"
+              :input-attr="{ 'aria-label': 'Title' }"
+            />
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">City</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.City"/>
+            <DxTextBox
+              v-model:value="currentEmployee.City"
+              :input-attr="{ 'aria-label': 'City' }"
+            />
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">State</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.State"/>
+            <DxTextBox
+              v-model:value="currentEmployee.State"
+              :input-attr="{ 'aria-label': 'State' }"
+            />
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Email</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.Email"/>
+            <DxTextBox
+              v-model:value="currentEmployee.Email"
+              :input-attr="{ 'aria-label': 'Email' }"
+            />
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Skype</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.Skype"/>
+            <DxTextBox
+              v-model:value="currentEmployee.Skype"
+              :input-attr="{ 'aria-label': 'Skype' }"
+            />
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Phone</div>
           <div class="dx-field-value">
-            <DxTextBox v-model:value="currentEmployee.Mobile_Phone"/>
+            <DxTextBox
+              v-model:value="currentEmployee.Mobile_Phone"
+              :input-attr="{ 'aria-label': 'Phone' }"
+            />
           </div>
         </div>
       </div>

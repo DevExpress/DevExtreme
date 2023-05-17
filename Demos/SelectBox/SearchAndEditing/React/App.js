@@ -4,7 +4,9 @@ import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
 import DataSource from 'devextreme/data/data_source';
 
-import { simpleProducts, products } from './data.js';
+import {
+  simpleProducts, products, searchTimeoutLabel, minimumSearchLengthLabel,
+} from './data.js';
 
 const searchModeItems = ['contains', 'startswith'];
 const searchExprItems = [{
@@ -151,6 +153,7 @@ class App extends React.Component {
               showSpinButtons={true}
               step={100}
               value={searchTimeoutOption}
+              inputAttr={searchTimeoutLabel}
               onValueChanged={this.searchTimeoutOptionChanged} />
           </div>
           <div className="option">
@@ -159,6 +162,7 @@ class App extends React.Component {
               max={5}
               showSpinButtons={true}
               value={minSearchLengthOption}
+              inputAttr={minimumSearchLengthLabel}
               onValueChanged={this.minSearchLengthOptionChanged} />
           </div>
           <div className="option">

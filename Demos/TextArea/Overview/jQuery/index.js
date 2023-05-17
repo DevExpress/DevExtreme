@@ -2,6 +2,7 @@ $(() => {
   const exampleTextArea = $('#example-textarea').dxTextArea({
     value: longText,
     height: 90,
+    inputAttr: { 'aria-label': 'Notes' },
   }).dxTextArea('instance');
 
   $('#set-max-length').dxCheckBox({
@@ -45,6 +46,7 @@ $(() => {
     value: longText,
     height: 90,
     valueChangeEvent: 'change',
+    inputAttr: { 'aria-label': 'Notes' },
     onValueChanged(data) {
       disabledTextArea.option('value', data.value);
     },
@@ -54,5 +56,6 @@ $(() => {
     value: longText,
     height: 90,
     readOnly: true,
+    inputAttr: { 'aria-label': 'Notes' },
   }).dxTextArea('instance');
 });

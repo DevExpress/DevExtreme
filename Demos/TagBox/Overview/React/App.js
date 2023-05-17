@@ -4,7 +4,7 @@ import TagBox from 'devextreme-react/tag-box';
 import ArrayStore from 'devextreme/data/array_store';
 
 import Item from './Item.js';
-import { simpleProducts, products } from './data.js';
+import { simpleProducts, products, productLabel } from './data.js';
 
 const disabledValue = [simpleProducts[0]];
 
@@ -39,14 +39,16 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Default mode</div>
             <div className="dx-field-value">
-              <TagBox items={simpleProducts} />
+              <TagBox items={simpleProducts} inputAttr={productLabel} />
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Search mode</div>
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
-                searchEnabled={true} />
+                searchEnabled={true}
+                inputAttr={productLabel}
+              />
             </div>
           </div>
           <div className="dx-field">
@@ -54,6 +56,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
                 showSelectionControls={true}
+                inputAttr={productLabel}
                 applyValueMode="useButtons" />
             </div>
           </div>
@@ -61,6 +64,7 @@ class App extends React.Component {
             <div className="dx-field-label">Hide selected items</div>
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
+                inputAttr={productLabel}
                 hideSelectedItems={true} />
             </div>
           </div>
@@ -68,6 +72,7 @@ class App extends React.Component {
             <div className="dx-field-label">Single line mode</div>
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
+                inputAttr={productLabel}
                 multiline={false} />
             </div>
           </div>
@@ -75,6 +80,7 @@ class App extends React.Component {
             <div className="dx-field-label">Add custom items</div>
             <div className="dx-field-value">
               <TagBox items={this.state.editableProducts}
+                inputAttr={productLabel}
                 acceptCustomValue={true}
                 onCustomItemCreating={this.onCustomItemCreating} />
             </div>
@@ -83,6 +89,7 @@ class App extends React.Component {
             <div className="dx-field-label">With custom placeholder</div>
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
+                inputAttr={productLabel}
                 placeholder="Choose Product..." />
             </div>
           </div>
@@ -90,6 +97,7 @@ class App extends React.Component {
             <div className="dx-field-label">Disabled</div>
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
+                inputAttr={productLabel}
                 value={disabledValue}
                 disabled={true} />
             </div>
@@ -98,6 +106,7 @@ class App extends React.Component {
             <div className="dx-field-label">Data source</div>
             <div className="dx-field-value">
               <TagBox dataSource={this.dataSource}
+                inputAttr={productLabel}
                 displayExpr="Name"
                 valueExpr="Id" />
             </div>
@@ -106,6 +115,7 @@ class App extends React.Component {
             <div className="dx-field-label">Custom template</div>
             <div className="dx-field-value">
               <TagBox dataSource={this.dataSource}
+                inputAttr={productLabel}
                 displayExpr="Name"
                 valueExpr="Id"
                 itemRender={Item} />

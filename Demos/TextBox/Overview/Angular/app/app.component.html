@@ -3,19 +3,30 @@
     <div class="dx-field">
       <div class="dx-field-label">Default mode</div>
       <div class="dx-field-value">
-        <dx-text-box value="John Smith"></dx-text-box>
+        <dx-text-box
+          value="John Smith"
+          [inputAttr]="{ 'aria-label': 'Name' }"
+        ></dx-text-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">With placeholder</div>
       <div class="dx-field-value">
-        <dx-text-box placeholder="Enter full name here..."></dx-text-box>
+        <dx-text-box
+          placeholder="Enter full name here..."
+          [inputAttr]="{ 'aria-label': 'Full Name' }"
+        ></dx-text-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">With clear button</div>
       <div class="dx-field-value">
-        <dx-text-box value="John Smith" [showClearButton]="true"> </dx-text-box>
+        <dx-text-box
+          value="John Smith"
+          [showClearButton]="true"
+          [inputAttr]="{ 'aria-label': 'Name' }"
+        >
+        </dx-text-box>
       </div>
     </div>
     <div class="dx-field">
@@ -23,6 +34,7 @@
       <div class="dx-field-value">
         <dx-text-box
           mode="password"
+          [inputAttr]="{ 'aria-label': 'Password' }"
           placeholder="Enter password"
           [showClearButton]="true"
           value="f5lzKs0T"
@@ -32,14 +44,23 @@
     <div class="dx-field">
       <div class="dx-field-label">Text mask</div>
       <div class="dx-field-value">
-        <dx-text-box mask="+1 (X00) 000-0000" [maskRules]="rules">
+        <dx-text-box
+          mask="+1 (X00) 000-0000"
+          [maskRules]="rules"
+          [inputAttr]="{ 'aria-label': 'Mask' }"
+        >
         </dx-text-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Disabled</div>
       <div class="dx-field-value">
-        <dx-text-box value="John Smith" [disabled]="true"> </dx-text-box>
+        <dx-text-box
+          value="John Smith"
+          [disabled]="true"
+          [inputAttr]="{ 'aria-label': 'Name' }"
+        >
+        </dx-text-box>
       </div>
     </div>
   </div>
@@ -53,6 +74,7 @@
           [showClearButton]="true"
           placeholder="Enter full name"
           valueChangeEvent="keyup"
+          [inputAttr]="{ 'aria-label': 'Full Name' }"
           (onValueChanged)="valueChanged($event)"
         ></dx-text-box>
       </div>
@@ -63,6 +85,7 @@
         <dx-text-box
           [readOnly]="true"
           [hoverStateEnabled]="false"
+          [inputAttr]="{ 'aria-label': 'Email' }"
           [(value)]="emailValue"
         ></dx-text-box>
       </div>

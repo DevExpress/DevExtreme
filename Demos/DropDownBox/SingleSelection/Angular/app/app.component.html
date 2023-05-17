@@ -4,6 +4,7 @@
     <div class="dx-field-value">
       <dx-drop-down-box
         [(value)]="treeBoxValue"
+        [inputAttr]="{ 'aria-label': 'Owner' }"
         [(opened)]="isTreeBoxOpened"
         valueExpr="ID"
         displayExpr="name"
@@ -40,6 +41,7 @@
         [deferRendering]="false"
         [displayExpr]="gridBox_displayExpr"
         placeholder="Select a value..."
+        [inputAttr]="{ 'aria-label': 'Owner' }"
         [showClearButton]="true"
         [dataSource]="gridDataSource"
         (onOptionChanged)="onGridBoxOptionChanged($event)"

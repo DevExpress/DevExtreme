@@ -2,6 +2,7 @@
   <DxTagBox
     :value="conditionInfo.value"
     :items="categories"
+    :input-attr="{ 'aria-label': 'Category' }"
     width="auto"
     @value-changed="onValueChanged"
   />

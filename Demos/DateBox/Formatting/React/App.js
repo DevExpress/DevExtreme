@@ -2,6 +2,8 @@ import React from 'react';
 import DateBox from 'devextreme-react/date-box';
 
 const date = new Date(2018, 9, 16, 15, 8, 12);
+const dataTimeLabel = { 'aria-label': 'Date Time' };
+const dateLabel = { 'aria-label': 'Date' };
 
 class App extends React.Component {
   render() {
@@ -15,6 +17,7 @@ class App extends React.Component {
                 type="datetime"
                 placeholder="12/31/2018, 2:52 PM"
                 showClearButton={true}
+                inputAttr={dataTimeLabel}
                 useMaskBehavior={true} />
             </div>
           </div>
@@ -24,6 +27,7 @@ class App extends React.Component {
               <DateBox defaultValue={date}
                 placeholder="10/16/2018"
                 showClearButton={true}
+                inputAttr={dateLabel}
                 useMaskBehavior={true}
                 type="date"
                 displayFormat="shortdate" />
@@ -35,6 +39,7 @@ class App extends React.Component {
               <DateBox defaultValue={date}
                 placeholder="Tuesday, 16 of Oct, 2018 14:52"
                 showClearButton={true}
+                inputAttr={dateLabel}
                 useMaskBehavior={true}
                 displayFormat="EEEE, d of MMM, yyyy HH:mm" />
             </div>
@@ -46,6 +51,7 @@ class App extends React.Component {
                 placeholder="Year: 2018"
                 showClearButton={true}
                 useMaskBehavior={true}
+                inputAttr={dateLabel}
                 type="date"
                 displayFormat={"'Year': yyyy"} />
             </div>

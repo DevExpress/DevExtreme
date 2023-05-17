@@ -8,7 +8,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Email</div>
         <div class="dx-field-value">
-          <DxTextBox>
+          <DxTextBox :input-attr="{ 'aria-label': 'Email' }">
             <DxValidator>
               <DxRequiredRule message="Email is required"/>
               <DxEmailRule message="Email is invalid"/>
@@ -25,6 +25,7 @@
         <div class="dx-field-value">
           <DxTextBox
             v-model:value="password"
+            :input-attr="{ 'aria-label': 'Password' }"
             v-model:mode="passwordMode"
             @value-changed="onPasswordChanged"
           >
@@ -44,6 +45,7 @@
         <div class="dx-field-value">
           <DxTextBox
             v-model:value="confirmPassword"
+            :input-attr="{ 'aria-label': 'Password' }"
             v-model:mode="confirmPasswordMode"
           >
             <DxTextBoxButton
@@ -67,7 +69,10 @@
       <div class="dx-field">
         <div class="dx-field-label">Name</div>
         <div class="dx-field-value">
-          <DxTextBox value="Peter">
+          <DxTextBox
+            value="Peter"
+            :input-attr="{ 'aria-label': 'Name' }"
+          >
             <DxValidator>
               <DxRequiredRule message="Name is required"/>
               <DxPatternRule
@@ -87,6 +92,7 @@
         <div class="dx-field-value">
           <DxDateBox
             invalid-date-message="The date must have the following format: MM/dd/yyyy"
+            :input-attr="{ 'aria-label': 'Date' }"
           >
             <DxValidator>
               <DxRequiredRule message="Date of birth is required"/>
@@ -117,7 +123,10 @@
       <div class="dx-field">
         <div class="dx-field-label">City</div>
         <div class="dx-field-value">
-          <DxTextBox validation-message-position="left">
+          <DxTextBox
+            validation-message-position="left"
+            :input-attr="{ 'aria-label': 'City' }"
+          >
             <DxValidator>
               <DxRequiredRule message="City is required"/>
               <DxPatternRule
@@ -135,7 +144,10 @@
       <div class="dx-field">
         <div class="dx-field-label">Address</div>
         <div class="dx-field-value">
-          <DxTextBox validation-message-position="left">
+          <DxTextBox
+            validation-message-position="left"
+            :input-attr="{ 'aria-label': 'Address' }"
+          >
             <DxValidator>
               <DxRequiredRule message="Address is required"/>
             </DxValidator>
@@ -147,6 +159,7 @@
         <div class="dx-field-value">
           <DxTextBox
             :mask-rules="phoneRules"
+            :input-attr="{ 'aria-label': 'Mask' }"
             mask="+1 (X00) 000-0000"
             mask-invalid-message="The phone must have a correct USA phone format"
             validation-message-position="left"

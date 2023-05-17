@@ -12,6 +12,7 @@
         <div class="dx-field-label">First Name:</div>
         <DxTextBox
           value="John"
+          :input-attr="{ 'aria-label': 'Full Name' }"
           name="FirstName"
           class="dx-field-value"
         />
@@ -20,6 +21,7 @@
         <div class="dx-field-label">Last Name:</div>
         <DxTextBox
           name="LastName"
+          :input-attr="{ 'aria-label': 'Last Name' }"
           value="Smith"
           class="dx-field-value"
         />

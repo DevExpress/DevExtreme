@@ -1,6 +1,13 @@
 import React from 'react';
 import { NumberBox } from 'devextreme-react/number-box';
 
+const simpleLabel = { 'aria-label': 'Simple' };
+const withSpinAndButtonsLabel = { 'aria-label': 'With Spin And Buttons' };
+const disabledLabel = { 'aria-label': 'Disabled' };
+const maxAndMinLabel = { 'aria-label': 'Min And Max' };
+const salesLabel = { 'aria-label': 'Sales' };
+const stockLabel = { 'aria-label': 'Stock' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +41,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Default mode</div>
             <div className="dx-field-value">
-              <NumberBox />
+              <NumberBox inputAttr={simpleLabel} />
             </div>
           </div>
           <div className="dx-field">
@@ -44,6 +51,7 @@ class App extends React.Component {
                 defaultValue={20.5}
                 showSpinButtons={true}
                 showClearButton={true}
+                inputAttr={withSpinAndButtonsLabel}
               />
             </div>
           </div>
@@ -55,6 +63,7 @@ class App extends React.Component {
                 showSpinButtons={true}
                 showClearButton={true}
                 disabled={true}
+                inputAttr={disabledLabel}
               />
             </div>
           </div>
@@ -66,6 +75,7 @@ class App extends React.Component {
                 min={10}
                 max={20}
                 showSpinButtons={true}
+                inputAttr={maxAndMinLabel}
               />
             </div>
           </div>
@@ -82,6 +92,7 @@ class App extends React.Component {
                 showSpinButtons={true}
                 onKeyDown={this.keyDown}
                 onValueChanged={this.valueChanged}
+                inputAttr={salesLabel}
               />
             </div>
           </div>
@@ -93,6 +104,7 @@ class App extends React.Component {
                 showSpinButtons={false}
                 readOnly={true}
                 value={ max - value }
+                inputAttr={stockLabel}
               />
             </div>
           </div>

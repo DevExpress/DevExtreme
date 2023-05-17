@@ -84,24 +84,27 @@ $(() => {
     disabled: true,
     value: 0,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Start Index' },
   });
   $('#endIndexContainer').dxNumberBox({
     disabled: true,
     value: 3,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'End Index' },
   });
 
   $('#startDateContainer').dxDateBox({
     disabled: true,
     type: 'date',
     value: tasks[0].start,
-
+    inputAttr: { 'aria-label': 'Start Date' },
   });
 
   $('#endDateContainer').dxDateBox({
     disabled: true,
     type: 'date',
     value: tasks[0].end,
+    inputAttr: { 'aria-label': 'End Date' },
   });
 
   function exportGantt() {

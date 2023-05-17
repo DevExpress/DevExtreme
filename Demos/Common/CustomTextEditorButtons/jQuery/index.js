@@ -3,6 +3,7 @@ $(() => {
     placeholder: 'password',
     mode: 'password',
     value: 'password',
+    inputAttr: { 'aria-label': 'Password' },
     stylingMode: 'filled',
     buttons: [{
       name: 'password',
@@ -22,6 +23,7 @@ $(() => {
     format: '$ #.##',
     showClearButton: true,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Multi Currency' },
     buttons: [{
       name: 'currency',
       location: 'after',
@@ -52,6 +54,7 @@ $(() => {
   const dateEditor = $('#advanced-datebox').dxDateBox({
     value: new Date().getTime(),
     stylingMode: 'outlined',
+    inputAttr: { 'aria-label': 'Date' },
     buttons: [{
       name: 'today',
       location: 'before',

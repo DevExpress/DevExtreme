@@ -24,3 +24,8 @@ export const positions = [
 export const types = ['error', 'info', 'success', 'warning'];
 
 export const radioGroupItems = ['predefined', 'coordinates'];
+
+export const positionTopLabel = { 'aria-label': 'Position Top' };
+export const positionBottomLabel = { 'aria-label': 'Position Bottom' };
+export const positionLeftLabel = { 'aria-label': 'Position Left' };
+export const positionRightLabel = { 'aria-label': 'Position Right' };

@@ -81,6 +81,7 @@ $(() => {
     value: 200,
     showSpinButtons: true,
     step: 100,
+    inputAttr: { 'aria-label': 'Search Timeout' },
     onValueChanged(e) {
       searchBox.option('searchTimeout', e.value);
     },
@@ -91,6 +92,7 @@ $(() => {
     max: 5,
     value: 0,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Min Search Length' },
     onValueChanged(e) {
       searchBox.option('minSearchLength', e.value);
     },

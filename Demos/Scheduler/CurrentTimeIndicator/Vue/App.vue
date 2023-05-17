@@ -56,6 +56,7 @@
               :step="10"
               :show-spin-buttons="true"
               width="100"
+              :input-attr="{ 'aria-label': 'Interval' }"
             />
           </div>
         </div>

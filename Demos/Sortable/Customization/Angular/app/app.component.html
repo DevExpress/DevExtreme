@@ -63,11 +63,17 @@
     </div>
     <div class="option">
       <span>Scroll Speed:</span>
-      <dx-number-box [(value)]="scrollSpeed"></dx-number-box>
+      <dx-number-box
+        [(value)]="scrollSpeed"
+        [inputAttr]="{ 'aria-label': 'Scroll Speed' }"
+      ></dx-number-box>
     </div>
     <div class="option">
       <span>Scroll Sensitivity:</span>
-      <dx-number-box [(value)]="scrollSensitivity"></dx-number-box>
+      <dx-number-box
+        [(value)]="scrollSensitivity"
+        [inputAttr]="{ 'aria-label': 'Scroll Sensitivity' }"
+      ></dx-number-box>
     </div>
     <div class="option">
       <dx-check-box

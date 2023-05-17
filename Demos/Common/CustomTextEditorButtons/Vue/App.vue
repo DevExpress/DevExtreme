@@ -7,6 +7,7 @@
           <DxTextBox
             v-model:mode="passwordMode"
             value="password"
+            :input-attr="{ 'aria-label': 'Password' }"
             styling-mode="filled"
             placeholder="password"
           >
@@ -27,6 +28,7 @@
             :format="currencyFormat"
             :show-clear-button="true"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Currency Value' }"
           >
             <DxNumberBoxButton
               :options="currencyButton"
@@ -44,6 +46,7 @@
         <div class="dx-field-value">
           <DxDateBox
             v-model:value="dateValue"
+            :input-attr="{ 'aria-label': 'Date' }"
             styling-mode="outlined"
           >
             <DxDateBoxButton

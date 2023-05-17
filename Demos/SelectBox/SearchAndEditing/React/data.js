@@ -179,3 +179,5 @@ export const products = [{
   ImageSrc: '../../../../images/products/19.png',
 }];
 
+export const minimumSearchLengthLabel = { 'aria-label': 'Minumum Search length' };
+export const searchTimeoutLabel = { 'aria-label': 'Search Timeout' };

@@ -8,6 +8,7 @@ $(() => {
     value: 'Olivia Peyton',
     width: '100%',
     placeholder: 'Type...',
+    inputAttr: { 'aria-label': 'Name' },
     label: 'Name',
   }).dxValidator({
     validationRules: [{
@@ -18,6 +19,7 @@ $(() => {
   const place = $('#address').dxTextBox({
     width: '100%',
     placeholder: 'Type...',
+    inputAttr: { 'aria-label': 'Address' },
     label: 'Address',
   }).dxValidator({
     validationRules: [{
@@ -30,6 +32,7 @@ $(() => {
     label: 'Birth Date',
     placeholder: 'Select...',
     value: '6/3/1981',
+    inputAttr: { 'aria-label': 'Birth Date' },
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -40,6 +43,7 @@ $(() => {
     width: '100%',
     label: 'Hire Date',
     placeholder: 'Select...',
+    inputAttr: { 'aria-label': 'Hire Date' },
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -63,6 +67,7 @@ $(() => {
     placeholder: 'Select...',
     multiline: false,
     width: '100%',
+    inputAttr: { 'aria-label': 'Position' },
     label: 'Position',
   }).dxValidator({
     validationRules: [{
@@ -74,6 +79,7 @@ $(() => {
     width: '100%',
     label: 'Phone',
     mask: '+1 (000) 000-0000',
+    inputAttr: { 'aria-label': 'Phone' },
     maskRules: {
       X: /[02-9]/,
     },
@@ -88,6 +94,7 @@ $(() => {
     width: '100%',
     placeholder: 'Type...',
     label: 'Notes',
+    inputAttr: { 'aria-label': 'Notes' },
   }).dxTextArea('instance');
 
   $('#validate').dxButton({

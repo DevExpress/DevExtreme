@@ -8,6 +8,8 @@ import service from './data.js';
 import CustomTitle from './CustomTitle.js';
 import CustomItem from './CustomItem.js';
 
+const companyLabel = { 'aria-label': 'Company' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -74,6 +76,7 @@ class App extends React.Component {
             <TagBox dataSource={this.companies}
               displayExpr="CompanyName"
               value={selectedItems}
+              inputAttr={companyLabel}
               onValueChanged={this.selectedItemsChanged}
               disabled={!multiple}
             />

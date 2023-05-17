@@ -76,6 +76,7 @@
         [(value)]="searchTimeoutOption"
         [showSpinButtons]="true"
         [step]="100"
+        [inputAttr]="{ 'aria-label': 'Search Timeout' }"
       ></dx-number-box>
     </div>
     <div class="option">
@@ -85,6 +86,7 @@
         [max]="5"
         [(value)]="minSearchLengthOption"
         [showSpinButtons]="true"
+        [inputAttr]="{ 'aria-label': 'Minimum Search Length' }"
       ></dx-number-box>
     </div>
     <div class="option">

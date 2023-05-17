@@ -6,6 +6,7 @@ $(() => {
     valueExpr: 'ID',
     showSelectionControls: true,
     maxDisplayedTags: 3,
+    inputAttr: productLabel,
   });
 
   $('#onMultiTagPreparing').dxTagBox({
@@ -15,6 +16,7 @@ $(() => {
     valueExpr: 'ID',
     showSelectionControls: true,
     maxDisplayedTags: 3,
+    inputAttr: productLabel,
     onMultiTagPreparing(args) {
       const selectedItemsLength = args.selectedItems.length;
       const totalCount = 5;
@@ -35,5 +37,6 @@ $(() => {
     showSelectionControls: true,
     maxDisplayedTags: 2,
     showMultiTagOnly: false,
+    inputAttr: productLabel,
   });
 });

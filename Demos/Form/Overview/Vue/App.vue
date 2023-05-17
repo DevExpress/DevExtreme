@@ -56,6 +56,7 @@
         <DxNumberBox
           :max="550"
           v-model:value="width"
+          :input-attr="{ 'aria-label': 'Form Width' }"
         />
       </div>
       <div class="option">

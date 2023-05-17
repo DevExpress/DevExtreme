@@ -18,6 +18,9 @@ import {
 
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
+import {
+  nameLabel, passwordLabel, emailLabel, maskLabel, dateLabel, cityLabel, addressLabel,
+} from '../../../Common/EditorsRightToLeftSupport/React/data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -71,7 +74,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Email</div>
             <div className="dx-field-value">
-              <TextBox>
+              <TextBox inputAttr={emailLabel}>
                 <Validator>
                   <RequiredRule message="Email is required" />
                   <EmailRule message="Email is invalid" />
@@ -88,6 +91,7 @@ class App extends React.Component {
               <TextBox
                 mode={this.state.passwordMode}
                 value={this.state.password}
+                inputAttr={passwordLabel}
                 onValueChanged={this.onPasswordChanged}>
                 <TextBoxButton
                   name="password"
@@ -105,6 +109,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <TextBox
                 value={this.state.confirmPassword}
+                inputAttr={passwordLabel}
                 onValueChanged={this.onConfirmPasswordChanged}
                 mode={this.state.confirmPasswordMode}>
                 <TextBoxButton
@@ -125,7 +130,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Name</div>
             <div className="dx-field-value">
-              <TextBox value="Peter">
+              <TextBox value="Peter" inputAttr={nameLabel}>
                 <Validator>
                   <RequiredRule message="Name is required" />
                   <PatternRule message="Do not use digits in the Name" pattern={this.namePattern} />
@@ -138,7 +143,7 @@ class App extends React.Component {
             <div className="dx-field-label">Date of birth</div>
             <div className="dx-field-value">
               <DateBox
-                invalidDateMessage="The date must have the following format: MM/dd/yyyy">
+                invalidDateMessage="The date must have the following format: MM/dd/yyyy" inputAttr={dateLabel}>
                 <Validator>
                   <RequiredRule message="Date of birth is required" />
                   <RangeRule message="You must be at least 21 years old" max={this.maxDate} />
@@ -162,7 +167,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">City</div>
             <div className="dx-field-value">
-              <TextBox validationMessagePosition="left">
+              <TextBox validationMessagePosition="left" inputAttr={cityLabel}>
                 <Validator>
                   <RequiredRule message="City is required" />
                   <PatternRule message="Do not use digits in the City name" pattern={this.cityPattern} />
@@ -174,7 +179,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Address</div>
             <div className="dx-field-value">
-              <TextBox validationMessagePosition="left">
+              <TextBox validationMessagePosition="left" inputAttr={addressLabel}>
                 <Validator>
                   <RequiredRule message="Address is required" />
                 </Validator>
@@ -186,6 +191,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <TextBox
                 mask="+1 (X00) 000-0000"
+                inputAttr={maskLabel}
                 maskRules={this.phoneRules}
                 maskInvalidMessage="The phone must have a correct USA phone format"
                 validationMessagePosition="left">

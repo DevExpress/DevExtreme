@@ -83,6 +83,7 @@ $(() => {
     min: 0,
     max: 100,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Slider Value' },
     onValueChanged({ value }) {
       onHandleMoveSlider.option('value', value);
       onHandleReleaseSlider.option('value', value);

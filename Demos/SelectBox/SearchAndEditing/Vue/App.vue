@@ -77,6 +77,7 @@
           :max="5000"
           :show-spin-buttons="true"
           :step="100"
+          :input-attr="{ 'aria-label': 'Search Timeout' }"
         />
       </div>
       <div class="option">
@@ -86,6 +87,7 @@
           :min="0"
           :max="5"
           :show-spin-buttons="true"
+          :input-attr="{ 'aria-label': 'Minimum Search Length' }"
         />
       </div>
       <div class="option">

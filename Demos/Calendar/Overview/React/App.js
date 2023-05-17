@@ -17,6 +17,8 @@ const weekDays = [
   { id: 6, text: 'Saturday' },
 ];
 
+const dateBoxLabel = { 'aria-label': 'Date' };
+
 export default function App() {
   const [minDateValue, setMinDateValue] = React.useState(null);
   const [maxDateValue, setMaxDateValue] = React.useState(null);
@@ -177,6 +179,7 @@ export default function App() {
             onValueChanged={onCurrentValueChange}
             min={minDateValue}
             max={maxDateValue}
+            inputAttr={dateBoxLabel}
           />
         </div>
       </div>

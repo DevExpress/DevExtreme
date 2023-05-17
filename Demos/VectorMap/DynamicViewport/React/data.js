@@ -20,3 +20,6 @@ export const viewportCoordinates = [{
   continent: 'Australia',
   coordinates: [104.87, -6.61, 149.98, -45.87],
 }];
+
+export const centerLabel = { 'aria-label': 'Center' };
+export const zoomLabel = { 'aria-label': 'Zoom' };

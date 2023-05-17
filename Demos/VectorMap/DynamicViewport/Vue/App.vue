@@ -34,6 +34,7 @@
             <span>Zoom factor </span>
             <TextBox
               :value="zoomFactor"
+              :input-attr="{ 'aria-label': 'Zoom' }"
               :read-only="true"
               :width="210"
             />
@@ -42,6 +43,7 @@
             <span>Center </span>
             <TextBox
               :value="center"
+              :input-attr="{ 'aria-label': 'Center' }"
               :read-only="true"
               :width="210"
             />

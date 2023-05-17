@@ -6,6 +6,7 @@
         <DxDropDownBox
           v-model:value="treeBoxValue"
           :show-clear-button="true"
+          :input-attr="{ 'aria-label': 'Owner' }"
           :data-source="treeDataSource"
           value-expr="ID"
           display-expr="name"
@@ -36,6 +37,7 @@
       <div class="dx-field-value">
         <DxDropDownBox
           v-model:value="gridBoxValue"
+          :input-attr="{ 'aria-label': 'Owner' }"
           :defer-rendering="false"
           :show-clear-button="true"
           :data-source="gridDataSource"

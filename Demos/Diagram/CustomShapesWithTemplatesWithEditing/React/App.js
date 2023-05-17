@@ -12,6 +12,14 @@ import service from './data.js';
 
 const pageCommands = ['pageSize', 'pageOrientation', 'pageColor'];
 
+const nameLabel = { 'aria-label': 'Name' };
+const emailLabel = { 'aria-label': 'Email' };
+const titleLabel = { 'aria-label': 'Title' };
+const stateLabel = { 'aria-label': 'State' };
+const cityLabel = { 'aria-label': 'City' };
+const phoneLabel = { 'aria-label': 'Phone' };
+const skypeLabel = { 'aria-label': 'Skype' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -233,43 +241,43 @@ function PopupContentFunc(props) {
         <div className="dx-field">
           <div className="dx-field-label">Name</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.Full_Name} onValueChanged={props.handleNameChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={nameLabel} value={props.currentEmployee.Full_Name} onValueChanged={props.handleNameChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
         <div className="dx-field">
           <div className="dx-field-label">Title</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.Title} onValueChanged={props.handleTitleChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={titleLabel} value={props.currentEmployee.Title} onValueChanged={props.handleTitleChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
         <div className="dx-field">
           <div className="dx-field-label">City</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.City} onValueChanged={props.handleCityChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={cityLabel} value={props.currentEmployee.City} onValueChanged={props.handleCityChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
         <div className="dx-field">
           <div className="dx-field-label">State</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.State} onValueChanged={props.handleStateChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={stateLabel} value={props.currentEmployee.State} onValueChanged={props.handleStateChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
         <div className="dx-field">
           <div className="dx-field-label">Email</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.Email} onValueChanged={props.handleEmailChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={emailLabel} value={props.currentEmployee.Email} onValueChanged={props.handleEmailChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
         <div className="dx-field">
           <div className="dx-field-label">Skype</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.Skype} onValueChanged={props.handleSkypeChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={skypeLabel} value={props.currentEmployee.Skype} onValueChanged={props.handleSkypeChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
         <div className="dx-field">
           <div className="dx-field-label">Phone</div>
           <div className="dx-field-value">
-            <TextBox value={props.currentEmployee.Mobile_Phone} onValueChanged={props.handlePhoneChange} valueChangeEvent="input"></TextBox>
+            <TextBox inputAttr={phoneLabel} value={props.currentEmployee.Mobile_Phone} onValueChanged={props.handlePhoneChange} valueChangeEvent="input"></TextBox>
           </div>
         </div>
       </div>

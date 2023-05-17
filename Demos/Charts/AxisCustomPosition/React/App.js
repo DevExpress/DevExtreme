@@ -9,7 +9,7 @@ import {
   ValueAxis,
   Legend,
 } from 'devextreme-react/chart';
-import { generateDataSource } from './data.js';
+import { generateDataSource, customPositionLabel, offsetLabel } from './data.js';
 
 const dataSource = generateDataSource();
 const defaultVisualRange = [-20, 20];
@@ -78,6 +78,7 @@ class App extends React.Component {
                 <NumberBox
                   value={argumentCustomPosition}
                   showSpinButtons={true}
+                  inputAttr={customPositionLabel}
                   onValueChanged={this.changeArgumentPosition} />
               </div>
               <div className='option'>
@@ -85,6 +86,7 @@ class App extends React.Component {
                 <NumberBox
                   value={argumentOffset}
                   showSpinButtons={true}
+                  inputAttr={offsetLabel}
                   onValueChanged={this.changeArgumentOffset} />
               </div>
             </div>
@@ -95,6 +97,7 @@ class App extends React.Component {
                 <NumberBox
                   value={valueCustomPosition}
                   showSpinButtons={true}
+                  inputAttr={customPositionLabel}
                   onValueChanged={this.changeValuePosition} />
               </div>
               <div className='option'>
@@ -102,6 +105,7 @@ class App extends React.Component {
                 <NumberBox
                   value={valueOffset}
                   showSpinButtons={true}
+                  inputAttr={offsetLabel}
                   onValueChanged={this.changeValueOffset} />
               </div>
             </div>

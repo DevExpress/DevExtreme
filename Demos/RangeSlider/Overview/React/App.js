@@ -11,6 +11,9 @@ const defaultValues = {
   disabled: [25, 75],
 };
 
+const startValueLabel = { 'aria-label': 'Start Value' };
+const endValueLabel = { 'aria-label': 'End Value' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -111,6 +114,7 @@ class App extends React.Component {
                 min={0}
                 max={100}
                 showSpinButtons={true}
+                inputAttr={startValueLabel}
                 onValueChanged={this.onStartChanged} />
             </div>
           </div>
@@ -122,6 +126,7 @@ class App extends React.Component {
                 min={0}
                 max={100}
                 showSpinButtons={true}
+                inputAttr={endValueLabel}
                 onValueChanged={this.onEndChanged} />
             </div>
           </div>

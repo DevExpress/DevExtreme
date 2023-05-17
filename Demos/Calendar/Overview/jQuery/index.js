@@ -93,6 +93,7 @@ $(() => {
 
   const selectedDate = $('#selected-date').dxDateBox({
     value: new Date(),
+    inputAttr: { 'aria-label': 'Date' },
     onValueChanged(data) {
       calendar.option('value', data.value);
     },

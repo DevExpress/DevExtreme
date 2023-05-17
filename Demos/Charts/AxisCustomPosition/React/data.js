@@ -40,3 +40,6 @@ export function generateDataSource() {
 function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export const customPositionLabel = { 'aria-label': 'Custom Position' };
+export const offsetLabel = { 'aria-label': 'Offset' };

@@ -21,6 +21,7 @@
       <DxTextArea
         v-model:height="height"
         :max-length="maxLength"
+        :input-attr="{ 'aria-label': 'Notes' }"
         v-model:value="value"
         v-model:auto-resize-enabled="autoResizeEnabled"
       />
@@ -42,6 +43,7 @@
       </div>
       <DxTextArea
         :height="90"
+        :input-attr="{ 'aria-label': 'Notes' }"
         v-model:value="valueForEditableTextArea"
         :value-change-event="eventValue"
       />
@@ -49,6 +51,7 @@
         :height="90"
         :read-only="true"
         :value="valueForEditableTextArea"
+        :input-attr="{ 'aria-label': 'Notes' }"
       />
     </div>
   </div>

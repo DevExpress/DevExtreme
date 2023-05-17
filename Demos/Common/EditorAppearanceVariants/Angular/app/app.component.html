@@ -5,6 +5,7 @@
       <dx-text-box
         value="Olivia Peyton"
         width="100%"
+        [inputAttr]="{ 'aria-label': 'Name' }"
         label="Name"
         placeholder="Type..."
         [stylingMode]="stylingMode"
@@ -17,6 +18,7 @@
       <dx-text-box
         width="100%"
         label="Address"
+        [inputAttr]="{ 'aria-label': 'Address' }"
         placeholder="Type..."
         [stylingMode]="stylingMode"
         [labelMode]="labelMode"
@@ -34,6 +36,7 @@
         placeholder="Select..."
         [stylingMode]="stylingMode"
         [labelMode]="labelMode"
+        [inputAttr]="{ 'aria-label': 'Birth Date' }"
       >
         <dx-validator>
           <dxi-validation-rule type="required"> </dxi-validation-rule>
@@ -60,6 +63,7 @@
       [multiline]="false"
       width="100%"
       placeholder="Select..."
+      [inputAttr]="{ 'aria-label': 'Position' }"
       label="Position"
       [stylingMode]="stylingMode"
       [labelMode]="labelMode"
@@ -74,6 +78,7 @@
       <dx-text-box
         width="100%"
         label="Phone"
+        [inputAttr]="{ 'aria-label': 'Phone' }"
         mask="+1 (000) 000-0000"
         [maskRules]="phoneRules"
         [stylingMode]="stylingMode"
@@ -91,6 +96,7 @@
         placeholder="Select..."
         [stylingMode]="stylingMode"
         [labelMode]="labelMode"
+        [inputAttr]="{ 'aria-label': 'Hire Date' }"
       >
         <dx-validator>
           <dxi-validation-rule type="required"> </dxi-validation-rule>
@@ -106,6 +112,7 @@
       label="Notes"
       [stylingMode]="stylingMode"
       [labelMode]="labelMode"
+      [inputAttr]="{ 'aria-label': 'Notes' }"
     ></dx-text-area>
   </div>
   <div class="center">

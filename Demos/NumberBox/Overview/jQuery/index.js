@@ -1,11 +1,13 @@
 $(() => {
   $('#simple').dxNumberBox({
+    inputAttr: { 'aria-label': 'Simple' },
   });
 
   $('#buttons').dxNumberBox({
     value: 20.5,
     showSpinButtons: true,
     showClearButton: true,
+    inputAttr: { 'aria-label': 'With Spin And Buttons' },
   });
 
   $('#disabled').dxNumberBox({
@@ -13,6 +15,7 @@ $(() => {
     showSpinButtons: true,
     showClearButton: true,
     disabled: true,
+    inputAttr: { 'aria-label': 'Disabled' },
   });
 
   $('#minAndMax').dxNumberBox({
@@ -20,6 +23,7 @@ $(() => {
     min: 10,
     max: 20,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Min And Max' },
   });
 
   const totalProductQuantity = 30;
@@ -29,6 +33,7 @@ $(() => {
     min: 0,
     value: 16,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Sales' },
     onKeyDown(e) {
       const { event } = e;
       const str = event.key || String.fromCharCode(event.which);
@@ -46,5 +51,6 @@ $(() => {
     min: 0,
     showSpinButtons: false,
     readOnly: true,
+    inputAttr: { 'aria-label': 'Stock' },
   }).dxNumberBox('instance');
 });

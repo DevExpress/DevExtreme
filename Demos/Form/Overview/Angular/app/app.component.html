@@ -53,7 +53,11 @@
     </div>
     <div class="option">
       <span>Form width:</span>
-      <dx-number-box [max]="550" [(value)]="width"></dx-number-box>
+      <dx-number-box
+        [max]="550"
+        [(value)]="width"
+        [inputAttr]="{ 'aria-label': 'Form Width' }"
+      ></dx-number-box>
     </div>
     <div class="option">
       <dx-check-box text="readOnly" [(value)]="readOnly"></dx-check-box>

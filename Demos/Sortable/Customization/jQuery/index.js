@@ -46,6 +46,7 @@ $(() => {
 
   $('#scroll-speed').dxNumberBox({
     value: 30,
+    inputAttr: { 'aria-label': 'Scroll Speed' },
     onValueChanged(e) {
       sortable.option('scrollSpeed', e.value);
     },
@@ -53,6 +54,7 @@ $(() => {
 
   $('#scroll-sensitivity').dxNumberBox({
     value: 60,
+    inputAttr: { 'aria-label': 'Scroll Sensitivity' },
     onValueChanged(e) {
       sortable.option('scrollSensitivity', e.value);
     },

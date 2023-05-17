@@ -19,7 +19,9 @@ $(() => {
 
   $('#summary').dxValidationSummary({ });
 
-  $('#email-validation').dxTextBox({})
+  $('#email-validation').dxTextBox({
+    inputAttr: { 'aria-label': 'Email' },
+  })
     .dxValidator({
       validationRules: [{
         type: 'required',
@@ -38,6 +40,7 @@ $(() => {
 
   $('#password-validation').dxTextBox({
     mode: 'password',
+    inputAttr: { 'aria-label': 'Password' },
     onValueChanged() {
       const editor = $('#confirm-password-validation').dxTextBox('instance');
       if (editor.option('value')) {
@@ -62,6 +65,7 @@ $(() => {
 
   $('#confirm-password-validation').dxTextBox({
     mode: 'password',
+    inputAttr: { 'aria-label': 'Password' },
     buttons: [{
       name: 'password',
       location: 'after',
@@ -91,6 +95,7 @@ $(() => {
 
   $('#name-validation').dxTextBox({
     value: 'Peter',
+    inputAttr: { 'aria-label': 'Name' },
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -108,6 +113,7 @@ $(() => {
 
   $('#date-validation').dxDateBox({
     invalidDateMessage: 'The date must have the following format: MM/dd/yyyy',
+    inputAttr: { 'aria-label': 'Date' },
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -131,6 +137,7 @@ $(() => {
 
   $('#city-validation').dxTextBox({
     validationMessagePosition: 'left',
+    inputAttr: { 'aria-label': 'City' },
   })
     .dxValidator({
       validationRules: [{
@@ -149,6 +156,7 @@ $(() => {
 
   $('#address-validation').dxTextBox({
     validationMessagePosition: 'left',
+    inputAttr: { 'aria-label': 'Address' },
   })
     .dxValidator({
       validationRules: [{
@@ -159,6 +167,7 @@ $(() => {
 
   $('#phone-validation').dxTextBox({
     mask: '+1 (X00) 000-0000',
+    inputAttr: { 'aria-label': 'Phone' },
     maskRules: {
       X: /[02-9]/,
     },

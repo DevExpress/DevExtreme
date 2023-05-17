@@ -49,6 +49,7 @@
         <DxTagBox
           :data-source="companies"
           v-model:value="selectedItems"
+          :input-attr="{ 'aria-label': 'Company' }"
           :disabled="!multiple"
           display-expr="CompanyName"
         />

@@ -100,6 +100,7 @@
             :max="100"
             :value="10"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Slider Value' }"
           />
         </div>
       </div>

@@ -8,6 +8,7 @@
         <DxTagBox
           :items="products"
           :value="[1, 2, 3, 4]"
+          :input-attr="{ 'aria-label': 'Product' }"
           :show-selection-controls="true"
           :max-displayed-tags="3"
           display-expr="Name"
@@ -23,6 +24,7 @@
       <div class="dx-field-value">
         <DxTagBox
           :items="items"
+          :input-attr="{ 'aria-label': 'Product' }"
           :value="[1, 2, 3, 4, 5]"
           :show-selection-controls="true"
           :max-displayed-tags="3"
@@ -41,6 +43,7 @@
           :items="products"
           :value="[1, 2, 3, 4, 5, 6, 7]"
           :show-selection-controls="true"
+          :input-attr="{ 'aria-label': 'Product' }"
           :max-displayed-tags="2"
           :show-multi-tag-only="false"
           display-expr="Name"

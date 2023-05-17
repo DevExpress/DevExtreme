@@ -13,6 +13,12 @@ import service from './data.js';
 
 const stylingModes = ['outlined', 'filled', 'underlined'];
 const labelModes = ['static', 'floating', 'hidden'];
+const notesLabel = { 'aria-label': 'Notes' };
+const birthDateLabel = { 'aria-label': 'Birth Date' };
+const hireDateLabel = { 'aria-label': 'Hire Date' };
+const nameLabel = { 'aria-label': 'Name' };
+const addressLabel = { 'aria-label': 'Address' };
+const phoneLabel = { 'aria-label': 'Phone' };
 
 class App extends React.Component {
   constructor(props) {
@@ -49,6 +55,7 @@ class App extends React.Component {
                 stylingMode={this.state.stylingMode}
                 defaultValue="Olivia Peyton"
                 width="100%"
+                inputAttr={nameLabel}
                 placeholder="Type..."
                 label="Name"
                 labelMode={this.state.labelMode}
@@ -61,6 +68,7 @@ class App extends React.Component {
                 stylingMode={this.state.stylingMode}
                 width="100%"
                 placeholder="Type..."
+                inputAttr={addressLabel}
                 label="Address"
                 labelMode={this.state.labelMode}
               >
@@ -76,6 +84,7 @@ class App extends React.Component {
                 width="100%"
                 placeholder="Birth Date"
                 label="Birth Date"
+                inputAttr={birthDateLabel}
                 labelMode={this.state.labelMode}
               >
                 <Validator>
@@ -103,6 +112,7 @@ class App extends React.Component {
               multiline={false}
               stylingMode={this.state.stylingMode}
               width="100%"
+              inputAttr={nameLabel}
               placeholder="Select..."
               label="Position"
               labelMode={this.state.labelMode}
@@ -118,6 +128,7 @@ class App extends React.Component {
                 stylingMode={this.state.stylingMode}
                 width="100%"
                 mask="+1 (000) 000-0000"
+                inputAttr={phoneLabel}
                 maskRules={this.phoneRules}
                 label="Phone"
                 labelMode={this.state.labelMode}
@@ -133,6 +144,7 @@ class App extends React.Component {
                 width="100%"
                 placeholder="Select..."
                 label="Hire Date"
+                inputAttr={hireDateLabel}
                 labelMode={this.state.labelMode}
               >
                 <Validator>
@@ -149,6 +161,7 @@ class App extends React.Component {
               placeholder="Type..."
               label="Notes"
               labelMode={this.state.labelMode}
+              inputAttr={notesLabel}
             />
           </div>
           <div className="center">

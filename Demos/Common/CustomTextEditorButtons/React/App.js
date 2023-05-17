@@ -5,6 +5,9 @@ import { NumberBox, Button as NumberBoxButton } from 'devextreme-react/number-bo
 import { DateBox, Button as DateBoxButton } from 'devextreme-react/date-box';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
+const currencyLabel = { 'aria-label': 'Multi Currency' };
+const dateBoxLabel = { 'aria-label': 'Date' };
+const passwordLabel = { 'aria-label': 'Password' };
 
 class App extends React.Component {
   constructor(props) {
@@ -106,6 +109,7 @@ class App extends React.Component {
                 placeholder="password"
                 stylingMode="filled"
                 defaultValue="password"
+                inputAttr={passwordLabel}
                 mode={this.state.passwordMode}>
                 <TextBoxButton
                   name="password"
@@ -123,6 +127,7 @@ class App extends React.Component {
                 showSpinButtons={true}
                 format={this.state.currencyFormat}
                 value={this.state.currencyValue}
+                inputAttr={currencyLabel}
                 onValueChanged={this.changeCurrency}>
                 <NumberBoxButton
                   name="currency"
@@ -139,6 +144,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <DateBox value={this.state.dateValue}
                 stylingMode="outlined"
+                inputAttr={dateBoxLabel}
                 onValueChanged={this.onDateChanged}>
                 <DateBoxButton
                   name="today"

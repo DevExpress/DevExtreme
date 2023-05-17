@@ -11,6 +11,8 @@ const defaultValues = {
   template: [18],
 };
 
+const productLabel = { 'aria-label': 'Product' };
+
 class App extends React.Component {
   constructor() {
     super();
@@ -30,6 +32,7 @@ class App extends React.Component {
           <div className="dx-field-value">
             <TagBox
               dataSource={this.products}
+              inputAttr={productLabel}
               valueExpr="ID"
               defaultValue={defaultValues.grouped}
               grouped={true}
@@ -43,6 +46,7 @@ class App extends React.Component {
             <TagBox
               dataSource={this.products}
               valueExpr="ID"
+              inputAttr={productLabel}
               defaultValue={defaultValues.search}
               searchEnabled={true}
               grouped={true}
@@ -56,6 +60,7 @@ class App extends React.Component {
             <TagBox
               dataSource={this.products}
               valueExpr="ID"
+              inputAttr={productLabel}
               defaultValue={defaultValues.template}
               grouped={true}
               displayExpr="Name"

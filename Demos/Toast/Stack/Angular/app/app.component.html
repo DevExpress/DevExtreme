@@ -21,6 +21,7 @@
       width="48%"
       valueChangeEvent="keyup"
       [disabled]="!!coordinatePosition.bottom"
+      [inputAttr]="{ 'aria-label': 'Position Top' }"
     >
     </dx-number-box>
     <dx-number-box
@@ -30,6 +31,7 @@
       width="48%"
       valueChangeEvent="keyup"
       [disabled]="!!coordinatePosition.top"
+      [inputAttr]="{ 'aria-label': 'Position Bottom' }"
     >
     </dx-number-box>
   </div>
@@ -41,6 +43,7 @@
       width="48%"
       valueChangeEvent="keyup"
       [disabled]="!!coordinatePosition.right"
+      [inputAttr]="{ 'aria-label': 'Position Left' }"
     >
     </dx-number-box>
     <dx-number-box
@@ -50,6 +53,7 @@
       width="48%"
       valueChangeEvent="keyup"
       [disabled]="!!coordinatePosition.left"
+      [inputAttr]="{ 'aria-label': 'Position Right' }"
     >
     </dx-number-box>
   </div>

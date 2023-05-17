@@ -8,6 +8,7 @@ import DataGrid, {
 import DropDownBox from 'devextreme-react/drop-down-box';
 
 const dropDownOptions = { width: 500 };
+const ownerLabel = { 'aria-label': 'Owner' };
 
 export default class EmployeeDropDownBoxComponent extends React.Component {
   constructor(props) {
@@ -69,6 +70,7 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
         value={this.state.selectedRowKeys[0]}
         displayExpr="FullName"
         valueExpr="ID"
+        inputAttr={ownerLabel}
         contentRender={this.contentRender}>
       </DropDownBox>
     );

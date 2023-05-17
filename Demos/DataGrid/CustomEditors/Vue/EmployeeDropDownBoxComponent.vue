@@ -2,6 +2,7 @@
   <DxDropDownBox
     :ref="dropDownBoxRefName"
     :drop-down-options="dropDownOptions"
+    :input-attr="{ 'aria-label': 'Owner' }"
     :data-source="dataSource"
     v-model:value="currentValue"
     display-expr="FullName"

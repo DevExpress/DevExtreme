@@ -38,6 +38,7 @@
             <DxNumberBox
               v-model:value="argumentPosition"
               :show-spin-buttons="true"
+              :input-attr="{ 'aria-label': 'Custom Position' }"
             />
           </div>
           <div class="option">
@@ -45,6 +46,7 @@
             <DxNumberBox
               v-model:value="argumentOffset"
               :show-spin-buttons="true"
+              :input-attr="{ 'aria-label': 'Offset' }"
             />
           </div>
         </div>
@@ -55,6 +57,7 @@
             <DxNumberBox
               v-model:value="valuePosition"
               :show-spin-buttons="true"
+              :input-attr="{ 'aria-label': 'Custom position' }"
             />
           </div>
           <div class="option">
@@ -62,6 +65,7 @@
             <DxNumberBox
               v-model:value="valueOffset"
               :show-spin-buttons="true"
+              :input-attr="{ 'aria-label': 'Offset' }"
             />
           </div>
         </div>

@@ -3,6 +3,15 @@ import DateBox from 'devextreme-react/date-box';
 
 import service from './data.js';
 
+const dateTimeLabel = { 'aria-label': 'Date Time' };
+const dateLabel = { 'aria-label': 'Date' };
+const timeLabel = { 'aria-label': 'Time' };
+const disabledLabel = { 'aria-label': 'Disabled' };
+const pickerLabel = { 'aria-label': 'Picker' };
+const clearLabel = { 'aria-label': 'Clear' };
+const customFormatLabel = { 'aria-label': 'Custom Format' };
+const birthDateLabel = { 'aria-label': 'Birth Date' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +44,7 @@ class App extends React.Component {
             <div className="dx-field-label">Date</div>
             <div className="dx-field-value">
               <DateBox defaultValue={this.now}
+                inputAttr={dateLabel}
                 type="date" />
             </div>
           </div>
@@ -42,6 +52,7 @@ class App extends React.Component {
             <div className="dx-field-label">Time</div>
             <div className="dx-field-value">
               <DateBox defaultValue={this.now}
+                inputAttr={timeLabel}
                 type="time" />
             </div>
           </div>
@@ -49,6 +60,7 @@ class App extends React.Component {
             <div className="dx-field-label">Date and time</div>
             <div className="dx-field-value">
               <DateBox defaultValue={this.now}
+                inputAttr={dateTimeLabel}
                 type="datetime" />
             </div>
           </div>
@@ -56,6 +68,7 @@ class App extends React.Component {
             <div className="dx-field-label">Custom format</div>
             <div className="dx-field-value">
               <DateBox defaultValue={this.now}
+                inputAttr={customFormatLabel}
                 displayFormat="EEEE, MMM dd" />
             </div>
           </div>
@@ -63,6 +76,7 @@ class App extends React.Component {
             <div className="dx-field-label">Date picker</div>
             <div className="dx-field-value">
               <DateBox defaultValue={this.now}
+                inputAttr={pickerLabel}
                 pickerType="rollers" />
             </div>
           </div>
@@ -71,6 +85,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <DateBox defaultValue={this.dateClear}
                 type="time"
+                inputAttr={clearLabel}
                 showClearButton={true} />
             </div>
           </div>
@@ -79,6 +94,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <DateBox defaultValue={this.now}
                 type="datetime"
+                inputAttr={disabledLabel}
                 disabled={true} />
             </div>
           </div>
@@ -88,6 +104,7 @@ class App extends React.Component {
               <DateBox defaultValue={this.firstWorkDay2017}
                 type="date"
                 pickerType="calendar"
+                inputAttr={disabledLabel}
                 disabledDates={this.disabledDates} />
             </div>
           </div>
@@ -101,6 +118,7 @@ class App extends React.Component {
                 value={this.state.value}
                 min={this.min}
                 max={this.now}
+                inputAttr={birthDateLabel}
                 onValueChanged={this.onValueChanged} />
             </div>
           </div>

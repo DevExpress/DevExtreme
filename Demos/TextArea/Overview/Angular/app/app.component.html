@@ -22,6 +22,7 @@
     [maxLength]="maxLength"
     [(value)]="value"
     [(autoResizeEnabled)]="autoResizeEnabled"
+    [inputAttr]="{ 'aria-label': 'Notes' }"
   >
   </dx-text-area>
 </div>
@@ -45,12 +46,14 @@
     [height]="90"
     [(value)]="valueForEditableTextArea"
     [valueChangeEvent]="eventValue"
+    [inputAttr]="{ 'aria-label': 'Notes' }"
   >
   </dx-text-area>
   <dx-text-area
     [height]="90"
     [readOnly]="true"
     [(value)]="valueForEditableTextArea"
+    [inputAttr]="{ 'aria-label': 'Notes' }"
   >
   </dx-text-area>
 </div>

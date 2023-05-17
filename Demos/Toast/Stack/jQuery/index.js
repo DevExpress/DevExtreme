@@ -87,24 +87,28 @@ $(() => {
   const topNumberBox = $('#positionTop').dxNumberBox({
     ...commonNumberBoxOptions,
     placeholder: 'top',
+    inputAttr: { 'aria-label': 'Position Top' },
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'top', bottomNumberBox),
   }).dxNumberBox('instance');
 
   const bottomNumberBox = $('#positionBottom').dxNumberBox({
     ...commonNumberBoxOptions,
     placeholder: 'bottom',
+    inputAttr: { 'aria-label': 'Position Bottom' },
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'bottom', topNumberBox),
   }).dxNumberBox('instance');
 
   const leftNumberBox = $('#positionLeft').dxNumberBox({
     ...commonNumberBoxOptions,
     placeholder: 'left',
+    inputAttr: { 'aria-label': 'Position Left' },
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'left', rightNumberBox),
   }).dxNumberBox('instance');
 
   const rightNumberBox = $('#positionRight').dxNumberBox({
     ...commonNumberBoxOptions,
     placeholder: 'right',
+    inputAttr: { 'aria-label': 'Position Right' },
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'right', leftNumberBox),
   }).dxNumberBox('instance');
 });

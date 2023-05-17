@@ -92,6 +92,7 @@ $(() => {
     min: 0,
     max: 100,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'Start Value' },
     onValueChanged({ value }) {
       onHandleMoveRangeSlider.option('start', value);
       onHandleReleaseRangeSlider.option('start', value);
@@ -103,6 +104,7 @@ $(() => {
     min: 0,
     max: 100,
     showSpinButtons: true,
+    inputAttr: { 'aria-label': 'End Value' },
     onValueChanged({ value }) {
       onHandleMoveRangeSlider.option('end', value);
       onHandleReleaseRangeSlider.option('end', value);

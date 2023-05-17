@@ -4,7 +4,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Default mode</div>
         <div class="dx-field-value">
-          <DxNumberBox/>
+          <DxNumberBox :input-attr="{ 'aria-label': 'Simple' }"/>
         </div>
       </div>
       <div class="dx-field">
@@ -14,6 +14,7 @@
             :value="20.5"
             :show-spin-buttons="true"
             :show-clear-button="true"
+            :input-attr="{ 'aria-label': 'With Spin And Buttons' }"
           />
         </div>
       </div>
@@ -25,6 +26,7 @@
             :show-spin-buttons="true"
             :show-clear-button="true"
             :disabled="true"
+            :input-attr="{ 'aria-label': 'Disabled' }"
           />
         </div>
       </div>
@@ -36,6 +38,7 @@
             :min="10"
             :max="20"
             :show-spin-buttons="true"
+            :input-attr="{ 'aria-label': 'Min And Max' }"
           />
         </div>
       </div>
@@ -51,6 +54,7 @@
             :show-spin-buttons="true"
             v-model:value="value"
             @keyDown="keyDown($event)"
+            :input-attr="{ 'aria-label': 'Sales' }"
           />
         </div>
       </div>
@@ -62,6 +66,7 @@
             :show-spin-buttons="false"
             :read-only="true"
             :value="max - value"
+            :input-attr="{ 'aria-label': 'Stock' }"
           />
         </div>
       </div>

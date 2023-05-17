@@ -359,3 +359,5 @@ export const orders = [{
   CustomerStoreCity: 'Phoenix',
   Employee: 'Clark Morgan',
 }];
+
+export const handleLabel = { 'aria-label': 'Handle' };

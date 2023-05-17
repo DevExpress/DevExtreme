@@ -1693,3 +1693,6 @@ export const tasks = [{
   Task_Completion: 0,
   Task_Parent_ID: 27,
 }];
+
+export const scrollSpeedLabel = { 'aria-label': 'Scroll Speed' };
+export const scrollSensitivityLabel = { 'aria-label': 'Scroll Sensitivity' };

@@ -21,6 +21,7 @@
           width="48%"
           value-change-event="keyup"
           :disabled="!!coordinatePosition.bottom"
+          :input-attr="{ 'aria-label': 'Position Top' }"
         />
         <DxNumberBox
           :visible="!isPredefined"
@@ -29,6 +30,7 @@
           width="48%"
           value-change-event="keyup"
           :disabled="!!coordinatePosition.top"
+          :input-attr="{ 'aria-label': 'Position Bottom' }"
         />
       </div>
       <div class="section">
@@ -39,6 +41,7 @@
           width="48%"
           value-change-event="keyup"
           :disabled="!!coordinatePosition.right"
+          :input-attr="{ 'aria-label': 'Position Left' }"
         />
         <DxNumberBox
           :visible="!isPredefined"
@@ -47,6 +50,7 @@
           width="48%"
           value-change-event="keyup"
           :disabled="!!coordinatePosition.left"
+          :input-attr="{ 'aria-label': 'Position Right' }"
         />
       </div>
       <div>Direction</div>

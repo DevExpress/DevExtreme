@@ -4,7 +4,7 @@
     <div class="dx-field">
       <div class="dx-field-label">Email</div>
       <div class="dx-field-value">
-        <dx-text-box>
+        <dx-text-box [inputAttr]="{ 'aria-label': 'Email' }">
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -27,6 +27,7 @@
       <div class="dx-field-label">Password</div>
       <div class="dx-field-value">
         <dx-text-box
+          [inputAttr]="{ 'aria-label': 'Password' }"
           [mode]="passwordMode"
           [(value)]="password"
           (onValueChanged)="onPasswordChanged()"
@@ -48,7 +49,11 @@
     <div class="dx-field">
       <div class="dx-field-label">Confirm Password</div>
       <div class="dx-field-value">
-        <dx-text-box [(value)]="confirmPassword" [mode]="confirmPasswordMode">
+        <dx-text-box
+          [(value)]="confirmPassword"
+          [mode]="confirmPasswordMode"
+          [inputAttr]="{ 'aria-label': 'Password' }"
+        >
           <dxi-button
             name="password"
             location="after"
@@ -74,7 +79,7 @@
     <div class="dx-field">
       <div class="dx-field-label">Name</div>
       <div class="dx-field-value">
-        <dx-text-box value="Peter">
+        <dx-text-box value="Peter" [inputAttr]="{ 'aria-label': 'Name' }">
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -99,6 +104,7 @@
       <div class="dx-field-value">
         <dx-date-box
           invalidDateMessage="The date must have the following format: MM/dd/yyyy"
+          [inputAttr]="{ 'aria-label': 'Date Of Birth' }"
         >
           <dx-validator>
             <dxi-validation-rule
@@ -136,7 +142,10 @@
     <div class="dx-field">
       <div class="dx-field-label">City</div>
       <div class="dx-field-value">
-        <dx-text-box validationMessagePosition="left">
+        <dx-text-box
+          validationMessagePosition="left"
+          [inputAttr]="{ 'aria-label': 'City' }"
+        >
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -159,7 +168,10 @@
     <div class="dx-field">
       <div class="dx-field-label">Address</div>
       <div class="dx-field-value">
-        <dx-text-box validationMessagePosition="left">
+        <dx-text-box
+          validationMessagePosition="left"
+          [inputAttr]="{ 'aria-label': 'Address' }"
+        >
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -173,6 +185,7 @@
       <div class="dx-field-label">Phone <i>(optional)</i></div>
       <div class="dx-field-value">
         <dx-text-box
+          [inputAttr]="{ 'aria-label': 'Phone' }"
           mask="+1 (X00) 000-0000"
           [maskRules]="phoneRules"
           maskInvalidMessage="The phone must have a correct USA phone format"

@@ -111,3 +111,14 @@ export const europeanUnion = [{
   nameAr: 'المملكة المتحدة',
   nameEn: 'United Kingdom',
 }];
+
+export const numberBoxLabel = { 'aria-label': 'Number Box' };
+export const notesLabel = { 'aria-label': 'Notes' };
+export const nameLabel = { 'aria-label': 'Name' };
+export const dateLabel = { 'aria-label': 'Date' };
+export const textBoxLabel = { 'aria-label': 'Text Box' };
+export const passwordLabel = { 'aria-label': 'Password' };
+export const maskLabel = { 'aria-label': 'Mask' };
+export const emailLabel = { 'aria-label': 'Email' };
+export const cityLabel = { 'aria-label': 'City' };
+export const addressLabel = { 'aria-label': 'Address' };

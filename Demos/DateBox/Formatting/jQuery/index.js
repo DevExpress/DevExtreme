@@ -6,6 +6,7 @@ $(() => {
     type: 'datetime',
     showClearButton: true,
     useMaskBehavior: true,
+    inputAttr: { 'aria-label': 'Date Time' },
   });
 
   $('#constant').dxDateBox({
@@ -15,6 +16,7 @@ $(() => {
     displayFormat: 'shortdate',
     type: 'date',
     value: date,
+    inputAttr: { 'aria-label': 'Date' },
   });
 
   $('#pattern').dxDateBox({
@@ -23,6 +25,7 @@ $(() => {
     useMaskBehavior: true,
     displayFormat: 'EEEE, d of MMM, yyyy HH:mm',
     value: date,
+    inputAttr: { 'aria-label': 'Date' },
   });
 
   $('#escape').dxDateBox({
@@ -32,5 +35,6 @@ $(() => {
     displayFormat: "'Year': yyyy",
     type: 'date',
     value: date,
+    inputAttr: { 'aria-label': 'Date' },
   });
 });

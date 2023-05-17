@@ -7,7 +7,9 @@ import { Autocomplete } from 'devextreme-react/autocomplete';
 import { CheckBox } from 'devextreme-react/check-box';
 import { TextArea } from 'devextreme-react/text-area';
 import { TagBox } from 'devextreme-react/tag-box';
-import { europeanUnion } from './data.js';
+import {
+  europeanUnion, numberBoxLabel, notesLabel, nameLabel, textBoxLabel,
+} from './data.js';
 
 class App extends React.Component {
   constructor() {
@@ -59,6 +61,7 @@ class App extends React.Component {
               <div className="dx-field-value">
                 <TextBox
                   showClearButton={true}
+                  inputAttr={textBoxLabel}
                   defaultValue={this.textValue}
                   rtlEnabled={this.state.rtlEnabled}
                 />
@@ -71,6 +74,7 @@ class App extends React.Component {
                   showSpinButtons={true}
                   defaultValue="123"
                   rtlEnabled={this.state.rtlEnabled}
+                  inputAttr={numberBoxLabel}
                 />
               </div>
             </div>
@@ -92,6 +96,7 @@ class App extends React.Component {
                   items={europeanUnion}
                   defaultValue={this.tagBoxDefaultValue}
                   rtlEnabled={this.state.rtlEnabled}
+                  inputAttr={nameLabel}
                   displayExpr={this.displayExpr}
                   placeholder="..."
                   valueExpr="id"
@@ -104,6 +109,7 @@ class App extends React.Component {
                 <TextArea
                   defaultValue={this.textValue}
                   rtlEnabled={this.state.rtlEnabled}
+                  inputAttr={notesLabel}
                 />
               </div>
             </div>

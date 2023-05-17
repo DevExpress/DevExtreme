@@ -3,6 +3,7 @@
     :data-source="dataSource"
     v-model:value="currentValue"
     :show-selection-controls="true"
+    :input-attr="{ 'aria-label': 'Name' }"
     :max-displayed-tags="3"
     :show-multi-tag-only="false"
     :on-value-changed="(e) => onValueChanged(e.value)"
