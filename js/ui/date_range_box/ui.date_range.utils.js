@@ -1,7 +1,7 @@
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 
-const getDeserializedDate = (value) => {
+export const getDeserializedDate = (value) => {
     return dateSerialization.deserializeDate(value);
 };
 
@@ -18,4 +18,13 @@ export const isSameDateArrays = (value, previousValue) => {
     const [previousStartDate, previousEndDate] = previousValue;
 
     return isSameDates(startDate, previousStartDate) && isSameDates(endDate, previousEndDate);
+};
+
+export const sortDatesArray = (value) => {
+    const [startDate, endDate] = value;
+    if(startDate && endDate && getDeserializedDate(startDate) > getDeserializedDate(endDate)) {
+        return [endDate, startDate];
+    } else {
+        return value;
+    }
 };

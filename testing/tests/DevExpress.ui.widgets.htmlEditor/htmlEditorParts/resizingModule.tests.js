@@ -9,6 +9,7 @@ import PointerMock from '../../../helpers/pointerMock.js';
 
 const RESIZE_FRAME_CLASS = 'dx-resize-frame';
 
+const RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle';
 const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 const RESIZABLE_HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
@@ -219,6 +220,28 @@ module('Resizing module', moduleConfig, () => {
         assert.ok(this.updateFrameSpy.notCalled, 'Frame hasn\'t been updated');
         assert.ok(this.showFrameSpy.notCalled, 'Frame hasn\'t been shown');
         assert.notOk($resizeFrame.is(':visible'), 'Frame element isn\'t visible');
+    });
+
+    test('resize frame should have "pointer-events:none" to pass scroll events (T1157826)', function(assert) {
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        this.$div.trigger(clickEvent);
+
+        assert.strictEqual($resizeFrame.css('pointer-events'), 'none', 'pointer-event=none');
+    });
+
+    test('handles inside resize frame should have "pointer-events:auto" to be clickable', function(assert) {
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+        const $handles = this.$element.find(`.${RESIZABLE_HANDLE_CLASS}`);
+
+        this.$div.trigger(clickEvent);
+
+        $handles.each((_, handle) => {
+            assert.strictEqual($(handle).css('pointer-events'), 'auto', 'pointer-event=auto');
+        });
     });
 
     test('click on an image after disable image resizing', function(assert) {

@@ -880,7 +880,6 @@ declare module DevExpress {
   }
   /**
    * [descr:dxSchedulerTimeZone]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSchedulerTimeZone {
     /**
@@ -1135,10 +1134,6 @@ declare module DevExpress {
     },
     componentClass: DevExpress.core.ComponentFactory<TComponent>
   ): void;
-  /**
-   * [descr:setTemplateEngine(name)]
-   */
-  export function setTemplateEngine(templateEngineName: string): void;
   /**
    * [descr:setTemplateEngine(options)]
    */
@@ -2484,6 +2479,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnChooser.mode]
      */
     mode?: ColumnChooserMode;
+    /**
+     * [descr:GridBaseOptions.columnChooser.position]
+     */
+    position?: PositionConfig;
     /**
      * [descr:GridBaseOptions.columnChooser.search]
      */
@@ -4936,6 +4935,10 @@ declare module DevExpress.data {
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
+     * [descr:DataSourceOptions.langParams]
+     */
+    langParams?: LangParams;
+    /**
      * [descr:DataSourceOptions.map]
      */
     map?: (dataItem: TStoreItem) => TMappedItem;
@@ -5051,6 +5054,19 @@ declare module DevExpress.data {
   type KeySelector<T> =
     | string
     | ((source: T) => string | number | Date | Object);
+  /**
+   * [descr:LangParams]
+   */
+  export type LangParams = {
+    /**
+     * [descr:LangParams.locale]
+     */
+    locale: string;
+    /**
+     * [descr:LangParams.collatorOptions]
+     */
+    collatorOptions?: Intl.CollatorOptions;
+  };
   /**
    * [descr:LoadOptions]
    */
@@ -6490,7 +6506,6 @@ declare module DevExpress.excelExporter {
   }
   /**
    * [descr:ExcelExportDataGridProps]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     /**
@@ -7544,27 +7559,13 @@ declare module DevExpress.ui {
      */
     cancelButtonText?: string;
     /**
-     * [descr:DateBoxBaseOptions.dateOutOfRangeMessage]
-     */
-    dateOutOfRangeMessage?: string;
-    /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
      */
     dateSerializationFormat?: string;
     /**
-     * [descr:DateBoxBaseOptions.disabledDates]
-     */
-    disabledDates?:
-      | Array<Date>
-      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
-    /**
      * [descr:DateBoxBaseOptions.displayFormat]
      */
     displayFormat?: Format;
-    /**
-     * [descr:DateBoxBaseOptions.invalidDateMessage]
-     */
-    invalidDateMessage?: string;
     /**
      * [descr:DateBoxBaseOptions.max]
      */
@@ -7573,10 +7574,6 @@ declare module DevExpress.ui {
      * [descr:DateBoxBaseOptions.min]
      */
     min?: Date | number | string;
-    /**
-     * [descr:DateBoxBaseOptions.placeholder]
-     */
-    placeholder?: string;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -7590,6 +7587,13 @@ declare module DevExpress.ui {
      */
     dropDownOptions?: DevExpress.ui.dxPopup.Properties;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export const DateRangeBoxBase: new (
+    element: DevExpress.core.UserDefinedElement,
+    options?: DevExpress.ui.dxDateRangeBox.Properties
+  ) => Omit<DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties>, 'field'>;
   /**
    * [descr:DraggableBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -9765,6 +9769,43 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type OverriddenKeys =
+      | 'columns'
+      | 'customizeColumns'
+      | 'dataRowTemplate'
+      | 'editing'
+      | 'export'
+      | 'grouping'
+      | 'groupPanel'
+      | 'keyExpr'
+      | 'masterDetail'
+      | 'onCellClick'
+      | 'onCellDblClick'
+      | 'onCellHoverChanged'
+      | 'onCellPrepared'
+      | 'onContextMenuPreparing'
+      | 'onEditingStart'
+      | 'onEditorPrepared'
+      | 'onEditorPreparing'
+      | 'onExporting'
+      | 'onFocusedCellChanged'
+      | 'onFocusedCellChanging'
+      | 'onFocusedRowChanged'
+      | 'onFocusedRowChanging'
+      | 'onRowClick'
+      | 'onRowDblClick'
+      | 'onRowPrepared'
+      | 'remoteOperations'
+      | 'rowTemplate'
+      | 'scrolling'
+      | 'selection'
+      | 'selectionFilter'
+      | 'sortByGroupSummaryInfo'
+      | 'summary'
+      | 'toolbar';
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -10348,13 +10389,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxDataGridOptions<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.common.grids.GridBaseOptions<
-    dxDataGrid<TRowData, TKey>,
-    TRowData,
-    TKey
+  export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<
+    DevExpress.common.grids.GridBaseOptions<
+      dxDataGrid<TRowData, TKey>,
+      TRowData,
+      TKey
+    >,
+    DevExpress.ui.dxDataGrid.OverriddenKeys
   > & {
     /**
      * [descr:dxDataGridOptions.columns]
@@ -10650,17 +10691,55 @@ declare module DevExpress.ui {
      */
     adaptivityEnabled?: boolean;
     /**
+     * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
+     */
+    dateOutOfRangeMessage?: string;
+    /**
+     * [descr:dxDateBoxOptions.disabledDates]
+     */
+    disabledDates?:
+      | Array<Date>
+      | ((data: DevExpress.ui.dxDateBox.DisabledDate) => boolean);
+    /**
+     * [descr:dxDateBoxOptions.inputAttr]
+     */
+    inputAttr?: any;
+    /**
      * [descr:dxDateBoxOptions.interval]
      */
     interval?: number;
+    /**
+     * [descr:dxDateBoxOptions.invalidDateMessage]
+     */
+    invalidDateMessage?: string;
+    /**
+     * [descr:dxDateBoxOptions.label]
+     */
+    label?: string;
+    /**
+     * [descr:dxDateBoxOptions.maxLength]
+     */
+    maxLength?: string | number;
+    /**
+     * [descr:dxDateBoxOptions.name]
+     */
+    name?: string;
     /**
      * [descr:dxDateBoxOptions.pickerType]
      */
     pickerType?: DevExpress.ui.dxDateBox.DatePickerType;
     /**
+     * [descr:dxDateBoxOptions.placeholder]
+     */
+    placeholder?: string;
+    /**
      * [descr:dxDateBoxOptions.showAnalogClock]
      */
     showAnalogClock?: boolean;
+    /**
+     * [descr:dxDateBoxOptions.text]
+     */
+    text?: string;
     /**
      * [descr:dxDateBoxOptions.type]
      */
@@ -10673,7 +10752,16 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateRangeBox]
    */
-  export class dxDateRangeBox extends DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties> {}
+  export class dxDateRangeBox extends DateRangeBoxBase {
+    /**
+     * [descr:dxDateRangeBox.endDateField()]
+     */
+    endDateField(): DevExpress.core.DxElement;
+    /**
+     * [descr:dxDateRangeBox.startDateField()]
+     */
+    startDateField(): DevExpress.core.DxElement;
+  }
   module dxDateRangeBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxDateRangeBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
@@ -10686,7 +10774,6 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type DateRangePickerType = 'calendar' | 'native';
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
@@ -10728,19 +10815,82 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+    export type Properties = Omit<
+      DateBoxBaseOptions<dxDateRangeBox>,
+      'inputAttr | label | maxLength | name | placeholder | text'
+    > & {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
       endDate?: Date | number | string;
       /**
-       * [descr:dxDateRangeBoxOptions.pickerType]
+       * [descr:dxDateRangeBoxOptions.endDateInputAttr]
        */
-      pickerType?: DateRangePickerType;
+      endDateInputAttr?: any;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateLabel]
+       */
+      endDateLabel?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateName]
+       */
+      endDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateOutOfRangeMessage]
+       */
+      endDateOutOfRangeMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDatePlaceholder]
+       */
+      endDatePlaceholder?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.endDateText]
+       */
+      endDateText?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.invalidEndDateMessage]
+       */
+      invalidEndDateMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.invalidStartDateMessage]
+       */
+      invalidStartDateMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.multiView]
+       */
+      multiView?: boolean;
+      /**
+       * [descr:dxDateRangeBoxOptions.openOnFieldClick]
+       */
+      openOnFieldClick?: boolean;
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
       startDate?: Date | number | string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateInputAttr]
+       */
+      startDateInputAttr?: any;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateLabel]
+       */
+      startDateLabel?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateName]
+       */
+      startDateName?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateOutOfRangeMessage]
+       */
+      startDateOutOfRangeMessage?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDatePlaceholder]
+       */
+      startDatePlaceholder?: string;
+      /**
+       * [descr:dxDateRangeBoxOptions.startDateText]
+       */
+      startDateText?: string;
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */
@@ -19667,10 +19817,24 @@ declare module DevExpress.ui {
    */
   export class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> {}
   module dxRecurrenceEditor {
+    export type ContentReadyEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor>;
+    export type DisposingEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxRecurrenceEditor>;
+    export type OptionChangedEvent =
+      DevExpress.events.EventInfo<dxRecurrenceEditor> &
+        DevExpress.events.ChangedOptionInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type Properties = dxRecurrenceEditorOptions;
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxRecurrenceEditor,
+      Event
+    > &
+      DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -23548,6 +23712,44 @@ declare module DevExpress.ui {
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type OverriddenKeys =
+      | 'autoExpandAll'
+      | 'columns'
+      | 'customizeColumns'
+      | 'dataStructure'
+      | 'editing'
+      | 'expandedRowKeys'
+      | 'expandNodesOnFiltering'
+      | 'filterMode'
+      | 'hasItemsExpr'
+      | 'itemsExpr'
+      | 'keyExpr'
+      | 'onCellClick'
+      | 'onCellDblClick'
+      | 'onCellHoverChanged'
+      | 'onCellPrepared'
+      | 'onContextMenuPreparing'
+      | 'onEditingStart'
+      | 'onEditorPrepared'
+      | 'onEditorPreparing'
+      | 'onFocusedCellChanged'
+      | 'onFocusedCellChanging'
+      | 'onFocusedRowChanged'
+      | 'onFocusedRowChanging'
+      | 'onNodesInitialized'
+      | 'onRowClick'
+      | 'onRowDblClick'
+      | 'onRowPrepared'
+      | 'paging'
+      | 'parentIdExpr'
+      | 'remoteOperations'
+      | 'rootValue'
+      | 'scrolling'
+      | 'selection'
+      | 'toolbar';
+    /**
      * [descr:Paging]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -23961,13 +24163,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxTreeListOptions<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.common.grids.GridBaseOptions<
-    dxTreeList<TRowData, TKey>,
-    TRowData,
-    TKey
+  export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<
+    DevExpress.common.grids.GridBaseOptions<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    >,
+    DevExpress.ui.dxTreeList.OverriddenKeys
   > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]

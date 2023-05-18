@@ -4,6 +4,8 @@ const ko = require('knockout');
 require('ui/pivot_grid/ui.pivot_grid');
 require('integration/knockout');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 QUnit.testStart(function() {
     const markup =
         '<div id="view">\
@@ -13,7 +15,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('dxPivotGrid', {
+moduleWithoutCsp('dxPivotGrid', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },

@@ -7,6 +7,8 @@ require('../../../helpers/executeAsyncMock.js');
 require('integration/knockout');
 require('bundles/modules/parts/widgets-web');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const LABEL = '.dx-field-label';
 const VALUE = '.dx-field-value';
 
@@ -207,7 +209,7 @@ module.exports = function(themeName, options) {
     options = $.extend({}, defaultOptions, options);
 
     const runTestModule = function(themeName) {
-        QUnit.module(themeName, {
+        moduleWithoutCsp(themeName, {
             beforeEach: function() {
                 DevExpress.testing.executeAsyncMock.setup();
                 $('#qunit-fixture').html(fieldsetFixtureTemplate);

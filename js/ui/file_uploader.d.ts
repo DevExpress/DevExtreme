@@ -470,3 +470,100 @@ export type Properties = dxFileUploaderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFileUploaderOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onBeforeSend
+ * @type_function_param1 e:{ui/file_uploader:BeforeSendEvent}
+ */
+onBeforeSend?: ((e: BeforeSendEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onContentReady
+ * @type_function_param1 e:{ui/file_uploader:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onDisposing
+ * @type_function_param1 e:{ui/file_uploader:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onDropZoneEnter
+ * @type_function_param1 e:{ui/file_uploader:DropZoneEnterEvent}
+ */
+onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onDropZoneLeave
+ * @type_function_param1 e:{ui/file_uploader:DropZoneLeaveEvent}
+ */
+onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onFilesUploaded
+ * @type_function_param1 e:{ui/file_uploader:FilesUploadedEvent}
+ */
+onFilesUploaded?: ((e: FilesUploadedEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onInitialized
+ * @type_function_param1 e:{ui/file_uploader:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onOptionChanged
+ * @type_function_param1 e:{ui/file_uploader:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onProgress
+ * @type_function_param1 e:{ui/file_uploader:ProgressEvent}
+ */
+onProgress?: ((e: ProgressEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onUploadAborted
+ * @type_function_param1 e:{ui/file_uploader:UploadAbortedEvent}
+ */
+onUploadAborted?: ((e: UploadAbortedEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onUploaded
+ * @type_function_param1 e:{ui/file_uploader:UploadedEvent}
+ */
+onUploaded?: ((e: UploadedEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onUploadError
+ * @type_function_param1 e:{ui/file_uploader:UploadErrorEvent}
+ */
+onUploadError?: ((e: UploadErrorEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onUploadStarted
+ * @type_function_param1 e:{ui/file_uploader:UploadStartedEvent}
+ */
+onUploadStarted?: ((e: UploadStartedEvent) => void);
+/**
+ * @skip
+ * @docid dxFileUploaderOptions.onValueChanged
+ * @type_function_param1 e:{ui/file_uploader:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};

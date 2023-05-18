@@ -66,7 +66,8 @@
             }
         }
 
-        return function(text) {
+        return function(element) {
+            var text = extractTemplateMarkup(element);
             var bag = ['var _ = [];', 'with(obj||{}) {'],
                 chunks = text.split(EXTENDED_OPEN_TAG);
 
@@ -82,26 +83,47 @@
             }
 
             bag.push('}', 'return _.join(\'\')');
+            var code = bag.join('');
 
-            // eslint-disable-next-line no-new-func
-            return new Function('obj', 'encodeHtml', bag.join(''));
+            try {
+                // eslint-disable-next-line no-new-func
+                return new Function('obj', 'encodeHtml', code);
+            } catch(e) {
+                var src = element[0];
+                if(src.tagName === 'SCRIPT') {
+                    var funcName = src.id.replaceAll('-', '');
+                    var func = 'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
+                    $.globalEval(func, src, window.document);
+                    return funcName;
+                } else {
+                    return text;
+                }
+            }
         };
     }
 
     function createTemplateEngine() {
         return {
             compile: function(element) {
-                return templateCompiler(extractTemplateMarkup(element));
+                return templateCompiler(element);
             },
             render: function(template, data) {
-                var html = template(data, encodeHtml);
+                if(template instanceof Function) {
+                    var html = template(data, encodeHtml);
 
-                var dxMvcExtensionsObj = window['MVCx'];
-                if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
-                    html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, '$1');
+                    var dxMvcExtensionsObj = window['MVCx'];
+                    if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
+                        html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, '$1');
+                    }
+
+                    return html;
+                } else if(window[template] instanceof Function) {
+                    return window[template](data, encodeHtml);
+                } else if(typeof template === 'string') {
+                    return template;
+                } else {
+                    throw 'Unknown template type';
                 }
-
-                return html;
             }
         };
     }

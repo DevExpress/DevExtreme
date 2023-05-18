@@ -52,6 +52,10 @@ const isDeviceDesktop = function(assert) {
     return true;
 };
 
+const getListKeyboard = ($list) => {
+    return keyboardMock($list.find('[tabindex=0]'));
+};
+
 const ScrollViewMock = DOMComponent.inherit({
 
     NAME: 'dxScrollView',
@@ -1621,7 +1625,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
         list.option('allowItemDeleting', false);
         $list.focusin();
-        const keyboard = keyboardMock($list);
+        const keyboard = getListKeyboard($list);
         keyboard.keyDown('del');
         assert.deepEqual(list.option('items'), [1, 2, 3, 4], 'item is not deleted');
     });
@@ -1635,8 +1639,8 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('allowItemDeleting', true);
-        $list.focusin();
-        const keyboard = keyboardMock($list);
+        list.focus();
+        const keyboard = getListKeyboard($list);
         keyboard.keyDown('del');
 
         assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
@@ -1653,7 +1657,7 @@ QUnit.module('options changed', moduleSetup, () => {
         list.option('allowItemDeleting', true);
         list.option('allowItemDeleting', false);
         $list.focusin();
-        const keyboard = keyboardMock($list);
+        const keyboard = getListKeyboard($list);
         keyboard.keyDown('del');
 
         assert.deepEqual(list.option('items'), [1, 2, 3, 4], 'item is not deleted');
@@ -2013,9 +2017,9 @@ QUnit.module('events', moduleSetup, () => {
 
         const $item = $element.find(toSelector(LIST_ITEM_CLASS));
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick(10);
-        keyboardMock($element).keyDown('enter');
+        getListKeyboard($element).keyDown('enter');
     });
 
     QUnit.test('onItemHold should be fired when item is held', function(assert) {
@@ -3622,8 +3626,9 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerdown');
-        let keyboard = keyboardMock($element);
+        let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerup');
+        this.clock.tick(10);
+        let keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
         this.clock.tick(10);
 
@@ -3633,9 +3638,9 @@ QUnit.module('keyboard navigation', {
         assert.equal(instance.scrollTop(), itemHeight, 'item scrolled to visible area at bottom when down arrow were pressed');
 
         $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(1);
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick(10);
-        keyboard = keyboardMock($element);
+        keyboard = getListKeyboard($element);
         keyboard.keyDown('up');
         assert.equal(instance.scrollTop(), 0, 'item scrolled to visible area at top when up arrow were pressed');
     });
@@ -3653,23 +3658,23 @@ QUnit.module('keyboard navigation', {
             items: [0, 1, 2, 3, 4]
         });
 
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const $selectAllCheckBox = $element.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
         const $selectAllItem = $element.find('.dx-list-select-all');
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
 
-        $firstItem.trigger('dxpointerdown');
+        $firstItem.trigger('dxpointerup');
         this.clock.tick(10);
 
         keyboard.keyDown('up');
         this.clock.tick(10);
         assert.ok($selectAllItem.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
 
-        $element.trigger($.Event('keydown', { key: 'Enter' }));
+        keyboard.keyDown('enter');
 
         assert.ok($selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox is checked');
 
-        $element.trigger($.Event('keydown', { key: ' ' }));
+        keyboard.keyDown('space');
 
         assert.ok(!$selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox isn\'t checked');
     });
@@ -3687,12 +3692,12 @@ QUnit.module('keyboard navigation', {
             items: [0, 1, 2, 3, 4]
         });
 
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const $selectAllCheckBox = $element.find('.dx-list-select-all');
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
         const $lastItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
 
-        $firstItem.trigger('dxpointerdown');
+        $firstItem.trigger('dxpointerup');
         this.clock.tick(10);
 
         keyboard.keyDown('up');
@@ -3748,7 +3753,7 @@ QUnit.module('keyboard navigation', {
         instance.option('height', itemHeight * 2.5);
         assert.equal(instance.scrollTop(), 0, 'list scrolled to zero');
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('dxpointerup');
         this.clock.tick(10);
 
         assert.equal(instance.scrollTop(), 0, 'item was not scrolled to half-visible item by click on it');
@@ -3764,7 +3769,7 @@ QUnit.module('keyboard navigation', {
 
         const instance = $element.dxList('instance');
         const $item = $element.find(toSelector(LIST_ITEM_CLASS)).first();
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
@@ -3788,10 +3793,10 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxList('instance');
         const $items = $element.find(toSelector(LIST_ITEM_CLASS));
         const $item = $items.first();
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
 
-        $element.trigger('focusin');
+        $element.dxList('focus');
         instance.option('height', itemHeight * 3);
 
         keyboard.keyDown('pageDown');
@@ -3822,7 +3827,7 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxList('instance');
         const $items = $element.find(toSelector(LIST_ITEM_CLASS));
         const $item = $items.first();
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
@@ -3849,7 +3854,7 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxList('instance');
         const $items = $element.find(toSelector(LIST_ITEM_CLASS));
         const $item = $items.first();
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
@@ -3884,7 +3889,7 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxList('instance');
         const $items = $element.find(toSelector(LIST_ITEM_CLASS));
         const $item = $items.first();
-        const keyboard = keyboardMock($element);
+        const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
@@ -3911,11 +3916,13 @@ QUnit.module('keyboard navigation', {
 
         instance.registerKeyHandler('enter', handler);
 
-        $element.trigger($.Event('keydown', { key: 'Enter' }));
+        const $itemContainer = $element.find(`.${LIST_ITEM_CLASS}`).eq(0).parent();
+
+        $itemContainer.trigger($.Event('keydown', { key: 'Enter' }));
         assert.equal(handler.callCount, 0);
 
         instance.option('onKeyboardHandled', () => true);
-        $element.trigger($.Event('keydown', { key: 'Enter' }));
+        $itemContainer.trigger($.Event('keydown', { key: 'Enter' }));
         assert.equal(handler.callCount, 1);
     });
 });
@@ -4130,6 +4137,11 @@ if(devices.real().deviceType === 'desktop') {
                         }, options))
                 });
                 this.clock = sinon.useFakeTimers();
+                this.expectedItemContainerAttrs = {
+                    role: 'listbox',
+                    tabindex: '0',
+                    'aria-label': 'Items'
+                };
             },
             afterEach: function() {
                 this.clock.restore();
@@ -4139,17 +4151,13 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test('Selected: ["Item_3"] -> focusin -> focusout', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_3'], keyExpr: 'text', selectionMode: 'single' });
 
-                if(searchEnabled) {
-                    $(helper.$itemContainer).focusin();
-                } else {
-                    helper.$widget.focusin();
-                }
+                $(helper.$itemContainer).trigger('focusin');
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
 
                 helper.$widget.focusout();
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
             });
 
@@ -4157,37 +4165,33 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test('Selected: ["Item_1"] -> set focusedElement -> change by click', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_1'], keyExpr: 'text', selectionMode: 'single' });
 
-                if(searchEnabled) {
-                    $(helper.$itemContainer).focusin();
-                } else {
-                    helper.$widget.focusin();
-                }
+                $(helper.$itemContainer).trigger('focusin');
 
                 const $item_2 = $(helper.getItems().eq(2));
                 eventsEngine.trigger($item_2, 'dxclick');
-                eventsEngine.trigger($item_2, 'dxpointerdown');
+                eventsEngine.trigger($item_2, 'dxpointerup');
                 this.clock.tick(10);
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
 
                 helper.widget.option('focusedElement', null);
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], role: 'option' });
             });
 
             QUnit.test('Selected: ["Item_1", "Item_3"] -> select "Item_2" by click', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_1', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
                 helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option' });
 
                 const $item_1 = $(helper.getItems().eq(1));
                 eventsEngine.trigger($item_1, 'dxclick');
-                eventsEngine.trigger($item_1, 'dxpointerdown');
+                eventsEngine.trigger($item_1, 'dxpointerup');
                 this.clock.tick(10);
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
         });
@@ -4238,7 +4242,7 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
         });
 
         QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('mouseup'));
             $(this.root).trigger(this.createEvent('touchstart'));
 
             this.clock.tick(10);

@@ -5,7 +5,6 @@ import themes from 'ui/themes';
 import viewPortUtils from 'core/utils/view_port';
 
 const viewPortChanged = viewPortUtils.changeCallback;
-import knownCssFiles from '/themes-test/get-css-files-list/!json';
 
 const { test, testInActiveWindow } = QUnit;
 
@@ -127,55 +126,58 @@ QUnit.module('Selector check', () => {
         return badSelectors;
     }
 
-    $.each(knownCssFiles, function(i, cssFileName) {
-        test(cssFileName, function(assert) {
-            const done = assert.async();
-            const frame = $('<iframe/>').appendTo('body');
+    $.getJSON('/themes-test/get-css-files-list', knownCssFiles => {
+        $.each(knownCssFiles, function(i, cssFileName) {
+            test(cssFileName, function(assert) {
+                const done = assert.async();
+                const frame = $('<iframe/>').appendTo('body');
 
-            window.waitFor(loadCss(frame, cssFileName)).done(function() {
-                assert.deepEqual(findBadCssSelectors(frame[0].contentWindow.document), [], 'Css rule has incorrect selectors');
-                frame.remove();
-                done();
+                window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                    assert.deepEqual(findBadCssSelectors(frame[0].contentWindow.document), [], 'Css rule has incorrect selectors');
+                    frame.remove();
+                    done();
+                });
+
             });
-
         });
     });
-
 });
 
 QUnit.module('All images are defined with data-uri and will be inlined', () => {
-    $.each(knownCssFiles, function(i, cssFileName) {
+    $.getJSON('/themes-test/get-css-files-list', knownCssFiles => {
+        $.each(knownCssFiles, function(i, cssFileName) {
 
-        function hasUrlImageProperty(doc) {
-            const rulesWithUrl = [];
-            $.each(doc.styleSheets, function() {
-                const rules = rulesFromSheet(this);
+            function hasUrlImageProperty(doc) {
+                const rulesWithUrl = [];
+                $.each(doc.styleSheets, function() {
+                    const rules = rulesFromSheet(this);
 
-                $.each(rules, function() {
-                    if(!this.cssText) {
-                        return;
-                    }
-                    if(/url\((?!"data:image)/.test(this.cssText) &&
-                       /url\((?!"?icons)/.test(this.cssText) &&
-                       /url\((?!"?fonts)/.test(this.cssText) &&
-                       /url\((?!"?https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
-                        rulesWithUrl.push(this.cssText);
-                    }
+                    $.each(rules, function() {
+                        if(!this.cssText) {
+                            return;
+                        }
+                        if(/url\((?!"data:image)/.test(this.cssText) &&
+                            /url\((?!"?icons)/.test(this.cssText) &&
+                            /url\((?!"?fonts)/.test(this.cssText) &&
+                            /url\((?!"?https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
+                            rulesWithUrl.push(this.cssText);
+                        }
+                    });
                 });
+                return rulesWithUrl;
+            }
+
+            test(cssFileName, function(assert) {
+                const done = assert.async();
+                const frame = $('<iframe/>').appendTo('body');
+
+                window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                    assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], 'Css rule has non-encoded url, change url() to data-uri() in the less file');
+                    frame.remove();
+                    done();
+                });
+
             });
-            return rulesWithUrl;
-        }
-
-        test(cssFileName, function(assert) {
-            const done = assert.async();
-            const frame = $('<iframe/>').appendTo('body');
-
-            window.waitFor(loadCss(frame, cssFileName)).done(function() {
-                assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], 'Css rule has non-encoded url, change url() to data-uri() in the less file');
-                frame.remove();
-                done();
-            });
-
         });
     });
 });
@@ -233,7 +235,7 @@ QUnit.module('dx-theme changing', (hooks) => {
         themes.init({ context: window.document, theme: 'material.blue.light' });
         themes.initialized(() => {
             themes.resetTheme();
-            linksContainer.append('<style>.dx-theme-marker { font-family: \'dx.generic.light\' }</style>');
+            linksContainer.append('<style nonce="qunit-test">.dx-theme-marker { font-family: \'dx.generic.light\' }</style>');
 
             assert.equal(themes.isGeneric(), true, 'isGeneric returns \'true\' if css has been added after themes initialization');
 
@@ -480,7 +482,7 @@ QUnit.module('dx-theme links', (hooks) => {
                     assert.equal(s.length, 0, 'style rules should be cleared');
                     /// TODO: end
 
-                    writeToFrame('<style>.dx-theme-marker{ font-family: \'dx.sampleTheme.sampleColorScheme1\';}</style>');
+                    writeToFrame('<style nonce="qunit-test">.dx-theme-marker{ font-family: \'dx.sampleTheme.sampleColorScheme1\';}</style>');
 
                     const assertPredicate = function() {
                         return themes.current() === 'sampleTheme.sampleColorScheme1';
@@ -514,7 +516,7 @@ QUnit.module('dx-theme links', (hooks) => {
                         /// TODO: end
 
 
-                        writeToFrame('<style>.dx-theme-marker{ font-family: \'dx.sampleTheme.sampleColorScheme2\';}</style>');
+                        writeToFrame('<style nonce="qunit-test">.dx-theme-marker{ font-family: \'dx.sampleTheme.sampleColorScheme2\';}</style>');
                         setTimeout(function() {
                             assert.ok(assertPredicate(), 'theme name was updated only once');
                             done();
@@ -745,7 +747,7 @@ QUnit.module('initialized method', (hooks) => {
     test('initialized fires for ordinary link (init after style addition - should run immediately)', function(assert) {
         const done = assert.async();
         const $frame = createFrame();
-        writeToFrame($frame, '<style>.dx-theme-marker { font-family: "dx.sampleTheme2"}</style>');
+        writeToFrame($frame, '<style nonce="qunit-test">.dx-theme-marker { font-family: "dx.sampleTheme2"}</style>');
 
         themes.resetTheme();
         themes.init({

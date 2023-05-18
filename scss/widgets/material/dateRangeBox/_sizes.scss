@@ -1,5 +1,15 @@
+@use "../sizes" as *;
+
 // adduse
 
-$material-daterangebox-height: 48px !default;
-$material-daterangebox-start-datebox-padding: 12px !default;
 $material-daterangebox-separator-horizontal-padding: 12px !default;
+
+$material-daterangebox-active-bar-horizontal-margin: null !default;
+
+@if $size == "default" {
+  $material-daterangebox-active-bar-horizontal-margin: 15px !default;
+}
+
+@else if $size == "compact" {
+  $material-daterangebox-active-bar-horizontal-margin: 11px !default;
+}

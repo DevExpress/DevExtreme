@@ -231,3 +231,130 @@ export type Properties = dxTagBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTagBoxOptions;
+
+type EventProps<T> = Extract<keyof T, `on${any}`>;
+type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+
+type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onChange
+ * @type_function_param1 e:{ui/tag_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onClosed
+ * @type_function_param1 e:{ui/tag_box:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/tag_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onCustomItemCreating
+ * @type_function_param1 e:{ui/tag_box:CustomItemCreatingEvent}
+ */
+onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/tag_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/tag_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/tag_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/tag_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/tag_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onInput
+ * @type_function_param1 e:{ui/tag_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onItemClick
+ * @type_function_param1 e:{ui/tag_box:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/tag_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/tag_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onMultiTagPreparing
+ * @type_function_param1 e:{ui/tag_box:MultiTagPreparingEvent}
+ */
+onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onOpened
+ * @type_function_param1 e:{ui/tag_box:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tag_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onSelectAllValueChanged
+ * @type_function_param1 e:{ui/tag_box:SelectAllValueChangedEvent}
+ */
+onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tag_box:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/tag_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};

@@ -10,9 +10,14 @@ const StubAxis = vizMocks.stubClass(axisModule.Axis);
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="test-container" style="width: 400px; height: 300px;"></div>';
+        '<div id="test-container"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#test-container').css({
+        width: '400px',
+        height: '300px'
+    });
 });
 
 QUnit.module('RangeSelector', {
@@ -23,7 +28,7 @@ QUnit.module('RangeSelector', {
         rendererModule.Renderer = function() { return renderer; };
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
-        sinon.stub(axisModule, 'Axis', function() {
+        sinon.stub(axisModule, 'Axis').callsFake(function() {
             return that.axis;
         });
 

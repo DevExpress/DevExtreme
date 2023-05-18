@@ -2,6 +2,7 @@ import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import { extend } from '../../../core/utils/extend';
 import { isSameDateArrays } from '../ui.date_range.utils';
+import { isFunction } from '../../../core/utils/type';
 
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
@@ -16,9 +17,15 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return extend(true, super.popupConfig(popupConfig), {
             position: { of: this.dateRangeBox.$element() },
             onShowing: () => {
-                this._widget.option('_currentSelection', 'startDate');
+                this._widget._restoreViewsMinMaxOptions();
+                this._dateSelectedCounter = 0;
+                // this._widget.option('_currentSelection', 'startDate');
             }
         });
+    }
+
+    _getPopup() {
+        return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
     }
 
     supportedKeys() {
@@ -33,23 +40,40 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 if(this.dateRangeBox.option('opened')) {
                     return true;
                 }
-            }
+            },
+            enter: (e) => {
+                if(this.dateRangeBox.option('opened')) {
+                    this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
+                    this.dateBox._valueChangeEventHandler(e);
+                    this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                    return false;
+                }
+            },
         };
-
-        delete supportedKeys.enter;
 
         return supportedKeys;
     }
 
     _getWidgetOptions() {
+        const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
+
+        const disabledDates = isFunction(disabledDatesValue)
+            ? this._injectComponent(disabledDatesValue)
+            : disabledDates;
+
         return extend(super._getWidgetOptions(), {
-            values: this.dateRangeBox.option('value'),
+            disabledDates,
+            values: value,
             selectionMode: 'range',
-            viewsCount: 2,
+            viewsCount: multiView ? 2 : 1,
             width: 260,
             _allowChangeSelectionOrder: true,
-            _currentSelection: 'startDate',
+            _currentSelection: this.getCurrentSelection(),
         });
+    }
+
+    _injectComponent(func) {
+        return (params) => func(extend(params, { component: this.dateRangeBox }));
     }
 
     getKeyboardListener() {
@@ -75,23 +99,38 @@ class RangeCalendarStrategy extends CalendarStrategy {
             return;
         }
 
-        if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
-            if(event) {
-                if(this._widget.option('_currentSelection') === 'startDate') {
-                    this.dateRangeBox.updateValue(value);
-                    this.getDateRangeBox().getEndDateBox().focus();
-                    this._widget.option('_currentSelection', 'endDate');
-                    this._widget._view.option('contouredDate', value[1]);
-                } else {
-                    this.setActiveEndDateBox();
-                    this.dateRangeBox.updateValue(value);
-                    this.getDateRangeBox().close();
-                    this._widget.option('_currentSelection', 'startDate');
-                }
-            } else {
-                this.dateRangeBox.updateValue(value);
+        const isInstantlyMode = this.dateRangeBox.option('applyValueMode') === 'instantly';
+
+        if(!isInstantlyMode && !event) {
+            this.dateRangeBox.updateValue(value);
+
+            return;
+        }
+
+        if(isInstantlyMode) {
+            this.dateRangeBox.updateValue(value, event);
+            this._dateSelectedCounter += 1;
+
+            if(this._dateSelectedCounter === 2) {
+                this.getDateRangeBox().close();
+
+                return;
             }
         }
+
+        if(this._widget.option('_currentSelection') === 'startDate') {
+            this.getDateRangeBox().getEndDateBox().focus();
+        } else {
+            this.getDateRangeBox().getStartDateBox().focus();
+        }
+    }
+
+    getCurrentSelection() {
+        return this.dateRangeBox.option('_currentSelection');
+    }
+
+    isStartDateBoxActive() {
+        return this.dateBox.$element().hasClass('dx-start-datebox');
     }
 
     _closeDropDownByEnter() {

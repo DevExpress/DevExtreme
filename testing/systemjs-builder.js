@@ -212,6 +212,18 @@ const transpileRenovationModules = async(Builder) => {
     }
 };
 
+const buildCssAsSystemModule = (name, filePath) => `
+    System.register('${filePath}', [], false, function() {});
+    (function() {
+        if (typeof document == 'undefined') return;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/${filePath}';
+        link.setAttribute('data-theme', '${name}');
+        document.getElementsByTagName('head')[0].appendChild(link);
+    })();
+`;
+
 const transpileCss = async(Builder) => {
     const pluginsList = ['css', 'json'];
 
@@ -226,26 +238,26 @@ const transpileCss = async(Builder) => {
         })
     );
 
-    const cssList = ['artifacts/css/dx.light.css', 'artifacts/css/dx.material.blue.light.css'];
+    const cssList = [
+        ['artifacts/css/dx.light.css', 'generic.light'],
+        ['artifacts/css/dx.material.blue.light.css', 'material.blue.light']
+    ];
 
     // eslint-disable-next-line no-restricted-syntax
-    for(const cssFile of cssList) {
+    for(const [cssFile, styleName] of cssList) {
         const destPath = path.join(root, cssFile.replace('css', 'css-systemjs'));
         const destDir = path.dirname(destPath);
         if(!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir, { recursive: true });
         }
 
-        const systemInject = `System.register('${cssFile}', [], false, function () {});`;
-        const cssInject = `(function(c){if (typeof document == 'undefined') return;var d=document,a='appendChild',i='styleSheet',s=d.createElement('link');s.rel='stylesheet';s.type='text/css';s.href='/${cssFile}';d.getElementsByTagName('head')[0][a](s);})();`;
-
-        fs.writeFileSync(destPath, [systemInject, cssInject].join('\n'));
+        fs.writeFileSync(destPath, buildCssAsSystemModule(styleName, cssFile));
     }
 };
 
-const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) => {
+const transpileWithBuilder = async(builder, sourcePath, destPath, buildTree) => {
     await builder.buildStatic(
-        `[${sourcePath}]`,
+        buildTree ? sourcePath : `[${sourcePath}]`,
         destPath,
         {
             minify: false,
@@ -257,7 +269,9 @@ const transpileWithBuilder = async(builder, sourcePath, destPath, sourceCode) =>
 
 const transpileWithBabel = async(sourceCode, destPath) => {
     const { code } = await babel.transform(sourceCode, {
+        compact: false,
         plugins: ['@babel/plugin-transform-modules-systemjs'],
+        sourceMaps: true,
     });
 
     const destDir = path.dirname(destPath);
@@ -267,6 +281,41 @@ const transpileWithBabel = async(sourceCode, destPath) => {
     }
 
     fs.writeFileSync(destPath, code);
+};
+
+const transpileJsVendors = async(Builder) => {
+    const builder = new Builder(root, config);
+
+    const vendorsList = [
+        {
+            filePath: path.join(root, 'node_modules/angular/index.js'),
+            destPath: path.join(root, 'artifacts/js-systemjs/angular.js')
+        },
+        {
+            filePath: path.join(root, 'node_modules/intl/index.js'),
+            destPath: path.join(root, 'artifacts/js-systemjs/intl.js')
+        },
+        {
+            filePath: path.join(root, 'node_modules/knockout/build/output/knockout-latest.debug.js'),
+            destPath: path.join(root, 'artifacts/js-systemjs/knockout.js')
+        }
+    ];
+    const cldrDataList = getFileList(path.join(root, 'node_modules/devextreme-cldr-data'));
+    const cldrCoreList = getFileList(path.join(root, 'node_modules/cldr-core/supplemental'));
+
+    const formatList = [].concat(cldrDataList, cldrCoreList)
+        .filter(filePath => filePath.endsWith('.json'))
+        .map(jsonPath => ({
+            filePath: jsonPath,
+            destPath: jsonPath.replace('node_modules', 'artifacts/js-systemjs')
+        }));
+
+    const modulesList = [].concat(vendorsList, formatList);
+
+    // eslint-disable-next-line no-restricted-syntax
+    for(const { filePath, destPath } of modulesList) {
+        await transpileWithBuilder(builder, filePath, destPath, true);
+    }
 };
 
 const transpileTesting = async(Builder) => {
@@ -281,7 +330,7 @@ const transpileTesting = async(Builder) => {
         const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
         const sourceCode = fs.readFileSync(filePath).toString();
 
-        if(/System(JS)?\./.test(sourceCode)) {
+        if(filePath.includes('DevExpress.ui.widgets/') && /System(JS)?\./.test(sourceCode)) {
             fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
             continue;
         }
@@ -290,7 +339,7 @@ const transpileTesting = async(Builder) => {
             filePath.includes('ui.widgets/fileManagerParts') ||
             filePath.includes('ui.widgets.htmlEditor/htmlEditorParts')
         ) {
-            await transpileWithBabel(sourceCode, destPath);
+            await transpileWithBuilder(builder, filePath, destPath);
         } else {
             try {
                 await transpileWithBuilder(builder, filePath, destPath);
@@ -306,7 +355,7 @@ const patchBuilder = (fileName, searchValue, replaceValue) => {
     const file = fs.readFileSync(filePath).toString();
 
     if(!file.includes(replaceValue)) {
-        fs.writeFileSync(filePath, file.replace(
+        fs.writeFileSync(filePath, file.replaceAll(
             searchValue,
             replaceValue
         ));
@@ -317,15 +366,23 @@ const updateBuilder = () => {
     patchBuilder(
         'trace.js',
         'load.depMap[dep] = getCanonicalName(loader, normalized);',
-        'load.depMap[dep] = dep' +
-        '.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")' +
-        '.replace("/node_modules/", "/../node_modules/")'
+        `load.depMap[dep] = normalized.includes('node_modules/angular') || normalized.includes('node_modules/intl') ?
+            getCanonicalName(loader, normalized) :
+            dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")
+                .replace("../../../../artifacts/js/", "../../../../../artifacts/js")
+                .replace("/node_modules/", "/../node_modules/");`
     );
 
     patchBuilder(
         'compile.js',
         'exportDefault ? "true" : "false"',
         'exportDefault && !compileOpts.namedExports ? "true" : "false"'
+    );
+
+    patchBuilder(
+        'builder.js',
+        'return normalized;',
+        'return normalized.replace("%20", " ");'
     );
 };
 
@@ -341,5 +398,6 @@ const updateBuilder = () => {
         case 'modules-renovation': return await transpileRenovationModules(Builder);
         case 'testing': return await transpileTesting(Builder);
         case 'css': return await transpileCss(Builder);
+        case 'js-vendors': return await transpileJsVendors(Builder);
     }
 })();

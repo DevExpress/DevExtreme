@@ -9,32 +9,56 @@ const positionUtils = require('animation/position');
 
 QUnit.testStart(function() {
     const markup =
-        '<style>\
-            .my-animation {\
-                -moz-transition-property: all;\
-                -o-transition-property: all;\
-                -webkit-transition-property: all;\
-                transition-property: all;\
-                -moz-transform: translate3d(0px,0px,0px);\
-                -o-transform: translate3d(0px,0px,0px);\
-                -webkit-transform: translate3d(0px,0px,0px);\
-                transform: translate3d(0px,0px,0px);\
-            }\
-            .my-animation.my-animation-active {\
-                -moz-transform: translate3d(1000px,0px,0px);\
-                -o-transform: translate3d(1000px,0px,0px);\
-                -webkit-transform: translate3d(1000px,0px,0px);\
-                transform: translate3d(1000px,0px,0px);\
-            }\
-        </style>\
-        \
-        <div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="container" style="position: relative;">\
-                <div id="test" style="position: absolute; top:0; left:0; width: 50px; height: 50px; background: yellow;"></div>\
-                <div id="transitionPropTest" style="position: absolute; top:0; left:0; width: 50px; height: 50px; background: red;"></div>\
-                <div id="staticTest" style="width: 50px; height: 50px; background: green;"></div>\
-            </div>\
-        </div>';
+        `<style nonce="qunit-test">
+            .my-animation {
+                -moz-transition-property: all;
+                -o-transition-property: all;
+                -webkit-transition-property: all;
+                transition-property: all;
+                -moz-transform: translate3d(0px,0px,0px);
+                -o-transform: translate3d(0px,0px,0px);
+                -webkit-transform: translate3d(0px,0px,0px);
+                transform: translate3d(0px,0px,0px);
+            }
+            .my-animation.my-animation-active {
+                -moz-transform: translate3d(1000px,0px,0px);
+                -o-transform: translate3d(1000px,0px,0px);
+                -webkit-transform: translate3d(1000px,0px,0px);
+                transform: translate3d(1000px,0px,0px);
+            }
+            #container {
+                position: relative;
+            }
+            #test {
+                position: absolute;
+                top:0;
+                left:0;
+                width: 50px;
+                height: 50px;
+                background: yellow;
+            }
+            #transitionPropTest {
+                position: absolute;
+                top:0;
+                left:0;
+                width: 50px;
+                height: 50px;
+                background: red;
+            }
+            #staticTest {
+                width: 50px;
+                height: 50px;
+                background: green;
+            }
+        </style>
+
+        <div id="qunit-fixture" class="qunit-fixture-visible">
+            <div id="container">
+                <div id="test"></div>
+                <div id="transitionPropTest"></div>
+                <div id="staticTest"></div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
 });

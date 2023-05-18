@@ -267,7 +267,7 @@ QUnit.test('item deletion by keyboard', function(assert) {
     });
     const list = $list.dxList('instance');
 
-    const keyboard = keyboardMock($list);
+    const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
     $list.focusin();
     keyboard.keyDown('del');
@@ -294,24 +294,26 @@ QUnit.test('items reordering by keyboard', function(assert) {
         focusStateEnabled: true
     });
     const list = $list.dxList('instance');
+    const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
     let $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
 
-    $lastItem.trigger('dxpointerdown');
+    $lastItem.trigger('dxpointerup');
     this.clock.tick(10);
-    $lastItem.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
+    keyboard.keyDown('arrowUp', { shiftKey: true });
 
     assert.deepEqual(list.option('items'), items, 'reordering by keyboard is impossible if \'itemDragging.allowReordering\' = false ');
 
     list.option('itemDragging.allowReordering', true);
 
     $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
-    $lastItem.trigger('dxpointerdown');
+    $lastItem.trigger('dxpointerup');
     this.clock.tick(10);
-    $list.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
+    keyboard.keyDown('arrowUp', { shiftKey: true });
 
     assert.deepEqual(list.option('items'), ['1', '3', '2'], 'items were reordered');
 
-    $lastItem.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
+    keyboard.keyDown('arrowDown', { shiftKey: true });
 
     assert.deepEqual(list.option('items'), items, 'items were reordered');
 });

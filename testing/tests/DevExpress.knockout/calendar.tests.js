@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/calendar');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('calendar');
+} else {
+    QUnit.module.skip('calendar');
+}
+
 QUnit.testStart(function() {
     const markup =
         '<div id="T354951" data-bind="dxCalendar: {}">\

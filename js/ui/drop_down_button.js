@@ -28,6 +28,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+const DX_BUTTON_CLASS = 'dx-button';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
@@ -432,7 +433,7 @@ const DropDownButton = Widget.inherit({
     _popupHidingHandler() {
         this.option('opened', false);
 
-        this._setAriaExpanded(false);
+        this._updateAriaAttributes(false);
     },
 
     _popupOptionChanged: function(args) {
@@ -460,26 +461,44 @@ const DropDownButton = Widget.inherit({
 
     _popupShowingHandler() {
         this.option('opened', true);
-        this._setAriaExpanded(true);
+        this._updateAriaAttributes(true);
     },
 
-    _setAriaExpanded(value) {
-        this._ariaExpandedElements.forEach((ariaElement) => {
-            this.setAria({
-                expanded: value,
-                owns: value ? this._popupContentId : undefined,
-            },
-            $(ariaElement));
+    _setElementAria(value) {
+        const elementAria = {
+            owns: value ? this._popupContentId : undefined,
+        };
+
+        this.setAria(elementAria, this.$element());
+    },
+
+    _setButtonsAria(value) {
+        const commonButtonAria = {
+            expanded: value,
+            haspopup: 'listbox',
+        };
+        const firstButtonAria = {};
+
+        if(!this.option('text')) {
+            firstButtonAria.label = 'dropdownbutton';
+        }
+
+        this._getButtons().each((index, $button) => {
+            if(index === 0) {
+                this.setAria({ ...firstButtonAria, ...commonButtonAria }, $($button));
+            } else {
+                this.setAria(commonButtonAria, $($button));
+            }
         });
     },
 
-    _setAriaHasPopup() {
-        const { splitButton } = this.option();
+    _updateAriaAttributes(value) {
+        this._setElementAria(value);
+        this._setButtonsAria(value);
+    },
 
-        const $buttons = this._buttonGroup.$element().find('.dx-button');
-        const $button = splitButton ? $buttons.eq(1) : $buttons.eq(0);
-
-        this.setAria('haspopup', 'listbox', $button);
+    _getButtons() {
+        return this._buttonGroup.$element().find(`.${DX_BUTTON_CLASS}`);
     },
 
     _renderButtonGroup() {
@@ -490,10 +509,6 @@ const DropDownButton = Widget.inherit({
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
-        const buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
-
-        this._ariaExpandedElements = [ ...buttonElements, this.$element() ];
-
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
         this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
@@ -501,8 +516,7 @@ const DropDownButton = Widget.inherit({
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
 
-        this._setAriaExpanded(this.option('opened'));
-        this._setAriaHasPopup();
+        this._updateAriaAttributes(this.option('opened'));
     },
 
     _updateArrowClass() {
@@ -568,10 +582,15 @@ const DropDownButton = Widget.inherit({
         });
     },
 
+    _updateButtonGroup(name, value) {
+        this._buttonGroup.option(name, value);
+        this._updateAriaAttributes(this.option('opened'));
+    },
+
     _actionButtonOptionChanged({ name, value }) {
         const newConfig = {};
         newConfig[name] = value;
-        this._buttonGroup.option('items[0]', extend({}, this._actionButtonConfig(), newConfig));
+        this._updateButtonGroup('items[0]', extend({}, this._actionButtonConfig(), newConfig));
         this._popup && this._popup.repaint();
     },
 
@@ -632,7 +651,6 @@ const DropDownButton = Widget.inherit({
             case 'splitButton':
                 this._updateArrowClass();
                 this._renderButtonGroup();
-                this._setAriaHasPopup();
                 break;
             case 'displayExpr':
                 this._compileDisplayGetter();
@@ -661,7 +679,7 @@ const DropDownButton = Widget.inherit({
             case 'focusStateEnabled':
             case 'hoverStateEnabled':
                 this._setListOption(name, value);
-                this._buttonGroup.option(name, value);
+                this._updateButtonGroup(name, value);
                 this.callBase(args);
                 break;
             case 'items':
@@ -692,7 +710,7 @@ const DropDownButton = Widget.inherit({
                 this._popup?.repaint();
                 break;
             case 'stylingMode':
-                this._buttonGroup.option(name, value);
+                this._updateButtonGroup(name, value);
                 break;
             case 'itemTemplate':
             case 'grouped':
@@ -723,7 +741,7 @@ const DropDownButton = Widget.inherit({
                 this.toggle(this.option('opened'));
                 break;
             case 'tabIndex':
-                this._buttonGroup.option(name, value);
+                this._updateButtonGroup(name, value);
                 break;
             default:
                 this.callBase(args);

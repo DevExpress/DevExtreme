@@ -18,6 +18,17 @@ $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right 
 $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
 
 
+@mixin tabpanel-tab-color-mixin() {
+  .dx-tab {
+    color: $tabs-border-color;
+
+    .dx-tab-content {
+      color: $tabs-tab-color;
+    }
+  }
+}
+
+
 @mixin tabpanel-tabs-shadow-mixin($accent-color) {
   .dx-tabs {
     box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
@@ -39,11 +50,21 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   }
 
   #{$tabs-expanded}:last-of-type {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
+    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
   }
 
   #{$tabs-expanded}:first-of-type {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
+    @include tabpanel-tab-shadow-mixin(
+      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color},
+      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color}
+    );
+  }
+
+  .dx-tabs-stretched#{$tabs-expanded}:last-of-type {
+    @include tabpanel-tab-shadow-mixin(
+      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color},
+      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color}
+    );
   }
 }
 
@@ -80,6 +101,8 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
       width: 140px;
       padding: $generic-tabpanel-tabs-item-padding;
     }
+
+    @include tabpanel-tab-color-mixin();
   }
 
   &:not(.dx-empty-collection) {

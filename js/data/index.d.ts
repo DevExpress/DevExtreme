@@ -42,7 +42,23 @@ export type SelectDescriptor<T> = string | Array<string> | ((source: T) => any);
  * @public
  */
 export type FilterDescriptor = any;
-
+/**
+ * @docid
+ * @public
+ */
+export type LangParams = {
+  /**
+   * @docid
+   * @public
+   */
+  locale: string;
+  /**
+   * @docid
+   * @public
+   * @type object
+   */
+  collatorOptions?: Intl.CollatorOptions;
+};
  /**
  * @docid
  * @public

@@ -31,6 +31,10 @@ const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 
 const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
 
+function isEditable($element) {
+    return $element && ($element.is('input') || $element.is('textarea'));
+}
+
 export default {
     extenders: {
         controllers: {
@@ -52,7 +56,7 @@ export default {
                             const targetComponent = event[TARGET_COMPONENT_NAME];
                             const component = this.component;
 
-                            if($pointerDownTarget && $pointerDownTarget.is('input') && !$pointerDownTarget.is($target)) {
+                            if(isEditable($pointerDownTarget) && !$pointerDownTarget.is($target)) {
                                 return;
                             }
 

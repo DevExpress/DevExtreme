@@ -28,6 +28,8 @@ const POPUP_CLASS = 'dx-popup';
 const FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
+const LIST_CLASS = 'dx-list';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 QUnit.testStart(() => {
     const markup =
@@ -44,6 +46,10 @@ const getPopup = (instance) => {
 
 const getList = (instance) => {
     return instance._list;
+};
+
+const getListKeyboard = (dropDownButton) => {
+    return keyboardMock($(getList(dropDownButton).element()).find('[tabindex=0]'));
 };
 
 const getButtonGroup = (instance) => {
@@ -2228,7 +2234,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
@@ -2249,7 +2255,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
@@ -2270,7 +2276,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'selectionChanged is raised');
@@ -2289,7 +2295,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
 
@@ -2311,7 +2317,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
 
         listKeyboard.press('enter');
         assert.strictEqual(handler.callCount, 1, 'onSelectionChanged is raised');
@@ -2372,7 +2378,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('esc');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2397,7 +2403,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('left');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2412,7 +2418,7 @@ QUnit.module('keyboard navigation', {
             .press('enter')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('right');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2435,7 +2441,7 @@ QUnit.module('keyboard navigation', {
             .press('down')
             .press('down');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         listKeyboard.press('enter');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2461,7 +2467,7 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(this.dropDownButton.option('dropDownOptions.visible'), 'popup is opened');
 
-        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const listKeyboard = getListKeyboard(this.dropDownButton);
         const event = listKeyboard.press('tab').event;
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
@@ -2607,10 +2613,9 @@ QUnit.module('Accessibility', {
 
         const buttonElements = this.getButtons();
 
-        assert.ok(buttonElements.eq(0).attr('aria-expanded'));
-        assert.ok(this.$element.attr('aria-expanded'));
+        assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
-
 
     QUnit.test('check aria-expanded attr for visible dropdown', function(assert) {
         this.createInstance({ opened: true });
@@ -2618,7 +2623,7 @@ QUnit.module('Accessibility', {
         const buttonElements = this.getButtons();
 
         assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'true');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     QUnit.test('check aria-expanded attr for visible dropdown if splitButton is true', function(assert) {
@@ -2630,7 +2635,7 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'true');
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'true');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
     });
 
     QUnit.test('check aria-expanded attr if splitButton is true after dropdown was closed', function(assert) {
@@ -2643,7 +2648,33 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'false');
         assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'false');
-        assert.strictEqual(this.$element.attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), undefined);
+    });
+
+    QUnit.test('check aria-expanded attr if splitButton=true', function(assert) {
+        const instance = this.createInstance();
+        const $firstButton = this.getButtons().eq(0);
+
+        assert.strictEqual($firstButton.attr('aria-expanded'), 'false');
+
+        instance.option({ splitButton: true });
+
+        const $buttonElements = this.getButtons();
+
+        assert.strictEqual($buttonElements.eq(0).attr('aria-expanded'), 'false');
+        assert.strictEqual($buttonElements.eq(1).attr('aria-expanded'), 'false');
+    });
+
+    QUnit.test('check aria-owns attr for element', function(assert) {
+        const instance = this.createInstance();
+
+        assert.strictEqual(this.$element.attr('aria-owns'), undefined);
+
+        instance.open();
+
+        const popupId = $(`.${POPUP_CONTENT_CLASS}`).attr('id');
+
+        assert.strictEqual(this.$element.attr('aria-owns'), popupId);
     });
 
     [true, false].forEach(splitButton => {
@@ -2669,7 +2700,152 @@ QUnit.module('Accessibility', {
         const $firstButton = this.getButtons().eq(0);
         const $secondButton = this.getButtons().eq(1);
 
-        assert.strictEqual($firstButton.attr('aria-haspopup'), undefined);
+        assert.strictEqual($firstButton.attr('aria-haspopup'), 'listbox');
         assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
+    });
+
+    [{
+        name: 'text',
+        value: 'text',
+        updatedValue: 'new text'
+    }, {
+        name: 'icon',
+        value: 'icon',
+        updatedValue: 'newIcon'
+    }, {
+        name: 'focusStateEnabled',
+        value: false,
+        updatedValue: true
+    }, {
+        name: 'hoverStateEnabled',
+        value: false,
+        updatedValue: true
+    }, {
+        name: 'stylingMode',
+        value: 'text',
+        updatedValue: 'outlined'
+    }, {
+        name: 'tabIndex',
+        value: 0,
+        updatedValue: 1
+    }].forEach((option) => {
+        QUnit.test(`button should have aria-haspopup, aria-label and aria-expanded attributes after update ${option.name} option`, function(assert) {
+            const instance = this.createInstance({ [option.name]: option.value });
+
+            instance.option(option.name, option.updatedValue);
+
+            const $button = this.getButtons().eq(0);
+
+            assert.strictEqual($button.attr('aria-haspopup'), 'listbox');
+            assert.strictEqual($button.attr('aria-label'), option.name === 'text' ? 'new text' : 'Text');
+            assert.strictEqual($button.attr('aria-expanded'), 'false');
+        });
+
+        QUnit.test(`buttons should have aria-haspopup, aria-label and aria-expanded attributes if splitButton is set and after update ${option.name} option`, function(assert) {
+            const instance = this.createInstance({ splitButton: true, [option.name]: option.value });
+
+            instance.option(option.name, option.updatedValue);
+
+            const $firstButton = this.getButtons().eq(0);
+            const $secondButton = this.getButtons().eq(1);
+
+            assert.strictEqual($firstButton.attr('aria-haspopup'), 'listbox');
+            assert.strictEqual($firstButton.attr('aria-label'), option.name === 'text' ? 'new text' : 'Text');
+            assert.strictEqual($firstButton.attr('aria-expanded'), 'false');
+
+            assert.strictEqual($secondButton.attr('aria-haspopup'), 'listbox');
+            assert.strictEqual($secondButton.attr('aria-label'), 'spindown');
+            assert.strictEqual($secondButton.attr('aria-expanded'), 'false');
+        });
+    });
+
+    QUnit.test('button should have correct aria-label attribute if text is not specified', function(assert) {
+        this.createInstance({ text: '' });
+
+        const $button = this.getButtons().eq(0);
+
+        assert.strictEqual($button.attr('aria-label'), 'dropdownbutton');
+    });
+
+    QUnit.test('button should have correct aria-label attribute if text updated from empty value', function(assert) {
+        const instance = this.createInstance({ text: '' });
+
+        instance.option('text', 'new text');
+
+        const $button = this.getButtons().eq(0);
+
+        assert.strictEqual($button.attr('aria-label'), 'new text');
+    });
+
+    QUnit.test('buttons should have correct aria-label attributes if text is not specified and splitButton is set', function(assert) {
+        this.createInstance({ splitButton: true, text: '' });
+
+        const $firstButton = this.getButtons().eq(0);
+        const $secondButton = this.getButtons().eq(1);
+
+        assert.strictEqual($firstButton.attr('aria-label'), 'dropdownbutton');
+        assert.strictEqual($secondButton.attr('aria-label'), 'spindown');
+    });
+
+    ['items', 'dataSource'].forEach(dataSource => {
+        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
+            const instance = this.createInstance({ opened: true });
+            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
+
+            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+        });
+
+        QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is empty on init`, function(assert) {
+            const instance = this.createInstance({
+                [dataSource]: [],
+                opened: true,
+            });
+            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
+
+            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+        });
+
+        QUnit.test(`list should have correct role if data sourse is set with ${dataSource} property`, function(assert) {
+            const instance = this.createInstance({
+                [dataSource]: [],
+                opened: true,
+            }); const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
+
+            assert.strictEqual($scrollView.attr('role'), undefined);
+
+            instance.option(dataSource, [1, 2, 3]);
+            assert.strictEqual($scrollView.attr('role'), 'listbox');
+
+            instance.option(dataSource, []);
+            assert.strictEqual($scrollView.attr('role'), undefined);
+        });
+
+        [[1, 2, 3], []].forEach(items => {
+            QUnit.test(`There is no errors if dataSource is ${dataSource}=[${items}] was changed in runtime and list was not rendered`, function(assert) {
+                const instance = this.createInstance({
+                    [dataSource]: items,
+                });
+
+                try {
+                    instance.option(dataSource, items);
+                } catch(e) {
+                    assert.ok(false, `error is raised: ${e.message}`);
+                } finally {
+                    assert.ok(true, 'no error raised');
+                }
+            });
+        });
     });
 });

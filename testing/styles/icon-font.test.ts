@@ -36,7 +36,7 @@ describe('Equals svg to font', () => {
   });
 
   test('check svg elements', () => {
-    const isOnlyMaterialIcons = ['belloutline.svg', 'optionsgear.svg', 'photooutline.svg', 'pinmap.svg', 'send.svg'];
+    const isOnlyMaterialIcons = ['optionsgear.svg', 'pinmap.svg', 'send.svg'];
 
     const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
     const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`).filter((svg) => !isOnlyMaterialIcons.includes(svg));

@@ -6,6 +6,7 @@ import themes from 'ui/themes';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import SelectBox from 'ui/select_box';
+import 'ui/text_area';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -772,7 +773,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(1, 0)).text(), '2', 'second row cell text');
     });
 
-    QUnit.test('Edit row with the underscore template when the editForm mode is enabled', function(assert) {
+    QUnit.test('Edit row with the jquery template when the editForm mode is enabled', function(assert) {
         // arrange
         const data = [{ firstName: 'Super', lastName: 'Man' }, { firstName: 'Super', lastName: 'Zi' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -792,7 +793,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
+        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the jquery template is rendered correctly');
     });
 
     // T386755
@@ -4028,6 +4029,45 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         const $cell = $(dataGrid.getCellElement(0, 0));
         assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
+    });
+
+    // T1161254
+    QUnit.test('A cell with a TextArea editor should not close when a mouse click is released outside the editor', function(assert) {
+        let $firstCell;
+        let $textArea;
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ value: 1, displayValue: 'text1' }],
+            showBorders: true,
+            columns: [{
+                dataField: 'displayValue'
+            }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+            onEditorPreparing(e) {
+                e.editorName = 'dxTextArea';
+            },
+        });
+        this.clock.tick(10);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $firstCell.trigger('dxclick');
+        this.clock.tick(10);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $textArea = $firstCell.find('textarea');
+        assert.equal($textArea.length, 1, 'textarea should appear');
+
+        $textArea.trigger($.Event('dxpointerdown'));
+        $textArea.trigger($.Event('dxpointerup'));
+        $textArea.trigger($.Event('click', { target: $('body').get(0) }));
+        this.clock.tick(10);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $textArea = $firstCell.find('textarea');
+        assert.equal($textArea.length, 1, 'textarea should not disappear');
     });
 });
 
@@ -7877,6 +7917,49 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowInfo.visibleIndex), 'new row visible after adding repeatedly');
             checkNeighboringRow();
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
+        });
+    });
+
+    ['pageBottom', 'pageTop'].forEach(newRowPosition => {
+        QUnit.test(`Adding a new row should not throw error in popup mode (newRowPosition is ${newRowPosition} and rowRenderingMode: virtual)`, function(assert) {
+            // arrange
+            const getData = () => {
+                const items = [];
+                for(let i = 0; i < 100; i += 1) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const dataGrid = createDataGrid({
+                height: 200,
+                dataSource: getData(),
+                keyExpr: 'id',
+                editing: {
+                    newRowPosition,
+                },
+                paging: {
+                    pageSize: 10
+                },
+                scrolling: {
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                masterDetail: {
+                    enabled: true,
+                    autoExpandAll: true,
+                }
+            });
+
+            this.clock.tick(400);
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(400);
+
+            assert.ok(true, 'no errors');
         });
     });
 });

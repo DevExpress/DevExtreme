@@ -463,7 +463,14 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
 
     QUnit.test('DateTimeIndicator should have correct positions, Day view with groups and allDay customization, verticalGrouping (T737095)', function(assert) {
         const instance = createInstance({});
-        const $style = $('<style>').text('.dx-scheduler-work-space-vertical-grouped .dx-scheduler-all-day-table-row { height: 150px } .dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-day .dx-scheduler-all-day-title { height: 150px !important } ');
+        const $style = $('<style nonce="qunit-test">').text(`
+            .dx-scheduler-work-space-vertical-grouped .dx-scheduler-all-day-table-row {
+                height: 150px
+            }
+            .dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-day .dx-scheduler-all-day-title {
+                height: 150px !important
+            }
+        `);
 
         try {
             $style.appendTo('head');

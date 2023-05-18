@@ -4,6 +4,8 @@ const $ = require('jquery');
 const ko = require('knockout');
 const dataUtils = require('core/element_data');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const FIXTURE_ELEMENT = $('#qunit-fixture');
 
 const setTestData = function($element) {
@@ -25,7 +27,7 @@ const checkHasNoTestData = function($element, assert) {
     assert.ok(!hasJQueryTestData($element), 'element has no $ data');
 };
 
-QUnit.module('clean data on node removing', {
+moduleWithoutCsp('clean data on node removing', {
     beforeEach: function() {
         this.$element = $('<div>').appendTo(FIXTURE_ELEMENT);
     },

@@ -1,4 +1,4 @@
-window.includeThemesLinks();
+require('../../helpers/includeThemesLinks.js');
 
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
@@ -16,7 +16,6 @@ const ColorBox = require('ui/color_box');
 const DataGrid = require('ui/data_grid');
 const DateBox = require('ui/date_box');
 const DateRangeBox = require('ui/date_range_box');
-const FakeDialogComponent = require('ui/dialog').FakeDialogComponent;
 const DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor');
 const DropDownBox = require('ui/drop_down_box');
 const DropDownButton = require('ui/drop_down_button');
@@ -169,18 +168,38 @@ testComponentDefaults(DateBox,
 testComponentDefaults(DateRangeBox,
     {},
     {
-        stylingMode: 'outlined',
-        labelMode: 'static',
+        activeStateEnabled: true,
         applyValueMode: 'instantly',
-        startDateLabel: 'Start Date',
+        deferRendering: true,
+        disabled: false,
+        endDateInputAttr: {},
         endDateLabel: 'End Date',
-        startDatePlaceholder: '',
+        endDateName: '',
         endDatePlaceholder: '',
-        readOnly: false,
-        tabIndex: 0,
-        onValueChanged: null,
-        onOpened: null,
+        endDateText: '',
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
+        labelMode: 'static',
+        onChange: null,
         onClosed: null,
+        onCopy: null,
+        onCut: null,
+        onEnterKey: null,
+        onInput: null,
+        onKeyDown: null,
+        onKeyUp: null,
+        onOpened: null,
+        onPaste: null,
+        onValueChanged: null,
+        openOnFieldClick: true,
+        readOnly: false,
+        startDateInputAttr: {},
+        startDateLabel: 'Start Date',
+        startDateName: '',
+        startDatePlaceholder: '',
+        startDateText: '',
+        stylingMode: 'outlined',
+        tabIndex: 0,
     }
 );
 
@@ -196,6 +215,51 @@ testComponentDefaults(DateRangeBox,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'android' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'ios' },
+    {
+        multiView: false
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'ios' });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(DateRangeBox,
+    { platform: 'generic', deviceType: 'desktop' },
+    {
+        multiView: true,
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
+    },
+    function() {
+        devices.real(this._origDevice);
     }
 );
 
@@ -238,13 +302,6 @@ testComponentDefaults(ValidationMessage,
         boundary: undefined,
         offset: { h: 0, v: 0 }
     }
-);
-
-testComponentDefaults(FakeDialogComponent,
-    [
-        { platform: 'ios' }
-    ],
-    { width: 276 }
 );
 
 testComponentDefaults(DropDownMenu,

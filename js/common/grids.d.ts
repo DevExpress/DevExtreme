@@ -69,6 +69,7 @@ import {
 import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
+import { PositionConfig } from '../animation/position';
 
 /**
  * @namespace DevExpress.common.grids
@@ -376,6 +377,7 @@ export interface ColumnBase<TRowData = any> {
   /**
    * @docid GridBaseColumn.sortIndex
    * @default undefined
+   * @fires GridBaseOptions.onOptionChanged
    * @public
    */
   sortIndex?: number;
@@ -488,6 +490,11 @@ export type ColumnChooser = {
    * @default "dragAndDrop"
    */
   mode?: ColumnChooserMode;
+  /**
+   * @docid GridBaseOptions.columnChooser.position
+   * @default undefined
+   */
+  position?: PositionConfig;
   /**
    * @docid GridBaseOptions.columnChooser.search
    */

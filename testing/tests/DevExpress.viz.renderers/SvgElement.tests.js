@@ -468,6 +468,23 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.deepEqual(release.lastCall.args, ['test-pattern'], 'release');
     });
 
+    QUnit.test('smartAttr should not raise exception when filter applied on element with hatching', function(assert) {
+        this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
+        this.rendererStub.releaseDefsElements = sinon.spy();
+        const element = (new this.Element(this.rendererStub, 'rect'));
+        const hatchingAttrs = { fill: 'red', hatching: { direction: 'left' } };
+        const filterAttrs = { filter: true };
+
+        element.smartAttr(hatchingAttrs);
+
+        try {
+            element.smartAttr(filterAttrs);
+            assert.strictEqual(Object.hasOwnProperty.call(filterAttrs, 'filter'), false);
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        }
+    });
+
     QUnit.module('SvgElement markup method');
 
     QUnit.test('Returns correct namespaces (IE specific problem)', function(assert) {
@@ -559,7 +576,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.eventsEngine = eventsEngine;
             this.rendererStub = { fake: 'fake', root: { element: document.createElement('div') } };
             this.$emptyStub = sinon.stub($.fn, 'empty');
-            this.$removeStub = sinon.stub($.fn, 'remove', function() { return this; });
+            this.$removeStub = sinon.stub($.fn, 'remove').callsFake(function() { return this; });
             this.$onStub = sinon.stub(this.eventsEngine, 'on');
             this.$offStub = sinon.stub(this.eventsEngine, 'off');
             this.$triggerStub = sinon.stub(this.eventsEngine, 'trigger');

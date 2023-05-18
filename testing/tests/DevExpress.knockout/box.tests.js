@@ -4,6 +4,12 @@ const ko = require('knockout');
 require('ui/box');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('box');
+} else {
+    QUnit.module.skip('box');
+}
+
 QUnit.testStart(function() {
     const markup =
         '<div id="nestedBox" data-bind="dxBox: {}">\
