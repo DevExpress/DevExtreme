@@ -206,7 +206,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc' ]
+        constel: [ 'export', 'misc' ]
 
     steps:
       - name: Get sources
