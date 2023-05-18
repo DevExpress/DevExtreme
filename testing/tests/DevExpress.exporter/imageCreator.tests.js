@@ -10,6 +10,8 @@ import { getWindow } from 'core/utils/window';
 
 const window = getWindow();
 
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 const pathNameByUrl = (url) => {
     const a = document.createElement('a');
     a.href = url;
@@ -1437,7 +1439,7 @@ QUnit.test('Export draws into hidden canvas', function(assert) {
     assert.strictEqual($('canvas')[0].hidden, true);
 });
 
-QUnit.test('Text', function(assert) {
+testWithoutCsp('Text', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
@@ -1755,7 +1757,7 @@ QUnit.test('Text with big amount of spaces', function(assert) {
     });
 });
 
-QUnit.test('Stroke text', function(assert) {
+testWithoutCsp('Stroke text', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5" style="fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;"><tspan style="font-weight: bold; font-style: italic; " stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd;
@@ -1790,7 +1792,7 @@ QUnit.test('Stroke text', function(assert) {
 });
 
 // T697125
-QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
+testWithoutCsp('Multiline text with shadow and stroked texts', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart +
@@ -1982,7 +1984,7 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     });
 });
 
-QUnit.test('Text decoration', function(assert) {
+testWithoutCsp('Text decoration', function(assert) {
     const that = this;
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
@@ -2463,7 +2465,7 @@ QUnit.test('Export.color option', function(assert) {
     });
 });
 
-QUnit.test('Read computed style of elements if export target is attached element', function(assert) {
+testWithoutCsp('Read computed style of elements if export target is attached element', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
