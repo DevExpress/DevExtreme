@@ -434,7 +434,7 @@ test('After modification of newRowIndex / newCellIndex focused row and cell shou
   await clearCallbackTesting();
 });
 
-test.only('It should be able to change focusedRowKey on "onContentReady"', async (t) => {
+test('It should be able to change focusedRowKey on "onContentReady"', async (t) => {
   const expectedRowFocusChanged: FocusRowChangedData[] = [[1], [3]];
 
   await t.wait(100);
