@@ -179,8 +179,6 @@ jobs:
         ]
         include:
           - useCsp: true
-          - constel: 'export'
-            useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
 
@@ -206,7 +204,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc' ]
+        constel: [ 'export', 'misc' ]
 
     steps:
       - name: Get sources

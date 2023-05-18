@@ -24,7 +24,7 @@ QUnit.module('_getFullOptions', moduleConfig, () => {
         [], '1', 1, {}, undefined, null,
     ].forEach((autoTableOptions) => {
         QUnit.test(`autoTableOptions: ${JSON.stringify(autoTableOptions)}`, function(assert) {
-            const stub = sinon.stub(errors, 'log', () => {
+            const stub = sinon.stub(errors, 'log').callsFake(() => {
                 assert.deepEqual(errors.log.lastCall.args, [
                     'W0001',
                     'Export',

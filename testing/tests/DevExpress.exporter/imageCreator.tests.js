@@ -10,6 +10,8 @@ import { getWindow } from 'core/utils/window';
 
 const window = getWindow();
 
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 const pathNameByUrl = (url) => {
     const a = document.createElement('a');
     a.href = url;
@@ -26,7 +28,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.spy(exporter.image.creator, '_createCanvas');
 
     // image
-    sinon.stub(prototype, 'drawImage', function(img, x, y, width, height) {
+    sinon.stub(prototype, 'drawImage').callsFake(function(img, x, y, width, height) {
         drawnElements.push({
             type: 'image',
             args: {
@@ -44,7 +46,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.spy(canvasPrototype, 'toDataURL');
 
     // stroke, fill
-    sinon.stub(prototype, 'stroke', function() {
+    sinon.stub(prototype, 'stroke').callsFake(function() {
         drawnElements.push({
             type: 'stroke',
             style: {
@@ -55,7 +57,7 @@ function setupCanvasStub(drawnElements, paths) {
             }
         });
     });
-    sinon.stub(prototype, 'fill', function() {
+    sinon.stub(prototype, 'fill').callsFake(function() {
         const style = {
             fillStyle: this.fillStyle,
             globalAlpha: this.globalAlpha
@@ -75,7 +77,7 @@ function setupCanvasStub(drawnElements, paths) {
             style: style
         });
     });
-    sinon.stub(prototype, 'fillRect', function(x, y, w, h) {
+    sinon.stub(prototype, 'fillRect').callsFake(function(x, y, w, h) {
         drawnElements.push({
             type: 'fillRect',
             args: {
@@ -92,24 +94,24 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     // paths, rect, circle
-    sinon.stub(prototype, 'beginPath', function() {
+    sinon.stub(prototype, 'beginPath').callsFake(function() {
         paths.push([]);
     });
-    sinon.stub(prototype, 'moveTo', function(x, y) {
+    sinon.stub(prototype, 'moveTo').callsFake(function(x, y) {
         paths[paths.length - 1].push({
             action: 'M',
             x: x,
             y: y
         });
     });
-    sinon.stub(prototype, 'lineTo', function(x, y) {
+    sinon.stub(prototype, 'lineTo').callsFake(function(x, y) {
         paths[paths.length - 1].push({
             action: 'L',
             x: x,
             y: y
         });
     });
-    sinon.stub(prototype, 'bezierCurveTo', function(x1, y1, x2, y2, x, y) {
+    sinon.stub(prototype, 'bezierCurveTo').callsFake(function(x1, y1, x2, y2, x, y) {
         paths[paths.length - 1].push({
             action: 'C',
             x1: x1,
@@ -120,7 +122,7 @@ function setupCanvasStub(drawnElements, paths) {
             y: y
         });
     });
-    sinon.stub(prototype, 'arc', function(x, y, r, sa, ea, c) {
+    sinon.stub(prototype, 'arc').callsFake(function(x, y, r, sa, ea, c) {
         drawnElements.push({
             type: 'arc',
             args: {
@@ -146,12 +148,12 @@ function setupCanvasStub(drawnElements, paths) {
             });
         }
     });
-    sinon.stub(prototype, 'closePath', function() {
+    sinon.stub(prototype, 'closePath').callsFake(function() {
         paths[paths.length - 1].push({
             action: 'Z'
         });
     });
-    sinon.stub(prototype, 'rect', function(x, y, width, height) {
+    sinon.stub(prototype, 'rect').callsFake(function(x, y, width, height) {
         drawnElements.push({
             type: 'rect',
             args: {
@@ -163,7 +165,7 @@ function setupCanvasStub(drawnElements, paths) {
             style: {}
         });
     });
-    sinon.stub(prototype, 'arcTo', function(x1, y1, x2, y2, radius) {
+    sinon.stub(prototype, 'arcTo').callsFake(function(x1, y1, x2, y2, radius) {
         drawnElements.push({
             action: 'arcTo',
             args: {
@@ -175,7 +177,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    sinon.stub(prototype, 'createLinearGradient', function(x0, y0, x1, y1) {
+    sinon.stub(prototype, 'createLinearGradient').callsFake(function(x0, y0, x1, y1) {
         const addColorStop = sinon.spy();
         drawnElements.push({
             type: 'linearGradient',
@@ -195,7 +197,7 @@ function setupCanvasStub(drawnElements, paths) {
         };
     });
 
-    sinon.stub(prototype, 'createRadialGradient', function(x0, y0, r0, x1, y1, r1) {
+    sinon.stub(prototype, 'createRadialGradient').callsFake(function(x0, y0, r0, x1, y1, r1) {
         const addColorStop = sinon.spy();
         drawnElements.push({
             type: 'radialGradient',
@@ -245,7 +247,7 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     // texts
-    sinon.stub(prototype, 'fillText', function() {
+    sinon.stub(prototype, 'fillText').callsFake(function() {
         const tempFont = this.font.replace(/px\s/g, 'px__');
         const fontParts = tempFont.split('__');
         const style = {
@@ -274,7 +276,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    sinon.stub(prototype, 'strokeText', function() {
+    sinon.stub(prototype, 'strokeText').callsFake(function() {
         const tempFont = this.font.replace(/px\s/g, 'px__');
         const fontParts = tempFont.split('__');
         const style = {
@@ -311,7 +313,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.stub(prototype, 'clip');
     sinon.stub(prototype, 'save');
     sinon.stub(prototype, 'restore');
-    sinon.stub(prototype, 'createPattern', function() {
+    sinon.stub(prototype, 'createPattern').callsFake(function() {
         drawnElements.push({
             type: 'pattern'
         });
@@ -546,7 +548,7 @@ QUnit.module('Svg to canvas', {
     stubGetComputedStyle: function(testElement, testStyle) {
         const getComputedStyle = window.getComputedStyle;
 
-        this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(element) {
+        this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(element) {
             if(element === testElement) {
                 return testStyle;
             }
@@ -1437,7 +1439,7 @@ QUnit.test('Export draws into hidden canvas', function(assert) {
     assert.strictEqual($('canvas')[0].hidden, true);
 });
 
-QUnit.test('Text', function(assert) {
+testWithoutCsp('Text', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
@@ -1755,7 +1757,7 @@ QUnit.test('Text with big amount of spaces', function(assert) {
     });
 });
 
-QUnit.test('Stroke text', function(assert) {
+testWithoutCsp('Stroke text', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5" style="fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;"><tspan style="font-weight: bold; font-style: italic; " stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd;
@@ -1790,7 +1792,7 @@ QUnit.test('Stroke text', function(assert) {
 });
 
 // T697125
-QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
+testWithoutCsp('Multiline text with shadow and stroked texts', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart +
@@ -1982,7 +1984,7 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     });
 });
 
-QUnit.test('Text decoration', function(assert) {
+testWithoutCsp('Text decoration', function(assert) {
     const that = this;
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
@@ -2463,7 +2465,7 @@ QUnit.test('Export.color option', function(assert) {
     });
 });
 
-QUnit.test('Read computed style of elements if export target is attached element', function(assert) {
+testWithoutCsp('Read computed style of elements if export target is attached element', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
