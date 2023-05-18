@@ -17,8 +17,6 @@ import 'generic_light.css!';
 import dxDrawer from 'ui/drawer';
 import fx from 'animation/fx';
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 const moduleConfig = {
     beforeEach: function() {
         this.$fixture = $('#qunit-fixture');
@@ -53,7 +51,7 @@ openedStateModes.forEach(openedStateMode => {
     });
 });
 
-moduleWithoutCsp('zIndex conflicts', moduleConfig, () => {
+QUnit.module('zIndex conflicts', moduleConfig, () => {
     openedStateModes.forEach(openedStateMode => {
         function checkShaderZIndex($drawer) {
             $drawer.dxDrawer({
@@ -188,7 +186,7 @@ moduleWithoutCsp('zIndex conflicts', moduleConfig, () => {
 });
 
 configs.forEach(config => {
-    moduleWithoutCsp(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading}, minSize: ${config.minSize})`, moduleConfig, () => {
+    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading}, minSize: ${config.minSize})`, moduleConfig, () => {
 
         function configIs(openedStateMode, position, revealMode) {
             const isPosition = Array.isArray(position) ? (position.indexOf(config.position) >= 0) : (config.position === position || !position);
@@ -550,7 +548,7 @@ changeOpenedStateModeConfigs.forEach(config => {
             config, targetOptions);
     }
 
-    moduleWithoutCsp(`Change openedStateMode (position: ${config.position}, revealMode: ${config.revealMode}, minSize: ${config.minSize})`, moduleConfig, () => {
+    QUnit.module(`Change openedStateMode (position: ${config.position}, revealMode: ${config.revealMode}, minSize: ${config.minSize})`, moduleConfig, () => {
         QUnit.test('opened: false, push -> shrink', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
@@ -711,7 +709,7 @@ changeOpenedStateModeConfigs.forEach(config => {
     });
 });
 
-moduleWithoutCsp('Scenarios', moduleConfig, () => {
+QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.test('push, left, opened: false, hidden child, AngularJS, T956751', function(assert) {
         const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
 
