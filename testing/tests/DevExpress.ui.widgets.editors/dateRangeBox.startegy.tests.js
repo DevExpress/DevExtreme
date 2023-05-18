@@ -257,6 +257,42 @@ QUnit.module('Strategy', moduleConfig, () => {
             assert.strictEqual(viewMin, calendarMin, 'view min option restored to calendar min option');
             assert.deepEqual(viewMax, endCellDate, 'view max option equals endDate');
         });
+
+        QUnit.test('min option in views should not change after selecting startDate (selectionBehavior="normal")', function(assert) {
+            this.reinit({
+                applyValueMode: 'useButtons',
+            });
+
+            this.instance.open();
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            $startDateCell.trigger('dxclick');
+
+            const { calendarMax } = this.getCalendarMinMax();
+            const { viewMin, viewMax } = this.getViewMinMax();
+
+            assert.strictEqual(viewMin, viewMin, 'view min option is not changed');
+            assert.strictEqual(calendarMax, viewMax, 'view max option is not changed');
+        });
+
+        QUnit.test('max option in views should not change after selecting endDate (selectionBehavior="normal")', function(assert) {
+            this.reinit({
+                applyValueMode: 'useButtons',
+            });
+            this.instance.open();
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            $startDateCell.trigger('dxclick');
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
+            $endDateCell.trigger('dxclick');
+
+            const { calendarMin, calendarMax } = this.getCalendarMinMax();
+            const { viewMin, viewMax } = this.getViewMinMax();
+
+            assert.strictEqual(viewMin, calendarMin, 'view min option is not changed');
+            assert.strictEqual(viewMax, calendarMax, 'view max option is not changed');
+        });
     });
 
     ['instantly', 'useButtons'].forEach((applyValueMode) => {
