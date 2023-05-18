@@ -13,7 +13,7 @@ const contentTestEnv = {
         pdfCreator.set_getBase64(function(data) { return data; });
         pdfCreator.set_getCurDate(function() { return '_test_date_'; });
         const that = this;
-        sinon.stub(imageCreator, 'getImageData', function(markup) { const def = $.Deferred(); def.resolve(that.imageDataSample || '_test_' + markup + '_string_'); return def; });
+        sinon.stub(imageCreator, 'getImageData').callsFake(function(markup) { const def = $.Deferred(); def.resolve(that.imageDataSample || '_test_' + markup + '_string_'); return def; });
     },
     afterEach: function() {
         pdfCreator.restore_getBlob();
@@ -133,7 +133,7 @@ QUnit.module('Export', {
     beforeEach: function() {
         pdfCreator.set_composePdfString(function() { return '_composed_string_'; });
 
-        sinon.stub(imageCreator, 'getImageData', function(markup) { const def = $.Deferred(); def.resolve(''); return def; });
+        sinon.stub(imageCreator, 'getImageData').callsFake(function(markup) { const def = $.Deferred(); def.resolve(''); return def; });
 
         if(isFunction(window.Blob)) {
             this.Blob = window.Blob;
