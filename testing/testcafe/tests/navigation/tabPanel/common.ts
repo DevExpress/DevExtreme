@@ -156,16 +156,16 @@ test('TabPanel borders without scrolling', async (t) => {
     await t.pressKey(direction);
 
     const thirdItem = tabPanel.getItem(2);
-    const fourthItem = tabPanel.getItem(3);
+    const firstItem = tabPanel.getItem(0);
 
     await t.dispatchEvent(thirdItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel when 3 item has active state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
       .dispatchEvent(thirdItem.element, 'mouseup')
-      .hover(fourthItem.element);
+      .hover(firstItem.element);
 
-    await testScreenshot(t, takeScreenshot, `TabPanel when 4 item has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t.hover(Selector(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`));
     await testScreenshot(t, takeScreenshot, `TabPanel when right navigation button has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
