@@ -60,8 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "End value must be a date",
         "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
         "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
-        "dxDateBox-startDateLabel": "Start Date",
-        "dxDateBox-endDateLabel": "End Date",
+        "dxDateBox-startDateLabel": "開始時刻",
+        "dxDateBox-endDateLabel": "終了時刻",
 
         "dxFileUploader-selectFile": "ファイルを選択",
         "dxFileUploader-dropFile": "またはファイルをこちらにドロップしてください。",

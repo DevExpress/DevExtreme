@@ -60,8 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "End value must be a date",
         "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
         "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
-        "dxDateBox-startDateLabel": "Start Date",
-        "dxDateBox-endDateLabel": "End Date",
+        "dxDateBox-startDateLabel": "Počáteční datum",
+        "dxDateBox-endDateLabel": "Koncové datum",
 
         "dxFileUploader-selectFile": "Vyberte soubor",
         "dxFileUploader-dropFile": "nebo přeneste soubor sem",
