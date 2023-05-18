@@ -44,6 +44,7 @@ const Tooltip = Popover.inherit({
 
             /**
             * @name dxTooltipOptions.titleTemplate
+            * @type template
             * @hidden
             */
             titleTemplate: null,

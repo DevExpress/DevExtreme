@@ -82,7 +82,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @public
  */
-export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | label | maxLength | name | placeholder | text'> & {
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
@@ -146,7 +146,7 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     multiView?: boolean;
     /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.openOnFieldClick
      * @default true
      * @public
      */
@@ -233,6 +233,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

@@ -1,5 +1,6 @@
 /**
  * @docid
+ * @public
  */
 export interface dxSchedulerTimeZone {
     /**
