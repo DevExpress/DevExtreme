@@ -330,7 +330,7 @@ const transpileTesting = async(Builder) => {
         const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
         const sourceCode = fs.readFileSync(filePath).toString();
 
-        if(filePath.includes('DevExpress.ui.widgets/') && /System(JS)?\./.test(sourceCode)) {
+        if(/System(JS)?\./.test(sourceCode)) {
             fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
             continue;
         }
