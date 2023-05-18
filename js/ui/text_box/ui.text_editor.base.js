@@ -476,14 +476,19 @@ const TextEditorBase = Editor.inherit({
     },
 
     _setLabelContainerAria() {
-        const { placeholder } = this.option();
-
-        const placeholderId = this._$placeholder.attr('id');
         const labelElementId = this._label.getId();
 
-        const value = placeholder ? `${labelElementId} ${placeholderId}` : labelElementId;
+        const aria = {
+            'labelledby': labelElementId,
+        };
 
-        this.setAria('labelledby', value, this._getElementToSettingAriaLabel());
+        if(this._$placeholder) {
+            const placeholderId = this._$placeholder.attr('id');
+
+            aria['labelledby'] = `${labelElementId} ${placeholderId}`;
+        }
+
+        this.setAria(aria, this._getElementToSettingAriaLabel());
     },
 
     _renderLabel: function() {
