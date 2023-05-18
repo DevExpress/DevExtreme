@@ -32,11 +32,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="drb"></div>
+    <div id="button"></div>
     <script>
         $(function() {
-            $("#drb").dxDateRangeBox({
-                width: 500
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
