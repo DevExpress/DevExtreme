@@ -6,7 +6,7 @@ const svgUtils = require('core/utils/svg');
 
 function setupCanvasStub() {
     // Blob
-    isFunction(Blob) && sinon.stub(window, 'Blob', function(arrayBuffer, options) {
+    isFunction(Blob) && sinon.stub(window, 'Blob').callsFake(function(arrayBuffer, options) {
         return {
             arrayBuffer: arrayBuffer,
             options: options
