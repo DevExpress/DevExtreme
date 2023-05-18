@@ -1,7 +1,7 @@
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter, toComparable } from '../../core/utils/data';
 import { ensureDefined, noop } from '../../core/utils/common';
-import { isDefined, isObject as isObjectType, isString, isFunction } from '../../core/utils/type';
+import { isDefined, isObject as isObjectType } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import DataHelperMixin from '../../data_helper';
 import { DataSource } from '../../data/data_source/data_source';
@@ -171,10 +171,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _getCollectionKeyExpr: function() {
-        const valueExpr = this.option('valueExpr');
-        const isValueExprField = isString(valueExpr) && valueExpr !== 'this' || isFunction(valueExpr);
-
-        return isValueExprField ? valueExpr : null;
+        return null;
     },
 
     _dataExpressionOptionChanged: function(args) {
