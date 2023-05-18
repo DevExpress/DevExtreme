@@ -5,6 +5,7 @@ import FilterBuilder from '../../model/filterBuilder';
 import createWidget from '../../helpers/createWidget';
 import { DateBoxPopup } from '../../model/filterBuilder/dateboxPopup';
 
+// comment to test PR
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
