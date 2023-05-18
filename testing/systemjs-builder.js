@@ -336,10 +336,10 @@ const transpileTesting = async(Builder) => {
         }
 
         if(
-            filePath.includes('ui.widgets/fileManagerParts') ||
-            filePath.includes('ui.widgets.htmlEditor/htmlEditorParts')
+            filePath.includes('ui.widgets/fileManagerParts')
+            || filePath.includes('ui.widgets.htmlEditor/htmlEditorParts')
         ) {
-            await transpileWithBuilder(builder, filePath, destPath);
+            await transpileWithBabel(sourceCode, destPath);
         } else {
             try {
                 await transpileWithBuilder(builder, filePath, destPath);
