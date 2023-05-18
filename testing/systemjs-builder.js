@@ -325,29 +325,28 @@ const transpileTesting = async(Builder) => {
     const testsList = getFileList(path.join(root, 'testing/tests'));
     const listFiles = [].concat(contentList, helpersList, testsList);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for(const filePath of listFiles) {
-        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
-        const sourceCode = fs.readFileSync(filePath).toString();
+    let transpileBuilderPromise = Promise.resolve();
 
-        if(/System(JS)?\./.test(sourceCode)) {
-            fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
-            continue;
-        }
+    await Promise.all(
+        listFiles.map((filePath) => {
+            const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
+            const sourceCode = fs.readFileSync(filePath).toString();
 
-        if(
-            filePath.includes('ui.widgets/fileManagerParts')
-            || filePath.includes('ui.widgets.htmlEditor/htmlEditorParts')
-        ) {
-            await transpileWithBabel(sourceCode, destPath);
-        } else {
-            try {
-                await transpileWithBuilder(builder, filePath, destPath);
-            } catch(error) {
-                await transpileWithBabel(sourceCode, destPath);
+            if(/System(JS)?\./.test(sourceCode) || /define\(/.test(sourceCode)) {
+                fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
+                return;
             }
-        }
-    }
+
+            if(/require\(/.test(sourceCode) || filePath.endsWith('.json')) {
+                transpileBuilderPromise = transpileBuilderPromise
+                    .then(() => transpileWithBuilder(builder, filePath, destPath));
+
+                return transpileBuilderPromise;
+            }
+
+            return transpileWithBabel(sourceCode, destPath);
+        })
+    );
 };
 
 const patchBuilder = (fileName, searchValue, replaceValue) => {
