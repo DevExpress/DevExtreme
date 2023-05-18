@@ -213,7 +213,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [Renovation, TS, JS, CSS, texts, package_lock, package_lock_npm_6, component_exports]
+    needs: [Renovation, TS, JS, CSS, texts, package_lock, component_exports]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
