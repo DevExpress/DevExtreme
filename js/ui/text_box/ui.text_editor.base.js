@@ -19,6 +19,7 @@ import LoadIndicator from '../load_indicator';
 import { TextEditorLabel } from './ui.text_editor.label';
 import { getWidth } from '../../core/utils/size';
 import resizeObserverSingleton from '../../core/resize_observer';
+import Guid from '../../core/guid';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -470,8 +471,19 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
-    _setLabelContainerAria: function() {
-        this.setAria('labelledby', this._label.getId(), this._getLabelContainer());
+    _getElementToSettingAriaLabel() {
+        return this._getLabelContainer();
+    },
+
+    _setLabelContainerAria() {
+        const { placeholder } = this.option();
+
+        const placeholderId = this._$placeholder.attr('id');
+        const labelElementId = this._label.getId();
+
+        const value = placeholder ? `${labelElementId} ${placeholderId}` : labelElementId;
+
+        this.setAria('labelledby', value, this._getElementToSettingAriaLabel());
     },
 
     _renderLabel: function() {
@@ -512,9 +524,13 @@ const TextEditorBase = Editor.inherit({
         }
 
         const $input = this._input();
-        const placeholderText = this.option('placeholder');
+        const placeholderAttributes = {
+            'id': `dx-${new Guid()}`,
+            'data-dx_placeholder': this.option('placeholder'),
+        };
+
         const $placeholder = this._$placeholder = $('<div>')
-            .attr('data-dx_placeholder', placeholderText);
+            .attr(placeholderAttributes);
 
         $placeholder.insertAfter($input);
         $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
@@ -772,6 +788,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'placeholder':
                 this._renderPlaceholder();
+                this._setLabelContainerAria();
                 break;
             case 'label':
                 this._label.updateText(value);
