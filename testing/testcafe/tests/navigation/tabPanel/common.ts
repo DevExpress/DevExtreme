@@ -200,6 +200,8 @@ test('TabPanel borders without scrolling', async (t) => {
       width: 450,
       showNavButtons: true,
       rtlEnabled,
+      // prevent firing dxinactive event for to avoid failing test
+      itemHoldTimeout: 5000,
     };
 
     return createWidget('dxTabPanel', tabPanelOptions);
