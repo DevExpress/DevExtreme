@@ -337,7 +337,7 @@ const transpileTesting = async(Builder) => {
                 return;
             }
 
-            if(/require\(/.test(sourceCode) || filePath.endsWith('.json')) {
+            if(/require\(/.test(sourceCode) || /(module\.)?exports(\..+)?\s*=\s*/.test(sourceCode) || filePath.endsWith('.json')) {
                 transpileBuilderPromise = transpileBuilderPromise
                     .then(() => transpileWithBuilder(builder, filePath, destPath));
 
