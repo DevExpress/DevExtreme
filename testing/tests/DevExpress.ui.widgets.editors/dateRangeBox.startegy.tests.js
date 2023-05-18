@@ -101,10 +101,11 @@ QUnit.module('Strategy', moduleConfig, () => {
         }
     }, () => {
         ['instantly', 'useButtons'].forEach((applyValueMode) => {
-            QUnit.test(`view min/max should be equal to calendar min/max on Popup open (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.test(`view min/max should be equal to calendar min/max on Popup open (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
                 this.reinit({
                     value: ['2023/01/05', '2023/02/14'],
-                    applyValueMode
+                    applyValueMode,
+                    selectionBehavior: 'withDisable',
                 });
 
                 this.instance.open();
@@ -116,9 +117,10 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(viewMax, calendarMax, 'view and calendar max option is the same');
             });
 
-            QUnit.test(`min option in views should be equal to startDate after selecting startDate (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.test(`min option in views should be equal to startDate after selecting startDate (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
                 this.reinit({
-                    applyValueMode
+                    applyValueMode,
+                    selectionBehavior: 'withDisable',
                 });
 
                 this.instance.open();
@@ -134,12 +136,13 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(calendarMax, viewMax, 'view max option is not changed');
             });
 
-            QUnit.testInActiveWindow(`min option in views should be equal to startDate after focus startDate input (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.testInActiveWindow(`min option in views should be equal to startDate after focus startDate input (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
                 const initialValue = [new Date(2021, 9, 17), new Date(2021, 9, 20)];
 
                 this.reinit({
                     applyValueMode,
                     value: initialValue,
+                    selectionBehavior: 'withDisable',
                 });
 
                 $(this.instance.endDateField()).trigger('dxclick');
@@ -165,10 +168,11 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.deepEqual(this.getViewMinMax().viewMax, initialValue[1], 'view max option is changed');
             });
 
-            QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
                 this.reinit({
                     applyValueMode,
                     multiView: true,
+                    selectionBehavior: 'withDisable',
                 });
 
                 this.instance.open();
@@ -193,10 +197,11 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(viewMax, calendarMax, 'view max option restored to calendar max option');
             });
 
-            QUnit.test(`Views min option should not be restored after view refresh (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.test(`Views min option should not be restored after view refresh (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
                 this.reinit({
                     applyValueMode,
                     opened: true,
+                    selectionBehavior: 'withDisable',
                 });
 
                 const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
@@ -210,10 +215,11 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.deepEqual(viewMin, startCellDate, 'view min option equals startDate');
             });
 
-            QUnit.test(`Views max option should not be restored after view refresh (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.test(`Views max option should not be restored after view refresh (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
                 this.reinit({
                     applyValueMode,
                     opened: true,
+                    selectionBehavior: 'withDisable',
                 });
 
                 $(this.instance.endDateField()).focusin();
@@ -230,10 +236,11 @@ QUnit.module('Strategy', moduleConfig, () => {
             });
         });
 
-        QUnit.test('max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode = "useButtons")', function(assert) {
+        QUnit.test('max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode="useButtons", selectionBehavior="withDisable")', function(assert) {
             this.reinit({
                 applyValueMode: 'useButtons',
                 multiView: true,
+                selectionBehavior: 'withDisable',
             });
             this.instance.open();
 

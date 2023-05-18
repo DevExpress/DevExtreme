@@ -92,6 +92,7 @@ class DateRangeBox extends Editor {
             opened: false,
             pickerType: 'calendar',
             readOnly: false,
+            selectionBehavior: 'normal',
             showClearButton: false,
             showDropDownButton: true,
             spellcheck: false,
@@ -805,6 +806,8 @@ class DateRangeBox extends Editor {
 
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
+                break;
+            case 'selectionBehavior':
                 break;
             case 'startDate':
                 this.updateValue([value, this.option('value')[1]]);
