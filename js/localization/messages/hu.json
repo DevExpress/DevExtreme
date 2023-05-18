@@ -60,6 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "End value must be a date",
         "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
         "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
+        "dxDateBox-startDateLabel": "Kezdés dátuma",
+        "dxDateBox-endDateLabel": "Befejezés dátuma",
 
         "dxFileUploader-selectFile": "Válasszon fájlt",
         "dxFileUploader-dropFile": "vagy húzza a fájlt ide",

@@ -175,10 +175,6 @@ jobs:
           'viz',
           'renovation'
         ]
-        include:
-          - useCsp: true
-          - constel: 'export'
-            useCsp: false
 
     steps:
       - name: Get sources
@@ -192,7 +188,7 @@ jobs:
           browser: 'firefox'
           useJQuery: 'true'
           headless: 'true'
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-no-csp:
     needs: build
@@ -202,7 +198,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc' ]
+        constel: [ 'export', 'misc' ]
 
     steps:
       - name: Get sources

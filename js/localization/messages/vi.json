@@ -60,6 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "End value must be a date",
         "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
         "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
+        "dxDateBox-startDateLabel": "Ngày bắt đầu",
+        "dxDateBox-endDateLabel": "Ngày kết thúc",
 
         "dxFileUploader-selectFile": "Chọn tập tin",
         "dxFileUploader-dropFile": "hoặc Thả tập tin vào đây",
