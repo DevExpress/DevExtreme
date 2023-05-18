@@ -169,10 +169,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Use Node.js
+    - name: Use Node.js 14
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+#       This version contains npm v6
+        node-version: '14'
 
     - name: Check package-lock
       run: |
