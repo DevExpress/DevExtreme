@@ -60,8 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "End value must be a date",
         "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
         "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
-        "dxDateBox-startDateLabel": "Start Date",
-        "dxDateBox-endDateLabel": "End Date",
+        "dxDateBox-startDateLabel": "Дата начала",
+        "dxDateBox-endDateLabel": "Дата завершения",
 
         "dxFileUploader-selectFile": "Выберите файл",
         "dxFileUploader-dropFile": "или Перетащите файл сюда",

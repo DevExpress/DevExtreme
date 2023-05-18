@@ -60,8 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "End value must be a date",
         "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
         "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
-        "dxDateBox-startDateLabel": "Start Date",
-        "dxDateBox-endDateLabel": "End Date",
+        "dxDateBox-startDateLabel": "開始日期",
+        "dxDateBox-endDateLabel": "結束日期",
 
         "dxFileUploader-selectFile": "選擇文件",
         "dxFileUploader-dropFile": "或者把文件放在此處",
