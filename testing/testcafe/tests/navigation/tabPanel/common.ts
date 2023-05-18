@@ -157,7 +157,7 @@ test('TabPanel borders without scrolling', async (t) => {
     const thirdItem = tabPanel.getItem(2);
     const fourthItem = tabPanel.getItem(3);
 
-    await t.dispatchEvent(thirdItem.element, 'mousedown');
+    await t.dispatchEvent(thirdItem.element, 'mouseup');
     await testScreenshot(t, takeScreenshot, `TabPanel when 3 item has active state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
