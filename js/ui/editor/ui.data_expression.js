@@ -171,7 +171,9 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _getCollectionKeyExpr: function() {
-        return null;
+        const valueExpr = this.option('valueExpr');
+
+        return valueExpr;
     },
 
     _dataExpressionOptionChanged: function(args) {
