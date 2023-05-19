@@ -15,7 +15,7 @@ export const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 export const TARGET_COMPONENT_NAME = 'targetComponent';
 
 export const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-export const FOCUSABLE_ELEMENT_SELECTOR = '[tabindex], ' + EDITORS_INPUT_SELECTOR;
+export const FOCUSABLE_ELEMENT_SELECTOR = `[tabindex], ${EDITORS_INPUT_SELECTOR}`;
 
 export const EDIT_MODE_BATCH = 'batch';
 export const EDIT_MODE_ROW = 'row';
@@ -30,6 +30,7 @@ export const PAGE_TOP_NEW_ROW_POSITION = 'pageTop';
 export const VIEWPORT_BOTTOM_NEW_ROW_POSITION = 'viewportBottom';
 export const VIEWPORT_TOP_NEW_ROW_POSITION = 'viewportTop';
 
+// eslint-disable-next-line max-len
 export const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
