@@ -276,4 +276,30 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
         assert.equal(this.instance._treeList.getVisibleRows().length, 1);
     });
+    test('render with progressExpr as a function (T1163857)', function(assert) {
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progressFake': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progressFake': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-19'), 'end': new Date('2019-02-26'), 'progressFake': 50 }
+        ];
+        const options = {
+            tasks: {
+                dataSource: tasks,
+                progressExpr: (data, value) => data.progressFake
+            },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick(1000);
+
+        this.clock.tick(0);
+        let $parentTasks = this.$element.find(Consts.PARENT_TASK_SELECTOR);
+        $parentTasks = this.$element.find(Consts.PARENT_TASK_SELECTOR);
+        assert.equal($parentTasks.length, 2, 'parent tasks not exists');
+
+        this.instance.showTaskDetailsDialog(2);
+        const $dialog = $('body').find(Consts.POPUP_SELECTOR);
+        const $inputs = $dialog.find(Consts.INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(3).val(), tasks[2].progressFake + '%', 'progress text is shown');
+    });
 });
