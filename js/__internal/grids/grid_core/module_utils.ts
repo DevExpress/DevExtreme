@@ -408,7 +408,7 @@ export default {
     return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
   },
 
-  getPointsByColumns(items, pointCreated, isVertical, startColumnIndex) {
+  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex?) {
     const cellsLength = items.length;
     let notCreatePoint = false;
     let item;
