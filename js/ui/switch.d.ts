@@ -28,6 +28,7 @@ export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseE
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**

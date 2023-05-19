@@ -25,7 +25,11 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @type object
+ */
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
@@ -212,6 +216,7 @@ export interface dxOverlayAnimation {
  * @inherits Widget
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxOverlayOptions
  */
 export default class dxOverlay<TProperties> extends Widget<TProperties> {
     /**

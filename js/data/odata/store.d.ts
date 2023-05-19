@@ -13,6 +13,7 @@ export type Options<
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface ODataStoreOptions<
     TItem = any,
@@ -93,6 +94,7 @@ export interface ODataStoreOptions<
  * @docid
  * @inherits Store
  * @public
+ * @options ODataStoreOptions
  */
 export default class ODataStore<
     TItem = any,

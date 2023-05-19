@@ -37,6 +37,7 @@ export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**

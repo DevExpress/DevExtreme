@@ -673,6 +673,8 @@ type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'edit
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
+ * @type object
  */
 export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
     /**
@@ -1582,8 +1584,9 @@ export type Selection = SelectionBase & {
  * @inherits GridBase
  * @namespace DevExpress.ui
  * @public
+ * @options dxDataGridOptions
  */
-declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
+export default class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -2079,8 +2082,6 @@ export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData,
 
 /** @deprecated use Properties instead */
 export type Options<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
-
-export default dxDataGrid;
 
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;

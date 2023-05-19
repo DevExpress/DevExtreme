@@ -104,6 +104,7 @@ export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**

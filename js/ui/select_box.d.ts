@@ -106,6 +106,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TComponent> {
     /**

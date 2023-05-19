@@ -42,6 +42,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRadioGroup, KeyboardEvent | Mo
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**

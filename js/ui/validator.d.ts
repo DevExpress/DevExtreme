@@ -45,6 +45,7 @@ export type ValidatedEvent = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**

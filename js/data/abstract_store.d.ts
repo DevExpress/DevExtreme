@@ -18,6 +18,8 @@ export type Options<
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
+ * @hidden
  */
 export interface StoreOptions<
     TItem = any,
@@ -115,7 +117,10 @@ export interface StoreOptions<
 type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
+ * @docid Store
+ * @hidden
  * @namespace DevExpress.data
+ * @options StoreOptions
  */
 export class Store<
     TItem = any,
@@ -221,8 +226,6 @@ export class Store<
 }
 
   /**
-   * @docid Store
-   * @hidden
    * @namespace DevExpress.data
    */
   export default class AbstractStore<

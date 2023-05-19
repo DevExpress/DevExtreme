@@ -225,6 +225,7 @@ export type DateNavigatorTextInfo = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**

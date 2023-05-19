@@ -263,6 +263,7 @@ export type TimeTooltipTemplateData = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
