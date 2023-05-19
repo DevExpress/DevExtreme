@@ -4,7 +4,7 @@ import gridCore from './module_core';
 
 gridCore.registerModule('columns', {
   defaultOptions() {
-    return extend(true, {}, columnsControllerModule.defaultOptions(), {
+    return extend(true, {}, (columnsControllerModule as any).defaultOptions(), {
       commonColumnSettings: {
         allowExporting: true,
       },
