@@ -1,150 +1,150 @@
+import { equalByValue } from '@js/core/utils/common';
 import {
-    EDIT_MODE_ROW,
-    MODES_WITH_DELAYED_FOCUS,
-    ROW_SELECTED_CLASS,
-    EDIT_FORM_CLASS,
-    EDITING_EDITROWKEY_OPTION_NAME
+  EDIT_MODE_ROW,
+  MODES_WITH_DELAYED_FOCUS,
+  ROW_SELECTED_CLASS,
+  EDIT_FORM_CLASS,
+  EDITING_EDITROWKEY_OPTION_NAME,
 
-} from './ui.grid_core.editing_constants';
-
-import { equalByValue } from '../../core/utils/common';
+} from './const';
 
 const EDIT_ROW = 'dx-edit-row';
 
 export const editingRowBasedModule = {
-    extenders: {
-        controllers: {
-            editing: {
-                isRowEditMode: function() {
-                    return this.getEditMode() === EDIT_MODE_ROW;
-                },
-
-                _afterCancelEditData: function(rowIndex) {
-                    const dataController = this._dataController;
-
-                    if(this.isRowBasedEditMode() && rowIndex >= 0) {
-                        dataController.updateItems({
-                            changeType: 'update',
-                            rowIndices: [rowIndex, rowIndex + 1]
-                        });
-                    } else {
-                        this.callBase.apply(this, arguments);
-                    }
-                },
-
-                _isDefaultButtonVisible: function(button, options) {
-                    const isRowMode = this.isRowBasedEditMode();
-                    const isEditRow = options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
-
-                    if(isRowMode) {
-                        switch(button.name) {
-                            case 'edit':
-                                return !isEditRow && this.allowUpdating(options);
-                            case 'delete':
-                                return this.callBase.apply(this, arguments) && !isEditRow;
-                            case 'save':
-                            case 'cancel':
-                                return isEditRow;
-                            default:
-                                return this.callBase.apply(this, arguments);
-                        }
-                    }
-
-                    return this.callBase.apply(this, arguments);
-                },
-
-                isEditRow: function(rowIndex) {
-                    return this.isRowBasedEditMode() && this.isEditRowByIndex(rowIndex);
-                },
-
-                _cancelSaving: function() {
-                    if(this.isRowBasedEditMode()) {
-                        if(!this.hasChanges()) {
-                            this._cancelEditDataCore();
-                        }
-                    }
-
-                    this.callBase.apply(this, arguments);
-                },
-
-                _refreshCore: function(params) {
-                    const { allowCancelEditing } = params ?? {};
-                    if(this.isRowBasedEditMode()) {
-                        const hasUpdateChanges = this.getChanges().filter(it => it.type === 'update').length > 0;
-
-                        this.init();
-                        allowCancelEditing && hasUpdateChanges && this._cancelEditDataCore();
-                    }
-
-                    this.callBase.apply(this, arguments);
-                },
-
-                _isEditColumnVisible: function() {
-                    const result = this.callBase.apply(this, arguments);
-                    const editingOptions = this.option('editing');
-                    const isRowEditMode = this.isRowEditMode();
-                    const isVisibleInRowEditMode = editingOptions.allowUpdating || editingOptions.allowAdding;
-
-                    return result || (isRowEditMode && isVisibleInRowEditMode);
-                },
-
-                _focusEditorIfNeed: function() {
-                    const editMode = this.getEditMode();
-
-                    if(this._needFocusEditor) {
-                        if(MODES_WITH_DELAYED_FOCUS.indexOf(editMode) !== -1) {
-                            const $editingCell = this.getFocusedCellInRow(this._getVisibleEditRowIndex());
-
-                            this._delayedInputFocus($editingCell, () => {
-                                $editingCell && this.component.focus($editingCell);
-                            });
-                        }
-
-                        this._needFocusEditor = false;
-                    }
-                },
-            },
-            data: {
-                _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    const editingController = this.getController('editing');
-
-                    if(editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {
-                        return;
-                    }
-
-                    return this.callBase.apply(this, arguments);
-                }
-            }
+  extenders: {
+    controllers: {
+      editing: {
+        isRowEditMode() {
+          return this.getEditMode() === EDIT_MODE_ROW;
         },
-        views: {
-            rowsView: {
-                _createRow: function(row) {
-                    const $row = this.callBase.apply(this, arguments);
 
-                    if(row) {
-                        const editingController = this._editingController;
-                        const isEditRow = editingController.isEditRow(row.rowIndex);
+        _afterCancelEditData(rowIndex) {
+          const dataController = this._dataController;
 
-                        if(isEditRow) {
-                            $row.addClass(EDIT_ROW);
-                            $row.removeClass(ROW_SELECTED_CLASS);
+          if (this.isRowBasedEditMode() && rowIndex >= 0) {
+            dataController.updateItems({
+              changeType: 'update',
+              rowIndices: [rowIndex, rowIndex + 1],
+            });
+          } else {
+            this.callBase.apply(this, arguments);
+          }
+        },
 
-                            if(row.rowType === 'detail') {
-                                $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
-                            }
-                        }
-                    }
+        _isDefaultButtonVisible(button, options) {
+          const isRowMode = this.isRowBasedEditMode();
+          const isEditRow = options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
-                    return $row;
-                },
-
-                _update: function(change) {
-                    this.callBase(change);
-                    if(change.changeType === 'updateSelection') {
-                        this.getTableElements().children('tbody').children('.' + EDIT_ROW).removeClass(ROW_SELECTED_CLASS);
-                    }
-                },
+          if (isRowMode) {
+            switch (button.name) {
+              case 'edit':
+                return !isEditRow && this.allowUpdating(options);
+              case 'delete':
+                return this.callBase.apply(this, arguments) && !isEditRow;
+              case 'save':
+              case 'cancel':
+                return isEditRow;
+              default:
+                return this.callBase.apply(this, arguments);
             }
-        }
-    }
+          }
+
+          return this.callBase.apply(this, arguments);
+        },
+
+        isEditRow(rowIndex) {
+          return this.isRowBasedEditMode() && this.isEditRowByIndex(rowIndex);
+        },
+
+        _cancelSaving() {
+          if (this.isRowBasedEditMode()) {
+            if (!this.hasChanges()) {
+              this._cancelEditDataCore();
+            }
+          }
+
+          this.callBase.apply(this, arguments);
+        },
+
+        _refreshCore(params) {
+          const { allowCancelEditing } = params ?? {};
+          if (this.isRowBasedEditMode()) {
+            const hasUpdateChanges = this.getChanges().filter((it) => it.type === 'update').length > 0;
+
+            this.init();
+            allowCancelEditing && hasUpdateChanges && this._cancelEditDataCore();
+          }
+
+          this.callBase.apply(this, arguments);
+        },
+
+        _isEditColumnVisible() {
+          const result = this.callBase.apply(this, arguments);
+          const editingOptions = this.option('editing');
+          const isRowEditMode = this.isRowEditMode();
+          const isVisibleInRowEditMode = editingOptions.allowUpdating || editingOptions.allowAdding;
+
+          return result || (isRowEditMode && isVisibleInRowEditMode);
+        },
+
+        _focusEditorIfNeed() {
+          const editMode = this.getEditMode();
+
+          if (this._needFocusEditor) {
+            if (MODES_WITH_DELAYED_FOCUS.includes(editMode)) {
+              const $editingCell = this.getFocusedCellInRow(this._getVisibleEditRowIndex());
+
+              this._delayedInputFocus($editingCell, () => {
+                $editingCell && this.component.focus($editingCell);
+              });
+            }
+
+            this._needFocusEditor = false;
+          }
+        },
+      },
+      data: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
+          const editingController = this.getController('editing');
+
+          if (editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {
+            return;
+          }
+
+          return this.callBase.apply(this, arguments);
+        },
+      },
+    },
+    views: {
+      rowsView: {
+        _createRow(row) {
+          const $row = this.callBase.apply(this, arguments);
+
+          if (row) {
+            const editingController = this._editingController;
+            const isEditRow = editingController.isEditRow(row.rowIndex);
+
+            if (isEditRow) {
+              $row.addClass(EDIT_ROW);
+              $row.removeClass(ROW_SELECTED_CLASS);
+
+              if (row.rowType === 'detail') {
+                $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+              }
+            }
+          }
+
+          return $row;
+        },
+
+        _update(change) {
+          this.callBase(change);
+          if (change.changeType === 'updateSelection') {
+            this.getTableElements().children('tbody').children(`.${EDIT_ROW}`).removeClass(ROW_SELECTED_CLASS);
+          }
+        },
+      },
+    },
+  },
 };
