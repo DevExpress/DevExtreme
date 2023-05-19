@@ -13,7 +13,14 @@ import {
 import numberLocalization from '@js/localization/number';
 import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import {
-  DEFAULT_COLUMN_OPTIONS, GROUP_LOCATION, COLUMN_CHOOSER_LOCATION, GROUP_COMMAND_COLUMN_NAME, USER_STATE_FIELD_NAMES, USER_STATE_FIELD_NAMES_15_1, IGNORE_COLUMN_OPTION_NAMES, COLUMN_INDEX_OPTIONS,
+  DEFAULT_COLUMN_OPTIONS,
+  GROUP_LOCATION,
+  COLUMN_CHOOSER_LOCATION,
+  GROUP_COMMAND_COLUMN_NAME,
+  USER_STATE_FIELD_NAMES,
+  USER_STATE_FIELD_NAMES_15_1,
+  IGNORE_COLUMN_OPTION_NAMES,
+  COLUMN_INDEX_OPTIONS,
 } from './const';
 
 export const setFilterOperationsAsDefaultValues = function (column) {
