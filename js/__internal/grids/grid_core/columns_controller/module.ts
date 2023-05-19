@@ -1765,12 +1765,6 @@ export const columnsControllerModule: Module = {
     };
   },
   controllers: {
-    columns: modules.Controller.inherit((function () {
-      const members = {
-
-      };
-
-      return members;
-    })()),
+    columns: ColumnsController,
   },
 };
