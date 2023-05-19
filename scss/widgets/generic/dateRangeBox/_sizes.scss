@@ -8,10 +8,10 @@ $generic-daterangebox-label-height: null !default;
 
 @if $size == "default" {
   $generic-daterangebox-active-bar-horizontal-margin: 9px !default;
-  $generic-daterangebox-label-height: 15px !default;
+  $generic-daterangebox-label-height: 14px !default;
 }
 
 @else if $size == "compact" {
   $generic-daterangebox-active-bar-horizontal-margin: 5px !default;
-  $generic-daterangebox-label-height: 13px !default;
+  $generic-daterangebox-label-height: 12px !default;
 }

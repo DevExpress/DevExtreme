@@ -1,4 +1,4 @@
-import DataSourceAdapter from '@js/ui/grid_core/ui.grid_core.data_source_adapter';
+import DataSourceAdapter from '../grid_core/data_source_adapter/module';
 
 let dataSourceAdapterType: any = DataSourceAdapter;
 

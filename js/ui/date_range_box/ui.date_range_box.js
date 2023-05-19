@@ -16,6 +16,8 @@ import { FunctionTemplate } from '../../core/templates/function_template';
 import { isSameDates, isSameDateArrays, sortDatesArray, getDeserializedDate } from './ui.date_range.utils';
 import { each } from '../../core/utils/iterator';
 import { camelize } from '../../core/utils/inflector';
+import { addNamespace } from '../../events/utils/index';
+import eventsEngine from '../../events/core/events_engine';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DATERANGEBOX_WITH_LABEL_CLASS = 'dx-daterangebox-with-label';
@@ -62,7 +64,7 @@ class DateRangeBox extends Editor {
             dropDownOptions: {},
             endDate: null,
             endDateInputAttr: {},
-            endDateLabel: 'End Date',
+            endDateLabel: messageLocalization.format('dxDateBox-endDateLabel'),
             endDateName: '',
             endDatePlaceholder: '',
             endDateText: undefined,
@@ -95,7 +97,7 @@ class DateRangeBox extends Editor {
             spellcheck: false,
             startDate: null,
             startDateInputAttr: {},
-            startDateLabel: 'Start Date',
+            startDateLabel: messageLocalization.format('dxDateBox-startDateLabel'),
             startDateName: '',
             startDateOutOfRangeMessage: messageLocalization.format('dxDateBox-startDateOutOfRangeMessage'),
             startDatePlaceholder: '',
@@ -304,7 +306,23 @@ class DateRangeBox extends Editor {
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
             .appendTo(this.$element());
 
+        this._renderPreventBlurOnSeparatorClick();
+
         $icon.appendTo(this._$separator);
+    }
+
+    _renderPreventBlurOnSeparatorClick() {
+        const eventName = addNamespace('mousedown', 'dxDateRangeBox');
+
+        eventsEngine.off(this._$separator, eventName);
+        eventsEngine.on(this._$separator, eventName, (e) => {
+            if(!this._hasActiveElement()) {
+                this.focus();
+            }
+
+            e.preventDefault();
+
+        });
     }
 
     _renderButtonsContainer() {
@@ -468,6 +486,8 @@ class DateRangeBox extends Editor {
             dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
+            'dropDownOptions.showTitle': false,
+            'dropDownOptions.title': '',
             dropDownOptions: options.dropDownOptions,
             invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
@@ -523,7 +543,9 @@ class DateRangeBox extends Editor {
 
                     // TODO: datebox doesn't clear opened state after prevent of opening
                     this.getEndDateBox().option('opened', false);
-                }
+                },
+                showTitle: false,
+                title: '',
             },
             onValueChanged: ({ value, event }) => {
                 if(!this._shouldSuppressValueSync) {
@@ -655,6 +677,7 @@ class DateRangeBox extends Editor {
             case 'displayFormat':
             case 'max':
             case 'min':
+            case 'openOnFieldClick':
             case 'spellcheck':
             case 'useMaskBehavior':
             case 'valueChangeEvent':
@@ -766,8 +789,6 @@ class DateRangeBox extends Editor {
             case 'onPaste':
             case 'onEnterKey':
                 this._createEventAction(name.replace('on', ''));
-                break;
-            case 'openOnFieldClick':
                 break;
             case 'readOnly':
                 this._updateButtons();

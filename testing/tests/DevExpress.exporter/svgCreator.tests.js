@@ -6,7 +6,7 @@ const svgUtils = require('core/utils/svg');
 
 function setupCanvasStub() {
     // Blob
-    isFunction(Blob) && sinon.stub(window, 'Blob', function(arrayBuffer, options) {
+    isFunction(Blob) && sinon.stub(window, 'Blob').callsFake(function(arrayBuffer, options) {
         return {
             arrayBuffer: arrayBuffer,
             options: options
@@ -29,6 +29,22 @@ function teardownCanvasStub() {
     isFunction(Blob) && window.Blob.restore();
 }
 
+function createSvgElement(markup) {
+    return new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
+}
+
+function createJQueryElement(markup) {
+    const styleRegex = /style="(.+)"/;
+    const regexResult = markup.match(styleRegex);
+    const $element = $(markup.replace(styleRegex, ''));
+
+    if(regexResult != null && regexResult.length > 1) {
+        $element[0].style = regexResult[1];
+    }
+
+    return $element;
+}
+
 QUnit.module('Svg creator. Get Data', {
     beforeEach: function() {
         this.blobArguments = {};
@@ -47,13 +63,83 @@ QUnit.test('getData', function(assert) {
 
     const done = assert.async();
     const versionXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
-    const testingMarkup = '<svg xmlns="http://www.w3.org/2000/svg" class="dxc dxc-chart" style="line-height: normal; overflow: hidden; display: block; -ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" fill="none" stroke="none" stroke-width="0" width="500" height="250" version="1.1"><path stroke="#ff0000" stroke-width="2" d="M 36 181 L 184 98 L 331 280" /></svg>';
+
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            class="dxc dxc-chart"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            width="500"
+            height="250"
+            version="1.1"><path
+            stroke="#ff0000"
+            stroke-width="2"
+            d="M 36 181 L 184 98 L 331 280"
+        />
+        </svg>
+    `);
+
+    testingMarkup.style = `
+        line-height: normal;
+        overflow: hidden;
+        display: block;
+        -ms-user-select: none;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+        touch-action: pan-x pan-y pinch-zoom;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    `;
+
     const deferred = exporter.getData(testingMarkup, {});
 
     assert.expect(3);
     $.when(deferred).done(function(blob) {
         try {
-            const $resultSvg = $(blob.arrayBuffer[0]);
+            const $resultSvg = createJQueryElement(blob.arrayBuffer[0]);
+
+            assert.ok(blob, 'Blob was created');
+            assert.deepEqual($resultSvg.html(), $(versionXML + testingMarkup).html(), 'Blob content is correct');
+            assert.equal(blob.options.type, 'image/svg+xml', 'Blob type is correct');
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('getData. markup as a string', function(assert) {
+    if(!checkForBlob.call(this, assert)) return;
+
+    const done = assert.async();
+    const versionXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
+
+    const testingMarkup = `
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            class="dxc dxc-chart"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            width="500"
+            height="250"
+            version="1.1"><path
+            stroke="#ff0000"
+            stroke-width="2"
+            d="M 36 181 L 184 98 L 331 280"
+        />
+        </svg>
+    `;
+
+    const deferred = exporter.getData(testingMarkup, {});
+
+    assert.expect(3);
+    $.when(deferred).done(function(blob) {
+        try {
+            const $resultSvg = createJQueryElement(blob.arrayBuffer[0]);
 
             assert.ok(blob, 'Blob was created');
             assert.deepEqual($resultSvg.html(), $(versionXML + testingMarkup).html(), 'Blob content is correct');
@@ -69,7 +155,27 @@ QUnit.test('getData. markup with special symbols', function(assert) {
 
     const done = assert.async();
     const testString = 'Temperature, °C';
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\'><text x="0" y="30" transform="translate(0,0)" text-anchor="middle" style="font-size:28px;font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:200;fill:#232323;cursor:default;">' + testString + '</text></svg>';
+
+    const text = createSvgElement(`<text x="0" y="30" transform="translate(0,0)" text-anchor="middle">${testString}</text>`);
+
+    text.style = `
+        font-size: 28px;
+        font-family: "Segoe UI Light", "Helvetica Neue Light", "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana;
+        font-weight: 200;
+        fill: #232323;
+        cursor: default;
+    `;
+
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+        ></svg>
+    `);
+
+    testingMarkup.appendChild(text);
+
     const deferred = svgCreator.getData(testingMarkup, {});
 
     assert.expect(1);
@@ -87,7 +193,34 @@ QUnit.test('getData. markup with image', function(assert) {
 
     const done = assert.async();
     const imageHtml = '<image xlink:href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>' + imageHtml + '</svg>';
+
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            class="dxc dxc-chart"
+            width="500"
+            height="250"
+        >
+            ${imageHtml}
+        </svg>
+    `);
+
+    testingMarkup.style = `
+        line-height: normal;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: block;
+        overflow: hidden;
+        touch-action: pan-x pan-y pinch-zoom;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+    `;
+
     const deferred = svgCreator.getData(testingMarkup, {});
 
     assert.expect(1);
@@ -104,8 +237,40 @@ QUnit.test('getData. correct process two images with similar href', function(ass
     if(!checkForBlob.call(this, assert)) return;
 
     const done = assert.async();
-    const imageHtml = '<image xlink:href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image><image xlink:href="../../testing/content/exporterTestsContent/test-image.png.png" width="300" height="200"></image>';
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>' + imageHtml + '</svg>';
+
+    const imageHtml = `
+        <image xlink:href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>
+        <image xlink:href="../../testing/content/exporterTestsContent/test-image.png.png" width="300" height="200"></image>
+    `;
+
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            class="dxc dxc-chart"
+            width="500"
+            height="250"
+        >
+            ${imageHtml}
+        </svg>
+    `);
+
+    testingMarkup.style = `
+        line-height: normal;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: block;
+        overflow: hidden;
+        touch-action: pan-x pan-y pinch-zoom;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+    `;
+
     const deferred = svgCreator.getData(testingMarkup, {});
 
     assert.expect(2);
@@ -124,7 +289,33 @@ QUnit.test('getData. markup with image with href', function(assert) {
 
     const done = assert.async();
     const imageHtml = '<image href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>' + imageHtml + '</svg>';
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            class="dxc dxc-chart"
+            width="500"
+            height="250"
+        >
+            ${imageHtml}
+        </svg>
+    `);
+
+    testingMarkup.style = `
+        line-height: normal;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: block;
+        overflow: hidden;
+        touch-action: pan-x pan-y pinch-zoom;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+    `;
+
     const deferred = svgCreator.getData(testingMarkup, {});
 
     assert.expect(1);
@@ -141,13 +332,42 @@ QUnit.test('getData. markup with background-color', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
     const done = assert.async();
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            class="dxc dxc-chart"
+            width="500"
+            height="250"
+        >
+            <text>test</text>
+        </svg>
+    `);
+
+    testingMarkup.style = `
+        line-height: normal;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: block;
+        overflow: hidden;
+        touch-action: pan-x pan-y pinch-zoom;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+    `;
+
     const deferred = svgCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(blob) {
         try {
-            assert.equal($(blob.arrayBuffer[0]).eq(1).css('background-color'), 'rgb(170, 170, 170)', 'Svg elementbackground color is correct');
+            assert.true(
+                /background-color:\s*rgb\(170, 170, 170\);/.test(blob.arrayBuffer[0]),
+                'Svg element background color is correct'
+            );
         } finally {
             done();
         }
@@ -158,7 +378,32 @@ QUnit.test('getData. markup with background-color. Source element hasn\'t backgr
     if(!checkForBlob.call(this, assert)) return;
 
     const done = assert.async();
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink"
+             version="1.1"
+             fill="none"
+             stroke="none"
+             stroke-width="0"
+             class="dxc dxc-chart"
+             width="500"
+             height="250"
+         >
+            <text>test</text>
+        </svg>
+    `);
+    testingMarkup.style = `
+        line-height: normal;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: block;
+        overflow: hidden;
+        touch-action: pan-x pan-y pinch-zoom;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+    `;
     const testingElement = svgUtils.getSvgElement(testingMarkup);
     const originalBackgroundColor = $(testingElement).css('backgroundColor');
     const deferred = svgCreator.getData(testingElement, { backgroundColor: '#aaa' });
@@ -178,7 +423,32 @@ QUnit.test('getData returns base64 when blob is not supported', function(assert)
     const done = assert.async();
     const _getBlob = svgCreator._getBlob;
     const _getBase64 = svgCreator._getBase64;
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
+    const testingMarkup = createSvgElement(`
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+            fill="none"
+            stroke="none"
+            stroke-width="0"
+            class="dxc dxc-chart"
+            width="500"
+            height="250"
+        >
+            <text>test</text>
+        </svg>
+    `);
+    testingMarkup.style = `
+        line-height: normal;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: block;
+        overflow: hidden;
+        touch-action: pan-x pan-y pinch-zoom;
+        -ms-touch-action: pan-x pan-y pinch-zoom;
+    `;
 
     svgCreator._getBlob = function() {
         return 'blobData';
@@ -209,20 +479,45 @@ QUnit.test('Do not export elements with \'hidden-for-export\' attribute', functi
     const versionXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
     const svgStart = '<svg ';
     const xmlLink = 'xmlns:xlink="http://www.w3.org/1999/xlink" ';
-    const rootAttributes = 'xmlns="http://www.w3.org/2000/svg" class="dxc dxc-chart" style="line-height: normal; overflow: hidden; display: block; -ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" fill="none" stroke="none" stroke-width="0" width="500" height="250" version="1.1">';
+    const rootAttributes = `
+        xmlns="http://www.w3.org/2000/svg"
+        class="dxc dxc-chart"
+        fill="none"
+        stroke="none"
+        stroke-width="0"
+        width="500"
+        height="250"
+        version="1.1">
+    `;
+    const styles = `
+        line-height: normal;
+         overflow: hidden;
+         display: block;
+         -ms-user-select: none;
+         -ms-touch-action: pan-x pan-y pinch-zoom;
+         touch-action: pan-x pan-y pinch-zoom;
+         -moz-user-select: none;
+         -webkit-user-select: none;
+         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    `;
     const svgEnd = '</svg>';
     const hiddenMarkup = '<g hidden-for-export="true"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect></g>';
     const innerMarkup = '<rect x="50" y="50" width="200" height="200" fill="#00FF00"></rect>';
-    const testingMarkup = svgStart + rootAttributes + hiddenMarkup + innerMarkup + svgEnd;
+    const testingMarkup = createSvgElement(svgStart + rootAttributes + hiddenMarkup + innerMarkup + svgEnd);
+    testingMarkup.style = styles;
     const deferred = exporter.getData(testingMarkup, {});
 
     assert.expect(3);
     $.when(deferred).done(function(blob) {
         try {
-            const $resultSvg = $(blob.arrayBuffer[0]);
+            const $resultSvg = createJQueryElement(blob.arrayBuffer[0]);
 
             assert.ok(blob, 'Blob was created');
-            assert.deepEqual($resultSvg[1].outerHTML, $(versionXML + svgStart + xmlLink + rootAttributes + innerMarkup + svgEnd)[1].outerHTML, 'Blob content is correct');
+            assert.deepEqual(
+                $resultSvg[1].outerHTML,
+                createJQueryElement(versionXML + svgStart + xmlLink + rootAttributes + innerMarkup + svgEnd)[1].outerHTML,
+                'Blob content is correct'
+            );
             assert.equal(blob.options.type, 'image/svg+xml', 'Blob type is correct');
         } finally {
             done();

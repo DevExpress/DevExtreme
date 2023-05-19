@@ -13,12 +13,13 @@ testStart(() => {
         <div id="boxWithScrollable">
             <div data-options="dxItem: { ratio: 1 }">
                 <div id="scrollable">
-                    <div style="height: 200px;"></div>
+                    <div id="content"></div>
                 </div>
             </div>
         </div>
     `;
     $('#qunit-fixture').html(markup);
+    $('#content').css({ height: '200px' });
 });
 
 const BOX_ITEM_CLASS = 'dx-box-item';
@@ -234,7 +235,7 @@ module('layouting', () => {
         const $box = createBox({
             direction: 'col',
             crossAlign: 'start',
-            items: [{ html: '<div style=\'width: ' + size + 'px\'></div>' }],
+            items: [{ template: $('<div>').css({ width: `${size}px` }) }],
             width: boxSize
         });
         const box = getBoxInstance($box);
@@ -263,7 +264,7 @@ module('layouting', () => {
         const $box = createBox({
             direction: 'row',
             crossAlign: 'start',
-            items: [{ html: '<div style=\'height: ' + size + 'px\'></div>' }],
+            items: [{ template: $('<div>').css({ height: `${size}px` }) }],
             height: boxSize
         });
         const box = getBoxInstance($box);
@@ -578,7 +579,7 @@ module('layouting in RTL', () => {
         const $box = createBox({
             direction: 'col',
             crossAlign: 'start',
-            items: [{ html: '<div style=\'width: ' + size + 'px\'></div>' }],
+            items: [{ template: $('<div>').css({ width: `${size}px` }) }],
             width: boxSize,
             rtlEnabled: true,
         });

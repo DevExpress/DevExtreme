@@ -880,7 +880,6 @@ declare module DevExpress {
   }
   /**
    * [descr:dxSchedulerTimeZone]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSchedulerTimeZone {
     /**
@@ -10775,8 +10774,6 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type DisabledDate =
-      DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateRangeBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDateRangeBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
@@ -10818,11 +10815,10 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
-      /**
-       * [descr:Properties.disabledDates]
-       */
-      disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
+    export type Properties = Omit<
+      DateBoxBaseOptions<dxDateRangeBox>,
+      'inputAttr | label | maxLength | name | placeholder | text'
+    > & {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
@@ -10864,7 +10860,7 @@ declare module DevExpress.ui {
        */
       multiView?: boolean;
       /**
-       * [descr:Properties.openOnFieldClick]
+       * [descr:dxDateRangeBoxOptions.openOnFieldClick]
        */
       openOnFieldClick?: boolean;
       /**
