@@ -35,7 +35,7 @@ function isEditable($element) {
   return $element && ($element.is('input') || $element.is('textarea'));
 }
 
-export default {
+export const editingCellBasedModule = {
   extenders: {
     controllers: {
       editing: {
