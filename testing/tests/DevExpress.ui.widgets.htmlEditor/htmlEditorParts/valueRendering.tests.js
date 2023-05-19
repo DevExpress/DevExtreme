@@ -7,6 +7,10 @@ import { getOuterHeight } from 'core/utils/size';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 import Quill from 'devextreme-quill';
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const CONTENT_CLASS = 'dx-htmleditor-content';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
 
@@ -35,8 +39,6 @@ function getSelector(className) {
     return `.${className}`;
 }
 
-const { test, module: testModule } = QUnit;
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -47,7 +49,7 @@ const moduleConfig = {
 };
 
 export default function() {
-    testModule('Value as HTML markup', moduleConfig, () => {
+    moduleWithoutCsp('Value as HTML markup', moduleConfig, () => {
         test('show placeholder is value undefined', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 placeholder: 'test placeholder'
@@ -433,7 +435,7 @@ export default function() {
         });
     });
 
-    testModule('xss security', {
+    moduleWithoutCsp('xss security', {
         beforeEach: function() {
             window._isScriptExecuted = false;
             window._isInlineHandlerExecuted = false;
@@ -504,7 +506,7 @@ export default function() {
         });
     });
 
-    testModule('Value as Markdown markup', {
+    moduleWithoutCsp('Value as Markdown markup', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
         },
@@ -630,7 +632,7 @@ export default function() {
         });
     });
 
-    testModule('Custom blots rendering', {
+    moduleWithoutCsp('Custom blots rendering', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
         },
@@ -693,7 +695,7 @@ export default function() {
         });
     });
 
-    testModule('Table without paragraph support', {
+    moduleWithoutCsp('Table without paragraph support', {
         ...moduleConfig,
         before: function() {
             this.originalTableModule = Quill.import('modules/table');

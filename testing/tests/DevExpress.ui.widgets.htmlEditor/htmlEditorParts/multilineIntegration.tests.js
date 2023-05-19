@@ -10,7 +10,10 @@ import { prepareTableValue } from './utils.js';
 const CONTENT_CLASS = 'dx-htmleditor-content';
 const TIME_TO_WAIT = 500;
 
-const { module: testModule, test } = QUnit;
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -21,7 +24,7 @@ const moduleConfig = {
 };
 
 export default function() {
-    testModule('Multiline module integration', {
+    moduleWithoutCsp('Multiline module integration', {
         beforeEach: function() {
             this.initialEditorDefaults = HtmlEditor._classCustomRules; // Save initial defaults
             HtmlEditor.defaultOptions({
@@ -41,7 +44,7 @@ export default function() {
         mentionIntegrationTests();
 
         // Run specific tests
-        testModule('initial render', function() {
+        moduleWithoutCsp('initial render', function() {
             test('editor should preserve initial breakers', function(assert) {
                 const value = '<h1>Hi!<br>Hej!</h1><p>Ab<br>Cd</p><ul><li>First<br>item</li><li>Second item</li></ul>';
                 const $element = $('#htmlEditor');
@@ -67,7 +70,7 @@ export default function() {
             });
         });
 
-        testModule('runtime editing', moduleConfig, function() {
+        moduleWithoutCsp('runtime editing', moduleConfig, function() {
             [
                 {
                     name: 'break paragraph',

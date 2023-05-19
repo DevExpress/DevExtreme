@@ -13,6 +13,10 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const BUTTON_WITH_TEXT_CLASS = 'dx-button-has-text';
 const CUSTOM_CLASS = 'custom-class';
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#htmlEditor');
@@ -27,9 +31,7 @@ const moduleConfig = {
     }
 };
 
-const { test } = QUnit;
-
-QUnit.module('FormDialog', moduleConfig, () => {
+moduleWithoutCsp('FormDialog', moduleConfig, () => {
     test('Wrapper has dialog class when the "wrapperAttr.class" property is added to "popupOption"', function(assert) {
         const popupConfig = {
             container: this.$element,

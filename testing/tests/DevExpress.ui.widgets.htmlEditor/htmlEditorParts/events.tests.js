@@ -16,7 +16,9 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const TIME_TO_WAIT = 500;
 const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
 
-const { test, module: testModule } = QUnit;
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 function createEvent(type = 'paste', element) {
     const customEvent = document.createEvent('Event');
@@ -59,7 +61,7 @@ const createModuleConfig = function({ initialOptions = {}, beforeCallback, after
     };
 };
 
-testModule('Events', createModuleConfig({ initialOptions: { value: '<p>Test 1</p><p>Test 2</p><p>Test 3</p>' } }), () => {
+moduleWithoutCsp('Events', createModuleConfig({ initialOptions: { value: '<p>Test 1</p><p>Test 2</p><p>Test 3</p>' } }), () => {
     test('focusIn event by API', function(assert) {
         this.createEditor();
 
@@ -184,7 +186,7 @@ testModule('Events', createModuleConfig({ initialOptions: { value: '<p>Test 1</p
     });
 });
 
-testModule('drop and paste events', createModuleConfig({
+moduleWithoutCsp('drop and paste events', createModuleConfig({
     beforeCallback: () => $('#qunit-fixture').addClass('qunit-fixture-visible'),
     afterCallback: () => $('#qunit-fixture').removeClass('qunit-fixture-visible')
 }), function() {
@@ -227,7 +229,7 @@ testModule('drop and paste events', createModuleConfig({
     });
 });
 
-testModule('ValueChanged event', createModuleConfig({}), function() {
+moduleWithoutCsp('ValueChanged event', createModuleConfig({}), function() {
     test('event should keep valueChanged event on typing', function(assert) {
         const done = assert.async();
         this.createEditor({

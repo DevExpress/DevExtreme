@@ -6,6 +6,10 @@ import browser from 'core/utils/browser';
 
 const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==';
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 class DropImageMock extends DropImage {
     _getImage(files, callback) {
         callback(IMAGE);
@@ -37,9 +41,7 @@ const moduleConfig = {
     }
 };
 
-const { test } = QUnit;
-
-QUnit.module('DropImage module', moduleConfig, () => {
+moduleWithoutCsp('DropImage module', moduleConfig, () => {
     test('insert image on drop', function(assert) {
         new DropImageMock(this.quillMock, this.options);
 

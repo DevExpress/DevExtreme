@@ -3,6 +3,10 @@ import 'ui/html_editor';
 import { createEvent } from 'events/utils/index';
 import eventsEngine from 'events/core/events_engine';
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const tableMarkup = '\
     before table text<br>\
     <table>\
@@ -27,15 +31,13 @@ const tableMarkup = '\
     </table>\
     <br>after table text<br>';
 
-const { test, module } = QUnit;
-
 const CONTEXT_MENU_OVERLAY_SELECTOR = '.dx-context-menu.dx-overlay-content';
 const ITEM_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const ITEM_HAS_TEXT_CLASS = 'dx-menu-item-has-text';
 const SUBMENU_CLASS = 'dx-submenu';
 const SUBMENU_ITEMS_SELECTOR = `.${SUBMENU_CLASS} .${SUBMENU_CLASS} .${ITEM_HAS_TEXT_CLASS}`;
 
-module('Table context menu integration', {
+moduleWithoutCsp('Table context menu integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -77,7 +79,7 @@ module('Table context menu integration', {
         this.clock.restore();
     }
 }, () => {
-    module('Default context menu', {}, () => {
+    moduleWithoutCsp('Default context menu', {}, () => {
         test('Context menu should be created on table click', function(assert) {
             this.createWidget();
 
@@ -385,7 +387,7 @@ module('Table context menu integration', {
         });
     });
 
-    module('Custom context menu', {}, () => {
+    moduleWithoutCsp('Custom context menu', {}, () => {
         test('empty items array', function(assert) {
             this.createWidget({
                 tableContextMenu: {

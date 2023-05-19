@@ -2,6 +2,10 @@ import $ from 'jquery';
 import ImageCursor from 'ui/html_editor/modules/imageCursor';
 import { name as clickEvent } from 'events/click';
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -52,9 +56,7 @@ const moduleConfig = {
     }
 };
 
-const { test, module } = QUnit;
-
-module('ImageCursor module', moduleConfig, () => {
+moduleWithoutCsp('ImageCursor module', moduleConfig, () => {
     test('events should be detached if the clean method is called', function(assert) {
         this.options.fileUploadMode = 'server';
         const ImageCursorInstance = new ImageCursor(this.quillMock, this.options);

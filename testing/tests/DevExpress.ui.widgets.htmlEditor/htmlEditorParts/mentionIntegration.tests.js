@@ -5,7 +5,9 @@ import 'ui/html_editor';
 import nativePointerMock from '../../../helpers/nativePointerMock.js';
 import { prepareEmbedValue } from './utils.js';
 
-const { test, module } = QUnit;
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -40,7 +42,7 @@ const NAVIGATION_KEYS = [
 const KeyEventsMock = nativePointerMock();
 
 export default function() {
-    module('Mentions integration', {
+    moduleWithoutCsp('Mentions integration', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 

@@ -68,6 +68,10 @@ const TABLE_OPERATIONS = [
     'deleteTable'
 ];
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const simpleModuleConfig = {
     beforeEach: function() {
         fx.off = true;
@@ -196,9 +200,7 @@ const dialogModuleConfig = {
     }
 };
 
-const { test, module: testModule } = QUnit;
-
-testModule('Toolbar module', simpleModuleConfig, () => {
+moduleWithoutCsp('Toolbar module', simpleModuleConfig, () => {
     test('Render toolbar without any options', function(assert) {
         new Toolbar(this.quillMock, this.options);
 
@@ -650,7 +652,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
     });
 });
 
-testModule('Active formats', simpleModuleConfig, () => {
+moduleWithoutCsp('Active formats', simpleModuleConfig, () => {
     test('without active formats', function(assert) {
         this.options.items = ['bold', 'italic', 'clear'];
 
@@ -863,7 +865,7 @@ testModule('Active formats', simpleModuleConfig, () => {
     });
 });
 
-testModule('Toolbar dialogs', dialogModuleConfig, () => {
+moduleWithoutCsp('Toolbar dialogs', dialogModuleConfig, () => {
     test('show color dialog', function(assert) {
         this.options.items = ['color'];
         new Toolbar(this.quillMock, this.options);
@@ -1320,7 +1322,7 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
     });
 });
 
-testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
+moduleWithoutCsp('Toolbar with multiline mode', simpleModuleConfig, function() {
     test('The toolbar must change its height according to the items', function(assert) {
         this.options.items = ['bold'];
         const toolbar = new Toolbar(this.quillMock, this.options);
@@ -1356,7 +1358,7 @@ testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
     });
 });
 
-testModule('Toolbar items state update', {
+moduleWithoutCsp('Toolbar items state update', {
     beforeEach: function() {
         simpleModuleConfig.beforeEach.apply(this, arguments);
         this.getDisabledFormats = () => {
@@ -1384,7 +1386,7 @@ testModule('Toolbar items state update', {
         acceptedValues: [3]
     }];
 
-    testModule('when items are located not in menu', () => {
+    moduleWithoutCsp('when items are located not in menu', () => {
         test('table formats on table focus', function(assert) {
             this.options.items = TABLE_OPERATIONS;
             const toolbar = new Toolbar(this.quillMock, this.options);
@@ -1592,7 +1594,7 @@ testModule('Toolbar items state update', {
         });
     });
 
-    testModule('when items are located in menu and it was not opened yet', {
+    moduleWithoutCsp('when items are located in menu and it was not opened yet', {
         beforeEach: function() {
             this.options.multiline = false;
             this.openDropDownMenu = () => {
@@ -1868,7 +1870,7 @@ testModule('Toolbar items state update', {
     });
 });
 
-testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
+moduleWithoutCsp('Toolbar with adaptive menu', simpleModuleConfig, function() {
     test('Render toolbar with adaptive mode', function(assert) {
         this.options.multiline = false;
         this.options.items = ['bold'];
@@ -1912,7 +1914,7 @@ testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
     });
 });
 
-testModule('tables', simpleModuleConfig, function() {
+moduleWithoutCsp('tables', simpleModuleConfig, function() {
     test('render table manipulation buttons', function(assert) {
         this.options.items = TABLE_OPERATIONS;
 
@@ -1983,7 +1985,7 @@ testModule('tables', simpleModuleConfig, function() {
     });
 });
 
-testModule('Toolbar localization', simpleModuleConfig, function() {
+moduleWithoutCsp('Toolbar localization', simpleModuleConfig, function() {
     const messages = {
         'ru': {
             /* eslint-disable i18n/no-russian-character */

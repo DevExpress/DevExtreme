@@ -28,7 +28,9 @@ const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYA
 
 const TIME_TO_WAIT = 200;
 
-const { test, module } = QUnit;
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 const markup = '\
     <p>test text</p>\
@@ -62,7 +64,7 @@ const createFakeFile = (name, size, type) => new File(new Array(size).fill('a'),
 
 const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
 
-module('Image uploading integration', {
+moduleWithoutCsp('Image uploading integration', {
     beforeEach: function() {
         fx.off = true;
 
@@ -179,7 +181,7 @@ module('Image uploading integration', {
         this.clock.restore();
     }
 }, () => {
-    module('resizing frames initialization', {}, () => {
+    moduleWithoutCsp('resizing frames initialization', {}, () => {
         ['both', 'base64', 'server'].forEach((fileUploadMode) => {
             test(`the form popup is correctly rendered for two tabs and fileUploadMode="${fileUploadMode}"`, function(assert) {
                 this.createWidget({

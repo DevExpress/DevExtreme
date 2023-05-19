@@ -7,6 +7,10 @@ const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const COLOR_BOX_CLASS = 'dx-colorbox';
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const showCellPropertiesForm = (instance, $cellElement) => {
     showForm(instance, $cellElement, 'cellProperties');
 };
@@ -100,9 +104,7 @@ const tableMarkupWithHeaderRow = '\
     </table>\
     <br><br>';
 
-const { test, module } = QUnit;
-
-module('Table properties forms', {
+moduleWithoutCsp('Table properties forms', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -137,7 +139,7 @@ module('Table properties forms', {
         this.clock.restore();
     }
 }, () => {
-    module('Base', {}, () => {
+    moduleWithoutCsp('Base', {}, () => {
         test('show table Form', function(assert) {
             this.createWidget();
 
@@ -558,7 +560,7 @@ module('Table properties forms', {
         });
     });
 
-    module('Cell width calculations', {}, () => {
+    moduleWithoutCsp('Cell width calculations', {}, () => {
         test('Check cell width edititing if all columns width is fixed', function(assert) {
             this.createWidget({ value: '\
             <table>\
@@ -874,7 +876,7 @@ module('Table properties forms', {
         });
     });
 
-    module('Cell height calculations', {}, () => {
+    moduleWithoutCsp('Cell height calculations', {}, () => {
         test('Check cell height edititng if all rows height is fixed', function(assert) {
             this.createWidget({ value: tableWithFixedDimensionsMarkup });
 
@@ -923,7 +925,7 @@ module('Table properties forms', {
 
     });
 
-    module('Table height calculations', {}, () => {
+    moduleWithoutCsp('Table height calculations', {}, () => {
         test('Check table height edititng if all rows height is fixed', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
@@ -972,7 +974,7 @@ module('Table properties forms', {
         });
     });
 
-    module('Table width calculations', {}, () => {
+    moduleWithoutCsp('Table width calculations', {}, () => {
         test('Check table width edititng if all columns height is fixed', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 

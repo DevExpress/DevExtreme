@@ -9,6 +9,10 @@ const SUGGESTION_LIST_WRAPPER_CLASS = 'dx-suggestion-list-wrapper';
 
 const MIN_HEIGHT = 100;
 
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#htmlEditor');
@@ -30,9 +34,7 @@ const moduleConfig = {
     }
 };
 
-const { test } = QUnit;
-
-QUnit.module('Popup module', moduleConfig, () => {
+moduleWithoutCsp('Popup module', moduleConfig, () => {
     test('Render Popup with a suggestion list', function(assert) {
         this.options.dataSource = ['Test1', 'Test2'];
         new PopupModule({}, this.options);

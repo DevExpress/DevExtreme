@@ -24,14 +24,16 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
 
-const { test, module: testModule } = QUnit;
+const { test } = QUnit;
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 function getToolbar($container) {
     return $container.find(`.${TOOLBAR_CLASS}`);
 }
 
 export default function() {
-    testModule('Toolbar integration', {
+    moduleWithoutCsp('Toolbar integration', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
             fx.off = true;
