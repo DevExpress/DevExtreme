@@ -4,26 +4,39 @@ import TransitionExecutorModule from 'animation/transition_executor/transition_e
 import 'ui/defer_rendering';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="animation">\
-            <div class="defer-rendering"></div>\
-        </div>\
-        <style>\
-            .test-staggering-item,\
-            test-no-staggering-item {\
-                    height: 10px;\
-                    width: 10px;\
-            }\
-        </style>\
-        <div id="staggering-animation" style="position: absolute; width: 100px; height: 100px; top: 0; left: 0">\
-            <div class="defer-rendering" style="position: absolute; width: 100%; height: 100%">\
-                <div class="item1 test-staggering-item"></div>\
-                <div class="item2 test-staggering-item"></div>\
-                <div class="item3 test-no-staggering-item"></div>\
-            </div>\
-        </div>';
+    const markup = `
+        <div id="animation">
+            <div class="defer-rendering"></div>
+        </div>
+        <style nonce="qunit-test">
+            .test-staggering-item,
+            test-no-staggering-item {
+                    height: 10px;
+                    width: 10px;
+            }
+        </style>
+        <div id="staggering-animation">
+            <div class="defer-rendering">
+                <div class="item1 test-staggering-item"></div>
+                <div class="item2 test-staggering-item"></div>
+                <div class="item3 test-no-staggering-item"></div>
+            </div>
+        </div>
+    `;
 
     $('#qunit-fixture').html(markup);
+    $('#staggering-animation').css({
+        position: 'absolute',
+        width: '100px',
+        height: '100px',
+        top: 0,
+        left: 0
+    });
+    $('#defer-rendering').css({
+        position: 'absolute',
+        width: '100%',
+        height: '100%'
+    });
 });
 
 let savedTransitionExecutor;

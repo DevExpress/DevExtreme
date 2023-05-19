@@ -27,85 +27,90 @@ import browser from 'core/utils/browser';
 
 QUnit.testStart(function() {
     const markup =
-        '<style>\
-            html, body {\
-                height: 100%;\
-                margin: 0;\
-            }\
-            \
-            #qunit-fixture {\
-                width: 100%;\
-                height: 100%;\
-            }\
-        </style>\
-        \
-        <div id="overlayInTargetContainer"></div>\
-        \
-        <div id="customTargetContainer">\
-            <div id="parentContainer">\
-                <input id="overlayInputTarget" type="text" />\
-                <div id="overlay"></div>\
-                <div id="overlay2">\
-                    <div id="test"></div>\
-                </div>\
-            </div>\
-        </div>\
-        \
-        <div id="container"></div>\
-        \
-        <div id="overlayWithClass" class="something another"></div>\
-        \
-        <div id="overlayWithAnonymousTmpl">\
-            <div id="content"></div>\
-        </div>\
-        \
-        <div id="B237292">\
-            <div id="B237292_container" style="width: 100px; height: 100px"></div>\
-        \
-            <div id="B237292_overlay">\
-                Overlay content\
-            </div>\
-        </div>\
-        \
-        <div id="Q518355">\
-            <div id="Q518355_overlay_1"></div>\
-            <div id="Q518355_overlay_2"></div>\
-        </div>\
-        \
-        <div id="overlayWithContentTemplate">\
-            <div data-options="dxTemplate: { name: \'custom\' }">\
-                TestContent\
-            </div>\
-        </div>\
-        \
-        <div id="overlayWithWrongTemplateName">\
-            <div data-options="dxTemplate: { name: \'wrongName\' }">testContent</div>\
-        </div>\
-        <div id="widget"></div>\
-        \
-        <script type="text/html" id="focusableTemplate">\
-            <a>something</a>\
-            <input class="firstTabbable" />\
-            <div tabindex=\'0\'></div>\
-            <textarea></textarea>\
-            <div tabindex=\'-1\'></div>\
-            <a href="#" class="lastTabbable">something</a>\
-        </script>\
-        <input class="outsideTabbable" />\
-        \
-        <div>\
-            <div class="dx-swatch-my-color_scheme1 some-class some-class2">\
-                <div>\
-                    <div id="swatchOverlay1"></div>\
-                </div>\
-            </div>\
-            <div class="some-class some-class2 dx-swatch-my-color_scheme2 some-class3">\
-                <div>\
-                    <div id="swatchOverlay2"></div>\
-                    <div id="swatchOverlay3"></div>\
-                </div>\
-            </div>\
-        <div>';
+        `<style nonce="qunit-test">
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+
+            #qunit-fixture {
+                width: 100%;
+                height: 100%;
+            }
+
+            #B237292_container {
+               width: 100px;
+               height: 100px
+            }
+        </style>
+
+        <div id="overlayInTargetContainer"></div>
+
+        <div id="customTargetContainer">
+            <div id="parentContainer">
+                <input id="overlayInputTarget" type="text" />
+                <div id="overlay"></div>
+                <div id="overlay2">
+                    <div id="test"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container"></div>
+
+        <div id="overlayWithClass" class="something another"></div>
+
+        <div id="overlayWithAnonymousTmpl">
+            <div id="content"></div>
+        </div>
+
+        <div id="B237292">
+            <div id="B237292_container"></div>
+
+            <div id="B237292_overlay">
+                Overlay content
+            </div>
+        </div>
+
+        <div id="Q518355">
+            <div id="Q518355_overlay_1"></div>
+            <div id="Q518355_overlay_2"></div>
+        </div>
+
+        <div id="overlayWithContentTemplate">
+            <div data-options="dxTemplate: { name: 'custom' }">
+                TestContent
+            </div>
+        </div>
+
+        <div id="overlayWithWrongTemplateName">
+            <div data-options="dxTemplate: { name: 'wrongName' }">testContent</div>
+        </div>
+        <div id="widget"></div>
+
+        <script type="text/html" id="focusableTemplate">
+            <a>something</a>
+            <input class="firstTabbable" />
+            <div tabindex='0'></div>
+            <textarea></textarea>
+            <div tabindex='-1'></div>
+            <a href="#" class="lastTabbable">something</a>
+        </script>
+        <input class="outsideTabbable" />
+
+        <div>
+            <div class="dx-swatch-my-color_scheme1 some-class some-class2">
+                <div>
+                    <div id="swatchOverlay1"></div>
+                </div>
+            </div>
+            <div class="some-class some-class2 dx-swatch-my-color_scheme2 some-class3">
+                <div>
+                    <div id="swatchOverlay2"></div>
+                    <div id="swatchOverlay3"></div>
+                </div>
+            </div>
+        <div>`;
 
     $('#qunit-fixture').html(markup);
 });

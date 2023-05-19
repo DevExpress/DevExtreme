@@ -16,20 +16,27 @@ import 'generic_light.css!';
 import 'ui/drop_down_button';
 import 'ui/tabs';
 
-$('#qunit-fixture').html('<style>\
-        #toolbarWithMenu .dx-toolbar-menu-container {\
-            width: 100px;\
-        }\
-        .dx-list-item {\
-            /* NOTE: to avoid decimal values in geometry */\
-            line-height: 1;\
-        }\
-    </style>\
-    \
-    <div id="toolbar"></div>\
-    <div id="toolbarWithMenu"></div>\
-    <div id="widget"></div>\
-    <div id="widthRootStyle" style="width: 300px;"></div>');
+QUnit.testStart(() => {
+    const markup = `
+        <style nonce="qunit-test">
+            #toolbarWithMenu .dx-toolbar-menu-container {
+                width: 100px;
+            }
+            .dx-list-item {
+                /* NOTE: to avoid decimal values in geometry */
+                line-height: 1;
+            }
+        </style>
+
+        <div id="toolbar"></div>
+        <div id="toolbarWithMenu"></div>
+        <div id="widget"></div>
+        <div id="widthRootStyle"></div>
+    `;
+
+    $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
+});
 
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
@@ -1748,12 +1755,14 @@ QUnit.module('adaptivity without hiding in menu', {
         };
 
         this.MEASURE_SAFE_TEXT = 'xyvxyv';
-        const fontStyles = '<style>\
-        .dx-toolbar-label > div,\
-        .dx-toolbar-label .dx-toolbar-item-content > div {\
-            font-family: arial !important;\
-        }\
-        </style>';
+        const fontStyles = `
+            <style nonce="qunit-test">
+                .dx-toolbar-label > div,
+                .dx-toolbar-label .dx-toolbar-item-content > div {
+                    font-family: arial !important;
+                }
+            </style>
+        `;
 
         this.styles = $(fontStyles).appendTo('head');
     },
