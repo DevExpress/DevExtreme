@@ -1,3 +1,4 @@
+import { isFunction } from '../../core/utils/type';
 import { compileGetter, compileSetter } from '../../core/utils/data';
 
 const GANTT_TASKS = 'tasks';
@@ -31,7 +32,7 @@ export class GanttMappingHelper {
     convertCoreToMappedData(optionName, coreData) {
         return Object.keys(coreData).reduce((previous, f) => {
             const mappedField = this._getMappedFieldName(optionName, f);
-            if(mappedField) {
+            if(mappedField && !isFunction(mappedField)) {
                 const setter = compileSetter(mappedField);
                 setter(previous, coreData[f]);
             }
