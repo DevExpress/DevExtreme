@@ -335,15 +335,14 @@ const transpileTesting = async(Builder) => {
             continue;
         }
 
-        if(
-            filePath.includes('ui.widgets/fileManagerParts') ||
-            filePath.endsWith('.json') ||
-            /require\(/.test(sourceCode) ||
-            /(module\.)?exports(\..+)?\s*=\s*/.test(sourceCode)
-        ) {
-            await transpileWithBuilder(builder, filePath, destPath);
-        } else {
+        if(filePath.includes('ui.widgets/fileManagerParts')) {
             await transpileWithBabel(sourceCode, destPath);
+        } else {
+            try {
+                await transpileWithBuilder(builder, filePath, destPath);
+            } catch(error) {
+                await transpileWithBabel(sourceCode, destPath);
+            }
         }
     }
 };
