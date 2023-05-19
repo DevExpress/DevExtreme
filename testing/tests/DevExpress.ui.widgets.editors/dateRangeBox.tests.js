@@ -3584,11 +3584,11 @@ QUnit.module('localization', moduleConfig, () => {
     const localeVariablesMap = {
         applyButtonText: 'OK',
         cancelButtonText: 'Cancel',
-        endDateLabel: 'dxDateBox-endDateLabel',
-        invalidStartDateMessage: 'dxDateBox-invalidStartDateMessage',
-        invalidEndDateMessage: 'dxDateBox-invalidEndDateMessage',
-        startDateLabel: 'dxDateBox-startDateLabel',
-        startDateOutOfRangeMessage: 'dxDateBox-startDateOutOfRangeMessage',
+        endDateLabel: 'dxDateRangeBox-endDateLabel',
+        invalidStartDateMessage: 'dxDateRangeBox-invalidStartDateMessage',
+        invalidEndDateMessage: 'dxDateRangeBox-invalidEndDateMessage',
+        startDateLabel: 'dxDateRangeBox-startDateLabel',
+        startDateOutOfRangeMessage: 'dxDateRangeBox-startDateOutOfRangeMessage',
         todayButtonText: 'dxCalendar-todayButtonText',
     };
 
