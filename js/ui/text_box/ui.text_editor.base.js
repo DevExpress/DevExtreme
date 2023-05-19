@@ -476,17 +476,14 @@ const TextEditorBase = Editor.inherit({
     },
 
     _setLabelContainerAria() {
-        const labelElementId = this._label.getId();
+        const labelId = this._label.getId();
+        const placeholderId = this._$placeholder?.attr('id');
+
+        const value = [labelId, placeholderId].filter(Boolean).join(' ');
 
         const aria = {
-            'labelledby': labelElementId,
+            'labelledby': value || undefined,
         };
-
-        if(this._$placeholder) {
-            const placeholderId = this._$placeholder.attr('id');
-
-            aria['labelledby'] = `${labelElementId} ${placeholderId}`;
-        }
 
         this.setAria(aria, this._getElementToSettingAriaLabel());
     },
@@ -529,9 +526,10 @@ const TextEditorBase = Editor.inherit({
         }
 
         const $input = this._input();
+        const { placeholder } = this.option();
         const placeholderAttributes = {
-            'id': `dx-${new Guid()}`,
-            'data-dx_placeholder': this.option('placeholder'),
+            'id': placeholder ? `dx-${new Guid()}` : undefined,
+            'data-dx_placeholder': placeholder,
         };
 
         const $placeholder = this._$placeholder = $('<div>')
