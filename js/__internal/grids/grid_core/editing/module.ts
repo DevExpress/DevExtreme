@@ -150,9 +150,6 @@ const EditingController = modules.ViewController.inherit((function () {
     return isObject(button) ? button.name : button;
   }
 
-  /**
-     * @type {Partial<import('./ui.grid_core.editing').EditingController>}
-     */
   const members = {
     init() {
       this._columnsController = this.getController('columns');
@@ -2276,9 +2273,6 @@ const EditingController = modules.ViewController.inherit((function () {
   return members;
 })());
 
-/**
- * @type {import('./ui.grid_core.modules').Module}
- */
 export const editingModule = {
   defaultOptions() {
     return {
@@ -2314,9 +2308,6 @@ export const editingModule = {
 
         editRowKey: null,
 
-        /**
-                 * @type {any}
-                 */
         editColumnName: null,
 
         changes: [],
