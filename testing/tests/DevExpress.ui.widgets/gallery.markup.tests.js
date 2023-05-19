@@ -4,21 +4,22 @@ import windowUtils from 'core/utils/window';
 
 
 QUnit.testStart(() => {
-    const markup =
-        '<style>\
-            .dx-gallery, .dx-gallery-item {\
-                width: 400px;\
-                height: 400px;\
-            }\
-        </style>\
-        \
-        <div id="gallerySimple"></div>\
-        \
-        <div id="galleryWithTmpl">\
-            <div data-options="dxTemplate : { name: \'item\' } " >\
-                <div>0</div>\
-            </div>\
-        </div>';
+    const markup = `
+        <style nonce="qunit-test">
+            .dx-gallery, .dx-gallery-item {
+                width: 400px;
+                height: 400px;
+            }
+        </style>
+
+        <div id="gallerySimple"></div>
+
+        <div id="galleryWithTmpl">
+            <div data-options="dxTemplate : { name: 'item' } " >
+                <div>0</div>
+            </div>
+        </div>
+    `;
 
     $('#qunit-fixture').html(markup);
 });

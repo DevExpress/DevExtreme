@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
@@ -53,7 +55,11 @@ function checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTempl
 const leftTemplateSize = 150;
 const LeftDrawerTester = {
     templateSize: leftTemplateSize,
-    template: () => `<div id="template" style="width: ${leftTemplateSize}px; height: 100%; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: `${leftTemplateSize}px`,
+        height: '100%',
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -197,7 +203,11 @@ const LeftDrawerTester = {
 const rightTemplateSize = 150;
 const RightDrawerTester = {
     templateSize: rightTemplateSize,
-    template: () => `<div id="template" style="width: ${rightTemplateSize}px; height: 100%; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: `${rightTemplateSize}px`,
+        height: '100%',
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -345,7 +355,11 @@ const RightDrawerTester = {
 const topTemplateSize = 75;
 const TopDrawerTester = {
     templateSize: topTemplateSize,
-    template: () => `<div id="template" style="width: 100%; height: ${topTemplateSize}px; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: '100%',
+        height: `${topTemplateSize}px`,
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -482,7 +496,11 @@ const TopDrawerTester = {
 const bottomTemplateSize = 75;
 const BottomDrawerTester = {
     templateSize: bottomTemplateSize,
-    template: () => `<div id="template" style="width: 100%; height: ${bottomTemplateSize}px; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: '100%',
+        height: `${bottomTemplateSize}px`,
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -620,11 +638,7 @@ const BottomDrawerTester = {
 
 const drawerElementId = 'drawer1';
 export const drawerTesters = {
-    drawerElementId: drawerElementId,
-    markup: `
-        <div id="${drawerElementId}" style="background-color: blue; width: 200px; height: 100px">
-            <div id="view" style="width: 100%; height: 100%; background-color: yellow">view</div>
-        </div>`,
+    drawerElementId,
     left: LeftDrawerTester,
     top: TopDrawerTester,
     right: RightDrawerTester,
