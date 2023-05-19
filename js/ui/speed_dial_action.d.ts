@@ -35,6 +35,7 @@ export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInf
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**

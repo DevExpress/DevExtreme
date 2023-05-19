@@ -165,6 +165,7 @@ export type Options = PivotGridDataSourceOptions;
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface PivotGridDataSourceOptions {
     /**
@@ -505,6 +506,7 @@ export interface PivotGridDataSourceField {
  * @docid
  * @namespace DevExpress.data
  * @public
+ * @options PivotGridDataSourceOptions
  */
 export default class PivotGridDataSource {
     constructor(options?: Options);

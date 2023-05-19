@@ -143,28 +143,29 @@ test('TabPanel borders without scrolling', async (t) => {
   test(`TabPanel when its disabled item has focus if rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const tabPanel = new TabPanel('#container');
+    const direction = rtlEnabled ? 'left' : 'right';
 
     await testScreenshot(t, takeScreenshot, `TabPanel without focus, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t.pressKey('tab');
     await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
-    await t.pressKey('right');
+    await t.pressKey(direction);
     await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
-    await t.pressKey('right');
+    await t.pressKey(direction);
 
     const thirdItem = tabPanel.getItem(2);
-    const fourthItem = tabPanel.getItem(3);
+    const firstItem = tabPanel.getItem(0);
 
-    await t.dispatchEvent(thirdItem.element, 'mousedown');
-    await testScreenshot(t, takeScreenshot, `TabPanel when 3 item has active state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
+    await t.dispatchEvent(firstItem.element, 'mousedown');
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
       .dispatchEvent(thirdItem.element, 'mouseup')
-      .hover(fourthItem.element);
+      .hover(firstItem.element);
 
-    await testScreenshot(t, takeScreenshot, `TabPanel when 4 item has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t.hover(Selector(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`));
     await testScreenshot(t, takeScreenshot, `TabPanel when right navigation button has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
@@ -199,6 +200,8 @@ test('TabPanel borders without scrolling', async (t) => {
       width: 450,
       showNavButtons: true,
       rtlEnabled,
+      // prevent firing dxinactive event for to avoid failing test
+      itemHoldTimeout: 5000,
     };
 
     return createWidget('dxTabPanel', tabPanelOptions);
@@ -206,11 +209,12 @@ test('TabPanel borders without scrolling', async (t) => {
 
   test(`Tab borders in TabPanel with expanded tabs if rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const direction = rtlEnabled ? 'left' : 'right';
 
     await t
       .pressKey('tab')
-      .pressKey('right')
-      .pressKey('right');
+      .pressKey(direction)
+      .pressKey(direction);
 
     await testScreenshot(t, takeScreenshot, `TabPanel with expanded tabs, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
@@ -243,13 +247,14 @@ test('TabPanel borders without scrolling', async (t) => {
 
   test(`Tab borders in TabPanel with long tabs if rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const direction = rtlEnabled ? 'left' : 'right';
 
     await testScreenshot(t, takeScreenshot, `TabPanel with long tabs, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
       .pressKey('tab')
-      .pressKey('right')
-      .pressKey('right');
+      .pressKey(direction)
+      .pressKey(direction);
 
     await testScreenshot(t, takeScreenshot, `TabPanel with long tabs, 2 tab is selected, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
@@ -287,10 +292,11 @@ test('TabPanel borders without scrolling', async (t) => {
 
   test(`Tab borders in TabPanel with long not stretched tabs if ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const direction = rtlEnabled ? 'left' : 'right';
 
     await t
       .pressKey('tab')
-      .pressKey('right');
+      .pressKey(direction);
 
     await testScreenshot(t, takeScreenshot, `TabPanel with long not stretched tabs, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 

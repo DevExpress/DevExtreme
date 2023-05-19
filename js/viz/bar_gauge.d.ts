@@ -127,6 +127,7 @@ export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**

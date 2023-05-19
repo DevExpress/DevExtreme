@@ -1,4 +1,8 @@
-/** @namespace DevExpress */
+/**
+ * @namespace DevExpress
+ * @docid
+ * @hidden
+ */
 export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionChangedEvent> {
   /**
    * @docid
@@ -37,6 +41,7 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
  * @namespace DevExpress
  * @hidden
  * @wrappable
+ * @options ComponentOptions
  */
 export class Component<TProperties> {
   constructor(options?: TProperties);

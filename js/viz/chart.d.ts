@@ -635,6 +635,7 @@ export interface chartSeriesObject extends baseSeriesObject {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**

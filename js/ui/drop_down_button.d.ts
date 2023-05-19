@@ -72,6 +72,7 @@ export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**

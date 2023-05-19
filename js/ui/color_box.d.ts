@@ -88,6 +88,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**

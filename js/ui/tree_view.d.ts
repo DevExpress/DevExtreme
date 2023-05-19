@@ -97,6 +97,7 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxTreeViewOptions<TKey = any>
     extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {

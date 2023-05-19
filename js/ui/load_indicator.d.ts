@@ -23,6 +23,7 @@ export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
