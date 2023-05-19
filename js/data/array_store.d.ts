@@ -12,6 +12,7 @@ export type Options<
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface ArrayStoreOptions<
     TItem = any,
@@ -27,6 +28,7 @@ export interface ArrayStoreOptions<
  * @docid
  * @inherits Store
  * @public
+ * @options ArrayStoreOptions
  */
 export default class ArrayStore<
     TItem = any,

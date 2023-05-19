@@ -37,6 +37,7 @@ export type ShownEvent = EventInfo<dxDeferRendering>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**

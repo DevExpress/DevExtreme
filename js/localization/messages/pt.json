@@ -60,6 +60,8 @@
         "dxDateBox-invalidEndDateMessage": "O valor final deve ser uma data",
         "dxDateBox-startDateOutOfRangeMessage": "A data de início está fora do intervalo",
         "dxDateBox-endDateOutOfRangeMessage": "A data final está fora do intervalo",
+        "dxDateRangeBox-startDateLabel": "Data de Início",
+        "dxDateRangeBox-endDateLabel": "Data Final",
 
         "dxFileUploader-selectFile": "Selecionar arquivo",
         "dxFileUploader-dropFile": "ou Soltar arquivo aqui",

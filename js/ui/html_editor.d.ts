@@ -83,6 +83,7 @@ export interface MentionTemplateData {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**

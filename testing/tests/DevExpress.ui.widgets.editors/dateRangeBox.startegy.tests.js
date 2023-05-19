@@ -550,6 +550,44 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
 
         assert.strictEqual(this.instance.option('opened'), true);
     });
+
+    QUnit.test('It should be possible to pick the same start date + end date', function(assert) {
+        this.reinit({
+            value: [null, null],
+            opened: true,
+        });
+
+        const $firstDate = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        const firstCellDate = dataUtils.data($firstDate.get(0), CALENDAR_DATE_VALUE_KEY);
+        $firstDate.trigger('dxclick');
+
+        const $secondDate = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        const secondCellDate = dataUtils.data($secondDate.get(0), CALENDAR_DATE_VALUE_KEY);
+        $secondDate.trigger('dxclick');
+
+        assert.deepEqual(firstCellDate, secondCellDate, 'dates are equal');
+        assert.deepEqual(this.instance.option('value'), [firstCellDate, secondCellDate], 'value is correct');
+    });
+
+    QUnit.test('It should be possible to pick the same end date + start date', function(assert) {
+        this.reinit({
+            value: [null, null],
+            opened: true,
+        });
+
+        $(this.instance.field()[1]).focusin();
+
+        const $firstDate = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        const firstCellDate = dataUtils.data($firstDate.get(0), CALENDAR_DATE_VALUE_KEY);
+        $firstDate.trigger('dxclick');
+
+        const $secondDate = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        const secondCellDate = dataUtils.data($secondDate.get(0), CALENDAR_DATE_VALUE_KEY);
+        $secondDate.trigger('dxclick');
+
+        assert.deepEqual(firstCellDate, secondCellDate, 'dates are equal');
+        assert.deepEqual(this.instance.option('value'), [secondCellDate, firstCellDate], 'value is correct');
+    });
 });
 
 QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig, () => {

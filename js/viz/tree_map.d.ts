@@ -108,6 +108,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**

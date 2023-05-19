@@ -210,6 +210,7 @@ export type ItemDownloadingEvent = EventInfo<dxFileManager> & ActionEventInfo & 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**

@@ -192,6 +192,7 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
@@ -203,7 +204,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @default undefined
-     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */

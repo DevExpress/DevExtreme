@@ -54,6 +54,7 @@ export type TemplateData = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**

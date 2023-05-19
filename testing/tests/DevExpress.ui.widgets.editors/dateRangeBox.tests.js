@@ -9,6 +9,7 @@ import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
+import localization from 'localization';
 
 import 'ui/validator';
 import 'generic_light.css!';
@@ -3575,6 +3576,36 @@ QUnit.module('Validation', {
             this.instance.reset();
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
+        });
+    });
+});
+
+QUnit.module('localization', moduleConfig, () => {
+    const localeVariablesMap = {
+        applyButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        endDateLabel: 'dxDateRangeBox-endDateLabel',
+        invalidStartDateMessage: 'dxDateRangeBox-invalidStartDateMessage',
+        invalidEndDateMessage: 'dxDateRangeBox-invalidEndDateMessage',
+        startDateLabel: 'dxDateRangeBox-startDateLabel',
+        startDateOutOfRangeMessage: 'dxDateRangeBox-startDateOutOfRangeMessage',
+        todayButtonText: 'dxCalendar-todayButtonText',
+    };
+
+    QUnit.test('default value is received from the dictionary', function(assert) {
+        Object.keys(localeVariablesMap).forEach((optionName, index) => {
+            const variableName = localeVariablesMap[optionName];
+            localization.loadMessages({
+                'en': {
+                    [variableName]: index + 1
+                }
+            });
+        });
+
+        this.reinit();
+
+        Object.keys(localeVariablesMap).forEach((optionName, index) => {
+            assert.strictEqual(this.instance.option(optionName), index + 1, optionName);
         });
     });
 });

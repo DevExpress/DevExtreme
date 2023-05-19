@@ -228,7 +228,7 @@
         svg: {
             create: function() {
                 const $container = $(
-                    `<div id="container" style="position:absolute; top:0;">
+                    `<div id="container">
                         <svg viewBox="0 0 500 500">
                             <g id="where">
                                 <rect x="10" y="20" width="30" height="40" fill="red" />
@@ -236,6 +236,11 @@
                         </svg>
                     </div>`
                 );
+
+                $container.css({
+                    position: 'absolute',
+                    top: 0
+                });
 
                 $container.appendTo(document.body);
 

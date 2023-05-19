@@ -50,6 +50,7 @@ export type OptionChangedEvent = EventInfo<dxPivotGridFieldChooser> & ChangedOpt
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**

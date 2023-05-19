@@ -71,6 +71,7 @@ export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**

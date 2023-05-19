@@ -74,6 +74,7 @@ export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | Mou
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**

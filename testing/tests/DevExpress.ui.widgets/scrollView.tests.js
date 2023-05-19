@@ -71,12 +71,27 @@ const moduleConfig = {
 
 QUnit.testStart(function() {
     const markup = '\
-        <div id="scrollView" style="height: 50px; width: 50px;">\
-            <div class="content1" style="height: 100px; width: 100px;"></div>\
-            <div class="content2" style="height: 100px; width: 100px;"></div>\
+        <div id="scrollView">\
+            <div class="content1"></div>\
+            <div class="content2"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#scrollView').css({
+        height: '50px',
+        width: '50px'
+    });
+
+    $('.content1').css({
+        height: '100px',
+        width: '100px'
+    });
+
+    $('.content2').css({
+        height: '100px',
+        width: '100px'
+    });
 });
 
 QUnit.module('render', moduleConfig, () => {
