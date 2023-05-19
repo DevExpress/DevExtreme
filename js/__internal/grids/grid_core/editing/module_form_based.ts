@@ -529,6 +529,7 @@ export const editingFormBasedModule = {
         _getEditFormEditorVisibleIndex($cells, column) {
           let visibleIndex = -1;
 
+          // @ts-expect-error
           each($cells, (index, cellElement) => {
             const item = ($(cellElement).find('.dx-field-item-content') as any).data('dx-form-item');
             if (item?.column && column && item.column.index === column.index) {

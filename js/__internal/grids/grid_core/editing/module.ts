@@ -133,6 +133,7 @@ const EditingController = modules.ViewController.inherit((function () {
   const getButtonIndex = (buttons, name) => {
     let result = -1;
 
+    // @ts-expect-error
     // eslint-disable-next-line array-callback-return
     buttons.some((button, index) => {
       if (getButtonName(button) === name) {
@@ -436,6 +437,7 @@ const EditingController = modules.ViewController.inherit((function () {
       let columnIndex;
 
       const visibleColumns = columnsController.getVisibleColumns();
+      // @ts-expect-error
       each(visibleColumns, (index, column) => {
         if (column.allowEditing) {
           columnIndex = index;
@@ -641,6 +643,7 @@ const EditingController = modules.ViewController.inherit((function () {
       if (!isDefined(key) && items.length === 0) {
         result = 0;
       } else if (isDefined(key)) {
+        // @ts-expect-error
         // eslint-disable-next-line array-callback-return
         items.some((item, index) => {
           const isProcessedItem = isProcessedItems || this._isProcessedItem(item);
@@ -1069,6 +1072,7 @@ const EditingController = modules.ViewController.inherit((function () {
       const visibleColumns = this._columnsController.getVisibleColumns();
       let editColumn;
 
+      // @ts-expect-error
       // eslint-disable-next-line array-callback-return
       isDefined(name) && visibleColumns.some((column) => {
         if (column.name === name) {
@@ -1108,6 +1112,7 @@ const EditingController = modules.ViewController.inherit((function () {
       this._resetEditRowKey();
     },
 
+    // @ts-expect-error
     editRow(rowIndex) {
       const dataController = this._dataController;
       const items = dataController.items();
@@ -1897,6 +1902,7 @@ const EditingController = modules.ViewController.inherit((function () {
 
       return deferred.promise();
     },
+    // @ts-expect-error
     _focusPreviousEditingCellIfNeed(options) {
       if (this.hasEditData() && !this.isEditCell(options.rowIndex, options.columnIndex)) {
         this._focusEditingCell();
@@ -2197,6 +2203,7 @@ const EditingController = modules.ViewController.inherit((function () {
 
     _afterInsertRow: noop,
 
+    // @ts-expect-error
     _beforeSaveEditData(change) {
       if (change && !isDefined(change.key) && isDefined(change.type)) {
         return true;
