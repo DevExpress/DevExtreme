@@ -22,6 +22,7 @@ import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import filterUtils from '@js/ui/shared/filtering';
 import gridCoreUtils from '../module_utils';
 import modules from '../modules';
+import { Module } from '../module_types';
 
 import {
   fireColumnsChanged,
@@ -1738,7 +1739,7 @@ export class ColumnsController extends modules.Controller {
   }
 }
 
-export const columnsControllerModule: import('../module_types').Module = {
+export const columnsControllerModule: Module = {
   defaultOptions() {
     return {
       commonColumnSettings: {

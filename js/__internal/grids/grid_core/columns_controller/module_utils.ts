@@ -705,9 +705,6 @@ export const addExpandColumn = function (that) {
   that.addCommandColumn(options);
 };
 
-/**
-   * @type {import('./ui.grid_core.columns_controller').Column['setCellValue']}
-   */
 export const defaultSetCellValue = function (data, value) {
   if (!this.dataField) {
     return;
