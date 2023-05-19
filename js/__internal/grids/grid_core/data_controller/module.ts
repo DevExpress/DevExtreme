@@ -144,7 +144,7 @@ export class DataController extends ControllerWithDataMixin {
 
   _isPagingByRendering: any;
 
-  _columnsController: Controllers['columns'];
+  _columnsController!: Controllers['columns'];
 
   _editingController: any;
 
@@ -1057,7 +1057,7 @@ export class DataController extends ControllerWithDataMixin {
 
       const rowIndexDelta = this.getRowIndexDelta();
       each(this._items, (index, item) => {
-        item.rowIndex = (index as any) - rowIndexDelta;
+        item.rowIndex = index - rowIndexDelta;
         if (oldItems) {
           item.cells = oldItems[index].cells ?? [];
         }
