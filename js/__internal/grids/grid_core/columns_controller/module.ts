@@ -21,6 +21,7 @@ import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import filterUtils from '@js/ui/shared/filtering';
 import gridCoreUtils from '../module_utils';
+import modules from '../modules';
 
 import {
   fireColumnsChanged,
@@ -73,11 +74,10 @@ import {
   DATATYPE_OPERATIONS,
   USER_STATE_FIELD_NAMES,
 } from './const';
-import { Controller } from '../module_types';
 
 const regExp = /columns\[(\d+)\]\.?/gi;
 
-export class ColumnsController extends Controller {
+export class ColumnsController extends modules.Controller {
   _skipProcessingColumnsChange: any;
 
   _commandColumns: any;
