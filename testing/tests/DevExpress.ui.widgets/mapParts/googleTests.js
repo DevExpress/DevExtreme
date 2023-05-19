@@ -40,13 +40,15 @@ QUnit.module('google provider', {
         ajaxMock.setup({
             url: fakeURL,
             callback: function() {
-                $.getScript('../../testing/helpers/forMap/googleMock.js')
-                    .done(function() {
-                        prepareTestingGoogleProvider();
-                        if(window._googleScriptReady) {
-                            window._googleScriptReady();
-                        }
-                    });
+                $.getScript({
+                    url: '../../testing/helpers/forMap/googleMock.js',
+                    scriptAttrs: { nonce: 'qunit-test' }
+                }).done(function() {
+                    prepareTestingGoogleProvider();
+                    if(window._googleScriptReady) {
+                        window._googleScriptReady();
+                    }
+                });
             }
         });
 
@@ -62,7 +64,10 @@ QUnit.module('google provider', {
 QUnit.test('map initialize with loaded map', function(assert) {
     const done = assert.async();
 
-    $.getScript('../../testing/helpers/forMap/googleMock.js').done(function() {
+    $.getScript({
+        url: '../../testing/helpers/forMap/googleMock.js',
+        scriptAttrs: { nonce: 'qunit-test' }
+    }).done(function() {
         window.google.maps.customFlag = true;
 
         setTimeout(function() {
