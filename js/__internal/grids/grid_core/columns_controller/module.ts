@@ -73,9 +73,8 @@ import {
   MAX_SAFE_INTEGER,
   DATATYPE_OPERATIONS,
   USER_STATE_FIELD_NAMES,
+  COLUMN_OPTION_REGEXP,
 } from './const';
-
-const regExp = /columns\[(\d+)\]\.?/gi;
 
 export class ColumnsController extends modules.Controller {
   _skipProcessingColumnsChange: any;
@@ -195,7 +194,7 @@ export class ColumnsController extends modules.Controller {
     let column;
     const columnIndexes: any = [];
 
-    path.replace(regExp, (_, columnIndex) => {
+    path.replace(COLUMN_OPTION_REGEXP, (_, columnIndex) => {
       // eslint-disable-next-line radix
       columnIndexes.push(parseInt(columnIndex));
       return '';
@@ -273,7 +272,7 @@ export class ColumnsController extends modules.Controller {
   _columnOptionChanged(args) {
     let columnOptionValue = {};
     const column = this.getColumnByPath(args.fullName);
-    const columnOptionName = args.fullName.replace(regExp, '');
+    const columnOptionName = args.fullName.replace(COLUMN_OPTION_REGEXP, '');
 
     if (column) {
       if (columnOptionName) {
@@ -291,7 +290,7 @@ export class ColumnsController extends modules.Controller {
   _updateRequireResize(args) {
     const { component } = this;
 
-    if (args.fullName.replace(regExp, '') === 'width' && component._updateLockCount) {
+    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width' && component._updateLockCount) {
       component._requireResize = true;
     }
   }
