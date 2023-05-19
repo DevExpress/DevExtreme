@@ -1835,3 +1835,6 @@ export const weatherData = [{
   temp: 11,
   precipitation: 0,
 }];
+
+export const intervalLabel = { 'aria-label': 'Interval' };
+export const functionLabel = { 'aria-label': 'Function' };

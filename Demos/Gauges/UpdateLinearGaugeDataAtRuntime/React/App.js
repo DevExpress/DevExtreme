@@ -3,7 +3,7 @@ import {
   LinearGauge, Title, Font, Geometry, Scale, RangeContainer, Range, ValueIndicator, Label,
 } from 'devextreme-react/linear-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
-import { cities } from './data.js';
+import { cities, cityLabel } from './data.js';
 
 const customTicks = [900, 1000, 1020, 1100];
 
@@ -88,6 +88,7 @@ class App extends React.Component {
         <SelectBox
           dataSource={cities}
           valueExpr="data"
+          inputAttr={cityLabel}
           value={this.state.selectBoxValue}
           displayExpr="name"
           onSelectionChanged={this.onSelectionChanged}

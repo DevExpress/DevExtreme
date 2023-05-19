@@ -6,7 +6,9 @@ import PieChart, {
 } from 'devextreme-react/pie-chart';
 import SelectBox from 'devextreme-react/select-box';
 import { getPalette } from 'devextreme/viz/palette';
-import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
+import {
+  paletteCollection, paletteExtensionModes, dataSource, paletteLabel, paletteExtensionLabel,
+} from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -53,6 +55,7 @@ class App extends React.Component {
               <span>Palette </span>
               <SelectBox
                 items={paletteCollection}
+                inputAttr={paletteLabel}
                 defaultValue={this.state.palette}
                 onValueChanged={this.setPalette}
               />
@@ -61,6 +64,7 @@ class App extends React.Component {
               <span>Palette Extension Mode </span>
               <SelectBox
                 items={paletteExtensionModes}
+                inputAttr={paletteExtensionLabel}
                 defaultValue={this.state.extensionMode}
                 onValueChanged={this.setExtensionMode}
               />

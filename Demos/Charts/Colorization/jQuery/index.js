@@ -57,6 +57,7 @@ $(() => {
   $('#colorization').dxSelectBox({
     items: colorizationOptions,
     width: 200,
+    inputAttr: { 'aria-label': 'Colorization Option' },
     value: startColorization,
     displayExpr: 'name',
     onValueChanged(data) {

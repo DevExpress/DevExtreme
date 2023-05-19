@@ -20,6 +20,7 @@
         <DxSelectBox
           :data-source="colorizationOptions"
           :width="200"
+          :input-attr="{ 'aria-label': 'Colorization Type' }"
           v-model:value="typeOptions"
           display-expr="name"
           value-expr="options"

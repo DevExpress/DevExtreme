@@ -40,6 +40,7 @@
           <DxSelectBox
             :data-source="prefixOptions"
             :value="prefix"
+            :input-attr="{ 'aria-label': 'Title' }"
             placeholder="Select title"
             width="150px"
             @value-changed="filterSelection"

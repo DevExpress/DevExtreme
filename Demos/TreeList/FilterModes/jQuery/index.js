@@ -37,6 +37,7 @@ $(() => {
 
   $('#filterMode').dxSelectBox({
     value: 'matchOnly',
+    inputAttr: { 'aria-label': 'Filter Mode' },
     items: ['matchOnly', 'withAncestors', 'fullBranch'],
     onValueChanged(data) {
       treeList.option('filterMode', data.value);

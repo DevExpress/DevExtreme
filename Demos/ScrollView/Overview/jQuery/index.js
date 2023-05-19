@@ -41,6 +41,7 @@ $(() => {
   $('#show-scrollbar-mode').dxSelectBox({
     items: showScrollbarModes,
     value: showScrollbarModes[0].value,
+    inputAttr: { 'aria-label': 'Show Scrollbar Mode' },
     valueExpr: 'value',
     displayExpr: 'text',
     onValueChanged(data) {

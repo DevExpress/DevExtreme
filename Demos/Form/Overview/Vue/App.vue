@@ -5,6 +5,7 @@
       <DxSelectBox
         :data-source="companies"
         :label-mode="companySelectorLabelMode"
+        :input-attr="{ 'aria-label': 'Company' }"
         label="Select company"
         v-model:value="company"
         display-expr="Name"
@@ -27,6 +28,7 @@
         <span>Label mode:</span>
         <DxSelectBox
           :items="labelModes"
+          :input-attr="{ 'aria-label': 'Label Mode' }"
           v-model:value="labelMode"
         />
       </div>
@@ -34,6 +36,7 @@
         <span>Label location:</span>
         <DxSelectBox
           :items="labelLocations"
+          :input-attr="{ 'aria-label': 'Label Location' }"
           v-model:value="labelLocation"
         />
       </div>
@@ -41,6 +44,7 @@
         <span>Columns count:</span>
         <DxSelectBox
           :items="columnsCounts"
+          :input-attr="{ 'aria-label': 'Column Count' }"
           v-model:value="colCount"
         />
       </div>
@@ -48,6 +52,7 @@
         <span>Min column width:</span>
         <DxSelectBox
           :items="minColumnWidths"
+          :input-attr="{ 'aria-label': 'Min Column Width' }"
           v-model:value="minColWidth"
         />
       </div>

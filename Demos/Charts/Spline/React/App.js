@@ -14,7 +14,7 @@ import {
   Label,
   Format,
 } from 'devextreme-react/chart';
-import { architectureSources, sharingStatisticsInfo } from './data.js';
+import { architectureSources, sharingStatisticsInfo, seriesTypeLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -69,6 +69,7 @@ class App extends React.Component {
             <span>Series Type </span>
             <SelectBox
               dataSource={this.types}
+              inputAttr={seriesTypeLabel}
               value={this.state.type}
               onValueChanged={this.handleChange}
             />

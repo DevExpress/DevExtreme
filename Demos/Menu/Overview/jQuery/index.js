@@ -25,6 +25,7 @@ $(() => {
   $('#show-submenu-mode').dxSelectBox({
     items: showSubmenuModes,
     value: showSubmenuModes[1],
+    inputAttr: { 'aria-label': 'Submenu Mode' },
     displayExpr: 'name',
     onValueChanged(data) {
       dxMenu.option('showFirstSubmenuMode', data.value);
@@ -33,6 +34,7 @@ $(() => {
 
   $('#orientation').dxSelectBox({
     items: ['horizontal', 'vertical'],
+    inputAttr: { 'aria-label': 'Orientation' },
     value: 'horizontal',
     onValueChanged(data) {
       dxMenu.option('orientation', data.value);

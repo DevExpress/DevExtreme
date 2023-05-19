@@ -35,6 +35,7 @@
             <DxSelectBox
               :items="valueChangeEvents"
               v-model:value="eventValue"
+              :input-attr="{ 'aria-label': 'Event' }"
               value-expr="name"
               display-expr="title"
             />

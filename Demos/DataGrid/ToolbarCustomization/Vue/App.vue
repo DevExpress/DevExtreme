@@ -60,6 +60,7 @@
       <DxSelectBox
         width="225"
         :items="groupingValues"
+        :input-attr="{ 'aria-label': 'Group' }"
         display-expr="text"
         value-expr="value"
         value="CustomerStoreState"

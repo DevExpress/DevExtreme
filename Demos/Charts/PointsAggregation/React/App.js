@@ -14,7 +14,9 @@ import Chart, {
 } from 'devextreme-react/chart';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
-import { weatherData, aggregationFunctions, aggregationIntervals } from './data.js';
+import {
+  weatherData, aggregationFunctions, aggregationIntervals, functionLabel, intervalLabel,
+} from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -118,6 +120,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={aggregationIntervals}
               value={this.state.currentInterval}
+              inputAttr={intervalLabel}
               onValueChanged={this.updateInterval}
               displayExpr="displayName"
               valueExpr="interval"
@@ -127,6 +130,7 @@ class App extends React.Component {
             <span>Method:</span>&nbsp;
             <SelectBox
               dataSource={aggregationFunctions}
+              inputAttr={functionLabel}
               value={this.state.currentFunction}
               onValueChanged={this.updateMethod}
               displayExpr="displayName"

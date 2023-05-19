@@ -20,3 +20,4 @@ export const dataSource = [{
   secondary: [],
 }];
 
+export const departmentLabel = { 'aria-label': 'Department' };

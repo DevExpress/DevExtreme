@@ -22,6 +22,7 @@
       <dx-select-box
         [items]="['none', 'single', 'multiple', 'all']"
         [(value)]="selectionModeValue"
+        [inputAttr]="{ 'aria-label': 'Selection Mode' }"
       >
       </dx-select-box>
     </div>
@@ -30,6 +31,7 @@
       <dx-select-box
         [disabled]="selectionModeValue !== 'all'"
         [items]="['page', 'allPages']"
+        [inputAttr]="{ 'aria-label': 'Select All Mode' }"
         [(value)]="selectAllModeValue"
       >
       </dx-select-box>

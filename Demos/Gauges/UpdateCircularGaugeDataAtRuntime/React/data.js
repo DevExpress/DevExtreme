@@ -20,3 +20,4 @@ export const dataSource = [{
   max: 31,
 }];
 
+export const seasonLabel = { 'aria-label': 'Season' };

@@ -51,6 +51,7 @@ $(() => {
   $('#choose-temperature').dxSelectBox({
     dataSource: [2, 4, 6, 8, 9, 10, 11],
     value: 2,
+    inputAttr: { 'aria-label': 'Temperature' },
     onValueChanged(data) {
       source.filter(['t', '>', data.value]);
       source.load();

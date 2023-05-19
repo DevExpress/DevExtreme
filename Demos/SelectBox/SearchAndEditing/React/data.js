@@ -181,3 +181,7 @@ export const products = [{
 
 export const minimumSearchLengthLabel = { 'aria-label': 'Minumum Search length' };
 export const searchTimeoutLabel = { 'aria-label': 'Search Timeout' };
+export const searchExpressionLabel = { 'aria-label': 'Search Expression' };
+export const searchModeLabel = { 'aria-label': 'Search Mode' };
+export const productLabel = { 'aria-label': 'Product' };
+export const simpleProductLabel = { 'aria-label': 'Simple Product' };

@@ -9,6 +9,7 @@
             <DxSelectBox
               :search-enabled="true"
               :data-source="products"
+              :input-attr="{ 'aria-label': 'Product' }"
               :search-mode="searchModeOption"
               :search-expr="searchExprOption"
               :search-timeout="searchTimeoutOption"
@@ -28,6 +29,7 @@
             <DxSelectBox
               v-model:selectedItem="editBoxValue"
               :value="product"
+              :input-attr="{ 'aria-label': 'Simple Product' }"
               :accept-custom-value="true"
               :data-source="productsDataSource"
               display-expr="Name"
@@ -57,6 +59,7 @@
         <div>Search Mode</div>
         <DxSelectBox
           v-model:value="searchModeOption"
+          :input-attr="{ 'aria-label': 'Search Mode' }"
           :items="['contains', 'startswith']"
         />
       </div>
@@ -65,6 +68,7 @@
         <DxSelectBox
           v-model:value="searchExprOption"
           :items="searchExprItems"
+          :input-attr="{ 'aria-label': 'Search Expression' }"
           display-expr="name"
           value-expr="value"
         />

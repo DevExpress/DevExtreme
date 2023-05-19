@@ -11,6 +11,7 @@ import SelectBox from 'devextreme-react/select-box';
 import { employees, states } from './data.js';
 
 const startEditActions = ['click', 'dblClick'];
+const actionLabel = { 'aria-label': 'Action' };
 
 class App extends React.Component {
   constructor() {
@@ -73,6 +74,7 @@ class App extends React.Component {
             <span>Start Edit Action</span>
             <SelectBox
               items={startEditActions}
+              inputAttr={actionLabel}
               value={this.state.startEditAction}
               onValueChanged={this.onStartEditActionChanged}>
             </SelectBox>

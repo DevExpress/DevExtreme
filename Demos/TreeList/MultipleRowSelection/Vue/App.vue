@@ -42,6 +42,7 @@
         <span>Selection Mode</span>{{ ' ' }}
         <DxSelectBox
           v-model:value="selectionMode"
+          :input-attr="{ 'aria-label': 'Selection Mode' }"
           :items="['all', 'excludeRecursive', 'leavesOnly']"
           @value-changed="onOptionsChanged"
         />

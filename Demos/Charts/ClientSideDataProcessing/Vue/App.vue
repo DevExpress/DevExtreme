@@ -27,6 +27,7 @@
       <DxSelectBox
         id="choose-temperature"
         :data-source="temperature"
+        :input-attr="{ 'aria-label': 'Temperature' }"
         :value="2"
         :on-value-changed="changeTemperature"
       />

@@ -11,7 +11,7 @@ import Chart, {
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
-import { dataSource } from './data.js';
+import { dataSource, lineStyleLabel, maxCountLabel } from './data.js';
 
 const lineStyles = ['waved', 'straight'];
 const breaksCount = [1, 2, 3, 4];
@@ -78,6 +78,7 @@ class App extends React.Component {
               <span>Max Count </span>
               <SelectBox
                 items={breaksCount}
+                inputAttr={maxCountLabel}
                 value={this.state.breaksCountValue}
                 onValueChanged={this.changeBreaksCount}
                 width={80}>
@@ -87,6 +88,7 @@ class App extends React.Component {
               <span>Style </span>
               <SelectBox
                 items={lineStyles}
+                inputAttr={lineStyleLabel}
                 value={this.state.lineStyleValue}
                 onValueChanged={this.changeStyle}
                 width={120}>

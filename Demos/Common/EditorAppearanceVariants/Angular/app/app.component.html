@@ -46,6 +46,7 @@
         [items]="states"
         width="100%"
         placeholder="Select..."
+        [inputAttr]="{ 'aria-label': 'State' }"
         label="State"
         [stylingMode]="stylingMode"
         [labelMode]="labelMode"
@@ -130,6 +131,7 @@
     <label>Styling Mode</label>
     <dx-select-box
       [items]="['outlined', 'filled', 'underlined']"
+      [inputAttr]="{ 'aria-label': 'Styling Mode' }"
       [(value)]="stylingMode"
       [stylingMode]="stylingMode"
     ></dx-select-box>
@@ -138,6 +140,7 @@
     <label>Label Mode</label>
     <dx-select-box
       [items]="['floating', 'static', 'hidden']"
+      [inputAttr]="{ 'aria-label': 'Label Mode' }"
       [(value)]="labelMode"
       [stylingMode]="stylingMode"
     ></dx-select-box>

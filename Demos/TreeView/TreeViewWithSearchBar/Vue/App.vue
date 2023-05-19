@@ -13,6 +13,7 @@
         <span>Search mode</span>
         <DxSelectBox
           :items="options"
+          :input-attr="{ 'aria-label': 'Search Mode' }"
           v-model:value="searchMode"
         />
       </div>

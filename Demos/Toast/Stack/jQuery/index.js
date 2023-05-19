@@ -62,12 +62,14 @@ $(() => {
 
   const positionSelect = $('#position').dxSelectBox({
     items: positions,
+    inputAttr: { 'aria-label': 'Position' },
     value: position,
     onSelectionChanged: ({ selectedItem }) => { position = selectedItem; },
   }).dxSelectBox('instance');
 
   $('#direction').dxSelectBox({
     items: directions,
+    inputAttr: { 'aria-label': 'Direction' },
     value: direction,
     onSelectionChanged: ({ selectedItem }) => { direction = selectedItem; },
   });

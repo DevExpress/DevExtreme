@@ -4,7 +4,7 @@ import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import List from 'devextreme-react/list';
 
-import { tasks } from './data.js';
+import { tasks, deleteModeLabel } from './data.js';
 
 const itemDeleteModes = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
 
@@ -56,6 +56,7 @@ class App extends React.Component {
             <SelectBox
               disabled={!this.state.allowDeletion}
               items={itemDeleteModes}
+              inputAttr={deleteModeLabel}
               value={this.state.itemDeleteMode}
               onValueChanged={this.onItemDeleteModeChange}>
             </SelectBox>

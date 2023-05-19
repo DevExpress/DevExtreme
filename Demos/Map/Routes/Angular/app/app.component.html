@@ -17,6 +17,7 @@
     <dx-select-box
       [dataSource]="['driving', 'walking']"
       value="driving"
+      [inputAttr]="{ 'aria-label': 'Mode' }"
       (onValueChanged)="setMode($event)"
     >
     </dx-select-box>
@@ -25,6 +26,7 @@
     <span>Route color</span>
     <dx-select-box
       [dataSource]="['blue', 'green', 'red']"
+      [inputAttr]="{ 'aria-label': 'Color' }"
       value="blue"
       (onValueChanged)="selectColor($event)"
     >

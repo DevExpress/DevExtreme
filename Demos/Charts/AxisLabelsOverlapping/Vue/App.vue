@@ -20,6 +20,7 @@
         <span>Overlapping Modes:</span>
         <DxSelectBox
           :data-source="overlappingModes"
+          :input-attr="{ 'aria-label': 'Overlapping Mode' }"
           v-model:value="currentMode"
         />
       </div>

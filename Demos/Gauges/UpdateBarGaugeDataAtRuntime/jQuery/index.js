@@ -22,6 +22,7 @@ $(() => {
 
   $('#select-color').dxSelectBox({
     width: 150,
+    inputAttr: { 'aria-label': 'Color' },
     dataSource: colors,
     displayExpr: 'name',
     value: colors[0],

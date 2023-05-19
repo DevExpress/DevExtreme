@@ -9,6 +9,7 @@
             <DxSelectBox
               :items="languages"
               :value="languages[1]"
+              :input-attr="{ 'aria-label': 'Language' }"
               @valueChanged="selectLanguage($event)"
             />
           </div>

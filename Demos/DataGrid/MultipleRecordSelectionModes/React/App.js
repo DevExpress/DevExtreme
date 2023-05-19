@@ -8,7 +8,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
-import { sales } from './data.js';
+import { sales, showCheckboxesModeLabel, selectAllModeLabel } from './data.js';
 
 const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
 const selectAllModes = ['allPages', 'page'];
@@ -60,6 +60,7 @@ class App extends React.Component {
               id="select-all-mode"
               dataSource={selectAllModes}
               value={allMode}
+              inputAttr={selectAllModeLabel}
               disabled={checkBoxesMode === 'none'}
               onValueChanged={this.onAllModeChanged}
             />
@@ -68,6 +69,7 @@ class App extends React.Component {
             <span>Show Checkboxes Mode </span>
             <SelectBox
               id="show-checkboxes-mode"
+              inputAttr={showCheckboxesModeLabel}
               dataSource={showCheckBoxesModes}
               value={checkBoxesMode}
               onValueChanged={this.onCheckBoxesModeChanged}

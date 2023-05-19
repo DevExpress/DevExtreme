@@ -29,6 +29,7 @@
     <span>Selection Mode</span>{{ " " }}
     <dx-select-box
       [(value)]="selectionMode"
+      [inputAttr]="{ 'aria-label': 'Selection Mode' }"
       [items]="['all', 'excludeRecursive', 'leavesOnly']"
       (onValueChanged)="onOptionsChanged($event)"
       text="Recursive Selection"

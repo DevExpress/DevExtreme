@@ -19,6 +19,7 @@
     <dx-select-box
       #searchMode
       [items]="['contains', 'startsWith', 'equals']"
+      [inputAttr]="{ 'aria-label': 'Search Mode' }"
       [(value)]="list.searchMode"
     >
     </dx-select-box>

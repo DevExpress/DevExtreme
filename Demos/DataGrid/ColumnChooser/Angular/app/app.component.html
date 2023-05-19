@@ -52,6 +52,7 @@
       <dx-select-box
         id="columnChooserMode"
         [items]="columnChooserModes"
+        [inputAttr]="{ 'aria-label': 'Column Chooser Mode' }"
         [(value)]="columnChooser.mode"
         valueExpr="key"
         displayExpr="name"

@@ -26,6 +26,8 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import service from './data.js';
 
+const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -110,6 +112,7 @@ class App extends React.Component {
               <SelectBox
                 className="option-editor"
                 items={applyChangesModes}
+                inputAttr={applyChangesModeLabel}
                 width={180}
                 value={this.state.applyChangesMode}
                 onValueChanged={this.changeMode}>

@@ -34,6 +34,7 @@ $(() => {
 
   $('#change-event').dxSelectBox({
     items: valueChangeEvents,
+    inputAttr: { 'aria-label': 'Event' },
     value: valueChangeEvents[0].name,
     valueExpr: 'name',
     displayExpr: 'title',

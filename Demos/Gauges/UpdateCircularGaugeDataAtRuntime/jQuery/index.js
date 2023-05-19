@@ -29,6 +29,7 @@ $(() => {
   $('#seasons').dxSelectBox({
     width: 150,
     dataSource,
+    inputAttr: { 'aria-label': 'Season' },
     displayExpr: 'name',
     value: dataSource[0],
     onSelectionChanged(e) {

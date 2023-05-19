@@ -3,6 +3,7 @@
   <dx-select-box
     [items]="demoLocations"
     [width]="240"
+    [inputAttr]="{ 'aria-label': 'Location' }"
     displayExpr="title"
     valueExpr="id"
     [(value)]="timezone"

@@ -31,6 +31,7 @@
         <span>Series Type </span>
         <DxSelectBox
           :data-source="types"
+          :input-attr="{ 'aria-label': 'Series Type' }"
           v-model:value="type"
         />
       </div>

@@ -16,6 +16,7 @@
         <span>Set mode </span>
         <DxSelectBox
           :items="routeModes"
+          :input-attr="{ 'aria-label': 'Mode' }"
           :on-value-changed="updateRoutesMode"
           value="driving"
         />
@@ -24,6 +25,7 @@
         <span>Route color </span>
         <DxSelectBox
           :items="routeColors"
+          :input-attr="{ 'aria-label': 'Color' }"
           :on-value-changed="updateRoutesColor"
           value="blue"
         />

@@ -41,6 +41,7 @@
           <div class="editor-container">
             <DxSelectBox
               :items="showCheckBoxesModes"
+              :input-attr="{ 'aria-label': 'Show Checkboxes Mode' }"
               v-model:value="showCheckBoxesModeValue"
               @value-changed="showCheckBoxesModeValueChanged"
             />
@@ -52,6 +53,7 @@
             <DxSelectBox
               :items="selectionModes"
               v-model:value="selectionModeValue"
+              :input-attr="{ 'aria-label': 'Selection Mode' }"
               :disabled="isSelectionModeDisabled"
               @value-changed="selectionModeValueChanged"
             />

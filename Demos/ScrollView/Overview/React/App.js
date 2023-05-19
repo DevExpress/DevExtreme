@@ -4,6 +4,8 @@ import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import service from './data.js';
 
+const showScrollBarModeLabel = { 'aria-label': 'Show Scrollbar Mode' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -51,6 +53,7 @@ class App extends React.Component {
             <SelectBox
               items={showScrollbarModes}
               valueExpr="value"
+              inputAttr={showScrollBarModeLabel}
               displayExpr="text"
               value={showScrollBarMode}
               onValueChanged={this.scrollbarModelValueChanged}

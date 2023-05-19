@@ -20,6 +20,7 @@ $(() => {
 
   const selectBoxWidget = $('#select-box').dxSelectBox({
     items: europeanUnion,
+    inputAttr: { 'aria-label': 'European Union' },
     value: europeanUnion[0].id,
     displayExpr: 'nameEn',
     valueExpr: 'id',
@@ -48,6 +49,7 @@ $(() => {
 
   $('#select-language').dxSelectBox({
     items: languages,
+    inputAttr: { 'aria-label': 'Language' },
     value: languages[1],
     onValueChanged(data) {
       const rtl = data.value === languages[0];

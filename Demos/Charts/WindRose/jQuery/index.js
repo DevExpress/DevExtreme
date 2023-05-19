@@ -44,6 +44,7 @@ $(() => {
   $('#radarPeriods').dxSelectBox({
     width: 300,
     dataSource,
+    inputAttr: { 'aria-label': 'Period' },
     displayExpr: 'period',
     valueExpr: 'values',
     value: dataSource[0].values,

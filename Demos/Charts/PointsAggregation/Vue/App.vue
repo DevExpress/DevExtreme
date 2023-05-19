@@ -84,6 +84,7 @@
         <DxSelectBox
           :data-source="aggregationIntervals"
           v-model:value="currentInterval"
+          :input-attr="{ 'aria-label': 'Interval' }"
           display-expr="displayName"
           value-expr="interval"
         />
@@ -93,6 +94,7 @@
         <DxSelectBox
           :data-source="aggregationFunctions"
           v-model:value="currentFunction"
+          :input-attr="{ 'aria-label': 'Function' }"
           display-expr="displayName"
           value-expr="func"
         />

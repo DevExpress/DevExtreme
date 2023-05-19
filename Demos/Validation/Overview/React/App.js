@@ -22,6 +22,8 @@ import {
   nameLabel, passwordLabel, emailLabel, maskLabel, dateLabel, cityLabel, addressLabel,
 } from '../../../Common/EditorsRightToLeftSupport/React/data.js';
 
+const countryLabel = { 'aria-label': 'Country' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -157,7 +159,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Country</div>
             <div className="dx-field-value">
-              <SelectBox dataSource={this.countries} validationMessagePosition="left">
+              <SelectBox dataSource={this.countries} validationMessagePosition="left" inputAttr={countryLabel}>
                 <Validator>
                   <RequiredRule message="Country is required" />
                 </Validator>

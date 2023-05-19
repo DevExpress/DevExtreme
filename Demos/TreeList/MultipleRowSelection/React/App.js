@@ -2,7 +2,7 @@ import React from 'react';
 import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
 import { CheckBox } from 'devextreme-react/check-box';
 import { SelectBox } from 'devextreme-react/select-box';
-import { employees } from './data.js';
+import { employees, selectionModeLabel } from './data.js';
 
 const expandedRowKeys = [1, 2, 10];
 const emptySelectedText = 'Nobody has been selected';
@@ -56,6 +56,7 @@ class App extends React.Component {
             <SelectBox
               value={selectionMode}
               items={selectionModes}
+              inputAttr={selectionModeLabel}
               text="Recursive Selection"
               onValueChanged={this.onSelectionModeChanged}
             />

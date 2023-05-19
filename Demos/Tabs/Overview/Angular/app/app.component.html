@@ -27,6 +27,7 @@
           [dataSource]="tabs"
           displayExpr="text"
           valueExpr="id"
+          [inputAttr]="{ 'aria-label': 'Tab' }"
           (onItemClick)="selectTab($event)"
           [(value)]="apiTabs.selectedIndex"
         ></dx-select-box>

@@ -17,3 +17,5 @@ export const populationData = [{
   region: 'Oceania',
   val: 35104756,
 }];
+
+export const regionLabel = { 'aria-label': 'Region' };

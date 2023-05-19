@@ -36,3 +36,4 @@ export const colors = [{
   code: '#635147',
 }];
 
+export const colorLabel = { 'aria-label': 'Color' };

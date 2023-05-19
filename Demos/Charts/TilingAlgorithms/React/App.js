@@ -1,7 +1,7 @@
 import React from 'react';
 import TreeMap, { Colorizer, Tooltip } from 'devextreme-react/tree-map';
 import SelectBox from 'devextreme-react/select-box';
-import { populationByAge } from './data.js';
+import { populationByAge, algorithmLabel } from './data.js';
 
 const algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
 
@@ -41,6 +41,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={algorithms}
               width={200}
+              inputAttr={algorithmLabel}
               value={this.state.selectedAlgorithm}
               onValueChanged={this.setAlgorithm}
             />

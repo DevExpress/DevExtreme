@@ -29,3 +29,5 @@ export const positionTopLabel = { 'aria-label': 'Position Top' };
 export const positionBottomLabel = { 'aria-label': 'Position Bottom' };
 export const positionLeftLabel = { 'aria-label': 'Position Left' };
 export const positionRightLabel = { 'aria-label': 'Position Right' };
+export const directionLabel = { 'aria-label': 'Direction' };
+export const positionLabel = { 'aria-label': 'Position' };

@@ -46,6 +46,7 @@
       <DxSelectBox
         id="seasons"
         :width="150"
+        :input-attr="{ 'aria-label': 'Season' }"
         :data-source="dataSource"
         v-model:value="value"
         display-expr="name"

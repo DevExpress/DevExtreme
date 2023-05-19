@@ -37,6 +37,7 @@
       <span class="option-caption">Enter Key Action</span>
       <dx-select-box
         class="select"
+        [inputAttr]="{ 'aria-label': 'Key Action' }"
         [dataSource]="enterKeyActions"
         [(value)]="enterKeyAction"
       >
@@ -46,6 +47,7 @@
       <span class="option-caption">Enter Key Direction</span>
       <dx-select-box
         class="select"
+        [inputAttr]="{ 'aria-label': 'Key Direction' }"
         [dataSource]="enterKeyDirections"
         [(value)]="enterKeyDirection"
       >

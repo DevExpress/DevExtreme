@@ -3,7 +3,7 @@ import SelectBox from 'devextreme-react/select-box';
 import Menu from 'devextreme-react/menu';
 import TreeView from 'devextreme-react/tree-view';
 import Accordion from 'devextreme-react/accordion';
-import { continents, europeCountries } from './data.js';
+import { continents, europeCountries, languageLabel } from './data.js';
 
 const languages = [
   'Arabic: Right-to-Left direction',
@@ -27,6 +27,7 @@ function App() {
             <div className="dx-field-value">
               <SelectBox
                 items={languages}
+                inputAttr={languageLabel}
                 defaultValue={languages[1]}
                 onValueChanged={selectLanguage}
               />

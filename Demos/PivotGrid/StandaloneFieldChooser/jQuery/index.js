@@ -92,6 +92,7 @@ $(() => {
     items: ['instantly', 'onDemand'],
     width: 180,
     value: 'instantly',
+    inputAttr: { 'aria-label': 'Apply Changes Mode' },
     onValueChanged(data) {
       salesFieldChooser.option('applyChangesMode', data.value);
       applyButton.option('visible', data.value === 'onDemand');

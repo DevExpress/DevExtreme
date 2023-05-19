@@ -7,6 +7,14 @@ import service from './data.js';
 import Field from './Field.js';
 import Item from './Item.js';
 
+const simpleProductLabel = { 'aria-label': 'Simple Product' };
+const productIDLabel = { 'aria-label': 'Product ID' };
+const productWithPlaceholderLabel = { 'aria-label': 'Product With Placeholder' };
+const productLabel = { 'aria-label': 'Product' };
+const readOnlyProductLabel = { 'aria-label': 'ReadOnly Product' };
+const templatedProductLabel = { 'aria-label': 'Templated Product' };
+const disabledProductLabel = { 'aria-label': 'Disabled Product' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +44,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Default mode</div>
             <div className="dx-field-value">
-              <SelectBox items={this.simpleProducts} />
+              <SelectBox items={this.simpleProducts} inputAttr={simpleProductLabel} />
             </div>
           </div>
           <div className="dx-field">
@@ -44,6 +52,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <SelectBox items={this.simpleProducts}
                 placeholder="Choose Product"
+                inputAttr={productWithPlaceholderLabel}
                 showClearButton={true} />
             </div>
           </div>
@@ -52,6 +61,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <SelectBox items={this.simpleProducts}
                 defaultValue={this.simpleProducts[0]}
+                inputAttr={readOnlyProductLabel}
                 readOnly={true} />
             </div>
           </div>
@@ -59,6 +69,7 @@ class App extends React.Component {
             <div className="dx-field-label">Disabled</div>
             <div className="dx-field-value">
               <SelectBox items={this.simpleProducts}
+                inputAttr={disabledProductLabel}
                 defaultValue={this.simpleProducts[0]}
                 disabled={true} />
             </div>
@@ -68,6 +79,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <SelectBox dataSource={this.data}
                 displayExpr="Name"
+                inputAttr={productIDLabel}
                 valueExpr="ID"
                 defaultValue={this.products[0].ID} />
             </div>
@@ -78,6 +90,7 @@ class App extends React.Component {
               <SelectBox id="custom-templates"
                 dataSource={this.products}
                 displayExpr="Name"
+                inputAttr={templatedProductLabel}
                 valueExpr="ID"
                 defaultValue={this.products[3].ID}
                 fieldRender={Field}
@@ -92,6 +105,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <SelectBox items={this.simpleProducts}
                 value={this.state.value}
+                inputAttr={productLabel}
                 onValueChanged={this.onValueChanged} />
             </div>
           </div>

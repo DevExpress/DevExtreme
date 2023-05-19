@@ -24,7 +24,11 @@
   <div class="options-container">
     <div class="option">
       <span>Palette</span>
-      <dx-select-box [items]="paletteCollection" [(value)]="palette">
+      <dx-select-box
+        [items]="paletteCollection"
+        [(value)]="palette"
+        [inputAttr]="{ 'aria-label': 'Palette' }"
+      >
       </dx-select-box>
     </div>
     <div class="option">
@@ -32,6 +36,7 @@
       <dx-select-box
         [items]="paletteExtensionModes"
         [(value)]="paletteExtensionMode"
+        [inputAttr]="{ 'aria-label': 'Palette Extension Mode' }"
       >
       </dx-select-box>
     </div>

@@ -7,6 +7,7 @@
 <div class="right-side">
   <dx-select-box
     [items]="statuses"
+    [inputAttr]="{ 'aria-label': 'Status' }"
     [value]="statuses[0]"
     (onValueChanged)="selectStatus($event)"
   ></dx-select-box>

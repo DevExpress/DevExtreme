@@ -18,6 +18,7 @@ $(() => {
   $('#radarTypes').dxSelectBox({
     width: 200,
     dataSource: types,
+    inputAttr: { 'aria-label': 'Series Type' },
     value: types[0],
     onValueChanged(e) {
       radar.option('commonSeriesSettings.type', e.value);

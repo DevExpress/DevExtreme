@@ -117,3 +117,5 @@ export const homes = [{
   Price: 1100000,
   ImageSrc: '../../../../images/gallery/21.jpg',
 }];
+
+export const directionLabel = { 'aria-label': 'Direction Label' };

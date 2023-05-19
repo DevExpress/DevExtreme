@@ -18,6 +18,7 @@ $(() => {
 
   $('#overlapping-modes').dxSelectBox({
     dataSource: overlappingModes,
+    inputAttr: { 'aria-label': 'Overlapping Mode' },
     value: overlappingModes[0],
     onValueChanged(e) {
       chart.option('argumentAxis.label.overlappingBehavior', e.value);

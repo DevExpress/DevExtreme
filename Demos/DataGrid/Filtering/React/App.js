@@ -8,6 +8,7 @@ import CheckBox from 'devextreme-react/check-box';
 import service from './data.js';
 
 const saleAmountEditorOptions = { format: 'currency', showClearButton: true };
+const filterLabel = { 'aria-label': 'Filter' };
 
 class App extends React.Component {
   constructor(props) {
@@ -111,6 +112,7 @@ class App extends React.Component {
               value={this.state.currentFilter}
               onValueChanged={this.onCurrentFilterChanged}
               valueExpr="key"
+              inputAttr={filterLabel}
               displayExpr="name"
               disabled={!this.state.showFilterRow} />
           </div>

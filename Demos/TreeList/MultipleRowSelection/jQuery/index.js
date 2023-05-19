@@ -49,6 +49,7 @@ $(() => {
 
   $('#selection-mode').dxSelectBox({
     value: selectionMode,
+    inputAttr: { 'aria-label': 'Selection Mode' },
     items: ['all', 'excludeRecursive', 'leavesOnly'],
     onValueChanged({ value }) {
       treeList.clearSelection();

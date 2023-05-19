@@ -6,7 +6,7 @@ import {
   Series,
   Margin,
 } from 'devextreme-react/polar-chart';
-import { types, dataSource } from './data.js';
+import { types, dataSource, seriesTypeLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -49,6 +49,7 @@ class App extends React.Component {
             <div>Series Type</div>&nbsp;&nbsp;
             <SelectBox
               width={200}
+              inputAttr={seriesTypeLabel}
               dataSource={types}
               value={this.state.currentType}
               onValueChanged={this.handleChange}

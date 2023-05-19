@@ -4,7 +4,7 @@ import List from 'devextreme-react/list';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
-import { employees } from './data.js';
+import { employees, showCheckboxesModeLabel, selectionModeLabel } from './data.js';
 
 class App extends React.Component {
   constructor() {
@@ -74,6 +74,7 @@ class App extends React.Component {
                 <SelectBox
                   items={this.state.showCheckBoxesModes}
                   value={this.state.showCheckBoxesMode}
+                  inputAttr={showCheckboxesModeLabel}
                   onValueChanged={this.showCheckBoxesModeValueChanged} />
               </div>
             </div>
@@ -83,6 +84,7 @@ class App extends React.Component {
                 <SelectBox
                   items={this.state.selectionModes}
                   value={this.state.selectionMode}
+                  inputAttr={selectionModeLabel}
                   disabled={this.state.isSelectionModeDisabled}
                   onValueChanged={this.selectionModeValueChanged} />
               </div>

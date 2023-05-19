@@ -34,6 +34,7 @@
           <span>Max Count </span>
           <DxSelectBox
             :items="breaksCount"
+            :input-attr="{ 'aria-label': 'Breaks Count' }"
             v-model:value="breaksCountValue"
             :width="80"
           />
@@ -42,6 +43,7 @@
           <span>Style </span>
           <DxSelectBox
             :items="lineStyles"
+            :input-attr="{ 'aria-label': 'Line Style' }"
             v-model:value="lineStyleValue"
             :width="120"
           />

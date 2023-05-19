@@ -24,3 +24,6 @@ export const dataSource = [{
   name: 'Mercury',
   mass: 0.06,
 }];
+
+export const maxCountLabel = { 'aria-label': 'Max Count' };
+export const lineStyleLabel = { 'aria-label': 'Line Style' };

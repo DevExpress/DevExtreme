@@ -499,3 +499,5 @@ export const windRoseData = [{
     val8: 0,
   }],
 }];
+
+export const periodLabel = { 'aria-label': 'Period' };

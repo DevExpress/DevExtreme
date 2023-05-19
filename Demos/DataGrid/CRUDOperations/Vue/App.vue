@@ -59,6 +59,7 @@
         <span>Refresh Mode: </span>
         <DxSelectBox
           v-model:value="refreshMode"
+          :input-attr="{ 'aria-label': 'Refresh Mode' }"
           :items="refreshModes"
         />
       </div>

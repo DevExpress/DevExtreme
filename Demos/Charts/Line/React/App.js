@@ -18,6 +18,7 @@ import service from './data.js';
 const countriesInfo = service.getCountriesInfo();
 const energySources = service.getEnergySources();
 const types = ['line', 'stackedline', 'fullstackedline'];
+const seriesTypeLabel = { 'aria-label': 'Series Type' };
 
 class App extends React.Component {
   constructor(props) {
@@ -69,6 +70,7 @@ class App extends React.Component {
             <span>Series Type </span>
             <SelectBox
               dataSource={types}
+              inputAttr={seriesTypeLabel}
               value={this.state.type}
               onValueChanged={this.handleChange}
             />

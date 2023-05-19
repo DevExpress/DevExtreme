@@ -15,6 +15,7 @@ $(() => {
   }).dxScrollView('instance');
 
   $('#item-orientation').dxSelectBox({
+    inputAttr: { 'aria-label': 'Item Orientation' },
     items: ['vertical', 'horizontal'],
     value: 'vertical',
     onValueChanged(e) {
@@ -22,6 +23,7 @@ $(() => {
       sortable.option('itemOrientation', e.value);
       scrollView.option('direction', e.value);
       $('#drag-direction').dxSelectBox({
+        inputAttr: { 'aria-label': 'Drag Direction' },
         value: 'both',
         items: ['both', e.value],
       });
@@ -31,12 +33,14 @@ $(() => {
   $('#drag-direction').dxSelectBox({
     items: ['both', 'vertical'],
     value: 'both',
+    inputAttr: { 'aria-label': 'Drag Direction' },
     onValueChanged(e) {
       sortable.option('dragDirection', e.value);
     },
   });
 
   $('#drop-feedback-mode').dxSelectBox({
+    inputAttr: { 'aria-label': 'Drop Feedback Mode' },
     items: ['push', 'indicate'],
     value: 'push',
     onValueChanged(e) {

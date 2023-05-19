@@ -18,6 +18,7 @@
       <span>Show scrollbar:</span>
       <dx-select-box
         id="show-scrollbar-mode"
+        [inputAttr]="{ 'aria-label': 'Show Scrollbar Mode' }"
         [items]="showScrollbarModes"
         valueExpr="value"
         displayExpr="text"

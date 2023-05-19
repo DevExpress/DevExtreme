@@ -103,6 +103,7 @@ $(() => {
     items: applyFilterTypes,
     value: applyFilterTypes[0].key,
     valueExpr: 'key',
+    inputAttr: { 'aria-label': 'Apply Filter' },
     displayExpr: 'name',
     onValueChanged(data) {
       dataGrid.option('filterRow.applyFilter', data.value);

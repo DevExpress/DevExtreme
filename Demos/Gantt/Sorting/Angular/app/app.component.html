@@ -7,6 +7,7 @@
         <dx-select-box
           [items]="['single', 'multiple', 'none']"
           [(value)]="sortingMode"
+          [inputAttr]="{ 'aria-label': 'Sorting Mode' }"
           (onValueChanged)="onSortingValueChanged($event)"
         ></dx-select-box>
       </div>

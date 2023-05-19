@@ -44,6 +44,7 @@
         id="selectbox"
         :width="150"
         :items="months"
+        :input-attr="{ 'aria-label': 'Month' }"
         :value="1"
         :on-value-changed="onValueChanged"
         value-expr="id"

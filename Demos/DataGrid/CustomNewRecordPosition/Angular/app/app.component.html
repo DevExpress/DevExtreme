@@ -51,6 +51,7 @@
       <dx-select-box
         id="newRowPositionSelectBox"
         [(value)]="newRowPosition"
+        [inputAttr]="{ 'aria-label': 'Position' }"
         [items]="newRowPositionOptions"
       ></dx-select-box>
     </div>
@@ -58,6 +59,7 @@
       <span>Scrolling Mode</span>
       <dx-select-box
         id="scrollingModeSelectBox"
+        [inputAttr]="{ 'aria-label': 'Scrolling Mode' }"
         [(value)]="scrollingMode"
         [items]="scrollingModeOptions"
       ></dx-select-box>

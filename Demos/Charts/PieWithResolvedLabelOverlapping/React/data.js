@@ -41,3 +41,5 @@ export const dataSource = [{
   country: 'Spain',
   medals: 19,
 }];
+
+export const resolutionModeLabel = { 'aria-label': 'Resolution Mode' };

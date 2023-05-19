@@ -16,6 +16,7 @@
         <DxSelectBox
           v-model:value="mapTypeValue"
           :data-source="mapTypes"
+          :input-attr="{ 'aria-label': 'Map Type' }"
           display-expr="name"
           value-expr="key"
         />

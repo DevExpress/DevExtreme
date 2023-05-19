@@ -28,6 +28,7 @@ $(() => {
 
   $('#types').dxSelectBox({
     dataSource: types,
+    inputAttr: { 'aria-label': 'Series Type' },
     value: types[0],
     onValueChanged(e) {
       chart.option('commonSeriesSettings.type', e.value);

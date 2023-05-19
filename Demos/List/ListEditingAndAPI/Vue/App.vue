@@ -20,6 +20,7 @@
         <span>Item delete mode </span>
         <DxSelectBox
           :disabled="!allowDeletion"
+          :input-attr="{ 'aria-label': 'Delete Mode' }"
           :items="['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']"
           v-model:value="itemDeleteMode"
         />

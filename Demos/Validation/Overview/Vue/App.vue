@@ -112,6 +112,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :data-source="countries"
+            :input-attr="{ 'aria-label': 'Country' }"
             validation-message-position="left"
           >
             <DxValidator>

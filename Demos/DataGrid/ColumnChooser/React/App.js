@@ -15,6 +15,7 @@ const columnChooserModes = [{
 }];
 
 const searchEditorOptions = { placeholder: 'Search column' };
+const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
 
 class App extends React.Component {
   constructor(props) {
@@ -97,6 +98,7 @@ class App extends React.Component {
                 items={columnChooserModes}
                 value={mode}
                 valueExpr="key"
+                inputAttr={columnChooserModeLabel}
                 displayExpr="name"
                 onValueChanged={this.onModeValueChanged}
               />

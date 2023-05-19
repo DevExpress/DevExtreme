@@ -8,3 +8,5 @@ export const mapTypes = [{
   key: 'hybrid',
   name: 'Hybrid Map',
 }];
+
+export const mapTypeLabel = { 'aria-label': 'Map Type' };

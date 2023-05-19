@@ -19,6 +19,9 @@ const hireDateLabel = { 'aria-label': 'Hire Date' };
 const nameLabel = { 'aria-label': 'Name' };
 const addressLabel = { 'aria-label': 'Address' };
 const phoneLabel = { 'aria-label': 'Phone' };
+const stateLabel = { 'aria-label': 'State' };
+const labelModeLabel = { 'aria-label': 'Label Mode' };
+const stylingModeLabel = { 'aria-label': 'Styling Mode' };
 
 class App extends React.Component {
   constructor(props) {
@@ -94,6 +97,7 @@ class App extends React.Component {
               <SelectBox
                 items={this.states}
                 stylingMode={this.state.stylingMode}
+                inputAttr={stateLabel}
                 width="100%"
                 placeholder="Select..."
                 label="State"
@@ -180,6 +184,7 @@ class App extends React.Component {
             <SelectBox
               stylingMode={this.state.stylingMode}
               items={stylingModes}
+              inputAttr={stylingModeLabel}
               value={this.state.stylingMode}
               onValueChanged={this.stylingModeChange}
             />
@@ -189,6 +194,7 @@ class App extends React.Component {
             <SelectBox
               stylingMode={this.state.stylingMode}
               items={labelModes}
+              inputAttr={labelModeLabel}
               value={this.state.labelMode}
               onValueChanged={this.labelModeChange}
             />

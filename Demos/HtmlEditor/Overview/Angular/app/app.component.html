@@ -75,6 +75,7 @@
     <div class="label">Image upload tabs:</div>
     <dx-select-box
       [items]="tabs"
+      [inputAttr]="{ 'aria-label': 'Tab' }"
       [(value)]="currentTab"
       valueExpr="value"
       displayExpr="name"

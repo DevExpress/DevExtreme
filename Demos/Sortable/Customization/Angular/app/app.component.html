@@ -43,6 +43,7 @@
       <span>Drop Feedback Mode:</span>
       <dx-select-box
         [items]="['push', 'indicate']"
+        [inputAttr]="{ 'aria-label': 'Drop Feedback Mode' }"
         [(value)]="dropFeedbackMode"
       ></dx-select-box>
     </div>
@@ -50,6 +51,7 @@
       <span>Item Orientation:</span>
       <dx-select-box
         [items]="['vertical', 'horizontal']"
+        [inputAttr]="{ 'aria-label': 'Item Orientation' }"
         [(value)]="itemOrientation"
         (onValueChanged)="onItemOrientationChanged($event)"
       ></dx-select-box>
@@ -58,6 +60,7 @@
       <span>Drag Direction:</span>
       <dx-select-box
         [items]="dragDirections"
+        [inputAttr]="{ 'aria-label': 'Drag Direction' }"
         [(value)]="dragDirection"
       ></dx-select-box>
     </div>

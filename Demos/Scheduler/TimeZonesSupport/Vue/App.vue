@@ -5,6 +5,7 @@
       <DxSelectBox
         :items="locationsData"
         v-model:value="timezone"
+        :input-attr="{ 'aria-label': 'Location' }"
         :width="240"
         display-expr="title"
         value-expr="id"

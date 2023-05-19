@@ -11,6 +11,7 @@ import Logo from './Logo.js';
 const widthLabel = { 'aria-label': 'Width' };
 const heightLabel = { 'aria-label': 'Height' };
 const titleLabel = { 'aria-label': 'Title' };
+const transformLabel = { 'aria-label': 'Transform' };
 
 const noFlipTransform = 'scaleX(1)';
 const transformations = [
@@ -119,6 +120,7 @@ class App extends React.Component {
                 <SelectBox
                   value={this.state.transform}
                   onValueChanged={this.handleTransformChange}
+                  inputAttr={transformLabel}
                   items={transformations}
                   grouped={true}
                   displayExpr="name"

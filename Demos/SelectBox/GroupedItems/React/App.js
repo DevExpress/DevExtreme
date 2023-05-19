@@ -3,7 +3,10 @@ import { SelectBox } from 'devextreme-react/select-box';
 import DataSource from 'devextreme/data/data_source';
 import Group from './Group.js';
 
-import { ungroupedData, pregroupedData } from './data.js';
+import {
+  ungroupedData, pregroupedData, ungroupedDataLabel,
+  pregroupedDataLabel, templatedUngroupedDataLabel,
+} from './data.js';
 
 const fromUngroupedData = new DataSource({
   store: {
@@ -42,6 +45,7 @@ class App extends React.Component {
               dataSource={fromUngroupedData}
               valueExpr="ID"
               grouped={true}
+              inputAttr={ungroupedDataLabel}
               displayExpr="Name"
               defaultValue={1} />
           </div>
@@ -52,6 +56,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={fromPregroupedData}
               valueExpr="ID"
+              inputAttr={pregroupedDataLabel}
               grouped={true}
               displayExpr="Name"
               defaultValue={1} />
@@ -63,6 +68,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={fromUngroupedData}
               valueExpr="ID"
+              inputAttr={templatedUngroupedDataLabel}
               grouped={true}
               displayExpr="Name"
               groupRender={Group}

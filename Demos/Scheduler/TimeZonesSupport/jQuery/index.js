@@ -43,6 +43,7 @@ $(() => {
   const locationSwitcher = $('#location-switcher').dxSelectBox({
     items: demoLocations,
     displayExpr: 'title',
+    inputAttr: { 'aria-label': 'Location' },
     valueExpr: 'id',
     width: 240,
     value: demoLocations[0].id,

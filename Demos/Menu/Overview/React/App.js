@@ -5,6 +5,8 @@ import CheckBox from 'devextreme-react/check-box';
 import service from './data.js';
 
 const orientations = ['horizontal', 'vertical'];
+const orientationLabel = { 'aria-label': 'Orientation' };
+const showSubmenuModeLabel = { 'aria-label': 'Show Submenu Mode' };
 
 class App extends React.Component {
   constructor(props) {
@@ -59,6 +61,7 @@ class App extends React.Component {
             <SelectBox
               items={this.showSubmenuModes}
               displayExpr="name"
+              inputAttr={showSubmenuModeLabel}
               value={showFirstSubmenuModes}
               onValueChanged={this.showSubmenuModeChanged}
             />
@@ -67,6 +70,7 @@ class App extends React.Component {
             <div>Orientation</div>
             <SelectBox
               items={orientations}
+              inputAttr={orientationLabel}
               value={orientation}
               onValueChanged={this.orientationChanged}
             />

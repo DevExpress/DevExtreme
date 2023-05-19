@@ -18,6 +18,7 @@ $(() => {
 
   $('#use-vertical-direction').dxSelectBox({
     items: ['horizontal', 'vertical'],
+    inputAttr: { 'aria-label': 'Direction' },
     value: direction,
     onValueChanged(data) {
       homeTiles.option('direction', data.value);

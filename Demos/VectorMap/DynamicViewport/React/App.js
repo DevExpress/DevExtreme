@@ -8,7 +8,9 @@ import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import Switch from 'devextreme-react/switch';
-import { viewportCoordinates, centerLabel, zoomLabel } from './data.js';
+import {
+  viewportCoordinates, centerLabel, zoomLabel, continentLabel,
+} from './data.js';
 
 const bounds = [-180, 85, 180, -60];
 
@@ -79,6 +81,7 @@ class App extends React.Component {
                   dataSource={viewportCoordinates}
                   displayExpr="continent"
                   valueExpr="coordinates"
+                  inputAttr={continentLabel}
                   value={this.state.coordinates}
                   onValueChanged={this.continentChanged}
                   width={210}

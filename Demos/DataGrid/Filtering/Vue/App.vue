@@ -67,6 +67,7 @@
         <DxSelectBox
           id="useFilterApplyButton"
           :items="applyFilterTypes"
+          :input-attr="{ 'aria-label': 'Filter' }"
           v-model:value="currentFilter"
           :disabled="!showFilterRow"
           value-expr="key"

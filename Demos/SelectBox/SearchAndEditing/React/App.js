@@ -6,6 +6,7 @@ import DataSource from 'devextreme/data/data_source';
 
 import {
   simpleProducts, products, searchTimeoutLabel, minimumSearchLengthLabel,
+  searchExpressionLabel, searchModeLabel, productLabel, simpleProductLabel,
 } from './data.js';
 
 const searchModeItems = ['contains', 'startswith'];
@@ -98,6 +99,7 @@ class App extends React.Component {
                 <SelectBox dataSource={products}
                   displayExpr="Name"
                   searchEnabled={true}
+                  inputAttr={simpleProductLabel}
                   searchMode={searchModeOption}
                   searchExpr={searchExprOption}
                   searchTimeout={searchTimeoutOption}
@@ -114,6 +116,7 @@ class App extends React.Component {
                 <SelectBox dataSource={productsDataSource}
                   displayExpr="Name"
                   valueExpr="ID"
+                  inputAttr={productLabel}
                   acceptCustomValue={true}
                   defaultValue={simpleProducts[0].ID}
                   onCustomItemCreating={this.customItemCreating}
@@ -136,6 +139,7 @@ class App extends React.Component {
             <div>Search Mode</div>
             <SelectBox items={searchModeItems}
               value={searchModeOption}
+              inputAttr={searchModeLabel}
               onValueChanged={this.searchModeOptionChanged} />
           </div>
           <div className="option">
@@ -143,6 +147,7 @@ class App extends React.Component {
             <SelectBox items={searchExprItems}
               displayExpr="name"
               valueExpr="value"
+              inputAttr={searchExpressionLabel}
               value={searchExprOption}
               onValueChanged={this.searchExprOptionChanged} />
           </div>

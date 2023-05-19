@@ -2,7 +2,10 @@
   <div class="dx-field">
     <div class="dx-field-label">Image as the icon</div>
     <div class="dx-field-value">
-      <dx-select-box [dataSource]="simpleProducts">
+      <dx-select-box
+        [dataSource]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Simple Product' }"
+      >
         <div *dxTemplate="let data of 'dropDownButton'">
           <img
             src="../../../../images/icons/custom-dropbutton-icon.svg"
@@ -16,7 +19,10 @@
   <div class="dx-field">
     <div class="dx-field-label">Load indicator as the icon</div>
     <div class="dx-field-value">
-      <dx-select-box [dataSource]="deferredProducts">
+      <dx-select-box
+        [dataSource]="deferredProducts"
+        [inputAttr]="{ 'aria-label': 'Deferred Product' }"
+      >
         <div *dxTemplate="let data of 'dropDownButton'">
           <dx-load-indicator [visible]="!isLoaded"></dx-load-indicator>
           <span [hidden]="!isLoaded">
@@ -35,6 +41,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [dataSource]="products"
+        [inputAttr]="{ 'aria-label': 'Templated Product' }"
         [(selectedItem)]="selectedItem"
         [value]="1"
         showClearButton="true"

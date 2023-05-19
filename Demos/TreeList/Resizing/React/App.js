@@ -1,7 +1,7 @@
 import React from 'react';
 import { TreeList, Column } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
-import { employees } from './data.js';
+import { employees, columnResizingModeLabel } from './data.js';
 
 const resizingModes = ['nextColumn', 'widget'];
 const expandedRowKeys = [1, 3, 6];
@@ -48,6 +48,7 @@ class App extends React.Component {
             <SelectBox
               items={resizingModes}
               value={columnResizingMode}
+              inputAttr={columnResizingModeLabel}
               width={250}
               onValueChanged={this.onResizingModeChanged}
             />

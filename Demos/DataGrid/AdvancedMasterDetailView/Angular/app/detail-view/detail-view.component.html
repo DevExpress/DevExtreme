@@ -9,6 +9,7 @@
         <dx-select-box
           [value]="productIdBySupplier"
           [dataSource]="productsData"
+          [inputAttr]="{ 'aria-label': 'Product' }"
           [deferRendering]="false"
           valueExpr="ProductID"
           displayExpr="ProductName"

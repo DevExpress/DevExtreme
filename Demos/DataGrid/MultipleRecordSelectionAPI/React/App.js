@@ -8,7 +8,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
-import { employees } from './data.js';
+import { employees, titleLabel } from './data.js';
 
 const titles = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 
@@ -57,6 +57,7 @@ class App extends React.Component {
             <Item location="before">
               <SelectBox
                 dataSource={titles}
+                inputAttr={titleLabel}
                 onValueChanged={this.onSelectionFilterChanged}
                 placeholder="Select title"
                 width={150}

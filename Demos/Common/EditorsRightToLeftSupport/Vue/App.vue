@@ -11,6 +11,7 @@
             <div class="dx-field-value">
               <DxSelectBox
                 :items="languages"
+                :input-attr="{ 'aria-label': 'Language' }"
                 :value="languages[1]"
                 :rtl-enabled="rtlEnabled"
                 @valueChanged="onLanguageChanged"
@@ -48,6 +49,7 @@
             <DxSelectBox
               :items="europeanUnion"
               :value="europeanUnion[0]"
+              :input-attr="{ 'aria-label': 'European Union Data' }"
               :rtl-enabled="rtlEnabled"
               :display-expr="displayExpr"
             />

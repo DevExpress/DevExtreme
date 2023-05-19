@@ -20,6 +20,7 @@ const dataSourceOptions = {
 };
 
 const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
+const statusLabel = { 'aria-label': 'Status' };
 
 class App extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class App extends React.Component {
         <div className="right-side">
           <SelectBox
             items={statuses}
+            inputAttr={statusLabel}
             value={this.state.filterStatus}
             onValueChanged={this.onValueChanged} />
         </div>

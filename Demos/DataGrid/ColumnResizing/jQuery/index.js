@@ -15,6 +15,7 @@ $(() => {
   $('#select-resizing').dxSelectBox({
     items: resizingModes,
     value: resizingModes[0],
+    inputAttr: { 'aria-label': 'Resize Mode' },
     width: 250,
     onValueChanged(data) {
       dataGrid.option('columnResizingMode', data.value);

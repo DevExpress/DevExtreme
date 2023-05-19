@@ -7,6 +7,7 @@ import RowTemplate from './RowTemplate.js';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const years = ['2010', '2011', '2012'];
+const monthLabel = { 'aria-label': 'Month' };
 
 const dataSource = new DataSource({
   store: new CustomStore({
@@ -56,6 +57,7 @@ class App extends React.Component {
             <SelectBox
               id="choose-months"
               dataSource={months}
+              inputAttr={monthLabel}
               defaultValue={months[0]}
               onValueChanged={this.onValueChanged}
             />

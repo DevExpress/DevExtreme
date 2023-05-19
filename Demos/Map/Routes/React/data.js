@@ -32,3 +32,6 @@ export const routesData = [{
     'Brooklyn Bridge,New York,NY',
   ],
 }];
+
+export const modeLabel = { 'aria-label': 'Mode' };
+export const colorLabel = { 'aria-label': 'Color' };

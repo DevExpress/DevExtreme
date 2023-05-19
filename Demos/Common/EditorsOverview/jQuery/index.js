@@ -48,6 +48,7 @@ $(() => {
   }).dxNumberBox('instance');
 
   $('#select-box').dxSelectBox({
+    inputAttr: { 'aria-label': 'Transform' },
     items: [
       {
         key: 'Flip',

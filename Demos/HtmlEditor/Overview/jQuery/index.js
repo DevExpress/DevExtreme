@@ -48,6 +48,7 @@ $(() => {
   $('#image-uploader-tabs').dxSelectBox({
     items: tabs,
     value: tabs[2].value,
+    inputAttr: { 'aria-label': 'Tab' },
     valueExpr: 'value',
     displayExpr: 'name',
     onValueChanged: (e) => {

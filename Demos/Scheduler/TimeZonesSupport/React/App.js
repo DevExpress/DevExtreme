@@ -3,7 +3,7 @@ import Scheduler, { Editing } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 
 import timeZoneUtils from 'devextreme/time_zone_utils';
-import { data, locations } from './data.js';
+import { data, locations, timeZoneLabel } from './data.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
@@ -66,6 +66,7 @@ class App extends React.Component {
             items={this.state.demoLocations}
             displayExpr="title"
             valueExpr="id"
+            inputAttr={timeZoneLabel}
             width={240}
             value={timeZone}
             onValueChanged={this.onValueChanged}

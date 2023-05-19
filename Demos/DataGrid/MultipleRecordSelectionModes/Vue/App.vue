@@ -42,6 +42,7 @@
         <span>Select All Mode </span>
         <DxSelectBox
           id="select-all-mode"
+          :input-attr="{ 'aria-label': 'Select All Mode' }"
           :data-source="['allPages', 'page']"
           :disabled="checkBoxesMode === 'none'"
           v-model:value="allMode"
@@ -51,6 +52,7 @@
         <span>Show Checkboxes Mode </span>
         <DxSelectBox
           id="show-checkboxes-mode"
+          :input-attr="{ 'aria-label': 'Show Checkboxes Mode' }"
           :data-source="['none', 'onClick', 'onLongTap', 'always']"
           v-model:value="checkBoxesMode"
         />

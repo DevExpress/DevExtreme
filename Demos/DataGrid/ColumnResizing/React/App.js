@@ -6,6 +6,7 @@ import orders from './data.js';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 const resizingModes = ['nextColumn', 'widget'];
+const columnResizingModeLabel = { 'aria-label': 'Column Resizing Mode' };
 
 class App extends React.Component {
   constructor(props) {
@@ -40,6 +41,7 @@ class App extends React.Component {
             <span>Column resizing mode:&nbsp;</span>
             <SelectBox items={resizingModes}
               value={this.state.mode}
+              inputAttr={columnResizingModeLabel}
               width={250}
               onValueChanged={this.changeResizingMode} />
           </div>

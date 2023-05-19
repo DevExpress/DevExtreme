@@ -86,6 +86,7 @@ $(() => {
   const zoomLevel = $('#zoom-level').dxSelectBox({
     dataSource: zoomLevels,
     value: zoomLevels[0],
+    inputAttr: { 'aria-label': 'Zoom Level' },
     onValueChanged(data) {
       calendar.option('zoomLevel', data.value);
     },
@@ -103,6 +104,7 @@ $(() => {
     dataSource: weekDays,
     value: 0,
     valueExpr: 'id',
+    inputAttr: { 'aria-label': 'First Day of Week' },
     displayExpr: 'text',
     onValueChanged(data) {
       calendar.option('firstDayOfWeek', data.value);
@@ -112,6 +114,7 @@ $(() => {
   $('#week-number-rule').dxSelectBox({
     dataSource: weekNumberRules,
     value: weekNumberRules[0],
+    inputAttr: { 'aria-label': 'Week Number Rule' },
     onValueChanged(data) {
       calendar.option('weekNumberRule', data.value);
     },

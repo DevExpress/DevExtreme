@@ -4,6 +4,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [dataSource]="fromUngroupedData"
+        [inputAttr]="{ 'aria-label': 'Data' }"
         valueExpr="ID"
         [grouped]="true"
         displayExpr="Name"
@@ -16,6 +17,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [dataSource]="fromPregroupedData"
+        [inputAttr]="{ 'aria-label': 'Pregrouped Data' }"
         valueExpr="ID"
         [grouped]="true"
         displayExpr="Name"
@@ -30,6 +32,7 @@
         [dataSource]="fromUngroupedData"
         valueExpr="ID"
         [grouped]="true"
+        [inputAttr]="{ 'aria-label': 'Templated Ungrouped Data' }"
         displayExpr="Name"
         [searchEnabled]="true"
         groupTemplate="group"

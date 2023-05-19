@@ -56,6 +56,7 @@
     <span>Apply Filter</span>
     <dx-select-box
       id="useFilterApplyButton"
+      [inputAttr]="{ 'aria-label': 'Filter' }"
       [items]="applyFilterTypes"
       [(value)]="currentFilter"
       valueExpr="key"

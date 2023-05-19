@@ -30,6 +30,7 @@
         <div class="label">Apply Value Mode</div>
         <DxSelectBox
           :items="applyValueModes"
+          :input-attr="{ 'aria-label': 'Apply Value Mode' }"
           v-model:value="applyValueMode"
         />
       </div>

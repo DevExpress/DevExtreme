@@ -29,6 +29,7 @@
       <DxSelectBox
         :width="300"
         :data-source="windRoseData"
+        :input-attr="{ 'aria-label': 'Period' }"
         v-model:value="periodValues"
         display-expr="period"
         value-expr="values"

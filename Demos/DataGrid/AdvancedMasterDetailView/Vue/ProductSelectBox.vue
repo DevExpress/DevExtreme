@@ -2,6 +2,7 @@
   <DxSelectBox
     :defer-rendering="false"
     :data-source="dataSource"
+    :input-attr="{ 'aria-label': 'Product' }"
     :value="value"
     value-expr="ProductID"
     display-expr="ProductName"

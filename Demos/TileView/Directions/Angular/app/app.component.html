@@ -24,6 +24,7 @@
     <span>Direction</span>
     <dx-select-box
       [items]="['horizontal', 'vertical']"
+      [inputAttr]="{ 'aria-label': 'Direction' }"
       [(value)]="tileView.direction"
     >
     </dx-select-box>

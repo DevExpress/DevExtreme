@@ -51,6 +51,7 @@
           <div class="value">
             <DxSelectBox
               :items="formats"
+              :input-attr="{ 'aria-label': 'Format' }"
               v-model:value="formatBoxValue"
             />
           </div>
@@ -66,6 +67,7 @@
           <div class="value">
             <DxSelectBox
               :items="exportModes"
+              :input-attr="{ 'aria-label': 'Export Mode' }"
               v-model:value="exportModeBoxValue"
             />
           </div>
@@ -76,6 +78,7 @@
             <DxSelectBox
               :items="dateRanges"
               v-model:value="dateRangeBoxValue"
+              :input-attr="{ 'aria-label': 'Date Range' }"
               @value-changed="dateRangeBoxSelectionChanged($event)"
             />
           </div>

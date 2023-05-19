@@ -63,6 +63,7 @@
           <span>New Row Position</span>
           <DxSelectBox
             id="newRowPositionSelectBox"
+            :input-attr="{ 'aria-label': 'Position' }"
             v-model:value="newRowPosition"
             :items="newRowPositionOptions"
           />
@@ -72,6 +73,7 @@
           <DxSelectBox
             id="scrollingModeSelectBox"
             v-model:value="scrollingMode"
+            :input-attr="{ 'aria-label': 'Scrolling Mode' }"
             :items="scrollingModeOptions"
           />
         </div>

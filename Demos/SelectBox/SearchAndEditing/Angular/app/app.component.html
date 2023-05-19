@@ -9,6 +9,7 @@
             [dataSource]="products"
             displayExpr="Name"
             valueExpr="ID"
+            [inputAttr]="{ 'aria-label': 'Product' }"
             [searchMode]="searchModeOption"
             [searchExpr]="searchExprOption"
             [searchTimeout]="searchTimeoutOption"
@@ -27,6 +28,7 @@
           <dx-select-box
             #selectBox
             [dataSource]="productsDataSource"
+            [inputAttr]="{ 'aria-label': 'Custom Product' }"
             [acceptCustomValue]="true"
             displayExpr="Name"
             valueExpr="ID"
@@ -56,6 +58,7 @@
       <div>Search Mode</div>
       <dx-select-box
         [items]="['contains', 'startswith']"
+        [inputAttr]="{ 'aria-label': 'Search Mode' }"
         [(value)]="searchModeOption"
       ></dx-select-box>
     </div>
@@ -64,6 +67,7 @@
       <dx-select-box
         [items]="searchExprOptionItems"
         displayExpr="name"
+        [inputAttr]="{ 'aria-label': 'Search Expression' }"
         valueExpr="value"
         [(value)]="searchExprOption"
       ></dx-select-box>

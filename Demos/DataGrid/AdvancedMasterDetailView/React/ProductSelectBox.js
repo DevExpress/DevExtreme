@@ -3,6 +3,7 @@ import { SelectBox } from 'devextreme-react/select-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+const productLabel = { 'aria-label': 'Product' };
 
 class ProductSelectBox extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class ProductSelectBox extends React.Component {
       <SelectBox
         value={this.props.productId}
         deferRendering={false}
+        inputAttr={productLabel}
         dataSource={this.productsData}
         valueExpr="ProductID"
         displayExpr="ProductName"

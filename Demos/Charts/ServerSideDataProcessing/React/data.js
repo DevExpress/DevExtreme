@@ -35,3 +35,5 @@ export const months = [{
   id: 12,
   name: 'December',
 }];
+
+export const monthLabel = { 'aria-label': 'Month' };

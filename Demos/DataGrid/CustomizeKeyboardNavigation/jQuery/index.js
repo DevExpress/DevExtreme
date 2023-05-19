@@ -59,6 +59,7 @@ $(() => {
   $('#enterKeyAction').dxSelectBox({
     items: enterKeyActions,
     value: enterKeyActions[1],
+    inputAttr: { 'aria-label': 'Key Action' },
     onValueChanged(data) {
       dataGrid.option('keyboardNavigation.enterKeyAction', data.value);
     },
@@ -67,6 +68,7 @@ $(() => {
   $('#enterKeyDirection').dxSelectBox({
     items: enterKeyDirections,
     value: enterKeyDirections[1],
+    inputAttr: { 'aria-label': 'Key Direction' },
     onValueChanged(data) {
       dataGrid.option('keyboardNavigation.enterKeyDirection', data.value);
     },

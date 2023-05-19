@@ -64,6 +64,7 @@
         <DxSelectBox
           :data-source="['auto', 'up', 'down']"
           value="auto"
+          :input-attr="{ 'aria-label': 'Direction' }"
           @selection-changed="directionChanged"
         />
       </div>

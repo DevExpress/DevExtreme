@@ -21,6 +21,7 @@
         <span>Apply Changes Mode:</span>
         <DxSelectBox
           :items="applyChangesModes"
+          :input-attr="{ 'aria-label': 'Apply Changes Mode' }"
           :width="180"
           v-model:value="applyChangesMode"
         />

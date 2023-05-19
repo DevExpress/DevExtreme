@@ -67,6 +67,7 @@
 <dx-select-box
   [dataSource]="cities"
   displayExpr="name"
+  [inputAttr]="{ 'aria-label': 'City' }"
   valueExpr="data"
   [(value)]="weatherData"
 >

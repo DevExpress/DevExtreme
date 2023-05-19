@@ -15,6 +15,7 @@ import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.js';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.js';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+const statusLabel = { 'aria-label': 'Status' };
 
 const employees = createStore({
   key: 'ID',
@@ -66,6 +67,7 @@ class App extends React.Component {
       defaultValue={cell.value}
       {...cell.column.lookup}
       onValueChanged={onValueChanged}
+      inputAttr={statusLabel}
       itemRender={this.itemRender}
     />;
   }

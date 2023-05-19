@@ -21,6 +21,7 @@
         <span>Selection Mode </span>
         <DxSelectBox
           :items="['none', 'single', 'multiple', 'all']"
+          :input-attr="{ 'aria-label': 'Selection Mode' }"
           v-model:value="selectionMode"
         />
       </div>
@@ -28,6 +29,7 @@
         <span>Select All Mode </span>
         <DxSelectBox
           :disabled="selectionMode !== 'all'"
+          :input-attr="{ 'aria-label': 'Select All Mode' }"
           :items="['page', 'allPages']"
           v-model:value="selectAllMode"
         />

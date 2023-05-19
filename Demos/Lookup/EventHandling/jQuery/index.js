@@ -22,6 +22,7 @@ $(() => {
 
   $('#applyValueMode').dxSelectBox({
     items: ['instantly', 'useButtons'],
+    inputAttr: { 'aria-label': 'Apply Value Mode' },
     value: 'instantly',
     onValueChanged(e) {
       lookup.option('applyValueMode', e.value);

@@ -252,3 +252,5 @@ export const products = [{
 
   }],
 }];
+
+export const searchModeLabel = { 'aria-label': 'Search Mode' };

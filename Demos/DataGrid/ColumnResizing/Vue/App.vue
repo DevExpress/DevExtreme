@@ -18,6 +18,7 @@
         <DxSelectBox
           :items="resizingModes"
           :value="currentMode"
+          :input-attr="{ 'aria-label': 'Column Resizing Mode' }"
           :width="250"
           :on-value-changed="changeResizingMode"
         />

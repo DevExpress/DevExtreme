@@ -57,6 +57,7 @@
         <span>Start Edit Action</span>
         <DxSelectBox
           :items="['click', 'dblClick']"
+          :input-attr="{ 'aria-label': 'Action' }"
           v-model:value="startEditAction"
         />
       </div>

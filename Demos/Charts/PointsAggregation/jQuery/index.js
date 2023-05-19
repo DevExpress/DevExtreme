@@ -107,6 +107,7 @@ $(() => {
     items: intervals,
     value: 'week',
     valueExpr: 'interval',
+    inputAttr: { 'aria-label': 'Interval' },
     displayExpr: 'displayName',
     onValueChanged(data) {
       chart.option('argumentAxis.aggregationInterval', data.value);
@@ -117,6 +118,7 @@ $(() => {
     items: functions,
     value: 'avg',
     valueExpr: 'func',
+    inputAttr: { 'aria-label': 'Function' },
     displayExpr: 'displayName',
     onValueChanged(data) {
       chart.option('series[2].aggregation.method', data.value);

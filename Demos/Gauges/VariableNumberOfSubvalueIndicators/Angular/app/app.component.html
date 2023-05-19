@@ -19,6 +19,7 @@
   <dx-select-box
     #select
     [dataSource]="powerInfo"
+    [inputAttr]="{ 'aria-label': 'Department' }"
     displayExpr="name"
     [(value)]="currentValue"
     [width]="200"

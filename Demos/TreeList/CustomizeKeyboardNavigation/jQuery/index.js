@@ -49,6 +49,7 @@ $(() => {
   $('#enterKeyAction').dxSelectBox({
     items: enterKeyActions,
     value: enterKeyActions[1],
+    inputAttr: { 'aria-label': 'Key Action' },
     onValueChanged(data) {
       treeList.option('keyboardNavigation.enterKeyAction', data.value);
     },
@@ -56,6 +57,7 @@ $(() => {
 
   $('#enterKeyDirection').dxSelectBox({
     items: enterKeyDirections,
+    inputAttr: { 'aria-label': 'Key Direction' },
     value: enterKeyDirections[1],
     onValueChanged(data) {
       treeList.option('keyboardNavigation.enterKeyDirection', data.value);

@@ -37,6 +37,7 @@
         { name: 'Videos', value: 'video/*' }
       ]"
       valueExpr="value"
+      [inputAttr]="{ 'aria-label': 'File Type' }"
       displayExpr="name"
       [(value)]="fileUploader.accept"
     ></dx-select-box>

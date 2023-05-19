@@ -3,7 +3,7 @@ import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import SelectBox from 'devextreme-react/select-box';
 
-import { products } from './data.js';
+import { products, searchModeLabel } from './data.js';
 
 const options = ['contains', 'startswith', 'equals'];
 
@@ -33,6 +33,7 @@ class App extends React.Component {
             <span>Search mode</span>
             <SelectBox
               items={options}
+              inputAttr={searchModeLabel}
               value={this.state.value}
               onValueChanged={this.valueChanged}
             />

@@ -53,6 +53,7 @@ $(() => {
   const state = $('#state').dxSelectBox({
     items: states,
     width: '100%',
+    inputAttr: { 'aria-label': 'State' },
     placeholder: 'Select...',
     label: 'State',
   }).dxValidator({
@@ -113,6 +114,7 @@ $(() => {
   $('#modeSelector').dxSelectBox({
     items: ['outlined', 'filled', 'underlined'],
     value: stylingMode,
+    inputAttr: { 'aria-label': 'Mode' },
     onValueChanged(e) {
       writeStylingMode(e.value);
     },
@@ -121,6 +123,7 @@ $(() => {
   $('#labelModeSelector').dxSelectBox({
     items: ['static', 'floating', 'hidden'],
     value: 'static',
+    inputAttr: { 'aria-label': 'Label Mode' },
     onValueChanged(e) {
       [name, place, birthDate, position, hireDate, state, phone, notes].forEach((editor) => {
         editor.option('labelMode', e.value);

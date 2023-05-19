@@ -90,3 +90,5 @@ export const salesAmount = [{
     salesAmount: 74000,
   }],
 }];
+
+export const colorizationTypeLabel = { 'aria-label': 'Colorization Type' };

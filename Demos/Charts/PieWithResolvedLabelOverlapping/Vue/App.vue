@@ -26,6 +26,7 @@
         <span>Label Overlapping Resolution Mode</span>
         <DxSelectBox
           :data-source="resolveModes"
+          :input-attr="{ 'aria-label': 'Resolution Mode' }"
           v-model:value="resolveMode"
         />
       </div>

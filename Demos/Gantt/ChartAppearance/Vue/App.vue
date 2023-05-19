@@ -8,6 +8,7 @@
           <div class="value">
             <DxSelectBox
               :items="['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years']"
+              :input-attr="{ 'aria-label': 'Scale Type' }"
               v-model:value="scaleType"
             />
           </div>
@@ -17,6 +18,7 @@
           <div class="value">
             <DxSelectBox
               :items="['inside', 'outside', 'none']"
+              :input-attr="{ 'aria-label': 'Title Position' }"
               v-model:value="taskTitlePosition"
             />
           </div>

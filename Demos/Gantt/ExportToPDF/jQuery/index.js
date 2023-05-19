@@ -63,6 +63,7 @@ $(() => {
 
   $('#formatSelector').dxSelectBox({
     items: formats,
+    inputAttr: { 'aria-label': 'Format' },
     value: formats[0],
   });
   $('#landscapeCheckBoxContainer').dxCheckBox({
@@ -70,11 +71,13 @@ $(() => {
   });
   $('#exportModeSelector').dxSelectBox({
     items: exportModes,
+    inputAttr: { 'aria-label': 'Export Mode' },
     value: exportModes[0],
   });
   $('#dataRangeSelector').dxSelectBox({
     items: dataRanges,
     value: dataRanges[1],
+    inputAttr: { 'aria-label': 'Date Range' },
     onValueChanged(data) {
       const disabled = data.value.toLowerCase() !== 'custom';
       changeCustomRangeEditorsDisabled(disabled);

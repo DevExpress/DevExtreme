@@ -35,6 +35,7 @@ $(() => {
     items: breaksCount,
     value: breaksCount[2],
     width: 80,
+    inputAttr: { 'aria-label': 'Count' },
     onValueChanged(data) {
       chart.option('valueAxis.maxAutoBreakCount', data.value);
     },
@@ -43,6 +44,7 @@ $(() => {
   $('#line-style').dxSelectBox({
     items: lineStyles,
     value: lineStyles[0],
+    inputAttr: { 'aria-label': 'Line Style' },
     width: 120,
     onValueChanged(data) {
       chart.option('valueAxis.breakStyle.line', data.value);

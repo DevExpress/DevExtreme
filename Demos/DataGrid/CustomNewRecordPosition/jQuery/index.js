@@ -56,6 +56,7 @@ $(() => {
   $('#newRowPositionSelectBox').dxSelectBox({
     value: 'viewportTop',
     items: newRowPositionOptions,
+    inputAttr: { 'aria-label': 'Position' },
     onValueChanged(e) {
       dataGrid.option('editing.newRowPosition', e.value);
     },
@@ -64,6 +65,7 @@ $(() => {
   $('#scrollingModeSelectBox').dxSelectBox({
     value: 'standard',
     items: scrollingModeOptions,
+    inputAttr: { 'aria-label': 'Scrolling Mode' },
     onValueChanged(e) {
       dataGrid.option('scrolling.mode', e.value);
     },

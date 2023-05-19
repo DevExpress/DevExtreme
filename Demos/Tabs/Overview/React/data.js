@@ -30,3 +30,5 @@ export const longtabs = [
   { text: 'orders' },
   { text: 'shipment' },
 ];
+
+export const tabLabel = { 'aria-label': 'Tab' };

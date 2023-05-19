@@ -30,6 +30,7 @@ $(() => {
 
   $('#types').dxSelectBox({
     dataSource: types,
+    inputAttr: { 'aria-label': 'Series Type' },
     value: types[0],
     onValueChanged(e) {
       pieChart.option('resolveLabelOverlapping', e.value);

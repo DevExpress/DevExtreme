@@ -10,6 +10,7 @@
       <DxSelectBox
         :items="statuses"
         :value="statuses[0]"
+        :input-attr="{ 'aria-label': 'Status' }"
         @value-changed="onValueChanged"
       />
     </div>

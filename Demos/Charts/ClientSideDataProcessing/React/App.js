@@ -15,6 +15,8 @@ import Chart, {
 
 import SelectBox from 'devextreme-react/select-box';
 
+const temperatureLabel = { 'aria-label': 'Temperature' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -75,6 +77,7 @@ class App extends React.Component {
           <SelectBox
             id="choose-temperature"
             dataSource={this.temperature}
+            inputAttr={temperatureLabel}
             defaultValue={2}
             onValueChanged={this.changeTemperature} />
         </div>

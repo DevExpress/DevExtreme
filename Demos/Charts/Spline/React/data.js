@@ -42,3 +42,5 @@ export const sharingStatisticsInfo = [{
   cnstl: 3,
   cluster: 437,
 }];
+
+export const seriesTypeLabel = { 'aria-label': 'Series Type' };

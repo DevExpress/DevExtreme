@@ -47,3 +47,5 @@ export const populationByAge = [{
     value: 44165365,
   }],
 }];
+
+export const algorithmLabel = { 'aria-label': 'Algorithm' };

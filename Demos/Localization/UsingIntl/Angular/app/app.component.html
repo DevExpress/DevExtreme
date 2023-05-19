@@ -40,6 +40,7 @@
       <dx-select-box
         id="selectBox"
         [dataSource]="locales"
+        [inputAttr]="{ 'aria-label': 'Language' }"
         displayExpr="Name"
         valueExpr="Value"
         [value]="locale"

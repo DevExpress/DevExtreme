@@ -5,7 +5,10 @@
       <div class="dx-field">
         <div class="dx-field-label">Default mode</div>
         <div class="dx-field-value">
-          <DxSelectBox :items="simpleProducts"/>
+          <DxSelectBox
+            :items="simpleProducts"
+            :input-attr="{ 'aria-label': 'Simple Product' }"
+          />
         </div>
       </div>
       <div class="dx-field">
@@ -13,6 +16,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :items="simpleProducts"
+            :input-attr="{ 'aria-label': 'Product With Placeholder' }"
             :show-clear-button="true"
             placeholder="Choose Product"
           />
@@ -23,6 +27,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :items="simpleProducts"
+            :input-attr="{ 'aria-label': 'ReadOnly Product' }"
             :value="simpleProducts[0]"
             :read-only="true"
           />
@@ -33,6 +38,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :items="simpleProducts"
+            :input-attr="{ 'aria-label': 'Disabled Product' }"
             :value="simpleProducts[0]"
             :disabled="true"
           />
@@ -43,6 +49,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :data-source="data"
+            :input-attr="{ 'aria-label': 'Product ID' }"
             :value="products[0].ID"
             display-expr="Name"
             value-expr="ID"
@@ -56,6 +63,7 @@
             id="custom-templates"
             :data-source="products"
             :value="products[3].ID"
+            :input-attr="{ 'aria-label': 'Templated Product' }"
             display-expr="Name"
             value-expr="ID"
             field-template="field"
@@ -78,6 +86,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :items="simpleProducts"
+            :input-attr="{ 'aria-label': 'Product' }"
             v-model:value="value"
             @value-changed="onValueChanged"
           />

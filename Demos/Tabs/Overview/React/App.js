@@ -3,7 +3,7 @@ import React from 'react';
 import Tabs from 'devextreme-react/tabs';
 import SelectBox from 'devextreme-react/select-box';
 
-import { tabs, longtabs } from './data.js';
+import { tabs, longtabs, tabLabel } from './data.js';
 
 class App extends React.Component {
   constructor() {
@@ -46,6 +46,7 @@ class App extends React.Component {
                 <SelectBox
                   dataSource={tabs}
                   displayExpr="text"
+                  inputAttr={tabLabel}
                   valueExpr="id"
                   value={selectedIndex}
                   onValueChanged={this.onValueChanged}

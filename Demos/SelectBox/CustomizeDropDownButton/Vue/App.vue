@@ -6,6 +6,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :data-source="simpleProducts"
+            :input-attr="{ 'aria-label': 'Product' }"
             drop-down-button-template="imageIcon"
           >
             <template #imageIcon="{}">
@@ -22,6 +23,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :data-source="deferredProducts"
+            :input-attr="{ 'aria-label': 'Deferred Product' }"
             drop-down-button-template="loadIcon"
           >
             <template #loadIcon="{}">
@@ -44,6 +46,7 @@
           <DxSelectBox
             :data-source="products"
             v-model:selected-item="selectedItem"
+            :input-attr="{ 'aria-label': 'Product' }"
             :value="1"
             :show-clear-button="true"
             display-expr="Name"

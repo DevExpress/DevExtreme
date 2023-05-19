@@ -23,6 +23,7 @@ $(() => {
 
   $('#select-resizing').dxSelectBox({
     items: resizingModes,
+    inputAttr: { 'aria-label': 'Resize Mode' },
     value: resizingModes[0],
     width: 250,
     onValueChanged(data) {

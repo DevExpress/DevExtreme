@@ -33,6 +33,7 @@ $(() => {
 
   $('#showCheckBoxesMode').dxSelectBox({
     items: ['selectAll', 'normal', 'none'],
+    inputAttr: { 'aria-label': 'Show Checkboxes Mode' },
     value: 'normal',
     onValueChanged(e) {
       treeView.option('showCheckBoxesMode', e.value);
@@ -48,6 +49,7 @@ $(() => {
   const selectionModeSelectBox = $('#selectionMode').dxSelectBox({
     items: ['multiple', 'single'],
     value: 'multiple',
+    inputAttr: { 'aria-label': 'Selection Mode' },
     onValueChanged(e) {
       treeView.option('selectionMode', e.value);
 

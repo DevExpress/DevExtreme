@@ -213,3 +213,5 @@ export const europeCountries = [{
   capitalEn: 'Zagreb',
   capitalAr: 'زغرب',
 }];
+
+export const languageLabel = { 'aria-label': 'Language' };

@@ -4,7 +4,7 @@ import {
 } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';
-import { employees } from './data.js';
+import { employees, columnChooserModeLabel } from './data.js';
 
 const columnChooserModes = [{
   key: 'dragAndDrop',
@@ -98,6 +98,7 @@ class App extends React.Component {
                 value={mode}
                 valueExpr="key"
                 displayExpr="name"
+                inputAttr={columnChooserModeLabel}
                 onValueChanged={this.onModeValueChanged}
               />
             </div>

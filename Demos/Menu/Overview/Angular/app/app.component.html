@@ -23,6 +23,7 @@
       <div>Show First Submenu Mode</div>
       <dx-select-box
         [items]="showSubmenuModes"
+        [inputAttr]="{ 'aria-label': 'Submenu Mode' }"
         displayExpr="name"
         [(value)]="showFirstSubmenuModes"
       ></dx-select-box>
@@ -31,6 +32,7 @@
       <div>Orientation</div>
       <dx-select-box
         [items]="['horizontal', 'vertical']"
+        [inputAttr]="{ 'aria-label': 'Orientation' }"
         [(value)]="menu.orientation"
       ></dx-select-box>
     </div>

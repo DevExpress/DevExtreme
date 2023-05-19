@@ -12,6 +12,7 @@ $(() => {
   const companySelectorSelectBox = $('#select-company').dxSelectBox({
     displayExpr: 'Name',
     dataSource: companies,
+    inputAttr: { 'aria-label': 'Company' },
     labelMode: 'floating',
     label: 'Select company',
     value: companies[0],
@@ -25,6 +26,7 @@ $(() => {
   $('#label-mode').dxSelectBox({
     items: ['outside', 'static', 'floating', 'hidden'],
     value: 'floating',
+    inputAttr: { 'aria-label': 'Label Mode' },
     onValueChanged(data) {
       form.option('labelMode', data.value);
 
@@ -41,6 +43,7 @@ $(() => {
   $('#label-location').dxSelectBox({
     items: ['left', 'top'],
     value: 'left',
+    inputAttr: { 'aria-label': 'Label Location' },
     onValueChanged(data) {
       form.option('labelLocation', data.value);
     },
@@ -48,6 +51,7 @@ $(() => {
 
   $('#columns-count').dxSelectBox({
     items: ['auto', 1, 2, 3],
+    inputAttr: { 'aria-label': 'Column Count' },
     value: 2,
     onValueChanged(data) {
       form.option('colCount', data.value);
@@ -56,6 +60,7 @@ $(() => {
 
   $('#min-column-width').dxSelectBox({
     items: [150, 200, 300],
+    inputAttr: { 'aria-label': 'Min Column Width' },
     value: 300,
     onValueChanged(data) {
       form.option('minColWidth', data.value);

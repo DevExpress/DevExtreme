@@ -1,7 +1,7 @@
 import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import List from 'devextreme-react/list';
-import { products } from './data.js';
+import { products, searchModeLabel } from './data.js';
 
 function ItemTemplate(data) {
   return <div>{data.Name}</div>;
@@ -41,6 +41,7 @@ class App extends React.Component {
             <span>Search mode </span>
             <SelectBox
               items={searchModes}
+              inputAttr={searchModeLabel}
               value={this.state.searchMode}
               onValueChanged={this.onSearchModeChange} />
           </div>

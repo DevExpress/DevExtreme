@@ -3,7 +3,7 @@ import {
   CircularGauge, Scale, Label, RangeContainer, Range, Tooltip, Title, Font,
 } from 'devextreme-react/circular-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
-import { dataSource } from './data.js';
+import { dataSource, seasonLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -45,6 +45,7 @@ class App extends React.Component {
         <SelectBox
           id="seasons"
           width={150}
+          inputAttr={seasonLabel}
           dataSource={dataSource}
           defaultValue={dataSource[0]}
           displayExpr="name"

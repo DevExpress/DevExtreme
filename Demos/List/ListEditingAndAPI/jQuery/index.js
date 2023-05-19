@@ -17,6 +17,7 @@ $(() => {
 
   const itemDeleteModeChooser = $('#itemDeleteMode').dxSelectBox({
     disabled: true,
+    inputAttr: { 'aria-label': 'Delete Mode' },
     dataSource: ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'],
     value: 'toggle',
     onValueChanged(data) {

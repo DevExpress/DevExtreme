@@ -7,8 +7,8 @@ import Notify from 'devextreme/ui/notify';
 import HideToasts from 'devextreme/ui/toast/hide_toasts';
 
 import {
-  directions, positions, types, radioGroupItems, positionTopLabel,
-  positionBottomLabel, positionLeftLabel, positionRightLabel,
+  directions, positions, types, radioGroupItems, positionTopLabel, directionLabel,
+  positionBottomLabel, positionLeftLabel, positionRightLabel, positionLabel,
 } from './data.js';
 
 function App() {
@@ -54,6 +54,7 @@ function App() {
       <SelectBox
         items={positions}
         value={predefinedPosition}
+        inputAttr={positionLabel}
         onSelectionChanged={({ selectedItem }) => setPredefinedPosition(selectedItem)}
         visible={isPredefined} />
       <div className='section'>
@@ -95,6 +96,7 @@ function App() {
       <div>Direction</div>
       <SelectBox
         items={directions}
+        inputAttr={directionLabel}
         value={direction}
         onSelectionChanged={({ selectedItem }) => setDirection(selectedItem)} />
       <div className='section'>

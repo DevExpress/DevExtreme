@@ -28,6 +28,7 @@
         <DxSelectBox
           id="choose-months"
           :data-source="months"
+          :input-attr="{ 'aria-label': 'Month' }"
           :value="months[0]"
           @value-changed="onValueChanged"
         />

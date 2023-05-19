@@ -12,3 +12,6 @@ export const dataSource = createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
+
+export const positionLabel = { 'aria-label': 'Position' };
+export const scrollingModeLabel = { 'aria-label': 'Scrolling Mode' };

@@ -46,6 +46,7 @@
         <span>Filter Mode</span>
         <DxSelectBox
           :items="filterModes"
+          :input-attr="{ 'aria-label': 'Filter Mode' }"
           v-model:value="filterMode"
         />
       </div>

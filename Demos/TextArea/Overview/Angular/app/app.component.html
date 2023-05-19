@@ -35,6 +35,7 @@
         <dx-select-box
           [items]="valueChangeEvents"
           valueExpr="name"
+          [inputAttr]="{ 'aria-label': 'Event' }"
           displayExpr="title"
           [(value)]="eventValue"
         >

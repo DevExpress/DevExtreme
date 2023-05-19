@@ -25,6 +25,7 @@
           <DxSelectBox
             id="dispalyModes"
             :items="displayModes"
+            :input-attr="{ 'aria-label': 'Display Mode' }"
             display-expr="text"
             value-expr="value"
             v-model:value="displayMode"

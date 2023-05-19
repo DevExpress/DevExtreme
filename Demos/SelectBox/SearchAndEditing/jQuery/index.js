@@ -2,6 +2,7 @@ $(() => {
   const searchBox = $('#searchBox').dxSelectBox({
     dataSource: products,
     displayExpr: 'Name',
+    inputAttr: { 'aria-label': 'Product' },
     valueExpr: 'ID',
     searchEnabled: true,
   }).dxSelectBox('instance');
@@ -16,6 +17,7 @@ $(() => {
 
   $('#editBox').dxSelectBox({
     dataSource: productsDataSource,
+    inputAttr: { 'aria-label': 'Simple Product' },
     displayExpr: 'Name',
     valueExpr: 'ID',
     value: simpleProducts[0].ID,
@@ -53,6 +55,7 @@ $(() => {
 
   $('#searchModeOption').dxSelectBox({
     items: ['contains', 'startswith'],
+    inputAttr: { 'aria-label': 'Search Mode' },
     value: 'contains',
     onValueChanged(e) {
       searchBox.option('searchMode', e.value);
@@ -60,6 +63,7 @@ $(() => {
   });
 
   $('#searchExprOption').dxSelectBox({
+    inputAttr: { 'aria-label': 'Search Option' },
     items: [{
       name: "'Name'",
       value: 'Name',

@@ -40,6 +40,7 @@
       <div class="editor-container">
         <dx-select-box
           [items]="showCheckBoxesModes"
+          [inputAttr]="{ 'aria-label': 'Show Checkboxes Mode' }"
           [value]="showCheckBoxesMode"
           (onValueChanged)="showCheckBoxesModeValueChanged($event)"
         ></dx-select-box>
@@ -51,6 +52,7 @@
         <dx-select-box
           [items]="selectionModes"
           [value]="selectionMode"
+          [inputAttr]="{ 'aria-label': 'Selection Mode' }"
           [disabled]="isSelectionModeDisabled"
           (onValueChanged)="selectionModeValueChanged($event)"
         ></dx-select-box>

@@ -50,6 +50,7 @@
     <dx-select-box
       id="select-language"
       [items]="languages"
+      [inputAttr]="{ 'aria-label': 'Language' }"
       [value]="languages[1]"
       [width]="250"
       (onValueChanged)="selectLanguage($event)"

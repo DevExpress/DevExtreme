@@ -26,6 +26,7 @@
       <span>Max Count</span>
       <dx-select-box
         [items]="breaksCount"
+        [inputAttr]="{ 'aria-label': 'Break Count' }"
         [(value)]="breaksCountValue"
         [width]="80"
       >
@@ -36,6 +37,7 @@
       <dx-select-box
         [items]="lineStyles"
         [(value)]="lineStyleValue"
+        [inputAttr]="{ 'aria-label': 'Line Style' }"
         [width]="120"
       >
       </dx-select-box>

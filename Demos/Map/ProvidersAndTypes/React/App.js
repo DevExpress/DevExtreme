@@ -3,7 +3,7 @@ import React from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 
-import { mapTypes } from './data.js';
+import { mapTypes, mapTypeLabel } from './data.js';
 
 const apiKey = {
   bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
@@ -36,6 +36,7 @@ export default function App() {
             value={mapTypeValue}
             onValueChange={onMapTypeChange}
             dataSource={mapTypes}
+            inputAttr={mapTypeLabel}
             displayExpr="name"
             valueExpr="key"
           />

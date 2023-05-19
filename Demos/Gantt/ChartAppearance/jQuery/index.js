@@ -38,6 +38,7 @@ $(() => {
   }).dxGantt('instance');
 
   $('#scaleType').dxSelectBox({
+    inputAttr: { 'aria-label': 'Scale Type' },
     items: [
       'auto',
       'minutes',
@@ -55,6 +56,7 @@ $(() => {
   });
 
   $('#titlePosition').dxSelectBox({
+    inputAttr: { 'aria-label': 'Title Position' },
     items: [
       'inside',
       'outside',

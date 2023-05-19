@@ -34,6 +34,7 @@
         <DxSelectBox
           :data-source="fileTypesSource"
           value-expr="value"
+          :input-attr="{ 'aria-label': 'File Type' }"
           display-expr="name"
           value="*"
           @value-changed="e => accept = e.value"
@@ -44,6 +45,7 @@
         <DxSelectBox
           :items="['instantly', 'useButtons']"
           value="instantly"
+          :input-attr="{ 'aria-label': 'Mode' }"
           @value-changed="e => uploadMode = e.value"
         />
       </div>

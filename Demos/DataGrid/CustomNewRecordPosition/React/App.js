@@ -4,7 +4,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';
-import { dataSource } from './data.js';
+import { dataSource, positionLabel, scrollingModeLabel } from './data.js';
 
 const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
 const scrollingModeOptions = ['standard', 'virtual'];
@@ -88,6 +88,7 @@ function App() {
           <SelectBox
             id='newRowPositionSelectBox'
             value={newRowPosition}
+            inputAttr={positionLabel}
             items={newRowPositionOptions}
             onValueChange={setNewRowPosition}
           />
@@ -97,6 +98,7 @@ function App() {
           <SelectBox
             id='scrollingModeSelectBox'
             value={scrollingMode}
+            inputAttr={scrollingModeLabel}
             items={scrollingModeOptions}
             onValueChange={setScrollingMode}
           />

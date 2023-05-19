@@ -19,6 +19,7 @@
         <DxSelectBox
           id="select-color"
           :width="150"
+          :input-attr="{ 'aria-label': 'Color' }"
           :data-source="colors"
           v-model:value="value"
           display-expr="name"

@@ -72,6 +72,7 @@
           <DxSelectBox
             :items="columnChooserModes"
             v-model:value="mode"
+            :input-attr="{ 'aria-label': 'Column Chooser Mode' }"
             value-expr="key"
             display-expr="name"
           />

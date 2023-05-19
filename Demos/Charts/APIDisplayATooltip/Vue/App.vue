@@ -22,6 +22,7 @@
       <DxSelectBox
         :width="250"
         :data-source="populationData"
+        :input-attr="{ 'aria-label': 'Region' }"
         :value="selectedRegion"
         display-expr="region"
         value-expr="region"

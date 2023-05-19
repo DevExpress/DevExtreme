@@ -10,6 +10,11 @@ const labelLocations = ['left', 'top'];
 const columnsCount = ['auto', 1, 2, 3];
 const minColumnWidths = [150, 200, 300];
 const widthLabel = { 'aria-label': 'Width' };
+const companyLabel = { 'aria-label': 'Company' };
+const labelModeLabel = { 'aria-label': 'Label Mode' };
+const labelLocationLabel = { 'aria-label': 'Label Location' };
+const columnCountLabel = { 'aria-label': 'Column Count' };
+const minCountWidthLabel = { 'aria-label': 'Min Count Width' };
 
 class App extends React.Component {
   constructor() {
@@ -57,6 +62,7 @@ class App extends React.Component {
           <SelectBox
             displayExpr="Name"
             dataSource={this.companies}
+            inputAttr={companyLabel}
             labelMode={companySelectorLabelMode}
             label='Select company'
             value={company}
@@ -80,6 +86,7 @@ class App extends React.Component {
             <span>Label mode:</span>
             <SelectBox
               items={labelModes}
+              inputAttr={labelModeLabel}
               value={labelMode}
               onValueChanged={this.onLabelModeChanged}
             />
@@ -88,6 +95,7 @@ class App extends React.Component {
             <span>Label location:</span>
             <SelectBox
               items={labelLocations}
+              inputAttr={labelLocationLabel}
               value={labelLocation}
               onValueChanged={this.onLabelLocationChanged}
             />
@@ -97,6 +105,7 @@ class App extends React.Component {
             <SelectBox
               items={columnsCount}
               value={colCount}
+              inputAttr={columnCountLabel}
               onValueChanged={this.onColumnsCountChanged}
             />
           </div>
@@ -105,6 +114,7 @@ class App extends React.Component {
             <SelectBox
               items={minColumnWidths}
               value={minColWidth}
+              inputAttr={minCountWidthLabel}
               onValueChanged={this.onMinColWidthChanged}
             />
           </div>

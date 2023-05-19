@@ -18,6 +18,7 @@ $(() => {
   $('#selectionMode').dxSelectBox({
     value: 'all',
     items: ['none', 'single', 'multiple', 'all'],
+    inputAttr: { 'aria-label': 'Selection Mode' },
     onValueChanged(data) {
       listWidget.option('selectionMode', data.value);
       selectAllModeChooser.option('disabled', data.value !== 'all');
@@ -32,6 +33,7 @@ $(() => {
     disabled: false,
     items: ['page', 'allPages'],
     value: 'page',
+    inputAttr: { 'aria-label': 'Select All Mode' },
     onValueChanged(data) {
       listWidget.option('selectAllMode', data.value);
     },

@@ -25,6 +25,7 @@ $(() => {
   }).dxFileUploader('instance');
 
   $('#accept-option').dxSelectBox({
+    inputAttr: { 'aria-label': 'Accept Option' },
     dataSource: [
       { name: 'All types', value: '*' },
       { name: 'Images', value: 'image/*' },
@@ -41,6 +42,7 @@ $(() => {
   $('#upload-option').dxSelectBox({
     items: ['instantly', 'useButtons'],
     value: 'instantly',
+    inputAttr: { 'aria-label': 'Upload Option' },
     onValueChanged(e) {
       fileUploader.option('uploadMode', e.value);
     },

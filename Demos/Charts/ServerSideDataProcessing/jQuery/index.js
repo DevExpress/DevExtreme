@@ -74,6 +74,7 @@ $(() => {
     width: 150,
     items: months,
     value: 1,
+    inputAttr: { 'aria-label': 'Month' },
     valueExpr: 'id',
     displayExpr: 'name',
     onValueChanged(data) {

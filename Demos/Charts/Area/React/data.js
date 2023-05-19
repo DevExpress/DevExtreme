@@ -29,3 +29,5 @@ export const dataSource = [{
   y1564: 96123777,
   y65: 20412243,
 }];
+
+export const seriesTypeLabel = { 'aria-label': 'Series Type' };

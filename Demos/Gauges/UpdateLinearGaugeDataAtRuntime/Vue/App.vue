@@ -116,6 +116,7 @@
     <DxSelectBox
       id="selectbox"
       :data-source="cities"
+      :input-attr="{ 'aria-label': 'City' }"
       v-model:value="value"
       display-expr="name"
     />

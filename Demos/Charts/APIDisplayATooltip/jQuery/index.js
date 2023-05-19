@@ -33,6 +33,7 @@ $(() => {
     width: 250,
     dataSource,
     displayExpr: 'region',
+    inputAttr: { 'aria-label': 'Region' },
     valueExpr: 'region',
     placeholder: 'Choose region',
     onValueChanged(data) {

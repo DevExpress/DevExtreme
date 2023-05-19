@@ -37,6 +37,7 @@ $(() => {
 
   $('#applyChangesMode').dxSelectBox({
     items: ['instantly', 'onDemand'],
+    inputAttr: { 'aria-label': 'Apply Changes Mode' },
     width: 180,
     value: 'instantly',
     onValueChanged(data) {

@@ -62,6 +62,7 @@ function createOrdersTabTemplate(masterDetailData) {
 function createProductSelectBoxTemplate(masterDetailData, onProductChanged) {
   return function () {
     return $('<div>').dxSelectBox({
+      inputAttr: { 'aria-label': 'Product' },
       dataSource: DevExpress.data.AspNet.createStore({
         key: 'ProductID',
         loadParams: { SupplierID: masterDetailData.SupplierID },

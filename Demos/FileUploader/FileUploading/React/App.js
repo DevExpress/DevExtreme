@@ -4,6 +4,8 @@ import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
 const uploadModes = ['instantly', 'useButtons'];
+const fileTypeLabel = { 'aria-label': 'File Type' };
+const uploadModeLabel = { 'aria-label': 'Mode' };
 
 class App extends React.Component {
   constructor(props) {
@@ -56,11 +58,11 @@ class App extends React.Component {
           <div className="caption">Options</div>
           <div className="option">
             <span>File types</span>
-            <SelectBox dataSource={this.fileTypesSource} valueExpr="value" displayExpr="name" defaultValue="*" onValueChanged={this.onAcceptChanged} />
+            <SelectBox dataSource={this.fileTypesSource} inputAttr={fileTypeLabel} valueExpr="value" displayExpr="name" defaultValue="*" onValueChanged={this.onAcceptChanged} />
           </div>
           <div className="option">
             <span>Upload mode</span>
-            <SelectBox items={uploadModes} defaultValue="instantly" onValueChanged={this.onUploadModeChanged} />
+            <SelectBox items={uploadModes} defaultValue="instantly" inputAttr={uploadModeLabel} onValueChanged={this.onUploadModeChanged} />
           </div>
           <div className="option">
             <CheckBox text="Allow multiple files selection" onValueChanged={this.onMultipleChanged} />

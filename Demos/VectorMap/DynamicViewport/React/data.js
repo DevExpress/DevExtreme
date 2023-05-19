@@ -23,3 +23,4 @@ export const viewportCoordinates = [{
 
 export const centerLabel = { 'aria-label': 'Center' };
 export const zoomLabel = { 'aria-label': 'Zoom' };
+export const continentLabel = { 'aria-label': 'Continent' };

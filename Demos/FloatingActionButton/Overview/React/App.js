@@ -6,7 +6,9 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
 import { SelectBox } from 'devextreme-react/select-box';
-import { employees, states, directions } from './data.js';
+import {
+  employees, states, directions, directionLabel,
+} from './data.js';
 
 const optionDirections = ['auto', 'up', 'down'];
 
@@ -102,6 +104,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={optionDirections}
               defaultValue="auto"
+              inputAttr={directionLabel}
               onSelectionChanged={this.directionChanged}
             />
           </div>

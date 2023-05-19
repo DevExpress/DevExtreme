@@ -9,6 +9,7 @@
   </dx-radio-group>
   <dx-select-box
     [items]="positions"
+    [inputAttr]="{ 'aria-label': 'Position' }"
     [(value)]="predefinedPosition"
     [visible]="isPredefined"
   >
@@ -58,7 +59,12 @@
     </dx-number-box>
   </div>
   <div>Direction</div>
-  <dx-select-box [items]="directions" [(value)]="direction"> </dx-select-box>
+  <dx-select-box
+    [items]="directions"
+    [(value)]="direction"
+    [inputAttr]="{ 'aria-label': 'Direction' }"
+  >
+  </dx-select-box>
   <div class="section">
     <dx-button text="Show" width="48%" (onClick)="show($event)"></dx-button>
     <dx-button

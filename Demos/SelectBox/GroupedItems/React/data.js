@@ -149,3 +149,7 @@ export const pregroupedData = [{
     Name: 'ExcelRemote IP',
   }],
 }];
+
+export const ungroupedDataLabel = { 'aria-label': 'Ungrouped Data' };
+export const pregroupedDataLabel = { 'aria-label': 'Pregrouped Data' };
+export const templatedUngroupedDataLabel = { 'aria-label': 'Templated Ungrouped Data' };

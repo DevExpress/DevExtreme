@@ -1204,3 +1204,5 @@ export const resourceAssignments = [{
   taskId: 85,
   resourceId: 2,
 }];
+
+export const sortingModeLabel = { 'aria-label': 'Sorting Mode' };

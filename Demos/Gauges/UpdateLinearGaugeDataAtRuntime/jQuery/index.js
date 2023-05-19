@@ -71,6 +71,7 @@ $(() => {
 
   $('#selectbox').dxSelectBox({
     dataSource: cities,
+    inputAttr: { 'aria-label': 'City' },
     onSelectionChanged(e) {
       const weatherData = e.selectedItem.data;
 

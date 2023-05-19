@@ -22,6 +22,7 @@
         <span>Tiling Algorithm</span>
         <DxSelectBox
           :data-source="algorithms"
+          :input-attr="{ 'aria-label': 'Algorithm' }"
           :width="200"
           v-model:value="selectedAlgorithm"
         />

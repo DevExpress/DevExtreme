@@ -10,7 +10,7 @@ import PieChart, {
   Animation,
 } from 'devextreme-react/pie-chart';
 
-import { dataSource } from './data.js';
+import { dataSource, resolutionModeLabel } from './data.js';
 
 const resolveModes = ['shift', 'hide', 'none'];
 
@@ -51,6 +51,7 @@ class App extends React.Component {
             <span>Label Overlapping Resolution Mode </span>
             <SelectBox
               dataSource={resolveModes}
+              inputAttr={resolutionModeLabel}
               value={this.state.resolveMode}
               onValueChanged={this.setResolveMode}
             />

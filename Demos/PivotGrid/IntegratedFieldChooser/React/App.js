@@ -8,6 +8,8 @@ import PivotGrid, {
   FieldChooser,
 } from 'devextreme-react/pivot-grid';
 
+const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -42,6 +44,7 @@ class App extends React.Component {
             <SelectBox
               items={applyChangesModes}
               width={180}
+              inputAttr={applyChangesModeLabel}
               value={this.state.applyChangesMode}
               onValueChanged={this.changeMode}>
             </SelectBox>

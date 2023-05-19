@@ -4486,3 +4486,6 @@ export const sales = [{
   amount: 780,
   date: '2015/05/07',
 }];
+
+export const selectAllModeLabel = { 'aria-label': 'Select All Mode' };
+export const showCheckboxesModeLabel = { 'aria-label': 'Show Checkboxes Mode' };

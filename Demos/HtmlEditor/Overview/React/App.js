@@ -6,7 +6,7 @@ import HtmlEditor, {
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 
-import { markup, tabs } from './data.js';
+import { markup, tabs, tabLabel } from './data.js';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
@@ -101,6 +101,7 @@ class App extends React.Component {
               items={this.tabs}
               value={this.state.currentTab}
               valueExpr="value"
+              inputAttr={tabLabel}
               displayExpr="name"
               onValueChanged={this.currentTabChanged}
             />

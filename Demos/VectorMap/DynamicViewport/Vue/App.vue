@@ -25,6 +25,7 @@
               :data-source="viewportCoordinates"
               :value="viewportCoordinates[0].coordinates"
               :on-value-changed="continentChanged"
+              :input-attr="{ 'aria-label': 'Continent' }"
               value-expr="coordinates"
               display-expr="continent"
               :width="210"

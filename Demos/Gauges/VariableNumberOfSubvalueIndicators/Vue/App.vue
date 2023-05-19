@@ -34,6 +34,7 @@
         id="selectbox"
         :data-source="dataSource"
         v-model:value="value"
+        :input-attr="{ 'aria-label': 'Department' }"
         :width="200"
         display-expr="name"
       />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TreeList, Column, SearchPanel } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
-import { employees } from './data.js';
+import { employees, filterLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -62,6 +62,7 @@ class App extends React.Component {
             <SelectBox
               items={this.filterModes}
               value={this.state.filterMode}
+              inputAttr={filterLabel}
               onValueChanged={this.onFilterModeChange}>
             </SelectBox>
           </div>

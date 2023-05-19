@@ -9,3 +9,6 @@ for (let i = 0; i < 20; i += 1) {
   });
 }
 export const dataSource = data;
+
+export const paletteLabel = { 'aria-label': 'Palette' };
+export const paletteExtensionLabel = { 'aria-label': 'Palette Extension Mode' };

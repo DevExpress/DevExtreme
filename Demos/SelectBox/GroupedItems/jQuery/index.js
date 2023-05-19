@@ -25,6 +25,7 @@ $(() => {
 
   $('#selectbox-ungroupeddata').dxSelectBox({
     dataSource: fromUngroupedData,
+    inputAttr: { 'aria-label': 'Data' },
     valueExpr: 'ID',
     grouped: true,
     displayExpr: 'Name',
@@ -33,6 +34,7 @@ $(() => {
 
   $('#selectbox-pregroupeddata').dxSelectBox({
     dataSource: fromPregroupedData,
+    inputAttr: { 'aria-label': 'Pregrouped Data' },
     valueExpr: 'ID',
     grouped: true,
     displayExpr: 'Name',
@@ -42,6 +44,7 @@ $(() => {
   $('#selectbox-template').dxSelectBox({
     dataSource: fromUngroupedData,
     valueExpr: 'ID',
+    inputAttr: { 'aria-label': 'Templated Ungrouped Data' },
     grouped: true,
     groupTemplate(data) {
       return $(`<div class='custom-icon'><span class='dx-icon-box icon'></span> ${data.key}</div>`);

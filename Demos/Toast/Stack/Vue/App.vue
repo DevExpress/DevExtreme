@@ -10,6 +10,7 @@
       />
       <DxSelectBox
         :items="positions"
+        :input-attr="{ 'aria-label': 'Position' }"
         v-model:value="predefinedPosition"
         :visible="isPredefined"
       />
@@ -56,6 +57,7 @@
       <div>Direction</div>
       <DxSelectBox
         :items="directions"
+        :input-attr="{ 'aria-label': 'Direction' }"
         v-model:value="direction"
       />
       <div class="section">

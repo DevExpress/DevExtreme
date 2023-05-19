@@ -25,6 +25,7 @@
     <dx-select-box
       id="select-resizing"
       [items]="resizingModes"
+      [inputAttr]="{ 'aria-label': 'Resizing Mode' }"
       [value]="resizingModes[0]"
       [width]="250"
       (onValueChanged)="selectResizing($event)"

@@ -19,6 +19,7 @@
         <span>Direction </span>
         <DxSelectBox
           v-model:value="direction"
+          :input-attr="{ 'aria-label': 'Direction' }"
           :items="directions"
         />
       </div>

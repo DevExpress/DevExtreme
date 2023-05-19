@@ -27,6 +27,7 @@
     <dx-select-box
       [dataSource]="windRoseData"
       displayExpr="period"
+      [inputAttr]="{ 'aria-label': 'Period' }"
       valueExpr="values"
       [(value)]="chart.dataSource"
       [width]="300"

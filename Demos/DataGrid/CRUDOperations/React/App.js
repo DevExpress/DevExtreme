@@ -10,6 +10,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { formatDate } from 'devextreme/localization';
 import 'whatwg-fetch';
 
+const refreshModeLabel = { 'aria-label': 'Refresh Mode' };
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 
 const REFRESH_MODES = ['full', 'reshape', 'repaint'];
@@ -155,6 +156,7 @@ class App extends React.Component {
             <span>Refresh Mode: </span>
             <SelectBox
               value={refreshMode}
+              inputAttr={refreshModeLabel}
               items={REFRESH_MODES}
               onValueChanged={this.handleRefreshModeChange}
             />

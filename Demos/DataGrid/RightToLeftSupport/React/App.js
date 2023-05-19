@@ -6,6 +6,7 @@ import service from './data.js';
 
 const populationFormat = { type: 'fixedPoint', precision: 0 };
 const areaFormat = { type: 'fixedPoint', precision: 0 };
+const languageLabel = { 'aria-label': 'Language' };
 
 class App extends React.Component {
   constructor(props) {
@@ -72,6 +73,7 @@ class App extends React.Component {
             <SelectBox id="select-language"
               items={this.languages}
               value={selectedValue}
+              inputAttr={languageLabel}
               width={250}
               onValueChanged={this.selectLanguage} />
           </div>

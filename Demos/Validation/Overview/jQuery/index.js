@@ -127,6 +127,7 @@ $(() => {
 
   $('#country-validation').dxSelectBox({
     dataSource: countries,
+    inputAttr: { 'aria-label': 'Country' },
     validationMessagePosition: 'left',
   }).dxValidator({
     validationRules: [{

@@ -42,7 +42,11 @@
   <div class="caption">Options</div>
   <div class="option">
     <span>Refresh Mode:</span>
-    <dx-select-box [(value)]="refreshMode" [items]="refreshModes">
+    <dx-select-box
+      [(value)]="refreshMode"
+      [items]="refreshModes"
+      [inputAttr]="{ 'aria-label': 'Refresh Mode' }"
+    >
     </dx-select-box>
   </div>
   <div id="requests">

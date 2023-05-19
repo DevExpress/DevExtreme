@@ -94,6 +94,7 @@ $(() => {
   $('#refresh-mode').dxSelectBox({
     items: ['full', 'reshape', 'repaint'],
     value: 'reshape',
+    inputAttr: { 'aria-label': 'Refresh Mode' },
     onValueChanged(e) {
       dataGrid.option('editing.refreshMode', e.value);
     },

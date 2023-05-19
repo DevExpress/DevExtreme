@@ -24,6 +24,7 @@ $(() => {
   $('#displayMode').dxSelectBox({
     items: [{ text: "Display Mode 'full'", value: 'full' }, { text: "Display Mode 'compact'", value: 'compact' }],
     displayExpr: 'text',
+    inputAttr: { 'aria-label': 'Display Mode' },
     valueExpr: 'value',
     value: 'full',
     onValueChanged(data) {

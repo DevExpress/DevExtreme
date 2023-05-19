@@ -6,6 +6,7 @@
         <DxSelectBox
           :data-source="fromUngroupedData"
           :grouped="true"
+          :input-attr="{ 'aria-label': 'Data' }"
           display-expr="Name"
           value-expr="ID"
           :value="1"
@@ -18,6 +19,7 @@
         <DxSelectBox
           :data-source="fromPregroupedData"
           :grouped="true"
+          :input-attr="{ 'aria-label': 'Pregrouped Data' }"
           display-expr="Name"
           value-expr="ID"
           :value="1"
@@ -33,6 +35,7 @@
           display-expr="Name"
           value-expr="ID"
           :value="1"
+          :input-attr="{ 'aria-label': 'Templated Ungrouped Data' }"
         >
           <template #group="{ data }">
             <Group :item-data="data"/>

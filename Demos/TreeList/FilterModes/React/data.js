@@ -390,3 +390,4 @@ export const employees = [{
   Hire_Date: '2009-04-22',
 }];
 
+export const filterLabel = { 'aria-label': 'Filter' };

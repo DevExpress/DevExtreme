@@ -2,7 +2,10 @@
   <div class="dx-field">
     <div class="dx-field-label">Default mode</div>
     <div class="dx-field-value">
-      <dx-select-box [items]="simpleProducts"></dx-select-box>
+      <dx-select-box
+        [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Simple Product' }"
+      ></dx-select-box>
     </div>
   </div>
   <div class="dx-field">
@@ -10,6 +13,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
         placeholder="Choose Product"
         [showClearButton]="true"
       ></dx-select-box>
@@ -20,6 +24,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'ReadOnly Product' }"
         [value]="simpleProducts[0]"
         [readOnly]="true"
       ></dx-select-box>
@@ -30,6 +35,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Disabled Product' }"
         [value]="simpleProducts[0]"
         [disabled]="true"
       ></dx-select-box>
@@ -40,6 +46,7 @@
     <div class="dx-field-value">
       <dx-select-box
         [dataSource]="data"
+        [inputAttr]="{ 'aria-label': 'Product ID' }"
         displayExpr="Name"
         valueExpr="ID"
         [value]="products[0].ID"
@@ -52,6 +59,7 @@
       <dx-select-box
         id="custom-templates"
         [dataSource]="products"
+        [inputAttr]="{ 'aria-label': 'Templated Product' }"
         displayExpr="Name"
         valueExpr="ID"
         [value]="products[3].ID"
@@ -88,6 +96,7 @@
       <dx-select-box
         #selectBox
         [items]="simpleProducts"
+        [inputAttr]="{ 'aria-label': 'Product' }"
         [value]="simpleProducts[0]"
         (onValueChanged)="onValueChanged($event)"
       >

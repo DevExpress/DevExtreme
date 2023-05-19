@@ -21,6 +21,7 @@
         <span>Search mode </span>
         <DxSelectBox
           :items="['contains', 'startsWith', 'equals']"
+          :input-attr="{ 'aria-label': 'Search Mode' }"
           v-model:value="searchMode"
         />
       </div>

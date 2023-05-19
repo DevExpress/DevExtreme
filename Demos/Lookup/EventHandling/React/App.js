@@ -1,7 +1,7 @@
 import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 import { SelectBox } from 'devextreme-react';
-import { employees } from './data.js';
+import { employees, applyValueModeLabel } from './data.js';
 
 const applyValueModes = ['instantly', 'useButtons'];
 
@@ -49,6 +49,7 @@ class App extends React.Component {
             <div className="label">Apply Value Mode</div>
             <SelectBox
               items={applyValueModes}
+              inputAttr={applyValueModeLabel}
               value={applyValueMode}
               onValueChanged={this.changeApplyValueMode} />
           </div>

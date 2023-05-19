@@ -9,6 +9,7 @@ import { TextArea } from 'devextreme-react/text-area';
 import { TagBox } from 'devextreme-react/tag-box';
 import {
   europeanUnion, numberBoxLabel, notesLabel, nameLabel, textBoxLabel,
+  europeanUnionDataLabel, languageLabel,
 } from './data.js';
 
 class App extends React.Component {
@@ -47,6 +48,7 @@ class App extends React.Component {
                 <div className="dx-field-value">
                   <SelectBox
                     items={this.languages}
+                    inputAttr={languageLabel}
                     defaultValue={this.languages[1]}
                     rtlEnabled={this.state.rtlEnabled}
                     onValueChanged={this.onLanguageChanged}
@@ -83,6 +85,7 @@ class App extends React.Component {
               <div className="dx-field-value">
                 <SelectBox
                   items={europeanUnion}
+                  inputAttr={europeanUnionDataLabel}
                   defaultValue={europeanUnion[0]}
                   rtlEnabled={this.state.rtlEnabled}
                   displayExpr={this.displayExpr}

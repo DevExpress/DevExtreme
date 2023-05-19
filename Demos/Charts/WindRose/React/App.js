@@ -9,7 +9,7 @@ import {
   Margin,
   Export,
 } from 'devextreme-react/polar-chart';
-import { windSources, windRoseData } from './data.js';
+import { windSources, windRoseData, periodLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -52,6 +52,7 @@ class App extends React.Component {
           <SelectBox
             width="300"
             dataSource={windRoseData}
+            inputAttr={periodLabel}
             displayExpr="period"
             valueExpr="values"
             value={this.state.periodValues}

@@ -3,7 +3,7 @@ import React from 'react';
 import DataGrid, { Scrolling, Pager, Paging } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { generateData } from './data.js';
+import { generateData, displayModeLabel } from './data.js';
 
 const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
 const allowedPageSizes = [5, 10, 'all'];
@@ -71,6 +71,7 @@ class App extends React.Component {
                 id='displayModes'
                 items={displayModes}
                 displayExpr='text'
+                inputAttr={displayModeLabel}
                 valueExpr='value'
                 value={this.state.displayMode}
                 onValueChange={this.displayModeChange} />

@@ -9,7 +9,9 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { employees, states } from './data.js';
+import {
+  employees, states, keyActionLabel, keyDirectionLabel,
+} from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -79,6 +81,7 @@ class App extends React.Component {
               <span className="option-caption">Enter Key Action</span>
               <SelectBox className="select"
                 items={this.enterKeyActions}
+                inputAttr={keyActionLabel}
                 value={this.state.enterKeyAction}
                 onValueChanged={this.enterKeyActionChanged} />
             </div>
@@ -86,6 +89,7 @@ class App extends React.Component {
               <span className="option-caption">Enter Key Direction</span>
               <SelectBox className="select"
                 items={this.enterKeyDirections}
+                inputAttr={keyDirectionLabel}
                 value={this.state.enterKeyDirection}
                 onValueChanged={this.enterKeyDirectionChanged} />
             </div>

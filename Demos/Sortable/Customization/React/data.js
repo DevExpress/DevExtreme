@@ -1696,3 +1696,6 @@ export const tasks = [{
 
 export const scrollSpeedLabel = { 'aria-label': 'Scroll Speed' };
 export const scrollSensitivityLabel = { 'aria-label': 'Scroll Sensitivity' };
+export const dropFeedbackModeLabel = { 'aria-label': 'Drop Feedback' };
+export const dragDirectionLabel = { 'aria-label': 'Drag Direction' };
+export const itemOrientationLabel = { 'aria-label': 'Item Orientation' };

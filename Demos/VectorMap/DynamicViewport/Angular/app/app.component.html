@@ -18,6 +18,7 @@
         <dx-select-box
           [dataSource]="viewportData"
           [width]="210"
+          [inputAttr]="{ 'aria-label': 'Continent' }"
           displayExpr="continent"
           valueExpr="coordinates"
           [value]="viewportData[0].coordinates"

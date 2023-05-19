@@ -26,6 +26,7 @@
             <DxSelectBox
               v-model:value="selectedIndex"
               :data-source="tabs"
+              :input-attr="{ 'aria-label': 'Tab' }"
               display-expr="text"
               value-expr="id"
             />

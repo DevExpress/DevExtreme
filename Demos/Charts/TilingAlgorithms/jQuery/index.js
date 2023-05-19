@@ -36,6 +36,7 @@ $(() => {
   $('#algorithm').dxSelectBox({
     items: algorithms,
     width: 200,
+    inputAttr: { 'aria-label': 'Algorithm' },
     value: currentAlgorithm,
     onValueChanged(data) {
       if (data.value === 'custom') {

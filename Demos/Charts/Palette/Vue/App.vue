@@ -28,6 +28,7 @@
           <span>Palette</span>
           <DxSelectBox
             :items="paletteCollection"
+            :input-attr="{ 'aria-label': 'Palette' }"
             v-model:value="palette"
           />
         </div>
@@ -35,6 +36,7 @@
           <span>Palette Extension Mode</span>
           <DxSelectBox
             :items="paletteExtensionModes"
+            :input-attr="{ 'aria-label': 'Palette Extension Mode' }"
             v-model:value="paletteExtensionMode"
           />
         </div>

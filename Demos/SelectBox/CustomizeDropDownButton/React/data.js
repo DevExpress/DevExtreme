@@ -52,3 +52,7 @@ export const products = [{
   Category: 'Televisions',
   IconSrc: 'tv.svg',
 }];
+
+export const simpleProductLabel = { 'aria-label': 'Simple Product' };
+export const deferredProductLabel = { 'aria-label': 'Deferred Product' };
+export const productLabel = { 'aria-label': 'Product' };

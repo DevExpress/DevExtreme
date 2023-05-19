@@ -18,6 +18,9 @@ const weekDays = [
 ];
 
 const dateBoxLabel = { 'aria-label': 'Date' };
+const zoomLevelLabel = { 'aria-label': 'Zoom Level' };
+const dayLabel = { 'aria-label': 'First Day of Week' };
+const ruleLabel = { 'aria-label': 'Week Number Rule' };
 
 export default function App() {
   const [minDateValue, setMinDateValue] = React.useState(null);
@@ -149,6 +152,7 @@ export default function App() {
           <span>First day of week</span>
           <SelectBox
             dataSource={weekDays}
+            inputAttr={dayLabel}
             displayExpr="text"
             valueExpr="id"
             value={firstDay}
@@ -159,6 +163,7 @@ export default function App() {
           <span>Week number rule</span>
           <SelectBox
             dataSource={weekNumberRules}
+            inputAttr={ruleLabel}
             value={weekNumberRule}
             onValueChanged={onWeekNumberRuleChange}
           />
@@ -168,6 +173,7 @@ export default function App() {
           <SelectBox
             dataSource={zoomLevels}
             value={zoomLevel}
+            inputAttr={zoomLevelLabel}
             onValueChanged={onZoomLevelChange}
           />
         </div>

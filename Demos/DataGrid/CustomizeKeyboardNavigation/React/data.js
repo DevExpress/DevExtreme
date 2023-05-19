@@ -264,3 +264,6 @@ export const states = [{
   ID: 51,
   Name: 'North Dakota',
 }];
+
+export const keyActionLabel = { 'aria-label': 'Key Action' };
+export const keyDirectionLabel = { 'aria-label': 'Key Direction' };

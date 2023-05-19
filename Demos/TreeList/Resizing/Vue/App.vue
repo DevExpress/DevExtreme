@@ -37,6 +37,7 @@
         <span>Column resizing mode:</span>
         <DxSelectBox
           :items="resizingModes"
+          :input-attr="{ 'aria-label': 'Column Resizing Mode' }"
           :width="250"
           v-model:value="columnResizingMode"
         />

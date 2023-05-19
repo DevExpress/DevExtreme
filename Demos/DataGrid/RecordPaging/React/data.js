@@ -31,3 +31,5 @@ export function generateData(count) {
   }
   return items;
 }
+
+export const displayModeLabel = { 'aria-label': 'Refresh Mode' };

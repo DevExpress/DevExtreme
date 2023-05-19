@@ -72,6 +72,7 @@
         <div class="label">Image upload tabs:</div>
         <DxSelectBox
           :items="tabs"
+          :input-attr="{ 'aria-label': 'Tab' }"
           v-model:value="currentTabs"
           display-expr="name"
           value-expr="value"

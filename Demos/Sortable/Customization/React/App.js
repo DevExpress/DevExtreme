@@ -4,7 +4,10 @@ import Sortable from 'devextreme-react/sortable';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import NumberBox from 'devextreme-react/number-box';
-import { tasks, scrollSensitivityLabel, scrollSpeedLabel } from './data.js';
+import {
+  tasks, scrollSensitivityLabel, scrollSpeedLabel, dropFeedbackModeLabel,
+  dragDirectionLabel, itemOrientationLabel,
+} from './data.js';
 import Item from './Item.js';
 import DragItem from './DragItem.js';
 
@@ -90,6 +93,7 @@ class App extends React.Component {
             <span>Drop Feedback Mode:</span>
             <SelectBox
               items={dropFeedbackModes}
+              inputAttr={dropFeedbackModeLabel}
               value={dropFeedbackMode}
               onValueChanged={this.onDropFeedbackModeChanged}
             />
@@ -98,6 +102,7 @@ class App extends React.Component {
             <span>Item Orientation:</span>
             <SelectBox
               items={itemOrientations}
+              inputAttr={itemOrientationLabel}
               value={itemOrientation}
               onValueChanged={this.onItemOrientationChanged}
             />
@@ -111,6 +116,7 @@ class App extends React.Component {
                   : horizontalDragDirections
               }
               value={dragDirection}
+              inputAttr={dragDirectionLabel}
               onValueChanged={this.onDragDirectionChanged}
             />
           </div>

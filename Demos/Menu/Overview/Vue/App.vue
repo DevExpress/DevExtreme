@@ -25,6 +25,7 @@
         <div>Show First Submenu Mode</div>
         <DxSelectBox
           :items="showSubmenuModes"
+          :input-attr="{ 'aria-label': 'Language' }"
           v-model:value="showFirstSubmenuModes"
           display-expr="name"
         />
@@ -33,6 +34,7 @@
         <div>Orientation</div>
         <DxSelectBox
           :items="['horizontal', 'vertical']"
+          :input-attr="{ 'aria-label': 'Orientation' }"
           v-model:value="orientation"
         />
       </div>

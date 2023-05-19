@@ -16,3 +16,5 @@ export const population = [
   { country: 'Philippines', val: 103906000 },
   { country: 'Egypt', val: 92847800 },
 ];
+
+export const seriesTypeLabel = { 'aria-label': 'Series Type' };

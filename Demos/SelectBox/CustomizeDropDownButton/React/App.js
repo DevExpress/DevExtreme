@@ -2,7 +2,9 @@ import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 
 import { Template } from 'devextreme-react/core/template';
-import { products, simpleProducts } from './data.js';
+import {
+  products, simpleProducts, simpleProductLabel, deferredProductLabel, productLabel,
+} from './data.js';
 import ImageIcon from './imageIcon.js';
 import IndicatorIcon from './indicatorIcon.js';
 import ConditionalIcon from './conditionalIcon.js';
@@ -41,6 +43,7 @@ class App extends React.Component {
           <div className='dx-field-label'>Image as the icon</div>
           <div className='dx-field-value'>
             <SelectBox dataSource={simpleProducts}
+              inputAttr={simpleProductLabel}
               dropDownButtonRender={ImageIcon} />
           </div>
         </div>
@@ -48,6 +51,7 @@ class App extends React.Component {
           <div className='dx-field-label'>Load indicator as the icon</div>
           <div className='dx-field-value'>
             <SelectBox dataSource={this.deferredProducts}
+              inputAttr={deferredProductLabel}
               dropDownButtonTemplate='loadIndicator'>
               <Template name='loadIndicator' render={this.renderLoadIndicator} />
             </SelectBox>
@@ -60,6 +64,7 @@ class App extends React.Component {
               defaultValue={products[0].ID}
               selectedItem={this.state.selectedItem}
               displayExpr='Name'
+              inputAttr={productLabel}
               showClearButton={true}
               valueExpr='ID'
               itemRender={Item}

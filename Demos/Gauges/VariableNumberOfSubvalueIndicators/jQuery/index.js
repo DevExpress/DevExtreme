@@ -37,6 +37,7 @@ $(() => {
 
   $('#selectbox').dxSelectBox({
     dataSource,
+    inputAttr: { 'aria-label': 'Department' },
     displayExpr: 'name',
     onValueChanged(data) {
       gauge.value(data.value.primary);

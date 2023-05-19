@@ -53,6 +53,7 @@
         <span>Drop Feedback Mode:</span>
         <DxSelectBox
           :items="['push', 'indicate']"
+          :input-attr="{ 'aria-label': 'Drop Feedback Mode' }"
           v-model:value="dropFeedbackMode"
         />
       </div>
@@ -61,6 +62,7 @@
         <DxSelectBox
           :items="['vertical', 'horizontal']"
           v-model:value="itemOrientation"
+          :input-attr="{ 'aria-label': 'Orientation' }"
           @value-changed="onItemOrientationChanged"
         />
       </div>
@@ -68,6 +70,7 @@
         <span>Drag Direction:</span>
         <DxSelectBox
           :items="dragDirections"
+          :input-attr="{ 'aria-label': 'Drag Direction' }"
           v-model:value="dragDirection"
         />
       </div>

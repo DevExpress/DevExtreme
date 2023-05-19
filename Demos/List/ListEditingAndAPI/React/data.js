@@ -27,3 +27,5 @@ export const tasks = ['Prepare 2016 Financial', 'Prepare 2016 Marketing Plan', '
   'Collect Customer Reviews for Website', 'Submit New W4 for Updated Exemptions', 'Get New Frequent Flier Account', 'Review New Customer Follow Up Plan', 'Submit Customer Follow Up Plan Feedback',
   'Review Issue Report and Provide Workarounds', 'Contact Customers for Video Interviews', 'Resubmit Request for Expense Reimbursement', 'Approve Vacation Request Form', 'Email Test Report on New Products',
   'Send Receipts for all Flights Last Month'];
+
+export const deleteModeLabel = { 'aria-label': 'Delete Mode' };

@@ -20,7 +20,7 @@ import Chart, {
 
 import SelectBox from 'devextreme-react/select-box';
 
-import { months } from './data.js';
+import { months, monthLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -88,6 +88,7 @@ class App extends React.Component {
             id="selectbox"
             width={150}
             valueExpr="id"
+            inputAttr={monthLabel}
             displayExpr="name"
             items={months}
             defaultValue={1}

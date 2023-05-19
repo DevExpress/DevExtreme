@@ -27,6 +27,7 @@
           <span>Handle Range Changes </span>
           <DxSelectBox
             :data-source="behaviorModes"
+            :input-attr="{ 'aria-label': 'Value Change Mode' }"
             :width="210"
             v-model:value="currentBehaviorMode"
           />

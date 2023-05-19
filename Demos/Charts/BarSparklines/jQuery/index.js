@@ -47,6 +47,7 @@ $(() => {
   $('#choose-months').dxSelectBox({
     dataSource: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
     value: 12,
+    inputAttr: { 'aria-label': 'Month' },
     onValueChanged(data) {
       const count = data.value;
       source.filter(['month', '<=', count]);

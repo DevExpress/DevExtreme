@@ -5,7 +5,7 @@ import Gantt, {
 import CheckBox from 'devextreme-react/check-box';
 import { SelectBox } from 'devextreme-react';
 import {
-  tasks, dependencies, resources, resourceAssignments,
+  tasks, dependencies, resources, resourceAssignments, sortingModeLabel,
 } from './data.js';
 
 const sortingModeValues = ['single', 'multiple', 'none'];
@@ -26,6 +26,7 @@ function App() {
           <div className="value">
             <SelectBox
               items={sortingModeValues}
+              inputAttr={sortingModeLabel}
               value={ganttConfig.sortingMode}
               onValueChanged={onSortingModeChanged}
             />

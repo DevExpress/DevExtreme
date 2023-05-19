@@ -7,6 +7,7 @@ import service from './data.js';
 
 const { valueChangeEvents } = service;
 const notesLabel = { 'aria-label': 'Notes' };
+const eventLabel = { 'aria-label': 'Event' };
 
 class App extends React.Component {
   constructor(props) {
@@ -61,6 +62,7 @@ class App extends React.Component {
                   items={valueChangeEvents}
                   valueExpr="name"
                   displayExpr="title"
+                  inputAttr={eventLabel}
                   value={this.state.eventValue}
                   onValueChanged={this.onSelectBoxValueChanged}
                 />

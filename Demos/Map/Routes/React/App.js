@@ -3,7 +3,9 @@ import React from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 
-import { markersData, routesData } from './data.js';
+import {
+  markersData, routesData, modeLabel, colorLabel,
+} from './data.js';
 
 const modes = ['driving', 'walking'];
 const routeColors = ['blue', 'green', 'red'];
@@ -48,6 +50,7 @@ export default function App() {
           <SelectBox
             defaultValue="driving"
             items={modes}
+            inputAttr={modeLabel}
             onValueChange={routeModeChange}
           />
         </div>
@@ -55,6 +58,7 @@ export default function App() {
           <span>Route color</span>
           <SelectBox
             defaultValue="blue"
+            inputAttr={colorLabel}
             items={routeColors}
             onValueChange={routeColorChange}
           />

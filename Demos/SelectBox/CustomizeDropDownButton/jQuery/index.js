@@ -1,6 +1,7 @@
 $(() => {
   $('#custom-icon').dxSelectBox({
     items: simpleProducts,
+    inputAttr: { 'aria-label': 'Simple Product' },
     dropDownButtonTemplate() {
       return $('<img>', {
         src: '../../../../images/icons/custom-dropbutton-icon.svg',
@@ -16,6 +17,7 @@ $(() => {
   });
 
   $('#load-indicator').dxSelectBox({
+    inputAttr: { 'aria-label': 'Load Indicator' },
     dropDownButtonTemplate(data, element) {
       $(element).append($loadIndicator, $dropDownButtonImage);
     },
@@ -53,6 +55,7 @@ $(() => {
   $('#dynamic-template').dxSelectBox({
     items: products,
     displayExpr: 'Name',
+    inputAttr: { 'aria-label': 'Product' },
     showClearButton: true,
     valueExpr: 'ID',
     value: 1,

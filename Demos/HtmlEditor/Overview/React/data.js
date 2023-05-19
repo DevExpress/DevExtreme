@@ -57,3 +57,5 @@ export const markup = `
         </tr>
     </table>
 `;
+
+export const tabLabel = { 'aria-label': 'Tab' };

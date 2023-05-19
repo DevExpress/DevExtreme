@@ -1207,3 +1207,6 @@ export const resourceAssignments = [{
 
 export const startDateLabel = { 'aria-label': 'Start Date' };
 export const endDateLabel = { 'aria-label': 'End Date' };
+export const documentFormatLabel = { 'aria-label': 'Document Format' };
+export const exportModeLabel = { 'aria-label': 'Export Mode' };
+export const dateRangeLabel = { 'aria-label': 'Date Range' };

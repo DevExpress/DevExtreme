@@ -10,7 +10,7 @@ import {
   Margin,
 } from 'devextreme-react/chart';
 
-import { dataSource } from './data.js';
+import { dataSource, seriesTypeLabel } from './data.js';
 
 const types = ['area', 'stackedarea', 'fullstackedarea'];
 
@@ -59,6 +59,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={types}
               value={this.state.type}
+              inputAttr={seriesTypeLabel}
               onValueChanged={this.handleChange}
             />
           </div>

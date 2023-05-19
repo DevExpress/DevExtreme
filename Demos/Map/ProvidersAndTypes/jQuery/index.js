@@ -24,6 +24,7 @@ $(() => {
 
   $('#choose-type').dxSelectBox({
     dataSource: mapTypes,
+    inputAttr: { 'aria-label': 'Map Type' },
     displayExpr: 'name',
     valueExpr: 'key',
     value: mapTypes[0].key,

@@ -7,6 +7,7 @@
         <div class="dx-field-value">
           <dx-select-box
             [items]="languages"
+            [inputAttr]="{ 'aria-label': 'Language' }"
             [value]="languages[1]"
             [rtlEnabled]="rtlEnabled"
             (onValueChanged)="onLanguageChanged($event)"
@@ -45,6 +46,7 @@
       <div class="dx-field-value">
         <dx-select-box
           [items]="europeanUnion"
+          [inputAttr]="{ 'aria-label': 'European Union Data' }"
           [value]="europeanUnion[0]"
           [displayExpr]="displayExpr"
           [rtlEnabled]="rtlEnabled"

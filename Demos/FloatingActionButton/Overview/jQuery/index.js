@@ -84,6 +84,7 @@ $(() => {
 
   $('#direction').dxSelectBox({
     dataSource: ['auto', 'up', 'down'],
+    inputAttr: { 'aria-label': 'Direction' },
     value: 'auto',
     onSelectionChanged(e) {
       DevExpress.config({

@@ -7,7 +7,7 @@ import {
   Legend,
   Label,
 } from 'devextreme-react/chart';
-import { overlappingModes, population } from './data.js';
+import { overlappingModes, population, seriesTypeLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -42,6 +42,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={overlappingModes}
               value={this.state.currentMode}
+              inputAttr={seriesTypeLabel}
               onValueChanged={this.handleChange}
             />
           </div>

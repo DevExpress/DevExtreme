@@ -48,3 +48,6 @@ export const tasks = [{ id: 1, text: 'Prepare 2016 Financial' },
   { id: 48, text: 'Launch New Website' },
   { id: 49, text: 'Update Customer Shipping Profiles' },
   { id: 50, text: 'Create New Shipping Return Labels' }];
+
+export const selectionModeLabel = { 'aria-label': 'Selection Mode' };
+export const selectAllModeLabel = { 'aria-label': 'Select All Mode' };

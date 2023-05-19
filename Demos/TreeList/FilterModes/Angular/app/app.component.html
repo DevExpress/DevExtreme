@@ -26,7 +26,11 @@
   <div class="caption">Options</div>
   <div class="option">
     <span>Filter Mode</span>
-    <dx-select-box [items]="filterModes" [(value)]="filterModeValue">
+    <dx-select-box
+      [items]="filterModes"
+      [(value)]="filterModeValue"
+      [inputAttr]="{ 'aria-label': 'Filter Mode' }"
+    >
     </dx-select-box>
   </div>
 </div>

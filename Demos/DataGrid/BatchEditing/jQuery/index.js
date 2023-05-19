@@ -50,6 +50,7 @@ $(() => {
 
   $('#startEditAction').dxSelectBox({
     value: 'click',
+    inputAttr: { 'aria-label': 'Action' },
     items: ['click', 'dblClick'],
     onValueChanged(data) {
       dataGrid.option('editing.startEditAction', data.value);

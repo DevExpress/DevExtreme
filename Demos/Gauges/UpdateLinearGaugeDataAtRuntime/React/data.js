@@ -40,3 +40,4 @@ export const cities = [{
   },
 }];
 
+export const cityLabel = { 'aria-label': 'City' };

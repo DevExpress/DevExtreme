@@ -58,6 +58,7 @@
             <DxSelectBox
               v-model:value="transform"
               :items="transformations"
+              :input-attr="{ 'aria-label': 'Transform' }"
               :grouped="true"
               display-expr="name"
               value-expr="value"

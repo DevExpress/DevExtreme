@@ -35,6 +35,7 @@
       <div class="value">
         <dx-select-box
           id="formatBox"
+          [inputAttr]="{ 'aria-label': 'Document Format' }"
           [items]="formats"
           [(value)]="formatBoxValue"
         >
@@ -50,7 +51,11 @@
     <div class="option">
       <div class="label">Export mode:</div>
       <div class="value">
-        <dx-select-box [items]="exportModes" [(value)]="exportModeBoxValue">
+        <dx-select-box
+          [items]="exportModes"
+          [(value)]="exportModeBoxValue"
+          [inputAttr]="{ 'aria-label': 'Export Mode' }"
+        >
         </dx-select-box>
       </div>
     </div>
@@ -59,6 +64,7 @@
       <div class="value">
         <dx-select-box
           [items]="dateRanges"
+          [inputAttr]="{ 'aria-label': 'Date Range' }"
           [(value)]="dateRangeBoxValue"
           (onValueChanged)="onDateRangeBoxSelectionChanged($event)"
         >

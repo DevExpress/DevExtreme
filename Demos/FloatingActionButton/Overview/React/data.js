@@ -343,3 +343,5 @@ export const states = [{
   ID: 51,
   Name: 'North Dakota',
 }];
+
+export const directionLabel = { 'aria-label': 'Mode' };

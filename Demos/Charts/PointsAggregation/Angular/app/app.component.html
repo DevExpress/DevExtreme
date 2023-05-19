@@ -82,6 +82,7 @@
         [dataSource]="intervals"
         displayExpr="displayName"
         valueExpr="interval"
+        [inputAttr]="{ 'aria-label': 'Interval' }"
         [(value)]="argumentAxisSettings.aggregationInterval"
       >
       </dx-select-box>
@@ -90,6 +91,7 @@
       <span>Method:</span>
       <dx-select-box
         [dataSource]="functions"
+        [inputAttr]="{ 'aria-label': 'Function' }"
         displayExpr="displayName"
         valueExpr="func"
         [(value)]="pointsAggregationSettings.method"

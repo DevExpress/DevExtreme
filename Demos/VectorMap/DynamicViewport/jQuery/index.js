@@ -29,6 +29,7 @@ $(() => {
     displayExpr: 'continent',
     valueExpr: 'coordinates',
     value: viewportCoordinates[0].coordinates,
+    inputAttr: { 'aria-label': 'Continent' },
     onValueChanged(data) {
       map.viewport(data.value);
     },

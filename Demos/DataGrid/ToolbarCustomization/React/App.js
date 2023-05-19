@@ -8,6 +8,8 @@ import DataGrid, {
 import query from 'devextreme/data/query';
 import service from './data.js';
 
+const countLabel = { 'aria-label': 'Count' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -92,6 +94,7 @@ class App extends React.Component {
               width="225"
               items={this.groupingValues}
               displayExpr="text"
+              inputAttr={countLabel}
               valueExpr="value"
               value={this.state.grouping}
               onValueChanged={this.groupChanged} />

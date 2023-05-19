@@ -12,6 +12,7 @@ $(() => {
   $('#searchMode').dxSelectBox({
     dataSource: ['contains', 'startswith', 'equals'],
     value: 'contains',
+    inputAttr: { 'aria-label': 'Search Mode' },
     onValueChanged(data) {
       listWidget.option('searchMode', data.value);
     },

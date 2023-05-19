@@ -3,7 +3,7 @@ import {
   LinearGauge, Scale, Label, Tooltip, Export, Title, Font,
 } from 'devextreme-react/linear-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
-import { dataSource } from './data.js';
+import { dataSource, departmentLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class App extends React.Component {
         <SelectBox
           id="selectbox"
           dataSource={dataSource}
+          inputAttr={departmentLabel}
           defaultValue={dataSource[0]}
           width={200}
           displayExpr="name"

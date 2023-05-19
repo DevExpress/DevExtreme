@@ -3,7 +3,7 @@ import PieChart, {
   Series, Tooltip, Size, Legend,
 } from 'devextreme-react/pie-chart';
 import { SelectBox } from 'devextreme-react/select-box';
-import { populationData } from './data.js';
+import { populationData, regionLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class App extends React.Component {
           <SelectBox
             width={250}
             dataSource={populationData}
+            inputAttr={regionLabel}
             displayExpr="region"
             valueExpr="region"
             placeholder="Choose region"

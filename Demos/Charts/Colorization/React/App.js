@@ -1,7 +1,7 @@
 import React from 'react';
 import TreeMap, { Tooltip } from 'devextreme-react/tree-map';
 import SelectBox from 'devextreme-react/select-box';
-import { salesAmount, colorizationOptions } from './data.js';
+import { salesAmount, colorizationOptions, colorizationTypeLabel } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -35,6 +35,7 @@ class App extends React.Component {
             <SelectBox
               dataSource={colorizationOptions}
               displayExpr="name"
+              inputAttr={colorizationTypeLabel}
               valueExpr="options"
               width={200}
               value={this.state.typeOptions}

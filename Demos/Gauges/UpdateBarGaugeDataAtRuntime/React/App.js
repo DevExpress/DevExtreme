@@ -1,7 +1,7 @@
 import React from 'react';
 import { BarGauge, Label } from 'devextreme-react/bar-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
-import { colors } from './data.js';
+import { colors, colorLabel } from './data.js';
 
 const palette = ['#ff0000', '#00ff00', '#0000ff'];
 
@@ -42,6 +42,7 @@ class App extends React.Component {
             <SelectBox
               id="select-color"
               width={150}
+              inputAttr={colorLabel}
               dataSource={colors}
               value={this.state.currentColor}
               displayExpr="name"

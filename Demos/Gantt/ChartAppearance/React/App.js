@@ -14,6 +14,8 @@ import TaskTimeTooltipContentTemplate from './TaskTimeTooltipContentTemplate.js'
 
 const scaleTypes = ['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years'];
 const titlePositions = ['inside', 'outside', 'none'];
+export const scaleTypeLabel = { 'aria-label': 'Scale Type' };
+export const titlePositionLabel = { 'aria-label': 'Title Position' };
 
 function App() {
   const [ganttConfig, setGanttConfig] = React.useState({
@@ -37,6 +39,7 @@ function App() {
             <div className="value">
               <SelectBox
                 items={scaleTypes}
+                inputAttr={scaleTypeLabel}
                 value={ganttConfig.scaleType}
                 onValueChanged={onScaleTypeChanged}
               />
@@ -48,6 +51,7 @@ function App() {
             <div className="value">
               <SelectBox
                 items={titlePositions}
+                inputAttr={titlePositionLabel}
                 value={ganttConfig.taskTitlePosition}
                 onValueChanged={onTaskTitlePositionChanged}
               />

@@ -47,6 +47,7 @@ $(() => {
   $('#select-language').dxSelectBox({
     items: languages,
     value: languages[1],
+    inputAttr: { 'aria-label': 'Language' },
     onValueChanged(data) {
       const isRTL = data.value === languages[0];
 

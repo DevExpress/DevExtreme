@@ -37,6 +37,7 @@ $(() => {
 
   $('#choose-mode').dxSelectBox({
     dataSource: ['driving', 'walking'],
+    inputAttr: { 'aria-label': 'Mode' },
     value: 'driving',
     onValueChanged(data) {
       map.option('routes', [$.extend({}, map.option('routes')[0], {
@@ -47,6 +48,7 @@ $(() => {
 
   $('#choose-color').dxSelectBox({
     dataSource: ['blue', 'green', 'red'],
+    inputAttr: { 'aria-label': 'Color' },
     value: 'blue',
     onValueChanged(data) {
       map.option('routes', [$.extend({}, map.option('routes')[0], {

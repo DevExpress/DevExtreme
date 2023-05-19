@@ -21,6 +21,7 @@ $(() => {
   const selectBox = $('#selectbox').dxSelectBox({
     value: 0,
     dataSource: tabs,
+    inputAttr: { 'aria-label': 'Tab' },
     displayExpr: 'text',
     valueExpr: 'id',
     onValueChanged(e) {

@@ -13,6 +13,7 @@ import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import {
   tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
+  documentFormatLabel, exportModeLabel, dateRangeLabel,
 } from './data.js';
 
 import 'jspdf-autotable';
@@ -97,6 +98,7 @@ class App extends React.Component {
               <div className="value">
                 <SelectBox items={formats}
                   value={this.state.formatBoxValue}
+                  inputAttr={documentFormatLabel}
                   onValueChanged={this.formatBoxSelectionChanged} />
               </div>
             </div>
@@ -115,6 +117,7 @@ class App extends React.Component {
               <div className="value">
                 <SelectBox items={exportModes}
                   value={this.state.exportModeBoxValue}
+                  inputAttr={exportModeLabel}
                   onValueChanged={this.exportModeBoxSelectionChanged} />
               </div>
             </div>
@@ -124,6 +127,7 @@ class App extends React.Component {
               <div className="value">
                 <SelectBox items={dateRanges}
                   value={this.state.dateRangeBoxValue}
+                  inputAttr={dateRangeLabel}
                   onValueChanged={this.dateRangeBoxSelectionChanged} />
               </div>
             </div>

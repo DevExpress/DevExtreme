@@ -109,3 +109,5 @@ export const employees = [{
   Notes: 'If you are like the rest of us at DevAV, then you\'ve probably reached out for help from Taylor. He does a great job as a member of our IT department.',
   Address: '7776 Torreyson Dr',
 }];
+
+export const titleLabel = { 'aria-label': 'Title' };

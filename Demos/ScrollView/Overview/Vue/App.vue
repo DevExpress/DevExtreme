@@ -24,6 +24,7 @@
           <DxSelectBox
             id="show-scrollbar-mode"
             :items="showScrollbarModes"
+            :input-attr="{ 'aria-label': 'Show Scrollbar Mode' }"
             v-model:value="showScrollbar"
             value-expr="value"
             display-expr="text"

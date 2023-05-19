@@ -19,6 +19,7 @@
       #selectbox
       class="selectbox"
       [items]="colorizationOptions"
+      [inputAttr]="{ 'aria-label': 'Colorization Option' }"
       [width]="200"
       [(value)]="options"
       displayExpr="name"

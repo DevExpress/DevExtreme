@@ -6,7 +6,7 @@ import CheckBox from 'devextreme-react/check-box';
 
 import ArrayStore from 'devextreme/data/array_store';
 
-import { tasks } from './data.js';
+import { tasks, selectAllModeLabel, selectionModeLabel } from './data.js';
 
 const dataSource = new ArrayStore({
   key: 'id',
@@ -66,6 +66,7 @@ export default function App() {
             &nbsp;
           <SelectBox
             items={selectionModes}
+            inputAttr={selectionModeLabel}
             value={selectionMode}
             onValueChange={onSelectionModeChange}>
           </SelectBox>
@@ -76,6 +77,7 @@ export default function App() {
           <SelectBox
             disabled={selectionMode !== 'all'}
             items={selectAllModes}
+            inputAttr={selectAllModeLabel}
             value={selectAllMode}
             onValueChange={onSelectAllModeChange}>
           </SelectBox>

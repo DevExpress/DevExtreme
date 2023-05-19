@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'devextreme-react/chart';
 
-import { dataSource } from './data.js';
+import { dataSource, seriesTypeLabel } from './data.js';
 
 const types = ['splinearea', 'stackedsplinearea', 'fullstackedsplinearea'];
 
@@ -56,6 +56,7 @@ class App extends React.Component {
             <span>Series Type </span>
             <SelectBox
               dataSource={types}
+              inputAttr={seriesTypeLabel}
               value={this.state.type}
               onValueChanged={this.handleChange}
             />

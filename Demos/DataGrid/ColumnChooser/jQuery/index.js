@@ -52,6 +52,7 @@ $(() => {
   $('#columnChooserMode').dxSelectBox({
     items: columnChooserModes,
     value: columnChooserModes[1].key,
+    inputAttr: { 'aria-label': 'Column Chooser Mode' },
     valueExpr: 'key',
     displayExpr: 'name',
     onValueChanged(data) {

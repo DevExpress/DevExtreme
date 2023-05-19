@@ -35,7 +35,11 @@
     <div class="caption">Options</div>
     <div class="option">
       <span>Series Type</span>
-      <dx-select-box [dataSource]="types" [(value)]="seriesSettings.type">
+      <dx-select-box
+        [dataSource]="types"
+        [(value)]="seriesSettings.type"
+        [inputAttr]="{ 'aria-label': 'Series Type' }"
+      >
       </dx-select-box>
     </div>
   </div>

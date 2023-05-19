@@ -68,3 +68,6 @@ export const employees = [{
     }],
   }],
 }];
+
+export const selectionModeLabel = { 'aria-label': 'Selection Mode' };
+export const showCheckboxesModeLabel = { 'aria-label': 'Show Checkboxes Mode' };

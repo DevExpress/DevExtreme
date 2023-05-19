@@ -30,6 +30,7 @@
       <dx-select-box
         id="select-all-mode"
         [dataSource]="['allPages', 'page']"
+        [inputAttr]="{ 'aria-label': 'Select All Mode' }"
         [(value)]="allMode"
         [disabled]="checkBoxesMode === 'none'"
       ></dx-select-box>
@@ -38,6 +39,7 @@
       <span>Show Checkboxes Mode</span>
       <dx-select-box
         id="show-checkboxes-mode"
+        [inputAttr]="{ 'aria-label': 'Show Checkboxes Mode' }"
         [dataSource]="['none', 'onClick', 'onLongTap', 'always']"
         [(value)]="checkBoxesMode"
       ></dx-select-box>

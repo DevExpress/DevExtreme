@@ -36,6 +36,7 @@ $(() => {
   }).dxGantt('instance');
 
   $('#sortingMode').dxSelectBox({
+    inputAttr: { 'aria-label': 'Sorting Mode' },
     items: [
       'single',
       'multiple',

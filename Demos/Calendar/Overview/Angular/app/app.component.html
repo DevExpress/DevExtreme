@@ -70,6 +70,7 @@
       <span>First day of week</span>
       <dx-select-box
         [dataSource]="weekDays"
+        [inputAttr]="{ 'aria-label': 'First Day of Week' }"
         [(value)]="calendar.firstDayOfWeek"
         valueExpr="id"
         displayExpr="text"
@@ -79,12 +80,17 @@
       <span>Week number rule</span>
       <dx-select-box
         [dataSource]="weekNumberRules"
+        [inputAttr]="{ 'aria-label': 'Week Number Rule' }"
         [(value)]="calendar.weekNumberRule"
       ></dx-select-box>
     </div>
     <div class="option">
       <span>Zoom level</span>
-      <dx-select-box [dataSource]="zoomLevels" [(value)]="calendar.zoomLevel">
+      <dx-select-box
+        [dataSource]="zoomLevels"
+        [(value)]="calendar.zoomLevel"
+        [inputAttr]="{ 'aria-label': 'Zoom Level' }"
+      >
       </dx-select-box>
     </div>
     <div class="option">

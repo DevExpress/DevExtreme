@@ -2,6 +2,7 @@ $(() => {
   $('#selectStatus').dxSelectBox({
     dataSource: statuses,
     value: statuses[0],
+    inputAttr: { 'aria-label': 'Status' },
     onValueChanged(data) {
       if (data.value === 'All') { dataGrid.clearFilter(); } else { dataGrid.filter(['Task_Status', '=', data.value]); }
     },

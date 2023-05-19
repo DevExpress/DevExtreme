@@ -49,3 +49,5 @@ export const dataSource = [{
   day: 7,
   night: 3,
 }];
+
+export const seriesTypeLabel = { 'aria-label': 'Series Type' };

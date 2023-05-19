@@ -51,6 +51,7 @@
           <span class="option-caption">Enter Key Action</span>
           <DxSelectBox
             :items="enterKeyActions"
+            :input-attr="{ 'aria-label': 'key Action' }"
             v-model:value="enterKeyAction"
             class="select"
           />
@@ -59,6 +60,7 @@
           <span class="option-caption">Enter Key Direction</span>
           <DxSelectBox
             :items="enterKeyDirections"
+            :input-attr="{ 'aria-label': 'Key Direction' }"
             v-model:value="enterKeyDirection"
             class="select"
           />

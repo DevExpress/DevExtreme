@@ -46,6 +46,7 @@
           </DxDateBox>
           <DxSelectBox
             :items="states"
+            :input-attr="{ 'aria-label': 'State' }"
             :styling-mode="stylingMode"
             :label-mode="labelMode"
             width="100%"
@@ -132,6 +133,7 @@
         <label>Styling Mode</label>
         <DxSelectBox
           :styling-mode="stylingMode"
+          :input-attr="{ 'aria-label': 'Styling Mode' }"
           :items="[ 'outlined', 'filled', 'underlined' ]"
           v-model:value="stylingMode"
         />
@@ -140,6 +142,7 @@
         <label>Label Mode</label>
         <DxSelectBox
           :styling-mode="stylingMode"
+          :input-attr="{ 'aria-label': 'Label Mode' }"
           :items="[ 'static', 'floating', 'hidden' ]"
           v-model:value="labelMode"
         />
