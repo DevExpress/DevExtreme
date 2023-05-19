@@ -325,28 +325,27 @@ const transpileTesting = async(Builder) => {
     const testsList = getFileList(path.join(root, 'testing/tests'));
     const listFiles = [].concat(contentList, helpersList, testsList);
 
-    let transpileBuilderPromise = Promise.resolve();
+    // eslint-disable-next-line no-restricted-syntax
+    for(const filePath of listFiles) {
+        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
+        const sourceCode = fs.readFileSync(filePath).toString();
 
-    await Promise.all(
-        listFiles.map((filePath) => {
-            const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
-            const sourceCode = fs.readFileSync(filePath).toString();
+        if(/System(JS)?\./.test(sourceCode)) {
+            fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
+            continue;
+        }
 
-            if(/System(JS)?\./.test(sourceCode) || /define\(/.test(sourceCode)) {
-                fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
-                return;
-            }
-
-            if(/require\(/.test(sourceCode) || /(module\.)?exports(\..+)?\s*=\s*/.test(sourceCode) || filePath.endsWith('.json')) {
-                transpileBuilderPromise = transpileBuilderPromise
-                    .then(() => transpileWithBuilder(builder, filePath, destPath));
-
-                return transpileBuilderPromise;
-            }
-
-            return transpileWithBabel(sourceCode, destPath);
-        })
-    );
+        if(
+            filePath.includes('ui.widgets/fileManagerParts') ||
+            filePath.endsWith('.json') ||
+            /require\(/.test(sourceCode) ||
+            /(module\.)?exports(\..+)?\s*=\s*/.test(sourceCode)
+        ) {
+            await transpileWithBuilder(builder, filePath, destPath);
+        } else {
+            await transpileWithBabel(sourceCode, destPath);
+        }
+    }
 };
 
 const patchBuilder = (fileName, searchValue, replaceValue) => {
