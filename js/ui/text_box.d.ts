@@ -67,6 +67,7 @@ export type ValueChangedEvent = NativeEventInfo<dxTextBox, KeyboardEvent | Mouse
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TComponent> {
     /**

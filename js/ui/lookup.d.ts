@@ -88,6 +88,7 @@ export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseE
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**

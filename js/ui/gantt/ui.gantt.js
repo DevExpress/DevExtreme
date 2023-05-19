@@ -317,6 +317,7 @@ class Gantt extends Widget {
                 const keyGetter = compileGetter(this.option(`${optionName}.keyExpr`));
                 const insertedId = keyGetter(response);
                 callback(insertedId);
+                this._executeFuncSetters(optionName, record, insertedId);
                 this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseInsertedAction(optionName, data, insertedId); }, true, isTaskInsert);
                 this._ganttTreeList.saveExpandedKeys();
                 dataOption._reloadDataSource().done(data => {
@@ -337,6 +338,7 @@ class Gantt extends Widget {
                 this._customFieldsManager.addCustomFieldsDataFromCache(key, data);
             }
             dataOption.update(key, data, () => {
+                this._executeFuncSetters(optionName, values, key);
                 this._ganttTreeList.saveExpandedKeys();
                 this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseUpdatedAction(optionName, data, key); }, true, isTaskUpdated);
                 dataOption._reloadDataSource();
@@ -371,6 +373,18 @@ class Gantt extends Widget {
     }
     _onGanttViewCoreUpdated() {
         this._dataProcessingHelper.onGanttViewReady();
+    }
+    _executeFuncSetters(optionName, coreData, key) {
+        const funcSetters = GanttHelper.compileFuncSettersByOption(this.option(optionName));
+        const keysToUpdate = Object.keys(funcSetters).filter(k => isDefined(coreData[k]));
+
+        if(keysToUpdate.length > 0) {
+            const dataObject = this._getDataSourceItem(optionName, key);
+            keysToUpdate.forEach(k => {
+                const setter = funcSetters[k];
+                setter(dataObject, coreData[k]);
+            });
+        }
     }
 
     _sortAndFilter() {
@@ -465,12 +479,19 @@ class Gantt extends Widget {
     }
 
     _getTaskKeyGetter() {
-        return compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        return this._getDataSourceItemKeyGetter(GANTT_TASKS);
     }
     _findTaskByKey(key) {
-        const tasks = this._tasksOption?._getItems();
-        const keyGetter = this._getTaskKeyGetter();
-        return tasks.find(t => keyGetter(t) === key);
+        return this._getDataSourceItem(GANTT_TASKS, key);
+    }
+    _getDataSourceItem(dataOptionName, key) {
+        const dataOption = this[`_${dataOptionName}Option`];
+        const keyGetter = this._getDataSourceItemKeyGetter(dataOptionName);
+        const items = dataOption?._getItems();
+        return items.find(t => keyGetter(t) === key);
+    }
+    _getDataSourceItemKeyGetter(dataOptionName) {
+        return compileGetter(this.option(`${dataOptionName}.keyExpr`));
     }
     _setGanttViewOption(optionName, value) {
         this._ganttView && this._ganttView.option(optionName, value);

@@ -56,7 +56,11 @@ export interface TooltipInfo {
     target?: basePointObject | dxChartAnnotationConfig | any;
 }
 
-/** @namespace DevExpress.viz */
+/**
+ * @namespace DevExpress.viz
+ * @docid
+ * @type object
+ */
 export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
@@ -300,6 +304,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget, DataHelperMixin
  * @namespace DevExpress.viz
+ * @options BaseChartOptions
  */
 export class BaseChart<TProperties> extends BaseWidget<TProperties> {
     /**

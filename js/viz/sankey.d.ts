@@ -90,6 +90,7 @@ export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**

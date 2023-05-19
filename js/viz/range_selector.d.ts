@@ -95,6 +95,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | To
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**

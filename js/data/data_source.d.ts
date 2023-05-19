@@ -22,6 +22,7 @@ export type Options<
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
+ * @docid
  */
 export interface DataSourceOptions<
     TStoreItem = any,
@@ -159,6 +160,7 @@ export interface DataSourceOptions<
 /**
  * @docid
  * @public
+ * @options DataSourceOptions
  */
 export default class DataSource<
     TItem = any,

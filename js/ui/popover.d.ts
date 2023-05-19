@@ -62,6 +62,7 @@ export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
     /**

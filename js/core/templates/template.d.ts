@@ -2,6 +2,10 @@ import {
     UserDefinedElement,
 } from '../element';
 
+/**
+ * @docid
+ * @type object
+ */
 export interface dxTemplateOptions {
     /**
      * @docid
@@ -14,6 +18,7 @@ export interface dxTemplateOptions {
  * @section uiWidgetMarkupComponents
  * @type object
  * @public
+ * @options dxTemplateOptions
  */
 export type dxTemplate = Template;
 

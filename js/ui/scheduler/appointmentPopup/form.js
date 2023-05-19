@@ -272,11 +272,11 @@ export class AppointmentForm {
             },
             {
                 itemType: 'group',
-                colCountByScreen: {
-                    lg: 3,
-                    xs: 3
-                },
                 colSpan: 2,
+                colCountByScreen: {
+                    lg: 2,
+                    xs: 2
+                },
                 items: [{
                     dataField: dataExprs.allDayExpr,
                     cssClass: 'dx-appointment-form-switch',

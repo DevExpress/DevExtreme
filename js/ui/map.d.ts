@@ -81,6 +81,7 @@ export interface MapLocation {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**

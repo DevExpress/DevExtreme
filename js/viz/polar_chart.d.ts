@@ -207,6 +207,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**

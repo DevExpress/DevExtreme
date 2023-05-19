@@ -64,6 +64,7 @@ export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> =
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxActionSheetOptions<
     TItem extends ItemLike<TKey> = any,

@@ -6,7 +6,11 @@ import {
     SearchMode,
 } from '../../common';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface SearchBoxMixinOptions {
     /**
      * @docid
@@ -50,6 +54,7 @@ export interface SearchBoxMixinOptions {
 /**
  * @docid
  * @hidden
+ * @options SearchBoxMixinOptions
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class SearchBoxMixin {

@@ -18,7 +18,11 @@ export interface ValueChangedInfo {
     readonly value?: any;
 }
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid

@@ -64,6 +64,7 @@ export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | Mous
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
