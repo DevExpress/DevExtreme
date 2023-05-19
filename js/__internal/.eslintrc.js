@@ -58,6 +58,7 @@ module.exports = {
                 'prefer-rest-params': 'warn',
                 'max-len': 'warn',
                 'consistent-return': 'warn',
+                'array-callback-return': 'warn',
                 '@typescript-eslint/explicit-function-return-type': 'warn',
                 '@typescript-eslint/init-declarations': 'warn',
                 '@typescript-eslint/no-unsafe-return': 'warn',
