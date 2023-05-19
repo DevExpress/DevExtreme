@@ -266,7 +266,7 @@ export class ColumnsController extends modules.Controller {
         this.reinit();
         break;
       default:
-        this.callBase(args);
+        super.optionChanged(args);
     }
   }
 
