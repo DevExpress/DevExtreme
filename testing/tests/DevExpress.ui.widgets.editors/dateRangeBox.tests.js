@@ -2163,6 +2163,10 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         {
             optionName: 'tabIndex',
             optionValue: 1,
+        },
+        {
+            optionName: 'disabled',
+            optionValue: false,
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
