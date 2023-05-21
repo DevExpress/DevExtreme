@@ -40,6 +40,7 @@ export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**

@@ -99,6 +99,7 @@ export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**

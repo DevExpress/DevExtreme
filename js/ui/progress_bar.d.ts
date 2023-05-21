@@ -34,6 +34,7 @@ export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInf
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**

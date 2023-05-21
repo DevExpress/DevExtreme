@@ -56,10 +56,13 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Seleccioneu Data",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Seleccioneu la data i l'hora",
         "dxDateBox-validation-datetime": "El valor ha de ser una data o hora",
-        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
-        "dxDateBox-invalidEndDateMessage": "End value must be a date",
-        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
-        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
+
+        "dxDateRangeBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateRangeBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateRangeBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateRangeBox-endDateOutOfRangeMessage": "End date is out of range",
+        "dxDateRangeBox-startDateLabel": "Data d'inici",
+        "dxDateRangeBox-endDateLabel": "Data de finalització",
 
         "dxFileUploader-selectFile": "Seleccioneu un fitxer",
         "dxFileUploader-dropFile": "o deixar un fitxer aquí",

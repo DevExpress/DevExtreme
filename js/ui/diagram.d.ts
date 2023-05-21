@@ -101,6 +101,7 @@ export type CustomShapeToolboxTemplateData = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**

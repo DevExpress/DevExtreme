@@ -41,6 +41,7 @@ export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInf
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }

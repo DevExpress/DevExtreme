@@ -471,6 +471,8 @@ type OverriddenKeys = 'autoExpandAll' | 'columns' | 'customizeColumns' | 'dataSt
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
+ * @type object
  */
 export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
     /**
@@ -932,6 +934,7 @@ export interface Selection extends SelectionBase {
  * @inherits GridBase
  * @namespace DevExpress.ui
  * @public
+ * @options dxTreeListOptions
  */
 export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**

@@ -57,6 +57,7 @@ export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedI
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**

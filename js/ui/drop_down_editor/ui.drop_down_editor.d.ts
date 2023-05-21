@@ -42,7 +42,11 @@ export interface DropDownButtonTemplateDataModel {
     readonly icon?: string;
 }
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptions<TComponent>, 'validationMessagePosition'> {
     /**
      * @docid
@@ -143,6 +147,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
  * @inherits dxTextBox
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxDropDownEditorOptions
  */
 export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
     /**

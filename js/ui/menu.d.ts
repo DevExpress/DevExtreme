@@ -82,6 +82,7 @@ export type SubmenuShownEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxMenuOptions<
     TKey = any,
