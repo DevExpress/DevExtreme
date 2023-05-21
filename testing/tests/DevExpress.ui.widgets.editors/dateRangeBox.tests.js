@@ -2148,6 +2148,18 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         {
             optionName: 'openOnFieldClick',
             optionValue: false,
+        },
+        {
+            optionName: 'activeStateEnabled',
+            optionValue: false,
+        },
+        {
+            optionName: 'focusStateEnabled',
+            optionValue: false,
+        },
+        {
+            optionName: 'tabIndex',
+            optionValue: 1,
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
