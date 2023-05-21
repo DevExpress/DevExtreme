@@ -82,6 +82,11 @@ class MultiselectDateBox extends DateBox {
         }
     }
 
+    _invalidate() {
+        super._invalidate();
+        this._refreshStrategy();
+    }
+
     _updateInternalValidationState(isValid, validationMessage) {
         this.option({
             isValid,
