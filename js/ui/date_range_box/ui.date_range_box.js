@@ -423,12 +423,6 @@ class DateRangeBox extends Editor {
         this.option(optionName, [...otherErrors, ...newPartialErrors]);
     }
 
-    _onShowingHandler() {
-        const strategy = this.getStartDateBox()._strategy;
-        strategy._widget._restoreViewsMinMaxOptions();
-        strategy._dateSelectedCounter = 0;
-    }
-
     _getDateBoxConfig() {
         const options = this.option();
 
@@ -495,19 +489,9 @@ class DateRangeBox extends Editor {
             dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
             disabledDates: options.disabledDates,
-            dropDownOptions: {
-                showTitle: false,
-                title: '',
-                ...options.dropDownOptions,
-                onShowing: (e) => {
-                    const userOnShowing = options.dropDownOptions?.onShowing;
-                    if(userOnShowing) {
-                        userOnShowing(e);
-                    }
-
-                    this._onShowingHandler();
-                }
-            },
+            'dropDownOptions.showTitle': false,
+            'dropDownOptions.title': '',
+            dropDownOptions: options.dropDownOptions,
             invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
                 if(!this._shouldSuppressValueSync) {
