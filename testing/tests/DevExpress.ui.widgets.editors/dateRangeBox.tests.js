@@ -2153,10 +2153,6 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             optionValue: false,
         },
         {
-            optionName: 'activeStateEnabled',
-            optionValue: false,
-        },
-        {
             optionName: 'focusStateEnabled',
             optionValue: false,
         },
