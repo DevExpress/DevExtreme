@@ -1,7 +1,7 @@
 import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import { extend } from '../../../core/utils/extend';
-import { isSameDateArrays } from '../ui.date_range.utils';
+import { isSameDateArrays, getDeserializedDate } from '../ui.date_range.utils';
 import { isFunction } from '../../../core/utils/type';
 
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
@@ -26,6 +26,15 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     _getPopup() {
         return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
+    }
+
+    // TODO: think again about prevent render calendar inside overlay-content element
+    renderPopupContent() {
+        if(this.dateBox.NAME === '_EndDateBox') {
+            return;
+        }
+
+        super.renderPopupContent();
     }
 
     supportedKeys() {
@@ -108,6 +117,21 @@ class RangeCalendarStrategy extends CalendarStrategy {
         }
 
         if(isInstantlyMode) {
+            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
+                if(this._widget.option('_currentSelection') === 'startDate') {
+                    this._dateSelectedCounter = 0;
+                } else {
+                    this._dateSelectedCounter = 1;
+
+                    if(!value[0]) {
+                        this._dateSelectedCounter = -1;
+                    } else if(getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+                        this.dateRangeBox.updateValue([value[0], null], event);
+                        return;
+                    }
+                }
+            }
+
             this.dateRangeBox.updateValue(value, event);
             this._dateSelectedCounter += 1;
 

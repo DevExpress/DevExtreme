@@ -317,6 +317,7 @@ QUnit.module('Strategy', moduleConfig, () => {
             QUnit.test(`Poup should ${applyValueMode === 'instantly' ? '' : 'not'} be closed after selecting ${firstSelect} + ${secondSelect} (applyValueMode = ${applyValueMode})`, function(assert) {
                 this.reinit({
                     applyValueMode,
+                    selectionBehavior: 'withDisable',
                     value: [null, null],
                     opened: true,
                 });
@@ -422,7 +423,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
         });
 
-        QUnit.test(`StartDate value should be choosed first after opening by click on startDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+        QUnit.test(`StartDate value should be chosen first after opening by click on startDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
             this.reinit({
                 applyValueMode: 'instantly',
                 value: initialValue,
@@ -455,9 +456,10 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
         });
 
-        QUnit.test(`EndDate value should be choosed first after opening by click on endDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+        QUnit.test(`EndDate value should be chosen first after opening by click on endDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
             this.reinit({
                 applyValueMode: 'instantly',
+                selectionBehavior: 'withDisabled',
                 value: initialValue,
                 openOnFieldClick: true,
                 multiView: true,
