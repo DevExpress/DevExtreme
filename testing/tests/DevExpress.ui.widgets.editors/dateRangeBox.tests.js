@@ -2077,6 +2077,9 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             optionName: 'applyButtonText',
             optionValue: 'kk'
         }, {
+            optionName: 'applyButtonText',
+            optionValue: 'apply'
+        }, {
             optionName: 'cancelButtonText',
             optionValue: 'abort'
         }, {
