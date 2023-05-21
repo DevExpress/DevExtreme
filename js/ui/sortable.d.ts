@@ -282,6 +282,7 @@ export type Properties = dxSortableOptions;
 /** @deprecated use Properties instead */
 export type Options = dxSortableOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -354,3 +355,4 @@ onRemove?: ((e: RemoveEvent) => void);
  */
 onReorder?: ((e: ReorderEvent) => void);
 };
+///#ENDDEBUG

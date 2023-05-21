@@ -1601,6 +1601,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Omit<dxGanttColumnBlank<
     type: any;
  }
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -1799,3 +1800,4 @@ onTaskUpdated?: ((e: TaskUpdatedEvent) => void);
  */
 onTaskUpdating?: ((e: TaskUpdatingEvent) => void);
 };
+///#ENDDEBUG
