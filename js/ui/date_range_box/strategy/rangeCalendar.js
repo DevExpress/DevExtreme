@@ -22,7 +22,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
     popupShowingHandler() {
         this._widget._restoreViewsMinMaxOptions();
         this._dateSelectedCounter = 0;
-        /// / this._widget.option('_currentSelection', 'startDate');
     }
 
     _getPopup() {
