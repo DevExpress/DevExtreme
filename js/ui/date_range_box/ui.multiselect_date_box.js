@@ -24,6 +24,14 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
+    _clearValueHandler(e) {
+        this.option('text', '');
+        e.stopPropagation();
+
+        this._saveValueChangeEvent(e);
+        this._clearValue();
+    }
+
     _renderOpenedState() {
         const opened = this._strategy.dateRangeBox.getStartDateBox()?.option('opened') ?? this.option('opened');
 
@@ -132,6 +140,10 @@ class MultiselectDateBox extends DateBox {
                 super._optionChanged(args);
                 break;
         }
+    }
+
+    close() {
+        this._strategy.getDateRangeBox().getStartDateBox().option('opened', false);
     }
 }
 

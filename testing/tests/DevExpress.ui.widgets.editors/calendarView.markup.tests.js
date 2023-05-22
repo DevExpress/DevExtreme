@@ -11,6 +11,8 @@ const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
+const CALENDAR_START_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-start-day-of-month';
+const CALENDAR_END_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-end-day-of-month';
 
 const getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -145,6 +147,56 @@ QUnit.module('MonthView markup', {
 
         const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
         assert.equal(todayCell.length, 1);
+    });
+
+    QUnit.test('start and end day cells of the month should be decorated with a css class if selectionMode is range', function(assert) {
+        this.reinit({
+            date: new Date(2021, 9, 17),
+            selectionMode: 'range',
+            value: [null, null],
+            range: [],
+            hoveredRange: [],
+        });
+
+        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+
+        assert.strictEqual($startDateCell.length, 1);
+        assert.strictEqual($startDateCell.text(), '1', 'the first day of the month');
+
+        assert.strictEqual($endDateCell.length, 1);
+        assert.strictEqual($endDateCell.text(), '31', 'the last day of the month');
+    });
+
+    QUnit.test('start and end day cells of the month should not be decorated with a css class after change selectionMode to single in runtime', function(assert) {
+        this.reinit({
+            date: new Date(2021, 9, 17),
+            selectionMode: 'range',
+            value: [null, null],
+            range: [],
+            hoveredRange: [],
+        });
+
+        this.view.option('selectionMode', 'single');
+
+        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+
+        assert.strictEqual($startDateCell.length, 0);
+        assert.strictEqual($endDateCell.length, 0);
+    });
+
+    QUnit.test('start and end day cells of the month should not be decorated with a css class if selectionMode is single', function(assert) {
+        this.reinit({
+            date: new Date(2021, 9, 17),
+            selectionMode: 'single',
+        });
+
+        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+
+        assert.strictEqual($startDateCell.length, 0);
+        assert.strictEqual($endDateCell.length, 0);
     });
 
     QUnit.test('correct date must be decorated with a css class when _todayDate is specified', function(assert) {

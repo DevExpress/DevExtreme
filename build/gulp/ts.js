@@ -10,6 +10,7 @@ const replace = require('gulp-replace');
 const ts = require('gulp-typescript');
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
+const compressionPipes = require('./compression-pipes.js');
 const MODULES = require('./modules_metadata.json');
 const { packageDir } = require('./utils');
 
@@ -123,7 +124,8 @@ gulp.task('ts-copy-modules', function() {
         .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
         .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
         .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
-
+        
+        .pipe(compressionPipes.removeDebug())
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(packagePath));
 });

@@ -912,6 +912,7 @@ export type Properties = dxPieChartOptions;
 /** @deprecated use Properties instead */
 export type Options = dxPieChartOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -1012,3 +1013,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
+///#ENDDEBUG

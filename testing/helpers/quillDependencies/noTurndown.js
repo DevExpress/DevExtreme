@@ -1,1 +1,1 @@
-window.TurndownService = module.exports = undefined;
+window.TurndownService = module.exports = null;

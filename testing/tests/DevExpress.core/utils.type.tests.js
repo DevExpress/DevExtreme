@@ -107,6 +107,7 @@ QUnit.test('isPlainObject', function(assert) {
 
     assert.strictEqual(typeUtils.isPlainObject({}), true, 'object is plain');
     assert.strictEqual(typeUtils.isPlainObject(new Object({})), true, 'object is plain');
+    assert.strictEqual(typeUtils.isPlainObject(Object.create(null)), true, 'object without prototype is plain object');
 
     assert.strictEqual(typeUtils.isPlainObject(new testFunction()), false, 'function is not plain object');
     assert.strictEqual(typeUtils.isPlainObject([]), false, 'array is not plain object');

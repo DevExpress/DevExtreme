@@ -102,6 +102,7 @@ export type Properties = dxCheckBoxOptions;
 /** @deprecated use Properties instead */
 export type Options = dxCheckBoxOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -144,3 +145,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

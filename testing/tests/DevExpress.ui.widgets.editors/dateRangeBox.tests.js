@@ -737,7 +737,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
     });
 
-    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is false', function(assert) {
+    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is true', function(assert) {
         this.reinit({
             disabled: true,
         });
@@ -1261,7 +1261,7 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(this.onValueChangedHandler.callCount, 1);
         });
 
-        QUnit.test('should be called once after click on reset method call', function(assert) {
+        QUnit.test('should be called once after reset method call', function(assert) {
             this.reinit({
                 showClearButton: true,
                 value: ['2021/09/17', '2022/10/14'],
@@ -1575,6 +1575,18 @@ QUnit.module('Events', moduleConfig, () => {
 
                 assert.strictEqual(this.onEnterKeyHandler.callCount, 0, 'onEnterKey event is not raised');
             });
+        });
+
+        QUnit.test('Click on clear button should raise input event', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: [new Date(2021, 9, 17), new Date(2021, 9, 19)],
+                onInput: this.onInputHandler
+            });
+
+            $(this.instance.getButton('clear')).trigger('dxclick');
+
+            this.checkEventHandlerArgs(this.instance.startDateField(), 'onInput', 'input');
         });
     });
 

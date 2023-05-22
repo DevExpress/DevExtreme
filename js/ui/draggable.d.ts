@@ -220,6 +220,7 @@ export type Properties = dxDraggableOptions;
 /** @deprecated use Properties instead */
 export type Options = dxDraggableOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -268,3 +269,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG
