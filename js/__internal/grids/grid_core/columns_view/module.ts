@@ -498,7 +498,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return renderingTemplate;
   }
 
-  renderTemplate(container, template, options, allowRenderToDetachedContainer, change) {
+  renderTemplate(container, template, options, allowRenderToDetachedContainer, change?) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
     const isDataRow = options.rowType === 'data';
@@ -840,7 +840,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return this._tableElement || $();
   }
 
-  getTableElement() {
+  getTableElement(isFixedTableRendering?) {
     return this._tableElement;
   }
 
@@ -1185,7 +1185,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   getColumnElements() {}
 
-  getColumns(rowIndex, $tableElement) {
+  getColumns(rowIndex?, $tableElement?) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 

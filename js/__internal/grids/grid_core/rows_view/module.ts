@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
 import { getWindow, hasWindow } from '@js/core/utils/window';
@@ -16,6 +19,7 @@ import browser from '@js/core/utils/browser';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import gridCoreUtils from '../module_utils';
 import { ColumnsView } from '../columns_view/module';
+import { EditorFactory } from '../editor_factory/module_types';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -62,7 +66,31 @@ const getScrollableBottomPadding = function (that) {
   return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
 };
 
-const RowsView = ColumnsView.inherit({
+class RowsView extends ColumnsView {
+  _loadPanel: any;
+
+  _editorFactoryController!: EditorFactory;
+
+  _hasHeight: boolean | undefined;
+
+  _scrollTop: any;
+
+  _scrollRight: any;
+
+  _scrollable: any;
+
+  _scrollableContainer: any;
+
+  _contentChanges: any;
+
+  _rowHeight: any;
+
+  resizeCompleted: any;
+
+  _lastColumnWidths: any;
+
+  _hideLoadingTimeoutID: number | undefined;
+
   _getDefaultTemplate(column) {
     switch (column.command) {
       case 'empty':
@@ -72,7 +100,7 @@ const RowsView = ColumnsView.inherit({
       default:
         return defaultCellTemplate;
     }
-  },
+  }
 
   _getDefaultGroupTemplate(column) {
     const that = this;
@@ -102,16 +130,17 @@ const RowsView = ColumnsView.inherit({
         container.innerHTML = text;
       }
     };
-  },
+  }
 
-  _update() { },
+  _update(change?) { }
 
   _updateCell($cell, options) {
     if (isGroupRow(options)) {
       $cell.addClass(GROUP_CELL_CLASS);
     }
     this.callBase.apply(this, arguments);
-  },
+  }
+
   _getCellTemplate(options) {
     const that = this;
     const { column } = options;
@@ -126,9 +155,9 @@ const RowsView = ColumnsView.inherit({
     }
 
     return template;
-  },
+  }
 
-  _createRow(row) {
+  _createRow(row?, tag?) {
     const $row = this.callBase.apply(this, arguments);
 
     if (row) {
@@ -153,7 +182,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     return $row;
-  },
+  }
 
   _rowPrepared($row, rowOptions, row) {
     if (rowOptions.rowType === 'data') {
@@ -169,7 +198,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     this.callBase.apply(this, arguments);
-  },
+  }
 
   _setAriaRowIndex(row, $row) {
     const { component } = this;
@@ -182,13 +211,13 @@ const RowsView = ColumnsView.inherit({
       rowIndex += this._dataController.getRowIndexOffset();
     }
     this.setAria('rowindex', rowIndex, $row);
-  },
+  }
 
   _afterRowPrepared(e) {
     const arg = e.args[0];
     const dataController = this._dataController;
     const row = dataController.getVisibleRows()[arg.rowIndex];
-    const watch = this.option('integrationOptions.watchMethod');
+    const watch: any = this.option('integrationOptions.watchMethod');
 
     if (!arg.data || arg.rowType !== 'data' || arg.isNewRow || !this.option('twoWayBindingEnabled') || !watch || !row) return;
 
@@ -204,9 +233,9 @@ const RowsView = ColumnsView.inherit({
     );
 
     eventsEngine.on(arg.rowElement, removeEvent, dispose);
-  },
+  }
 
-  _renderScrollable(force) {
+  _renderScrollable(force?) {
     const that = this;
     const $element = that.element();
 
@@ -232,7 +261,7 @@ const RowsView = ColumnsView.inherit({
         that._renderScrollableCore($element);
       }
     }
-  },
+  }
 
   _handleScroll(e) {
     const that = this;
@@ -254,7 +283,7 @@ const RowsView = ColumnsView.inherit({
       }
     }
     that.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, that.name);
-  },
+  }
 
   _renderScrollableCore($element) {
     const that = this;
@@ -265,17 +294,19 @@ const RowsView = ColumnsView.inherit({
 
     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
     that._scrollableContainer = that._scrollable && $(that._scrollable.container());
-  },
+  }
 
-  _renderLoadPanel: gridCoreUtils.renderLoadPanel,
+  _renderLoadPanel(...args: any[]) {
+    return gridCoreUtils.renderLoadPanel.apply(this, arguments as any);
+  }
 
-  _renderContent(contentElement, tableElement) {
+  _renderContent(contentElement, tableElement, isFixedTableRendering?) {
     contentElement.empty().append(tableElement);
 
     return this._findContentElement();
-  },
+  }
 
-  _updateContent(newTableElement, change, isFixedTableRendering) {
+  _updateContent(newTableElement, change, isFixedTableRendering?) {
     this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -355,9 +386,9 @@ const RowsView = ColumnsView.inherit({
     }).fail(() => {
       this._contentChanges = [];
     });
-  },
+  }
 
-  _createEmptyRow(className, isFixed, height) {
+  _createEmptyRow(className, isFixed?, height?) {
     const that = this;
     let $cell;
     const $row = that._createRow();
@@ -379,9 +410,13 @@ const RowsView = ColumnsView.inherit({
     that.setAria('role', 'presentation', $row);
 
     return $row;
-  },
+  }
 
-  _appendEmptyRow($table, $emptyRow, location) {
+  getFixedColumns() {
+    throw new Error('Method not implemented.');
+  }
+
+  _appendEmptyRow($table, $emptyRow, location?) {
     const $tBodies = this._getBodies($table);
     const isTableContainer = !$tBodies.length || $emptyRow.is('tbody');
     const $container = isTableContainer ? $table : $tBodies;
@@ -395,7 +430,7 @@ const RowsView = ColumnsView.inherit({
     } else {
       $container.last().append($emptyRow);
     }
-  },
+  }
 
   _renderFreeSpaceRow($tableElement, change) {
     let $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
@@ -403,7 +438,7 @@ const RowsView = ColumnsView.inherit({
     $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement, change?.changeType === 'refresh');
 
     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
-  },
+  }
 
   _checkRowKeys(options) {
     const that = this;
@@ -417,11 +452,11 @@ const RowsView = ColumnsView.inherit({
       }
       return undefined;
     });
-  },
+  }
 
   _needUpdateRowHeight(itemsCount) {
     return itemsCount > 0 && !this._rowHeight;
-  },
+  }
 
   _getRowsHeight($tableElement) {
     $tableElement = $tableElement || this._tableElement;
@@ -429,7 +464,7 @@ const RowsView = ColumnsView.inherit({
     const $rowElements = $tableElement.children('tbody').children().not('.dx-virtual-row').not(`.${FREE_SPACE_CLASS}`);
 
     return $rowElements.toArray().reduce((sum, row) => sum + getBoundingRect(row).height, 0);
-  },
+  }
 
   _updateRowHeight() {
     const that = this;
@@ -440,9 +475,9 @@ const RowsView = ColumnsView.inherit({
       const rowsHeight = that._getRowsHeight($tableElement);
       that._rowHeight = rowsHeight / itemsCount;
     }
-  },
+  }
 
-  _findContentElement() {
+  _findContentElement(isFixedTableRendering?) {
     let $content = this.element();
     const scrollable = this.getScrollable();
 
@@ -452,25 +487,25 @@ const RowsView = ColumnsView.inherit({
       }
       return $content.children().first();
     }
-  },
+  }
 
-  _getRowElements(tableElement) {
+  _getRowElements(tableElement?) {
     const $rows = this.callBase(tableElement);
 
     return $rows && $rows.not(`.${FREE_SPACE_CLASS}`);
-  },
+  }
 
   _getFreeSpaceRowElements($table) {
     const tableElements = $table || this.getTableElements();
 
     return tableElements && tableElements.children('tbody').children(`.${FREE_SPACE_CLASS}`);
-  },
+  }
 
   _getNoDataText() {
     return this.option('noDataText');
-  },
+  }
 
-  _rowClick(e) {
+  _rowClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
     this.executeAction('onRowClick', extend({
       evaluate(expr) {
@@ -479,12 +514,12 @@ const RowsView = ColumnsView.inherit({
         return getter(item.data);
       },
     }, e, item));
-  },
+  }
 
-  _rowDblClick(e) {
+  _rowDblClick(e?) {
     const item = this._dataController.items()[e.rowIndex] || {};
     this.executeAction('onRowDblClick', extend({}, e, item));
-  },
+  }
 
   _getColumnsCountBeforeGroups(columns) {
     for (let i = 0; i < columns.length; i++) {
@@ -494,7 +529,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     return 0;
-  },
+  }
 
   _getGroupCellOptions(options) {
     const columnsCountBeforeGroups = this._getColumnsCountBeforeGroups(options.columns);
@@ -504,11 +539,11 @@ const RowsView = ColumnsView.inherit({
       columnIndex,
       colspan: options.columns.length - columnIndex - 1,
     };
-  },
+  }
 
   _needWrapRow() {
     return this.callBase.apply(this, arguments) || !!this.option('dataRowTemplate');
-  },
+  }
 
   _renderCells($row, options) {
     if (options.row.rowType === 'group') {
@@ -516,7 +551,7 @@ const RowsView = ColumnsView.inherit({
     } else if (options.row.values) {
       this.callBase($row, options);
     }
-  },
+  }
 
   _renderGroupedCells($row, options) {
     const { row } = options;
@@ -581,7 +616,7 @@ const RowsView = ColumnsView.inherit({
         change: options.change,
       });
     }
-  },
+  }
 
   _renderRows($table, options) {
     const that = this;
@@ -597,7 +632,7 @@ const RowsView = ColumnsView.inherit({
     if (!that._hasHeight) {
       that.updateFreeSpaceRowHeight($table);
     }
-  },
+  }
 
   _renderDataRowByTemplate($table, options, dataRowTemplate) {
     const { row } = options;
@@ -606,7 +641,7 @@ const RowsView = ColumnsView.inherit({
     $tbody.appendTo($table);
     this.renderTemplate($tbody, dataRowTemplate, rowOptions, true, options.change);
     this._rowPrepared($tbody, rowOptions, options.row);
-  },
+  }
 
   _renderRow($table, options) {
     const { row } = options;
@@ -620,7 +655,7 @@ const RowsView = ColumnsView.inherit({
     } else {
       this.callBase($table, options);
     }
-  },
+  }
 
   _renderTable(options) {
     const that = this;
@@ -642,7 +677,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     return $table;
-  },
+  }
 
   _createTable() {
     const $table = this.callBase.apply(this, arguments);
@@ -652,7 +687,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     return $table;
-  },
+  }
 
   _renderCore(change) {
     const $element = this.element();
@@ -669,11 +704,11 @@ const RowsView = ColumnsView.inherit({
 
     this._lastColumnWidths = null;
     return deferred;
-  },
+  }
 
   _getRows(change) {
     return change && change.items || this._dataController.items();
-  },
+  }
 
   _getCellOptions(options) {
     const that = this;
@@ -699,7 +734,7 @@ const RowsView = ColumnsView.inherit({
     parameters.resized = column.resizedCallbacks;
 
     if (isDefined(column.groupIndex) && !column.command) {
-      const groupingTextsOptions = that.option('grouping.texts');
+      const groupingTextsOptions: any = that.option('grouping.texts');
       const scrollingMode = that.option('scrolling.mode');
       if (scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
         parameters.groupContinuesMessage = data && data.isContinuationOnNextPage && groupingTextsOptions && groupingTextsOptions.groupContinuesMessage;
@@ -708,7 +743,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     return parameters;
-  },
+  }
 
   _setRowsOpacityCore($rows, visibleColumns, columnIndex, value) {
     const columnsController = this._columnsController;
@@ -728,13 +763,15 @@ const RowsView = ColumnsView.inherit({
         }
       }
     });
-  },
+  }
 
   _getDevicePixelRatio() {
     return getWindow().devicePixelRatio;
-  },
+  }
 
-  renderNoDataText: gridCoreUtils.renderNoDataText,
+  renderNoDataText() {
+    return gridCoreUtils.renderNoDataText.apply(this, arguments as any);
+  }
 
   getCellOptions(rowIndex, columnIdentifier) {
     const rowOptions = this._dataController.items()[rowIndex];
@@ -758,7 +795,7 @@ const RowsView = ColumnsView.inherit({
       }
     }
     return cellOptions;
-  },
+  }
 
   getRow(index) {
     if (index >= 0) {
@@ -770,9 +807,9 @@ const RowsView = ColumnsView.inherit({
     }
 
     return undefined;
-  },
+  }
 
-  updateFreeSpaceRowHeight($table) {
+  updateFreeSpaceRowHeight($table?) {
     const dataController = this._dataController;
     const itemCount = dataController.items(true).length;
     const contentElement = this._findContentElement();
@@ -825,7 +862,7 @@ const RowsView = ColumnsView.inherit({
         this._updateLastRowBorder(true);
       }
     }
-  },
+  }
 
   _getHeightCorrection() {
     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
@@ -834,7 +871,7 @@ const RowsView = ColumnsView.inherit({
     // @ts-expect-error
     const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
     return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
-  },
+  }
 
   _columnOptionChanged(e) {
     const { optionNames } = e;
@@ -845,11 +882,11 @@ const RowsView = ColumnsView.inherit({
       this.callBase(e);
       this._fireColumnResizedCallbacks();
     }
-  },
+  }
 
   getScrollable() {
     return this._scrollable;
-  },
+  }
 
   init() {
     const that = this;
@@ -876,9 +913,9 @@ const RowsView = ColumnsView.inherit({
         });
       }
     });
-  },
+  }
 
-  _handleDataChanged(change) {
+  _handleDataChanged(change?) {
     const that = this;
 
     switch (change.changeType) {
@@ -892,17 +929,17 @@ const RowsView = ColumnsView.inherit({
         that._update(change);
         break;
     }
-  },
+  }
 
   publicMethods() {
     return ['isScrollbarVisible', 'getTopVisibleRowData', 'getScrollbarWidth', 'getCellElement', 'getRowElement', 'getScrollable'];
-  },
+  }
 
   contentWidth() {
     return getWidth(this.element()) - this.getScrollbarWidth();
-  },
+  }
 
-  getScrollbarWidth(isHorizontal) {
+  getScrollbarWidth(isHorizontal?) {
     const scrollableContainer = this._scrollableContainer && this._scrollableContainer.get(0);
     let scrollbarWidth = 0;
 
@@ -915,7 +952,7 @@ const RowsView = ColumnsView.inherit({
       }
     }
     return scrollbarWidth > 0 ? scrollbarWidth : 0;
-  },
+  }
 
   // TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
   _fireColumnResizedCallbacks() {
@@ -932,7 +969,7 @@ const RowsView = ColumnsView.inherit({
     }
 
     that._lastColumnWidths = columnWidths;
-  },
+  }
 
   _updateLastRowBorder(isFreeSpaceRowVisible) {
     if (this.option('showBorders') && this.option('showRowLines') && !isFreeSpaceRowVisible) {
@@ -940,7 +977,7 @@ const RowsView = ColumnsView.inherit({
     } else {
       this.element().removeClass(LAST_ROW_BORDER);
     }
-  },
+  }
 
   _updateScrollable() {
     const scrollable = Scrollable.getInstance(this.element());
@@ -954,7 +991,7 @@ const RowsView = ColumnsView.inherit({
         this._updateHorizontalScrollPosition();
       }
     }
-  },
+  }
 
   _updateHorizontalScrollPosition() {
     const scrollable = this.getScrollable();
@@ -972,7 +1009,7 @@ const RowsView = ColumnsView.inherit({
     if (this._scrollLeft >= 0 && scrollLeft !== this._scrollLeft) {
       scrollable.scrollTo({ x: this._scrollLeft });
     }
-  },
+  }
 
   _resizeCore() {
     const that = this;
@@ -988,7 +1025,7 @@ const RowsView = ColumnsView.inherit({
         that._updateScrollable();
       });
     });
-  },
+  }
 
   scrollTo(location) {
     const $element = this.element();
@@ -997,7 +1034,7 @@ const RowsView = ColumnsView.inherit({
     if (dxScrollable) {
       dxScrollable.scrollTo(location);
     }
-  },
+  }
 
   height(height) {
     const that = this;
@@ -1011,7 +1048,7 @@ const RowsView = ColumnsView.inherit({
       that.hasHeight(height !== 'auto');
       setHeight($element, height);
     }
-  },
+  }
 
   hasHeight(hasHeight) {
     if (arguments.length === 0) { return !!this._hasHeight; }
@@ -1019,13 +1056,13 @@ const RowsView = ColumnsView.inherit({
     this._hasHeight = hasHeight;
 
     return undefined;
-  },
+  }
 
   setLoading(isLoading, messageText) {
     const that = this;
     let loadPanel = that._loadPanel;
     const dataController = that._dataController;
-    const loadPanelOptions = that.option('loadPanel') || {};
+    const loadPanelOptions: any = that.option('loadPanel') || {};
     const animation = dataController.isLoaded() ? loadPanelOptions.animation : null;
     const $element = that.element();
 
@@ -1055,12 +1092,12 @@ const RowsView = ColumnsView.inherit({
         loadPanel.option(visibilityOptions);
       }
     }
-  },
+  }
 
   setRowsOpacity(columnIndex, value) {
     const $rows = this._getRowElements().not(`.${GROUP_ROW_CLASS}`) || [];
     this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
-  },
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _getCellElementsCore(rowIndex) {
@@ -1073,7 +1110,7 @@ const RowsView = ColumnsView.inherit({
       }
     }
     return $cells;
-  },
+  }
 
   _getBoundaryVisibleItemIndex(isTop, isFloor) {
     const that = this;
@@ -1119,15 +1156,15 @@ const RowsView = ColumnsView.inherit({
     }
 
     return itemIndex;
-  },
+  }
 
-  getTopVisibleItemIndex(isFloor) {
+  getTopVisibleItemIndex(isFloor?) {
     return this._getBoundaryVisibleItemIndex(true, isFloor);
-  },
+  }
 
   getBottomVisibleItemIndex(isFloor) {
     return this._getBoundaryVisibleItemIndex(false, isFloor);
-  },
+  }
 
   getTopVisibleRowData() {
     const itemIndex = this.getTopVisibleItemIndex();
@@ -1136,12 +1173,12 @@ const RowsView = ColumnsView.inherit({
     if (items[itemIndex]) {
       return items[itemIndex].data;
     }
-  },
+  }
 
   _scrollToElement($element, offset) {
     const scrollable = this.getScrollable();
     scrollable && scrollable.scrollToElement($element, offset);
-  },
+  }
 
   optionChanged(args) {
     const that = this;
@@ -1179,18 +1216,18 @@ const RowsView = ColumnsView.inherit({
         args.handled = true;
         break;
     }
-  },
+  }
 
   dispose() {
     this.callBase();
     clearTimeout(this._hideLoadingTimeoutID);
     this._scrollable && this._scrollable.dispose();
-  },
+  }
 
-  setScrollerSpacing() { },
+  setScrollerSpacing() { }
 
-  _restoreErrorRow() { },
-});
+  _restoreErrorRow() { }
+}
 
 export const rowsModule = {
   defaultOptions() {

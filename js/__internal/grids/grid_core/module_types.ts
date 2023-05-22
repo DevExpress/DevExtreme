@@ -56,6 +56,8 @@ export interface InternalGrid extends GridBaseType {
 }
 
 export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown> {
+  dataRowTemplate?: any;
+
   loadingTimeout?: number;
 
   useLegacyKeyboardNavigation?: boolean;

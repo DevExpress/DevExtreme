@@ -542,7 +542,8 @@ export class DataController extends ControllerWithDataMixin {
     this.pushed.fire(changes);
   }
 
-  fireError() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  fireError(...args: any[]) {
     // @ts-expect-error
     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
   }
@@ -1257,7 +1258,7 @@ export class DataController extends ControllerWithDataMixin {
     return dataSourceAdapter;
   }
 
-  isLocalStore(store) {
+  isLocalStore(store?) {
     store = store || this.store();
     return store instanceof ArrayStore;
   }
