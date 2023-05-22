@@ -26,7 +26,7 @@ import { nativeScrolling } from '@js/core/utils/support';
 import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import modules from '../modules';
 import gridCoreUtils from '../module_utils';
-import { ModuleType, View } from '../module_types';
+import type { ModuleType, View } from '../module_types';
 import { ColumnsController } from '../columns_controller/module';
 import { DataController } from '../data_controller/module';
 
@@ -134,7 +134,7 @@ const copyAttributes = function (element, newElement) {
   }
 };
 
-const viewWithColumnStateMixin: ModuleType<View> = View.inherit(columnStateMixin);
+const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
 
 export class ColumnsView extends viewWithColumnStateMixin {
   _tableElement: any;
