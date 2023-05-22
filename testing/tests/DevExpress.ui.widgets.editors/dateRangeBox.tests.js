@@ -733,7 +733,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
     });
 
-    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is false', function(assert) {
+    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is true', function(assert) {
         this.reinit({
             disabled: true,
         });
