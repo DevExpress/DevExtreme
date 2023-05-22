@@ -2124,6 +2124,31 @@ QUnit.module('Option synchronization', moduleConfig, () => {
 
     [
         {
+            optionName: 'isValid',
+            optionValue: false
+        }
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`${optionName} should be passed to endDateBox on init`, function(assert) {
+            this.reinit({
+                [optionName]: optionValue
+            });
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.deepEqual(endDateBox.option(optionName), optionValue);
+        });
+
+        QUnit.test(`${optionName} should be passed to endDateBox on runtime change`, function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            this.instance.option(optionName, optionValue);
+
+            assert.deepEqual(endDateBox.option(optionName), optionValue);
+        });
+    });
+
+    [
+        {
             optionName: 'dateSerializationFormat',
             optionValue: 'yyyy-MM-dd',
         }, {

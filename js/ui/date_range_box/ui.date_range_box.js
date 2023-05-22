@@ -544,6 +544,7 @@ class DateRangeBox extends Editor {
         return {
             ...this._getDateBoxConfig(),
             invalidDateMessage: options.invalidEndDateMessage,
+            isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             dropDownOptions: {
                 onShowing: (e) => {
