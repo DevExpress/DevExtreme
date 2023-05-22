@@ -35,7 +35,11 @@ export interface SelectionChangedInfo<T = any> {
     readonly selectedItem: T;
 }
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, dxDropDownEditorOptions<TComponent> {
     /**
      * @docid
@@ -175,6 +179,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxDropDownListOptions
  */
 export default class dxDropDownList<TProperties> extends dxDropDownEditor<TProperties> {
     getDataSource(): DataSource;

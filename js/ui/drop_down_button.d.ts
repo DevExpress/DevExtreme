@@ -72,6 +72,7 @@ export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
@@ -327,6 +328,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

@@ -88,6 +88,7 @@ export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseE
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
@@ -339,6 +340,9 @@ type FilterOutHidden<T> = Omit<T, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey'
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

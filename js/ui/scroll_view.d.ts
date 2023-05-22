@@ -37,6 +37,7 @@ export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
@@ -120,6 +121,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

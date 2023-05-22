@@ -57,6 +57,7 @@ export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedI
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
@@ -194,6 +195,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

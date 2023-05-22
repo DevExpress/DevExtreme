@@ -74,6 +74,7 @@ export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | Mou
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
@@ -159,6 +160,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

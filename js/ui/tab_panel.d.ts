@@ -72,6 +72,7 @@ export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxTabPanelOptions<
     TItem extends ItemLike = any,
@@ -260,6 +261,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' |
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

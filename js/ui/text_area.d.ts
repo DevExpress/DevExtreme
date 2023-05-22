@@ -64,6 +64,7 @@ export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | Mous
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
@@ -111,6 +112,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

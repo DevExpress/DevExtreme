@@ -39,7 +39,11 @@ export interface TooltipInfo {
     target: any;
 }
 
-/** @namespace DevExpress.viz */
+/**
+ * @namespace DevExpress.viz
+ * @docid
+ * @hidden
+ */
 export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
@@ -401,6 +405,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget
  * @namespace DevExpress.viz
+ * @options BaseGaugeOptions
  */
 export class BaseGauge<TProperties> extends BaseWidget<TProperties> {
     /**

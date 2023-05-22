@@ -192,6 +192,7 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
@@ -203,7 +204,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @default undefined
-     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -917,6 +917,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

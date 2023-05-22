@@ -90,6 +90,7 @@ export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
@@ -711,6 +712,9 @@ type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any)
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

@@ -34,6 +34,7 @@ export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInf
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
@@ -86,6 +87,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

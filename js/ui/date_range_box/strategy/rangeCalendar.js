@@ -111,10 +111,19 @@ class RangeCalendarStrategy extends CalendarStrategy {
             this.dateRangeBox.updateValue(value, event);
             this._dateSelectedCounter += 1;
 
-            if(this._dateSelectedCounter === 2) {
-                this.getDateRangeBox().close();
+            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
+                // TODO update close condition for normal mode
+                if(this._dateSelectedCounter === 2) {
+                    this.getDateRangeBox().close();
 
-                return;
+                    return;
+                }
+            } else {
+                if(this._dateSelectedCounter === 2) {
+                    this.getDateRangeBox().close();
+
+                    return;
+                }
             }
         }
 

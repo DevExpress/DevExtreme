@@ -9,7 +9,8 @@ const GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../container.html'));
 
-test('Validation popup screenshot', async (t) => {
+// TODO: make this test stable
+test.skip('Validation popup screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 

@@ -142,6 +142,7 @@ export interface DragTemplateData {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
@@ -288,6 +289,9 @@ type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

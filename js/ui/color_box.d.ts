@@ -88,6 +88,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
@@ -161,6 +162,9 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

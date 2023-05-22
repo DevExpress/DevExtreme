@@ -9,6 +9,7 @@ import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
+import localization from 'localization';
 
 import 'ui/validator';
 import 'generic_light.css!';
@@ -1814,6 +1815,37 @@ QUnit.module('Popup integration', moduleConfig, () => {
             assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
         });
     });
+
+    QUnit.module('popup can be opened by click on input after option change when popup was already rendered', () => {
+        [
+            { name: 'min', value: new Date() },
+            { name: 'max', value: new Date() },
+            { name: 'multiView', value: false },
+            { name: 'dateSerializationFormat', value: 'yyyy-MM-dd' },
+            { name: 'calendarOptions', value: { showTodayButton: true } },
+            { name: 'acceptCustomValue', value: false },
+
+        ].forEach(({ name, value }) => {
+            QUnit.test(name, function(assert) {
+                const clickEndInput = () => {
+                    const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                    $endDateBoxInput.trigger('dxclick');
+                };
+
+                clickEndInput();
+                this.instance.close();
+                this.instance.blur();
+
+                this.instance.option(name, value);
+
+                clickEndInput();
+
+                const popup = getPopup(getStartDateBoxInstance(this.instance));
+                assert.strictEqual(popup.option('visible'), true, 'popup is opened');
+                assert.strictEqual(popup.$content().is(':empty'), false, 'content is rendered');
+            });
+        });
+    });
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
@@ -2112,6 +2144,10 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         {
             optionName: 'labelMode',
             optionValue: 'floating'
+        },
+        {
+            optionName: 'openOnFieldClick',
+            optionValue: false,
         }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox and endDateBox on init`, function(assert) {
@@ -3571,6 +3607,36 @@ QUnit.module('Validation', {
             this.instance.reset();
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
+        });
+    });
+});
+
+QUnit.module('localization', moduleConfig, () => {
+    const localeVariablesMap = {
+        applyButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        endDateLabel: 'dxDateRangeBox-endDateLabel',
+        invalidStartDateMessage: 'dxDateRangeBox-invalidStartDateMessage',
+        invalidEndDateMessage: 'dxDateRangeBox-invalidEndDateMessage',
+        startDateLabel: 'dxDateRangeBox-startDateLabel',
+        startDateOutOfRangeMessage: 'dxDateRangeBox-startDateOutOfRangeMessage',
+        todayButtonText: 'dxCalendar-todayButtonText',
+    };
+
+    QUnit.test('default value is received from the dictionary', function(assert) {
+        Object.keys(localeVariablesMap).forEach((optionName, index) => {
+            const variableName = localeVariablesMap[optionName];
+            localization.loadMessages({
+                'en': {
+                    [variableName]: index + 1
+                }
+            });
+        });
+
+        this.reinit();
+
+        Object.keys(localeVariablesMap).forEach((optionName, index) => {
+            assert.strictEqual(this.instance.option(optionName), index + 1, optionName);
         });
     });
 });

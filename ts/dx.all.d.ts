@@ -649,6 +649,7 @@ declare module DevExpress {
     resetOption(optionName: string): void;
   }
   /**
+   * [descr:ComponentOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ComponentOptions<
@@ -839,6 +840,7 @@ declare module DevExpress {
   }
 
   /**
+   * [descr:DOMComponentOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DOMComponentOptions<TComponent>
@@ -3270,6 +3272,7 @@ declare module DevExpress.common.grids {
     updateDimensions(): void;
   }
   /**
+   * [descr:GridBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type GridBaseOptions<
@@ -4343,6 +4346,7 @@ declare module DevExpress.core {
    */
   export type dxTemplate = Template;
   /**
+   * [descr:dxTemplateOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTemplateOptions {
@@ -4473,7 +4477,6 @@ declare module DevExpress.core.utils {
 }
 declare module DevExpress.data {
   /**
-   * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class AbstractStore<TItem = any, TKey = any> extends Store<
@@ -4547,7 +4550,8 @@ declare module DevExpress.data {
     >;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:ArrayStoreOptions]
+   * @deprecated [depNote:ArrayStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ArrayStoreOptions<TItem = any, TKey = any>
@@ -4630,7 +4634,8 @@ declare module DevExpress.data {
         };
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:CustomStoreOptions]
+   * @deprecated [depNote:CustomStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
@@ -4909,7 +4914,8 @@ declare module DevExpress.data {
     > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:DataSourceOptions]
+   * @deprecated [depNote:DataSourceOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DataSourceOptions<
@@ -5168,7 +5174,8 @@ declare module DevExpress.data {
     >;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:LocalStoreOptions]
+   * @deprecated [depNote:LocalStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface LocalStoreOptions<TItem = any, TKey = any>
@@ -5234,6 +5241,7 @@ declare module DevExpress.data {
     }
   }
   /**
+   * [descr:ODataContextOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ODataContextOptions {
@@ -5321,7 +5329,8 @@ declare module DevExpress.data {
     >;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:ODataStoreOptions]
+   * @deprecated [depNote:ODataStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ODataStoreOptions<TItem = any, TKey = any>
@@ -5727,7 +5736,8 @@ declare module DevExpress.data {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:PivotGridDataSourceOptions]
+   * @deprecated [depNote:PivotGridDataSourceOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface PivotGridDataSourceOptions {
@@ -5926,6 +5936,7 @@ declare module DevExpress.data {
    */
   export type SortDescriptor<T> = GroupDescriptor<T>;
   /**
+   * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
@@ -6004,7 +6015,8 @@ declare module DevExpress.data {
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:StoreOptions]
+   * @deprecated [depNote:StoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface StoreOptions<TItem = any, TKey = any> {
@@ -6076,6 +6088,7 @@ declare module DevExpress.data {
     constructor(options?: XmlaStoreOptions);
   }
   /**
+   * [descr:XmlaStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface XmlaStoreOptions {
@@ -6124,9 +6137,6 @@ declare module DevExpress.data.utils {
     | ArrayStore<TItem, TKey>
     | LocalStore<TItem, TKey>
     | ODataStore<TItem, TKey>;
-  /**
-   * [descr:StoreOptions]
-   */
   export type StoreOptions<TItem = any, TKey = any> =
     | DevExpress.data.CustomStore.Options<TItem, TKey>
     | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
@@ -6618,7 +6628,8 @@ declare module DevExpress.fileManagement {
     export type Options = CustomFileSystemProviderOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:CustomFileSystemProviderOptions]
+   * @deprecated [depNote:CustomFileSystemProviderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomFileSystemProviderOptions
@@ -6868,6 +6879,7 @@ declare module DevExpress.fileManagement {
     ): DevExpress.core.utils.DxPromise<any>;
   }
   /**
+   * [descr:FileSystemProviderBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
@@ -6908,7 +6920,8 @@ declare module DevExpress.fileManagement {
     export type Options = ObjectFileSystemProviderOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:ObjectFileSystemProviderOptions]
+   * @deprecated [depNote:ObjectFileSystemProviderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ObjectFileSystemProviderOptions
@@ -6938,7 +6951,8 @@ declare module DevExpress.fileManagement {
     export type Options = RemoteFileSystemProviderOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:RemoteFileSystemProviderOptions]
+   * @deprecated [depNote:RemoteFileSystemProviderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RemoteFileSystemProviderOptions
@@ -7372,6 +7386,7 @@ declare module DevExpress.ui {
     visible?: boolean;
   }
   /**
+   * [descr:CollectionWidgetOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CollectionWidgetOptions<
@@ -7489,6 +7504,7 @@ declare module DevExpress.ui {
     getDataSource(): DevExpress.data.DataSource;
   }
   /**
+   * [descr:DataExpressionMixinOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
@@ -7600,6 +7616,7 @@ declare module DevExpress.ui {
    */
   export interface DraggableBase {}
   /**
+   * [descr:DraggableBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DraggableBaseOptions<TComponent>
@@ -7779,7 +7796,8 @@ declare module DevExpress.ui {
       | (() => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxAccordionOptions]
+   * @deprecated [depNote:dxAccordionOptions]
    */
   export interface dxAccordionOptions<
     TItem extends DevExpress.ui.dxAccordion.ItemLike = any,
@@ -7981,7 +7999,8 @@ declare module DevExpress.ui {
     stylingMode?: DevExpress.common.ButtonStyle;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxActionSheetOptions]
+   * @deprecated [depNote:dxActionSheetOptions]
    */
   export interface dxActionSheetOptions<
     TItem extends DevExpress.ui.dxActionSheet.ItemLike<TKey> = any,
@@ -8106,7 +8125,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxAutocompleteOptions]
+   * @deprecated [depNote:dxAutocompleteOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxAutocompleteOptions
@@ -8238,7 +8258,8 @@ declare module DevExpress.ui {
     shrink?: number;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxBoxOptions]
+   * @deprecated [depNote:dxBoxOptions]
    */
   export interface dxBoxOptions<
     TItem extends DevExpress.ui.dxBox.ItemLike<TKey> = any,
@@ -8334,7 +8355,8 @@ declare module DevExpress.ui {
     elementAttr?: { [key: string]: any };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxButtonGroupOptions]
+   * @deprecated [depNote:dxButtonGroupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
@@ -8391,7 +8413,8 @@ declare module DevExpress.ui {
     stylingMode?: DevExpress.common.ButtonStyle;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxButtonOptions]
+   * @deprecated [depNote:dxButtonOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxButtonOptions extends WidgetOptions<dxButton> {
@@ -8487,7 +8510,8 @@ declare module DevExpress.ui {
       | 'firstFourDays';
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxCalendarOptions]
+   * @deprecated [depNote:dxCalendarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
@@ -8592,7 +8616,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxCheckBoxOptions]
+   * @deprecated [depNote:dxCheckBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
@@ -8695,7 +8720,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxColorBoxOptions]
+   * @deprecated [depNote:dxColorBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxColorBoxOptions
@@ -8839,7 +8865,8 @@ declare module DevExpress.ui {
     items?: Array<DevExpress.ui.dxContextMenu.Item>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxContextMenuOptions]
+   * @deprecated [depNote:dxContextMenuOptions]
    */
   export interface dxContextMenuOptions<TKey = any>
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
@@ -10387,7 +10414,8 @@ declare module DevExpress.ui {
     TKey = any
   > = DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDataGridOptions]
+   * @deprecated [depNote:dxDataGridOptions]
    */
   export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<
     DevExpress.common.grids.GridBaseOptions<
@@ -10682,7 +10710,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDateBoxOptions]
+   * @deprecated [depNote:dxDateBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
@@ -10815,7 +10844,10 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
-    export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+    export type Properties = Omit<
+      DateBoxBaseOptions<dxDateRangeBox>,
+      'inputAttr | label | maxLength | name | placeholder | text'
+    > & {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
@@ -10857,7 +10889,7 @@ declare module DevExpress.ui {
        */
       multiView?: boolean;
       /**
-       * [descr:Properties.openOnFieldClick]
+       * [descr:dxDateRangeBoxOptions.openOnFieldClick]
        */
       openOnFieldClick?: boolean;
       /**
@@ -10917,7 +10949,8 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxDeferRendering>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDeferRenderingOptions]
+   * @deprecated [depNote:dxDeferRenderingOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDeferRenderingOptions
@@ -11550,7 +11583,8 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDiagramOptions]
+   * @deprecated [depNote:dxDiagramOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
@@ -12454,7 +12488,8 @@ declare module DevExpress.ui {
     export type Properties = dxDraggableOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDraggableOptions]
+   * @deprecated [depNote:dxDraggableOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDraggableOptions
@@ -12524,7 +12559,8 @@ declare module DevExpress.ui {
     export type RevealMode = 'slide' | 'expand';
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDrawerOptions]
+   * @deprecated [depNote:dxDrawerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -12654,7 +12690,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDropDownBoxOptions]
+   * @deprecated [depNote:dxDropDownBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDropDownBoxOptions
@@ -12772,7 +12809,8 @@ declare module DevExpress.ui {
       | string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxDropDownButtonOptions]
+   * @deprecated [depNote:dxDropDownButtonOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDropDownButtonOptions
@@ -12930,6 +12968,7 @@ declare module DevExpress.ui {
     export type DropDownPredefinedButton = 'clear' | 'dropDown';
   }
   /**
+   * [descr:dxDropDownEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDropDownEditorOptions<TComponent>
@@ -13021,6 +13060,7 @@ declare module DevExpress.ui {
     }
   }
   /**
+   * [descr:dxDropDownListOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDropDownListOptions<TComponent>
@@ -13396,7 +13436,8 @@ declare module DevExpress.ui {
     width?: number | string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxFileManagerOptions]
+   * @deprecated [depNote:dxFileManagerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
@@ -13814,7 +13855,8 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxFileUploaderOptions]
+   * @deprecated [depNote:dxFileUploaderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
@@ -14246,7 +14288,8 @@ declare module DevExpress.ui {
     trueText?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxFilterBuilderOptions]
+   * @deprecated [depNote:dxFilterBuilderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFilterBuilderOptions
@@ -14605,7 +14648,8 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxFormOptions]
+   * @deprecated [depNote:dxFormOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -15013,7 +15057,8 @@ declare module DevExpress.ui {
     imageSrc?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxGalleryOptions]
+   * @deprecated [depNote:dxGalleryOptions]
    */
   export interface dxGalleryOptions<
     TItem extends DevExpress.ui.dxGallery.ItemLike = any,
@@ -15763,7 +15808,8 @@ declare module DevExpress.ui {
     ok?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxGanttOptions]
+   * @deprecated [depNote:dxGanttOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxGanttOptions extends WidgetOptions<dxGantt> {
@@ -16629,7 +16675,8 @@ declare module DevExpress.ui {
     valueExpr?: string | Function;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxHtmlEditorOptions]
+   * @deprecated [depNote:dxHtmlEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -17114,7 +17161,8 @@ declare module DevExpress.ui {
     showChevron?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxListOptions]
+   * @deprecated [depNote:dxListOptions]
    */
   export interface dxListOptions<
     TItem extends DevExpress.ui.dxList.ItemLike = any,
@@ -17355,7 +17403,8 @@ declare module DevExpress.ui {
     export type Properties = dxLoadIndicatorOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxLoadIndicatorOptions]
+   * @deprecated [depNote:dxLoadIndicatorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLoadIndicatorOptions
@@ -17399,7 +17448,8 @@ declare module DevExpress.ui {
     show?: AnimationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxLoadPanelOptions]
+   * @deprecated [depNote:dxLoadPanelOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
@@ -17497,7 +17547,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxLookupOptions]
+   * @deprecated [depNote:dxLookupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
@@ -17703,7 +17754,8 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxMapOptions]
+   * @deprecated [depNote:dxMapOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxMapOptions extends WidgetOptions<dxMap> {
@@ -17992,6 +18044,7 @@ declare module DevExpress.ui {
     items?: Array<dxMenuBaseItem>;
   }
   /**
+   * [descr:dxMenuBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxMenuBaseOptions<
@@ -18085,7 +18138,8 @@ declare module DevExpress.ui {
     linkAttr?: { [key: string]: any };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxMenuOptions]
+   * @deprecated [depNote:dxMenuOptions]
    */
   export interface dxMenuOptions<TKey = any>
     extends dxMenuBaseOptions<dxMenu<TKey>, dxMenuItem, TKey> {
@@ -18247,7 +18301,7 @@ declare module DevExpress.ui {
     export type Properties<
       TItem extends ItemLike = any,
       TKey = any
-    > = dxMultiViewBaseOptions<MultiViewInstance<TItem, TKey>, TItem, TKey>;
+    > = dxMultiViewOptions<TItem, TKey>;
     export type SelectionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -18255,7 +18309,8 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxMultiViewOptions]
+   * @deprecated [depNote:dxMultiViewOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxMultiViewBaseOptions<
@@ -18306,12 +18361,17 @@ declare module DevExpress.ui {
    */
   export interface dxMultiViewItem extends CollectionWidgetItem {}
   /**
-   * @deprecated use DevExpress.ui.dxMultiView.Properties instead
+   * [descr:dxMultiViewOptions]
+   * @deprecated [depNote:dxMultiViewOptions]
    */
   export interface dxMultiViewOptions<
     TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
     TKey = any
-  > extends DevExpress.ui.dxMultiView.Properties<TItem, TKey> {}
+  > extends dxMultiViewBaseOptions<
+      DevExpress.ui.dxMultiView.MultiViewInstance<TItem, TKey>,
+      TItem,
+      TKey
+    > {}
   /**
    * [descr:dxNumberBox]
    */
@@ -18377,7 +18437,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxNumberBoxOptions]
+   * @deprecated [depNote:dxNumberBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
@@ -18465,6 +18526,7 @@ declare module DevExpress.ui {
     show?: AnimationConfig;
   }
   /**
+   * [descr:dxOverlayOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxOverlayOptions<TComponent>
@@ -18712,7 +18774,8 @@ declare module DevExpress.ui {
     export type Properties = dxPivotGridFieldChooserOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxPivotGridFieldChooserOptions]
+   * @deprecated [depNote:dxPivotGridFieldChooserOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPivotGridFieldChooserOptions
@@ -18834,7 +18897,8 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxPivotGridOptions]
+   * @deprecated [depNote:dxPivotGridOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
@@ -19407,7 +19471,8 @@ declare module DevExpress.ui {
     show?: AnimationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxPopoverOptions]
+   * @deprecated [depNote:dxPopoverOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPopoverOptions<TComponent>
@@ -19560,7 +19625,8 @@ declare module DevExpress.ui {
     show?: AnimationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxPopupOptions]
+   * @deprecated [depNote:dxPopupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPopupOptions<TComponent>
@@ -19681,7 +19747,8 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxProgressBarOptions]
+   * @deprecated [depNote:dxProgressBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxProgressBarOptions
@@ -19724,7 +19791,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxRadioGroupOptions]
+   * @deprecated [depNote:dxRadioGroupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxRadioGroupOptions
@@ -19779,7 +19847,8 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxRangeSliderOptions]
+   * @deprecated [depNote:dxRangeSliderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxRangeSliderOptions
@@ -19834,6 +19903,7 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
+   * [descr:dxRecurrenceEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxRecurrenceEditorOptions
@@ -19879,7 +19949,8 @@ declare module DevExpress.ui {
       ResizeInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxResizableOptions]
+   * @deprecated [depNote:dxResizableOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
@@ -20050,7 +20121,8 @@ declare module DevExpress.ui {
         }>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxResponsiveBoxOptions]
+   * @deprecated [depNote:dxResponsiveBoxOptions]
    */
   export interface dxResponsiveBoxOptions<
     TItem extends DevExpress.ui.dxResponsiveBox.ItemLike = any,
@@ -20417,7 +20489,8 @@ declare module DevExpress.ui {
     visible?: boolean;
   } & Record<string, any>;
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSchedulerOptions]
+   * @deprecated [depNote:dxSchedulerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
@@ -21114,6 +21187,7 @@ declare module DevExpress.ui {
     }
   }
   /**
+   * [descr:dxScrollableOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxScrollableOptions<TComponent>
@@ -21189,7 +21263,8 @@ declare module DevExpress.ui {
       DevExpress.ui.dxScrollable.ScrollEventInfo<dxScrollView>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxScrollViewOptions]
+   * @deprecated [depNote:dxScrollViewOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxScrollViewOptions
@@ -21309,7 +21384,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSelectBoxOptions]
+   * @deprecated [depNote:dxSelectBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSelectBoxOptions<TComponent>
@@ -21388,6 +21464,11 @@ declare module DevExpress.ui {
    * [descr:dxSliderBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  export interface dxSliderBase {}
+  /**
+   * [descr:dxSliderBaseOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
   export interface dxSliderBaseOptions<TComponent>
     extends dxTrackBarOptions<TComponent> {
     /**
@@ -21462,7 +21543,8 @@ declare module DevExpress.ui {
     valueChangeMode?: DevExpress.common.SliderValueChangeMode;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSliderOptions]
+   * @deprecated [depNote:dxSliderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
@@ -21597,7 +21679,8 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSortableOptions]
+   * @deprecated [depNote:dxSortableOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
@@ -21687,7 +21770,8 @@ declare module DevExpress.ui {
     export type Properties = dxSpeedDialActionOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSpeedDialActionOptions]
+   * @deprecated [depNote:dxSpeedDialActionOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSpeedDialActionOptions
@@ -21738,7 +21822,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSwitchOptions]
+   * @deprecated [depNote:dxSwitchOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
@@ -21907,7 +21992,8 @@ declare module DevExpress.ui {
     title?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTabPanelOptions]
+   * @deprecated [depNote:dxTabPanelOptions]
    */
   export interface dxTabPanelOptions<
     TItem extends DevExpress.ui.dxTabPanel.ItemLike = any,
@@ -22065,7 +22151,8 @@ declare module DevExpress.ui {
       extends dxTabs<Properties<TItem, TKey>, TItem, TKey> {}
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTabsOptions]
+   * @deprecated [depNote:dxTabsOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTabsBaseOptions<
@@ -22125,7 +22212,8 @@ declare module DevExpress.ui {
     icon?: string;
   }
   /**
-   * @deprecated use DevExpress.ui.dxTabs.Properties instead
+   * [descr:dxTabsOptions]
+   * @deprecated [depNote:dxTabsOptions]
    */
   export interface dxTabsOptions<
     TItem extends DevExpress.ui.dxTabs.ItemLike = any,
@@ -22205,7 +22293,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTagBoxOptions]
+   * @deprecated [depNote:dxTagBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTagBoxOptions
@@ -22348,7 +22437,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTextAreaOptions]
+   * @deprecated [depNote:dxTextAreaOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
@@ -22445,7 +22535,8 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTextBoxOptions]
+   * @deprecated [depNote:dxTextBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTextBoxOptions<TComponent>
@@ -22512,6 +22603,7 @@ declare module DevExpress.ui {
     options?: dxButtonOptions;
   }
   /**
+   * [descr:dxTextEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTextEditorOptions<TComponent>
@@ -22753,7 +22845,8 @@ declare module DevExpress.ui {
     widthRatio?: number;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTileViewOptions]
+   * @deprecated [depNote:dxTileViewOptions]
    */
   export interface dxTileViewOptions<
     TItem extends DevExpress.ui.dxTileView.ItemLike = any,
@@ -22839,7 +22932,8 @@ declare module DevExpress.ui {
     show?: AnimationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxToastOptions]
+   * @deprecated [depNote:dxToastOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxToastOptions extends dxOverlayOptions<dxToast> {
@@ -23026,7 +23120,8 @@ declare module DevExpress.ui {
     widget?: DevExpress.common.ToolbarItemComponent;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxToolbarOptions]
+   * @deprecated [depNote:dxToolbarOptions]
    */
   export interface dxToolbarOptions<
     TItem extends DevExpress.ui.dxToolbar.ItemLike = any,
@@ -23075,7 +23170,8 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxTooltip>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTooltipOptions]
+   * @deprecated [depNote:dxTooltipOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {}
@@ -23085,6 +23181,7 @@ declare module DevExpress.ui {
    */
   export class dxTrackBar<TProperties> extends Editor<TProperties> {}
   /**
+   * [descr:dxTrackBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTrackBarOptions<TComponent>
@@ -24158,7 +24255,8 @@ declare module DevExpress.ui {
     TKey = any
   > = DevExpress.ui.dxTreeList.Node<TRowData, TKey>;
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTreeListOptions]
+   * @deprecated [depNote:dxTreeListOptions]
    */
   export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<
     DevExpress.common.grids.GridBaseOptions<
@@ -24651,7 +24749,8 @@ declare module DevExpress.ui {
     text?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTreeViewOptions]
+   * @deprecated [depNote:dxTreeViewOptions]
    */
   export interface dxTreeViewOptions<TKey = any>
     extends Omit<
@@ -24831,7 +24930,8 @@ declare module DevExpress.ui {
     export type ValidationResult = dxValidationGroupResult;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxValidationGroupOptions]
+   * @deprecated [depNote:dxValidationGroupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxValidationGroupOptions
@@ -24956,7 +25056,8 @@ declare module DevExpress.ui {
     > = dxValidationSummaryOptions<TItem, TKey>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxValidationSummaryOptions]
+   * @deprecated [depNote:dxValidationSummaryOptions]
    */
   export interface dxValidationSummaryOptions<
     TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
@@ -25007,7 +25108,8 @@ declare module DevExpress.ui {
     export type ValidationResult = dxValidatorResult;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxValidatorOptions]
+   * @deprecated [depNote:dxValidatorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
@@ -25128,6 +25230,7 @@ declare module DevExpress.ui {
     }
   }
   /**
+   * [descr:EditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
@@ -25236,6 +25339,7 @@ declare module DevExpress.ui {
     TKey = any
   > extends CollectionWidget<TProperties, TItem, TKey> {}
   /**
+   * [descr:HierarchicalCollectionWidgetOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface HierarchicalCollectionWidgetOptions<
@@ -25318,6 +25422,7 @@ declare module DevExpress.ui {
     constructor(options?: SearchBoxMixinOptions);
   }
   /**
+   * [descr:SearchBoxMixinOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface SearchBoxMixinOptions {
@@ -25445,6 +25550,7 @@ declare module DevExpress.ui {
     export type format = Format;
   }
   /**
+   * [descr:WidgetOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface WidgetOptions<TComponent>
@@ -25849,6 +25955,7 @@ declare module DevExpress.viz {
     series?: baseSeriesObject;
   }
   /**
+   * [descr:BaseChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseChartOptions<TComponent>
@@ -26062,6 +26169,7 @@ declare module DevExpress.viz {
     enabled?: boolean;
   }
   /**
+   * [descr:BaseGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseGaugeOptions<TComponent>
@@ -26508,6 +26616,7 @@ declare module DevExpress.viz {
     showLoadingIndicator(): void;
   }
   /**
+   * [descr:BaseSparklineOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseSparklineOptions<TComponent>
@@ -26883,6 +26992,7 @@ declare module DevExpress.viz {
     top?: number;
   }
   /**
+   * [descr:BaseWidgetOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface BaseWidgetOptions<TComponent>
@@ -27500,7 +27610,8 @@ declare module DevExpress.viz {
     enabled?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxBarGaugeOptions]
+   * @deprecated [depNote:dxBarGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
@@ -27677,7 +27788,8 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBullet>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxBulletOptions]
+   * @deprecated [depNote:dxBulletOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
@@ -28715,7 +28827,8 @@ declare module DevExpress.viz {
     position?: DevExpress.common.charts.RelativePosition;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxChartOptions]
+   * @deprecated [depNote:dxChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxChartOptions extends BaseChartOptions<dxChart> {
@@ -31422,7 +31535,8 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxCircularGaugeOptions]
+   * @deprecated [depNote:dxCircularGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxCircularGaugeOptions
@@ -31650,7 +31764,8 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxFunnelOptions]
+   * @deprecated [depNote:dxFunnelOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
@@ -32022,7 +32137,8 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxLinearGaugeOptions]
+   * @deprecated [depNote:dxLinearGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLinearGaugeOptions
@@ -32276,7 +32392,8 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxPieChartOptions]
+   * @deprecated [depNote:dxPieChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
@@ -33329,7 +33446,8 @@ declare module DevExpress.viz {
     hoverMode?: DevExpress.common.charts.LegendHoverMode;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxPolarChartOptions]
+   * @deprecated [depNote:dxPolarChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
@@ -34370,7 +34488,8 @@ declare module DevExpress.viz {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxRangeSelectorOptions]
+   * @deprecated [depNote:dxRangeSelectorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxRangeSelectorOptions
@@ -35043,7 +35162,8 @@ declare module DevExpress.viz {
     title?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSankeyOptions]
+   * @deprecated [depNote:dxSankeyOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
@@ -35456,7 +35576,8 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxSparkline>;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxSparklineOptions]
+   * @deprecated [depNote:dxSparklineOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSparklineOptions
@@ -35723,7 +35844,8 @@ declare module DevExpress.viz {
     value(): number;
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxTreeMapOptions]
+   * @deprecated [depNote:dxTreeMapOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
@@ -36280,7 +36402,8 @@ declare module DevExpress.viz {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * [descr:dxVectorMapOptions]
+   * @deprecated [depNote:dxVectorMapOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {

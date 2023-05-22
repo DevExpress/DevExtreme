@@ -62,6 +62,7 @@ export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
     /**
@@ -215,6 +216,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onResize' | 'onR
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip

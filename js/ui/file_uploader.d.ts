@@ -99,6 +99,7 @@ export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
@@ -478,6 +479,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
