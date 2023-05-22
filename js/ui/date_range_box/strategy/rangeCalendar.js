@@ -16,12 +16,12 @@ class RangeCalendarStrategy extends CalendarStrategy {
     popupConfig(popupConfig) {
         return extend(true, super.popupConfig(popupConfig), {
             position: { of: this.dateRangeBox.$element() },
-            onShowing: () => {
-                this._widget._restoreViewsMinMaxOptions();
-                this._dateSelectedCounter = 0;
-                // this._widget.option('_currentSelection', 'startDate');
-            }
         });
+    }
+
+    popupShowingHandler() {
+        this._widget._restoreViewsMinMaxOptions();
+        this._dateSelectedCounter = 0;
     }
 
     _getPopup() {

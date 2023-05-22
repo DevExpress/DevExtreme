@@ -631,6 +631,26 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         assert.deepEqual(firstCellDate, secondCellDate, 'dates are equal');
         assert.deepEqual(this.instance.option('value'), [secondCellDate, firstCellDate], 'value is correct');
     });
+
+    QUnit.test('User and inner (setting selection counter) onShowing handlers should be fired on Popup showing', function(assert) {
+        const onShowing = sinon.stub();
+        this.reinit({
+            selectionBehavior: 'withDisable',
+            opened: true,
+            dropDownOptions: {
+                onShowing
+            }
+        });
+
+        const $firstDate = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        $firstDate.trigger('dxclick');
+
+        const $secondDate = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
+        $secondDate.trigger('dxclick');
+
+        assert.ok(onShowing.called, 'user onShowing handler was called');
+        assert.strictEqual(this.instance.option('opened'), false, 'Popup is closed');
+    });
 });
 
 QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig, () => {
