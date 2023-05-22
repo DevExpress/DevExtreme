@@ -471,11 +471,11 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
-    _getElementToSettingAriaLabel() {
+    _getFieldElement() {
         return this._getLabelContainer();
     },
 
-    _setLabelContainerAria() {
+    _setFieldAria() {
         const labelId = this._label.getId();
         const placeholderId = this._$placeholder?.attr('id');
 
@@ -485,7 +485,7 @@ const TextEditorBase = Editor.inherit({
             'labelledby': value || undefined,
         };
 
-        this.setAria(aria, this._getElementToSettingAriaLabel());
+        this.setAria(aria, this._getFieldElement());
     },
 
     _renderLabel: function() {
@@ -507,7 +507,7 @@ const TextEditorBase = Editor.inherit({
 
         this._label = new TextEditorLabelCreator(labelConfig);
 
-        this._setLabelContainerAria();
+        this._setFieldAria();
 
         if(this._labelContainerElement) { // NOTE: element can be not in DOM yet in React and Vue
             resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
@@ -791,18 +791,18 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'placeholder':
                 this._renderPlaceholder();
-                this._setLabelContainerAria();
+                this._setFieldAria();
                 break;
             case 'label':
                 this._label.updateText(value);
-                this._setLabelContainerAria();
+                this._setFieldAria();
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
                 break;
             case 'labelMode':
                 this._label.updateMode(value);
-                this._setLabelContainerAria();
+                this._setFieldAria();
                 break;
             case 'width':
                 this.callBase(args);

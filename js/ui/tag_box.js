@@ -235,7 +235,7 @@ const TagBox = SelectBox.inherit({
         return this._$tagsContainer;
     },
 
-    _getElementToSettingAriaLabel() {
+    _getFieldElement() {
         return this._input();
     },
 
