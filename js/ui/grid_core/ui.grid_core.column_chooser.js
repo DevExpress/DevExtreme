@@ -26,8 +26,6 @@ const COLUMN_CHOOSER_SELECT_CLASS = 'column-chooser-mode-select';
 const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
-const CLICK_TIMEOUT = 300;
-
 const processItems = function(that, chooserColumns) {
     const items = [];
     const isSelectMode = that.isSelectMode();
@@ -323,7 +321,6 @@ const columnChooserMembers = {
             });
         };
 
-        let updateColumnVisibilityTimeout;
         let isUpdatingSelection = false;
 
         const selectionChangedHandler = e => {
@@ -341,16 +338,13 @@ const columnChooserMembers = {
             e.component.endUpdate();
             isUpdatingSelection = false;
 
-            clearTimeout(updateColumnVisibilityTimeout);
-            updateColumnVisibilityTimeout = setTimeout(() => {
-                that.component.beginUpdate();
-                this._isUpdatingColumnVisibility = true;
+            that.component.beginUpdate();
+            this._isUpdatingColumnVisibility = true;
 
-                updateColumnVisibility(nodes);
+            updateColumnVisibility(nodes);
 
-                that.component.endUpdate();
-                this._isUpdatingColumnVisibility = false;
-            }, CLICK_TIMEOUT);
+            that.component.endUpdate();
+            this._isUpdatingColumnVisibility = false;
         };
 
         return {
