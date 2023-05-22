@@ -116,6 +116,7 @@ export type Properties = dxScrollViewOptions;
 /** @deprecated use Properties instead */
 export type Options = dxScrollViewOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -168,3 +169,4 @@ onScroll?: ((e: ScrollEvent) => void);
  */
 onUpdated?: ((e: UpdatedEvent) => void);
 };
+///#ENDDEBUG
