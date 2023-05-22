@@ -724,7 +724,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return [];
   }
 
-  _getCellOptions(options) {
+  _getCellOptions(options): any {
     const cellOptions = {
       column: options.column,
       columnIndex: options.columnIndex,
@@ -849,7 +849,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
   }
 
   optionChanged(args) {
-    this.callBase(args);
+    super.optionChanged(args);
 
     // eslint-disable-next-line default-case
     switch (args.name) {

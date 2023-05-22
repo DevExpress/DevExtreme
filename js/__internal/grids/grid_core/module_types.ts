@@ -162,8 +162,6 @@ declare class ModuleItem {
 
   name: string;
 
-  callBase: any;
-
   _createComponent: InternalGrid['_createComponent'];
 
   getController: InternalGrid['getController'];

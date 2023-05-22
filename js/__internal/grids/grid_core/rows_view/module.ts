@@ -138,7 +138,7 @@ class RowsView extends ColumnsView {
     if (isGroupRow(options)) {
       $cell.addClass(GROUP_CELL_CLASS);
     }
-    this.callBase.apply(this, arguments);
+    super._updateCell.apply(this, arguments as any);
   }
 
   _getCellTemplate(options) {
@@ -158,7 +158,7 @@ class RowsView extends ColumnsView {
   }
 
   _createRow(row?, tag?) {
-    const $row = this.callBase.apply(this, arguments);
+    const $row = super._createRow.apply(this, arguments as any);
 
     if (row) {
       const isGroup = row.rowType === 'group';
@@ -197,7 +197,7 @@ class RowsView extends ColumnsView {
       rowOptions.watch && rowOptions.watch(() => rowOptions.rowIndex, () => this._setAriaRowIndex(rowOptions, $row));
     }
 
-    this.callBase.apply(this, arguments);
+    super._rowPrepared.apply(this, arguments as any);
   }
 
   _setAriaRowIndex(row, $row) {
@@ -490,7 +490,7 @@ class RowsView extends ColumnsView {
   }
 
   _getRowElements(tableElement?) {
-    const $rows = this.callBase(tableElement);
+    const $rows = super._getRowElements(tableElement);
 
     return $rows && $rows.not(`.${FREE_SPACE_CLASS}`);
   }
@@ -542,14 +542,14 @@ class RowsView extends ColumnsView {
   }
 
   _needWrapRow() {
-    return this.callBase.apply(this, arguments) || !!this.option('dataRowTemplate');
+    return super._needWrapRow.apply(this, arguments as any) || !!this.option('dataRowTemplate');
   }
 
   _renderCells($row, options) {
     if (options.row.rowType === 'group') {
       this._renderGroupedCells($row, options);
     } else if (options.row.values) {
-      this.callBase($row, options);
+      super._renderCells($row, options);
     }
   }
 
@@ -622,7 +622,7 @@ class RowsView extends ColumnsView {
     const that = this;
     const scrollingMode = that.option('scrolling.mode');
 
-    that.callBase($table, extend({
+    super._renderRows($table, extend({
       scrollingMode,
     }, options));
 
@@ -653,13 +653,13 @@ class RowsView extends ColumnsView {
     } else if ((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
       this.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
     } else {
-      this.callBase($table, options);
+      super._renderRow($table, options);
     }
   }
 
   _renderTable(options) {
     const that = this;
-    const $table = that.callBase(options);
+    const $table = super._renderTable(options);
     const resizeCompletedHandler = function () {
       const scrollableInstance = that.getScrollable();
       if (scrollableInstance && that.element().closest(getWindow().document).length) {
@@ -680,7 +680,7 @@ class RowsView extends ColumnsView {
   }
 
   _createTable() {
-    const $table = this.callBase.apply(this, arguments);
+    const $table = super._createTable.apply(this, arguments as any);
 
     if (this.option().rowTemplate || this.option().dataRowTemplate) {
       $table.appendTo(this.component.$element());
@@ -700,7 +700,7 @@ class RowsView extends ColumnsView {
     const $table = this._renderTable({ change });
     const deferred = this._updateContent($table, change);
 
-    this.callBase(change);
+    super._renderCore(change);
 
     this._lastColumnWidths = null;
     return deferred;
@@ -719,7 +719,7 @@ class RowsView extends ColumnsView {
     const { value } = options;
     const displayValue = gridCoreUtils.getDisplayValue(column, value, data, row.rowType);
 
-    const parameters = this.callBase(options);
+    const parameters = super._getCellOptions(options);
     parameters.value = value;
     parameters.oldValue = options.oldValue;
     parameters.displayValue = displayValue;
@@ -879,7 +879,7 @@ class RowsView extends ColumnsView {
     if (e.changeTypes.grouping) return;
 
     if (optionNames.width || optionNames.visibleWidth) {
-      this.callBase(e);
+      super._columnOptionChanged(e);
       this._fireColumnResizedCallbacks();
     }
   }
@@ -892,7 +892,7 @@ class RowsView extends ColumnsView {
     const that = this;
     const dataController = that.getController('data');
 
-    that.callBase();
+    super.init();
     that._editorFactoryController = that.getController('editorFactory');
     that._rowHeight = 0;
     that._scrollTop = 0;
@@ -1101,7 +1101,7 @@ class RowsView extends ColumnsView {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _getCellElementsCore(rowIndex) {
-    const $cells = this.callBase.apply(this, arguments);
+    const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
     if ($cells) {
       const groupCellIndex = $cells.filter(`.${GROUP_CELL_CLASS}`).index();
@@ -1183,7 +1183,7 @@ class RowsView extends ColumnsView {
   optionChanged(args) {
     const that = this;
 
-    that.callBase(args);
+    super.optionChanged(args);
 
     // eslint-disable-next-line default-case
     switch (args.name) {
@@ -1219,7 +1219,7 @@ class RowsView extends ColumnsView {
   }
 
   dispose() {
-    this.callBase();
+    super.dispose();
     clearTimeout(this._hideLoadingTimeoutID);
     this._scrollable && this._scrollable.dispose();
   }
