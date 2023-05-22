@@ -1,7 +1,7 @@
 import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import { extend } from '../../../core/utils/extend';
-import { isSameDateArrays, getDeserializedDate } from '../ui.date_range.utils';
+import { isSameDateArrays, getDeserializedDate, isSameDates } from '../ui.date_range.utils';
 import { isFunction } from '../../../core/utils/type';
 
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
@@ -54,9 +54,17 @@ class RangeCalendarStrategy extends CalendarStrategy {
             },
             enter: (e) => {
                 if(this.dateRangeBox.option('opened')) {
-                    this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
+                    const dateBoxValue = this.dateBox.dateOption('value');
                     this.dateBox._valueChangeEventHandler(e);
-                    this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                    const newDateBoxValue = this.dateBox.dateOption('value');
+                    const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
+
+                    if(dateBoxValueChanged) {
+                        this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                    } else {
+                        this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
+                    }
+
                     return false;
                 }
             },
@@ -132,11 +140,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         const isInstantlyMode = this.dateRangeBox.option('applyValueMode') === 'instantly';
 
-        if(!isInstantlyMode && !event) {
-            this.dateRangeBox.updateValue(value);
-
-            return;
-        }
+        // if(!isInstantlyMode && !event && false) {
+        //     this.dateRangeBox.updateValue(value);
+        //     console.log('return');
+        //     return;
+        // }
 
         if(isInstantlyMode) {
             if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
@@ -157,19 +165,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
             this.dateRangeBox.updateValue(value, event);
             this._dateSelectedCounter += 1;
 
-            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
-                // TODO update close condition for normal mode
-                if(this._dateSelectedCounter === 2) {
-                    this.getDateRangeBox().close();
+            if(this._dateSelectedCounter === 2) {
+                this.getDateRangeBox().close();
 
-                    return;
-                }
-            } else {
-                if(this._dateSelectedCounter === 2) {
-                    this.getDateRangeBox().close();
-
-                    return;
-                }
+                return;
             }
         }
 
