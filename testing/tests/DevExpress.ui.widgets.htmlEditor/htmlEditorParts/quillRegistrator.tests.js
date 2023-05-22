@@ -7,9 +7,7 @@ import Size from 'ui/html_editor/formats/size';
 
 const { test } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
-moduleWithoutCsp('Quill registrator', () => {
+QUnit.module('Quill registrator', () => {
     test('check defaults', function(assert) {
         const quillRegistrator = new QuillRegistrator();
         const quill = quillRegistrator.getQuill();

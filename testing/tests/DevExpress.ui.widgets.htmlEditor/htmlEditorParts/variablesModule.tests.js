@@ -6,10 +6,6 @@ import { noop } from 'core/utils/common';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -52,7 +48,9 @@ const moduleConfig = {
     }
 };
 
-moduleWithoutCsp('Variable format', () => {
+const { test } = QUnit;
+
+QUnit.module('Variable format', () => {
     test('Create an element by data', function(assert) {
         const data = {
             value: 'TEST_NAME',
@@ -127,7 +125,7 @@ moduleWithoutCsp('Variable format', () => {
     });
 });
 
-moduleWithoutCsp('Variables module', moduleConfig, () => {
+QUnit.module('Variables module', moduleConfig, () => {
     test('insert variable after click on item', function(assert) {
         this.options.escapeChar = '#';
         const variables = new Variables(this.quillMock, this.options);

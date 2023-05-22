@@ -8,9 +8,7 @@ import PointerMock from '../../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { getWindow } from 'core/utils/window.js';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+const { test, module } = QUnit;
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
@@ -153,7 +151,7 @@ function dragLoop(pointerMockInstance, stepCount, offsets) {
     }
 }
 
-moduleWithoutCsp('Table resizing integration', {
+module('Table resizing integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -177,7 +175,7 @@ moduleWithoutCsp('Table resizing integration', {
         this.clock.restore();
     }
 }, () => {
-    moduleWithoutCsp('resizing frames initialization', {}, () => {
+    module('resizing frames initialization', {}, () => {
         test('Frame is created for table by default if the tableResizing option is enabled', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -374,7 +372,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('frame position', {}, () => {
+    module('frame position', {}, () => {
         test('Check table resize frame position', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -445,7 +443,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('Column resizing', {}, () => {
+    module('Column resizing', {}, () => {
         test('Check column resizers elements positions', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -626,7 +624,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('minColumnWidth', {}, () => {
+    module('minColumnWidth', {}, () => {
         test('Check column border positions after drag (default min width)', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -869,7 +867,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('Row resizing', {}, () => {
+    module('Row resizing', {}, () => {
         test('Table height was changed if we drag the row height resizer', function(assert) {
             this.createWidget({ height: 300 });
             this.clock.tick(TIME_TO_WAIT);
@@ -1098,7 +1096,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('Resizers boundaries', {}, () => {
+    module('Resizers boundaries', {}, () => {
         test('Boundary should have bottom boundary offset we use vertical drag', function(assert) {
             this.createWidget({ width: 430, tableResizing: { enabled: true } });
             this.clock.tick(TIME_TO_WAIT);
@@ -1144,7 +1142,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('API', {}, () => {
+    module('API', {}, () => {
         test('Table and columns width was saved if we apply new markup with td width styles', function(assert) {
             this.createWidget({ width: 630 });
             this.clock.tick(TIME_TO_WAIT);
@@ -1165,7 +1163,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('Window resizing', {}, () => {
+    module('Window resizing', {}, () => {
         test('Check resizers elements positions after window resize', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -1230,7 +1228,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('Table structure changing', {}, () => {
+    module('Table structure changing', {}, () => {
         test('Second frame should be added if we add the second table', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -1814,7 +1812,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('history integration', {}, () => {
+    module('history integration', {}, () => {
         test('The widget can revert table resizing by undo if table has columns with auto width', function(assert) {
             assert.expect(6);
             const done = assert.async();
@@ -2156,7 +2154,7 @@ moduleWithoutCsp('Table resizing integration', {
         });
     });
 
-    moduleWithoutCsp('rtl', {}, () => {
+    module('rtl', {}, () => {
         test('Columns resizers should be positioned correctly if the rtl mode is enabled', function(assert) {
             this.createWidget({ width: 430, rtlEnabled: true });
             this.clock.tick(TIME_TO_WAIT);

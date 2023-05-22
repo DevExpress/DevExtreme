@@ -4,11 +4,9 @@ import DeltaConverter from 'ui/html_editor/converters/delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
 import { getQuill } from 'ui/html_editor/quill_importer';
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
-moduleWithoutCsp('Delta converter', {
+testModule('Delta converter', {
     beforeEach: function() {
         const Quill = getQuill();
         this.deltaConverter = new DeltaConverter();
@@ -88,7 +86,7 @@ moduleWithoutCsp('Delta converter', {
     });
 });
 
-moduleWithoutCsp('Markdown converter', () => {
+testModule('Markdown converter', () => {
     test('it convert a HTML to the Markdown', function(assert) {
         const markdownConverter = new MarkdownConverter();
         const html = '<p>Te<strong>st</strong></p>';
@@ -113,7 +111,7 @@ moduleWithoutCsp('Markdown converter', () => {
 });
 
 
-moduleWithoutCsp('Custom list', {
+testModule('Custom list', {
     before: function() {
         const Quill = getQuill();
         this.originalList = Quill.import('formats/list');

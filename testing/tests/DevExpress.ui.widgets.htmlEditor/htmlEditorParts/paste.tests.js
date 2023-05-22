@@ -37,12 +37,10 @@ const TEXT_WITH_DECORATION = '<span style=\'text-decoration: underline;\'>test1<
 
 const MS_INVALID_LIST_PARAGRAPH = '<p class=\'MsoListParagraphCxSpFirst\'><span>test<o:p></o:p></span></p>';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+const { module: testModule, test } = QUnit;
 
 export default function() {
-    moduleWithoutCsp('Paste from MS Word', {
+    testModule('Paste from MS Word', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
         },
@@ -96,7 +94,7 @@ export default function() {
         });
     });
 
-    moduleWithoutCsp('Text with decoration', () => {
+    testModule('Text with decoration', () => {
         test('paste text with text-decoration style', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')

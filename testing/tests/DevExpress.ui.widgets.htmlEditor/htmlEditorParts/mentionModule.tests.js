@@ -130,9 +130,7 @@ const moduleConfig = {
 
 const { test } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
-moduleWithoutCsp('Mention format', () => {
+QUnit.module('Mention format', () => {
     test('Create an element by data', function(assert) {
         const data = {
             value: 'John Smith',
@@ -192,7 +190,7 @@ moduleWithoutCsp('Mention format', () => {
     });
 });
 
-moduleWithoutCsp('Mentions module', moduleConfig, () => {
+QUnit.module('Mentions module', moduleConfig, () => {
     test('insert mention after click on item', function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 

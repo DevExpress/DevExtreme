@@ -1,10 +1,6 @@
 import $ from 'jquery';
 import ImageUpload from 'ui/html_editor/modules/imageUpload';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -57,8 +53,9 @@ const moduleConfig = {
     }
 };
 
+const { test, module } = QUnit;
 
-moduleWithoutCsp('ImageUpload module', moduleConfig, () => {
+module('ImageUpload module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const ImageUploadInstance = new ImageUpload(this.quillMock, this.options);
 

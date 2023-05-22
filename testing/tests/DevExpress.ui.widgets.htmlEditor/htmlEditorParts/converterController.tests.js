@@ -5,9 +5,7 @@ import ConverterController from 'ui/html_editor/converterController';
 
 const { test } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
-moduleWithoutCsp('Converter controller', () => {
+QUnit.module('Converter controller', () => {
     test('Check registered converters', function(assert) {
         const deltaConverter = ConverterController.getConverter('delta');
         const markdownConverter = ConverterController.getConverter('markdown');
@@ -24,7 +22,7 @@ moduleWithoutCsp('Converter controller', () => {
     });
 });
 
-moduleWithoutCsp('Unknown converter', () => {
+QUnit.module('Unknown converter', () => {
     test('Editor throw an error if cannot find a converter', function(assert) {
         assert.throws(
             function() { $('#htmlEditor').dxHtmlEditor({ valueType: 'markdown' }); },

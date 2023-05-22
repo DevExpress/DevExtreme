@@ -14,10 +14,8 @@ const HTML_EDITOR_UNDERLINED_CLASS = 'dx-htmleditor-filled';
 
 const { test } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 export default function() {
-    moduleWithoutCsp('Base markup', () => {
+    QUnit.module('Base markup', () => {
         test('render markup', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<h1>Hi!</h1><p>Test</p>'
@@ -110,7 +108,7 @@ export default function() {
         });
     });
 
-    moduleWithoutCsp('Accessibility', () => {
+    QUnit.module('Accessibility', () => {
         test('accessibility roles', function(assert) {
             const $element = $('#htmlEditor');
 
@@ -143,7 +141,7 @@ export default function() {
         });
     });
 
-    moduleWithoutCsp('Props from global config', {
+    QUnit.module('Props from global config', {
         beforeEach() {
             config({
                 editorStylingMode: 'filled',

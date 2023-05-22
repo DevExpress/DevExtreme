@@ -9,11 +9,9 @@ import 'ui/scroll_view';
 
 const { test } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 const MULTILINE_VALUE = '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n';
 
-moduleWithoutCsp('Scrolling', {
+QUnit.module('Scrolling', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;

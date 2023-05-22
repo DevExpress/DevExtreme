@@ -4,10 +4,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -80,7 +76,9 @@ const moduleConfig = {
     }
 };
 
-moduleWithoutCsp('Table resizing module', moduleConfig, () => {
+const { test, module } = QUnit;
+
+module('Table resizing module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 

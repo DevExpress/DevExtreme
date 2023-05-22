@@ -1,9 +1,6 @@
 import $ from 'jquery';
 import TableUI from 'ui/html_editor/modules/tableContextMenu';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -56,7 +53,9 @@ const moduleConfig = {
     }
 };
 
-moduleWithoutCsp('Table Context Menu module', moduleConfig, () => {
+const { test, module } = QUnit;
+
+module('Table Context Menu module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const tableUIInstance = new TableUI(this.quillMock, this.options);
         this.attachSpies(tableUIInstance);

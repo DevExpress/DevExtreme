@@ -1,11 +1,9 @@
 import $ from 'jquery';
 import 'ui/html_editor';
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
-moduleWithoutCsp('lists', () => {
+testModule('lists', () => {
     [
         { listType: 'bullet', hasUi: false },
         { listType: 'ordered', hasUi: false },

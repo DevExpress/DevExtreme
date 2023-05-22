@@ -7,9 +7,7 @@ SystemJS.config({
 define(function(require) {
     const MarkdownConverter = require('ui/html_editor/converters/markdown');
 
-    const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
-    moduleWithoutCsp('Import 3rd party', function() {
+    QUnit.module('Import 3rd party', function() {
         QUnit.test('it throw an error if the html -> markdown converter script isn\'t referenced', function(assert) {
             assert.throws(
                 function() { new MarkdownConverter(); },

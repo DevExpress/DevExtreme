@@ -4,9 +4,7 @@ import 'ui/html_editor';
 import { prepareEmbedValue, prepareTableValue } from './utils.js';
 import { isObject } from 'core/utils/type';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+const { test, module: testModule } = QUnit;
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -56,7 +54,7 @@ const moduleConfigWithTable = {
     }
 };
 
-moduleWithoutCsp('API', moduleConfig, () => {
+testModule('API', moduleConfig, () => {
     test('get registered module', function(assert) {
         this.createEditor();
         const Bold = this.instance.get('formats/bold');
@@ -498,7 +496,7 @@ moduleWithoutCsp('API', moduleConfig, () => {
     });
 });
 
-moduleWithoutCsp('Private API', moduleConfig, () => {
+testModule('Private API', moduleConfig, () => {
     test('cleanCallback should trigger on refresh', function(assert) {
         const cleanCallback = sinon.stub();
 
@@ -545,7 +543,7 @@ moduleWithoutCsp('Private API', moduleConfig, () => {
     });
 });
 
-moduleWithoutCsp('Table API', moduleConfigWithTable, function() {
+testModule('Table API', moduleConfigWithTable, function() {
     test('insertTable', function(assert) {
         const expectedValue = '<table><tbody><tr><td><p><br></p></td><td><p><br></p></td></tr></tbody></table><p><br></p>';
         this.options.value = '';

@@ -5,9 +5,7 @@ import { name as clickEvent } from 'events/click';
 
 import PointerMock from '../../../helpers/pointerMock.js';
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+const { test, module } = QUnit;
 
 const RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const RESIZABLE_CLASS = 'dx-resizable';
@@ -17,7 +15,7 @@ const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcS
 const IMAGE_SIZE = 100;
 const BORDER_PADDING_WIDTH = 2;
 
-moduleWithoutCsp('Resizing integration', {
+module('Resizing integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 

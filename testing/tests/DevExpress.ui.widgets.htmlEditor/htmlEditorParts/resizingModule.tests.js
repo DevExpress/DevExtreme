@@ -18,10 +18,6 @@ const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcS
 const IMAGE_SIZE = 100;
 const BORDER_PADDING_WIDTH = 2;
 
-const { test } = QUnit;
-
-const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -68,7 +64,9 @@ const moduleConfig = {
     }
 };
 
-moduleWithoutCsp('Resizing module', moduleConfig, () => {
+const { test, module } = QUnit;
+
+module('Resizing module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
@@ -164,7 +162,7 @@ moduleWithoutCsp('Resizing module', moduleConfig, () => {
         assert.strictEqual(frameClientRect.height, IMAGE_SIZE + BORDER_PADDING_WIDTH * 2, 'Frame has a correct height');
     });
 
-    moduleWithoutCsp('resizable minWidth and minHeight', {
+    QUnit.module('resizable minWidth and minHeight', {
         beforeEach: function() {
             this.cachedStyles = {
                 border: this.$image.css('border'),
