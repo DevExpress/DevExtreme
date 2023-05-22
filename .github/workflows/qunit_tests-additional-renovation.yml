@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: devextreme-shr2
     name: Build
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
       - name: Get sources
@@ -56,7 +56,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-${{ matrix.timezone }}
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -82,7 +82,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: Performance
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - name: Get sources
         uses: actions/checkout@v3
@@ -101,7 +101,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-${{ matrix.kind }}
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -164,7 +164,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-firefox
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -201,7 +201,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-no-csp
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
