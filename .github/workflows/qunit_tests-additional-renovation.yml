@@ -60,7 +60,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc', 'ui.editors', 'ui.grid(1/2)', 'ui.grid(2/2)', 'ui.scheduler(1/2)', 'ui.scheduler(2/2)' ]
+        constel: [
+          'misc',
+          'ui.editors(1/2)',
+          'ui.editors(2/2)',
+          'ui.grid(1/2)',
+          'ui.grid(2/2)',
+          'ui.scheduler(1/2)',
+          'ui.scheduler(2/2)'
+        ]
         timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
 
     steps:
