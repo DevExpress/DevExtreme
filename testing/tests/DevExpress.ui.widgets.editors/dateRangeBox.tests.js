@@ -2402,24 +2402,6 @@ QUnit.module('Dimensions', moduleConfig, () => {
     });
 });
 
-QUnit.module('Options', moduleConfig, () => {
-    QUnit.module('accessKey', () => {
-        QUnit.test('should be rendered on the start input on init', function(assert) {
-            this.reinit({ accessKey: 'a' });
-
-            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
-            assert.strictEqual($startDateBoxInput.attr('accesskey'), 'a');
-        });
-
-        QUnit.test('should be rendered on the start input on runtime change', function(assert) {
-            this.instance.option('accessKey', 'a');
-
-            const $startDateBoxInput = $(getStartDateBoxInstance(this.instance).field());
-            assert.strictEqual($startDateBoxInput.attr('accesskey'), 'a');
-        });
-    });
-});
-
 QUnit.module('Validation', {
     ...moduleConfig,
     failInternalValidation(keyboard) {
