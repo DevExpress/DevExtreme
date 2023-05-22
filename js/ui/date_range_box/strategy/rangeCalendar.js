@@ -38,8 +38,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     supportedKeys() {
+        const originalHandlers = super.supportedKeys();
+
         const supportedKeys = {
-            ...super.supportedKeys(),
+            ...originalHandlers,
             rightArrow: () => {
                 if(this.dateRangeBox.option('opened')) {
                     return true;
@@ -58,6 +60,26 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     return false;
                 }
             },
+            tab: (e) => {
+                if(!this.dateRangeBox.option('opened')) {
+                    return;
+                }
+
+                if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
+                    if(e.shiftKey) {
+                        if(this.dateRangeBox._isActiveElement(this.dateRangeBox.startDateField())) {
+                            this.dateRangeBox.close();
+                        }
+                    } else {
+                        if(this.dateRangeBox._isActiveElement(this.dateRangeBox.endDateField())) {
+                            this.dateRangeBox.close();
+                        }
+                    }
+                    return;
+                }
+
+                originalHandlers.tab(e);
+            }
         };
 
         return supportedKeys;

@@ -571,8 +571,7 @@ test('DateRangeBox & StartDateBox should be focused if endDateBox open and close
 
   await t
     .expect(dateRangeBox.option('opened'))
-    // TODO: popup should be closed
-    .eql(true)
+    .eql(false)
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
