@@ -319,6 +319,9 @@ const ColorBox = DropDownEditor.inherit({
 
         this.option('text', text);
 
+        const $input = this._input();
+        this.setAria('live', 'polite', $input);
+
         return this.callBase();
     },
 
