@@ -662,32 +662,59 @@ QUnit.module('check aria-labelledby attribute', {
         this.$textEditor = $('#texteditor');
         this.textEditor = this.$textEditor
             .dxTextEditor({
-                label: 'some'
+                label: 'custom',
+                placeholder: 'custom',
             })
             .dxTextEditor('instance');
         this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
         this.$label = this.$textEditor.find(`.${LABEL_CLASS}`);
+        this.$placeholder = this.$textEditor.find(`.${PLACEHOLDER_CLASS}`);
     }
 }, () => {
-    QUnit.test('if label is defined', function(assert) {
+    QUnit.test('if label and placeholder are defined', function(assert) {
+        const inputAttr = this.$input.attr('aria-labelledby');
+        const labelId = this.$label.attr('id');
+        const placeholderId = this.$placeholder.attr('id');
+
+        assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
+    });
+
+    QUnit.test('if label is defined and placeholder is not defined', function(assert) {
+        this.textEditor.option({ placeholder: null });
+
         const inputAttr = this.$input.attr('aria-labelledby');
         const labelId = this.$label.attr('id');
 
-        assert.strictEqual(labelId, inputAttr);
+        assert.strictEqual(inputAttr, labelId);
     });
 
-    QUnit.test('if label is not defined', function(assert) {
-        this.textEditor.option('label', '');
-        const inputAttr = this.$input.attr('aria-labelledby');
+    QUnit.test('if label is not defined and placeholder is defined', function(assert) {
+        this.textEditor.option({ label: null });
 
-        assert.notOk(inputAttr);
+        const inputAttr = this.$input.attr('aria-labelledby');
+        const placeholderId = this.$placeholder.attr('id');
+
+        assert.strictEqual(inputAttr, placeholderId);
     });
 
-    QUnit.test('if label mode has value "hidden"', function(assert) {
-        this.textEditor.option('labelMode', 'hidden');
+    QUnit.test('if label and placeholderId are not defined', function(assert) {
+        this.textEditor.option({
+            label: null,
+            placeholder: null,
+        });
         const inputAttr = this.$input.attr('aria-labelledby');
 
-        assert.notOk(inputAttr);
+        assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('if label mode has value "hidden" and placeholder is not defined', function(assert) {
+        this.textEditor.option({
+            labelMode: 'hidden',
+            placeholder: null,
+        });
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
     });
 });
 
