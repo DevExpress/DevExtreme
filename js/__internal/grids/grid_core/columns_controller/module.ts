@@ -363,11 +363,14 @@ export class ColumnsController extends modules.Controller {
 
   getCommonSettings(column?) {
     const commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {};
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const groupingOptions: any = this.option('grouping') || {};
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const groupPanelOptions: any = this.option('groupPanel') || {};
 
     return extend({
       allowFixing: this.option('columnFixing.enabled'),
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       allowResizing: this.option('allowColumnResizing') || undefined,
       allowReordering: this.option('allowColumnReordering'),
       minWidth: this.option('columnMinWidth'),
