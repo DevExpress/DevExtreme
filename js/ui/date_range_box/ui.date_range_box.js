@@ -368,11 +368,14 @@ class DateRangeBox extends Editor {
         this._saveValueChangeEvent(e);
 
         this._shouldSuppressValueSync = true;
-        this.getEndDateBox()._clearValueHandler(e);
         this.getStartDateBox()._clearValueHandler(e);
+        this.getEndDateBox()._clearValueHandler(e);
         this._shouldSuppressValueSync = false;
 
-        this.reset();
+        this.reset(true);
+
+        this.focus();
+        eventsEngine.trigger($(this.startDateField()), 'input');
     }
 
     _isClearButtonVisible() {
@@ -934,9 +937,13 @@ class DateRangeBox extends Editor {
         this.getStartDateBox().focus();
     }
 
-    reset() {
-        // this.getEndDateBox().reset();
-        // this.getStartDateBox().reset();
+    reset(shouldSkipCall) {
+        if(!shouldSkipCall) {
+            this._shouldSuppressValueSync = true;
+            this.getEndDateBox().reset();
+            this.getStartDateBox().reset();
+            this._shouldSuppressValueSync = false;
+        }
 
         super.reset();
     }
