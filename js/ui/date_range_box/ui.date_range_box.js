@@ -26,6 +26,7 @@ const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
+const INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 
@@ -247,6 +248,8 @@ class DateRangeBox extends Editor {
         this._renderButtonsContainer();
 
         super._initMarkup();
+
+        this.$element().removeClass(INVALID_BADGE_CLASS);
     }
 
     _attachKeyboardEvents() {
@@ -541,6 +544,7 @@ class DateRangeBox extends Editor {
         return {
             ...this._getDateBoxConfig(),
             invalidDateMessage: options.invalidEndDateMessage,
+            isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             dropDownOptions: {
                 onShowing: (e) => {

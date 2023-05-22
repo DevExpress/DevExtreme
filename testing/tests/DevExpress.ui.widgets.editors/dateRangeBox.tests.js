@@ -372,6 +372,10 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
 });
 
 QUnit.module('Classes', moduleConfig, () => {
+    QUnit.test(`DateRangeBox should not have ${SHOW_INVALID_BADGE_CLASS} class for start dateBox to never show invalid icon`, function(assert) {
+        assert.strictEqual(this.$element.hasClass(SHOW_INVALID_BADGE_CLASS), false, 'dateRangeBox does not have invalid badge class');
+    });
+
     [true, false].forEach(readOnly => {
         QUnit.test(`hover class should be added on hover event if dateRangeBox readOnly is ${readOnly}`, function(assert) {
             this.reinit({
@@ -2087,7 +2091,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             optionValue: 'useButtons'
         }, {
             optionName: 'applyButtonText',
-            optionValue: 'kk'
+            optionValue: 'apply'
         }, {
             optionName: 'cancelButtonText',
             optionValue: 'abort'
@@ -2115,6 +2119,31 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             this.instance.option(optionName, optionValue);
 
             assert.deepEqual(startDateBox.option(optionName), optionValue);
+        });
+    });
+
+    [
+        {
+            optionName: 'isValid',
+            optionValue: false
+        }
+    ].forEach(({ optionName, optionValue }) => {
+        QUnit.test(`${optionName} should be passed to endDateBox on init`, function(assert) {
+            this.reinit({
+                [optionName]: optionValue
+            });
+
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            assert.deepEqual(endDateBox.option(optionName), optionValue);
+        });
+
+        QUnit.test(`${optionName} should be passed to endDateBox on runtime change`, function(assert) {
+            const endDateBox = getEndDateBoxInstance(this.instance);
+
+            this.instance.option(optionName, optionValue);
+
+            assert.deepEqual(endDateBox.option(optionName), optionValue);
         });
     });
 
@@ -2159,6 +2188,18 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         },
         {
             optionName: 'openOnFieldClick',
+            optionValue: false,
+        },
+        {
+            optionName: 'focusStateEnabled',
+            optionValue: false,
+        },
+        {
+            optionName: 'tabIndex',
+            optionValue: 1,
+        },
+        {
+            optionName: 'disabled',
             optionValue: false,
         }
     ].forEach(({ optionName, optionValue }) => {
