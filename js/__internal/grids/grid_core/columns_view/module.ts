@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import {
   getOuterWidth, getWidth, getOuterHeight, getHeight,
 } from '@js/core/utils/size';
@@ -129,7 +131,9 @@ const copyAttributes = function (element, newElement) {
   }
 };
 
-const columnsViewMembers = {
+const viewWithColumnStateMixin = modules.View.inherit(columnStateMixin);
+
+export class ColumnsView extends viewWithColumnStateMixin {
   _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
@@ -153,13 +157,13 @@ const columnsViewMembers = {
       options.useSimulatedScrollbar = !useNativeScrolling;
     }
     return options;
-  },
+  }
 
   _updateCell($cell, parameters) {
     if (parameters.rowType) {
       this._cellPrepared($cell, parameters);
     }
-  },
+  }
 
   _createCell(options) {
     const { column } = options;
@@ -197,18 +201,18 @@ const columnsViewMembers = {
     }
 
     return $cell;
-  },
+  }
 
-  _createRow(rowObject, tagName) {
+  _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
     const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
     this.setAria('role', 'row', $element);
     return $element;
-  },
+  }
 
   _isAltRow(row) {
     return row && row.dataIndex % 2 === 1;
-  },
+  }
 
   _createTable(columns, isAppend) {
     const that = this;
@@ -340,13 +344,19 @@ const columnsViewMembers = {
     subscribeToRowEvents(that, $table);
 
     return $table;
-  },
+  }
 
-  _rowPointerDown: noop,
+  _rowPointerDown() {
 
-  _rowClick: noop,
+  }
 
-  _rowDblClick: noop,
+  _rowClick() {
+
+  }
+
+  _rowDblClick() {
+
+  }
 
   _createColGroup(columns) {
     const colgroupElement = $('<colgroup>');
@@ -359,7 +369,7 @@ const columnsViewMembers = {
       }
     }
     return colgroupElement;
-  },
+  }
 
   _createCol(column) {
     let width = column.visibleWidth || column.width;
@@ -372,9 +382,9 @@ const columnsViewMembers = {
     setWidth(col, width);
 
     return col;
-  },
+  }
 
-  renderDelayedTemplates(change) {
+  renderDelayedTemplates(change?) {
     const delayedTemplates = this._delayedTemplates;
     const syncTemplates = delayedTemplates.filter((template) => !template.async);
     const asyncTemplates = delayedTemplates.filter((template) => template.async);
@@ -383,7 +393,7 @@ const columnsViewMembers = {
 
     this._renderDelayedTemplatesCore(syncTemplates, false, change);
     this._renderDelayedTemplatesCoreAsync(asyncTemplates);
-  },
+  }
 
   _renderDelayedTemplatesCoreAsync(templates) {
     if (templates.length) {
@@ -394,9 +404,9 @@ const columnsViewMembers = {
 
       this._templateTimeouts.add(templateTimeout);
     }
-  },
+  }
 
-  _renderDelayedTemplatesCore(templates, isAsync, change) {
+  _renderDelayedTemplatesCore(templates, isAsync, change?) {
     const date = new Date();
 
     while (templates.length) {
@@ -424,9 +434,9 @@ const columnsViewMembers = {
     if (!templates.length && this._delayedTemplates.length) {
       this.renderDelayedTemplates();
     }
-  },
+  }
 
-  _processTemplate(template) {
+  _processTemplate(template, options?) {
     const that = this;
     let renderingTemplate;
 
@@ -463,9 +473,8 @@ const columnsViewMembers = {
     }
 
     return renderingTemplate;
-  },
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderTemplate(container, template, options, allowRenderToDetachedContainer, change) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
@@ -508,19 +517,19 @@ const columnsViewMembers = {
     return templateDeferred.promise().always(() => {
       this._templateDeferreds.delete(templateDeferred);
     });
-  },
+  }
 
   _getBodies(tableElement) {
     return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
-  },
+  }
 
   _needWrapRow($tableElement) {
     const hasRowTemplate = !!this.option().rowTemplate;
 
     return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${ROW_CLASS}`).length;
-  },
+  }
 
-  _wrapRowIfNeed($table, $row, isRefreshing) {
+  _wrapRowIfNeed($table, $row, isRefreshing?) {
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
@@ -533,12 +542,12 @@ const columnsViewMembers = {
     }
 
     return $row;
-  },
+  }
 
-  _appendRow($table, $row, appendTemplate) {
+  _appendRow($table, $row, appendTemplate?) {
     appendTemplate = appendTemplate || appendElementTemplate;
     appendTemplate.render({ content: $row, container: $table });
-  },
+  }
 
   _resizeCore() {
     const scrollLeft = this._scrollLeft;
@@ -547,7 +556,7 @@ const columnsViewMembers = {
       this._scrollLeft = 0;
       this.scrollTo({ left: scrollLeft });
     }
-  },
+  }
 
   _renderCore(e) {
     const $root = this.element().parent();
@@ -555,7 +564,7 @@ const columnsViewMembers = {
     if (!$root || $root.parent().length) {
       this.renderDelayedTemplates(e);
     }
-  },
+  }
 
   _renderTable(options) {
     options = options || {};
@@ -567,7 +576,7 @@ const columnsViewMembers = {
     this._renderRows($table, options);
 
     return $table;
-  },
+  }
 
   _renderRows($table, options) {
     const that = this;
@@ -578,7 +587,7 @@ const columnsViewMembers = {
     for (let i = 0; i < rows.length; i++) {
       that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i] }, options));
     }
-  },
+  }
 
   _renderRow($table, options) {
     if (!options.columnIndices) {
@@ -596,11 +605,11 @@ const columnsViewMembers = {
     this._addWatchMethod(rowOptions, options.row);
 
     this._rowPrepared($wrappedRow, rowOptions, options.row);
-  },
+  }
 
   _needRenderCell(columnIndex, columnIndices) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
-  },
+  }
 
   _renderCells($row, options) {
     const that = this;
@@ -621,7 +630,7 @@ const columnsViewMembers = {
         columnIndex++;
       }
     }
-  },
+  }
 
   _updateCells($rowElement, $newRowElement, columnIndices) {
     const $cells = $rowElement.children();
@@ -641,7 +650,7 @@ const columnsViewMembers = {
     });
 
     copyAttributes($rowElement.get(0), $newRowElement.get(0));
-  },
+  }
 
   _setCellAriaAttributes($cell, cellOptions) {
     if (cellOptions.rowType !== 'freeSpace') {
@@ -651,7 +660,7 @@ const columnsViewMembers = {
       const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
       this.setAria('colindex', ariaColIndex, $cell);
     }
-  },
+  }
 
   _renderCell($row, options) {
     const cellOptions = this._getCellOptions(options);
@@ -674,7 +683,7 @@ const columnsViewMembers = {
     $row.get(0).appendChild($cell.get(0));
 
     return $cell;
-  },
+  }
 
   _renderCellContent($cell, options, renderOptions) {
     const template = this._getCellTemplate(options);
@@ -682,13 +691,15 @@ const columnsViewMembers = {
     when(!template || this.renderTemplate($cell, template, options, undefined, renderOptions.change)).done(() => {
       this._updateCell($cell, options);
     });
-  },
+  }
 
-  _getCellTemplate() { },
+  _getCellTemplate(options?): any {
 
-  _getRows() {
+  }
+
+  _getRows(change?) {
     return [];
-  },
+  }
 
   _getCellOptions(options) {
     const cellOptions = {
@@ -701,9 +712,9 @@ const columnsViewMembers = {
     this._addWatchMethod(cellOptions);
 
     return cellOptions;
-  },
+  }
 
-  _addWatchMethod(options, source) {
+  _addWatchMethod(options, source?) {
     if (!this.option('repaintChangesOnly')) return;
 
     const watchers: any[] = [];
@@ -762,19 +773,19 @@ const columnsViewMembers = {
     }
 
     return options;
-  },
+  }
 
   _cellPrepared(cell, options) {
     options.cellElement = getPublicElement($(cell));
     this.executeAction('onCellPrepared', options);
-  },
+  }
 
-  _rowPrepared($row, options) {
+  _rowPrepared($row, options, row?) {
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);
     this.executeAction('onRowPrepared', options);
-  },
+  }
 
   _columnOptionChanged(e) {
     const { optionNames } = e;
@@ -793,26 +804,26 @@ const columnsViewMembers = {
     if (!this._requireReady) {
       this.render();
     }
-  },
+  }
 
   getCellIndex($cell) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;
-  },
+  }
 
   getTableElements() {
     // @ts-expect-error
     return this._tableElement || $();
-  },
+  }
 
   getTableElement() {
     return this._tableElement;
-  },
+  }
 
-  setTableElement(tableElement) {
+  setTableElement(tableElement, isFixedTableRendering?) {
     this._tableElement = tableElement;
-  },
+  }
 
   optionChanged(args) {
     this.callBase(args);
@@ -827,7 +838,7 @@ const columnsViewMembers = {
         args.handled = true;
         break;
     }
-  },
+  }
 
   init() {
     this._scrollLeft = -1;
@@ -853,16 +864,18 @@ const columnsViewMembers = {
 
     this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
     this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
-  },
+  }
 
-  _afterRowPrepared: noop,
+  _afterRowPrepared(e?) {
+
+  }
 
   _handleDataChanged() {
-  },
+  }
 
   callbackNames() {
     return ['scrollChanged'];
-  },
+  }
 
   _updateScrollLeftPosition() {
     const scrollLeft = this._scrollLeft;
@@ -871,7 +884,7 @@ const columnsViewMembers = {
       this._scrollLeft = 0;
       this.scrollTo({ left: scrollLeft });
     }
-  },
+  }
 
   scrollTo(pos) {
     const $element = this.element();
@@ -881,11 +894,11 @@ const columnsViewMembers = {
       this._scrollLeft = pos.left;
       $scrollContainer && $scrollContainer.scrollLeft(pos.left);
     }
-  },
+  }
 
-  _getContent() {
+  _getContent(isFixedTableRendering?) {
     return this._tableElement?.parent();
-  },
+  }
 
   _removeContent(isFixedTableRendering) {
     const $scrollContainer = this._getContent(isFixedTableRendering);
@@ -893,9 +906,9 @@ const columnsViewMembers = {
     if ($scrollContainer?.length) {
       $scrollContainer.remove();
     }
-  },
+  }
 
-  _wrapTableInScrollContainer($table) {
+  _wrapTableInScrollContainer($table, isFixedTableRendering?) {
     const $scrollContainer = $('<div>');
     const useNative = this.option('scrolling.useNative');
 
@@ -919,11 +932,11 @@ const columnsViewMembers = {
     this.setAria('role', 'presentation', $scrollContainer);
 
     return $scrollContainer;
-  },
+  }
 
   needWaitAsyncTemplates() {
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
-  },
+  }
 
   waitAsyncTemplates(forceWaiting = false) {
     // @ts-expect-error
@@ -948,7 +961,7 @@ const columnsViewMembers = {
     waitTemplatesRecursion();
 
     return result.promise();
-  },
+  }
 
   _updateContent($newTableElement, change, isFixedTableRendering) {
     return this.waitAsyncTemplates().done(() => {
@@ -956,9 +969,11 @@ const columnsViewMembers = {
       this.setTableElement($newTableElement, isFixedTableRendering);
       this._wrapTableInScrollContainer($newTableElement, isFixedTableRendering);
     });
-  },
+  }
 
-  _findContentElement: noop,
+  _findContentElement() {
+
+  }
 
   _getWidths($cellElements) {
     const result: any[] = [];
@@ -979,11 +994,11 @@ const columnsViewMembers = {
     }
 
     return result;
-  },
+  }
 
   getColumnWidths($tableElement) {
     const that = this;
-    let result = [];
+    let result: any[] = [];
     let $rows;
     let $cells;
 
@@ -1007,16 +1022,15 @@ const columnsViewMembers = {
     }
 
     return result;
-  },
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getVisibleColumnIndex(columnIndex, rowIndex) {
     return columnIndex;
-  },
+  }
 
   setColumnWidths({
     widths, $tableElement, columns, fixed,
-  }) {
+  }: any) {
     let $cols;
     let width;
     let minWidth;
@@ -1076,16 +1090,16 @@ const columnsViewMembers = {
         columnIndex++;
       }
     }
-  },
+  }
 
   getCellElements(rowIndex) {
     return this._getCellElementsCore(rowIndex);
-  },
+  }
 
   _getCellElementsCore(rowIndex) {
     const $row = this._getRowElements().eq(rowIndex);
     return $row.children();
-  },
+  }
 
   _getCellElement(rowIndex, columnIdentifier) {
     const that = this;
@@ -1100,7 +1114,7 @@ const columnsViewMembers = {
     if ($cell && $cell.length) {
       return $cell;
     }
-  },
+  }
 
   _getRowElement(rowIndex) {
     const that = this;
@@ -1116,15 +1130,15 @@ const columnsViewMembers = {
       return $rowElement;
     }
     return undefined;
-  },
+  }
 
   getCellElement(rowIndex, columnIdentifier) {
     return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
-  },
+  }
 
   getRowElement(rowIndex) {
     const $rows = this._getRowElement(rowIndex);
-    let elements: any[] = [];
+    let elements: any = [];
 
     // @ts-expect-error
     if ($rows && !getPublicElement($rows).get) {
@@ -1135,7 +1149,7 @@ const columnsViewMembers = {
       elements = $rows;
     }
     return elements;
-  },
+  }
 
   _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     if (isString(columnIdentifier)) {
@@ -1144,13 +1158,13 @@ const columnsViewMembers = {
     }
 
     return columnIdentifier;
-  },
+  }
 
-  getColumnElements() {},
+  getColumnElements() {}
 
-  getColumns(rowIndex) {
+  getColumns(rowIndex, $tableElement) {
     return this._columnsController.getVisibleColumns(rowIndex);
-  },
+  }
 
   getCell(cellPosition, rows, cells) {
     const $rows = rows || this._getRowElements();
@@ -1165,7 +1179,7 @@ const columnsViewMembers = {
         return $cells.eq($cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1);
       }
     }
-  },
+  }
 
   getRowsCount() {
     const tableElement = this.getTableElement();
@@ -1174,7 +1188,7 @@ const columnsViewMembers = {
       return tableElement[0].rows.length;
     }
     return 0;
-  },
+  }
 
   _getRowElementsCore(tableElement) {
     tableElement = tableElement || this.getTableElement();
@@ -1189,19 +1203,19 @@ const columnsViewMembers = {
 
     // @ts-expect-error
     return $();
-  },
+  }
 
-  _getRowElements(tableElement) {
+  _getRowElements(tableElement?) {
     return this._getRowElementsCore(tableElement);
-  },
+  }
 
   getRowIndex($row) {
     return this._getRowElements().index($row);
-  },
+  }
 
-  getBoundingRect() { },
+  getBoundingRect() { }
 
-  getName() { },
+  getName() { }
 
   setScrollerSpacing(width) {
     const that = this;
@@ -1212,7 +1226,7 @@ const columnsViewMembers = {
       paddingLeft: rtlEnabled ? width : '',
       paddingRight: !rtlEnabled ? width : '',
     });
-  },
+  }
 
   isScrollbarVisible(isHorizontal) {
     const $element = this.element();
@@ -1223,11 +1237,11 @@ const columnsViewMembers = {
     }
 
     return false;
-  },
+  }
 
   isDisposed() {
     return this.component?._disposed;
-  },
+  }
 
   dispose() {
     if (hasWindow()) {
@@ -1236,7 +1250,5 @@ const columnsViewMembers = {
       this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
       this._templateTimeouts?.clear();
     }
-  },
-};
-
-export const ColumnsView = modules.View.inherit(columnStateMixin).inherit(columnsViewMembers);
+  }
+}
