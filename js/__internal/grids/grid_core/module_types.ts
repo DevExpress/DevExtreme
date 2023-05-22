@@ -111,7 +111,7 @@ export type OptionChanged = {
 
 export interface Controllers {
   data: import('./data_controller/module').DataController;
-  columns: any;
+  columns: import('./columns_controller/module').ColumnsController;
   resizing: any;
   adaptiveColumns: any;
   columnChooser: any;
