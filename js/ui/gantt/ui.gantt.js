@@ -186,6 +186,7 @@ class Gantt extends Widget {
             bars: this._bars,
             mainElement: this.$element(),
             onSelectionChanged: (e) => { this._ganttTreeList.selectRows(GanttHelper.getArrayFromOneElement(e.id)); },
+            onViewTypeChanged: (e) => { this._onViewTypeChanged(e.type); },
             onScroll: (e) => { this._ganttTreeList.scrollBy(e.scrollTop); },
             onDialogShowing: this._showDialog.bind(this),
             onPopupMenuShowing: this._showPopupMenu.bind(this),
@@ -217,6 +218,9 @@ class Gantt extends Widget {
             this._fireContentReadyAction();
         }
         delete this._treeListParentRecalculatedDataUpdating;
+    }
+    _onViewTypeChanged(type) {
+        this.option('scaleType', this._actionsManager._getScaleType(type));
     }
     _refreshDataSource(name) {
         let dataOption = this[`_${name}Option`];
