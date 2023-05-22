@@ -144,7 +144,7 @@ export class DataController extends ControllerWithDataMixin {
 
   _isPagingByRendering: any;
 
-  _columnsController: Controllers['columns'];
+  _columnsController!: Controllers['columns'];
 
   _editingController: any;
 
