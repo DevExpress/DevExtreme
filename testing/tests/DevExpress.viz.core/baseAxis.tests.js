@@ -7,6 +7,7 @@ import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import xyMethods from 'viz/axes/xy_axes';
 import { isFunction, isDeferred } from 'core/utils/type';
+import errors from 'core/errors';
 
 const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
@@ -1197,6 +1198,43 @@ QUnit.test('Validate visualRange, option is set', function(assert) {
     this.axis.validate();
 
     assert.deepEqual(this.axis.getOptions().visualRange, [new Date(10), new Date(20)]);
+});
+
+QUnit.module('Deprecated options', {
+    beforeEach() {
+        environment.beforeEach.apply(this, arguments);
+        sinon.spy(errors, 'log');
+    },
+    afterEach() {
+        environment.afterEach.apply(this, arguments);
+        errors.log.restore();
+    },
+    createAxis() {
+        return new Axis({
+            renderer: this.renderer,
+            axisType: 'xyAxes',
+            drawingType: 'linear',
+            isArgumentAxis: false,
+            eventTrigger: () => { },
+            getTemplate() {}
+        });
+    }
+});
+
+QUnit.test('Should show warning if deprecated "shift" value sets to "valueAxis.visualRangeUpdateMode" option', function(assert) {
+    const axis = this.createAxis();
+    axis.updateOptions({ label: {}, visualRangeUpdateMode: 'shift' });
+
+    axis.validate();
+
+    assert.deepEqual(errors.log.lastCall.args,
+        [
+            'W0016',
+            'valueAxis.visualRangeUpdateMode',
+            'shift',
+            '23.1',
+            'Use any other accepted value'
+        ]);
 });
 
 QUnit.module('Zoom', {

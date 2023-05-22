@@ -21,6 +21,7 @@ import { Translator2D } from '../translators/translator2d';
 import { Range } from '../translators/range';
 import { tick } from './tick';
 import { adjust } from '../../core/utils/math';
+import errors from '../../core/errors';
 import dateUtils from '../../core/utils/date';
 import { noop as _noop } from '../../core/utils/common';
 import xyMethods from './xy_axes';
@@ -282,6 +283,13 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
 function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
+
+function checkDeprecatedValues(isValueAxis, options) {
+    if(isValueAxis && options.visualRangeUpdateMode === 'shift') {
+        errors.log('W0016', 'valueAxis.visualRangeUpdateMode', 'shift', '23.1', 'Use any other accepted value');
+    }
+}
+
 export const Axis = function(renderSettings) {
     const that = this;
 
@@ -2186,12 +2194,12 @@ Axis.prototype = {
     },
 
     _validateOptions(options) {
-        const that = this;
+        checkDeprecatedValues(!this.isArgumentAxis, options);
 
-        options.wholeRange = that._validateVisualRange(options.wholeRange);
-        options.visualRange = options._customVisualRange = that._validateVisualRange(options._customVisualRange);
+        options.wholeRange = this._validateVisualRange(options.wholeRange);
+        options.visualRange = options._customVisualRange = this._validateVisualRange(options._customVisualRange);
 
-        that._setVisualRange(options._customVisualRange);
+        this._setVisualRange(options._customVisualRange);
     },
 
     validate() {
