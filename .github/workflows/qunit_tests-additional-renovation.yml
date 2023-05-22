@@ -175,10 +175,6 @@ jobs:
           'viz',
           'renovation'
         ]
-        include:
-          - useCsp: true
-          - constel: 'ui.htmlEditor'
-            useCsp: false
 
     steps:
       - name: Get sources
@@ -192,7 +188,7 @@ jobs:
           browser: 'firefox'
           useJQuery: 'true'
           headless: 'true'
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-no-csp:
     needs: build

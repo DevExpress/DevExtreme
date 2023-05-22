@@ -102,6 +102,8 @@ const tableMarkupWithHeaderRow = '\
 
 const { test, module } = QUnit;
 
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 module('Table properties forms', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -219,7 +221,7 @@ module('Table properties forms', {
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
         });
 
-        test('Cell backgroundColor & borderColor should be passed to colorBox as a default during editing', function(assert) {
+        testWithoutCsp('Cell backgroundColor & borderColor should be passed to colorBox as a default during editing', function(assert) {
             this.createWidget({ value: tableWithoutContent });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -236,7 +238,7 @@ module('Table properties forms', {
             assert.strictEqual(borderColorEditor.option('value'), 'gray', 'border color is passed to colorBox');
         });
 
-        test('backgroundColor & borderColor of first selected cell should be applied for all cells when color was not modified in colorBox', function(assert) {
+        testWithoutCsp('backgroundColor & borderColor of first selected cell should be applied for all cells when color was not modified in colorBox', function(assert) {
             this.createWidget({ value: tableWithoutContent });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -997,7 +999,7 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($horizontalCells.eq(1).get(0).style.width), 200, 2, 'second column cell width style is applied');
         });
 
-        test('Check table width edititng if one column width is fixed', function(assert) {
+        testWithoutCsp('Check table width edititng if one column width is fixed', function(assert) {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\

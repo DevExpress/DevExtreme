@@ -1,1 +1,1 @@
-window.showdown = module.exports = undefined;
+window.showdown = module.exports = null;
