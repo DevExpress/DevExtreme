@@ -133,6 +133,10 @@ class MultiselectDateBox extends DateBox {
                 break;
         }
     }
+
+    close() {
+        this._strategy.getDateRangeBox().getStartDateBox().option('opened', false);
+    }
 }
 
 export default MultiselectDateBox;
