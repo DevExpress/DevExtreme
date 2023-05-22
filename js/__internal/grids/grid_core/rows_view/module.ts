@@ -1173,6 +1173,8 @@ class RowsView extends ColumnsView {
     if (items[itemIndex]) {
       return items[itemIndex].data;
     }
+
+    return undefined;
   }
 
   _scrollToElement($element, offset) {
