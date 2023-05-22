@@ -693,8 +693,7 @@ export default function() {
         });
     });
 
-    testModule('Table without paragraph support', {
-        ...moduleConfig,
+    testModule('Table without paragraph support', Object.assign(moduleConfig, {
         before: function() {
             this.originalTableModule = Quill.import('modules/table');
             const TableModule = Quill.import('tableModules/lite');
@@ -703,7 +702,7 @@ export default function() {
         after: function() {
             Quill.register('modules/table', this.originalTableModule, true);
         }
-    }, () => {
+    }), () => {
         test('render table with header', function(assert) {
             const expectedMarkup = '<table><thead><tr><th>Header1</th><th>Header2</th></tr></thead><tbody><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
             const instance = $('#htmlEditor').dxHtmlEditor({
