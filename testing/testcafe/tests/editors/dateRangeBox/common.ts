@@ -40,8 +40,6 @@ stylingModes.forEach((stylingMode) => {
       HOVER_STATE_CLASS,
       READONLY_STATE_CLASS,
       DISABLED_STATE_CLASS,
-      INVALID_STATE_CLASS,
-      `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
     ] as any[]
     ) {
       for (const id of t.ctx.ids) {
@@ -54,6 +52,24 @@ stylingModes.forEach((stylingMode) => {
       for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);
         await removeClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
+      }
+    }
+
+    for (const state of [
+      INVALID_STATE_CLASS,
+      `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
+    ] as any[]
+    ) {
+      for (const id of t.ctx.ids) {
+        await setClassAttribute(Selector(`#${id}`), state);
+        await setClassAttribute(Selector(`#${id} .dx-end-datebox`), state);
+      }
+
+      await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
+
+      for (const id of t.ctx.ids) {
+        await removeClassAttribute(Selector(`#${id}`), state);
+        await removeClassAttribute(Selector(`#${id} .dx-end-datebox`), state);
       }
     }
 
