@@ -1,7 +1,7 @@
 import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import { extend } from '../../../core/utils/extend';
-import { isSameDateArrays } from '../ui.date_range.utils';
+import { isSameDateArrays, getDeserializedDate } from '../ui.date_range.utils';
 import { isFunction } from '../../../core/utils/type';
 
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
@@ -16,21 +16,32 @@ class RangeCalendarStrategy extends CalendarStrategy {
     popupConfig(popupConfig) {
         return extend(true, super.popupConfig(popupConfig), {
             position: { of: this.dateRangeBox.$element() },
-            onShowing: () => {
-                this._widget._restoreViewsMinMaxOptions();
-                this._dateSelectedCounter = 0;
-                // this._widget.option('_currentSelection', 'startDate');
-            }
         });
+    }
+
+    popupShowingHandler() {
+        this._widget._restoreViewsMinMaxOptions();
+        this._dateSelectedCounter = 0;
     }
 
     _getPopup() {
         return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
     }
 
+    // TODO: think again about prevent render calendar inside overlay-content element
+    renderPopupContent() {
+        if(this.dateBox.NAME === '_EndDateBox') {
+            return;
+        }
+
+        super.renderPopupContent();
+    }
+
     supportedKeys() {
+        const originalHandlers = super.supportedKeys();
+
         const supportedKeys = {
-            ...super.supportedKeys(),
+            ...originalHandlers,
             rightArrow: () => {
                 if(this.dateRangeBox.option('opened')) {
                     return true;
@@ -49,6 +60,26 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     return false;
                 }
             },
+            tab: (e) => {
+                if(!this.dateRangeBox.option('opened')) {
+                    return;
+                }
+
+                if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
+                    if(e.shiftKey) {
+                        if(this.dateRangeBox._isActiveElement(this.dateRangeBox.startDateField())) {
+                            this.dateRangeBox.close();
+                        }
+                    } else {
+                        if(this.dateRangeBox._isActiveElement(this.dateRangeBox.endDateField())) {
+                            this.dateRangeBox.close();
+                        }
+                    }
+                    return;
+                }
+
+                originalHandlers.tab(e);
+            }
         };
 
         return supportedKeys;
@@ -108,13 +139,37 @@ class RangeCalendarStrategy extends CalendarStrategy {
         }
 
         if(isInstantlyMode) {
+            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
+                if(this._widget.option('_currentSelection') === 'startDate') {
+                    this._dateSelectedCounter = 0;
+                } else {
+                    this._dateSelectedCounter = 1;
+
+                    if(!value[0]) {
+                        this._dateSelectedCounter = -1;
+                    } else if(getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+                        this.dateRangeBox.updateValue([value[0], null], event);
+                        return;
+                    }
+                }
+            }
+
             this.dateRangeBox.updateValue(value, event);
             this._dateSelectedCounter += 1;
 
-            if(this._dateSelectedCounter === 2) {
-                this.getDateRangeBox().close();
+            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
+                // TODO update close condition for normal mode
+                if(this._dateSelectedCounter === 2) {
+                    this.getDateRangeBox().close();
 
-                return;
+                    return;
+                }
+            } else {
+                if(this._dateSelectedCounter === 2) {
+                    this.getDateRangeBox().close();
+
+                    return;
+                }
             }
         }
 

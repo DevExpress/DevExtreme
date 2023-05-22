@@ -92,6 +92,7 @@ const GALLERY_SELECTED_ITEM_CLASS = INDICATOR_ITEM_CLASS + '-selected';
 const NAV_PREV_BUTTON_CLASS = 'dx-gallery-nav-button-prev';
 const NAV_NEXT_BUTTON_CLASS = 'dx-gallery-nav-button-next';
 const DX_WIDGET_CLASS = 'dx-widget';
+const ITEM_CONTENT_SELECTOR = '.dx-item-content';
 
 const ANIMATION_WAIT_TIME = 500;
 const ITEM_WIDTH = 400;
@@ -381,6 +382,18 @@ QUnit.module('behavior', {
 
         const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
         assert.equal($loopItems.length, 2);
+    });
+
+    QUnit.test('duplicate items should have role="presentation"', function(assert) {
+        const $gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            loop: true
+        });
+
+        const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
+        $loopItems.each((index, item) => {
+            assert.strictEqual($(item).attr('role'), 'presentation');
+        });
     });
 
     QUnit.test('duplicate items is not rendered when loop=false', function(assert) {
@@ -1185,17 +1198,15 @@ QUnit.module('items visibility', {
     }
 }, () => {
     QUnit.test('invisible items should have correct class', function(assert) {
-        const instance = this.instance;
-
-        instance.option('selectedIndex', 2);
+        this.instance.option('selectedIndex', 2);
 
         const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
         $.each($galleryItems, (index, $item) => {
-            if(index !== instance.option('selectedIndex')) {
-                assert.ok($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'item has invisible class');
+            if(index !== this.instance.option('selectedIndex')) {
+                assert.ok($($item).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'item has invisible class');
             } else {
-                assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'selected item has not invisible class');
+                assert.notOk($($item).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'selected item has not invisible class');
             }
         });
     });
@@ -1208,10 +1219,9 @@ QUnit.module('items visibility', {
         mouse.start().swipeStart();
 
         $.each($galleryItems, (index, $item) => {
-            assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'swiped item has not invisible class');
+            assert.notOk($($item).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'swiped item has not invisible class');
         });
     });
-
 
     QUnit.test('all items should be visible after click on a button', function(assert) {
         const $nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
@@ -1231,12 +1241,12 @@ QUnit.module('items visibility', {
         const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
         this.instance.goToItem(1);
-        assert.notOk($galleryItems.eq(1).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'selected item has not invisible class');
-        assert.ok($galleryItems.eq(2).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'previously selected item has not invisible class');
+        assert.notOk($galleryItems.eq(1).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'selected item has not invisible class');
+        assert.ok($galleryItems.eq(2).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'previously selected item has not invisible class');
 
         this.instance.goToItem(3);
-        assert.notOk($galleryItems.eq(3).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'selected item has not invisible class');
-        assert.ok($galleryItems.eq(1).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'previously selected item has not invisible class');
+        assert.notOk($galleryItems.eq(3).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'selected item has not invisible class');
+        assert.ok($galleryItems.eq(1).find(ITEM_CONTENT_SELECTOR).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), 'previously selected item has not invisible class');
     });
 
     QUnit.test('there are no invisible items if items count per page > 1', function(assert) {

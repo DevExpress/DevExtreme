@@ -109,6 +109,7 @@ export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: strin
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
@@ -810,7 +811,8 @@ export type Options = dxFormOptions;
 
 // TODO: temporary commented out to fix jquery generation error in R1
 
-// type EventProps<T> = Extract<keyof T, `on${any}`>;
+// ///#DEBUG
+type EventProps<T> = Extract<keyof T, `on${any}`>;
 // type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
@@ -858,3 +860,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

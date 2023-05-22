@@ -255,6 +255,7 @@ export interface VectorMapLegendItem extends BaseLegendItem {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
@@ -900,6 +901,7 @@ export type Properties = dxVectorMapOptions;
 /** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -994,3 +996,4 @@ onTooltipShown?: ((e: TooltipShownEvent) => void);
  */
 onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
 };
+///#ENDDEBUG

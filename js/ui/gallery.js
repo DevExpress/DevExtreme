@@ -37,6 +37,7 @@ const GALLERY_INDICATOR_CLASS = GALLERY_CLASS + '-indicator';
 const GALLERY_INDICATOR_ITEM_CLASS = GALLERY_INDICATOR_CLASS + '-item';
 const GALLERY_INDICATOR_ITEM_SELECTOR = '.' + GALLERY_INDICATOR_ITEM_CLASS;
 const GALLERY_INDICATOR_ITEM_SELECTED_CLASS = GALLERY_INDICATOR_ITEM_CLASS + '-selected';
+const ITEM_CONTENT_SELECTOR = '.dx-item-content';
 
 const GALLERY_IMAGE_CLASS = 'dx-gallery-item-image';
 
@@ -387,11 +388,13 @@ const Gallery = CollectionWidget.inherit({
 
     _cloneItemForDuplicate: function(item, $container) {
         if(item) {
-            $(item)
+            const $clonedItem = $(item)
                 .clone(false)
                 .addClass(GALLERY_LOOP_ITEM_CLASS)
                 .css('margin', 0)
                 .appendTo($container);
+
+            this.setAria({ role: 'presentation' }, $clonedItem);
         }
     },
 
@@ -556,7 +559,7 @@ const Gallery = CollectionWidget.inherit({
 
     _reviseDimensions: function() {
         const that = this;
-        const $firstItem = that._itemElements().first().find('.dx-item-content');
+        const $firstItem = that._itemElements().first().find(ITEM_CONTENT_SELECTOR);
 
         if(!$firstItem || $firstItem.is(':hidden')) {
             return;
@@ -638,25 +641,16 @@ const Gallery = CollectionWidget.inherit({
             this._releaseInvisibleItems();
             return;
         }
-
-        this._itemElements().each((function(index, item) {
-            if(this.option('selectedIndex') === index) {
-                $(item).removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
-            } else {
-                $(item).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
+        const selectedIndex = this.option('selectedIndex');
+        this._itemElements().each((index, item) => {
+            if(selectedIndex !== index) {
+                $(item).find(ITEM_CONTENT_SELECTOR).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
             }
-        }).bind(this));
-
-        this._getLoopedItems()
-            .addClass(GALLERY_INVISIBLE_ITEM_CLASS);
+        });
     },
 
     _releaseInvisibleItems: function() {
-        this._itemElements()
-            .removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
-
-        this._getLoopedItems()
-            .removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
+        this._itemElements().find(ITEM_CONTENT_SELECTOR).removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
     },
 
     _renderSelectedPageIndicator: function() {

@@ -37,11 +37,12 @@ export default class DateRangeBox extends Widget {
   getName(): WidgetName { return 'dxDateRangeBox'; }
 
   getPopup(): Popup {
-    return new Popup(this.element.find(`.${CLASS.popup}`));
+    return new Popup(this.getStartDateBox().element.find(`.${CLASS.popup}`));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getCalendar(): Calendar {
-    return new Calendar(this.getPopup().getContent().find(`.${CLASS.calendar}`));
+    return new Calendar(Selector(`.${CLASS.calendar}`));
   }
 
   getCalendarCell(index: number): Selector {

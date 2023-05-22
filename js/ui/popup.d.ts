@@ -94,6 +94,7 @@ export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
     /**

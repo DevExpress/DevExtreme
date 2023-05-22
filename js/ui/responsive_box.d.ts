@@ -51,6 +51,7 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxResponsiveBoxOptions<
   TItem extends ItemLike = any,
@@ -228,6 +229,7 @@ export type Options<
   TKey = any,
 > = Properties<TItem, TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -288,3 +290,4 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

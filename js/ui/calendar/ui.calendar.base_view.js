@@ -17,11 +17,14 @@ const { abstract } = Widget;
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_START_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-start-day-of-month';
+const CALENDAR_END_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-end-day-of-month';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
+const CALENDAR_CELL_RANGE_HOVER_CLASS = 'dx-calendar-cell-range-hover';
 const CALENDAR_CELL_RANGE_HOVER_START_CLASS = 'dx-calendar-cell-range-hover-start';
 const CALENDAR_CELL_RANGE_HOVER_END_CLASS = 'dx-calendar-cell-range-hover-end';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
@@ -183,7 +186,18 @@ const BaseView = Widget.inherit({
             className += ` ${CALENDAR_OTHER_VIEW_CLASS}`;
         }
 
+        if(this.option('selectionMode') === 'range') {
+            if(this._isStartDayOfMonth(cellDate)) {
+                className += ` ${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`;
+            }
+
+            if(this._isEndDayOfMonth(cellDate)) {
+                className += ` ${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`;
+            }
+        }
+
         return className;
+
     },
 
     _prepareCellTemplateData: function(cellDate, cellIndex, $cell) {
@@ -259,6 +273,10 @@ const BaseView = Widget.inherit({
 
     _isOtherView: abstract,
 
+    _isStartDayOfMonth: abstract,
+
+    _isEndDayOfMonth: abstract,
+
     _getCellText: abstract,
 
     _getFirstCellData: abstract,
@@ -304,35 +322,58 @@ const BaseView = Widget.inherit({
 
     _renderRange: function() {
         const { allowValueSelection, selectionMode, value, range } = this.option();
+
         if(!allowValueSelection || selectionMode !== 'range') {
             return;
         }
 
         this._$rangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_IN_RANGE_CLASS); });
-        this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
-        this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
+
+        this._$hoveredRangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS); });
         this._$rangeStartHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
         this._$rangeEndHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
 
+        this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
+        this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
+
         this._$rangeCells = range.map((value) => this._getCellByDate(value));
-
-        if(this.option('rtlEnabled')) {
-            this._$rangeStartHoverCell = this._getCellByDate(range[range.length - 1]);
-            this._$rangeEndHoverCell = this._getCellByDate(range[0]);
-        } else {
-            this._$rangeStartHoverCell = this._getCellByDate(range[0]);
-            this._$rangeEndHoverCell = this._getCellByDate(range[range.length - 1]);
-        }
-
 
         this._$rangeStartDateCell = this._getCellByDate(value[0]);
         this._$rangeEndDateCell = this._getCellByDate(value[1]);
 
         this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_IN_RANGE_CLASS); });
-        this._$rangeStartHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
-        this._$rangeEndHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
+
         this._$rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
         this._$rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
+    },
+
+    _renderHoveredRange() {
+        const { allowValueSelection, selectionMode, hoveredRange } = this.option();
+
+        if(!allowValueSelection || selectionMode !== 'range') {
+            return;
+        }
+
+        this._$hoveredRangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS); });
+
+        this._$rangeStartHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
+        this._$rangeEndHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
+
+        this._$hoveredRangeCells = hoveredRange
+            .map((value) => this._getCellByDate(value));
+
+        if(this.option('rtlEnabled')) {
+            this._$rangeStartHoverCell = this._getCellByDate(hoveredRange[hoveredRange.length - 1]);
+            this._$rangeEndHoverCell = this._getCellByDate(hoveredRange[0]);
+        } else {
+            this._$rangeStartHoverCell = this._getCellByDate(hoveredRange[0]);
+            this._$rangeEndHoverCell = this._getCellByDate(hoveredRange[hoveredRange.length - 1]);
+        }
+
+        this._$hoveredRangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_RANGE_HOVER_CLASS); });
+
+        this._$rangeStartHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
+        this._$rangeEndHoverCell?.addClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
     },
 
     getCellAriaLabel: function(date) {
@@ -360,6 +401,9 @@ const BaseView = Widget.inherit({
             case 'range':
                 this._renderRange();
                 break;
+            case 'hoveredRange':
+                this._renderHoveredRange();
+                break;
             case 'contouredDate':
                 this._renderContouredDate(value);
                 break;
@@ -373,6 +417,7 @@ const BaseView = Widget.inherit({
             case 'max':
             case 'disabledDates':
             case 'cellTemplate':
+            case 'selectionMode':
                 this._invalidate();
                 break;
             case 'rtlEnabled':

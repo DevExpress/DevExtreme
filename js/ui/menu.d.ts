@@ -82,6 +82,7 @@ export type SubmenuShownEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxMenuOptions<
     TKey = any,
@@ -313,6 +314,7 @@ export type Properties<TKey = any> = dxMenuOptions<TKey>;
 /** @deprecated use Properties instead */
 export type Options<TKey = any> = Properties<TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -397,3 +399,4 @@ onSubmenuShowing?: ((e: SubmenuShowingEvent) => void);
  */
 onSubmenuShown?: ((e: SubmenuShownEvent) => void);
 };
+///#ENDDEBUG

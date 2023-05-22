@@ -36,6 +36,7 @@ export type ShownEvent = EventInfo<dxTooltip>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> { }
 /**
@@ -53,6 +54,7 @@ export type Properties = dxTooltipOptions;
 /** @deprecated use Properties instead */
 export type Options = dxTooltipOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -113,3 +115,4 @@ onShowing?: ((e: ShowingEvent) => void);
  */
 onShown?: ((e: ShownEvent) => void);
 };
+///#ENDDEBUG

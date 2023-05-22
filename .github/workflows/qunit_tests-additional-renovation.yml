@@ -106,8 +106,6 @@ jobs:
       fail-fast: false
       matrix:
         constel: [
-          'export',
-          'misc',
           'ui',
           'ui.widgets(1/3)',
           'ui.widgets(2/3)',
@@ -131,19 +129,12 @@ jobs:
           - kind: 'android6'
             userAgent: 'android6'
           - headless: false
-          - useCsp: true
-          - constel: 'export'
-            useCsp: false
           - constel: 'ui'
             headless: true
           - constel: 'viz'
             headless: true
           - kind: 'android6'
             useJQuery: true
-          - constel: 'ui.widgets(2/3)'
-            useCsp: false
-          - constel: 'ui.htmlEditor'
-            useCsp: false
         exclude:
           - kind: 'shadow-dom'
             constel: 'ui'
@@ -166,7 +157,7 @@ jobs:
           userAgent: ${{ matrix.userAgent }}
           useShadowDom: ${{ matrix.useShadowDom }}
           headless: ${{ matrix.headless }}
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-firefox:
     needs: build
@@ -180,9 +171,6 @@ jobs:
           'export',
           'misc',
           'ui',
-          'ui.widgets(1/3)',
-          'ui.widgets(2/3)',
-          'ui.widgets(3/3)',
           'ui.editors',
           'ui.htmlEditor',
           'ui.grid(1/2)',
@@ -192,14 +180,6 @@ jobs:
           'viz',
           'renovation'
         ]
-        include:
-          - useCsp: true
-          - constel: 'export'
-            useCsp: false
-          - constel: 'ui.htmlEditor'
-            useCsp: false
-          - constel: 'ui.widgets(2/3)'
-            useCsp: false
 
     steps:
       - name: Get sources
@@ -213,7 +193,7 @@ jobs:
           browser: 'firefox'
           useJQuery: 'true'
           headless: 'true'
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-no-csp:
     needs: build
@@ -223,7 +203,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc' ]
+        constel: [ 'export', 'misc', 'ui.htmlEditor' ]
 
     steps:
       - name: Get sources

@@ -96,6 +96,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
@@ -265,6 +266,7 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
  * @inherits dxDropDownEditor
  * @namespace DevExpress.ui
  * @hidden
+ * @options DateBoxBaseOptions
  */
 export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
     /**
@@ -298,6 +300,7 @@ export type Properties = dxDateBoxOptions;
 /** @deprecated use Properties instead */
 export type Options = Properties;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -410,3 +413,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

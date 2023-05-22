@@ -56,10 +56,13 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Tarih seç",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Tarih ve saati seçin",
         "dxDateBox-validation-datetime": "Değer bir tarih veya saat olmalıdır",
-        "dxDateBox-invalidStartDateMessage": "Start value must be a date",
-        "dxDateBox-invalidEndDateMessage": "End value must be a date",
-        "dxDateBox-startDateOutOfRangeMessage": "Start date is out of range",
-        "dxDateBox-endDateOutOfRangeMessage": "End date is out of range",
+
+        "dxDateRangeBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateRangeBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateRangeBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateRangeBox-endDateOutOfRangeMessage": "End date is out of range",
+        "dxDateRangeBox-startDateLabel": "Başlangıç Tarihi",
+        "dxDateRangeBox-endDateLabel": "Bitiş Tarihi",
 
         "dxFileUploader-selectFile": "Dosya seç",
         "dxFileUploader-dropFile": "veya Dosyayı buraya bırakın",

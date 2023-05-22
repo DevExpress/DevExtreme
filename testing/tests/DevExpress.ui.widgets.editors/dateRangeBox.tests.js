@@ -9,6 +9,7 @@ import fx from 'animation/fx';
 import hoverEvents from 'events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
+import localization from 'localization';
 
 import 'ui/validator';
 import 'generic_light.css!';
@@ -732,7 +733,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), false, 'endDateBox has no focus state class');
     });
 
-    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is false', function(assert) {
+    QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is true', function(assert) {
         this.reinit({
             disabled: true,
         });
@@ -1256,7 +1257,7 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(this.onValueChangedHandler.callCount, 1);
         });
 
-        QUnit.test('should be called once after click on reset method call', function(assert) {
+        QUnit.test('should be called once after reset method call', function(assert) {
             this.reinit({
                 showClearButton: true,
                 value: ['2021/09/17', '2022/10/14'],
@@ -1571,6 +1572,18 @@ QUnit.module('Events', moduleConfig, () => {
                 assert.strictEqual(this.onEnterKeyHandler.callCount, 0, 'onEnterKey event is not raised');
             });
         });
+
+        QUnit.test('Click on clear button should raise input event', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: [new Date(2021, 9, 17), new Date(2021, 9, 19)],
+                onInput: this.onInputHandler
+            });
+
+            $(this.instance.getButton('clear')).trigger('dxclick');
+
+            this.checkEventHandlerArgs(this.instance.startDateField(), 'onInput', 'input');
+        });
     });
 
     QUnit.module('onFocusIn & onFocusOut events', {
@@ -1812,6 +1825,37 @@ QUnit.module('Popup integration', moduleConfig, () => {
             $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $otherStartDateBoxInput }));
 
             assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
+        });
+    });
+
+    QUnit.module('popup can be opened by click on input after option change when popup was already rendered', () => {
+        [
+            { name: 'min', value: new Date() },
+            { name: 'max', value: new Date() },
+            { name: 'multiView', value: false },
+            { name: 'dateSerializationFormat', value: 'yyyy-MM-dd' },
+            { name: 'calendarOptions', value: { showTodayButton: true } },
+            { name: 'acceptCustomValue', value: false },
+
+        ].forEach(({ name, value }) => {
+            QUnit.test(name, function(assert) {
+                const clickEndInput = () => {
+                    const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                    $endDateBoxInput.trigger('dxclick');
+                };
+
+                clickEndInput();
+                this.instance.close();
+                this.instance.blur();
+
+                this.instance.option(name, value);
+
+                clickEndInput();
+
+                const popup = getPopup(getStartDateBoxInstance(this.instance));
+                assert.strictEqual(popup.option('visible'), true, 'popup is opened');
+                assert.strictEqual(popup.$content().is(':empty'), false, 'content is rendered');
+            });
         });
     });
 });
@@ -3575,6 +3619,36 @@ QUnit.module('Validation', {
             this.instance.reset();
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
+        });
+    });
+});
+
+QUnit.module('localization', moduleConfig, () => {
+    const localeVariablesMap = {
+        applyButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        endDateLabel: 'dxDateRangeBox-endDateLabel',
+        invalidStartDateMessage: 'dxDateRangeBox-invalidStartDateMessage',
+        invalidEndDateMessage: 'dxDateRangeBox-invalidEndDateMessage',
+        startDateLabel: 'dxDateRangeBox-startDateLabel',
+        startDateOutOfRangeMessage: 'dxDateRangeBox-startDateOutOfRangeMessage',
+        todayButtonText: 'dxCalendar-todayButtonText',
+    };
+
+    QUnit.test('default value is received from the dictionary', function(assert) {
+        Object.keys(localeVariablesMap).forEach((optionName, index) => {
+            const variableName = localeVariablesMap[optionName];
+            localization.loadMessages({
+                'en': {
+                    [variableName]: index + 1
+                }
+            });
+        });
+
+        this.reinit();
+
+        Object.keys(localeVariablesMap).forEach((optionName, index) => {
+            assert.strictEqual(this.instance.option(optionName), index + 1, optionName);
         });
     });
 });

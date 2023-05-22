@@ -62,6 +62,7 @@ export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
     /**
@@ -208,6 +209,7 @@ export type Properties = dxPopoverOptions<PopoverInstance>;
 /** @deprecated use Properties instead */
 export type Options = Properties;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -274,3 +276,4 @@ onShown?: ((e: ShownEvent) => void);
  */
 onTitleRendered?: ((e: TitleRenderedEvent) => void);
 };
+///#ENDDEBUG

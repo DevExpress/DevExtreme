@@ -37,6 +37,7 @@ export type ShownEvent = EventInfo<dxDeferRendering>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
@@ -93,6 +94,7 @@ export type Properties = dxDeferRenderingOptions;
 /** @deprecated use Properties instead */
 export type Options = dxDeferRenderingOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -141,3 +143,4 @@ onRendered?: ((e: RenderedEvent) => void);
  */
 onShown?: ((e: ShownEvent) => void);
 };
+///#ENDDEBUG
