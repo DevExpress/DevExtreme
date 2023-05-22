@@ -26,6 +26,9 @@ import { nativeScrolling } from '@js/core/utils/support';
 import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
 import modules from '../modules';
 import gridCoreUtils from '../module_utils';
+import { ModuleType, View } from '../module_types';
+import { ColumnsController } from '../columns_controller/module';
+import { DataController } from '../data_controller/module';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
@@ -131,9 +134,29 @@ const copyAttributes = function (element, newElement) {
   }
 };
 
-const viewWithColumnStateMixin = modules.View.inherit(columnStateMixin);
+const viewWithColumnStateMixin: ModuleType<View> = View.inherit(columnStateMixin);
 
 export class ColumnsView extends viewWithColumnStateMixin {
+  _tableElement: any;
+
+  _scrollLeft: any;
+
+  _delayedTemplates: any;
+
+  _templateDeferreds: any;
+
+  _templateTimeouts: any;
+
+  _templatesCache: any;
+
+  _requireReady: any;
+
+  scrollChanged: any;
+
+  _columnsController!: ColumnsController;
+
+  _dataController!: DataController;
+
   _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
@@ -558,7 +581,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _renderCore(e) {
+  _renderCore(e?) {
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {

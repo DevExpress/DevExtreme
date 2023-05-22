@@ -59,6 +59,10 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   loadingTimeout?: number;
 
   useLegacyKeyboardNavigation?: boolean;
+
+  rowTemplate?: any;
+
+  forceApplyBindings?: any;
 }
 
 // todo: move to upper .d.ts files

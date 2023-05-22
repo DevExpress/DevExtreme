@@ -554,6 +554,7 @@ export class DataController extends ControllerWithDataMixin {
     const scrollingMode = this.option('scrolling.mode');
     const appendMode = scrollingMode === 'infinite';
     const virtualMode = scrollingMode === 'virtual';
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const paginate = pagingEnabled || virtualMode || appendMode;
     let isPaginateChanged = false;
     let isPageSizeChanged = false;

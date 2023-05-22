@@ -539,6 +539,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (
       this.option('selection')
+      // @ts-expect-error
       && this.option('selection').mode !== 'none'
       && !isEditing
     ) {
@@ -2161,6 +2162,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _applyTabIndexToElement($element) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const tabIndex = this.option('tabIndex') || 0;
     $element.attr('tabindex', isDefined(tabIndex) ? tabIndex : 0);
   }
