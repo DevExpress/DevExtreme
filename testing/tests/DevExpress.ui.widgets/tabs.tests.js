@@ -13,7 +13,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
     const markup =
-        `<style>
+        `<style nonce="qunit-test">
             #scrollableTabs .dx-tab {
                 display: table-cell;
                 padding: 35px;
@@ -22,10 +22,14 @@ QUnit.testStart(function() {
             .bigtab.dx-tabs-expanded .dx-tab {
                 width: 1000px;
             }
+
+            #widthRootStyle {
+                width: 300px;
+            }
         </style>
         <div id="tabs"></div>
         <div id="widget"></div>
-        <div id="widthRootStyle" style="width: 300px;"></div>
+        <div id="widthRootStyle"></div>
         <div id="scrollableTabs"></div>`;
 
     $('#qunit-fixture').html(markup);

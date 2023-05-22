@@ -55,7 +55,7 @@ class DateRangeBox extends Editor {
             buttons: undefined,
             calendarOptions: {},
             cancelButtonText: messageLocalization.format('Cancel'),
-            endDateOutOfRangeMessage: messageLocalization.format('dxDateBox-endDateOutOfRangeMessage'),
+            endDateOutOfRangeMessage: messageLocalization.format('dxDateRangeBox-endDateOutOfRangeMessage'),
             dateSerializationFormat: undefined,
             deferRendering: true,
             disabledDates: null,
@@ -64,14 +64,14 @@ class DateRangeBox extends Editor {
             dropDownOptions: {},
             endDate: null,
             endDateInputAttr: {},
-            endDateLabel: messageLocalization.format('dxDateBox-endDateLabel'),
+            endDateLabel: messageLocalization.format('dxDateRangeBox-endDateLabel'),
             endDateName: '',
             endDatePlaceholder: '',
             endDateText: undefined,
             focusStateEnabled: true,
             hoverStateEnabled: true,
-            invalidStartDateMessage: messageLocalization.format('dxDateBox-invalidStartDateMessage'),
-            invalidEndDateMessage: messageLocalization.format('dxDateBox-invalidEndDateMessage'),
+            invalidStartDateMessage: messageLocalization.format('dxDateRangeBox-invalidStartDateMessage'),
+            invalidEndDateMessage: messageLocalization.format('dxDateRangeBox-invalidEndDateMessage'),
             isValid: true,
             labelMode: 'static',
             max: undefined,
@@ -92,14 +92,15 @@ class DateRangeBox extends Editor {
             opened: false,
             pickerType: 'calendar',
             readOnly: false,
+            selectionBehavior: 'normal',
             showClearButton: false,
             showDropDownButton: true,
             spellcheck: false,
             startDate: null,
             startDateInputAttr: {},
-            startDateLabel: messageLocalization.format('dxDateBox-startDateLabel'),
+            startDateLabel: messageLocalization.format('dxDateRangeBox-startDateLabel'),
             startDateName: '',
-            startDateOutOfRangeMessage: messageLocalization.format('dxDateBox-startDateOutOfRangeMessage'),
+            startDateOutOfRangeMessage: messageLocalization.format('dxDateRangeBox-startDateOutOfRangeMessage'),
             startDatePlaceholder: '',
             startDateText: undefined,
             stylingMode: config().editorStylingMode || 'outlined',
@@ -290,6 +291,7 @@ class DateRangeBox extends Editor {
             .appendTo(this.$element());
 
         this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
+        this._startDateBox.NAME = '_StartDateBox';
     }
 
     _renderEndDateBox() {
@@ -298,6 +300,7 @@ class DateRangeBox extends Editor {
             .appendTo(this.$element());
 
         this._endDateBox = this._createComponent(this._$endDateBox, MultiselectDateBox, this._getEndDateBoxConfig());
+        this._endDateBox.NAME = '_EndDateBox';
     }
 
     _renderSeparator() {
@@ -805,6 +808,8 @@ class DateRangeBox extends Editor {
 
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
+                break;
+            case 'selectionBehavior':
                 break;
             case 'startDate':
                 this.updateValue([value, this.option('value')[1]]);

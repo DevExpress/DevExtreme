@@ -1815,6 +1815,37 @@ QUnit.module('Popup integration', moduleConfig, () => {
             assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
         });
     });
+
+    QUnit.module('popup can be opened by click on input after option change when popup was already rendered', () => {
+        [
+            { name: 'min', value: new Date() },
+            { name: 'max', value: new Date() },
+            { name: 'multiView', value: false },
+            { name: 'dateSerializationFormat', value: 'yyyy-MM-dd' },
+            { name: 'calendarOptions', value: { showTodayButton: true } },
+            { name: 'acceptCustomValue', value: false },
+
+        ].forEach(({ name, value }) => {
+            QUnit.test(name, function(assert) {
+                const clickEndInput = () => {
+                    const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+                    $endDateBoxInput.trigger('dxclick');
+                };
+
+                clickEndInput();
+                this.instance.close();
+                this.instance.blur();
+
+                this.instance.option(name, value);
+
+                clickEndInput();
+
+                const popup = getPopup(getStartDateBoxInstance(this.instance));
+                assert.strictEqual(popup.option('visible'), true, 'popup is opened');
+                assert.strictEqual(popup.$content().is(':empty'), false, 'content is rendered');
+            });
+        });
+    });
 });
 
 QUnit.module('Option synchronization', moduleConfig, () => {
@@ -3584,11 +3615,11 @@ QUnit.module('localization', moduleConfig, () => {
     const localeVariablesMap = {
         applyButtonText: 'OK',
         cancelButtonText: 'Cancel',
-        endDateLabel: 'dxDateBox-endDateLabel',
-        invalidStartDateMessage: 'dxDateBox-invalidStartDateMessage',
-        invalidEndDateMessage: 'dxDateBox-invalidEndDateMessage',
-        startDateLabel: 'dxDateBox-startDateLabel',
-        startDateOutOfRangeMessage: 'dxDateBox-startDateOutOfRangeMessage',
+        endDateLabel: 'dxDateRangeBox-endDateLabel',
+        invalidStartDateMessage: 'dxDateRangeBox-invalidStartDateMessage',
+        invalidEndDateMessage: 'dxDateRangeBox-invalidEndDateMessage',
+        startDateLabel: 'dxDateRangeBox-startDateLabel',
+        startDateOutOfRangeMessage: 'dxDateRangeBox-startDateOutOfRangeMessage',
         todayButtonText: 'dxCalendar-todayButtonText',
     };
 

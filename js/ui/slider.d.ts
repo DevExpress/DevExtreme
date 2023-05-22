@@ -51,6 +51,7 @@ export type ValueChangeMode = SliderValueChangeMode;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
@@ -70,8 +71,7 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
 export default class dxSlider extends dxTrackBar<dxSliderOptions> { }
 
 /**
- * @docid dxSliderBase
- * @inherits dxTrackBar
+ * @docid
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -172,6 +172,16 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
      */
      valueChangeMode?: SliderValueChangeMode;
 }
+
+/**
+ * @docid
+ * @inherits dxTrackBar
+ * @hidden
+ * @namespace DevExpress.ui
+ * @options dxSliderBaseOptions
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface dxSliderBase { }
 
 /** @public */
 export type Properties = dxSliderOptions;

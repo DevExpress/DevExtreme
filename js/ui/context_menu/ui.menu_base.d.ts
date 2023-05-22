@@ -16,7 +16,11 @@ import {
     SubmenuShowMode,
 } from '../../common';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
   TItem extends dxMenuBaseItem = dxMenuBaseItem,
@@ -111,6 +115,7 @@ export interface dxMenuBaseOptions<
  * @inherits HierarchicalCollectionWidget
  * @hidden
  * @namespace DevExpress.ui
+ * @options dxMenuBaseOptions
  */
 export default class dxMenuBase<
   TProperties extends dxMenuBaseOptions<any, TItem, TKey>,

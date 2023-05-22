@@ -49,6 +49,7 @@ export type ShownEvent = EventInfo<dxToast>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**

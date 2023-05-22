@@ -109,6 +109,7 @@ export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: strin
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**

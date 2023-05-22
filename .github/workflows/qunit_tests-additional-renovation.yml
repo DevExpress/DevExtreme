@@ -128,8 +128,6 @@ jobs:
             headless: true
           - userAgent: 'android6'
             useJQuery: true
-          - constel: 'ui.widgets(2/3)'
-            useCsp: false
           - constel: 'ui.htmlEditor'
             useCsp: false
         exclude:

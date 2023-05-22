@@ -12,7 +12,7 @@ import 'ui/date_box';
 
 QUnit.testStart(function() {
     const markup =
-        `<style>
+        `<style nonce="qunit-test">
             html, body {
                 height: 100%;
                 margin: 0;

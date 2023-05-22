@@ -20,7 +20,17 @@ import fx from 'animation/fx';
 const moduleConfig = {
     beforeEach: function() {
         this.$fixture = $('#qunit-fixture');
-        this.$element = $(drawerTesters.markup);
+        this.$element = $(`<div id="${drawerTesters.drawerElementId}"></div>`).css({
+            width: '200px',
+            height: '100px',
+            'background-color': 'blue',
+        }).append(
+            $('<div id="view">view</div>').css({
+                width: '100%',
+                height: '100%',
+                'background-color': 'yellow',
+            })
+        );
         this.$fixture.html(this.$element);
         this.clock = sinon.useFakeTimers();
         clearStack();
@@ -717,10 +727,16 @@ QUnit.module('Scenarios', moduleConfig, () => {
             openedStateMode: 'shrink',
             position: 'left',
             template: () =>
-                `<div id="template" data-options="dxTemplate: {name: 'chartDrawerTemplate'}" class="dx-template-wrapper ng-scope">
-                    <div style="width: 150px; display: none !important;"></div>
-                    <div style="width: 150px; height: 100px"></div>
-                </div>`,
+                $('<div id="template" data-options="dxTemplate: {name: \'chartDrawerTemplate\'}" class="dx-template-wrapper ng-scope">').append([
+                    $('<div></div>').css({
+                        width: '150px',
+                        display: 'none !important',
+                    }),
+                    $('<div></div>').css({
+                        width: '150px',
+                        height: '100px',
+                    })
+                ]),
             opened: false,
         });
 
@@ -734,10 +750,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const drawer = new dxDrawer(drawerElement, {
             openedStateMode: 'overlap',
             position: 'left',
-            template: () =>
-                `<div _ngcontent-qhr-c357="" class="dx-template-wrapper">
-                    <div id="template" style="width: 150px; height: 100px"></div>
-                </div>`,
+            template: () => $('<div _ngcontent-qhr-c357="" class="dx-template-wrapper">').append(
+                $('<div></div>').css({
+                    width: '150px',
+                    height: '100px',
+                })
+            ),
             opened: false,
         });
 

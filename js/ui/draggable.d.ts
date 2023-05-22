@@ -27,6 +27,8 @@ import {
 
 /**
  * @namespace DevExpress.ui
+ * @docid
+ * @type object
  */
 export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
@@ -105,6 +107,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
  * @inherits DOMComponent
  * @hidden
  * @namespace DevExpress.ui
+ * @options DraggableBaseOptions
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DraggableBase { }
@@ -154,6 +157,7 @@ export type DragTemplateData = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**

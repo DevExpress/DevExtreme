@@ -211,6 +211,7 @@ declare const DateRangeBoxBase: new(element: UserDefinedElement, options?: Prope
  * @isEditor
  * @inherits DateBoxBase
  * @namespace DevExpress.ui
+ * @options Properties
  * @public
  */
 export default class dxDateRangeBox extends DateRangeBoxBase {

@@ -46,7 +46,7 @@ const itemsOverflowXY = [{
 }];
 
 function appendTreeViewTo(appendToElement, id, items, width, height) {
-    const $treeView = $(`<div id="${id}" style="background-color: orange"></div>`);
+    const $treeView = $(`<div id="${id}"></div>`).css('background-color', 'orange');
 
     $(appendToElement).append($treeView);
 
@@ -60,7 +60,7 @@ function appendTreeViewTo(appendToElement, id, items, width, height) {
 
 QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', {
     beforeEach: function() {
-        this.$container = $('<div style="background-color: blue"></div>');
+        this.$container = $('<div></div>').css('background-color', 'blue');
         $('#qunit-fixture').append(this.$container);
     },
     afterEach: function() {

@@ -7,7 +7,11 @@ import {
     EventInfo,
 } from '../../events/index';
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @type object
+ */
 export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
@@ -71,6 +75,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
  * @inherits DOMComponent
  * @hidden
  * @namespace DevExpress.ui
+ * @options WidgetOptions
  */
 export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**

@@ -16,7 +16,11 @@ export interface ODataRequestOptions {
     xhrFields: any;
 }
 
-/** @namespace DevExpress.data */
+/**
+ * @docid
+ * @namespace DevExpress.data
+ * @type object
+ */
 export interface ODataContextOptions {
     /**
      * @docid
@@ -77,6 +81,7 @@ export interface ODataContextOptions {
 /**
  * @docid
  * @public
+ * @options ODataContextOptions
  */
 export default class ODataContext {
     constructor(options?: ODataContextOptions);

@@ -1295,6 +1295,7 @@ export type HeaderFilterTexts = {
  * @inherits Widget, DataHelperMixin
  * @hidden
  * @namespace DevExpress.common.grids
+ * @options GridBaseOptions
  */
 export interface GridBase<TRowData = any, TKey = any> {
   /**
@@ -1727,6 +1728,8 @@ interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRow
 
 /**
  * @namespace DevExpress.common.grids
+ * @docid
+ * @type object
  */
 export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionsBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
   /**

@@ -255,6 +255,7 @@ export interface VectorMapLegendItem extends BaseLegendItem {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
