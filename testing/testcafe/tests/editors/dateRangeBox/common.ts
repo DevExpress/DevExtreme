@@ -32,7 +32,7 @@ fixture.disablePageReloads`DateRangeBox render`
     test(`DateRangeBox styles, stylingMode=${stylingMode}, isValid=${isValid}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
 
       for (const state of [
         DROP_DOWN_EDITOR_ACTIVE_CLASS,
@@ -47,7 +47,7 @@ fixture.disablePageReloads`DateRangeBox render`
           await setClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
         }
 
-        await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
+        await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
 
         for (const id of t.ctx.ids) {
           await removeClassAttribute(Selector(`#${id}`), state);
