@@ -663,4 +663,56 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.ok($bandColumnCheckBox.hasClass('dx-checkbox-checked'), 'band column checkbox is checked');
         assert.deepEqual(dataGrid.getVisibleColumns().map((column) => column.dataField), ['field1', 'field2', 'field3', 'field4'], 'visible columns');
     });
+
+    QUnit.test('The columnChooser items should be updated if columns were hidden via API', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                mode: 'select',
+                selection: { recursive: true }
+            },
+            columns: [
+                {
+                    name: 'Band',
+                    caption: 'band1',
+                    columns: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' }
+                    ]
+                },
+                { dataField: 'field3' },
+                { dataField: 'field4' },
+            ],
+            dataSource: []
+        });
+
+        dataGrid.showColumnChooser();
+
+        // act
+        dataGrid.beginUpdate();
+        dataGrid.columnOption('Band', 'visible', false);
+        dataGrid.columnOption('field3', 'visible', false);
+        dataGrid.endUpdate();
+
+        // assert
+        let $bandColumnCheckBox = $('.dx-overlay-wrapper.dx-datagrid-column-chooser').find('.dx-treeview-node .dx-checkbox').first();
+        let $field3ColumnCheckBox = $('.dx-overlay-wrapper.dx-datagrid-column-chooser').find('.dx-treeview-node .dx-checkbox').eq(3);
+        assert.notOk($bandColumnCheckBox.hasClass('dx-checkbox-checked'), 'band column checkbox is unchecked');
+        assert.notOk($field3ColumnCheckBox.hasClass('dx-checkbox-checked'), 'field3 column checkbox is unchecked');
+        assert.deepEqual(dataGrid.getVisibleColumns().map((column) => column.dataField), ['field4'], 'visible columns');
+
+        // act
+        dataGrid.beginUpdate();
+        dataGrid.columnOption('Band', 'visible', true);
+        dataGrid.columnOption('field3', 'visible', true);
+        dataGrid.endUpdate();
+
+        // assert
+        $bandColumnCheckBox = $('.dx-overlay-wrapper.dx-datagrid-column-chooser').find('.dx-treeview-node .dx-checkbox').first();
+        $field3ColumnCheckBox = $('.dx-overlay-wrapper.dx-datagrid-column-chooser').find('.dx-treeview-node .dx-checkbox').eq(3);
+        assert.ok($bandColumnCheckBox.hasClass('dx-checkbox-checked'), 'band column checkbox is checked');
+        assert.ok($field3ColumnCheckBox.hasClass('dx-checkbox-checked'), 'field3 column checkbox is checked');
+        assert.deepEqual(dataGrid.getVisibleColumns().map((column) => column.dataField), ['field1', 'field2', 'field3', 'field4'], 'visible columns');
+    });
 });
