@@ -129,7 +129,7 @@ export default {
         switch(args.name) {
             case 'searchEnabled':
             case 'searchEditorOptions':
-                this._cleanAria(this.option('searchEnabled') ? this.$element() : this._itemContainer());
+                this._cleanAria(this.$element());
                 this._invalidate();
                 break;
             case 'searchExpr':

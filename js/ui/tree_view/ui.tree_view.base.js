@@ -239,29 +239,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._selectAllValueChangedAction({ value: value });
     },
 
-    _checkBoxModeChange: function(value, previousValue) {
-        if(previousValue === 'none' || value === 'none') {
-            this.repaint();
-            return;
-        }
-
-        const selectAllExists = this._$selectAllItem && this._$selectAllItem.length;
-        switch(value) {
-            case 'selectAll':
-                if(!selectAllExists) {
-                    this._createSelectAllValueChangedAction();
-                    this._renderSelectAllItem();
-                }
-                break;
-            case 'normal':
-                if(selectAllExists) {
-                    this._$selectAllItem.remove();
-                    delete this._$selectAllItem;
-                }
-                break;
-        }
-    },
-
     _removeSelection: function() {
         const that = this;
 
@@ -275,7 +252,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        const { name, value, previousValue } = args;
+        const { name, value } = args;
 
         switch(name) {
             case 'selectAllText':
@@ -284,7 +261,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
                 break;
             case 'showCheckBoxesMode':
-                this._checkBoxModeChange(value, previousValue);
+                this._cleanAria(this.$element());
+                this._invalidate();
                 break;
             case 'scrollDirection':
                 this.getScrollable().option('direction', value);
