@@ -38,7 +38,7 @@ export class AppComponent {
   focusedRowKey: number;
 
   constructor() {
-    this.focusedRowKey = 4;
+    this.focusedRowKey = 45;
     this.dataSource = AspNetData.createStore({
       key: 'Task_ID',
       loadUrl: `${url}/Tasks`,

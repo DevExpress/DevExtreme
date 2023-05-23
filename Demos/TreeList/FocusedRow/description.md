@@ -4,4 +4,4 @@ To focus a row programmatically, specify the [focusedRowKey](/Documentation/ApiR
 
 You can use the [onFocusedRowChanging](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onFocusedRowChanging) and [onFocusedRowChanged](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onFocusedRowChanged) properties to specify a custom function that is executed before or after a row is focused.
 
-In this demo, the row with the `4` key is focused initially. You can specify the `focusedRowKey` property via the input field below the TreeList. The **onFocusedRowChanged** function is used to display additional information below the component when the focused row changes.
+In this demo, the row with the `45` key is focused initially. You can specify the `focusedRowKey` property via the input field below the TreeList. The **onFocusedRowChanged** function is used to display additional information below the component when the focused row changes.

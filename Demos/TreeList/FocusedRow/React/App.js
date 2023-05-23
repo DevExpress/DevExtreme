@@ -30,7 +30,7 @@ class App extends React.Component {
       startDate: '',
       taskStatus: '',
       taskProgress: '',
-      focusedRowKey: 4,
+      focusedRowKey: 45,
     };
 
     this.onFocusedRowChanged = this.onFocusedRowChanged.bind(this);

@@ -23,7 +23,7 @@ $(() => {
     parentIdExpr: 'Task_Parent_ID',
     hasItemsExpr: 'Has_Items',
     focusedRowEnabled: true,
-    focusedRowKey: 4,
+    focusedRowKey: 45,
     showBorders: true,
     wordWrapEnabled: true,
     columns: [

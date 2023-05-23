@@ -108,7 +108,7 @@ export default {
         loadMode: 'raw',
         loadUrl: `${url}/TaskEmployees`,
       }),
-      focusedRowKey: 4,
+      focusedRowKey: 45,
     };
   },
   methods: {
