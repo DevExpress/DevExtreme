@@ -544,10 +544,9 @@ const EditingController = modules.ViewController.inherit((function () {
         if (change.type === 'insert') {
           this._addInsertInfo(change);
         } else {
-          const items = dataController.items();
-          const rowIndex = dataController.getRowIndexByKey(change.key);
-
-          this._addInternalData({ key: change.key, oldData: items[rowIndex]?.data });
+          const items = dataController.getCachedStoreData() || dataController.items()?.map((item) => item.data);
+          const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, dataController.key());
+          this._addInternalData({ key: change.key, oldData: items[rowIndex] });
         }
       });
 

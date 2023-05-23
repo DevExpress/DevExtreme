@@ -2172,3 +2172,84 @@ test('Popup EditForm screenshot', async (t) => {
     allowUpdating: true,
   },
 }));
+
+// T1165529
+[
+  true,
+  false,
+].forEach((remoteOperations) => {
+  test.only(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      // act
+      .click(dataGrid.getHeaderPanel().getSaveButton())
+
+      // assert
+      .expect(dataGrid.dataRows.count)
+      .eql(remoteOperations ? 5 : 6)
+
+      .expect(dataGrid.getDataCell(0, 0).element.textContent)
+      .eql(remoteOperations ? 'val_0_0' : 'val_5_0');
+  }).before(async () => {
+    const data = getData(10, 4);
+
+    await createWidget('dxDataGrid', {
+      dataSource: data,
+      keyExpr: 'field_0',
+      paging: {
+        pageSize: 5,
+      },
+      remoteOperations,
+      editing: {
+        allowUpdating: true,
+        mode: 'batch',
+      },
+      columns: [
+        {
+          dataField: 'field_0',
+          validationRules: [
+            {
+              type: 'custom',
+              validationCallback: (options) => options.value !== 'val_5_0',
+            },
+          ],
+        },
+        'field_1',
+        'field_2',
+        'field_3',
+      ],
+    });
+
+    await ClientFunction(() => {
+      const keys = data.map((e) => e.field_0);
+      const columnToModify = 'field_1';
+      const gridName = 'dxDataGrid';
+
+      const grid = $('#container')[gridName]('instance');
+      const changes = grid.option('editing.changes');
+      keys.forEach((key) => {
+        const editData = changes.find(
+          (change) => change.type === 'update' && change.key === key,
+        );
+        if (editData) {
+          editData.data[columnToModify] = 'EEEEEE';
+        } else {
+          const changingData = {};
+          changingData[columnToModify] = 'EEEEEE';
+
+          changes.push({
+            type: 'update',
+            key,
+            data: changingData,
+          });
+        }
+      });
+      grid.option('editing.changes', changes);
+    }, {
+      dependencies: {
+        data,
+      },
+    })();
+  });
+});
