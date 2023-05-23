@@ -146,12 +146,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         const isInstantlyMode = this.dateRangeBox.option('applyValueMode') === 'instantly';
 
-        // if(!isInstantlyMode && !event && false) {
-        //     this.dateRangeBox.updateValue(value);
-        //     console.log('return');
-        //     return;
-        // }
-
         if(isInstantlyMode) {
             if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
                 if(this._widget.option('_currentSelection') === 'startDate') {
