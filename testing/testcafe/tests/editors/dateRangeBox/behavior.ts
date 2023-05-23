@@ -656,7 +656,7 @@ test('Open by click on startDate input and select date in calendar = startDate -
   });
 });
 
-test('Value in calendar should be updated after click on clear button if popup is open', async (t) => {
+test('Value in calendar should be updated by click on clear button if popup is open', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
