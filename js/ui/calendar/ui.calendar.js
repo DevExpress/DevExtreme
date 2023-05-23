@@ -737,13 +737,12 @@ const Calendar = Editor.inherit({
     },
 
     _renderSpecificView: function(date) {
-        const { viewsCount, zoomLevel } = this.option();
+        const { zoomLevel } = this.option();
         const specificView = Views[zoomLevel];
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
         const view = this._createComponent($view, specificView, config);
-        $view.toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
 
         return view;
     },
