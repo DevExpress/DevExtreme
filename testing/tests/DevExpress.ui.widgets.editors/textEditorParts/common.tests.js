@@ -671,7 +671,7 @@ QUnit.module('aria-labelledby attribute', {
         this.$placeholder = this.$textEditor.find(`.${PLACEHOLDER_CLASS}`);
     }
 }, () => {
-    QUnit.test('aria-labelledby should be equal label and placeholder ids if label and placeholder are defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal label and placeholder ids if label and placeholder are specified', function(assert) {
         const inputAttr = this.$input.attr('aria-labelledby');
         const labelId = this.$label.attr('id');
         const placeholderId = this.$placeholder.attr('id');
@@ -679,7 +679,7 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
     });
 
-    QUnit.test('aria-labelledby should be equal label id if label is defined and placeholder is not defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal label id if label is specified and placeholder is not specified', function(assert) {
         this.textEditor.option({ placeholder: null });
 
         const inputAttr = this.$input.attr('aria-labelledby');
@@ -688,7 +688,7 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, labelId);
     });
 
-    QUnit.test('aria-labelledby should be equal placeholder id if label is not defined and placeholder is defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal placeholder id if label is not specified and placeholder is specified', function(assert) {
         this.textEditor.option({ label: null });
 
         const inputAttr = this.$input.attr('aria-labelledby');
@@ -697,7 +697,7 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, placeholderId);
     });
 
-    QUnit.test('if label and placeholderId are not defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal undefined if label and placeholderId are not specified', function(assert) {
         this.textEditor.option({
             label: null,
             placeholder: null,
@@ -707,7 +707,7 @@ QUnit.module('aria-labelledby attribute', {
         assert.strictEqual(inputAttr, undefined);
     });
 
-    QUnit.test('if label mode has value "hidden" and placeholder is not defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal undefined if label mode has value "hidden" and placeholder is not specified', function(assert) {
         this.textEditor.option({
             labelMode: 'hidden',
             placeholder: null,
