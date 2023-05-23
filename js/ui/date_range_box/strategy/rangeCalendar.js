@@ -118,17 +118,19 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _updateValue() {
-        const { opened, value } = this.dateRangeBox.option();
+        const { value } = this.dateRangeBox.option();
 
-        if(!this._widget || !opened) {
+        if(!this._widget) {
             return;
         }
 
+        this._shouldPreventFocusChange = true;
         this._widget.option('values', value);
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
         if(isSameDateArrays(value, previousValue) && !this._widget._valueSelected) {
+            this._shouldPreventFocusChange = false;
             return;
         }
 
@@ -177,11 +179,15 @@ class RangeCalendarStrategy extends CalendarStrategy {
             }
         }
 
-        if(this._widget.option('_currentSelection') === 'startDate') {
-            this.getDateRangeBox().getEndDateBox().focus();
-        } else {
-            this.getDateRangeBox().getStartDateBox().focus();
+        if(!this._shouldPreventFocusChange) {
+            if(this._widget.option('_currentSelection') === 'startDate') {
+                this.getDateRangeBox().getEndDateBox().focus();
+            } else {
+                this.getDateRangeBox().getStartDateBox().focus();
+            }
         }
+
+        this._shouldPreventFocusChange = false;
     }
 
     getCurrentSelection() {
