@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import dataUtils from 'core/element_data';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_range_box';
 
@@ -296,6 +297,60 @@ QUnit.module('Strategy', moduleConfig, () => {
     });
 
     ['instantly', 'useButtons'].forEach((applyValueMode) => {
+        QUnit.test(`Enter key should apply value from input when input value was changed (applyValueMode = ${applyValueMode})`, function(assert) {
+            this.reinit({
+                applyValueMode,
+                value: ['2023/05/11', '2023/05/23'],
+                displayFormat: 'yyyy/MM/dd',
+                opened: true,
+            });
+
+            const $startDateInput = $(this.instance.startDateField());
+            let keyboard = keyboardMock($startDateInput);
+
+            $startDateInput.focusin();
+
+            keyboard.caret(100).press('backspace').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[0]), new Date('2023/05/01'), 'value from start date input aplied');
+
+            const $endDateInput = $(this.instance.endDateField());
+            keyboard = keyboardMock($endDateInput);
+
+            $endDateInput.focusin();
+
+            keyboard.caret(100).press('backspace').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/02'), 'value from end date input aplied');
+        });
+
+        QUnit.test(`Enter key should apply value from calendar when input value was not changed (applyValueMode = ${applyValueMode})`, function(assert) {
+            this.reinit({
+                applyValueMode,
+                value: ['2023/05/11', '2023/05/23'],
+                displayFormat: 'yyyy/MM/dd',
+                opened: true,
+            });
+
+            const $startDateInput = $(this.instance.startDateField());
+            let keyboard = keyboardMock($startDateInput);
+
+            $startDateInput.focusin();
+
+            keyboard.caret(100).press('arrowleft').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[0]), new Date('2023/05/10'), 'value from start date input aplied');
+
+            const $endDateInput = $(this.instance.endDateField());
+            keyboard = keyboardMock($endDateInput);
+
+            $endDateInput.focusin();
+
+            keyboard.caret(100).press('arrowright').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/11'), 'value from end date input aplied');
+        });
+
         [
             {
                 firstSelect: 'startDate',
