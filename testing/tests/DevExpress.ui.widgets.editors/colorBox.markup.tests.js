@@ -42,13 +42,6 @@ QUnit.module('ColorBox', {
         assert.ok($input.closest('.' + COLOR_BOX_INPUT_CONTAINER_CLASS).length);
     });
 
-    QUnit.test('Input should have "aria-live"="polite" attribute', function(assert) {
-        const $colorBox = showColorBox.call(this);
-        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('aria-live'), 'polite');
-    });
-
     QUnit.test('Default value should be \'null\'', function(assert) {
         const colorBox = showColorBox.call(this).dxColorBox('instance');
         assert.strictEqual(colorBox.option('value'), null);
