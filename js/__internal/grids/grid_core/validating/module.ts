@@ -794,6 +794,11 @@ export const validatingModule = {
                   data = change.data;
                 } else if (change.type === 'update') {
                   const oldData = that._getOldData(change.key);
+
+                  if (!isDefined(oldData)) {
+                    return;
+                  }
+
                   data = createObjectWithChanges(oldData, change.data);
                 }
                 if (data) {
