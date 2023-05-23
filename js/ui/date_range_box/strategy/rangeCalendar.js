@@ -118,11 +118,13 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _updateValue() {
-        if(!this._widget) {
+        const { opened, value } = this.dateRangeBox.option();
+
+        if(!this._widget || !opened) {
             return;
         }
 
-        this._widget.option('values', this.dateRangeBox.option('value'));
+        this._widget.option('values', value);
     }
 
     _valueChangedHandler({ value, previousValue, event }) {

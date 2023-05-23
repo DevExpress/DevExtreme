@@ -456,6 +456,42 @@ test('DateRangeBox & StartDateBox should be focused after click on clear button'
   openOnFieldClick: false,
 }));
 
+test('DateRangeBox & StartDateBox should be focused after click on clear button when popup is opened', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().element);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+
+  await t
+    .click(dateRangeBox.clearButton);
+
+  await t.wait(500);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  showClearButton: true,
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+}, '#container', {
+  disableFxAnimation: false,
+}));
+
 test('DateRangeBox & StartDateBox should be focused after close drop down button and click on clear button', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
