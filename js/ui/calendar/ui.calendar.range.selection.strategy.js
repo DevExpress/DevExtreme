@@ -30,6 +30,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         this._currentDateChanged = true;
 
         if(this.calendar.option('_allowChangeSelectionOrder') === true) {
+            this.calendar._valueSelected = true;
+
             if(this.calendar.option('_currentSelection') === 'startDate') {
                 if(this.calendar._convertToDate(selectedValue) > this.calendar._convertToDate(endDate)) {
                     this.dateValue([selectedValue, null], e);
