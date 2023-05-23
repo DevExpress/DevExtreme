@@ -1135,13 +1135,6 @@ QUnit.module('Accessibility', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('input should have "aria-live"="polite" attribute', function(assert) {
-        const $colorBox = showColorBox.call(this);
-        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('aria-live'), 'polite');
-    });
-
     QUnit.test('input should have "aria-activedescendant" attribute', function(assert) {
         const $colorBox = showColorBox.call(this);
         const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);

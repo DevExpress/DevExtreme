@@ -297,12 +297,7 @@ const ColorBox = DropDownEditor.inherit({
 
         this._ariaId = `dx-${new Guid()}`;
 
-        const elementAria = {
-            live: 'polite',
-            activedescendant: this._ariaId
-        };
-
-        this.setAria(elementAria);
+        this.setAria('activedescendant', this._ariaId);
 
         this._input().addClass(COLOR_BOX_INPUT_CLASS);
         this._renderColorPreview();
