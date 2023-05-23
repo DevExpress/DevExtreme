@@ -484,6 +484,18 @@ class DateRangeBox extends Editor {
         return dateBoxConfig;
     }
 
+    _hideOnOutsideClickHandler({ target }) {
+        // TODO: extract this common code part with ddeditor to avoid duplication
+        const $target = $(target);
+        const dropDownButton = this.getButton('dropDown');
+        const $dropDownButton = dropDownButton && dropDownButton.$element();
+        const isInputClicked = !!$target.closest(this.$element()).length;
+        const isDropDownButtonClicked = !!$target.closest($dropDownButton).length;
+        const isOutsideClick = !isInputClicked && !isDropDownButtonClicked;
+
+        return isOutsideClick;
+    }
+
     _getStartDateBoxConfig() {
         const options = this.option();
 
@@ -495,9 +507,12 @@ class DateRangeBox extends Editor {
             dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
             disabledDates: options.dropDownOptions?.disabledDates,
-            'dropDownOptions.showTitle': false,
-            'dropDownOptions.title': '',
-            dropDownOptions: options.dropDownOptions,
+            dropDownOptions: {
+                showTitle: false,
+                title: '',
+                hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
+                ...options.dropDownOptions,
+            },
             invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
                 if(!this._shouldSuppressValueSync) {

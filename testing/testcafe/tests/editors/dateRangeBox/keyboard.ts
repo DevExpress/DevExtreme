@@ -300,7 +300,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input and 
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .ok()
-    .expect(dateRangeBox.getPopup().getCloseButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
@@ -319,7 +319,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input and 
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
-    .expect(dateRangeBox.getPopup().getCloseButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .ok()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
@@ -338,7 +338,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input and 
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
-    .expect(dateRangeBox.getPopup().getCloseButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
@@ -379,7 +379,7 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .ok()
-    .expect(dateRangeBox.getPopup().getCloseButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
@@ -398,7 +398,7 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
-    .expect(dateRangeBox.getPopup().getCloseButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .ok()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
@@ -417,7 +417,7 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
-    .expect(dateRangeBox.getPopup().getCloseButton().isFocused)
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
@@ -427,9 +427,6 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
   applyValueMode: 'useButtons',
   opened: false,
   width: 500,
-  dropDownOptions: {
-    hideOnOutsideClick: false,
-  },
 }));
 
 test('DateRangeBox should not be closed by press shift+tab key on endDate input', async (t) => {
