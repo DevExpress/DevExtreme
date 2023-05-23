@@ -1419,6 +1419,54 @@ describe("component rendering", () => {
                 expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
             });
 
+            it("passes configuration component updates before templates", () => {
+                const NestedItem = createConfigurationComponent({
+                    props: {
+                        template: String
+                    }
+                });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+                const component = defineComponent({
+                    template: `<test-component :prop1='prop1Value'>
+                                <nested-item v-if="renderTemplate">
+                                    <template #default>
+                                        <div>1</div>
+                                    </template>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    },
+                    props: {
+                        renderTemplate: {
+                            type: Boolean,
+                            value: false
+                        },
+                        prop1Value: {
+                            type: Number,
+                            value: 1
+                        }
+                    }
+                });
+
+                const wrapper = mount(component);
+
+                wrapper.setProps({
+                    renderTemplate: true,
+                    prop1Value: 2
+                });
+
+                nextTick(() => {
+                    expect(Widget.option.mock.calls[0][0]).toEqual("items");
+                    expect(Widget.option.mock.calls[1][0]).toEqual("integrationOptions.templates");
+                    expect(Widget.option.mock.calls[2][0]).toEqual("items[0].template");
+                    expect(Widget.option.mock.calls[3][0]).toEqual("prop1");
+                });
+            });
+
             it("passes node of nested component as template", () => {
                 const NestedItem = createConfigurationComponent({
                     props: {

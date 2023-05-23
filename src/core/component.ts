@@ -99,6 +99,9 @@ function initBaseComponent() {
             thisComponent.$_templatesManager.discover();
 
             thisComponent.$_instance.beginUpdate();
+
+            this.$_applyConfigurationChanges();
+
             if (thisComponent.$_templatesManager.isDirty) {
                 thisComponent.$_instance.option(
                     "integrationOptions.templates",
@@ -117,8 +120,6 @@ function initBaseComponent() {
                 thisComponent.$_instance.option(name, thisComponent.$_pendingOptions[name]);
             }
             thisComponent.$_pendingOptions = {};
-
-            this.$_applyConfigurationChanges();
 
             thisComponent.$_instance.endUpdate();
 
