@@ -41,7 +41,9 @@ const FakeView = BaseView.inherit({
     _getCellByDate: noop,
     _renderWeekNumberCell: noop,
     isBoundary: noop,
-    _renderValue: noop
+    _renderValue: noop,
+    _isStartDayOfMonth: noop,
+    _isEndDayOfMonth: noop,
 });
 
 

@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import DateBox from '../date_box/ui.date_box.mask';
 import RangeCalendarStrategy from './strategy/rangeCalendar';
 
+const START_DATEBOX_CLASS = 'dx-start-datebox';
 class MultiselectDateBox extends DateBox {
     _initStrategy() {
         this._strategy = new RangeCalendarStrategy(this);
@@ -24,12 +25,33 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
+    _clearValueHandler(e) {
+        this.option('text', '');
+        e.stopPropagation();
+
+        this._saveValueChangeEvent(e);
+        this._clearValue();
+    }
+
     _renderOpenedState() {
-        const opened = this._strategy.dateRangeBox.getStartDateBox()?.option('opened') ?? this.option('opened');
+        this._strategy.dateRangeBox.option('opened', this.option('opened'));
 
-        this._strategy.dateRangeBox._toggleDropDownEditorActiveClass(opened);
+        if(this._isStartDateBox()) {
+            super._renderOpenedState();
+        }
+    }
 
-        super._renderOpenedState();
+    _isStartDateBox() {
+        return this.$element().hasClass(START_DATEBOX_CLASS);
+    }
+
+    _renderPopup() {
+        super._renderPopup();
+
+        if(this._isStartDateBox()) {
+            const dateRangeBox = this._strategy.dateRangeBox;
+            dateRangeBox._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
+        }
     }
 
     _popupShownHandler() {
@@ -42,13 +64,6 @@ class MultiselectDateBox extends DateBox {
         super._popupHiddenHandler();
 
         this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
-    }
-
-    _closeOutsideDropDownHandler(e) {
-        const { target } = e;
-        const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
-
-        return super._closeOutsideDropDownHandler(e) && !($(target).is(startDateInput) || $(target).is(endDateInput));
     }
 
     _focusInHandler(e) {
@@ -132,6 +147,10 @@ class MultiselectDateBox extends DateBox {
                 super._optionChanged(args);
                 break;
         }
+    }
+
+    close() {
+        this._strategy.getDateRangeBox().getStartDateBox().option('opened', false);
     }
 }
 

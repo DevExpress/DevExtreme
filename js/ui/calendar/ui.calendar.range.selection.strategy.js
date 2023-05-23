@@ -30,6 +30,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         this._currentDateChanged = true;
 
         if(this.calendar.option('_allowChangeSelectionOrder') === true) {
+            this.calendar._valueSelected = true;
+
             if(this.calendar.option('_currentSelection') === 'startDate') {
                 if(this.calendar._convertToDate(selectedValue) > this.calendar._convertToDate(endDate)) {
                     this.dateValue([selectedValue, null], e);
@@ -41,7 +43,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
                 if(this.calendar._convertToDate(selectedValue) >= this.calendar._convertToDate(startDate)) {
                     this.dateValue([startDate, selectedValue], e);
                 } else {
-                    this.dateValue([null, selectedValue], e);
+                    this.dateValue([selectedValue, null], e);
                 }
             }
         } else {
@@ -52,7 +54,6 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
             }
         }
     }
-
 
     updateAriaSelected(value, previousValue) {
         value ??= this._getValues();
@@ -112,14 +113,31 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         const isMaxZoomLevel = this._isMaxZoomLevel();
         const [startDate, endDate] = this._getValues();
         const { _allowChangeSelectionOrder, _currentSelection } = this.calendar.option();
-        const skipHoveredRange = _allowChangeSelectionOrder && _currentSelection === 'startDate';
 
-        if(isMaxZoomLevel && startDate && !endDate && !skipHoveredRange) {
-            if(startDate < e.value) {
-                this._updateViewsOption('range', this._getDaysInRange(startDate, e.value));
-            } else {
-                this._updateViewsOption('range', this._getDaysInRange(e.value, startDate));
+        if(isMaxZoomLevel) {
+            const skipHoveredRange = _allowChangeSelectionOrder && _currentSelection === 'startDate';
+
+            if(startDate && !endDate && !skipHoveredRange) {
+                if(e.value > startDate) {
+                    this._updateViewsOption('hoveredRange', this._getDaysInRange(startDate, e.value));
+                    return;
+                }
+            } else if(!startDate && endDate && !(_allowChangeSelectionOrder && _currentSelection === 'endDate')) {
+                if(e.value < endDate) {
+                    this._updateViewsOption('hoveredRange', this._getDaysInRange(e.value, endDate));
+                    return;
+                }
+            } else if(startDate && endDate) {
+                if(_currentSelection === 'startDate' && e.value < startDate) {
+                    this._updateViewsOption('hoveredRange', this._getDaysInRange(e.value, startDate));
+                    return;
+                } else if(_currentSelection === 'endDate' && e.value > endDate) {
+                    this._updateViewsOption('hoveredRange', this._getDaysInRange(endDate, e.value));
+                    return;
+                }
             }
+
+            this._updateViewsOption('hoveredRange', []);
         }
     }
 }

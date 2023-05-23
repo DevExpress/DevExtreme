@@ -19,6 +19,7 @@ import LoadIndicator from '../load_indicator';
 import { TextEditorLabel } from './ui.text_editor.label';
 import { getWidth } from '../../core/utils/size';
 import resizeObserverSingleton from '../../core/resize_observer';
+import Guid from '../../core/guid';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -470,8 +471,21 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
-    _setLabelContainerAria: function() {
-        this.setAria('labelledby', this._label.getId(), this._getLabelContainer());
+    _getFieldElement() {
+        return this._getLabelContainer();
+    },
+
+    _setFieldAria() {
+        const labelId = this._label.getId();
+        const placeholderId = this._$placeholder?.attr('id');
+
+        const value = [labelId, placeholderId].filter(Boolean).join(' ');
+
+        const aria = {
+            'labelledby': value || undefined,
+        };
+
+        this.setAria(aria, this._getFieldElement());
     },
 
     _renderLabel: function() {
@@ -493,7 +507,7 @@ const TextEditorBase = Editor.inherit({
 
         this._label = new TextEditorLabelCreator(labelConfig);
 
-        this._setLabelContainerAria();
+        this._setFieldAria();
 
         if(this._labelContainerElement) { // NOTE: element can be not in DOM yet in React and Vue
             resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
@@ -512,9 +526,14 @@ const TextEditorBase = Editor.inherit({
         }
 
         const $input = this._input();
-        const placeholderText = this.option('placeholder');
+        const { placeholder } = this.option();
+        const placeholderAttributes = {
+            'id': placeholder ? `dx-${new Guid()}` : undefined,
+            'data-dx_placeholder': placeholder,
+        };
+
         const $placeholder = this._$placeholder = $('<div>')
-            .attr('data-dx_placeholder', placeholderText);
+            .attr(placeholderAttributes);
 
         $placeholder.insertAfter($input);
         $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
@@ -772,17 +791,18 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'placeholder':
                 this._renderPlaceholder();
+                this._setFieldAria();
                 break;
             case 'label':
                 this._label.updateText(value);
-                this._setLabelContainerAria();
+                this._setFieldAria();
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
                 break;
             case 'labelMode':
                 this._label.updateMode(value);
-                this._setLabelContainerAria();
+                this._setFieldAria();
                 break;
             case 'width':
                 this.callBase(args);

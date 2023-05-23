@@ -170,9 +170,6 @@ test('onFocusIn should be called only after first click on drop down button', as
   return createWidget('dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
-    dropDownOptions: {
-      hideOnOutsideClick: false,
-    },
     onFocusIn() {
       ((window as any).onFocusInCounter as number) += 1;
     },
@@ -269,9 +266,6 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: true,
     width: 500,
-    dropDownOptions: {
-      hideOnOutsideClick: false,
-    },
     onFocusIn() {
       ((window as any).onFocusInCounter as number) += 1;
     },
@@ -293,6 +287,8 @@ test('Click by separator element should focus DateRangeBox or leave active input
     .click(dateRangeBox.separator);
 
   await t
+    .expect(dateRangeBox.option('opened'))
+    .notOk()
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -308,6 +304,8 @@ test('Click by separator element should focus DateRangeBox or leave active input
     .click(dateRangeBox.separator);
 
   await t
+    .expect(dateRangeBox.option('opened'))
+    .notOk()
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -323,6 +321,8 @@ test('Click by separator element should focus DateRangeBox or leave active input
     .click(dateRangeBox.getEndDateBox().input);
 
   await t
+    .expect(dateRangeBox.option('opened'))
+    .ok()
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -338,6 +338,8 @@ test('Click by separator element should focus DateRangeBox or leave active input
     .click(dateRangeBox.separator);
 
   await t
+    .expect(dateRangeBox.option('opened'))
+    .ok()
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -351,6 +353,8 @@ test('Click by separator element should focus DateRangeBox or leave active input
 
   await t
     .click(Selector('body'), { offsetX: -50 })
+    .expect(dateRangeBox.option('opened'))
+    .notOk()
     .expect(dateRangeBox.isFocused)
     .notOk()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -421,9 +425,6 @@ test('EndDateBox should be stay focused after close popup by click on drop down 
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
   openOnFieldClick: false,
-  dropDownOptions: {
-    hideOnOutsideClick: false,
-  },
 }));
 
 test('DateRangeBox & StartDateBox should be focused after click on clear button', async (t) => {
@@ -454,6 +455,76 @@ test('DateRangeBox & StartDateBox should be focused after click on clear button'
   showClearButton: true,
   value: ['2021/09/17', '2021/10/24'],
   openOnFieldClick: false,
+}));
+
+test('DateRangeBox & StartDateBox should be focused and stay opened after click on clear button when popup is opened', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().element);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+
+  await t
+    .click(dateRangeBox.clearButton);
+
+  await t.wait(500);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  showClearButton: true,
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+}, '#container', {
+  disableFxAnimation: false,
+}));
+
+test('DateRangeBox & StartDateBox should be focused after close drop down button and click on clear button', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input)
+    .click(dateRangeBox.dropDownButton);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .click(dateRangeBox.clearButton);
+
+  await t
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  showClearButton: true,
+  value: [null, '2021/10/24'],
+  openOnFieldClick: false,
+  opened: true,
 }));
 
 test('DateRangeBox & StartDateBox should be focused if startDateBox open by keyboard, alt+down, alt+up', async (t) => {
@@ -536,8 +607,7 @@ test('DateRangeBox & StartDateBox should be focused if endDateBox open and close
 
   await t
     .expect(dateRangeBox.option('opened'))
-    // TODO: popup should be closed
-    .eql(true)
+    .eql(false)
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
