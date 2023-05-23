@@ -657,7 +657,7 @@ QUnit.module('label integration', {
     });
 });
 
-QUnit.module('check aria-labelledby attribute', {
+QUnit.module('aria-labelledby attribute', {
     beforeEach: function() {
         this.$textEditor = $('#texteditor');
         this.textEditor = this.$textEditor
@@ -671,7 +671,7 @@ QUnit.module('check aria-labelledby attribute', {
         this.$placeholder = this.$textEditor.find(`.${PLACEHOLDER_CLASS}`);
     }
 }, () => {
-    QUnit.test('if label and placeholder are defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal label and placeholder ids if label and placeholder are defined', function(assert) {
         const inputAttr = this.$input.attr('aria-labelledby');
         const labelId = this.$label.attr('id');
         const placeholderId = this.$placeholder.attr('id');
@@ -679,7 +679,7 @@ QUnit.module('check aria-labelledby attribute', {
         assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
     });
 
-    QUnit.test('if label is defined and placeholder is not defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal label id if label is defined and placeholder is not defined', function(assert) {
         this.textEditor.option({ placeholder: null });
 
         const inputAttr = this.$input.attr('aria-labelledby');
@@ -688,7 +688,7 @@ QUnit.module('check aria-labelledby attribute', {
         assert.strictEqual(inputAttr, labelId);
     });
 
-    QUnit.test('if label is not defined and placeholder is defined', function(assert) {
+    QUnit.test('aria-labelledby should be equal placeholder id if label is not defined and placeholder is defined', function(assert) {
         this.textEditor.option({ label: null });
 
         const inputAttr = this.$input.attr('aria-labelledby');

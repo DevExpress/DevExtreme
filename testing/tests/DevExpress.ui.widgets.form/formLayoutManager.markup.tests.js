@@ -2447,14 +2447,14 @@ QUnit.module('Accessibility', () => {
 
             if(editorClassesRequiringIdForLabel.includes(editorClassName)) {
                 if(!(!windowUtils.hasWindow() && editorType === 'dxHtmlEditor')) {
-                    assert.ok($ariaTarget.attr('aria-labelledby'), `aria-labeledby attribute ${editorClassName}`);
+                    assert.ok($ariaTarget.attr('aria-labelledby'), `aria-labelledby attribute ${editorClassName}`);
                     assert.ok($label.attr('id'), `label id attribute for ${editorClassName}`);
                     assert.strictEqual($ariaTarget.attr('aria-labelledby'), $label.attr('id'), 'attributes aria-labelledby and labelID are equal');
                 }
             } else {
                 const expectedTargetValue = $placeholder.length ? $placeholder.attr('id') : null;
 
-                assert.equal($ariaTarget.eq(0).attr('aria-labelledby'), expectedTargetValue, `aria-labeledby attribute ${editorClassName}`);
+                assert.equal($ariaTarget.eq(0).attr('aria-labelledby'), expectedTargetValue, `aria-labelledby attribute ${editorClassName}`);
                 assert.equal($label.attr('id'), null, `label id attribute for ${editorClassName}`);
             }
         });
