@@ -22,7 +22,11 @@ type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionI
 
 /* eslint-disable no-underscore-dangle */
 
-/** @namespace DevExpress */
+/**
+ * @namespace DevExpress
+ * @docid
+ * @hidden
+ */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<
     EventInfo<TComponent>,
     InitializedEventInfo<TComponent>,

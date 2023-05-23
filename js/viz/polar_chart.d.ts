@@ -207,6 +207,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
@@ -2301,6 +2302,7 @@ export type Properties = dxPolarChartOptions;
 /** @deprecated use Properties instead */
 export type Options = dxPolarChartOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -2437,3 +2439,4 @@ onZoomEnd?: ((e: ZoomEndEvent) => void);
  */
 onZoomStart?: ((e: ZoomStartEvent) => void);
 };
+///#ENDDEBUG

@@ -26,6 +26,7 @@ const START_DATEBOX_CLASS = 'dx-start-datebox';
 const END_DATEBOX_CLASS = 'dx-end-datebox';
 const DATERANGEBOX_SEPARATOR_CLASS = 'dx-daterangebox-separator';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
+const INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 
@@ -92,6 +93,7 @@ class DateRangeBox extends Editor {
             opened: false,
             pickerType: 'calendar',
             readOnly: false,
+            selectionBehavior: 'normal',
             showClearButton: false,
             showDropDownButton: true,
             spellcheck: false,
@@ -246,6 +248,8 @@ class DateRangeBox extends Editor {
         this._renderButtonsContainer();
 
         super._initMarkup();
+
+        this.$element().removeClass(INVALID_BADGE_CLASS);
     }
 
     _attachKeyboardEvents() {
@@ -367,11 +371,14 @@ class DateRangeBox extends Editor {
         this._saveValueChangeEvent(e);
 
         this._shouldSuppressValueSync = true;
-        this.getEndDateBox()._clearValueHandler(e);
         this.getStartDateBox()._clearValueHandler(e);
+        this.getEndDateBox()._clearValueHandler(e);
         this._shouldSuppressValueSync = false;
 
-        this.reset();
+        this.reset(true);
+
+        this.focus();
+        eventsEngine.trigger($(this.startDateField()), 'input');
     }
 
     _isClearButtonVisible() {
@@ -537,6 +544,7 @@ class DateRangeBox extends Editor {
         return {
             ...this._getDateBoxConfig(),
             invalidDateMessage: options.invalidEndDateMessage,
+            isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             dropDownOptions: {
                 onShowing: (e) => {
@@ -808,6 +816,8 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
                 break;
+            case 'selectionBehavior':
+                break;
             case 'startDate':
                 this.updateValue([value, this.option('value')[1]]);
                 break;
@@ -931,9 +941,13 @@ class DateRangeBox extends Editor {
         this.getStartDateBox().focus();
     }
 
-    reset() {
-        // this.getEndDateBox().reset();
-        // this.getStartDateBox().reset();
+    reset(shouldSkipCall) {
+        if(!shouldSkipCall) {
+            this._shouldSuppressValueSync = true;
+            this.getEndDateBox().reset();
+            this.getStartDateBox().reset();
+            this._shouldSuppressValueSync = false;
+        }
 
         super.reset();
     }

@@ -47,6 +47,7 @@ export type TooltipShownEvent = EventInfo<dxBullet>;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     /**
@@ -122,6 +123,7 @@ export type Properties = dxBulletOptions;
 /** @deprecated use Properties instead */
 export type Options = dxBulletOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -192,3 +194,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
+///#ENDDEBUG

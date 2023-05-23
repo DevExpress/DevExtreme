@@ -106,6 +106,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TComponent> {
     /**
@@ -196,6 +197,7 @@ export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
 /** @deprecated use Properties instead */
 export type Options = Properties;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -326,3 +328,4 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

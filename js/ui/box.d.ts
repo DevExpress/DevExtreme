@@ -58,6 +58,7 @@ export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> =
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxBoxOptions<
     TItem extends ItemLike<TKey> = any,
@@ -173,6 +174,7 @@ export type Options<
     TKey = any,
 > = Properties<TItem, TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -233,3 +235,4 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

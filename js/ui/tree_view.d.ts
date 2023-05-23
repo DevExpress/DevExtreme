@@ -97,6 +97,7 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxTreeViewOptions<TKey = any>
     extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
@@ -659,6 +660,7 @@ export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
 /** @deprecated use Properties instead */
 export type Options<TKey = any> = Properties<TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -749,3 +751,4 @@ onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
+///#ENDDEBUG

@@ -65,6 +65,7 @@ export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
@@ -193,6 +194,7 @@ export type Properties = dxLinearGaugeOptions;
 /** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -263,3 +265,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
+///#ENDDEBUG

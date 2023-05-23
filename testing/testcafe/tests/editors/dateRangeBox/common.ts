@@ -19,7 +19,6 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const HOVER_STATE_CLASS = 'dx-state-focused';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const INVALID_STATE_CLASS = 'dx-invalid';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
@@ -28,68 +27,69 @@ fixture.disablePageReloads`DateRangeBox render`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-stylingModes.forEach((stylingMode) => {
-  test(`DateRangeBox styles, stylingMode=${stylingMode}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((isValid) => {
+  stylingModes.forEach((stylingMode) => {
+    test(`DateRangeBox styles, stylingMode=${stylingMode}, isValid=${isValid}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
 
-    for (const state of [
-      DROP_DOWN_EDITOR_ACTIVE_CLASS,
-      FOCUSED_STATE_CLASS,
-      HOVER_STATE_CLASS,
-      READONLY_STATE_CLASS,
-      DISABLED_STATE_CLASS,
-      INVALID_STATE_CLASS,
-      `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
-    ] as any[]
-    ) {
-      for (const id of t.ctx.ids) {
-        await setClassAttribute(Selector(`#${id}`), state);
-        await setClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
-      }
+      for (const state of [
+        DROP_DOWN_EDITOR_ACTIVE_CLASS,
+        FOCUSED_STATE_CLASS,
+        HOVER_STATE_CLASS,
+        READONLY_STATE_CLASS,
+        DISABLED_STATE_CLASS,
+      ] as any[]
+      ) {
+        for (const id of t.ctx.ids) {
+          await setClassAttribute(Selector(`#${id}`), state);
+          await setClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
+        }
 
-      await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, { shouldTestInCompact: true });
+        await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
 
-      for (const id of t.ctx.ids) {
-        await removeClassAttribute(Selector(`#${id}`), state);
-        await removeClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
-      }
-    }
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    t.ctx.ids = [];
-
-    await insertStylesheetRulesToPage(`.${DATERANGEBOX_CLASS} { display: inline-flex; margin: 5px; }`);
-
-    for (const rtlEnabled of [false, true]) {
-      for (const labelMode of labelModes) {
-        for (const value of [
-          [null, null],
-          [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
-        ]) {
-          const id = `${`dx${new Guid()}`}`;
-
-          t.ctx.ids.push(id);
-          await appendElementTo('#container', 'div', id, { });
-
-          const options: any = {
-            width: 500,
-            value,
-            labelMode,
-            rtlEnabled,
-            stylingMode,
-            endDateLabel: labelMode,
-            startDateLabel: 'qwertyQWERTYg',
-            showClearButton: true,
-          };
-
-          await createWidget('dxDateRangeBox', options, `#${id}`);
+        for (const id of t.ctx.ids) {
+          await removeClassAttribute(Selector(`#${id}`), state);
+          await removeClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
         }
       }
-    }
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      t.ctx.ids = [];
+
+      await insertStylesheetRulesToPage(`.${DATERANGEBOX_CLASS} { display: inline-flex; margin: 5px; }`);
+
+      for (const rtlEnabled of [false, true]) {
+        for (const labelMode of labelModes) {
+          for (const value of [
+            [null, null],
+            [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
+          ]) {
+            const id = `${`dx${new Guid()}`}`;
+
+            t.ctx.ids.push(id);
+            await appendElementTo('#container', 'div', id, { });
+
+            const options: any = {
+              width: 500,
+              isValid,
+              value,
+              labelMode,
+              rtlEnabled,
+              stylingMode,
+              endDateLabel: labelMode,
+              startDateLabel: 'qwertyQWERTYg',
+              showClearButton: true,
+            };
+
+            await createWidget('dxDateRangeBox', options, `#${id}`);
+          }
+        }
+      }
+    });
   });
 });

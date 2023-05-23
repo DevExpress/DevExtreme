@@ -41,6 +41,7 @@ export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInf
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
@@ -111,6 +112,7 @@ export type Properties = dxValidationGroupOptions;
 /** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -139,3 +141,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

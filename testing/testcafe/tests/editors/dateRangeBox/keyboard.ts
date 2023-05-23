@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DateRangeBox from '../../../model/dateRangeBox';
@@ -63,13 +64,134 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
   await t
     .pressKey('alt+up');
 
-  // TODO: reanimate this expectation
-  // await t
-  //   .expect(dateRangeBox.option('opened'))
-  //   .eql(false);
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false);
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
   openOnFieldClick: false,
+}));
+
+test('DateRangeBox should be closed by press esc key when startDateBox is focused', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('esc');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false);
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+}));
+
+test('DateRangeBox should be closed by press esc key when endDateBox is focused', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('esc');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false);
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+}));
+
+test('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(Selector('body'), { offsetX: -50 })
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+  opened: true,
+  width: 500,
+  dropDownOptions: {
+    hideOnOutsideClick: false,
+  },
+}));
+
+test('DateRangeBox should not be closed by press shift+tab key on endDate input', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(Selector('body'), { offsetX: -50 })
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+  opened: true,
+  width: 500,
+  dropDownOptions: {
+    hideOnOutsideClick: false,
+  },
 }));
 
 [
