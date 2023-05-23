@@ -83,6 +83,7 @@ const CLEAR_BUTTON_CLASS = 'dx-popup-clear';
 const APPLY_BUTTON_CLASS = 'dx-popup-done';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
 const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
@@ -3370,6 +3371,9 @@ if(devices.real().deviceType === 'desktop') {
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const $placeholder = helper.widget._popup.$content().find(`.${PLACEHOLDER_CLASS}`);
+
+                const placeholderId = $placeholder.attr('id');
 
                 const listAttributes = {
                     id: helper.widget._listId,
@@ -3411,6 +3415,7 @@ if(devices.real().deviceType === 'desktop') {
                         tabindex: '0',
                         role: 'textbox',
                         'aria-label': 'Search',
+                        'aria-labelledby': placeholderId,
                     };
 
                     if(this.isMac) {
@@ -3453,6 +3458,7 @@ if(devices.real().deviceType === 'desktop') {
                         spellcheck: 'false',
                         role: 'textbox',
                         'aria-label': 'Search',
+                        'aria-labelledby': placeholderId,
                     };
 
                     if(this.isMac) {

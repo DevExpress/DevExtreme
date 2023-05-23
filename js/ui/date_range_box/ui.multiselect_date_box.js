@@ -40,6 +40,16 @@ class MultiselectDateBox extends DateBox {
         super._renderOpenedState();
     }
 
+    _renderPopup() {
+        super._renderPopup();
+
+        const isStartDateBox = this.$element().hasClass('dx-start-datebox');
+        if(isStartDateBox) {
+            const dateRangeBox = this._strategy.dateRangeBox;
+            dateRangeBox._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
+        }
+    }
+
     _popupShownHandler() {
         super._popupShownHandler();
 

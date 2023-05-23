@@ -70,6 +70,9 @@ const optionTestValues = {
 };
 
 const getPopupInstance = (editor) => {
+    if(editor.NAME === 'dxDateRangeBox') {
+        return editor.getStartDateBox()._popup;
+    }
     return editor._popup;
 };
 const skipTesting = (assert) => {

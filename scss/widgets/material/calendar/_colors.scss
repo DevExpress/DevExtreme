@@ -21,6 +21,7 @@ $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default
 $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
 $calendar-bg: $base-bg !default;
 $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
+$calendar-cell-hover-border-color: color.change($base-accent, $alpha: 0.6) !default;
 $calendar-cell-hover-color: $calendar-color !default;
 
 /**
