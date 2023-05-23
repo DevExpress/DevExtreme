@@ -4,11 +4,14 @@ import Button from './button';
 import Overlay from './overlay';
 
 const CLASS = {
+  button: 'dx-button',
   content: 'dx-overlay-content',
   wrapper: 'dx-overlay-wrapper',
   topToolbar: 'dx-popup-title',
   bottomToolbar: 'dx-popup-bottom',
-  closeButton: 'dx-closebutton',
+  closeButton: 'dx-popup-cancel',
+  doneButton: 'dx-popup-done',
+  todayButton: 'dx-button-today',
 };
 export default class Popup extends Overlay {
   public static className = '.dx-popup-wrapper';
@@ -36,7 +39,15 @@ export default class Popup extends Overlay {
     return Selector(`.${CLASS.bottomToolbar}`);
   }
 
+  getApplyButton(): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.button}.${CLASS.doneButton}`));
+  }
+
   getCloseButton(): Button {
-    return new Button(this.getWrapper().find(`.${CLASS.closeButton}`));
+    return new Button(this.getWrapper().find(`.${CLASS.button}.${CLASS.closeButton}`));
+  }
+
+  getTodayButton(): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.todayButton}`));
   }
 }

@@ -265,10 +265,10 @@ class DateRangeBox extends Editor {
         // TODO: should we add area readonly here?
     }
 
-    _toggleDropDownEditorActiveClass(state) {
+    _toggleDropDownEditorActiveClass() {
         const { opened } = this.option();
 
-        this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE_CLASS, state ?? opened);
+        this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE_CLASS, opened);
     }
 
     _toggleEditorLabelClass() {
@@ -508,13 +508,9 @@ class DateRangeBox extends Editor {
             },
             opened: options.opened,
             onOpened: () => {
-                this.option('opened', true);
-
                 this._raiseOpenAction();
             },
             onClosed: () => {
-                this.option('opened', false);
-
                 this._raiseCloseAction();
             },
             onOptionChanged: (args) => {
@@ -546,17 +542,6 @@ class DateRangeBox extends Editor {
             invalidDateMessage: options.invalidEndDateMessage,
             isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
-            dropDownOptions: {
-                onShowing: (e) => {
-                    e.cancel = true;
-                    this.getStartDateBox().open();
-
-                    // TODO: datebox doesn't clear opened state after prevent of opening
-                    this.getEndDateBox().option('opened', false);
-                },
-                showTitle: false,
-                title: '',
-            },
             onValueChanged: ({ value, event }) => {
                 if(!this._shouldSuppressValueSync) {
                     const newValue = [this.option('value')[0], value];
@@ -573,6 +558,7 @@ class DateRangeBox extends Editor {
                     this._syncValidationErrors('_internalValidationErrors', value, previousValue);
                 }
             },
+            opened: options.opened,
             showClearButton: false,
             showDropDownButton: false,
             value: this.option('value')[1],
@@ -711,8 +697,9 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option(name, value);
                 break;
             case 'opened':
-                this._toggleDropDownEditorActiveClass(value);
+                this._toggleDropDownEditorActiveClass();
                 this.getStartDateBox().option(name, value);
+                this.getEndDateBox()._setOptionWithoutOptionChange(name, value);
                 break;
             case 'buttons':
                 this._cleanButtonContainers();
