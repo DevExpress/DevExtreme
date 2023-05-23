@@ -8,7 +8,7 @@ import browser from '@js/core/utils/browser';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import LoadIndicator from '@js/ui/load_indicator';
-import { VirtualScrollController, subscribeToExternalScrollers } from '@js/ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import { VirtualScrollController, subscribeToExternalScrollers } from './module_core';
 import gridCoreUtils from '../module_utils';
 
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
