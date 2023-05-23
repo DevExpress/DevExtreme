@@ -134,9 +134,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
-        if(isSameDateArrays(value, previousValue)) {
+        if(isSameDateArrays(value, previousValue) && !this._widget._valueSelected) {
             return;
         }
+
+        this._widget._valueSelected = false;
 
         const isInstantlyMode = this.dateRangeBox.option('applyValueMode') === 'instantly';
 

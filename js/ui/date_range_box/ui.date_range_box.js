@@ -459,7 +459,7 @@ class DateRangeBox extends Editor {
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
             valueChangeEvent: options.valueChangeEvent,
-            onKeyDown: options.onKeyUp,
+            onKeyDown: options.onKeyDown,
             onKeyUp: options.onKeyUp,
             onChange: options.onChange,
             onInput: options.onInput,
