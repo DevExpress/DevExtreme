@@ -97,7 +97,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
             values: value,
             selectionMode: 'range',
             viewsCount: multiView ? 2 : 1,
-            width: 260,
             _allowChangeSelectionOrder: true,
             _currentSelection: this.getCurrentSelection(),
         });

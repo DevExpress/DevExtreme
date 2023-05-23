@@ -266,9 +266,9 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 ...expectedDateBoxOptions,
                 applyButtonText: 'OK',
                 calendarOptions: {},
+                disabledDates: undefined,
                 cancelButtonText: 'Cancel',
                 dateOutOfRangeMessage: 'Start date is out of range',
-                disabledDates: null,
                 invalidDateMessage: 'Start value must be a date',
                 label: 'Start Date',
                 opened: false,
@@ -2098,10 +2098,12 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         }, {
             optionName: 'todayButtonText',
             optionValue: 'now'
-        }, {
-            optionName: 'disabledDates',
-            optionValue: [new Date('2023/04/27'), new Date('2023/04/28')]
-        }
+        },
+        // NOTE: disabledDates are not published now. Use calendarOptions.disabledDates
+        // {
+        //     optionName: 'disabledDates',
+        //     optionValue: [new Date('2023/04/27'), new Date('2023/04/28')]
+        // }
     ].forEach(({ optionName, optionValue }) => {
         QUnit.test(`${optionName} should be passed to startDateBox on init`, function(assert) {
             this.reinit({
@@ -3690,6 +3692,73 @@ QUnit.module('localization', moduleConfig, () => {
 
         Object.keys(localeVariablesMap).forEach((optionName, index) => {
             assert.strictEqual(this.instance.option(optionName), index + 1, optionName);
+        });
+    });
+});
+
+QUnit.module('calendarOptions', moduleConfig, () => {
+    // NOTE: commented props are restricted in docs: value is passed from DateRangeBox.
+    const calendarOptions = {
+        accessKey: 'b',
+        activeStateEnabled: false,
+        cellTemplate: () => {},
+        // dateSerializationFormat: 'yyyy-MM-dd',
+        disabled: true,
+        disabledDates: () => {},
+        elementAttr: {},
+        firstDayOfWeek: 5,
+        focusStateEnabled: false,
+        height: 500,
+        hint: 'hint',
+        hoverStateEnabled: false,
+        isValid: false,
+        // max: new Date('5/5/2023'),
+        maxZoomLevel: 'year',
+        // min: new Date('5/5/2023'),
+        minZoomLevel: 'year',
+        name: 'name',
+        onDisposing: () => {},
+        onInitialized: () => {},
+        onOptionChanged: () => {},
+        // onValueChanged: () => {},
+        readOnly: true,
+        rtlEnabled: true,
+        showTodayButton: true,
+        showWeekNumbers: true,
+        // tabIndex: 1,
+        validationError: {},
+        validationErrors: [{}],
+        validationMessageMode: 'always',
+        validationMessagePosition: 'top',
+        validationStatus: 'pending',
+        // value: [null, null],
+        visible: false,
+        weekNumberRule: 'fullWeek',
+        width: 500,
+        zoomLevel: 'year',
+    };
+
+    Object.entries(calendarOptions).forEach(([ name, value ]) => {
+        QUnit.test(`calendarOptions.${name} should be passed to the calendar on init`, function(assert) {
+            this.reinit({
+                deferRendering: false,
+                [`calendarOptions.${name}`]: value
+            });
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option(name), value);
+        });
+
+        QUnit.test(`calendarOptions.${name} should be passed to the calendar on runtime change`, function(assert) {
+            this.instance.option({
+                deferRendering: false,
+                [`calendarOptions.${name}`]: value
+            });
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option(name), value);
         });
     });
 });
