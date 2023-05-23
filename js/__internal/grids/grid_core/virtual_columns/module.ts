@@ -1,7 +1,7 @@
 import { getWidth, getOuterWidth } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
 import { isDefined } from '@js/core/utils/type';
-import { createColumnsInfo } from '@js/ui/grid_core/ui.grid_core.virtual_columns_core';
+import { createColumnsInfo } from './module_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
