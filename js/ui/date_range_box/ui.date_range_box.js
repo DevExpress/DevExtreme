@@ -494,7 +494,7 @@ class DateRangeBox extends Editor {
             cancelButtonText: options.cancelButtonText,
             dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
-            disabledDates: options.disabledDates,
+            disabledDates: options.dropDownOptions?.disabledDates,
             'dropDownOptions.showTitle': false,
             'dropDownOptions.title': '',
             dropDownOptions: options.dropDownOptions,
