@@ -18,7 +18,7 @@ const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 
-export function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement?) {
+function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement?) {
   let $scrollElement;
   const scrollableArray: any = [];
   const scrollToArray: any = [];
@@ -108,7 +108,7 @@ export function subscribeToExternalScrollers($element, scrollChangedHandler, $ta
   };
 }
 
-export const VirtualScrollController = Class.inherit((function () {
+const VirtualScrollController = Class.inherit((function () {
   const members = {
     ctor(component, dataOptions, isVirtual) {
       this._dataOptions = dataOptions;
@@ -418,3 +418,6 @@ export const VirtualScrollController = Class.inherit((function () {
 
   return members;
 })());
+
+export default { VirtualScrollController };
+export { VirtualScrollController, subscribeToExternalScrollers };
