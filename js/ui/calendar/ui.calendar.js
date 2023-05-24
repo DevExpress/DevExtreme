@@ -567,6 +567,11 @@ const Calendar = Editor.inherit({
     },
 
     _getMinDate: function() {
+        const _rangeMin = this.option('_rangeMin');
+        if(_rangeMin) {
+            return _rangeMin;
+        }
+
         if(this.min) {
             return this.min;
         }
@@ -576,6 +581,11 @@ const Calendar = Editor.inherit({
     },
 
     _getMaxDate: function() {
+        const _rangeMax = this.option('_rangeMax');
+        if(_rangeMax) {
+            return _rangeMax;
+        }
+
         if(this.max) {
             return this.max;
         }
@@ -1312,15 +1322,22 @@ const Calendar = Editor.inherit({
 
     _setViewsMinOption: function(min) {
         this._restoreViewsMinMaxOptions();
-        this._updateViewsOption('min', this._convertToDate(min));
+        this.option('_rangeMin', this._convertToDate(min));
+        this._updateViewsOption('min', this._getMinDate());
     },
 
     _setViewsMaxOption: function(max) {
         this._restoreViewsMinMaxOptions();
-        this._updateViewsOption('max', this._convertToDate(max));
+        this.option('_rangeMax', this._convertToDate(max));
+        this._updateViewsOption('max', this._getMaxDate());
     },
 
     _restoreViewsMinMaxOptions: function() {
+        this.option({
+            _rangeMin: null,
+            _rangeMax: null,
+        });
+
         this._updateViewsOption('min', this._getMinDate());
         this._updateViewsOption('max', this._getMaxDate());
     },

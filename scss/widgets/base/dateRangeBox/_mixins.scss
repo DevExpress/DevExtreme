@@ -49,9 +49,14 @@
         }
       }
 
-      .dx-start-datebox,
-      .dx-end-datebox {
-        &.dx-invalid {
+      .dx-datebox {
+        &.dx-invalid,
+        &.dx-invalid.dx-state-hover,
+        &.dx-invalid.dx-state-focused,
+        &.dx-state-disabled,
+        &.dx-state-readonly,
+        &.dx-state-readonly.dx-state-hover,
+        &.dx-state-readonly.dx-state-focused {
           .dx-label {
             padding: 0 $horizontal-padding;
 
@@ -118,8 +123,7 @@
   &.dx-editor-filled,
   &.dx-editor-underlined {
     &.dx-invalid {
-      .dx-start-datebox,
-      .dx-end-datebox {
+      .dx-datebox {
         &.dx-state-hover {
           &::before {
             border-color: $texteditor-invalid-faded-border-color;

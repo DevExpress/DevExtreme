@@ -61,8 +61,7 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
   &.dx-editor-outlined,
   &.dx-editor-filled,
   &.dx-editor-underlined {
-    .dx-start-datebox,
-    .dx-end-datebox {
+    .dx-datebox {
       &::before {
         border-width: 0;
       }
