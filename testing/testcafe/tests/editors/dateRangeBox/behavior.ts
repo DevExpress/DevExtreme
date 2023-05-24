@@ -655,3 +655,39 @@ test('Open by click on startDate input and select date in calendar = startDate -
     },
   });
 });
+
+test('Value in calendar should be updated by click on clear button if popup is open', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .click(dateRangeBox.clearButton)
+    .expect(dateRangeBox.option('value'))
+    .eql([null, null])
+    .expect(dateRangeBox.getCalendar().option('values'))
+    .eql([null, null])
+    .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
+    .eql(1);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onValueChangedCounter = 0;
+  })();
+
+  return createWidget('dxDateRangeBox', {
+    value: [new Date(2021, 9, 17), new Date(2021, 9, 24)],
+    opened: true,
+    width: 500,
+    calendarOptions: {
+      currentDate: new Date(2021, 9, 19),
+    },
+    showClearButton: true,
+    onValueChanged() {
+      ((window as any).onValueChangedCounter as number) += 1;
+    },
+  });
+});
