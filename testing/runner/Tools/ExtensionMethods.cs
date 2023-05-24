@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Runner.Models.Results;
-using System.IO;
 
 namespace Runner.Tools
 {
@@ -31,11 +30,6 @@ namespace Runner.Tools
                 result += key + "=" + value;
 
             return new HtmlString(result);
-        }
-
-        public static bool IsBuiltSystemJs(this IUrlHelper url)
-        {
-            return Directory.Exists("./artifacts/transpiled-systemjs");
         }
 
         public static IEnumerable<TestCase> EnumerateAllCases(this TestSuite suite)

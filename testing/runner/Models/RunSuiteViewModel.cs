@@ -4,5 +4,6 @@ namespace Runner.Models
     {
         public string ScriptVirtualPath { get; set; }
         public string Title { get; set; }
+
     }
 }

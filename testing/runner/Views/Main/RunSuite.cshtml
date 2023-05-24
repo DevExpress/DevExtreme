@@ -140,13 +140,11 @@
                 tooltip: "Use norenovation components with old tests",
             });
 
-            if ('@Url.IsBuiltSystemJs()' === 'True') {
-                QUnit.config.urlConfig.push({
-                    id: "nocsp",
-                    label: "No CSP",
-                    tooltip: "Use noscp components without CSP checks",
-                });
-            }
+            QUnit.config.urlConfig.push({
+                id: "nocsp",
+                label: "No CSP",
+                tooltip: "Use noscp components without CSP checks",
+            });
 
             function notifyExtraDoneCall() {
                 var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
