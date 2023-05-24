@@ -1,67 +1,72 @@
 @use "sass:math";
 
-@mixin dx-outlined-mixin($base-bg, $horizontal-padding, $texteditor-label-font-size, $label-offset-y, $label-height) {
+@mixin dx-outlined-mixin(
+  $base-bg,
+  $horizontal-padding,
+  $texteditor-label-font-size,
+  $label-offset-y,
+  $label-height,
+  $label-line-height,
+  $label-background-height,
+  $label-background-top,
+) {
   .dx-daterangebox-with-label,
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-outlined {
+      .dx-texteditor-label {
+        .dx-label {
+          position: relative;
+
+          &::before {
+            content: '';
+            background-color: $base-bg;
+            width: 100%;
+            position: absolute;
+            height: $label-background-height;
+            top: $label-background-top;
+            margin-left: -$horizontal-padding;
+          }
+        }
+      }
+    }
+  }
+
   .dx-daterangebox-with-floating-label {
     &.dx-editor-outlined {
       margin-top: $label-offset-y;
 
-      .dx-texteditor-label {
-        .dx-label {
-          span {
-            background-color: $base-bg;
-            box-shadow: $horizontal-padding 0 $base-bg, -$horizontal-padding 0 $base-bg !important; // stylelint-disable-line declaration-no-important
-            height: $label-height;
-          }
-        }
-      }
-
-      &.dx-state-hover {
-        .dx-texteditor-label {
-          .dx-label {
-            padding: 0 $horizontal-padding;
-
-            span {
-              height: $label-height;
-            }
-          }
-        }
-      }
-
       &.dx-dropdowneditor-active,
-      &.dx-dropdowneditor-active.dx-state-focused,
-      &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
       &.dx-state-focused,
-      &.dx-state-focused.dx-state-hover {
-        .dx-texteditor-label {
-          .dx-label {
-            padding: 0 $horizontal-padding;
+      &.dx-invalid {
+        .dx-datebox.dx-editor-outlined {
+          .dx-texteditor-label {
+            .dx-label {
+              padding: 0 $horizontal-padding;
 
-            span {
-              transform: translate(0, -$label-offset-y);
-              font-size: $texteditor-label-font-size;
-              margin-top: 0;
-              top: 0;
-              height: $label-height;
-              line-height: $texteditor-label-font-size;
+              &::before {
+                background-color: $base-bg;
+              }
+
+              span {
+                transform: translate(0, -$label-offset-y);
+                font-size: $texteditor-label-font-size;
+                margin-top: 0;
+                top: 0;
+                height: $label-height;
+                line-height: $label-line-height;
+              }
             }
           }
         }
       }
 
-      .dx-datebox {
-        &.dx-invalid,
-        &.dx-invalid.dx-state-hover,
-        &.dx-invalid.dx-state-focused,
-        &.dx-state-disabled,
-        &.dx-state-readonly,
-        &.dx-state-readonly.dx-state-hover,
-        &.dx-state-readonly.dx-state-focused {
-          .dx-label {
-            padding: 0 $horizontal-padding;
-
-            span {
-              height: $label-height;
+      &.dx-texteditor-empty {
+        .dx-datebox {
+          .dx-texteditor-label {
+            .dx-label {
+              &::before {
+                background-color: transparent;
+              }
             }
           }
         }

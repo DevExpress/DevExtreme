@@ -16,7 +16,10 @@
   4px,
   $material-texteditor-label-font-size,
   math.div($material-texteditor-label-font-size, 2),
+  $material-texteditor-label-font-size + 1px,
   $material-texteditor-label-font-size,
+  2px,
+  0,
 );
 @include dx-underlined-mixin(
   $material-texteditor-label-font-size,

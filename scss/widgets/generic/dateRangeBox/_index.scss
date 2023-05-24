@@ -16,7 +16,16 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
 @include dx-filled-mixin(0, $generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
 @include dx-underlined-mixin($generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
-@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y, $generic-daterangebox-label-height);
+@include dx-outlined-mixin(
+  $base-bg,
+  2px,
+  $generic-texteditor-label-size,
+  $label-offset-y,
+  $generic-base-inline-block-height,
+  $generic-base-line-height,
+  1px,
+  -1px,
+);
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
@@ -24,10 +33,12 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
   &.dx-editor-outlined {
     &.dx-daterangebox-with-label,
     &.dx-daterangebox-with-floating-label {
-      .dx-texteditor-label {
-        .dx-label {
-          span {
-            line-height: normal !important; // stylelint-disable-line declaration-no-important
+      .dx-datebox.dx-editor-outlined {
+        .dx-texteditor-label {
+          .dx-label {
+            span {
+              line-height: normal;
+            }
           }
         }
       }
