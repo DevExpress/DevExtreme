@@ -2220,6 +2220,9 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             optionName: 'dateSerializationFormat',
             optionValue: 'yyyy-MM-dd',
         }, {
+            optionName: 'isValid',
+            optionValue: false,
+        }, {
             optionName: 'height',
             optionValue: 200,
         }, {
@@ -3578,6 +3581,29 @@ QUnit.module('Validation', {
                     assert.deepEqual(this.instance.option('validationErrors'), expectedErrors, 'dateRangeBox validationError is updated');
                 });
             });
+        });
+
+        QUnit.test('startDateBox should become valid after internal validation pass', function(assert) {
+            this.reinit({
+                value: [null, null],
+                opened: true
+            });
+
+            const startDateBox = getStartDateBoxInstance(this.instance);
+
+            const $startDateBoxInput = $(startDateBox.field());
+            let keyboard = keyboardMock($startDateBoxInput);
+            this.failInternalValidation(keyboard);
+
+            const $endDateBoxInput = $(getEndDateBoxInstance(this.instance).field());
+            keyboard = keyboardMock($endDateBoxInput);
+            this.failInternalValidation(keyboard);
+
+            keyboard.press('enter');
+            keyboard = keyboardMock($startDateBoxInput);
+            keyboard.press('enter');
+
+            assert.strictEqual(startDateBox.option('isValid'), true);
         });
     });
 

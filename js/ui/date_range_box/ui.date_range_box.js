@@ -455,6 +455,7 @@ class DateRangeBox extends Editor {
             disabled: options.disabled,
             displayFormat: options.displayFormat,
             focusStateEnabled: options.focusStateEnabled,
+            isValid: options.isValid,
             tabIndex: options.tabIndex,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
@@ -566,7 +567,6 @@ class DateRangeBox extends Editor {
         return {
             ...this._getDateBoxConfig(),
             invalidDateMessage: options.invalidEndDateMessage,
-            isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             onValueChanged: ({ value, event }) => {
                 const newValue = [this.option('value')[0], value];
@@ -863,6 +863,7 @@ class DateRangeBox extends Editor {
                 break;
             }
             case 'isValid': {
+                this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
 
                 const isValid = value && !this.option('_internalValidationErrors').length;
