@@ -145,7 +145,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         this._widget._valueSelected = false;
 
         if(this._isInstantlyMode()) {
-            if(!this.dateRangeBox.option('disableDatesOutOfRange')) {
+            if(!this.dateRangeBox.option('disableOutOfRangeSelection')) {
                 if(this._widget.option('_currentSelection') === 'startDate') {
                     this._dateSelectedCounter = 0;
                 } else {

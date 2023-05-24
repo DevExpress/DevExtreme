@@ -10849,9 +10849,9 @@ declare module DevExpress.ui {
       'inputAttr | label | maxLength | name | placeholder | text'
     > & {
       /**
-       * [descr:dxDateRangeBoxOptions.disableDatesOutOfRange]
+       * [descr:dxDateRangeBoxOptions.disableOutOfRangeSelection]
        */
-      disableDatesOutOfRange?: boolean;
+      disableOutOfRangeSelection?: boolean;
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
