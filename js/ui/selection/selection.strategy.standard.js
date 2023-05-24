@@ -8,25 +8,25 @@ import { SelectionFilterCreator } from '../../core/utils/selection_filter';
 import errors from '../widget/ui.errors';
 import SelectionStrategy from './selection.strategy';
 
-export default SelectionStrategy.inherit({
-    ctor: function(options) {
-        this.callBase(options);
+export default class StandardStrategy extends SelectionStrategy {
+    constructor(options) {
+        super(options);
         this._initSelectedItemKeyHash();
-    },
+    }
 
-    _initSelectedItemKeyHash: function() {
+    _initSelectedItemKeyHash() {
         this._setOption('keyHashIndices', this.options.equalByReference ? null : {});
-    },
+    }
 
-    getSelectedItemKeys: function() {
+    getSelectedItemKeys() {
         return this.options.selectedItemKeys.slice(0);
-    },
+    }
 
-    getSelectedItems: function() {
+    getSelectedItems() {
         return this.options.selectedItems.slice(0);
-    },
+    }
 
-    _preserveSelectionUpdate: function(items, isDeselect) {
+    _preserveSelectionUpdate(items, isDeselect) {
         const keyOf = this.options.keyOf;
         let keyIndicesToRemoveMap;
         let keyIndex;
@@ -56,9 +56,9 @@ export default SelectionStrategy.inherit({
         if(isBatchDeselect) {
             this._batchRemoveSelectedItems(keyIndicesToRemoveMap);
         }
-    },
+    }
 
-    _batchRemoveSelectedItems: function(keyIndicesToRemoveMap) {
+    _batchRemoveSelectedItems(keyIndicesToRemoveMap) {
         const selectedItemKeys = this.options.selectedItemKeys.slice(0);
         const selectedItems = this.options.selectedItems.slice(0);
 
@@ -74,9 +74,9 @@ export default SelectionStrategy.inherit({
 
         this._initSelectedItemKeyHash();
         this.updateSelectedItemKeyHash(this.options.selectedItemKeys);
-    },
+    }
 
-    _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll, filter) {
+    _loadSelectedItemsCore(keys, isDeselect, isSelectAll, filter) {
         let deferred = new Deferred();
         const key = this.options.key();
 
@@ -114,9 +114,9 @@ export default SelectionStrategy.inherit({
         }
 
         return deferred;
-    },
+    }
 
-    _replaceSelectionUpdate: function(items) {
+    _replaceSelectionUpdate(items) {
         const internalKeys = [];
         const keyOf = this.options.keyOf;
 
@@ -130,9 +130,9 @@ export default SelectionStrategy.inherit({
         }
 
         this.setSelectedItems(internalKeys, items);
-    },
+    }
 
-    _warnOnIncorrectKeys: function(keys) {
+    _warnOnIncorrectKeys(keys) {
         const allowNullValue = this.options.allowNullValue;
 
         for(let i = 0; i < keys.length; i++) {
@@ -142,18 +142,18 @@ export default SelectionStrategy.inherit({
                 errors.log('W1002', key);
             }
         }
-    },
+    }
 
-    _isMultiSelectEnabled: function() {
+    _isMultiSelectEnabled() {
         const mode = this.options.mode;
         return mode === 'all' || mode === 'multiple';
-    },
+    }
 
-    _requestInProgress: function() {
+    _requestInProgress() {
         return this._lastLoadDeferred?.state() === 'pending';
-    },
+    }
 
-    _concatRequestsItems: function(keys, isDeselect, oldRequestItems, updatedKeys) {
+    _concatRequestsItems(keys, isDeselect, oldRequestItems, updatedKeys) {
         let selectedItems;
         const deselectedItems = isDeselect ? keys : [];
 
@@ -168,9 +168,9 @@ export default SelectionStrategy.inherit({
             removedItems: oldRequestItems.removed.concat(deselectedItems),
             keys: keys
         };
-    },
+    }
 
-    _collectLastRequestData: function(keys, isDeselect, isSelectAll, updatedKeys) {
+    _collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys) {
         const isDeselectAll = isDeselect && isSelectAll;
         const oldRequestItems = {
             added: [],
@@ -198,9 +198,9 @@ export default SelectionStrategy.inherit({
         }
 
         return lastRequestData;
-    },
+    }
 
-    _updateKeysByLastRequestData: function(keys, isDeselect, isSelectAll) {
+    _updateKeysByLastRequestData(keys, isDeselect, isSelectAll) {
         let currentKeys = keys;
         if(this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && !isDeselect && !isSelectAll) {
             currentKeys = removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
@@ -208,9 +208,9 @@ export default SelectionStrategy.inherit({
         }
 
         return currentKeys;
-    },
+    }
 
-    _loadSelectedItems: function(keys, isDeselect, isSelectAll, updatedKeys) {
+    _loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = new Deferred();
         const filter = that.options.filter();
@@ -232,9 +232,9 @@ export default SelectionStrategy.inherit({
         that._lastLoadDeferred = deferred;
 
         return deferred;
-    },
+    }
 
-    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
+    selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys);
 
@@ -253,9 +253,9 @@ export default SelectionStrategy.inherit({
         });
 
         return deferred;
-    },
+    }
 
-    addSelectedItem: function(key, itemData) {
+    addSelectedItem(key, itemData) {
         if(isDefined(itemData) && !this.options.ignoreDisabledItems && itemData.disabled) {
             if(this.options.disabledItemKeys.indexOf(key) === -1) {
                 this.options.disabledItemKeys.push(key);
@@ -275,9 +275,9 @@ export default SelectionStrategy.inherit({
             this.options.addedItems.push(itemData);
             this.options.selectedItems.push(itemData);
         }
-    },
+    }
 
-    _getSelectedIndexByKey: function(key, ignoreIndicesMap) {
+    _getSelectedIndexByKey(key, ignoreIndicesMap) {
         const selectedItemKeys = this.options.selectedItemKeys;
 
         for(let index = 0; index < selectedItemKeys.length; index++) {
@@ -286,9 +286,9 @@ export default SelectionStrategy.inherit({
             }
         }
         return -1;
-    },
+    }
 
-    _getSelectedIndexByHash: function(key, ignoreIndicesMap) {
+    _getSelectedIndexByHash(key, ignoreIndicesMap) {
         let indices = this.options.keyHashIndices[key];
 
         if(indices && indices.length > 1 && ignoreIndicesMap) {
@@ -298,9 +298,9 @@ export default SelectionStrategy.inherit({
         }
 
         return indices && indices[0] >= 0 ? indices[0] : -1;
-    },
+    }
 
-    _indexOfSelectedItemKey: function(key, ignoreIndicesMap) {
+    _indexOfSelectedItemKey(key, ignoreIndicesMap) {
         let selectedIndex;
 
         if(this.options.equalByReference) {
@@ -312,9 +312,9 @@ export default SelectionStrategy.inherit({
         }
 
         return selectedIndex;
-    },
+    }
 
-    _shiftSelectedKeyIndices: function(keyIndex) {
+    _shiftSelectedKeyIndices(keyIndex) {
         for(let currentKeyIndex = keyIndex; currentKeyIndex < this.options.selectedItemKeys.length; currentKeyIndex++) {
             const currentKey = this.options.selectedItemKeys[currentKeyIndex];
             const currentKeyHash = getKeyHash(currentKey);
@@ -328,9 +328,9 @@ export default SelectionStrategy.inherit({
                 }
             }
         }
-    },
+    }
 
-    removeSelectedItem: function(key, keyIndicesToRemoveMap, isDisabled) {
+    removeSelectedItem(key, keyIndicesToRemoveMap, isDisabled) {
         if(!this.options.ignoreDisabledItems && isDisabled) {
             return;
         }
@@ -372,27 +372,27 @@ export default SelectionStrategy.inherit({
         this._shiftSelectedKeyIndices(keyIndex);
 
         return keyIndex;
-    },
+    }
 
-    _updateAddedItemKeys: function(keys, items) {
+    _updateAddedItemKeys(keys, items) {
         for(let i = 0; i < keys.length; i++) {
             if(!this.isItemKeySelected(keys[i])) {
                 this.options.addedItemKeys.push(keys[i]);
                 this.options.addedItems.push(items[i]);
             }
         }
-    },
+    }
 
-    _updateRemovedItemKeys: function(keys, oldSelectedKeys, oldSelectedItems) {
+    _updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems) {
         for(let i = 0; i < oldSelectedKeys.length; i++) {
             if(!this.isItemKeySelected(oldSelectedKeys[i])) {
                 this.options.removedItemKeys.push(oldSelectedKeys[i]);
                 this.options.removedItems.push(oldSelectedItems[i]);
             }
         }
-    },
+    }
 
-    _isItemSelectionInProgress: function(key, checkPending) {
+    _isItemSelectionInProgress(key, checkPending) {
         const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
         if(shouldCheckPending) {
             const addedItems = this._lastRequestData.addedItems ?? [];
@@ -400,13 +400,13 @@ export default SelectionStrategy.inherit({
         } else {
             return false;
         }
-    },
+    }
 
-    _getKeyHash: function(key) {
+    _getKeyHash(key) {
         return this.options.equalByReference ? key : getKeyHash(key);
-    },
+    }
 
-    setSelectedItems: function(keys, items) {
+    setSelectedItems(keys, items) {
         this._updateAddedItemKeys(keys, items);
 
         const oldSelectedKeys = this.options.selectedItemKeys;
@@ -421,14 +421,14 @@ export default SelectionStrategy.inherit({
         this._setOption('selectedItems', items);
 
         this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
-    },
+    }
 
-    isItemDataSelected: function(itemData, options = {}) {
+    isItemDataSelected(itemData, options = {}) {
         const key = this.options.keyOf(itemData);
         return this.isItemKeySelected(key, options);
-    },
+    }
 
-    isItemKeySelected: function(key, options = {}) {
+    isItemKeySelected(key, options = {}) {
         let result = this._isItemSelectionInProgress(key, options.checkPending);
 
         if(!result) {
@@ -438,13 +438,13 @@ export default SelectionStrategy.inherit({
         }
 
         return result;
-    },
+    }
 
-    getSelectAllState: function(visibleOnly) {
+    getSelectAllState(visibleOnly) {
         if(visibleOnly) {
             return this._getVisibleSelectAllState();
         } else {
             return this._getFullSelectAllState();
         }
     }
-});
+}
