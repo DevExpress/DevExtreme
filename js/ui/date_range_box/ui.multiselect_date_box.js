@@ -20,7 +20,7 @@ class MultiselectDateBox extends DateBox {
         const clickEventName = addNamespace('dxclick', this.NAME);
         eventsEngine.off(this._input(), clickEventName);
         eventsEngine.on(this._input(), clickEventName, (e) => {
-            this._inputClickHandler(e);
+            this._processValueChange(e);
         });
     }
 
@@ -74,7 +74,12 @@ class MultiselectDateBox extends DateBox {
         this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     }
 
-    _inputClickHandler(e) {
+    _focusInHandler(e) {
+        super._focusInHandler(e);
+        this._processValueChange(e);
+    }
+
+    _processValueChange(e) {
         const { target } = e;
         const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
 
