@@ -25,14 +25,6 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
-    _clearValueHandler(e) {
-        this.option('text', '');
-        e.stopPropagation();
-
-        this._saveValueChangeEvent(e);
-        this._clearValue();
-    }
-
     _renderOpenedState() {
         this._strategy.dateRangeBox.option('opened', this.option('opened'));
 

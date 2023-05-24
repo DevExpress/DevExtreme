@@ -495,7 +495,7 @@ test('DateRangeBox & StartDateBox should be focused and stay opened after click 
   disableFxAnimation: false,
 }));
 
-test('DateRangeBox & StartDateBox should be focused after close drop down button and click on clear button', async (t) => {
+test('DateRangeBox & StartDateBox should be focused after click on clear button', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
