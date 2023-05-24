@@ -1600,6 +1600,46 @@ describe("static items", () => {
         expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
     });
 
+    it("passes configuration component updates before templates", (done) => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration(),
+            props: {
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        const vm = new Vue({
+            template: `<test-component :prop1='prop1Value'>
+                        <nested-item v-if="renderTemplate">
+                            <template #default>
+                                <div>1</div>
+                            </template>
+                        </nested-item>
+                    </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            },
+            data: {
+                renderTemplate: false,
+                prop1Value: 1
+            }
+        }).$mount();
+
+        vm.$data.renderTemplate = true;
+        vm.$data.prop1Value = 2;
+
+        Vue.nextTick(() => {
+            expect(Widget.option.mock.calls[0][0]).toEqual("items");
+            expect(Widget.option.mock.calls[1][0]).toEqual("integrationOptions.templates");
+            expect(Widget.option.mock.calls[2][0]).toEqual("items[0].template");
+            expect(Widget.option.mock.calls[3][0]).toEqual("prop1");
+            done();
+        });
+    });
+
     it("doesn't pass integrationOptions to widget if template prop is absent", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),

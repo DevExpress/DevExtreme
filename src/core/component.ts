@@ -78,6 +78,8 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
+        this.$_applyConfigurationChanges();
+
         if (this.$_templatesManager.isDirty) {
             this.$_instance.option(
                 "integrationOptions.templates",
@@ -96,9 +98,6 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
             this.$_instance.option(name, this.$_pendingOptions[name]);
         }
         (this as IBaseComponent).$_pendingOptions = {};
-
-        this.$_applyConfigurationChanges();
-
         this.$_instance.endUpdate();
         this.eventBus.$emit("updated");
     },
