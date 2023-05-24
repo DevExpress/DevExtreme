@@ -8,6 +8,7 @@ import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/st
 import { each } from '../core/utils/iterator';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
+import { setStyle } from '../core/utils/csp_set_style';
 
 // STYLE box
 
@@ -57,11 +58,7 @@ const setFlexProp = (element, prop, value) => {
         const cssName = dasherize(prop);
         const styleExpr = cssName + ': ' + value + ';';
 
-        if(!element.attributes.style) {
-            element.setAttribute('style', styleExpr);
-        } else if(element.attributes.style.value.indexOf(styleExpr) < 0) {
-            element.attributes.style.value += ' ' + styleExpr;
-        }
+        setStyle(element, styleExpr);
     }
 };
 

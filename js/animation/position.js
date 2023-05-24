@@ -13,6 +13,7 @@ import browser from '../core/utils/browser';
 import { resetPosition, move } from './translator';
 import { touch } from '../core/utils/support';
 import devices from '../core/devices';
+import { setStyle } from '../core/utils/csp_set_style';
 
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
@@ -354,7 +355,7 @@ const setScaleProperty = function(element, scale, transformProp, styleAttr, isEm
     if(stylePropIsValid) {
         element.style.transform = isEmpty ? transformProp.replace(scale, '') : transformProp;
     } else {
-        element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr);
+        setStyle(element, isEmpty ? styleAttr.replace(scale, '') : styleAttr);
     }
 };
 
