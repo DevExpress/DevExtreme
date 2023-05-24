@@ -385,16 +385,12 @@ class DateRangeBox extends Editor {
     }
 
     _clearValueHandler(e) {
+        e.stopPropagation();
         this._saveValueChangeEvent(e);
 
-        this._shouldSuppressValueSync = true;
-        this.getStartDateBox()._clearValueHandler(e);
-        this.getEndDateBox()._clearValueHandler(e);
-        this._shouldSuppressValueSync = false;
+        this.reset();
 
-        this.reset(true);
-
-        this.focus();
+        !this._isActiveElement(this.startDateField()) && this.focus();
         eventsEngine.trigger($(this.startDateField()), 'input');
     }
 
@@ -532,11 +528,9 @@ class DateRangeBox extends Editor {
             },
             invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
-                if(!this._shouldSuppressValueSync) {
-                    const newValue = [value, this.option('value')[1]];
+                const newValue = [value, this.option('value')[1]];
 
-                    this.updateValue(newValue, event);
-                }
+                this.updateValue(newValue, event);
             },
             opened: options.opened,
             onOpened: () => {
@@ -575,11 +569,9 @@ class DateRangeBox extends Editor {
             isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
             onValueChanged: ({ value, event }) => {
-                if(!this._shouldSuppressValueSync) {
-                    const newValue = [this.option('value')[0], value];
+                const newValue = [this.option('value')[0], value];
 
-                    this.updateValue(newValue, event);
-                }
+                this.updateValue(newValue, event);
             },
             onOptionChanged: (args) => {
                 const { name, value, previousValue } = args;
@@ -961,15 +953,11 @@ class DateRangeBox extends Editor {
         this.getStartDateBox().focus();
     }
 
-    reset(shouldSkipCall) {
-        if(!shouldSkipCall) {
-            this._shouldSuppressValueSync = true;
-            this.getEndDateBox().reset();
-            this.getStartDateBox().reset();
-            this._shouldSuppressValueSync = false;
-        }
-
+    reset() {
         super.reset();
+
+        this.getEndDateBox().reset();
+        this.getStartDateBox().reset();
     }
 }
 
