@@ -415,8 +415,9 @@ const VirtualScrollingRowsViewExtender = (function () {
         scrollPosition = itemIndex * itemSize;
 
         // eslint-disable-next-line no-restricted-syntax
-        for (const index of itemSizes) {
-          if (index < itemIndex) {
+        for (const index in itemSizes) {
+          // eslint-disable-next-line radix
+          if (parseInt(index) < itemIndex) {
             scrollPosition += itemSizes[index] - itemSize;
           }
         }
