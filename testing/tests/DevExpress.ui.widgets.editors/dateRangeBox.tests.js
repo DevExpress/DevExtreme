@@ -2403,12 +2403,40 @@ QUnit.module('Dimensions', moduleConfig, () => {
                     : getEndDateBoxInstance(this.instance);
                 const initialWidth = $(dateBox.$element()).width();
 
+                const $clearButton = getClearButton(this.$element);
+
+                assert.strictEqual($clearButton.css('visibility'), 'visible', 'clear button is visible');
+
                 this.instance.option('value', [null, null]);
 
                 const newWidth = $(dateBox.$element()).width();
 
                 assert.strictEqual(initialWidth, newWidth);
+                assert.strictEqual($clearButton.css('visibility'), 'hidden', 'clear button is hidden');
             });
+        });
+
+        QUnit.test('\'Clear\' button visibility depends on value', function(assert) {
+            this.reinit({
+                showClearButton: true,
+                value: [null, null]
+            });
+
+            const $clearButton = getClearButton(this.$element);
+
+            assert.strictEqual($clearButton.css('visibility'), 'hidden', 'clear button is hidden');
+
+            this.instance.option('value', [new Date(2021, 9, 17), null]);
+            assert.strictEqual($clearButton.css('visibility'), 'visible', 'clear button is visible');
+
+            this.instance.option('value', [null, null]);
+            assert.strictEqual($clearButton.css('visibility'), 'hidden', 'clear button is hidden');
+
+            this.instance.option('value', [null, new Date(2021, 9, 17)]);
+            assert.strictEqual($clearButton.css('visibility'), 'visible', 'clear button is visible');
+
+            this.instance.option('value', [null, null]);
+            assert.strictEqual($clearButton.css('visibility'), 'hidden', 'clear button is hidden');
         });
     });
 
