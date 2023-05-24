@@ -74,6 +74,11 @@
       }
     }
   }
+
+  &.dx-texteditor-empty .dx-clear-button-area {
+    display: block;
+    visibility: hidden;
+  }
 }
 
 .dx-daterangebox-separator {

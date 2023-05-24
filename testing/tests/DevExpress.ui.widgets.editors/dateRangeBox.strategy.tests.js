@@ -632,6 +632,27 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
     });
 
+    QUnit.test('active dateBox should be changed after date selection even in focusStateEnabled=false', function(assert) {
+        this.reinit({
+            applyValueMode: 'instantly',
+            value: [null, null],
+            focusStateEnabled: false,
+            multiView: true,
+        });
+
+        const $startDateInput = $(this.instance.startDateField());
+
+        $startDateInput.trigger('dxclick');
+
+        const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        $startDateCell.trigger('dxclick');
+
+        const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+        $endDateCell.trigger('dxclick');
+
+        assert.deepEqual(this.instance.option('value'), [new Date('5/20/2023'), new Date('6/11/2023')], 'value is changed correctly because end dateBox became active after first date select');
+    });
+
     QUnit.test('Popup should not break after selecting values by click and updating min option that triggers invalidate', function(assert) {
         this.reinit({
             applyValueMode: 'instantly',

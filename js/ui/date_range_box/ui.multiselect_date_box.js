@@ -1,10 +1,27 @@
 import $ from '../../core/renderer';
 import DateBox from '../date_box/ui.date_box.mask';
 import RangeCalendarStrategy from './strategy/rangeCalendar';
+import { addNamespace } from '../../events/utils';
+import eventsEngine from '../../events/core/events_engine';
 
+const START_DATEBOX_CLASS = 'dx-start-datebox';
 class MultiselectDateBox extends DateBox {
     _initStrategy() {
         this._strategy = new RangeCalendarStrategy(this);
+    }
+
+    _initMarkup() {
+        super._initMarkup();
+
+        this._renderInputClickEvent();
+    }
+
+    _renderInputClickEvent() {
+        const clickEventName = addNamespace('dxclick', this.NAME);
+        eventsEngine.off(this._input(), clickEventName);
+        eventsEngine.on(this._input(), clickEventName, (e) => {
+            this._processValueChange(e);
+        });
     }
 
     _applyButtonHandler({ event }) {
@@ -24,27 +41,22 @@ class MultiselectDateBox extends DateBox {
         super._openHandler(e);
     }
 
-    _clearValueHandler(e) {
-        this.option('text', '');
-        e.stopPropagation();
+    _renderOpenedState() {
+        this._strategy.dateRangeBox.option('opened', this.option('opened'));
 
-        this._saveValueChangeEvent(e);
-        this._clearValue();
+        if(this._isStartDateBox()) {
+            super._renderOpenedState();
+        }
     }
 
-    _renderOpenedState() {
-        const opened = this._strategy.dateRangeBox.getStartDateBox()?.option('opened') ?? this.option('opened');
-
-        this._strategy.dateRangeBox._toggleDropDownEditorActiveClass(opened);
-
-        super._renderOpenedState();
+    _isStartDateBox() {
+        return this.$element().hasClass(START_DATEBOX_CLASS);
     }
 
     _renderPopup() {
         super._renderPopup();
 
-        const isStartDateBox = this.$element().hasClass('dx-start-datebox');
-        if(isStartDateBox) {
+        if(this._isStartDateBox()) {
             const dateRangeBox = this._strategy.dateRangeBox;
             dateRangeBox._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
         }
@@ -62,16 +74,12 @@ class MultiselectDateBox extends DateBox {
         this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     }
 
-    _closeOutsideDropDownHandler(e) {
-        const { target } = e;
-        const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
-
-        return super._closeOutsideDropDownHandler(e) && !($(target).is(startDateInput) || $(target).is(endDateInput));
-    }
-
     _focusInHandler(e) {
         super._focusInHandler(e);
+        this._processValueChange(e);
+    }
 
+    _processValueChange(e) {
         const { target } = e;
         const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
 
