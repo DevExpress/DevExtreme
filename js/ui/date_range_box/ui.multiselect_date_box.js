@@ -100,7 +100,7 @@ class MultiselectDateBox extends DateBox {
             this._strategy.setActiveStartDateBox();
             this._strategy._widget.option('_currentSelection', 'startDate');
 
-            if(this._strategy.dateRangeBox.option('selectionBehavior') === 'withDisable') {
+            if(this._strategy.dateRangeBox.option('disableOutOfRangeSelection')) {
                 this._strategy._widget._setViewsMaxOption(value[1]);
             }
         }
@@ -108,7 +108,7 @@ class MultiselectDateBox extends DateBox {
             this._strategy.dateRangeBox.getStartDateBox()._strategy.setActiveEndDateBox();
             this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('_currentSelection', 'endDate');
 
-            if(this._strategy.dateRangeBox.option('selectionBehavior') === 'withDisable') {
+            if(this._strategy.dateRangeBox.option('disableOutOfRangeSelection')) {
                 this._strategy.dateRangeBox.getStartDateBox()._strategy._widget._setViewsMinOption(value[0]);
             }
         }
