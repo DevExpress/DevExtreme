@@ -366,18 +366,17 @@ const columnChooserMembers = {
     },
 
     _updateItemsSelection: function(columnIndices) {
-        const columnChooserList = this._columnChooserList;
         const changedColumns = columnIndices?.map((columnIndex) => this._columnsController.columnOption(columnIndex));
 
-        columnChooserList.beginUpdate();
+        this._columnChooserList.beginUpdate();
         changedColumns?.forEach(({ visible, index }) => {
             if(visible) {
-                columnChooserList.selectItem(index);
+                this._columnChooserList.selectItem(index);
             } else {
-                columnChooserList.unselectItem(index);
+                this._columnChooserList.unselectItem(index);
             }
         });
-        columnChooserList.endUpdate();
+        this._columnChooserList.endUpdate();
     },
 
     _columnOptionChanged: function(e) {
