@@ -370,11 +370,11 @@ const columnChooserMembers = {
         const changedColumns = columnIndices?.map((columnIndex) => this._columnsController.columnOption(columnIndex));
 
         columnChooserList.beginUpdate();
-        changedColumns?.forEach((changedColumn) => {
-            if(changedColumn.visible) {
-                columnChooserList.selectItem(changedColumn.index);
+        changedColumns?.forEach(({ visible, index }) => {
+            if(visible) {
+                columnChooserList.selectItem(index);
             } else {
-                columnChooserList.unselectItem(changedColumn.index);
+                columnChooserList.unselectItem(index);
             }
         });
         columnChooserList.endUpdate();
@@ -386,7 +386,7 @@ const columnChooserMembers = {
         const isSelectMode = this.isSelectMode();
 
         if(isSelectMode && this._columnChooserList && this._isUpdatingColumnVisibility !== true) {
-            const optionNames = e.optionNames;
+            const { optionNames } = e;
             const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
             const columnIndices = isDefined(e.columnIndex) ? [e.columnIndex] : e.columnIndices;
             const needUpdate = COLUMN_OPTIONS_USED_IN_ITEMS.some(optionName => optionNames[optionName]) || (e.changeTypes.columns && optionNames.all);
