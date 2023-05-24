@@ -16,7 +16,7 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
 @include dx-filled-mixin(0, $generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
 @include dx-underlined-mixin($generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
-@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y, $generic-daterangebox-label-height,);
+@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y, $generic-daterangebox-label-height);
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
@@ -40,13 +40,57 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
     &::before {
       content: '';
       position: absolute;
-      border: 0;
-      border-bottom-width: 1px;
-      border-style: solid;
-      width: 100%;
-      border-color: transparent;
+      border-bottom: 1px solid transparent;
       bottom: 0;
       z-index: 2;
+    }
+
+    &.dx-state-hover {
+      &::before {
+        border-bottom-color: $texteditor-hover-border-color;
+      }
+
+      &.dx-invalid {
+        &::before {
+          border-bottom-color: $texteditor-invalid-faded-border-color;
+        }
+      }
+    }
+
+    &.dx-state-focused {
+      &::before {
+        border-bottom-color: $texteditor-focused-border-color;
+      }
+
+      &.dx-invalid {
+        &::before {
+          border-bottom-color: $texteditor-invalid-focused-border-color;
+        }
+      }
+    }
+
+    &.dx-state-readonly {
+      &::before {
+        border-bottom-style: dashed;
+      }
+    }
+  }
+
+  &.dx-invalid {
+    .dx-editor-outlined,
+    .dx-editor-filled,
+    .dx-editor-underlined {
+      &.dx-state-hover {
+        &::before {
+          border-bottom-color: $texteditor-invalid-faded-border-color;
+        }
+      }
+
+      &.dx-state-focused {
+        &::before {
+          border-bottom-color: $texteditor-invalid-focused-border-color;
+        }
+      }
     }
   }
 
@@ -58,51 +102,11 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
     }
   }
 
-  &.dx-editor-outlined,
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
-    .dx-datebox {
-      &::before {
-        border-width: 0;
-      }
-
-      &.dx-state-hover {
-        &::before {
-          border-bottom-width: 1px;
-          border-color: $texteditor-hover-border-color;
-        }
-      }
-
-      &.dx-state-focused {
-        &::before {
-          border-bottom-width: 1px;
-          border-color: $texteditor-focused-border-color;
-        }
-
-        &.dx-invalid {
-          &::before {
-            border-bottom-width: 1px;
-            border-color: $texteditor-invalid-focused-border-color;
-          }
-        }
-      }
-
-      &.dx-state-readonly {
-        &::before {
-          border-bottom-width: 0;
-        }
-      }
-
-      &.dx-invalid {
-        &::before {
-          border-bottom-width: 1px;
-          border-color: $texteditor-invalid-faded-border-color;
-        }
-      }
+  .dx-editor-underlined {
+    &::before {
+      width: 100%;
     }
   }
-
-  @include dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color);
 
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
