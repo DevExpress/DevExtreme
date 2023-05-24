@@ -11,6 +11,10 @@
 
 // adduse
 
+$material-editor-custom-button-margin: 5px;
+$material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
+$material-filled-texteditor-spin-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 8px;
+
 @include dx-outlined-mixin(
   $base-bg,
   4px,
@@ -81,6 +85,35 @@
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
       padding-right: $material-daterangebox-separator-horizontal-padding;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    > .dx-texteditor-buttons-container {
+      > .dx-button,
+      > .dx-clear-button-area {
+        margin-left: $material-editor-custom-button-margin;
+        margin-right: $material-editor-custom-button-margin;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: $material-editor-custom-button-margin * 2;
+        }
+      }
+
+      > .dx-dropdowneditor-button:last-child {
+        margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
+      }
+
+      > .dx-clear-button-area:last-child,
+      > .dx-clear-button-area + div:empty:last-child {
+        margin-right: $material-filled-texteditor-input-button-horizontal-padding;
+      }
     }
   }
 }
