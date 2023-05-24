@@ -59,6 +59,7 @@ class DateRangeBox extends Editor {
             endDateOutOfRangeMessage: messageLocalization.format('dxDateRangeBox-endDateOutOfRangeMessage'),
             dateSerializationFormat: undefined,
             deferRendering: true,
+            disableDatesOutOfRange: false,
             disabledDates: null,
             displayFormat: null,
             dropDownButtonTemplate: 'dropDownButton',
@@ -93,7 +94,6 @@ class DateRangeBox extends Editor {
             opened: false,
             pickerType: 'calendar',
             readOnly: false,
-            selectionBehavior: 'normal',
             showClearButton: false,
             showDropDownButton: true,
             spellcheck: false,
@@ -816,7 +816,7 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
                 break;
-            case 'selectionBehavior':
+            case 'disableDatesOutOfRange':
                 break;
             case 'startDate':
                 this.updateValue([value, this.option('value')[1]]);

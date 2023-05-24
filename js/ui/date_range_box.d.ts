@@ -84,6 +84,12 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  */
 export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | label | maxLength | name | placeholder | text'> & {
     /**
+     * @docid dxDateRangeBoxOptions.disableDatesOutOfRange
+     * @default true
+     * @public
+     */
+    disableDatesOutOfRange?: boolean;
+    /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
