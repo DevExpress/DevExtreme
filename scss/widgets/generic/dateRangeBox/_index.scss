@@ -8,6 +8,7 @@
 @use "../colors" as *;
 @use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
+@use "../../base/icons" as *;
 
 // adduse
 
@@ -128,5 +129,9 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
 .dx-daterangebox-separator {
   padding-left: $generic-daterangebox-separator-horizontal-padding;
-  opacity: $base-disabled-opacity;
+  color: $base-icon-color;
+
+  .dx-icon {
+    @include dx-icon-sizing($generic-base-icon-size);
+  }
 }

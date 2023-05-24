@@ -8,6 +8,7 @@
 @use "../colors" as *;
 @use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
+@use "../../base/icons" as *;
 
 // adduse
 
@@ -120,5 +121,9 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
 .dx-daterangebox-separator {
   padding-left: $material-daterangebox-separator-horizontal-padding;
-  opacity: $base-disabled-opacity;
+  color: $base-icon-color;
+
+  .dx-icon {
+    @include dx-icon-sizing($material-base-icon-size);
+  }
 }
