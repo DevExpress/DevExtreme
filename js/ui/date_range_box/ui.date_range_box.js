@@ -256,10 +256,14 @@ class DateRangeBox extends Editor {
     }
 
     _renderEmptinessEvent() {
+        const { showClearButton } = this.option();
+
         const eventName = addNamespace('input blur', this.NAME);
 
         eventsEngine.off(this._focusTarget(), eventName);
-        eventsEngine.on(this._focusTarget(), eventName, this._toggleEmptinessState.bind(this));
+        if(showClearButton) {
+            eventsEngine.on(this._focusTarget(), eventName, this._toggleEmptinessState.bind(this));
+        }
     }
 
     _toggleEmptinessState() {
