@@ -34,6 +34,7 @@ const STATE_HOVER_CLASS = 'dx-state-hover';
 const VALIDATION_MESSAGE_CLASS = 'dx-invalid-message';
 const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 const INVALID_CLASS = 'dx-invalid';
+const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
@@ -389,6 +390,71 @@ QUnit.module('Classes', moduleConfig, () => {
             assert.strictEqual(this.$element.hasClass(STATE_HOVER_CLASS), true, 'dateRangeBox element has hover class');
         });
     });
+
+    QUnit.test(`DateRangeBox should toggle ${TEXTEDITOR_EMPTY_CLASS} class on input event after typing in start datebox`, function(assert) {
+        this.reinit({
+            value: [null, null],
+        });
+
+        const $startDateInput = $(this.instance.startDateField());
+        const keyboard = keyboardMock($startDateInput);
+
+        keyboard.type('2021/14/15');
+        $startDateInput.trigger('input');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'has not class');
+
+        $startDateInput.val('').trigger('input');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'has class');
+    });
+
+    QUnit.test(`DateRangeBox should toggle ${TEXTEDITOR_EMPTY_CLASS}  class on input event after typing in end datebox`, function(assert) {
+        this.reinit({
+            value: [null, null],
+        });
+
+        const $endDateInput = $(this.instance.endDateField());
+        const keyboard = keyboardMock($endDateInput);
+
+        keyboard.type('2021/14/15');
+        $endDateInput.trigger('input');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'has not class');
+
+        $endDateInput.val('').trigger('input');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'has class');
+    });
+
+    QUnit.test(`DateRangeBox should toggle ${TEXTEDITOR_EMPTY_CLASS} class on blur event after typing in start datebox`, function(assert) {
+        this.reinit({
+            value: [null, null],
+        });
+
+        const $startDateInput = $(this.instance.startDateField());
+        const keyboard = keyboardMock($startDateInput);
+
+        keyboard.type('2021/14/15');
+        $startDateInput.trigger('blur');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'has not class');
+
+        $startDateInput.val('').trigger('blur');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'has class');
+    });
+
+    QUnit.test(`DateRangeBox should toggle ${TEXTEDITOR_EMPTY_CLASS}  class on blur event after typing in end datebox`, function(assert) {
+        this.reinit({
+            value: [null, null],
+        });
+
+        const $endDateInput = $(this.instance.endDateField());
+        const keyboard = keyboardMock($endDateInput);
+
+        keyboard.type('2021/14/15');
+        $endDateInput.trigger('blur');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'has not class');
+
+        $endDateInput.val('').trigger('blur');
+        assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'has class');
+    });
+
 });
 
 QUnit.module('DropDownButton', moduleConfig, () => {
