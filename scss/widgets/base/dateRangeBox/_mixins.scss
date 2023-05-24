@@ -13,6 +13,8 @@
   .dx-daterangebox-with-label,
   .dx-daterangebox-with-floating-label {
     &.dx-editor-outlined {
+      margin-top: $label-offset-y;
+
       .dx-texteditor-label {
         .dx-label {
           position: relative;
@@ -33,8 +35,6 @@
 
   .dx-daterangebox-with-floating-label {
     &.dx-editor-outlined {
-      margin-top: $label-offset-y;
-
       &.dx-dropdowneditor-active,
       &.dx-state-focused,
       &.dx-invalid {
