@@ -68,8 +68,9 @@ jobs:
           'ui.editors(2/2)',
           'ui.grid(1/2)',
           'ui.grid(2/2)',
-          'ui.scheduler(1/2)',
-          'ui.scheduler(2/2)'
+          'ui.scheduler(1/3)',
+          'ui.scheduler(2/3)',
+          'ui.scheduler(3/3)'
         ]
         timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
 
@@ -125,8 +126,9 @@ jobs:
           'ui.htmlEditor',
           'ui.grid(1/2)',
           'ui.grid(2/2)',
-          'ui.scheduler(1/2)',
-          'ui.scheduler(2/2)',
+          'ui.scheduler(1/3)',
+          'ui.scheduler(2/3)',
+          'ui.scheduler(3/3)',
           'viz'
         ]
         kind: [ 'shadow-dom', 'ios10', 'android6' ]
@@ -187,8 +189,9 @@ jobs:
           'ui.htmlEditor',
           'ui.grid(1/2)',
           'ui.grid(2/2)',
-          'ui.scheduler(1/2)',
-          'ui.scheduler(2/2)',
+          'ui.scheduler(1/3)',
+          'ui.scheduler(2/3)',
+          'ui.scheduler(3/3)',
           'viz',
           'renovation'
         ]
