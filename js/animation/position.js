@@ -13,7 +13,7 @@ import browser from '../core/utils/browser';
 import { resetPosition, move } from './translator';
 import { touch } from '../core/utils/support';
 import devices from '../core/devices';
-import { setStyle } from '../core/utils/csp_set_style';
+import { setStyle } from '../core/utils/style';
 
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
