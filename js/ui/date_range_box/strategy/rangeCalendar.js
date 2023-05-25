@@ -1,4 +1,5 @@
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
+import eventsEngine from '../../../events/core/events_engine';
 import { extend } from '../../../core/utils/extend';
 import { isSameDateArrays, getDeserializedDate, isSameDates } from '../ui.date_range.utils';
 import { isFunction } from '../../../core/utils/type';
@@ -144,7 +145,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         this._widget._valueSelected = false;
 
         if(this._isInstantlyMode()) {
-            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
+            if(!this.dateRangeBox.option('disableOutOfRangeSelection')) {
                 if(this._widget.option('_currentSelection') === 'startDate') {
                     this._dateSelectedCounter = 0;
                 } else {
@@ -170,11 +171,12 @@ class RangeCalendarStrategy extends CalendarStrategy {
         }
 
         if(!this._shouldPreventFocusChange) {
-            if(this._widget.option('_currentSelection') === 'startDate') {
-                this.getDateRangeBox().getEndDateBox().focus();
-            } else {
-                this.getDateRangeBox().getStartDateBox().focus();
-            }
+            const targetDateBox = this._widget.option('_currentSelection') === 'startDate'
+                ? this.getDateRangeBox().getEndDateBox()
+                : this.getDateRangeBox().getStartDateBox();
+
+            targetDateBox.focus();
+            eventsEngine.trigger(targetDateBox.field(), 'dxclick');
         }
 
         this._shouldPreventFocusChange = false;
