@@ -45,6 +45,7 @@ const GROUP_LIST_HEADER_CLASS = 'dx-list-group-header';
 
 const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 5;
 const MATERIAL_LOOKUP_LIST_PADDING = 8;
+const WINDOW_RATIO = 0.8;
 
 
 const Lookup = DropDownList.inherit({
@@ -61,6 +62,16 @@ const Lookup = DropDownList.inherit({
     },
 
     _getDefaultOptions: function() {
+        const getSize = (side) => {
+            let size;
+            if(devices.real().deviceType === 'phone' && window.visualViewport) {
+                size = window.visualViewport[side];
+            } else {
+                size = side === 'width' ? getWidth(window) : getHeight(window);
+            }
+            return size * WINDOW_RATIO;
+        };
+
         return extend(this.callBase(), {
             placeholder: messageLocalization.format('Select'),
 
@@ -131,9 +142,13 @@ const Lookup = DropDownList.inherit({
             dropDownOptions: {
                 showTitle: true,
 
-                width: function() { return getWidth(window) * 0.8; },
+                width: function() {
+                    return getSize('width');
+                },
 
-                height: function() { return getHeight(window) * 0.8; },
+                height: function() {
+                    return getSize('height');
+                },
 
                 shading: true,
 
