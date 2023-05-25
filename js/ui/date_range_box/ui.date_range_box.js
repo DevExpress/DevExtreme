@@ -904,6 +904,7 @@ class DateRangeBox extends Editor {
                     this._applyCustomValidation(newValue);
 
                     this._updateDateBoxesValue(newValue);
+                    this.getStartDateBox()._strategy.renderValue();
                     this._toggleEmptinessState();
 
                     this._raiseValueChangeAction(newValue, previousValue);
