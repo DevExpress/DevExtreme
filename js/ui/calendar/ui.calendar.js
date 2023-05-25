@@ -20,10 +20,12 @@ import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import dateLocalization from '../../localization/date';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import { isCommandKeyPressed } from '../../events/utils/index';
+import { isCommandKeyPressed, addNamespace } from '../../events/utils/index';
 import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
 import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
+import { end as hoverEndEventName } from '../../events/hover';
+import eventsEngine from '../../events/core/events_engine';
 
 // STYLE calendar
 
@@ -46,6 +48,8 @@ const POP_ANIMATION_TO = 1;
 
 const CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd';
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
+
+const CALENDAR_DXHOVEREND_EVENT_NAME = addNamespace(hoverEndEventName, 'dxCalendar');
 
 const LEVEL_COMPARE_MAP = {
     'month': 3,
@@ -677,6 +681,7 @@ const Calendar = Editor.inherit({
         $element.append(this.$body);
 
         this._renderViews();
+        this._renderEvents();
 
         this._renderNavigator();
         $element.prepend(this._navigator.$element());
@@ -770,6 +775,16 @@ const Calendar = Editor.inherit({
             allowValueSelection: this._isMaxZoomLevel(),
             _todayDate: this.option('_todayDate')
         };
+    },
+
+    _renderEvents() {
+        eventsEngine.off(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME);
+
+        if(this.option('selectionMode') === 'range') {
+            eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
+                this._updateViewsOption('hoveredRange', []);
+            }));
+        }
     },
 
     _injectComponent: function(func) {
