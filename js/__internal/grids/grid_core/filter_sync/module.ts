@@ -5,10 +5,10 @@ import {
   getFilterExpression, filterHasField,
 } from '@js/ui/filter_builder/utils';
 import errors from '@js/ui/widget/ui.errors';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import filterUtils from '@js/ui/shared/filtering';
 import { anyOf, noneOf } from '../filter_custom_operations/module';
 import modules from '../modules';
+import gridCoreUtils from '../module_utils';
 
 const FILTER_ROW_OPERATIONS = ['=', '<>', '<', '<=', '>', '>=', 'notcontains', 'contains', 'startswith', 'endswith', 'between'];
 const FILTER_TYPES_INCLUDE = 'include';

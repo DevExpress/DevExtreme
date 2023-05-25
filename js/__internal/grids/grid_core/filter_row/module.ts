@@ -5,14 +5,14 @@ import { isDefined } from '@js/core/utils/type';
 import { extend } from '@js/core/utils/extend';
 import { normalizeKeyName } from '@js/events/utils/index';
 import { each, map } from '@js/core/utils/iterator';
-import modules from '@js/ui/grid_core/ui.grid_core.modules';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import messageLocalization from '@js/localization/message';
 import Editor from '@js/ui/editor/editor';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import Menu from '@js/ui/menu';
 import { selectView } from '@js/ui/shared/accessibility';
 import { equalByValue } from '@js/core/utils/common';
+import modules from '../modules';
+import gridCoreUtils from '../module_utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
