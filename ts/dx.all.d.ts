@@ -6154,15 +6154,30 @@ declare module DevExpress.events {
    * [descr:Cancelable]
    */
   export interface Cancelable {
+    /**
+     * [descr:Cancelable.cancel]
+     */
     cancel?: boolean;
   }
   /**
    * [descr:ChangedOptionInfo]
    */
   export interface ChangedOptionInfo {
+    /**
+     * [descr:ChangedOptionInfo.name]
+     */
     readonly name: string;
+    /**
+     * [descr:ChangedOptionInfo.fullName]
+     */
     readonly fullName: string;
+    /**
+     * [descr:ChangedOptionInfo.value]
+     */
     readonly value?: any;
+    /**
+     * [descr:ChangedOptionInfo.previousValue]
+     */
     readonly previousValue?: any;
   }
 
@@ -6183,8 +6198,17 @@ declare module DevExpress.events {
    * [descr:EventInfo]
    */
   export interface EventInfo<TComponent> {
+    /**
+     * [descr:EventInfo.component]
+     */
     readonly component: TComponent;
+    /**
+     * [descr:EventInfo.element]
+     */
     readonly element: DevExpress.core.DxElement;
+    /**
+     * [descr:EventInfo.model]
+     */
     readonly model?: any;
   }
   /**
@@ -6254,24 +6278,51 @@ declare module DevExpress.events {
    * [descr:InitializedEventInfo]
    */
   export interface InitializedEventInfo<TComponent> {
+    /**
+     * [descr:InitializedEventInfo.component]
+     */
     readonly component?: TComponent;
+    /**
+     * [descr:InitializedEventInfo.element]
+     */
     readonly element?: DevExpress.core.DxElement;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:ItemInfo]
    */
   export interface ItemInfo<TItemData = any> {
+    /**
+     * [descr:ItemInfo.itemData]
+     */
     readonly itemData?: TItemData;
+    /**
+     * [descr:ItemInfo.itemElement]
+     */
     readonly itemElement: DevExpress.core.DxElement;
+    /**
+     * [descr:ItemInfo.itemIndex]
+     */
     readonly itemIndex: number;
   }
   /**
    * [descr:NativeEventInfo]
    */
   export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
+    /**
+     * [descr:NativeEventInfo.component]
+     */
     readonly component: TComponent;
+    /**
+     * [descr:NativeEventInfo.element]
+     */
     readonly element: DevExpress.core.DxElement;
+    /**
+     * [descr:NativeEventInfo.model]
+     */
     readonly model?: any;
+    /**
+     * [descr:NativeEventInfo.event]
+     */
     readonly event?: DxEvent<TNativeEvent>;
   }
   /**
@@ -19840,6 +19891,9 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxRangeSlider> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSliderOptions;
+    /**
+     * [descr:ValueChangedEvent]
+     */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRangeSlider,
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
@@ -25226,10 +25280,16 @@ declare module DevExpress.ui {
      */
     type Properties = EditorOptions<EditorInstance>;
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:ValueChangedInfo]
      */
     export interface ValueChangedInfo {
+      /**
+       * [descr:ValueChangedInfo.previousValue]
+       */
       readonly previousValue?: any;
+      /**
+       * [descr:ValueChangedInfo.value]
+       */
       readonly value?: any;
     }
   }
