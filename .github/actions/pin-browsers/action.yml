@@ -4,7 +4,7 @@ description: "Install and setup Chrome and Firefox"
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "canary"
+    default: "dev"
   firefox-version:
     description: "Firefox version to install"
     default: "latest"
