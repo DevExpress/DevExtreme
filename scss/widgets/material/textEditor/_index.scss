@@ -270,8 +270,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
 
     &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
+    &.dx-state-readonly {
       box-shadow: inset 0 0 0 1px color.change($texteditor-color, $alpha: 0.5);
 
       .dx-texteditor-input {
@@ -825,8 +824,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         @include dx-state-empty(color.change($texteditor-color, $alpha: 0.5), 1);
 
         &.dx-state-focused,
-        &.dx-state-focused.dx-state-hover,
-        &.dx-textarea.dx-state-focused.dx-state-hover,
         &.dx-textarea.dx-state-focused {
           @include dx-state-empty($texteditor-focused-border-color, 2);
 

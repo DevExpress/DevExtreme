@@ -3,6 +3,37 @@
 .dx-daterangebox {
   display: flex;
 
+  .dx-texteditor-with-label,
+  .dx-texteditor-with-floating-label {
+    margin-top: 0;
+  }
+
+  &.dx-editor-outlined {
+    .dx-datebox {
+      &.dx-start-datebox,
+      &.dx-end-datebox {
+        &.dx-editor-outlined {
+          border: 0;
+          box-shadow: none;
+
+          &.dx-texteditor-with-label,
+          &.dx-texteditor-with-floating-label {
+            .dx-texteditor-label {
+              .dx-label,
+              .dx-label-before,
+              .dx-label-after {
+                margin: 0;
+                border: 0;
+                clip-path: none;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   .dx-datebox {
     flex-grow: 1;
 
@@ -18,45 +49,6 @@
           .dx-texteditor-input {
             padding-right: 0;
           }
-        }
-      }
-    }
-
-    &.dx-editor-outlined {
-      border: 0;
-      box-shadow: none;
-
-      .dx-texteditor-label {
-        .dx-label-before,
-        .dx-label,
-        .dx-label-after {
-          border: 0 !important; // stylelint-disable-line declaration-no-important
-          margin: 0 !important; // stylelint-disable-line declaration-no-important
-          box-shadow: none !important; // stylelint-disable-line declaration-no-important
-          clip-path: none;
-        }
-      }
-
-      &.dx-state-focused,
-      &.dx-state-hover,
-      &.dx-state-focused.dx-state-hover {
-        .dx-texteditor-label {
-          .dx-label-before,
-          .dx-label,
-          .dx-label-after {
-            clip-path: none;
-          }
-        }
-      }
-
-      &.dx-texteditor-with-floating-label,
-      &.dx-texteditor-with-label {
-        margin-top: 0;
-      }
-
-      &.dx-state-readonly {
-        &.dx-state-hover {
-          box-shadow: none;
         }
       }
     }

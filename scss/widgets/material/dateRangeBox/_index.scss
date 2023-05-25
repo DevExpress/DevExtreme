@@ -121,7 +121,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
 .dx-daterangebox-separator {
   padding-left: $material-daterangebox-separator-horizontal-padding;
-  color: $base-icon-color;
+  color: $texteditor-label-color;
 
   .dx-icon {
     @include dx-icon-sizing($material-base-icon-size);

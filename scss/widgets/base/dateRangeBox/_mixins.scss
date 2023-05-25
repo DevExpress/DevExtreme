@@ -34,39 +34,41 @@
     }
   }
 
-  .dx-daterangebox-with-floating-label {
-    &.dx-editor-outlined {
-      &.dx-dropdowneditor-active,
-      &.dx-state-focused,
-      &.dx-invalid {
-        .dx-datebox.dx-editor-outlined {
-          .dx-texteditor-label {
-            .dx-label {
-              padding: 0 $horizontal-padding;
+  .dx-daterangebox {
+    &.dx-daterangebox-with-floating-label {
+      &.dx-editor-outlined {
+        &.dx-dropdowneditor-active,
+        &.dx-state-focused,
+        &.dx-invalid {
+          .dx-datebox.dx-editor-outlined {
+            .dx-texteditor-label {
+              .dx-label {
+                padding: 0 $horizontal-padding;
 
-              &::before {
-                background-color: $base-bg;
-              }
+                &::before {
+                  background-color: $base-bg;
+                }
 
-              span {
-                transform: translate(0, -$label-offset-y);
-                font-size: $texteditor-label-font-size;
-                margin-top: 0;
-                top: 0;
-                height: $label-height;
-                line-height: $label-line-height;
+                span {
+                  transform: translate(0, -$label-offset-y);
+                  font-size: $texteditor-label-font-size;
+                  margin-top: 0;
+                  top: 0;
+                  height: $label-height;
+                  line-height: $label-line-height;
+                }
               }
             }
           }
         }
-      }
 
-      &.dx-texteditor-empty {
-        .dx-datebox {
-          .dx-texteditor-label {
-            .dx-label {
-              &::before {
-                background-color: transparent;
+        &.dx-texteditor-empty {
+          .dx-datebox {
+            .dx-texteditor-label {
+              .dx-label {
+                &::before {
+                  background-color: transparent;
+                }
               }
             }
           }

@@ -9,6 +9,8 @@
 @use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
 @use "../../base/icons" as *;
+@use "../textEditor" as *;
+@use "../dropDownEditor" as *;
 
 // adduse
 
@@ -23,7 +25,7 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
   $generic-texteditor-label-size,
   $label-offset-y,
   $generic-base-inline-block-height,
-  $generic-base-line-height,
+  normal,
   1px,
   -1px,
 );
@@ -31,14 +33,31 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
 
+  .dx-dropdowneditor-button {
+    min-width: $generic-dropdowneditor-container-button-size - 2px;
+    width: $generic-dropdowneditor-container-button-size - 2px;
+
+    .dx-dropdowneditor-icon {
+      width: $generic-dropdowneditor-button-size - 2px;
+    }
+  }
+
+  .dx-texteditor-input {
+    min-height: $generic-texteditor-input-height - 2px;
+  }
+
   &.dx-editor-outlined {
-    &.dx-daterangebox-with-label,
-    &.dx-daterangebox-with-floating-label {
-      .dx-datebox.dx-editor-outlined {
-        .dx-texteditor-label {
-          .dx-label {
-            span {
-              line-height: normal;
+    &,
+    &.dx-dropdowneditor-active,
+    &.dx-state-focused {
+      &.dx-daterangebox-with-label,
+      &.dx-daterangebox-with-floating-label {
+        .dx-datebox.dx-editor-outlined {
+          .dx-texteditor-label {
+            .dx-label {
+              span {
+                line-height: normal;
+              }
             }
           }
         }
@@ -129,7 +148,7 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
 .dx-daterangebox-separator {
   padding-left: $generic-daterangebox-separator-horizontal-padding;
-  color: $base-icon-color;
+  color: $texteditor-label-color;
 
   .dx-icon {
     @include dx-icon-sizing($generic-base-icon-size);
