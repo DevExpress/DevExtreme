@@ -53,7 +53,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   _updateFocusHandler: any;
 
-  private subscribedContainerRoot!: Node;
+  private _subscribedContainerRoot!: Node;
 
   _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
@@ -231,13 +231,13 @@ export class EditorFactory extends ViewControllerWithMixin {
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
 
-    this.subscribedContainerRoot = this._getContainerRoot();
-    eventsEngine.on(this.subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+    this._subscribedContainerRoot = this._getContainerRoot();
+    eventsEngine.on(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
     this._attachContainerEventHandlers();
   }
 
-  _getContainerRoot(): Node {
+  private _getContainerRoot(): Node {
     const $container = this.component?.$element();
     // @ts-expect-error
     const root = domAdapter.getRootNode($container?.get(0));
@@ -270,7 +270,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   dispose() {
     clearTimeout(this._focusTimeoutID);
     clearTimeout(this._updateFocusTimeoutID);
-    eventsEngine.off(this.subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+    eventsEngine.off(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
   }
 }
 
