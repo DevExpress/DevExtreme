@@ -131,9 +131,13 @@ const Lookup = DropDownList.inherit({
             dropDownOptions: {
                 showTitle: true,
 
-                width: function() { return getWidth(window) * 0.8; },
+                width: function() {
+                    return getWidth(window) * 0.8;
+                },
 
-                height: function() { return getHeight(window) * 0.8; },
+                height: function() {
+                    return getHeight(window) * 0.8;
+                },
 
                 shading: true,
 
