@@ -540,7 +540,7 @@ export const updateColumnChanges = function (that, changeType, optionName?, colu
   const columnChanges = that._columnChanges || {
     optionNames: { length: 0 },
     changeTypes: { length: 0 },
-    columnIndex,
+    columnIndex, // TODO replace columnIndex -> columnIndices
   };
 
   optionName = optionName || 'all';
@@ -561,6 +561,11 @@ export const updateColumnChanges = function (that, changeType, optionName?, colu
     optionNames.length++;
   }
   if (columnIndex === undefined || columnIndex !== columnChanges.columnIndex) {
+    if (isDefined(columnIndex)) {
+      columnChanges.columnIndices ??= [columnChanges.columnIndex];
+      columnChanges.columnIndices.push(columnIndex);
+    }
+
     delete columnChanges.columnIndex;
   }
   that._columnChanges = columnChanges;
