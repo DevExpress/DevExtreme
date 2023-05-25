@@ -6,6 +6,7 @@ import { isFunction } from '../../../core/utils/type';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const TODAY_BUTTON_CLASS = 'dx-button-today';
 class RangeCalendarStrategy extends CalendarStrategy {
     constructor(dateBox) {
         super();
@@ -28,11 +29,32 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
     }
 
-    getFirstPopupElement() {
-        return this._getPopup().$wrapper().find(APPLY_BUTTON_SELECTOR);
+    getFirstPopupElement(e) {
+        if(this.getDateRangeBox()._isStartDateActiveElement()) {
+            this.getDateRangeBox().getEndDateBox().focus();
+
+            return false;
+        }
+
+        const $popupWrapper = this._getPopup().$wrapper();
+
+        const $todayButton = $popupWrapper.find(`.${TODAY_BUTTON_CLASS}`);
+
+        if($todayButton.length) {
+            return $todayButton;
+        }
+
+        return $popupWrapper.find(APPLY_BUTTON_SELECTOR);
     }
 
-    getLastPopupElement() {
+    getLastPopupElement(e) {
+        if(e.shiftKey) {
+            if(this.getDateRangeBox()._isEndDateActiveElement()) {
+                this.getDateRangeBox().focus();
+                return false;
+            }
+        }
+
         return this._getPopup().$wrapper().find(CANCEL_BUTTON_SELECTOR);
     }
 
