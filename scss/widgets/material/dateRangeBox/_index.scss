@@ -8,6 +8,7 @@
 @use "../colors" as *;
 @use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
+@use "../../base/icons" as *;
 
 // adduse
 
@@ -20,7 +21,10 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
   4px,
   $material-texteditor-label-font-size,
   math.div($material-texteditor-label-font-size, 2),
+  $material-texteditor-label-font-size + 1px,
   $material-texteditor-label-font-size,
+  2px,
+  0,
 );
 @include dx-underlined-mixin(
   $material-texteditor-label-font-size,
@@ -77,8 +81,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
     }
   }
 
-  @include dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color);
-
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
       padding-right: $material-daterangebox-separator-horizontal-padding;
@@ -117,5 +119,9 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
 .dx-daterangebox-separator {
   padding-left: $material-daterangebox-separator-horizontal-padding;
-  opacity: $base-disabled-opacity;
+  color: $texteditor-label-color;
+
+  .dx-icon {
+    @include dx-icon-sizing($material-base-icon-size);
+  }
 }

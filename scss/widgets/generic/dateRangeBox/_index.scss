@@ -8,6 +8,9 @@
 @use "../colors" as *;
 @use "../../base/dateRangeBox/mixins" as *;
 @use "../../base/dateRangeBox";
+@use "../../base/icons" as *;
+@use "../textEditor" as *;
+@use "../dropDownEditor" as *;
 
 // adduse
 
@@ -16,18 +19,46 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
 @include dx-filled-mixin(0, $generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
 @include dx-underlined-mixin($generic-texteditor-label-size, $generic-base-inline-block-height, $generic-base-line-height);
-@include dx-outlined-mixin($base-bg, 2px, $generic-texteditor-label-size, $label-offset-y, $generic-daterangebox-label-height);
+@include dx-outlined-mixin(
+  $base-bg,
+  2px,
+  $generic-texteditor-label-size,
+  $label-offset-y,
+  $generic-base-inline-block-height,
+  normal,
+  1px,
+  -1px,
+);
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(eventall);
 
+  .dx-dropdowneditor-button {
+    min-width: $generic-dropdowneditor-container-button-size - 2px;
+    width: $generic-dropdowneditor-container-button-size - 2px;
+
+    .dx-dropdowneditor-icon {
+      width: $generic-dropdowneditor-button-size - 2px;
+    }
+  }
+
+  .dx-texteditor-input {
+    min-height: $generic-texteditor-input-height - 2px;
+  }
+
   &.dx-editor-outlined {
-    &.dx-daterangebox-with-label,
-    &.dx-daterangebox-with-floating-label {
-      .dx-texteditor-label {
-        .dx-label {
-          span {
-            line-height: normal !important; // stylelint-disable-line declaration-no-important
+    &,
+    &.dx-dropdowneditor-active,
+    &.dx-state-focused {
+      &.dx-daterangebox-with-label,
+      &.dx-daterangebox-with-floating-label {
+        .dx-datebox.dx-editor-outlined {
+          .dx-texteditor-label {
+            .dx-label {
+              span {
+                line-height: normal;
+              }
+            }
           }
         }
       }
@@ -117,5 +148,9 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
 .dx-daterangebox-separator {
   padding-left: $generic-daterangebox-separator-horizontal-padding;
-  opacity: $base-disabled-opacity;
+  color: $texteditor-label-color;
+
+  .dx-icon {
+    @include dx-icon-sizing($generic-base-icon-size);
+  }
 }
