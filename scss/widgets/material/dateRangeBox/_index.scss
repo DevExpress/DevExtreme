@@ -70,6 +70,15 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
       }
     }
 
+    &.dx-state-focused {
+      &.dx-invalid {
+        &::before {
+          border-bottom-width: 1px;
+          transition: none;
+        }
+      }
+    }
+
     .dx-datebox {
       &::before {
         bottom: 1px;
