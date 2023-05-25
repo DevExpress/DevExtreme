@@ -62,7 +62,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc', 'ui.editors', 'ui.grid', 'ui.scheduler' ]
+        constel: [
+          'misc',
+          'ui.editors(1/2)',
+          'ui.editors(2/2)',
+          'ui.grid(1/3)',
+          'ui.grid(2/3)',
+          'ui.grid(3/3)',
+          'ui.scheduler(1/2)',
+          'ui.scheduler(2/2)'
+        ]
         timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
 
     steps:
@@ -112,10 +121,14 @@ jobs:
           'ui.widgets(1/3)',
           'ui.widgets(2/3)',
           'ui.widgets(3/3)',
-          'ui.editors',
+          'ui.editors(1/2)',
+          'ui.editors(2/2)',
           'ui.htmlEditor',
-          'ui.grid',
-          'ui.scheduler',
+          'ui.grid(1/3)',
+          'ui.grid(2/3)',
+          'ui.grid(3/3)',
+          'ui.scheduler(1/2)',
+          'ui.scheduler(2/2)',
           'viz'
         ]
         userAgent: [ '', 'ios10', 'android6' ]
@@ -165,10 +178,12 @@ jobs:
           'export',
           'misc',
           'ui',
-          'ui.editors',
+          'ui.editors(1/2)',
+          'ui.editors(2/2)',
           'ui.htmlEditor',
-          'ui.grid(1/2)',
-          'ui.grid(2/2)',
+          'ui.grid(1/3)',
+          'ui.grid(2/3)',
+          'ui.grid(3/3)',
           'ui.scheduler(1/2)',
           'ui.scheduler(2/2)',
           'viz',
