@@ -518,7 +518,6 @@ const DraggingHeaderView = modules.View.inherit({
         columns: targetDraggingPanel.getColumns(rowIndex),
         columnElements,
         isVerticalOrientation,
-        // @ts-expect-error
         startColumnIndex: targetLocation === 'headers' && $(columnElements[0]).index(),
       }));
 

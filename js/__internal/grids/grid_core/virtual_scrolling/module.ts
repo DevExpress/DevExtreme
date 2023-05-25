@@ -630,6 +630,8 @@ const VirtualScrollingRowsViewExtender = (function () {
             result = false;
             return result;
           }
+
+          return undefined;
         });
       }
 
