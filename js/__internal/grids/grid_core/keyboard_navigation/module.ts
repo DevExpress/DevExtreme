@@ -134,7 +134,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._focusController = this.getController('focus');
 
     this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this));
-    this._memoFireFocusedRowChangedImpl = memoize(this._memoFireFocusedRowChangedImpl.bind(this));
+    this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this));
 
     if (this.isKeyboardEnabled()) {
       accessibility.subscribeVisibilityChange();
@@ -2126,7 +2126,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _fireFocusedRowChanged(): void {
-    console.log('fire!');
     const focusedRowEnabled = this.option('focusedRowEnabled');
     const focusedRowKey = this.option('focusedRowKey');
     const focusedRowIndex = this._focusController?.getFocusedRowIndexByKey(focusedRowKey);
@@ -2135,10 +2134,10 @@ export class KeyboardNavigationController extends modules.ViewController {
       return;
     }
 
-    this._memoFireFocusedRowChangedImpl(focusedRowKey, focusedRowIndex);
+    this._memoFireFocusedRowChanged(focusedRowKey, focusedRowIndex);
   }
 
-  _memoFireFocusedRowChangedImpl(focusedRowKey: unknown, focusedRowIndex: number): void {
+  _memoFireFocusedRowChanged(focusedRowKey: unknown, focusedRowIndex: number): void {
     const localRowIndex = focusedRowIndex - this._dataController.getRowIndexOffset();
 
     this.executeAction('onFocusedRowChanged', {

@@ -237,7 +237,6 @@ export default {
   },
 
   getIndexByKey(key, items, keyName?) {
-    console.log('utils');
     let index = -1;
 
     if (key !== undefined && Array.isArray(items)) {
