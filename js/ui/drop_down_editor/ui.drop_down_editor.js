@@ -50,8 +50,8 @@ const DropDownEditor = TextBox.inherit({
                 }
 
                 const $focusableElement = e.shiftKey
-                    ? this._getLastPopupElement(e)
-                    : this._getFirstPopupElement(e);
+                    ? this._getLastPopupElement()
+                    : this._getFirstPopupElement();
 
                 if($focusableElement) {
                     eventsEngine.trigger($focusableElement, 'focus');
@@ -758,8 +758,8 @@ const DropDownEditor = TextBox.inherit({
     _popupElementTabHandler: function(e) {
         const $element = $(e.currentTarget);
 
-        if((e.shiftKey && $element.is(this._getFirstPopupElement(e)))
-            || (!e.shiftKey && $element.is(this._getLastPopupElement(e)))) {
+        if((e.shiftKey && $element.is(this._getFirstPopupElement()))
+            || (!e.shiftKey && $element.is(this._getLastPopupElement()))) {
 
             eventsEngine.trigger(this._input(), 'focus');
             e.preventDefault();

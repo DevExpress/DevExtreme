@@ -7,6 +7,7 @@ import { isFunction } from '../../../core/utils/type';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 const TODAY_BUTTON_CLASS = 'dx-button-today';
+
 class RangeCalendarStrategy extends CalendarStrategy {
     constructor(dateBox) {
         super();
