@@ -76,37 +76,22 @@ class RangeCalendarStrategy extends CalendarStrategy {
                 }
             },
             tab: (e) => {
-                if(!this.dateRangeBox.option('opened')) {
+                if(!this.getDateRangeBox().option('opened')) {
                     return;
                 }
 
                 if(this._isInstantlyMode()) {
-                    if(e.shiftKey) {
-                        if(this.getDateRangeBox()._isStartDateActiveElement()) {
-                            this.dateRangeBox.close();
-                        }
-                    } else {
-                        if(this.getDateRangeBox()._isEndDateActiveElement()) {
-                            this.dateRangeBox.close();
-                        }
+                    if((!e.shiftKey && this.getDateRangeBox()._isEndDateActiveElement())
+                        || (e.shiftKey && this.getDateRangeBox()._isStartDateActiveElement())) {
+                        this.dateRangeBox.close();
                     }
                     return;
                 }
 
-                e.preventDefault();
 
-                if(e.shiftKey) {
-                    if(this.getDateRangeBox()._isEndDateActiveElement()) {
-
-                        this.getDateRangeBox().focus();
-                        return;
-                    }
-                } else {
-                    if(this.getDateRangeBox()._isStartDateActiveElement()) {
-                        this.getDateRangeBox().getEndDateBox().focus();
-
-                        return;
-                    }
+                if(((!e.shiftKey && this.getDateRangeBox()._isStartDateActiveElement())
+                    || (e.shiftKey && this.getDateRangeBox()._isEndDateActiveElement()))) {
+                    return;
                 }
 
                 const $focusableElement = e.shiftKey
@@ -117,8 +102,20 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     eventsEngine.trigger($focusableElement, 'focus');
                     $focusableElement.select();
                 }
+
+                e.preventDefault();
             }
         };
+    }
+
+    _getTodayButtonConfig() {
+        const todayButtonConfig = super._getTodayButtonConfig();
+
+        todayButtonConfig.options.onInitialized = (e) => {
+            this.dateBox._popupButtonInitializedHandler(e);
+        };
+
+        return todayButtonConfig;
     }
 
     _getWidgetOptions() {
