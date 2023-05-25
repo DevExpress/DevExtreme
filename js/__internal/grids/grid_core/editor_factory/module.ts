@@ -53,6 +53,8 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   _updateFocusHandler: any;
 
+  private subscribedContainerRoot!: Node;
+
   _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
     const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus, .dx-adaptive-item-text:focus`;
@@ -228,12 +230,14 @@ export class EditorFactory extends ViewControllerWithMixin {
     this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-    eventsEngine.on(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+
+    this.subscribedContainerRoot = this._getContainerRoot();
+    eventsEngine.on(this.subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
     this._attachContainerEventHandlers();
   }
 
-  _getContainerRoot() {
+  _getContainerRoot(): Node {
     const $container = this.component?.$element();
     // @ts-expect-error
     const root = domAdapter.getRootNode($container?.get(0));
@@ -266,7 +270,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   dispose() {
     clearTimeout(this._focusTimeoutID);
     clearTimeout(this._updateFocusTimeoutID);
-    eventsEngine.off(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+    eventsEngine.off(this.subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
   }
 }
 
