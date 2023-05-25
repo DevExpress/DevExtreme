@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 // @ts-check
 
 import {
@@ -16,7 +17,7 @@ import { getBoundingRect } from '@js/core/utils/position';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import modules from '../modules';
 import gridCoreUtils from '../module_utils';
-import { Module } from '../module_types';
+import { Module, ModuleType, ViewController } from '../module_types';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -28,7 +29,30 @@ const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
 const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
 
-const members: Partial<import('../editor_factory/module_types').EditorFactory> = {
+interface EditorFactoryMixinType {
+  createEditor: (...args: any[]) => any;
+
+  _getRevertTooltipsSelector: () => string;
+
+}
+
+const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = modules.ViewController.inherit(EditorFactoryMixin);
+
+export class EditorFactory extends ViewControllerWithMixin {
+  _isFocusOverlay: any;
+
+  _updateFocusTimeoutID: any;
+
+  _$focusedElement: any;
+
+  _focusTimeoutID: any;
+
+  focused: any;
+
+  _$focusOverlay: any;
+
+  _updateFocusHandler: any;
+
   _getFocusedElement($dataGridElement) {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
     const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus, .dx-adaptive-item-text:focus`;
@@ -37,11 +61,11 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
     const $focusedElement = $dataGridElement.find(focusedElementSelector);
 
     return this.elementIsInsideGrid($focusedElement) && $focusedElement;
-  },
+  }
 
   _getFocusCellSelector() {
     return '.dx-row > td';
-  },
+  }
 
   _updateFocusCore() {
     const $dataGridElement = this.component && this.component.$element();
@@ -70,11 +94,11 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
     }
 
     this.loseFocus();
-  },
+  }
 
   _needHideBorder($element) {
     return $element.hasClass(EDITOR_INLINE_BLOCK);
-  },
+  }
 
   _updateFocus(e) {
     const that = this;
@@ -91,7 +115,7 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
       }
       that._isFocusOverlay = false;
     });
-  },
+  }
 
   _updateFocusOverlaySize($element, position) {
     $element.hide();
@@ -108,13 +132,13 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
     }
 
     $element.show();
-  },
+  }
 
   callbackNames() {
     return ['focused'];
-  },
+  }
 
-  focus($element, isHideBorder) {
+  focus($element?, isHideBorder?) {
     const that = this;
 
     if ($element === undefined) {
@@ -137,12 +161,12 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
         that.focused.fire($element);
       });
     }
-  },
+  }
 
   refocus() {
     const $focus = this.focus();
     this.focus($focus);
-  },
+  }
 
   renderFocusOverlay($element, isHideBorder) {
     const that = this;
@@ -183,7 +207,7 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
 
       that._$focusOverlay.css('visibility', 'visible'); // for ios
     }
-  },
+  }
 
   resize() {
     const $focusedElement = this._$focusedElement;
@@ -191,13 +215,13 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
     if ($focusedElement) {
       this.focus($focusedElement);
     }
-  },
+  }
 
   loseFocus() {
     this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
     this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
-  },
+  }
 
   init() {
     this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
@@ -207,7 +231,7 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
     eventsEngine.on(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
     this._attachContainerEventHandlers();
-  },
+  }
 
   _getContainerRoot() {
     const $container = this.component?.$element();
@@ -223,7 +247,7 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
     }
 
     return root;
-  },
+  }
 
   _attachContainerEventHandlers() {
     const that = this;
@@ -237,16 +261,14 @@ const members: Partial<import('../editor_factory/module_types').EditorFactory> =
         }
       });
     }
-  },
+  }
 
   dispose() {
     clearTimeout(this._focusTimeoutID);
     clearTimeout(this._updateFocusTimeoutID);
     eventsEngine.off(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
-  },
-};
-
-const EditorFactory: any = modules.ViewController.inherit(EditorFactoryMixin).inherit(members);
+  }
+}
 
 export const editorFactoryModule: Module = {
   defaultOptions() {
