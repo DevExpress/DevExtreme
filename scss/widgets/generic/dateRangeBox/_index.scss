@@ -141,13 +141,61 @@ $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
 
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
-      padding-right: $generic-daterangebox-separator-horizontal-padding;
+      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+    }
+  }
+
+  .dx-datebox {
+    &.dx-start-datebox,
+    &.dx-end-datebox {
+      &.dx-editor-outlined,
+      &.dx-editor-filled,
+      &.dx-editor-underlined {
+        .dx-texteditor-input {
+          padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+        }
+
+        &.dx-rtl {
+          .dx-texteditor-input {
+            padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
+          }
+        }
+      }
+    }
+
+    &.dx-end-datebox {
+      &.dx-editor-outlined,
+      &.dx-editor-filled,
+      &.dx-editor-underlined {
+        &.dx-invalid {
+          .dx-texteditor-input {
+            padding-right: $generic-texteditor-invalid-badge-size;
+          }
+
+          &.dx-rtl {
+            .dx-texteditor-input {
+              padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+              padding-left: $generic-texteditor-invalid-badge-size;
+            }
+          }
+        }
+      }
+
+      &.dx-editor-underlined {
+        &.dx-invalid {
+          &.dx-rtl {
+            .dx-texteditor-input {
+              padding-right: 0;
+            }
+          }
+        }
+      }
     }
   }
 }
 
 .dx-daterangebox-separator {
-  padding-left: $generic-daterangebox-separator-horizontal-padding;
+  padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
   color: $texteditor-label-color;
 
   .dx-icon {
