@@ -79,7 +79,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal($('.dx-texteditor [id]').length, 0, 'editors has no accessibility id');
+        assert.equal($('.dx-texteditor input[id]').length, 0, 'editors has no accessibility id');
     });
 
     QUnit.test('Command column accessibility structure', function(assert) {

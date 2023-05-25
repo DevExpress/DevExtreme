@@ -1,11 +1,11 @@
-import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
+import eventsEngine from '../../../events/core/events_engine';
 import { extend } from '../../../core/utils/extend';
-import { isSameDateArrays, getDeserializedDate } from '../ui.date_range.utils';
+import { isSameDateArrays, getDeserializedDate, isSameDates } from '../ui.date_range.utils';
 import { isFunction } from '../../../core/utils/type';
 
-const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
-const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
+const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
+const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 class RangeCalendarStrategy extends CalendarStrategy {
     constructor(dateBox) {
         super();
@@ -28,20 +28,17 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
     }
 
-    // TODO: think again about prevent render calendar inside overlay-content element
-    renderPopupContent() {
-        if(this.dateBox.NAME === '_EndDateBox') {
-            return;
-        }
+    getFirstPopupElement() {
+        return this._getPopup().$wrapper().find(APPLY_BUTTON_SELECTOR);
+    }
 
-        super.renderPopupContent();
+    getLastPopupElement() {
+        return this._getPopup().$wrapper().find(CANCEL_BUTTON_SELECTOR);
     }
 
     supportedKeys() {
-        const originalHandlers = super.supportedKeys();
-
         const supportedKeys = {
-            ...originalHandlers,
+            ...super.supportedKeys(),
             rightArrow: () => {
                 if(this.dateRangeBox.option('opened')) {
                     return true;
@@ -54,33 +51,41 @@ class RangeCalendarStrategy extends CalendarStrategy {
             },
             enter: (e) => {
                 if(this.dateRangeBox.option('opened')) {
-                    this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
+                    const dateBoxValue = this.dateBox.dateOption('value');
                     this.dateBox._valueChangeEventHandler(e);
-                    this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                    const newDateBoxValue = this.dateBox.dateOption('value');
+                    const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
+
+                    if(dateBoxValueChanged) {
+                        this.dateRangeBox.getStartDateBox()._strategy._widget.option('values', this.dateRangeBox.option('value'));
+                    } else {
+                        this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
+                    }
+
                     return false;
                 }
             },
-            tab: (e) => {
+        };
+
+        if(this._isInstantlyMode()) {
+            supportedKeys.tab = (e) => {
                 if(!this.dateRangeBox.option('opened')) {
                     return;
                 }
 
-                if(this.dateRangeBox.option('applyValueMode') === 'instantly') {
-                    if(e.shiftKey) {
-                        if(this.dateRangeBox._isActiveElement(this.dateRangeBox.startDateField())) {
-                            this.dateRangeBox.close();
-                        }
-                    } else {
-                        if(this.dateRangeBox._isActiveElement(this.dateRangeBox.endDateField())) {
-                            this.dateRangeBox.close();
-                        }
+                if(e.shiftKey) {
+                    if(this.dateRangeBox._isActiveElement(this.dateRangeBox.startDateField())) {
+                        this.dateRangeBox.close();
                     }
-                    return;
+                } else {
+                    if(this.dateRangeBox._isActiveElement(this.dateRangeBox.endDateField())) {
+                        this.dateRangeBox.close();
+                    }
                 }
 
-                originalHandlers.tab(e);
-            }
-        };
+                return false;
+            };
+        }
 
         return supportedKeys;
     }
@@ -97,7 +102,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
             values: value,
             selectionMode: 'range',
             viewsCount: multiView ? 2 : 1,
-            width: 260,
             _allowChangeSelectionOrder: true,
             _currentSelection: this.getCurrentSelection(),
         });
@@ -118,28 +122,30 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     _updateValue() {
+        const { value } = this.dateRangeBox.option();
+
         if(!this._widget) {
             return;
         }
 
-        this._widget.option('values', this.dateRangeBox.option('value'));
+        this._shouldPreventFocusChange = true;
+        this._widget.option('values', value);
+    }
+
+    _isInstantlyMode() {
+        return this.dateRangeBox.option('applyValueMode') === 'instantly';
     }
 
     _valueChangedHandler({ value, previousValue, event }) {
-        if(isSameDateArrays(value, previousValue)) {
+        if(isSameDateArrays(value, previousValue) && !this._widget._valueSelected) {
+            this._shouldPreventFocusChange = false;
             return;
         }
 
-        const isInstantlyMode = this.dateRangeBox.option('applyValueMode') === 'instantly';
+        this._widget._valueSelected = false;
 
-        if(!isInstantlyMode && !event) {
-            this.dateRangeBox.updateValue(value);
-
-            return;
-        }
-
-        if(isInstantlyMode) {
-            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
+        if(this._isInstantlyMode()) {
+            if(!this.dateRangeBox.option('disableOutOfRangeSelection')) {
                 if(this._widget.option('_currentSelection') === 'startDate') {
                     this._dateSelectedCounter = 0;
                 } else {
@@ -157,35 +163,27 @@ class RangeCalendarStrategy extends CalendarStrategy {
             this.dateRangeBox.updateValue(value, event);
             this._dateSelectedCounter += 1;
 
-            if(this.dateRangeBox.option('selectionBehavior') === 'normal') {
-                // TODO update close condition for normal mode
-                if(this._dateSelectedCounter === 2) {
-                    this.getDateRangeBox().close();
+            if(this._dateSelectedCounter === 2) {
+                this.getDateRangeBox().close();
 
-                    return;
-                }
-            } else {
-                if(this._dateSelectedCounter === 2) {
-                    this.getDateRangeBox().close();
-
-                    return;
-                }
+                return;
             }
         }
 
-        if(this._widget.option('_currentSelection') === 'startDate') {
-            this.getDateRangeBox().getEndDateBox().focus();
-        } else {
-            this.getDateRangeBox().getStartDateBox().focus();
+        if(!this._shouldPreventFocusChange) {
+            const targetDateBox = this._widget.option('_currentSelection') === 'startDate'
+                ? this.getDateRangeBox().getEndDateBox()
+                : this.getDateRangeBox().getStartDateBox();
+
+            targetDateBox.focus();
+            eventsEngine.trigger(targetDateBox.field(), 'dxclick');
         }
+
+        this._shouldPreventFocusChange = false;
     }
 
     getCurrentSelection() {
         return this.dateRangeBox.option('_currentSelection');
-    }
-
-    isStartDateBoxActive() {
-        return this.dateBox.$element().hasClass('dx-start-datebox');
     }
 
     _closeDropDownByEnter() {
@@ -216,22 +214,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     getDateRangeBox() {
         return this.dateRangeBox;
-    }
-
-    isStartDateSelected({ currentTarget }) {
-        if($(currentTarget).hasClass(CALENDAR_RANGE_START_DATE_CLASS)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    isEndDateSelected({ currentTarget }) {
-        if($(currentTarget).hasClass(CALENDAR_RANGE_END_DATE_CLASS)) {
-            return true;
-        }
-
-        return false;
     }
 }
 

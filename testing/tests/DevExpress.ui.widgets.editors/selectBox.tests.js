@@ -5943,18 +5943,19 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($listItemContainer, {}, 'scrollview content');
 
                 const inputAttributes = {
-                    role: 'combobox',
                     autocomplete: 'off',
-                    'aria-autocomplete': 'list',
-                    type: 'text',
+                    role: 'combobox',
                     spellcheck: 'false',
+                    tabindex: '0',
+                    type: 'text',
+                    'aria-autocomplete': 'list',
                     'aria-expanded': 'true',
                     'aria-haspopup': 'listbox',
-                    tabindex: '0',
                 };
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
+                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
@@ -5974,6 +5975,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
+                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
 
                 delete inputAttributes.readonly;
 
@@ -5993,21 +5995,25 @@ if(devices.real().deviceType === 'desktop') {
                 });
 
                 const inputAttributes = {
-                    role: 'combobox',
                     autocomplete: 'off',
-                    'aria-autocomplete': 'list',
-                    type: 'text',
+                    role: 'combobox',
                     spellcheck: 'false',
+                    tabindex: '0',
+                    type: 'text',
+                    'aria-autocomplete': 'list',
                     'aria-expanded': 'false',
                     'aria-haspopup': 'listbox',
-                    tabindex: '0'
+                    'aria-labelledby': helper.widget._$placeholder.attr('id'),
                 };
+
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
                 if(this.isMac) {
                     inputAttributes.placeholder = ' ';
                 }
+
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
 
@@ -6016,7 +6022,11 @@ if(devices.real().deviceType === 'desktop') {
                 if(searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
                 helper.widget.option('searchEnabled', !searchEnabled);
+
+                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
+
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
             });

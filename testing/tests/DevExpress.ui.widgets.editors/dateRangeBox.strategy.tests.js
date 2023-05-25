@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import dataUtils from 'core/element_data';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_range_box';
 
@@ -79,7 +80,7 @@ QUnit.module('Strategy', moduleConfig, () => {
         assert.deepEqual(startDateBox._strategy.widgetOption('values'), this.instance.option('value'));
     });
 
-    QUnit.module('Min/max options in views', {
+    QUnit.module('disableOutOfRangeSelection option', {
         beforeEach: function() {
             this.getCalendarMinMax = () => {
                 const { min, max } = this.getCalendar().option();
@@ -101,11 +102,11 @@ QUnit.module('Strategy', moduleConfig, () => {
         }
     }, () => {
         ['instantly', 'useButtons'].forEach((applyValueMode) => {
-            QUnit.test(`view min/max should be equal to calendar min/max on Popup open (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
+            QUnit.test(`view min/max should be equal to calendar min/max on Popup open (applyValueMode="${applyValueMode}", disableOutOfRangeSelection=true)`, function(assert) {
                 this.reinit({
                     value: ['2023/01/05', '2023/02/14'],
                     applyValueMode,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                 });
 
                 this.instance.open();
@@ -117,10 +118,10 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(viewMax, calendarMax, 'view and calendar max option is the same');
             });
 
-            QUnit.test(`min option in views should be equal to startDate after selecting startDate (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
+            QUnit.test(`min option in views should be equal to startDate after selecting startDate (applyValueMode="${applyValueMode}", disableOutOfRangeSelection=true)`, function(assert) {
                 this.reinit({
                     applyValueMode,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                 });
 
                 this.instance.open();
@@ -136,13 +137,13 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(calendarMax, viewMax, 'view max option is not changed');
             });
 
-            QUnit.testInActiveWindow(`min option in views should be equal to startDate after focus startDate input (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
+            QUnit.testInActiveWindow(`min option in views should be equal to startDate after focus startDate input (applyValueMode="${applyValueMode}", disableOutOfRangeSelection=true)`, function(assert) {
                 const initialValue = [new Date(2021, 9, 17), new Date(2021, 9, 20)];
 
                 this.reinit({
                     applyValueMode,
                     value: initialValue,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                 });
 
                 $(this.instance.endDateField()).trigger('dxclick');
@@ -168,11 +169,11 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.deepEqual(this.getViewMinMax().viewMax, initialValue[1], 'view max option is changed');
             });
 
-            QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
+            QUnit.test(`min and max options should be restored after selecting startDate and endDate and reopen popup (applyValueMode="${applyValueMode}", disableOutOfRangeSelection=true)`, function(assert) {
                 this.reinit({
                     applyValueMode,
                     multiView: true,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                 });
 
                 this.instance.open();
@@ -197,11 +198,11 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(viewMax, calendarMax, 'view max option restored to calendar max option');
             });
 
-            QUnit.test(`Views min option should not be restored after view refresh (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
+            QUnit.test(`Views min option should not be restored after view refresh (applyValueMode="${applyValueMode}", disableOutOfRangeSelection=true)`, function(assert) {
                 this.reinit({
                     applyValueMode,
                     opened: true,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                 });
 
                 const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
@@ -215,11 +216,11 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.deepEqual(viewMin, startCellDate, 'view min option equals startDate');
             });
 
-            QUnit.test(`Views max option should not be restored after view refresh (applyValueMode="${applyValueMode}", selectionBehavior="withDisable")`, function(assert) {
+            QUnit.test(`Views max option should not be restored after view refresh (applyValueMode="${applyValueMode}", disableOutOfRangeSelection=true)`, function(assert) {
                 this.reinit({
                     applyValueMode,
                     opened: true,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                 });
 
                 $(this.instance.endDateField()).focusin();
@@ -236,11 +237,11 @@ QUnit.module('Strategy', moduleConfig, () => {
             });
         });
 
-        QUnit.test('max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode="useButtons", selectionBehavior="withDisable")', function(assert) {
+        QUnit.test('max option in views should be equal to endDate, min option in views should be restored after selecting startDate and endDate (applyValueMode="useButtons", disableOutOfRangeSelection=true)', function(assert) {
             this.reinit({
                 applyValueMode: 'useButtons',
                 multiView: true,
-                selectionBehavior: 'withDisable',
+                disableOutOfRangeSelection: true,
             });
             this.instance.open();
 
@@ -258,7 +259,7 @@ QUnit.module('Strategy', moduleConfig, () => {
             assert.deepEqual(viewMax, endCellDate, 'view max option equals endDate');
         });
 
-        QUnit.test('min option in views should not change after selecting startDate (selectionBehavior="normal")', function(assert) {
+        QUnit.test('min option in views should not change after selecting startDate (disableOutOfRangeSelection=false)', function(assert) {
             this.reinit({
                 applyValueMode: 'useButtons',
             });
@@ -275,7 +276,7 @@ QUnit.module('Strategy', moduleConfig, () => {
             assert.strictEqual(calendarMax, viewMax, 'view max option is not changed');
         });
 
-        QUnit.test('max option in views should not change after selecting endDate (selectionBehavior="normal")', function(assert) {
+        QUnit.test('max option in views should not change after selecting endDate (disableOutOfRangeSelection=false)', function(assert) {
             this.reinit({
                 applyValueMode: 'useButtons',
             });
@@ -296,6 +297,60 @@ QUnit.module('Strategy', moduleConfig, () => {
     });
 
     ['instantly', 'useButtons'].forEach((applyValueMode) => {
+        QUnit.test(`Enter key should apply value from input when input value was changed (applyValueMode = ${applyValueMode})`, function(assert) {
+            this.reinit({
+                applyValueMode,
+                value: ['2023/05/11', '2023/05/23'],
+                displayFormat: 'yyyy/MM/dd',
+                opened: true,
+            });
+
+            const $startDateInput = $(this.instance.startDateField());
+            let keyboard = keyboardMock($startDateInput);
+
+            $startDateInput.focusin();
+
+            keyboard.caret(100).press('backspace').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[0]), new Date('2023/05/01'), 'value from start date input aplied');
+
+            const $endDateInput = $(this.instance.endDateField());
+            keyboard = keyboardMock($endDateInput);
+
+            $endDateInput.focusin();
+
+            keyboard.caret(100).press('backspace').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/02'), 'value from end date input aplied');
+        });
+
+        QUnit.test(`Enter key should apply value from calendar when input value was not changed (applyValueMode = ${applyValueMode})`, function(assert) {
+            this.reinit({
+                applyValueMode,
+                value: ['2023/05/11', '2023/05/23'],
+                displayFormat: 'yyyy/MM/dd',
+                opened: true,
+            });
+
+            const $startDateInput = $(this.instance.startDateField());
+            let keyboard = keyboardMock($startDateInput);
+
+            $startDateInput.focusin();
+
+            keyboard.caret(100).press('arrowleft').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[0]), new Date('2023/05/10'), 'value from start date input aplied');
+
+            const $endDateInput = $(this.instance.endDateField());
+            keyboard = keyboardMock($endDateInput);
+
+            $endDateInput.focusin();
+
+            keyboard.caret(100).press('arrowright').press('enter');
+
+            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/11'), 'value from end date input aplied');
+        });
+
         [
             {
                 firstSelect: 'startDate',
@@ -314,10 +369,10 @@ QUnit.module('Strategy', moduleConfig, () => {
                 secondSelect: 'endDate',
             },
         ].forEach(({ firstSelect, secondSelect }) => {
-            QUnit.test(`Poup should ${applyValueMode === 'instantly' ? '' : 'not'} be closed after selecting ${firstSelect} + ${secondSelect} (applyValueMode = ${applyValueMode})`, function(assert) {
+            QUnit.test(`Popup should ${applyValueMode === 'instantly' ? '' : 'not'} be closed after selecting ${firstSelect} + ${secondSelect} (applyValueMode = ${applyValueMode}, disableOutOfRangeSelection = true)`, function(assert) {
                 this.reinit({
                     applyValueMode,
-                    selectionBehavior: 'withDisable',
+                    disableOutOfRangeSelection: true,
                     value: [null, null],
                     opened: true,
                 });
@@ -456,10 +511,10 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.deepEqual(this.instance.option('opened'), false, 'dateRangeBox is closed');
         });
 
-        QUnit.test(`EndDate value should be chosen first after opening by click on endDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)}`, function(assert) {
+        QUnit.test(`EndDate value should be chosen first after opening by click on endDate field if openOnFieldClick is true, initialValue: ${JSON.stringify(initialValue)} (disableOutOfRangeSelection = true)`, function(assert) {
             this.reinit({
                 applyValueMode: 'instantly',
-                selectionBehavior: 'withDisabled',
+                disableOutOfRangeSelection: true,
                 value: initialValue,
                 openOnFieldClick: true,
                 multiView: true,
@@ -577,6 +632,27 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
         assert.strictEqual(this.instance.getEndDateBox().$element().hasClass(STATE_FOCUSED_CLASS), true, 'endDateBox has focus state class');
     });
 
+    QUnit.test('active dateBox should be changed after date selection even in focusStateEnabled=false', function(assert) {
+        this.reinit({
+            applyValueMode: 'instantly',
+            value: [null, null],
+            focusStateEnabled: false,
+            multiView: true,
+        });
+
+        const $startDateInput = $(this.instance.startDateField());
+
+        $startDateInput.trigger('dxclick');
+
+        const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        $startDateCell.trigger('dxclick');
+
+        const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
+        $endDateCell.trigger('dxclick');
+
+        assert.deepEqual(this.instance.option('value'), [new Date('5/20/2023'), new Date('6/11/2023')], 'value is changed correctly because end dateBox became active after first date select');
+    });
+
     QUnit.test('Popup should not break after selecting values by click and updating min option that triggers invalidate', function(assert) {
         this.reinit({
             applyValueMode: 'instantly',
@@ -637,7 +713,6 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
     QUnit.test('User and inner (setting selection counter) onShowing handlers should be fired on Popup showing', function(assert) {
         const onShowing = sinon.stub();
         this.reinit({
-            selectionBehavior: 'withDisable',
             opened: true,
             dropDownOptions: {
                 onShowing
