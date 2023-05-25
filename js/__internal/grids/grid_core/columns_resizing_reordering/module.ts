@@ -371,6 +371,8 @@ const DraggingHeaderView = modules.View.inherit({
           return false;
         }
       }
+
+      return undefined;
     });
 
     return result;
