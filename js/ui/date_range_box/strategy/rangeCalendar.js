@@ -29,13 +29,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
     }
 
-    getFirstPopupElement(e) {
-        if(this.getDateRangeBox()._isStartDateActiveElement()) {
-            this.getDateRangeBox().getEndDateBox().focus();
-
-            return false;
-        }
-
+    getFirstPopupElement() {
         const $popupWrapper = this._getPopup().$wrapper();
 
         const $todayButton = $popupWrapper.find(`.${TODAY_BUTTON_CLASS}`);
@@ -47,19 +41,12 @@ class RangeCalendarStrategy extends CalendarStrategy {
         return $popupWrapper.find(APPLY_BUTTON_SELECTOR);
     }
 
-    getLastPopupElement(e) {
-        if(e.shiftKey) {
-            if(this.getDateRangeBox()._isEndDateActiveElement()) {
-                this.getDateRangeBox().focus();
-                return false;
-            }
-        }
-
+    getLastPopupElement() {
         return this._getPopup().$wrapper().find(CANCEL_BUTTON_SELECTOR);
     }
 
     supportedKeys() {
-        const supportedKeys = {
+        return {
             ...super.supportedKeys(),
             rightArrow: () => {
                 if(this.dateRangeBox.option('opened')) {
@@ -87,29 +74,50 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     return false;
                 }
             },
-        };
-
-        if(this._isInstantlyMode()) {
-            supportedKeys.tab = (e) => {
+            tab: (e) => {
                 if(!this.dateRangeBox.option('opened')) {
                     return;
                 }
 
+                if(this._isInstantlyMode()) {
+                    if(e.shiftKey) {
+                        if(this.getDateRangeBox()._isStartDateActiveElement()) {
+                            this.dateRangeBox.close();
+                        }
+                    } else {
+                        if(this.getDateRangeBox()._isEndDateActiveElement()) {
+                            this.dateRangeBox.close();
+                        }
+                    }
+                    return;
+                }
+
+                e.preventDefault();
+
                 if(e.shiftKey) {
-                    if(this.dateRangeBox._isActiveElement(this.dateRangeBox.startDateField())) {
-                        this.dateRangeBox.close();
+                    if(this.getDateRangeBox()._isEndDateActiveElement()) {
+
+                        this.getDateRangeBox().focus();
+                        return;
                     }
                 } else {
-                    if(this.dateRangeBox._isActiveElement(this.dateRangeBox.endDateField())) {
-                        this.dateRangeBox.close();
+                    if(this.getDateRangeBox()._isStartDateActiveElement()) {
+                        this.getDateRangeBox().getEndDateBox().focus();
+
+                        return;
                     }
                 }
 
-                return false;
-            };
-        }
+                const $focusableElement = e.shiftKey
+                    ? this.getLastPopupElement()
+                    : this.getFirstPopupElement();
 
-        return supportedKeys;
+                if($focusableElement) {
+                    eventsEngine.trigger($focusableElement, 'focus');
+                    $focusableElement.select();
+                }
+            }
+        };
     }
 
     _getWidgetOptions() {

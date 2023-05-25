@@ -384,12 +384,12 @@ const DateBox = DropDownEditor.inherit({
         this._strategy.renderPopupContent();
     },
 
-    _getFirstPopupElement: function(e) {
-        return this._strategy.getFirstPopupElement(e) ?? this.callBase();
+    _getFirstPopupElement: function() {
+        return this._strategy.getFirstPopupElement() || this.callBase();
     },
 
-    _getLastPopupElement: function(e) {
-        return this._strategy.getLastPopupElement(e) ?? this.callBase();
+    _getLastPopupElement: function() {
+        return this._strategy.getLastPopupElement() || this.callBase();
     },
 
     _popupShowingHandler: function() {
