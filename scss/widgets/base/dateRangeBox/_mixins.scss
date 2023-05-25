@@ -92,13 +92,15 @@
       &.dx-dropdowneditor-active,
       &.dx-state-focused,
       &.dx-invalid {
-        .dx-texteditor-label {
-          transform: $label-transform;
-          font-size: $texteditor-label-font-size;
-          height: $label-height;
-          line-height: $line-height;
-          top: 0;
-          margin-top: 0;
+        .dx-datebox {
+          .dx-texteditor-label {
+            transform: $label-transform;
+            font-size: $texteditor-label-font-size;
+            height: $label-height;
+            line-height: $line-height;
+            top: 0;
+            margin-top: 0;
+          }
         }
       }
     }
@@ -116,12 +118,14 @@
       &.dx-dropdowneditor-active,
       &.dx-state-focused,
       &.dx-invalid {
-        .dx-texteditor-label {
-          font-size: $texteditor-label-font-size;
-          height: $label-height;
-          line-height: $line-height;
-          top: $label-position-top;
-          margin-top: 0;
+        .dx-datebox {
+          .dx-texteditor-label {
+            font-size: $texteditor-label-font-size;
+            height: $label-height;
+            line-height: $line-height;
+            top: $label-position-top;
+            margin-top: 0;
+          }
         }
       }
     }
