@@ -273,7 +273,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
   },
 }));
 
-test('DateRangeBox should not be closed by press tab key on startDate input and focus the apply button and then cancel button if applyValueMode is useButtons', async (t) => {
+test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useButtons, start -> end -> today -> apply -> cancel -> start -> end', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
@@ -283,7 +283,49 @@ test('DateRangeBox should not be closed by press tab key on startDate input and 
   await t
     .expect(dateRangeBox.option('opened'))
     .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .ok();
 
   await t
@@ -336,6 +378,25 @@ test('DateRangeBox should not be closed by press tab key on startDate input and 
     .ok()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
@@ -353,7 +414,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input and 
   },
 }));
 
-test('DateRangeBox should not be closed by press tab key on endDate input and focus the apply button and then cancel button if applyValueMode is useButtons', async (t) => {
+test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is useButtons, end -> start -> cancel -> apply -> today -> end -> start', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
@@ -362,11 +423,53 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
   await t
     .expect(dateRangeBox.option('opened'))
     .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .ok();
 
   await t
-    .pressKey('tab');
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -385,7 +488,7 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
     .notOk();
 
   await t
-    .pressKey('tab');
+    .pressKey('shift+tab');
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -399,12 +502,31 @@ test('DateRangeBox should not be closed by press tab key on endDate input and fo
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .ok();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
     .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
 
   await t
-    .pressKey('tab');
+    .pressKey('shift+tab');
 
   await t
     .expect(dateRangeBox.option('opened'))

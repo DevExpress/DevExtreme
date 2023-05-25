@@ -6,6 +6,8 @@ import { isFunction } from '../../../core/utils/type';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const TODAY_BUTTON_CLASS = 'dx-button-today';
+
 class RangeCalendarStrategy extends CalendarStrategy {
     constructor(dateBox) {
         super();
@@ -29,7 +31,15 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     getFirstPopupElement() {
-        return this._getPopup().$wrapper().find(APPLY_BUTTON_SELECTOR);
+        const $popupWrapper = this._getPopup().$wrapper();
+
+        const $todayButton = $popupWrapper.find(`.${TODAY_BUTTON_CLASS}`);
+
+        if($todayButton.length) {
+            return $todayButton;
+        }
+
+        return $popupWrapper.find(APPLY_BUTTON_SELECTOR);
     }
 
     getLastPopupElement() {
@@ -37,7 +47,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     supportedKeys() {
-        const supportedKeys = {
+        return {
             ...super.supportedKeys(),
             rightArrow: () => {
                 if(this.dateRangeBox.option('opened')) {
@@ -65,29 +75,50 @@ class RangeCalendarStrategy extends CalendarStrategy {
                     return false;
                 }
             },
-        };
-
-        if(this._isInstantlyMode()) {
-            supportedKeys.tab = (e) => {
+            tab: (e) => {
                 if(!this.dateRangeBox.option('opened')) {
                     return;
                 }
 
+                if(this._isInstantlyMode()) {
+                    if(e.shiftKey) {
+                        if(this.getDateRangeBox()._isStartDateActiveElement()) {
+                            this.dateRangeBox.close();
+                        }
+                    } else {
+                        if(this.getDateRangeBox()._isEndDateActiveElement()) {
+                            this.dateRangeBox.close();
+                        }
+                    }
+                    return;
+                }
+
+                e.preventDefault();
+
                 if(e.shiftKey) {
-                    if(this.dateRangeBox._isActiveElement(this.dateRangeBox.startDateField())) {
-                        this.dateRangeBox.close();
+                    if(this.getDateRangeBox()._isEndDateActiveElement()) {
+
+                        this.getDateRangeBox().focus();
+                        return;
                     }
                 } else {
-                    if(this.dateRangeBox._isActiveElement(this.dateRangeBox.endDateField())) {
-                        this.dateRangeBox.close();
+                    if(this.getDateRangeBox()._isStartDateActiveElement()) {
+                        this.getDateRangeBox().getEndDateBox().focus();
+
+                        return;
                     }
                 }
 
-                return false;
-            };
-        }
+                const $focusableElement = e.shiftKey
+                    ? this.getLastPopupElement()
+                    : this.getFirstPopupElement();
 
-        return supportedKeys;
+                if($focusableElement) {
+                    eventsEngine.trigger($focusableElement, 'focus');
+                    $focusableElement.select();
+                }
+            }
+        };
     }
 
     _getWidgetOptions() {

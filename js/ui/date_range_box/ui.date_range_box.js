@@ -390,7 +390,7 @@ class DateRangeBox extends Editor {
 
         this.reset();
 
-        !this._isActiveElement(this.startDateField()) && this.focus();
+        !this._isStartDateActiveElement() && this.focus();
         eventsEngine.trigger($(this.startDateField()), 'input');
     }
 
@@ -654,9 +654,15 @@ class DateRangeBox extends Editor {
     }
 
     _hasActiveElement() {
-        const [startDateInput, endDateInput] = this.field();
+        return this._isStartDateActiveElement() || this._isEndDateActiveElement();
+    }
 
-        return this._isActiveElement(startDateInput) || this._isActiveElement(endDateInput);
+    _isStartDateActiveElement() {
+        return this._isActiveElement(this.startDateField());
+    }
+
+    _isEndDateActiveElement() {
+        return this._isActiveElement(this.endDateField());
     }
 
     _isActiveElement(input) {
