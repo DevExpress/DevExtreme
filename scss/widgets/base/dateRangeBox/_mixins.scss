@@ -90,7 +90,8 @@
       }
 
       &.dx-dropdowneditor-active,
-      &.dx-state-focused {
+      &.dx-state-focused,
+      &.dx-invalid {
         .dx-texteditor-label {
           transform: $label-transform;
           font-size: $texteditor-label-font-size;
@@ -113,35 +114,14 @@
       }
 
       &.dx-dropdowneditor-active,
-      &.dx-state-focused {
+      &.dx-state-focused,
+      &.dx-invalid {
         .dx-texteditor-label {
           font-size: $texteditor-label-font-size;
           height: $label-height;
           line-height: $line-height;
           top: $label-position-top;
           margin-top: 0;
-        }
-      }
-    }
-  }
-}
-
-@mixin dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color) {
-  &.dx-editor-outlined,
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
-    &.dx-invalid {
-      .dx-datebox {
-        &.dx-state-hover {
-          &::before {
-            border-color: $texteditor-invalid-faded-border-color;
-          }
-        }
-
-        &.dx-state-focused {
-          &::before {
-            border-color: $texteditor-invalid-focused-border-color;
-          }
         }
       }
     }

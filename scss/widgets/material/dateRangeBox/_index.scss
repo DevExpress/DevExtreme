@@ -81,8 +81,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
     }
   }
 
-  @include dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color);
-
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
       padding-right: $material-daterangebox-separator-horizontal-padding;
