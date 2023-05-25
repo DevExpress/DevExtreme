@@ -57,7 +57,7 @@ const setFlexProp = (element, prop, value) => {
         const cssName = dasherize(prop);
         const styleExpr = cssName + ': ' + value + ';';
 
-        setStyle(element, styleExpr);
+        setStyle(element, styleExpr, false);
     }
 };
 
