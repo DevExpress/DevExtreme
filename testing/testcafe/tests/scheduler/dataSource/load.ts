@@ -72,9 +72,10 @@ test('it should not call additional DataSource loads after repaint', async (t) =
   await repaint();
 
   await pushDataToStore(0, {});
+  await t.wait(200);
 
   const testClientData = await getWindow();
-  await t.expect(testClientData?.loadCount).eql(2);
+  await t.expect(testClientData.loadCount).eql(2);
 }).before(async () => ClientFunction(() => {
   window.testOptions = {
     loadCount: 0,
