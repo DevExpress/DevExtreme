@@ -2269,6 +2269,14 @@ QUnit.module('Option synchronization', moduleConfig, () => {
             optionValue: false,
         },
         {
+            optionName: 'activeStateEnabled',
+            optionValue: false,
+        },
+        {
+            optionName: 'hoverStateEnabled',
+            optionValue: false,
+        },
+        {
             optionName: 'tabIndex',
             optionValue: 1,
         },
