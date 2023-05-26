@@ -792,7 +792,9 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option('calendarOptions.viewsCount', value ? 2 : 1);
                 break;
             case 'tabIndex':
+            case 'activeStateEnabled':
             case 'focusStateEnabled':
+            case 'hoverStateEnabled':
                 super._optionChanged(args);
 
                 this.getStartDateBox().option(name, value);
