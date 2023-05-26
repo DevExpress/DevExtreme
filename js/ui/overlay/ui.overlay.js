@@ -1,4 +1,4 @@
-import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
+import { getWidth, getHeight, getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import fx from '../../animation/fx';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
@@ -1044,9 +1044,8 @@ const Overlay = Widget.inherit({
         const $visualContainer = this._positionController.$visualContainer;
         const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
-        // Use visualViewport for solving overlay dimentions issues
-        const wrapperWidth = isVisualContainerWindow ? window.visualViewport.width : getOuterWidth($visualContainer);
-        const wrapperHeight = isVisualContainerWindow ? window.visualViewport.height : getOuterHeight($visualContainer);
+        const wrapperWidth = isVisualContainerWindow ? getWidth($visualContainer) : getOuterWidth($visualContainer);
+        const wrapperHeight = isVisualContainerWindow ? getHeight($visualContainer) : getOuterHeight($visualContainer);
 
         this._$wrapper.css({
             width: wrapperWidth,

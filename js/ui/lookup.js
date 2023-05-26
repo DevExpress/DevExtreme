@@ -62,16 +62,6 @@ const Lookup = DropDownList.inherit({
     },
 
     _getDefaultOptions: function() {
-        const getSize = (side) => {
-            let size;
-            if(devices.real().deviceType === 'phone' && window.visualViewport) {
-                size = window.visualViewport[side];
-            } else {
-                size = side === 'width' ? getWidth(window) : getHeight(window);
-            }
-            return size * WINDOW_RATIO;
-        };
-
         return extend(this.callBase(), {
             placeholder: messageLocalization.format('Select'),
 
@@ -143,11 +133,11 @@ const Lookup = DropDownList.inherit({
                 showTitle: true,
 
                 width: function() {
-                    return getSize('width');
+                    return getWidth(window) * WINDOW_RATIO;
                 },
 
                 height: function() {
-                    return getSize('height');
+                    return getWidth(window) * WINDOW_RATIO;
                 },
 
                 shading: true,

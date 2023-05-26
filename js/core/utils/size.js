@@ -1,6 +1,7 @@
 import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { isWindow, isString, isNumeric, isRenderer } from '../utils/type';
+import { hasVisualViewport, getViewportSizes } from './visual_viewport';
 
 const window = getWindow();
 
@@ -236,6 +237,7 @@ const elementSize = function(el, sizeProperty, value) {
     const isOuter = sizeProperty.indexOf('outer') === 0;
     const isInner = sizeProperty.indexOf('inner') === 0;
     const isGetter = arguments.length === 2 || typeof value === 'boolean';
+    const shouldUseVisualViewport = hasVisualViewport() && (sizeProperty === 'width' || sizeProperty === 'height');
 
     if(isRenderer(el)) {
         if(el.length > 1 && !isGetter) {
@@ -250,6 +252,10 @@ const elementSize = function(el, sizeProperty, value) {
     if(!el) return;
 
     if(isWindow(el)) {
+        if(shouldUseVisualViewport) {
+            return getViewportSizes()[sizeProperty];
+        }
+
         return isOuter ? el['inner' + partialName] : domAdapter.getDocumentElement()['client' + partialName];
     }
 
