@@ -840,6 +840,9 @@ class DateRangeBox extends Editor {
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
+
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
                 break;
             case 'startDateText':
             case 'endDateText':
