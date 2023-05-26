@@ -115,7 +115,7 @@ export interface Controllers {
   resizing: any;
   adaptiveColumns: any;
   columnChooser: any;
-  editorFactory: import('./editor_factory/module_types').EditorFactory;
+  editorFactory: any; // import('./editor_factory/module').EditorFactory;
   editing: any;
   keyboardNavigation: import('./keyboard_navigation/module').KeyboardNavigationController;
   focus: any;
