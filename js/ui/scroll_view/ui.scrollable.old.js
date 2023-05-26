@@ -369,7 +369,9 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        return this._strategy._getScrollOffset();
+        const scrollOffset = this._strategy._getScrollOffset();
+
+        return scrollOffset;
     },
 
     _isRtlNativeStrategy: function() {

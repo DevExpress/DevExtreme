@@ -1042,11 +1042,11 @@ const Overlay = Widget.inherit({
 
     _renderWrapperDimensions: function() {
         const $visualContainer = this._positionController.$visualContainer;
-        const documentElement = domAdapter.getDocumentElement();
         const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
-        const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
-        const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
+        // Use visualViewport for solving overlay dimentions issues
+        const wrapperWidth = isVisualContainerWindow ? window.visualViewport.width : getOuterWidth($visualContainer);
+        const wrapperHeight = isVisualContainerWindow ? window.visualViewport.height : getOuterHeight($visualContainer);
 
         this._$wrapper.css({
             width: wrapperWidth,
