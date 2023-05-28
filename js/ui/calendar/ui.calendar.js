@@ -780,11 +780,11 @@ const Calendar = Editor.inherit({
     _renderEvents() {
         eventsEngine.off(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME);
 
-        if(this.option('selectionMode') === 'range') {
-            eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
-                this._updateViewsOption('hoveredRange', []);
-            }));
-        }
+        // if(this.option('selectionMode') === 'range') {
+        //     eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
+        //         this._updateViewsOption('hoveredRange', []);
+        //     }));
+        // }
     },
 
     _injectComponent: function(func) {
@@ -1061,13 +1061,11 @@ const Calendar = Editor.inherit({
 
     _getViewsCaption: function(view, additionalView) {
         let caption = view.getNavigatorCaption();
-        const { viewsCount, rtlEnabled } = this.option();
+        const { viewsCount } = this.option();
 
         if(viewsCount > 1 && additionalView) {
             const additionalViewCaption = additionalView.getNavigatorCaption();
-            caption = rtlEnabled
-                ? `${additionalViewCaption} - ${caption}`
-                : `${caption} - ${additionalViewCaption}`;
+            caption = `${caption} - ${additionalViewCaption}`;
         }
 
         return caption;

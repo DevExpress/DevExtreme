@@ -84,17 +84,11 @@ const Views = {
                     class: 'dx-week-number-header'
                 });
 
-            const rtlEnabled = this.option('rtlEnabled');
-
-            if(rtlEnabled) {
-                $headerRow.append($weekNumberHeaderCell);
-            } else {
-                $headerRow.prepend($weekNumberHeaderCell);
-            }
+            $headerRow.prepend($weekNumberHeaderCell);
         },
 
         _renderWeekNumberCell: function(rowData) {
-            const { showWeekNumbers, rtlEnabled, cellTemplate } = this.option();
+            const { showWeekNumbers, cellTemplate } = this.option();
 
             if(!showWeekNumbers) {
                 return;
@@ -113,11 +107,8 @@ const Views = {
                 cell.innerHTML = weekNumber;
             }
 
-            if(rtlEnabled) {
-                rowData.row.append(cell);
-            } else {
-                rowData.row.prepend(cell);
-            }
+            rowData.row.prepend(cell);
+
             this.setAria({
                 'role': 'gridcell',
                 'label': `Week ${weekNumber}`,

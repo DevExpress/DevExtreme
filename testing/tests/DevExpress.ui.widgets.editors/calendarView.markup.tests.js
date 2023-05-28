@@ -11,8 +11,8 @@ const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
-const CALENDAR_START_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-start-day-of-month';
-const CALENDAR_END_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-end-day-of-month';
+const CALENDAR_CELL_START_CLASS = 'dx-calendar-cell-start';
+const CALENDAR_CELL_END_CLASS = 'dx-calendar-cell-end';
 
 const getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -158,8 +158,8 @@ QUnit.module('MonthView markup', {
             hoveredRange: [],
         });
 
-        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
-        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+        const $startDateCell = this.$element.find(`.${CALENDAR_CELL_START_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_CELL_END_CLASS}`);
 
         assert.strictEqual($startDateCell.length, 1);
         assert.strictEqual($startDateCell.text(), '1', 'the first day of the month');
@@ -179,8 +179,8 @@ QUnit.module('MonthView markup', {
 
         this.view.option('selectionMode', 'single');
 
-        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
-        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+        const $startDateCell = this.$element.find(`.${CALENDAR_CELL_START_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_CELL_END_CLASS}`);
 
         assert.strictEqual($startDateCell.length, 0);
         assert.strictEqual($endDateCell.length, 0);
@@ -192,8 +192,8 @@ QUnit.module('MonthView markup', {
             selectionMode: 'single',
         });
 
-        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
-        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+        const $startDateCell = this.$element.find(`.${CALENDAR_CELL_START_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_CELL_END_CLASS}`);
 
         assert.strictEqual($startDateCell.length, 0);
         assert.strictEqual($endDateCell.length, 0);
