@@ -90,8 +90,13 @@
 
   .dx-calendar-week-number-cell {
     color: $week-number-cell-color;
-    margin-inline-end: 0.5em;
     width: 2em;
+    margin-right: 0.5em;
+
+    .dx-rtl & {
+      margin-left: 0.5em;
+    }
+
 
     span {
       background-color: $week-number-cell-bg;
