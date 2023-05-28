@@ -118,22 +118,6 @@ const BaseView = Widget.inherit({
         return row;
     },
 
-    _appendCell: function(row, cell) {
-        if(!this._appendMethodName) {
-            this._cacheAppendMethodName();
-        }
-
-        $(row)[this._appendMethodName](cell);
-    },
-
-    _cacheAppendMethodName: function(rtlEnabled) {
-        // this._appendMethodName = rtlEnabled ?? this.option('rtlEnabled') ?
-        //     'prepend' :
-        //     'append';
-
-        this._appendMethodName = 'append';
-    },
-
     _createCell: function(cellDate, cellIndex) {
         const cell = domAdapter.createElement('td');
         const $cell = $(cell);
@@ -165,7 +149,7 @@ const BaseView = Widget.inherit({
 
         const cellTemplate = this.option('cellTemplate');
 
-        this._appendCell(row, cell);
+        $(row).append(cell);
 
         if(cellTemplate) {
             cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
@@ -434,10 +418,6 @@ const BaseView = Widget.inherit({
             case 'cellTemplate':
             case 'selectionMode':
                 this._invalidate();
-                break;
-            case 'rtlEnabled':
-                this._cacheAppendMethodName(value);
-                this.callBase(args);
                 break;
             case '_todayDate':
                 this._renderBody();

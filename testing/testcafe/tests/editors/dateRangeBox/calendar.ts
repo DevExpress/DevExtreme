@@ -544,11 +544,11 @@ test('Cell in range', async (t) => {
 
   await dateRangeBox.getCalendar().option('currentDate', new Date(2023, 2, 1));
 
-  await testScreenshot(t, takeScreenshot, 'DRB range, cell in range is start in view and end in row & end in view and start in row.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'DRB range cells, start in view and end in row & vise versa.png', { element: '#container' });
 
   await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 6, 1));
 
-  await testScreenshot(t, takeScreenshot, 'DRB range, cell in range is start in view and start in row & end in view and end in row.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'DRB range cells, start in view and in row & end in view and in row.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

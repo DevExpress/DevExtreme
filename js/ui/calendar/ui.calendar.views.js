@@ -73,7 +73,7 @@ const Views = {
                 })
                 .text(abbrCaption);
 
-            this._appendCell($headerRow, $cell);
+            $headerRow.append($cell);
         },
 
         _renderWeekHeaderCell: function($headerRow) {

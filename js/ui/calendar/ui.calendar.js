@@ -780,11 +780,11 @@ const Calendar = Editor.inherit({
     _renderEvents() {
         eventsEngine.off(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME);
 
-        // if(this.option('selectionMode') === 'range') {
-        //     eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
-        //         this._updateViewsOption('hoveredRange', []);
-        //     }));
-        // }
+        if(this.option('selectionMode') === 'range') {
+            eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
+                this._updateViewsOption('hoveredRange', []);
+            }));
+        }
     },
 
     _injectComponent: function(func) {
@@ -953,8 +953,8 @@ const Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton('next', !isDefined(this._getRequiredView('next')));
-        this._navigator.toggleButton('prev', !isDefined(this._getRequiredView('prev')));
+        this._navigator.toggleButton('next', !isDefined(this._afterView));
+        this._navigator.toggleButton('prev', !isDefined(this._beforeView));
     },
 
     _renderSwipeable: function() {

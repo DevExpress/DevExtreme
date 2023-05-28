@@ -218,41 +218,27 @@ QUnit.module('Navigator integration', {
         };
         const zoomLevels = ['month', 'year', 'decade', 'century'];
 
-        QUnit.test('after navigate to next', function(assert) {
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
+        [true, false].forEach(rtlEnabled => {
+            QUnit.test(`after navigate to next, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                this.reinit({ rtlEnabled, value: new Date(2015, 5, 13) });
 
-                this.$navigatorNext.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+                $.each(zoomLevels, (_, zoomLevel) => {
+                    this.calendar.option({ zoomLevel });
+
+                    this.$navigatorNext.trigger('dxclick');
+                    assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+                });
             });
-        });
 
-        QUnit.test('after navigate to next in RTL', function(assert) {
-            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
+            QUnit.test(`after navigate to prev, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                this.reinit({ rtlEnabled, value: new Date(2015, 5, 13) });
 
-                this.$navigatorNext.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
-            });
-        });
+                $.each(zoomLevels, (_, zoomLevel) => {
+                    this.calendar.option({ zoomLevel });
 
-        QUnit.test('after navigate to prev', function(assert) {
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
-
-                this.$navigatorPrev.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
-            });
-        });
-
-        QUnit.test('after navigate to prev in RTL', function(assert) {
-            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
-
-                this.$navigatorPrev.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+                    this.$navigatorPrev.trigger('dxclick');
+                    assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
+                });
             });
         });
     });
@@ -273,41 +259,26 @@ QUnit.module('Navigator integration', {
         assert.strictEqual(this.$element.css('width'), initialWidthValue, 'width is correct');
     });
 
-    QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
-        const calendar = this.calendar;
-        const $navigatorPrev = this.$navigatorPrev;
-        const $navigatorNext = this.$navigatorNext;
+    [true, false].forEach((rtlEnabled) => {
+        QUnit.test(`calendar must change the current date when navigating to previous and next view, rtlEnabled=${rtlEnabled}`, function(assert) {
+            this.reinit({
+                rtlEnabled,
+            });
 
-        $.each(['month', 'year', 'decade', 'century'], (_, type) => {
-            calendar.option('zoomLevel', type);
+            const calendar = this.calendar;
+            const $navigatorPrev = this.$navigatorPrev;
+            const $navigatorNext = this.$navigatorNext;
 
-            const startDate = calendar.option('currentDate');
-            $($navigatorPrev).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') < startDate, 'current date more then start date');
+            $.each(['month', 'year', 'decade', 'century'], (_, type) => {
+                calendar.option('zoomLevel', type);
 
-            $($navigatorNext.trigger('dxclick')).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') > startDate, 'current date less then start date');
-        });
-    });
+                const startDate = calendar.option('currentDate');
+                $($navigatorPrev).trigger('dxclick');
+                assert.ok(calendar.option('currentDate') < startDate, 'current date more then start date');
 
-    QUnit.test('calendar must change the current date when navigating to previous and next view in RTL mode', function(assert) {
-        this.reinit({
-            rtlEnabled: true
-        });
-
-        const calendar = this.calendar;
-        const $navigatorPrev = this.$navigatorPrev;
-        const $navigatorNext = this.$navigatorNext;
-
-        $.each(['month', 'year', 'decade', 'century'], (_, type) => {
-            calendar.option('zoomLevel', type);
-
-            const startDate = calendar.option('currentDate');
-            $($navigatorPrev).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') > startDate, 'current date more then start date');
-
-            $($navigatorNext.trigger('dxclick')).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') < startDate, 'current date less then start date');
+                $($navigatorNext.trigger('dxclick')).trigger('dxclick');
+                assert.ok(calendar.option('currentDate') > startDate, 'current date less then start date');
+            });
         });
     });
 
@@ -443,41 +414,25 @@ QUnit.module('Navigator integration', {
         assert.ok(!$(nextChangeMonthButton).hasClass(ACTIVE_STATE_CLASS));
     });
 
-    QUnit.test('view change buttons should be disabled if min/max has been reached', function(assert) {
-        this.reinit({
-            value: new Date(2015, 8, 6),
-            min: new Date(2015, 7, 1),
-            max: new Date(2015, 9, 28)
+    [true, false].forEach((rtlEnabled) =>{
+        QUnit.test(`view change buttons should be disabled if min/max has been reached, rtlEnabled=${rtlEnabled}`, function(assert) {
+            this.reinit({
+                rtlEnabled,
+                value: new Date(2015, 8, 6),
+                min: new Date(2015, 7, 1),
+                max: new Date(2015, 9, 28)
+            });
+
+            assert.ok(!this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
+            assert.ok(!this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
+
+            $(this.$navigatorPrev).trigger('dxclick');
+            assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
+
+            $(this.$navigatorNext).trigger('dxclick');
+            $(this.$navigatorNext).trigger('dxclick');
+            assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
         });
-
-        assert.ok(!this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-        assert.ok(!this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorPrev).trigger('dxclick');
-        assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorNext).trigger('dxclick');
-        $(this.$navigatorNext).trigger('dxclick');
-        assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-    });
-
-    QUnit.test('view change buttons should be disabled if min/max has been reached in RTL mode', function(assert) {
-        this.reinit({
-            rtlEnabled: true,
-            value: new Date(2015, 8, 6),
-            min: new Date(2015, 7, 1),
-            max: new Date(2015, 9, 28)
-        });
-
-        assert.ok(!this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-        assert.ok(!this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorPrev).trigger('dxclick');
-        assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorNext).trigger('dxclick');
-        $(this.$navigatorNext).trigger('dxclick');
-        assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
     });
 
     [

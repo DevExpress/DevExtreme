@@ -61,7 +61,6 @@ class Navigator extends Widget {
 
     _renderButtons() {
         const { rtlEnabled, type, stylingMode } = this.option();
-        // const direction = rtlEnabled ? -1 : 1;
 
         const direction = 1;
 
