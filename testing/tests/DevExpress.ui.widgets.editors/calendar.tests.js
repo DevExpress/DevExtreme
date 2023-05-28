@@ -35,6 +35,9 @@ const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 // calendar view
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
+const CALENDAR_CELL_RANGE_HOVER_CLASS = 'dx-calendar-cell-range-hover';
+const CALENDAR_CELL_RANGE_HOVER_START_CLASS = 'dx-calendar-cell-range-hover-start';
+const CALENDAR_CELL_RANGE_HOVER_END_CLASS = 'dx-calendar-cell-range-hover-end';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
@@ -2205,7 +2208,41 @@ QUnit.module('Options', {
                 });
             });
 
-            QUnit.test(`Cells should have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover when only startDate is defined`, function(assert) {
+            QUnit.test(`Cells should have ${CALENDAR_CELL_RANGE_HOVER_CLASS} class on hover when only startDate is defined`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'test does not actual for mobile devices');
+                    return;
+                }
+
+                this.reinit({
+                    values: ['2023/01/13', null],
+                    selectionMode: 'range'
+                });
+
+                const getCell = (date) => {
+                    return $(getCurrentViewInstance(this.calendar).$element().find(`*[data-value="${date}"]`));
+                };
+
+                getCell('2023/01/15').trigger('mouseenter');
+
+                const hoveredRange = getCurrentViewInstance(this.calendar).option('hoveredRange');
+
+                assert.strictEqual(hoveredRange.length, 3, 'hovered range is correct');
+
+                assert.strictEqual(getCell('2023/01/15').hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/15').hasClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_END_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/15').hasClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_START_CLASS} class`);
+
+                assert.strictEqual(getCell('2023/01/14').hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/14').hasClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_END_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/14').hasClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_START_CLASS} class`);
+
+                assert.strictEqual(getCell('2023/01/13').hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/13').hasClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_END_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/13').hasClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_START_CLASS} class`);
+            });
+
+            QUnit.test('Hovered range should be cleared after mouseleave on viewsWrapper element', function(assert) {
                 if(devices.real().deviceType !== 'desktop') {
                     assert.ok(true, 'test does not actual for mobile devices');
                     return;
@@ -2219,7 +2256,13 @@ QUnit.module('Options', {
 
                 $cell.trigger('mouseenter');
 
-                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
+                assert.strictEqual(getCurrentViewInstance(this.calendar).option('hoveredRange').length, 3, 'hovered range is correct');
+
+                const $viewsWrapper = $(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)));
+
+                $viewsWrapper.trigger('mouseleave');
+
+                assert.strictEqual(getCurrentViewInstance(this.calendar).option('hoveredRange').length, 0, 'hovered range is cleared');
             });
 
             QUnit.test('Selected range should be reduced when difference between startDate and endDate is bigger than four mounths', function(assert) {
@@ -2287,7 +2330,7 @@ QUnit.module('Options', {
                     const endCellDate = dataUtils.data($endCellDate.get(0), CALENDAR_DATE_VALUE_KEY);
                     $endCellDate.trigger('dxclick');
 
-                    assert.deepEqual(this.calendar.option('values'), [null, endCellDate]);
+                    assert.deepEqual(this.calendar.option('values'), endCellDate < values[0] ? [endCellDate, null] : [null, endCellDate]);
                 });
 
                 QUnit.test(`Click by cell should change endDate value if _allowChangeSelectionOrder is true and _currentSelection is endDate, initial value: ${JSON.stringify(values)}`, function(assert) {

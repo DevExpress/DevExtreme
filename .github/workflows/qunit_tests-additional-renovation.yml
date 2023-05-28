@@ -39,7 +39,9 @@ jobs:
           DEVEXTREME_TEST_CI: "true"
           DOTNET_CLI_TELEMETRY_OPTOUT: "true"
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-        run: npm run build:dev
+        run: |
+          npm run build:dev
+          npm run build:systemjs
 
       - name: Zip artifacts
         run: |
@@ -121,19 +123,12 @@ jobs:
           - userAgent: ''
             useShadowDom: true
           - headless: false
-          - useCsp: true
           - constel: 'ui'
             headless: true
           - constel: 'viz'
             headless: true
           - userAgent: 'android6'
             useJQuery: true
-          - constel: 'ui.widgets(1/3)'
-            useCsp: false
-          - constel: 'ui.widgets(2/3)'
-            useCsp: false
-          - constel: 'ui.htmlEditor'
-            useCsp: false
         exclude:
           - userAgent: ''
             constel: 'ui'
@@ -156,7 +151,7 @@ jobs:
           userAgent: ${{ matrix.userAgent }}
           useShadowDom: ${{ matrix.useShadowDom }}
           headless: ${{ matrix.headless }}
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-firefox:
     needs: build
@@ -179,12 +174,6 @@ jobs:
           'viz',
           'renovation'
         ]
-        include:
-          - useCsp: true
-          - constel: 'export'
-            useCsp: false
-          - constel: 'ui.htmlEditor'
-            useCsp: false
 
     steps:
       - name: Get sources
@@ -198,7 +187,7 @@ jobs:
           browser: 'firefox'
           useJQuery: 'true'
           headless: 'true'
-          useCsp: ${{ matrix.useCsp == false && 'false' || 'true' }}
+          useCsp: 'true'
 
   qunit-tests-no-csp:
     needs: build
@@ -208,7 +197,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'misc' ]
+        constel: [ 'export', 'misc', 'ui.htmlEditor' ]
 
     steps:
       - name: Get sources

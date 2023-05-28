@@ -81,6 +81,7 @@ export type ShownEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxContextMenuOptions<
     TKey = any,
@@ -280,6 +281,7 @@ export type Properties<TKey = any> = dxContextMenuOptions<TKey>;
 /** @deprecated use Properties instead */
 export type Options<TKey = any> = Properties<TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -287,6 +289,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' |
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -367,3 +372,4 @@ onShowing?: ((e: ShowingEvent) => void);
  */
 onShown?: ((e: ShownEvent) => void);
 };
+///#ENDDEBUG

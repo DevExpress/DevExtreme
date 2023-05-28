@@ -35,7 +35,8 @@ QUnit.module('ColorBox', {
     });
 
     QUnit.test('Render color input', function(assert) {
-        const $colorBox = showColorBox.call(this); const $input = $colorBox.find('.' + COLOR_BOX_INPUT_CLASS);
+        const $colorBox = showColorBox.call(this);
+        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
 
         assert.equal($input.length, 1);
         assert.ok($input.closest('.' + COLOR_BOX_INPUT_CONTAINER_CLASS).length);

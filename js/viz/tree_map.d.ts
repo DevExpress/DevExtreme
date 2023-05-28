@@ -108,6 +108,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
@@ -714,11 +715,15 @@ export type Properties = dxTreeMapOptions;
 /** @deprecated use Properties instead */
 export type Options = dxTreeMapOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -805,3 +810,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
+///#ENDDEBUG

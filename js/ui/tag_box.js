@@ -235,8 +235,8 @@ const TagBox = SelectBox.inherit({
         return this._$tagsContainer;
     },
 
-    _setLabelContainerAria: function() {
-        this.setAria('labelledby', this._label.getId(), this._input());
+    _getFieldElement() {
+        return this._input();
     },
 
     _scrollContainer: function(direction) {
@@ -336,11 +336,6 @@ const TagBox = SelectBox.inherit({
 
             /**
             * @name dxTagBoxOptions.hiddenAction
-            * @hidden
-            */
-
-            /**
-            * @name dxTagBoxOptions.itemRender
             * @hidden
             */
 

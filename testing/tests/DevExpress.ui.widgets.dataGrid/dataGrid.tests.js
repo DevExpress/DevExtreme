@@ -2464,6 +2464,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.deepEqual(columnsChangedArgs, [{
+            columnIndices: [0, 1],
             changeTypes: { columns: true, length: 1 },
             optionNames: { visible: true, length: 1 }
         }]);

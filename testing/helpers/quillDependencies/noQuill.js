@@ -1,1 +1,1 @@
-window.Quill = module.exports = undefined;
+window.Quill = module.exports = null;

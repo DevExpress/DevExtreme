@@ -328,16 +328,23 @@ const transpileTesting = async(Builder) => {
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
         const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
+        const sourceCode = fs.readFileSync(filePath).toString();
+
+        if(/System(JS)?\./.test(sourceCode) && (
+            filePath.includes('DevExpress.ui.widgets/') ||
+            filePath.includes('htmlEditorParts/')
+        )) {
+            fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
+            continue;
+        }
 
         if(filePath.includes('ui.widgets/fileManagerParts')) {
-            const file = fs.readFileSync(filePath);
-            await transpileWithBabel(file.toString(), destPath);
+            await transpileWithBabel(sourceCode, destPath);
         } else {
             try {
                 await transpileWithBuilder(builder, filePath, destPath);
             } catch(error) {
-                const file = fs.readFileSync(filePath);
-                await transpileWithBabel(file.toString(), destPath);
+                await transpileWithBabel(sourceCode, destPath);
             }
         }
     }

@@ -635,6 +635,7 @@ export interface chartSeriesObject extends baseSeriesObject {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
@@ -5165,11 +5166,15 @@ export type Properties = dxChartOptions;
 /** @deprecated use Properties instead */
 export type Options = dxChartOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -5298,3 +5303,4 @@ onZoomEnd?: ((e: ZoomEndEvent) => void);
  */
 onZoomStart?: ((e: ZoomStartEvent) => void);
 };
+///#ENDDEBUG

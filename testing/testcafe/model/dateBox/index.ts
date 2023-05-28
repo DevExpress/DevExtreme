@@ -1,11 +1,13 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
+import Popup from '../popup';
 
 const CLASS = {
   input: 'dx-texteditor-input',
   dropDownEditorButton: 'dx-dropdowneditor-button',
   doneButton: 'dx-popup-done',
+  popup: 'dx-popup',
 };
 
 export default class DateBox extends Widget {
@@ -38,6 +40,10 @@ export default class DateBox extends Widget {
         },
       },
     )();
+  }
+
+  getPopup(): Popup {
+    return new Popup(this.element.find(`.${CLASS.popup}`));
   }
 
   // eslint-disable-next-line class-methods-use-this

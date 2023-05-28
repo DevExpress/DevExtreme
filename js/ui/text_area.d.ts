@@ -64,6 +64,7 @@ export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | Mous
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
@@ -106,11 +107,15 @@ export type Properties = dxTextAreaOptions;
 /** @deprecated use Properties instead */
 export type Options = dxTextAreaOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -203,3 +208,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

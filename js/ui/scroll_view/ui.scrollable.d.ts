@@ -27,7 +27,11 @@ export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | Mous
     readonly reachedBottom?: boolean;
 }
 
-/** @namespace DevExpress.ui */
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
 export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid

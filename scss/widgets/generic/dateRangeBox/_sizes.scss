@@ -2,16 +2,12 @@
 
 // adduse
 
-$generic-daterangebox-separator-horizontal-padding: 10px !default;
 $generic-daterangebox-active-bar-horizontal-margin: null !default;
-$generic-daterangebox-label-height: null !default;
 
 @if $size == "default" {
   $generic-daterangebox-active-bar-horizontal-margin: 9px !default;
-  $generic-daterangebox-label-height: 15px !default;
 }
 
 @else if $size == "compact" {
   $generic-daterangebox-active-bar-horizontal-margin: 5px !default;
-  $generic-daterangebox-label-height: 13px !default;
 }

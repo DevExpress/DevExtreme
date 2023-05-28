@@ -26,7 +26,7 @@ const COLUMN_CHOOSER_SELECT_CLASS = 'column-chooser-mode-select';
 const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
-const CLICK_TIMEOUT = 300;
+const COLUMN_OPTIONS_USED_IN_ITEMS = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
 
 const processItems = function(that, chooserColumns) {
     const items = [];
@@ -323,7 +323,6 @@ const columnChooserMembers = {
             });
         };
 
-        let updateColumnVisibilityTimeout;
         let isUpdatingSelection = false;
 
         const selectionChangedHandler = e => {
@@ -341,16 +340,13 @@ const columnChooserMembers = {
             e.component.endUpdate();
             isUpdatingSelection = false;
 
-            clearTimeout(updateColumnVisibilityTimeout);
-            updateColumnVisibilityTimeout = setTimeout(() => {
-                that.component.beginUpdate();
-                this._isUpdatingColumnVisibility = true;
+            that.component.beginUpdate();
+            this._isUpdatingColumnVisibility = true;
 
-                updateColumnVisibility(nodes);
+            updateColumnVisibility(nodes);
 
-                that.component.endUpdate();
-                this._isUpdatingColumnVisibility = false;
-            }, CLICK_TIMEOUT);
+            that.component.endUpdate();
+            this._isUpdatingColumnVisibility = false;
         };
 
         return {
@@ -369,38 +365,37 @@ const columnChooserMembers = {
         this._columnChooserList.option('items', items);
     },
 
-    _updateItemSelection: function(columnIndex) {
-        const isRecursive = this.option('columnChooser.selection.recursive');
-        const column = this._columnsController.columnOption(columnIndex);
+    _updateItemsSelection: function(columnIndices) {
+        const changedColumns = columnIndices?.map((columnIndex) => this._columnsController.columnOption(columnIndex));
 
-        const isRecursiveWithColumns = isRecursive && column.hasColumns;
-
-        if(!isRecursiveWithColumns) {
-            column.visible
-                ? this._columnChooserList.selectItem(columnIndex)
-                : this._columnChooserList.unselectItem(columnIndex);
-        }
+        this._columnChooserList.beginUpdate();
+        changedColumns?.forEach(({ visible, index }) => {
+            if(visible) {
+                this._columnChooserList.selectItem(index);
+            } else {
+                this._columnChooserList.unselectItem(index);
+            }
+        });
+        this._columnChooserList.endUpdate();
     },
 
     _columnOptionChanged: function(e) {
         this.callBase(e);
 
-        const changeTypes = e.changeTypes;
-        const optionNames = e.optionNames;
         const isSelectMode = this.isSelectMode();
 
         if(isSelectMode && this._columnChooserList && this._isUpdatingColumnVisibility !== true) {
-            const onlyOneColumnChanged = e.columnIndex !== undefined;
+            const { optionNames } = e;
             const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
-            const isDraggedFromGroupPanel = optionNames.visible && optionNames.groupIndex && optionNames.length === 2;
+            const columnIndices = isDefined(e.columnIndex) ? [e.columnIndex] : e.columnIndices;
+            const needUpdate = COLUMN_OPTIONS_USED_IN_ITEMS.some(optionName => optionNames[optionName]) || (e.changeTypes.columns && optionNames.all);
 
-            const optionsUsedInItems = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
-            const needFullRender = optionsUsedInItems.some(optionName => optionNames[optionName]) || (changeTypes.columns && optionNames.all);
+            if(needUpdate) {
+                this._updateItemsSelection(columnIndices);
 
-            if(onlyOneColumnChanged && (onlyVisibleChanged || isDraggedFromGroupPanel)) {
-                this._updateItemSelection(e.columnIndex);
-            } else if(needFullRender) {
-                this._updateItems();
+                if(!onlyVisibleChanged) {
+                    this._updateItems();
+                }
             }
         }
     },

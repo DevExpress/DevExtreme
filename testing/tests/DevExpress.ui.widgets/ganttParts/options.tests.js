@@ -280,4 +280,33 @@ QUnit.module('Options', moduleConfig, () => {
         assert.strictEqual(columns[0].calculateCellValue({ id: '54' }), '54', 'number');
         assert.strictEqual(columns[0].calculateCellValue({ id: '54a' }), '54a', 'pseudo guid');
     });
+    test('scaleType in optionChanged on zoom (T1167131)', function(assert) {
+        let lastScale;
+        const options = {
+            scaleType: 'weeks',
+            onOptionChanged: (e) => {
+                if(e.name === 'scaleType') {
+                    lastScale = e.value;
+                }
+            },
+        };
+        this.createInstance(options);
+        this.clock.tick(0);
+        assert.notOk(lastScale, 'first time undefined');
+
+        this.instance.zoomIn();
+        this.instance.zoomIn();
+        this.instance.zoomIn();
+        this.clock.tick(0);
+        assert.equal(lastScale, 'days', 'check after zoom in');
+
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.clock.tick(0);
+        assert.equal(lastScale, 'months', 'check after zoom in');
+    });
 });

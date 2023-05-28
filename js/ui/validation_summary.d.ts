@@ -45,6 +45,7 @@ export type OptionChangedEvent<
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
+ * @docid
  */
 export interface dxValidationSummaryOptions<
     TItem extends ItemLike = any,
@@ -100,6 +101,7 @@ export type Options<
     TKey = any,
 > = Properties<TItem, TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -107,6 +109,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemContextMen
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -139,3 +144,4 @@ onItemClick?: ((e: ItemClickEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

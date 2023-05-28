@@ -46,24 +46,6 @@
   $header-color,
 ) {
   .dx-calendar-body {
-    table {
-      .dx-week-number-header {
-        font-size: $cell-font-size;
-        width: 2.5em;
-      }
-
-      .dx-calendar-week-number-cell {
-        color: $week-number-cell-color;
-        background-color: $week-number-cell-bg;
-        width: 2em;
-        margin-right: 0.5em;
-
-        .dx-rtl & {
-          margin-left: 0.5em;
-        }
-      }
-    }
-
     thead {
       tr {
         height: 2em;
@@ -78,22 +60,44 @@
       tr {
         &:first-of-type {
           .dx-calendar-week-number-cell {
-            border-top-left-radius: $week-number-cell-border-radius;
-            border-top-right-radius: $week-number-cell-border-radius;
+            span {
+              border-start-start-radius: $week-number-cell-border-radius;
+              border-start-end-radius: $week-number-cell-border-radius;
+            }
           }
         }
 
         &:last-of-type {
           .dx-calendar-week-number-cell {
-            border-bottom-left-radius: $week-number-cell-border-radius;
-            border-bottom-right-radius: $week-number-cell-border-radius;
+            span {
+              border-end-start-radius: $week-number-cell-border-radius;
+              border-end-end-radius: $week-number-cell-border-radius;
+            }
           }
         }
       }
     }
 
-    td {
+    .dx-week-number-header {
       font-size: $cell-font-size;
+      width: 2.5em;
+    }
+  }
+
+  .dx-calendar-cell {
+    font-size: $cell-font-size;
+  }
+
+  .dx-calendar-week-number-cell {
+    color: $week-number-cell-color;
+    width: 2em;
+
+    span {
+      background-color: $week-number-cell-bg;
+
+      .dx-rtl & {
+        margin-left: 0.5em;
+      }
     }
   }
 }
@@ -103,7 +107,7 @@
   $cell-text-color,
   $base-border-radius,
   $base-accent,
-  $cell-hover-bg-color,
+  $cell-hover-bg,
   $cell-hover-color,
   $cell-active-bg,
   $cell-selected-bg,
@@ -111,6 +115,7 @@
   $cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
+  $calendar-cell-hover-border-color,
 ) {
   .dx-calendar-cell {
     color: $cell-text-color;
@@ -141,7 +146,7 @@
 
     &.dx-state-hover {
       span {
-        background-color: $cell-hover-bg-color;
+        background-color: $cell-hover-bg;
         color: $cell-hover-color;
       }
     }
@@ -165,6 +170,15 @@
       }
     }
 
+    &.dx-calendar-cell-range-hover,
+    &.dx-calendar-cell-range-hover.dx-state-hover,
+    &.dx-calendar-cell-range-hover.dx-state-active {
+      &::before {
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+
     &.dx-calendar-cell-in-range,
     &.dx-calendar-cell-in-range.dx-state-hover,
     &.dx-calendar-cell-in-range.dx-state-active {
@@ -184,11 +198,12 @@
       }
     }
 
-    &.dx-calendar-range-end-date,
-    &.dx-calendar-range-end-date.dx-state-hover,
-    &.dx-calendar-range-end-date.dx-state-active {
-      &::before {
-        width: 50%;
+    &.dx-calendar-range-end-date {
+      &.dx-state-hover,
+      &.dx-state-active {
+        &::before {
+          width: 50%;
+        }
       }
     }
 
@@ -201,13 +216,17 @@
       }
     }
 
-    &.dx-calendar-cell-in-range {
+    &.dx-calendar-cell-range-hover {
       &::before {
         height: 2em;
         inset-inline-start: 0;
         inset-inline-end: 0;
         width: 100%;
-        background-color: $cell-hover-bg-color;
+        border-width: 1px;
+        border-style: dashed;
+        border-color: $calendar-cell-hover-border-color transparent;
+        border-image: initial;
+        border-radius: 0;
       }
 
       &.dx-calendar-cell-range-hover-start {
@@ -219,6 +238,7 @@
           border-bottom-left-radius: $cell-border-radius;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
+          border-left: 1px dashed $calendar-cell-hover-border-color;
         }
       }
 
@@ -231,10 +251,66 @@
           border-bottom-left-radius: 0;
           border-top-right-radius: $cell-border-radius;
           border-bottom-right-radius: $cell-border-radius;
+          border-right: 1px dashed $calendar-cell-hover-border-color;
         }
       }
 
-      &.dx-calendar-cell-range-hover-start.dx-calendar-cell-range-hover-end {
+      &.dx-calendar-range-start-date,
+      &.dx-calendar-range-end-date {
+        &::before {
+          border-width: 0;
+        }
+      }
+    }
+
+    &.dx-calendar-cell-in-range {
+      &::before {
+        height: 2em;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        width: 100%;
+        background-color: $cell-hover-bg;
+      }
+
+      &.dx-calendar-range-start-date,
+      &.dx-calendar-start-day-of-month {
+        &::before {
+          width: calc(50% + 1em);
+          inset-inline-start: auto;
+          inset-inline-end: 0;
+          border-top-left-radius: $cell-border-radius;
+          border-bottom-left-radius: $cell-border-radius;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
+        &.dx-calendar-end-day-of-month {
+          &::before {
+            content: none;
+          }
+        }
+      }
+
+      &.dx-calendar-range-end-date,
+      &.dx-calendar-end-day-of-month {
+        &::before {
+          width: calc(50% + 1em);
+          inset-inline-start: 0;
+          inset-inline-end: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-top-right-radius: $cell-border-radius;
+          border-bottom-right-radius: $cell-border-radius;
+        }
+
+        &.dx-calendar-start-day-of-month {
+          &::before {
+            content: none;
+          }
+        }
+      }
+
+      &.dx-calendar-range-start-date.dx-calendar-range-end-date {
         &::before {
           content: none;
         }
@@ -262,9 +338,29 @@
     &.dx-calendar-other-view {
       &.dx-calendar-range-start-date,
       &.dx-calendar-range-end-date,
-      &.dx-calendar-cell-in-range {
+      &.dx-calendar-cell-in-range,
+      &.dx-calendar-cell-range-hover {
         &::before {
           content: none;
+        }
+
+        &.dx-state-hover,
+        &.dx-state-active {
+          span {
+            color: $calendar-cell-other-hover-color;
+          }
+        }
+
+        &.dx-state-hover {
+          span {
+            background-color: $cell-hover-bg;
+          }
+        }
+
+        &.dx-state-active {
+          span {
+            background-color: $cell-active-bg;
+          }
         }
 
         span {

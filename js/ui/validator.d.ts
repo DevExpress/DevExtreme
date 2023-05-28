@@ -45,6 +45,7 @@ export type ValidatedEvent = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
@@ -197,35 +198,3 @@ export type Properties = dxValidatorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidatorOptions;
-
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
-
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
-
-type Events = {
-/**
- * @skip
- * @docid dxValidatorOptions.onDisposing
- * @type_function_param1 e:{ui/validator:DisposingEvent}
- */
-onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxValidatorOptions.onInitialized
- * @type_function_param1 e:{ui/validator:InitializedEvent}
- */
-onInitialized?: ((e: InitializedEvent) => void);
-/**
- * @skip
- * @docid dxValidatorOptions.onOptionChanged
- * @type_function_param1 e:{ui/validator:OptionChangedEvent}
- */
-onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxValidatorOptions.onValidated
- * @type_function_param1 e:{ui/validator:ValidatedEvent}
- */
-onValidated?: ((e: ValidatedEvent) => void);
-};

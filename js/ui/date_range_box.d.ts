@@ -82,7 +82,13 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @public
  */
-export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
+export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'> & {
+    /**
+     * @docid dxDateRangeBoxOptions.disableOutOfRangeSelection
+     * @default true
+     * @public
+     */
+    disableOutOfRangeSelection?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
@@ -146,7 +152,7 @@ export type Properties = DateBoxBaseOptions<dxDateRangeBox> & {
      */
     multiView?: boolean;
     /**
-     * @docid
+     * @docid dxDateRangeBoxOptions.openOnFieldClick
      * @default true
      * @public
      */
@@ -211,6 +217,7 @@ declare const DateRangeBoxBase: new(element: UserDefinedElement, options?: Prope
  * @isEditor
  * @inherits DateBoxBase
  * @namespace DevExpress.ui
+ * @options Properties
  * @public
  */
 export default class dxDateRangeBox extends DateRangeBoxBase {
@@ -228,11 +235,15 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
   startDateField(): DxElement;
 }
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -337,3 +348,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

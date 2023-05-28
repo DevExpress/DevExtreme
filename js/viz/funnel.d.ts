@@ -134,6 +134,7 @@ export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
@@ -707,11 +708,15 @@ export type Properties = dxFunnelOptions;
 /** @deprecated use Properties instead */
 export type Options = dxFunnelOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -786,3 +791,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
+///#ENDDEBUG

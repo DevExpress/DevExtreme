@@ -127,6 +127,7 @@ export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
@@ -180,7 +181,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
      * @default undefined
-     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -415,11 +415,15 @@ export type Properties = dxBarGaugeOptions;
 /** @deprecated use Properties instead */
 export type Options = dxBarGaugeOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -482,3 +486,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
+///#ENDDEBUG

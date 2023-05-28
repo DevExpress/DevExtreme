@@ -19,13 +19,14 @@ QUnit.testStart(function() {
         '<form id="form">\
         <div id="button"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="inkButton"></div>\
             <div data-options="dxTemplate: { name: \'content\' }" data-bind="text: text"></div>\
         </div>\
         </form>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
     addShadowDomStyles($('#qunit-fixture'));
 
     $('#form').on('submit', function(e) {

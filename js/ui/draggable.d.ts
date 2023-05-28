@@ -27,6 +27,8 @@ import {
 
 /**
  * @namespace DevExpress.ui
+ * @docid
+ * @type object
  */
 export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
@@ -105,6 +107,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
  * @inherits DOMComponent
  * @hidden
  * @namespace DevExpress.ui
+ * @options DraggableBaseOptions
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DraggableBase { }
@@ -154,6 +157,7 @@ export type DragTemplateData = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
@@ -216,6 +220,7 @@ export type Properties = dxDraggableOptions;
 /** @deprecated use Properties instead */
 export type Options = dxDraggableOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -223,6 +228,9 @@ type FilterOutHidden<T> = Omit<T, 'onDrop'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -261,3 +269,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

@@ -111,11 +111,11 @@ export type OptionChanged = {
 
 export interface Controllers {
   data: import('./data_controller/module').DataController;
-  columns: any;
+  columns: import('./columns_controller/module').ColumnsController;
   resizing: any;
   adaptiveColumns: any;
   columnChooser: any;
-  editorFactory: import('./editor_factory/module_types').EditorFactory;
+  editorFactory: any; // import('./editor_factory/module').EditorFactory;
   editing: any;
   keyboardNavigation: import('./keyboard_navigation/module').KeyboardNavigationController;
   focus: any;

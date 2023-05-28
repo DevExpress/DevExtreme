@@ -66,6 +66,7 @@ export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
+ * @docid
  */
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
@@ -87,7 +88,6 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     /**
      * @docid
      * @default undefined
-     * @type template
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -185,11 +185,15 @@ export type Properties = dxCircularGaugeOptions;
 /** @deprecated use Properties instead */
 export type Options = dxCircularGaugeOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -252,3 +256,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
+///#ENDDEBUG

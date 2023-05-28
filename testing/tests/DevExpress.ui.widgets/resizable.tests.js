@@ -7,12 +7,37 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="resizable" style="height: 50px; width: 50px; position: absolute; box-sizing: border-box;"></div>\
-        <div id="resizableAutoSize" style="height: auto; width: auto; position: absolute"><div style="height: 50px; width: 50px; box-sizing: border-box;"></div></div>\
-        <div id="areaDiv" style="height: 100px; width:100px; position: absolute; box-sizing: border-box;"></div>';
+    const markup = `
+        <div id="resizable"></div>
+        <div id="resizableAutoSize">
+            <div id="data"></div>
+        </div>
+        <div id="areaDiv"></div>
+    `;
 
     $('#qunit-fixture').html(markup);
+    $('#resizable').css({
+        height: '50px',
+        width: '50px',
+        position: 'absolute',
+        'box-sizing': 'border-box',
+    });
+    $('#resizableAutoSize').css({
+        height: 'auto',
+        width: 'auto',
+        position: 'absolute',
+    }),
+    $('#data').css({
+        height: '50px',
+        width: '50px',
+        'box-sizing': 'border-box',
+    }),
+    $('#areaDiv').css({
+        height: '100px',
+        width: '100px',
+        position: 'absolute',
+        'box-sizing': 'border-box',
+    });
 });
 
 const RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle';

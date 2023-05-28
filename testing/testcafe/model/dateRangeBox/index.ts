@@ -15,6 +15,7 @@ const CLASS = {
   clearButton: 'dx-clear-button-area',
   buttonsContainer: 'dx-texteditor-buttons-container',
   doneButton: 'dx-popup-done',
+  separator: 'dx-daterangebox-separator',
 };
 
 export default class DateRangeBox extends Widget {
@@ -22,10 +23,13 @@ export default class DateRangeBox extends Widget {
 
   clearButton: Selector;
 
+  separator: Selector;
+
   constructor(id: string | Selector) {
     super(id);
 
     this.dropDownButton = this.element.find(`.${CLASS.dropDownButton}`);
+    this.separator = this.element.find(`.${CLASS.separator}`);
     this.clearButton = this.element.find(`.${CLASS.buttonsContainer}`).find(`.${CLASS.clearButton}`);
   }
 
@@ -33,9 +37,10 @@ export default class DateRangeBox extends Widget {
   getName(): WidgetName { return 'dxDateRangeBox'; }
 
   getPopup(): Popup {
-    return new Popup(this.element.find(`.${CLASS.popup}`));
+    return new Popup(this.getStartDateBox().element.find(`.${CLASS.popup}`));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getCalendar(): Calendar {
     return new Calendar(this.getPopup().getContent().find(`.${CLASS.calendar}`));
   }

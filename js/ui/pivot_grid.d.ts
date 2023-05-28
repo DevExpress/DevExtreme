@@ -104,6 +104,7 @@ export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @docid
  */
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
@@ -734,6 +735,7 @@ export type Properties = dxPivotGridOptions;
 /** @deprecated use Properties instead */
 export type Options = dxPivotGridOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -741,6 +743,9 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
+/**
+* @hidden
+*/
 type Events = {
 /**
  * @skip
@@ -791,3 +796,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG
