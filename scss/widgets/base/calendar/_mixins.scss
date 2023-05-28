@@ -46,24 +46,6 @@
   $header-color,
 ) {
   .dx-calendar-body {
-    table {
-      .dx-week-number-header {
-        font-size: $cell-font-size;
-        width: 2.5em;
-      }
-
-      .dx-calendar-week-number-cell {
-        color: $week-number-cell-color;
-        background-color: $week-number-cell-bg;
-        width: 2em;
-        margin-right: 0.5em;
-
-        .dx-rtl & {
-          margin-left: 0.5em;
-        }
-      }
-    }
-
     thead {
       tr {
         height: 2em;
@@ -78,22 +60,44 @@
       tr {
         &:first-of-type {
           .dx-calendar-week-number-cell {
-            border-top-left-radius: $week-number-cell-border-radius;
-            border-top-right-radius: $week-number-cell-border-radius;
+            span {
+              border-start-start-radius: $week-number-cell-border-radius;
+              border-start-end-radius: $week-number-cell-border-radius;
+            }
           }
         }
 
         &:last-of-type {
           .dx-calendar-week-number-cell {
-            border-bottom-left-radius: $week-number-cell-border-radius;
-            border-bottom-right-radius: $week-number-cell-border-radius;
+            span {
+              border-end-start-radius: $week-number-cell-border-radius;
+              border-end-end-radius: $week-number-cell-border-radius;
+            }
           }
         }
       }
     }
 
-    td {
+    .dx-week-number-header {
       font-size: $cell-font-size;
+      width: 2.5em;
+    }
+  }
+
+  .dx-calendar-cell {
+    font-size: $cell-font-size;
+  }
+
+  .dx-calendar-week-number-cell {
+    color: $week-number-cell-color;
+    width: 2em;
+
+    span {
+      background-color: $week-number-cell-bg;
+
+      .dx-rtl & {
+        margin-left: 0.5em;
+      }
     }
   }
 }
