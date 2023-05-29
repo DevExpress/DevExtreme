@@ -951,6 +951,7 @@ Axis.prototype = {
         const labelOpt = options.label;
 
         validateAxisOptions(options);
+        checkDeprecatedOptions(!that.isArgumentAxis, options);
         that._options = options;
 
         options.tick = options.tick || {};
@@ -2194,8 +2195,6 @@ Axis.prototype = {
     },
 
     _validateOptions(options) {
-        checkDeprecatedOptions(!this.isArgumentAxis, options);
-
         options.wholeRange = this._validateVisualRange(options.wholeRange);
         options.visualRange = options._customVisualRange = this._validateVisualRange(options._customVisualRange);
 
