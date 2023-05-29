@@ -318,6 +318,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             showDropDownButton: true,
             startDateInputAttr: { id: 'startDateInput' },
             startDateName: 'start_input',
+            stylingMode: 'underlined',
             // TODO: extend this list of options
         };
 
@@ -333,6 +334,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 hoverStateEnabled: false,
                 inputAttr: { id: 'startDateInput' },
                 labelMode: 'floating',
+                stylingMode: 'underlined',
                 name: 'start_input',
                 readOnly: true,
                 showClearButton: false,
@@ -360,6 +362,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 labelMode: 'floating',
                 name: 'end_input',
                 readOnly: true,
+                stylingMode: 'underlined',
                 showDropDownButton: false,
                 showClearButton: false,
             };
@@ -2263,6 +2266,14 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         },
         {
             optionName: 'focusStateEnabled',
+            optionValue: false,
+        },
+        {
+            optionName: 'activeStateEnabled',
+            optionValue: false,
+        },
+        {
+            optionName: 'hoverStateEnabled',
             optionValue: false,
         },
         {

@@ -523,7 +523,7 @@ export default {
 
   getWidgetInstance,
 
-  getLastResizableColumnIndex(columns, resultWidths) {
+  getLastResizableColumnIndex(columns, resultWidths?) {
     const hasResizableColumns = columns.some((column) => column && !column.command && !column.fixed && column.allowResizing !== false);
     let lastColumnIndex;
 

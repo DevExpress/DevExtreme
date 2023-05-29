@@ -390,7 +390,7 @@ class DateRangeBox extends Editor {
 
         this.reset();
 
-        !this._isActiveElement(this.startDateField()) && this.focus();
+        !this._isStartDateActiveElement() && this.focus();
         eventsEngine.trigger($(this.startDateField()), 'input');
     }
 
@@ -654,9 +654,15 @@ class DateRangeBox extends Editor {
     }
 
     _hasActiveElement() {
-        const [startDateInput, endDateInput] = this.field();
+        return this._isStartDateActiveElement() || this._isEndDateActiveElement();
+    }
 
-        return this._isActiveElement(startDateInput) || this._isActiveElement(endDateInput);
+    _isStartDateActiveElement() {
+        return this._isActiveElement(this.startDateField());
+    }
+
+    _isEndDateActiveElement() {
+        return this._isActiveElement(this.endDateField());
     }
 
     _isActiveElement(input) {
@@ -786,7 +792,9 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option('calendarOptions.viewsCount', value ? 2 : 1);
                 break;
             case 'tabIndex':
+            case 'activeStateEnabled':
             case 'focusStateEnabled':
+            case 'hoverStateEnabled':
                 super._optionChanged(args);
 
                 this.getStartDateBox().option(name, value);
@@ -834,6 +842,9 @@ class DateRangeBox extends Editor {
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
+
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
                 break;
             case 'startDateText':
             case 'endDateText':
@@ -898,6 +909,7 @@ class DateRangeBox extends Editor {
                     this._applyCustomValidation(newValue);
 
                     this._updateDateBoxesValue(newValue);
+                    this.getStartDateBox()._strategy.renderValue();
                     this._toggleEmptinessState();
 
                     this._raiseValueChangeAction(newValue, previousValue);

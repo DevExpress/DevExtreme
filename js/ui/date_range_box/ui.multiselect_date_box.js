@@ -79,6 +79,20 @@ class MultiselectDateBox extends DateBox {
         this._processValueChange(e);
     }
 
+    _popupElementTabHandler(e) {
+        const $element = $(e.currentTarget);
+
+        if(e.shiftKey && $element.is(this._getFirstPopupElement())) {
+            this._strategy.dateRangeBox.getEndDateBox().focus();
+            e.preventDefault();
+        }
+
+        if(!e.shiftKey && $element.is(this._getLastPopupElement())) {
+            this._strategy.dateRangeBox.getStartDateBox().focus();
+            e.preventDefault();
+        }
+    }
+
     _processValueChange(e) {
         const { target } = e;
         const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();

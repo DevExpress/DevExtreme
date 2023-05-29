@@ -226,9 +226,10 @@ const BaseView = Widget.inherit({
             }
         }));
 
+        eventsEngine.off(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME);
         if(this.option('selectionMode') === 'range') {
             this._createCellHoverAction();
-            eventsEngine.off(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME);
+
             eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
                 if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                     this._cellHoverAction({

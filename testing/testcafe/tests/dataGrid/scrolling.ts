@@ -1001,6 +1001,49 @@ test('The data should display correctly after changing the dataSource and focuse
   },
 }));
 
+// T1166649
+test('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const scrollbarVerticalThumbTrack = dataGrid.getScrollBarThumbTrack('vertical');
+
+  // act
+  await t
+    .hover(scrollbarVerticalThumbTrack)
+    .drag(scrollbarVerticalThumbTrack, 0, 600)
+    .wait(1000);
+
+  await t
+    .expect(await takeScreenshot('grid-virtual-scrolling_with_fixed_columns-T1166649.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+  // assert
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(1000)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  keyExpr: 'id',
+  showRowLines: true,
+  height: 600,
+  scrolling: {
+    mode: 'virtual',
+    useNative: false,
+  },
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+    allowDeleting: true,
+    useIcons: true,
+  },
+  columnFixing: {
+    enabled: true,
+  },
+  columns: [{
+    type: 'buttons',
+    fixedPosition: 'left',
+  }, 'id', 'text'],
+}));
+
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'))
   .beforeEach(async (t) => {

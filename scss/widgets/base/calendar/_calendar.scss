@@ -80,12 +80,19 @@
 
     @include dx-overflow();
   }
+}
 
-  .dx-calendar-week-number-cell {
+.dx-calendar-week-number-cell {
+  position: relative;
+
+  span {
+    position: absolute;
     display: flex;
-    height: 100%;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    width: 2em;
+    inset: 0;
   }
 }
 

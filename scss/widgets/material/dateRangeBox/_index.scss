@@ -24,7 +24,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
   math.div($material-texteditor-label-font-size, 2),
   $material-texteditor-label-font-size + 1px,
   $material-texteditor-label-font-size,
-  2px,
+  2.5px,
   0,
 );
 @include dx-underlined-mixin(

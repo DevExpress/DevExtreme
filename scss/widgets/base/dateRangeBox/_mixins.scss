@@ -62,8 +62,8 @@
           }
         }
 
-        &.dx-texteditor-empty {
-          .dx-datebox {
+        .dx-datebox {
+          &.dx-texteditor-empty {
             .dx-texteditor-label {
               .dx-label {
                 &::before {
