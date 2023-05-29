@@ -928,6 +928,23 @@ QUnit.test('Skip unknown command', function(assert) {
     });
 });
 
+QUnit.test('Comments should not to be exported(T1168423)', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<!-- text -->' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(2);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 1, 'Canvas elements count');
+            assert.equal(that.drawnElements[0].type, 'fillRect', 'Drawn "fillRect" only');
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Rect', function(assert) {
     const that = this;
     const done = assert.async();
