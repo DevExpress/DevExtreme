@@ -32,7 +32,6 @@ test('DateRangeBox calendar appearance after change rtl mode in runtime', async 
     value: [new Date(2021, 9, 17), new Date(2021, 10, 30)],
     openOnFieldClick: true,
     opened: true,
-    width: 500,
   }, '#dateRangeBox');
 });
 

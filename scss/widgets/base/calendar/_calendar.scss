@@ -8,9 +8,14 @@
 
   position: relative;
   display: flex;
+  direction: ltr;
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid transparent;
+
+  &.dx-rtl {
+    direction: rtl;
+  }
 }
 
 .dx-calendar-views-wrapper {

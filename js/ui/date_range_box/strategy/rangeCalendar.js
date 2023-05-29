@@ -15,11 +15,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
         this.dateRangeBox = dateBox.option('_dateRangeBoxInstance');
     }
 
-    popupConfig(popupConfig) {
-        return extend(true, super.popupConfig(popupConfig), {
-            position: { of: this.dateRangeBox.$element() },
-        });
-    }
+    // popupConfig(popupConfig) {
+    //     return extend(true, super.popupConfig(popupConfig), {
+    //         position: { of: this.dateRangeBox.$element() },
+    //     });
+    // }
 
     popupShowingHandler() {
         this._widget?._restoreViewsMinMaxOptions();
