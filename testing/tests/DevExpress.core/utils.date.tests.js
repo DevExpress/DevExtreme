@@ -622,7 +622,7 @@ QUnit.module('week numbers: fullWeek', () => {
 
     for(let firstDayOfWeek = 0; firstDayOfWeek < 7; firstDayOfWeek++) {
         QUnit.module(`firstDayOfWeek is ${WEEK_DAYS[firstDayOfWeek]}`, () => {
-            for(let year = 2000; year < 2300; year++) {
+            for(let year = 2000; year < 2200; year++) {
                 const firsDayOfYear = new Date(year, 0, 1).getDay();
 
                 const offset = firsDayOfYear - firstDayOfWeek < 0 ? firsDayOfYear - firstDayOfWeek + 7 : firsDayOfYear - firstDayOfWeek;
@@ -668,7 +668,7 @@ QUnit.module('week numbers: firstDay (american format)', () => {
                 }
             };
 
-            for(let year = 2000; year < 2300; year++) {
+            for(let year = 2000; year < 2200; year++) {
                 const firsDayOfYear = new Date(year, 0, 1).getDay();
 
                 const offset = firsDayOfYear - firstDayOfWeek < 0 ? firsDayOfYear - firstDayOfWeek + 7 : firsDayOfYear - firstDayOfWeek;

@@ -13,6 +13,29 @@ fixture.disablePageReloads`DateRangeBox range selection`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
+test('DateRangeBox calendar appearance after change rtl mode in runtime', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await dateRangeBox.getCalendar().option('rtlEnabled', true);
+
+  await testScreenshot(t, takeScreenshot, 'DRB appearance after change rtl mode in runtime.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+
+  return createWidget('dxDateRangeBox', {
+    value: [new Date(2021, 9, 17), new Date(2021, 10, 30)],
+    openOnFieldClick: true,
+    opened: true,
+    width: 500,
+  }, '#dateRangeBox');
+});
+
 test('Cells classes after hover cells, value: [null, null]', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
