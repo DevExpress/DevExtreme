@@ -73,7 +73,7 @@ import {
   shouldPreventScroll,
 } from './module_utils';
 import {
-  Controllers, OptionChanged, Views,
+  Controllers, OptionChanged, RowKey, Views,
 } from '../module_types';
 import modules from '../modules';
 
@@ -133,8 +133,8 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
 
-    this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this));
-    this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this));
+    this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
+    this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
 
     if (this.isKeyboardEnabled()) {
       accessibility.subscribeVisibilityChange();
@@ -2052,7 +2052,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedCellChanged($cell: dxElementWrapper): void {
+  _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
     const columnIndex = this._rowsView.getCellIndex($cell);
     const rowIndex = this._getRowIndex($cell?.parent());
 
@@ -2060,7 +2060,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _memoFireFocusedCellChanged(
-    $cell: dxElementWrapper,
+    $cell: dxElementWrapper | undefined,
     rowIndex: number,
     columnIndex: number,
   ): void {
@@ -2137,7 +2137,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._memoFireFocusedRowChanged(focusedRowKey, focusedRowIndex);
   }
 
-  _memoFireFocusedRowChanged(focusedRowKey: unknown, focusedRowIndex: number): void {
+  _memoFireFocusedRowChanged(focusedRowKey: RowKey, focusedRowIndex: number): void {
     const localRowIndex = focusedRowIndex - this._dataController.getRowIndexOffset();
 
     this.executeAction('onFocusedRowChanged', {
