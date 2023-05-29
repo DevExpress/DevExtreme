@@ -1233,7 +1233,7 @@ QUnit.test('Should show warning if deprecated "shift" value sets to "valueAxis.v
             'valueAxis.visualRangeUpdateMode',
             'shift',
             '23.1',
-            'Use any other accepted value'
+            'Specify another value'
         ]);
 });
 

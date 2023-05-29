@@ -284,9 +284,9 @@ function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
-function checkDeprecatedValues(isValueAxis, options) {
+function checkDeprecatedOptions(isValueAxis, options) {
     if(isValueAxis && options.visualRangeUpdateMode === 'shift') {
-        errors.log('W0016', 'valueAxis.visualRangeUpdateMode', 'shift', '23.1', 'Use any other accepted value');
+        errors.log('W0016', 'valueAxis.visualRangeUpdateMode', 'shift', '23.1', 'Specify another value');
     }
 }
 
@@ -2194,7 +2194,7 @@ Axis.prototype = {
     },
 
     _validateOptions(options) {
-        checkDeprecatedValues(!this.isArgumentAxis, options);
+        checkDeprecatedOptions(!this.isArgumentAxis, options);
 
         options.wholeRange = this._validateVisualRange(options.wholeRange);
         options.visualRange = options._customVisualRange = this._validateVisualRange(options._customVisualRange);
