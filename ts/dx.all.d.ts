@@ -10846,8 +10846,12 @@ declare module DevExpress.ui {
     >;
     export type Properties = Omit<
       DateBoxBaseOptions<dxDateRangeBox>,
-      'inputAttr | label | maxLength | name | placeholder | text'
+      'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'
     > & {
+      /**
+       * [descr:dxDateRangeBoxOptions.disableOutOfRangeSelection]
+       */
+      disableOutOfRangeSelection?: boolean;
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */

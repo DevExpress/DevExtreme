@@ -19,7 +19,7 @@ import browser from '@js/core/utils/browser';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import gridCoreUtils from '../module_utils';
 import { ColumnsView } from '../columns_view/module';
-import { EditorFactory } from '../editor_factory/module_types';
+import { EditorFactory } from '../editor_factory/module';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';

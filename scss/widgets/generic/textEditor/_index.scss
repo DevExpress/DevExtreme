@@ -586,7 +586,7 @@ $generic-texteditor-label-transition:
       &.dx-state-disabled {
         @include dx-state-empty($texteditor-border-color, dashed);
 
-        &.dx-state-readonly.dx-state-hover {
+        &.dx-state-hover {
           @include dx-state-empty($texteditor-hover-border-color, dashed);
         }
 

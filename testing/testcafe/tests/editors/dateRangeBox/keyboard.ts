@@ -3,6 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DateRangeBox from '../../../model/dateRangeBox';
 import { clearTestPage } from '../../../helpers/clearPage';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateRangeBox keyboard navigation`
   .page(url(__dirname, '../../container.html'))
@@ -24,6 +25,10 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 
   await t
     .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
     .eql(false);
 
   await t
@@ -31,6 +36,10 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 
   await t
     .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
     .eql(true);
 
   await t
@@ -38,6 +47,32 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 
   await t
     .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(false);
+
+  await t
+    .pressKey('alt+down');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('alt+up');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
     .eql(false);
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
@@ -52,6 +87,10 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 
   await t
     .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
     .eql(false);
 
   await t
@@ -59,6 +98,10 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 
   await t
     .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
     .eql(true);
 
   await t
@@ -66,6 +109,83 @@ test('DateRangeBox should be opened and close by press alt+down and alt+up respe
 
   await t
     .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(false);
+
+  await t
+    .pressKey('alt+down');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('alt+up');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(false);
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: false,
+}));
+
+test('DateRangeBox should be opened by press alt+down if startDate input is focused and close by press alt+up if endDateBox is focused', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(false);
+
+  await t
+    .pressKey('alt+down');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(true);
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('alt+up');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getStartDateBox().option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.getEndDateBox().option('opened'))
     .eql(false);
 }).before(async () => createWidget('dxDateRangeBox', {
   value: ['2021/09/17', '2021/10/24'],
@@ -114,6 +234,35 @@ test('DateRangeBox should be closed by press esc key when endDateBox is focused'
   openOnFieldClick: true,
 }));
 
+test('DateRangeBox should be closed by press esc key when today button is focused, applyValueMode is useButtons', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .eql(true);
+
+  await t
+    .pressKey('esc');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false);
+}).before(async () => createWidget('dxDateRangeBox', {
+  value: ['2021/09/17', '2021/10/24'],
+  openOnFieldClick: true,
+  applyValueMode: 'useButtons',
+}));
+
 test('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
@@ -153,6 +302,312 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
     hideOnOutsideClick: false,
   },
 }));
+
+test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useButtons, start -> end -> today -> apply -> cancel -> start -> end', async (t) => {
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await t
+    .click(Selector('#firstFocusableElement'))
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .ok();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'firstFocusableElement');
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await appendElementTo('#container', 'div', 'lastFocusableElement');
+
+  await createWidget('dxButton', {
+    text: 'First Focusable Element',
+  }, '#firstFocusableElement');
+
+  await createWidget('dxButton', {
+    text: 'Last Focusable Element',
+  }, '#lastFocusableElement');
+
+  return createWidget('dxDateRangeBox', {
+    value: ['2021/09/17', '2021/10/24'],
+    openOnFieldClick: true,
+    applyValueMode: 'useButtons',
+    opened: true,
+    width: 500,
+    dropDownOptions: {
+      hideOnOutsideClick: false,
+    },
+  }, '#dateRangeBox');
+});
+
+test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is useButtons, end -> start -> cancel -> apply -> today -> end -> start', async (t) => {
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .ok();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .ok()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .ok()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'firstFocusableElement');
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await appendElementTo('#container', 'div', 'lastFocusableElement');
+
+  await createWidget('dxButton', {
+    text: 'First Focused Element',
+  }, '#firstFocusableElement');
+
+  await createWidget('dxButton', {
+    text: 'Last Focused Element',
+  }, '#lastFocusableElement');
+
+  return createWidget('dxDateRangeBox', {
+    value: ['2021/09/17', '2021/10/24'],
+    openOnFieldClick: true,
+    applyValueMode: 'useButtons',
+    opened: false,
+    width: 500,
+  }, '#dateRangeBox');
+});
 
 test('DateRangeBox should not be closed by press shift+tab key on endDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');

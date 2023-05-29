@@ -11,20 +11,16 @@
 ) {
   .dx-calendar {
     width: $calendar-width;
-    min-width: $calendar-width;
     height: $calendar-height;
-    min-height: $calendar-height;
     background-color: $calendar-bg;
     gap: $calendar-element-padding;
 
     &.dx-calendar-with-footer {
       height: $calendar-height + $calendar-element-padding + $footer-button-height;
-      min-height: $calendar-height + $calendar-element-padding + $footer-button-height;
     }
 
     &.dx-calendar-multiview {
       width: $calendar-width * 2;
-      min-width: $calendar-width * 2;
     }
 
     &.dx-invalid {
@@ -46,24 +42,6 @@
   $header-color,
 ) {
   .dx-calendar-body {
-    table {
-      .dx-week-number-header {
-        font-size: $cell-font-size;
-        width: 2.5em;
-      }
-
-      .dx-calendar-week-number-cell {
-        color: $week-number-cell-color;
-        background-color: $week-number-cell-bg;
-        width: 2em;
-        margin-right: 0.5em;
-
-        .dx-rtl & {
-          margin-left: 0.5em;
-        }
-      }
-    }
-
     thead {
       tr {
         height: 2em;
@@ -78,22 +56,44 @@
       tr {
         &:first-of-type {
           .dx-calendar-week-number-cell {
-            border-top-left-radius: $week-number-cell-border-radius;
-            border-top-right-radius: $week-number-cell-border-radius;
+            span {
+              border-start-start-radius: $week-number-cell-border-radius;
+              border-start-end-radius: $week-number-cell-border-radius;
+            }
           }
         }
 
         &:last-of-type {
           .dx-calendar-week-number-cell {
-            border-bottom-left-radius: $week-number-cell-border-radius;
-            border-bottom-right-radius: $week-number-cell-border-radius;
+            span {
+              border-end-start-radius: $week-number-cell-border-radius;
+              border-end-end-radius: $week-number-cell-border-radius;
+            }
           }
         }
       }
     }
 
-    td {
+    .dx-week-number-header {
       font-size: $cell-font-size;
+      width: 2.5em;
+    }
+  }
+
+  .dx-calendar-cell {
+    font-size: $cell-font-size;
+  }
+
+  .dx-calendar-week-number-cell {
+    color: $week-number-cell-color;
+    width: 2em;
+
+    span {
+      background-color: $week-number-cell-bg;
+
+      .dx-rtl & {
+        margin-left: 0.5em;
+      }
     }
   }
 }
@@ -103,7 +103,7 @@
   $cell-text-color,
   $base-border-radius,
   $base-accent,
-  $cell-hover-bg-color,
+  $cell-hover-bg,
   $cell-hover-color,
   $cell-active-bg,
   $cell-selected-bg,
@@ -111,6 +111,7 @@
   $cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
+  $calendar-cell-hover-border-color,
 ) {
   .dx-calendar-cell {
     color: $cell-text-color;
@@ -141,7 +142,7 @@
 
     &.dx-state-hover {
       span {
-        background-color: $cell-hover-bg-color;
+        background-color: $cell-hover-bg;
         color: $cell-hover-color;
       }
     }
@@ -219,7 +220,7 @@
         width: 100%;
         border-width: 1px;
         border-style: dashed;
-        border-color: $cell-hover-bg-color transparent;
+        border-color: $calendar-cell-hover-border-color transparent;
         border-image: initial;
         border-radius: 0;
       }
@@ -233,7 +234,7 @@
           border-bottom-left-radius: $cell-border-radius;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
-          border-left: 1px dashed $cell-hover-bg-color;
+          border-left: 1px dashed $calendar-cell-hover-border-color;
         }
       }
 
@@ -246,7 +247,7 @@
           border-bottom-left-radius: 0;
           border-top-right-radius: $cell-border-radius;
           border-bottom-right-radius: $cell-border-radius;
-          border-right: 1px dashed $cell-hover-bg-color;
+          border-right: 1px dashed $calendar-cell-hover-border-color;
         }
       }
 
@@ -264,7 +265,7 @@
         inset-inline-start: 0;
         inset-inline-end: 0;
         width: 100%;
-        background-color: $cell-hover-bg-color;
+        background-color: $cell-hover-bg;
       }
 
       &.dx-calendar-range-start-date,
@@ -348,7 +349,7 @@
 
         &.dx-state-hover {
           span {
-            background-color: $cell-hover-bg-color;
+            background-color: $cell-hover-bg;
           }
         }
 
