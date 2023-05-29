@@ -4,13 +4,12 @@ import errors from '../widget/ui.errors';
 import dataQuery from '../../data/query';
 import { Deferred } from '../../core/utils/deferred';
 
-export default SelectionStrategy.inherit({
-
-    getSelectedItems: function() {
+export default class DeferredStrategy extends SelectionStrategy {
+    getSelectedItems() {
         return this._loadFilteredData(this.options.selectionFilter);
-    },
+    }
 
-    getSelectedItemKeys: function() {
+    getSelectedItemKeys() {
         const d = new Deferred();
         const that = this;
         const key = this.options.key();
@@ -25,9 +24,9 @@ export default SelectionStrategy.inherit({
         }).fail(d.reject);
 
         return d.promise();
-    },
+    }
 
-    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
+    selectedItemKeys(keys, preserve, isDeselect, isSelectAll) {
         if(isSelectAll) {
             const filter = this.options.filter();
             const needResetSelectionFilter = !filter || JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect;
@@ -55,20 +54,20 @@ export default SelectionStrategy.inherit({
         this.onSelectionChanged();
 
         return new Deferred().resolve();
-    },
+    }
 
-    setSelectedItems: function(keys) {
+    setSelectedItems(keys) {
         this._setOption('selectionFilter', null);
         for(let i = 0; i < keys.length; i++) {
             this.addSelectedItem(keys[i]);
         }
-    },
+    }
 
-    isItemDataSelected: function(itemData) {
+    isItemDataSelected(itemData) {
         return this.isItemKeySelected(itemData);
-    },
+    }
 
-    isItemKeySelected: function(itemData) {
+    isItemKeySelected(itemData) {
         const selectionFilter = this.options.selectionFilter;
 
         if(!selectionFilter) {
@@ -76,25 +75,25 @@ export default SelectionStrategy.inherit({
         }
 
         return !!dataQuery([itemData]).filter(selectionFilter).toArray().length;
-    },
+    }
 
-    _getKeyExpr: function() {
+    _getKeyExpr() {
         const keyField = this.options.key();
         if(Array.isArray(keyField) && keyField.length === 1) {
             return keyField[0];
         }
         return keyField;
-    },
+    }
 
-    _normalizeKey: function(key) {
+    _normalizeKey(key) {
         const keyExpr = this.options.key();
         if(Array.isArray(keyExpr) && keyExpr.length === 1) {
             return key[keyExpr[0]];
         }
         return key;
-    },
+    }
 
-    _getFilterByKey: function(key) {
+    _getFilterByKey(key) {
         const keyField = this._getKeyExpr();
         let filter = [keyField, '=', this._normalizeKey(key)];
 
@@ -109,29 +108,29 @@ export default SelectionStrategy.inherit({
         }
 
         return filter;
-    },
+    }
 
-    addSelectedItem: function(key, isSelectAll, skipFilter) {
+    addSelectedItem(key, isSelectAll, skipFilter) {
         const filter = this._getFilterByKey(key);
 
         this._addSelectionFilter(false, filter, isSelectAll, skipFilter);
-    },
+    }
 
-    removeSelectedItem: function(key) {
+    removeSelectedItem(key) {
         const filter = this._getFilterByKey(key);
 
         this._addSelectionFilter(true, filter);
-    },
+    }
 
-    validate: function() {
+    validate() {
         const key = this.options.key;
 
         if(key && key() === undefined) {
             throw errors.Error('E1042', 'Deferred selection');
         }
-    },
+    }
 
-    _findSubFilter: function(selectionFilter, filter) {
+    _findSubFilter(selectionFilter, filter) {
         if(!selectionFilter) return -1;
         const filterString = JSON.stringify(filter);
 
@@ -143,16 +142,16 @@ export default SelectionStrategy.inherit({
         }
 
         return -1;
-    },
+    }
 
-    _isLastSubFilter: function(selectionFilter, filter) {
+    _isLastSubFilter(selectionFilter, filter) {
         if(selectionFilter && filter) {
             return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1 || this._findSubFilter([selectionFilter], filter) === 0;
         }
         return false;
-    },
+    }
 
-    _addFilterOperator: function(selectionFilter, filterOperator) {
+    _addFilterOperator(selectionFilter, filterOperator) {
         if(selectionFilter.length > 1 && isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
             selectionFilter = [selectionFilter];
         }
@@ -160,16 +159,16 @@ export default SelectionStrategy.inherit({
             selectionFilter.push(filterOperator);
         }
         return selectionFilter;
-    },
+    }
 
-    _denormalizeFilter: function(filter) {
+    _denormalizeFilter(filter) {
         if(filter && isString(filter[0])) {
             filter = [filter];
         }
         return filter;
-    },
+    }
 
-    _isOnlyNegativeFiltersLeft: function(filters) {
+    _isOnlyNegativeFiltersLeft(filters) {
         return filters.every((filterItem, i) => {
             if(i % 2 === 0) {
                 return Array.isArray(filterItem) && filterItem[0] === '!';
@@ -177,9 +176,9 @@ export default SelectionStrategy.inherit({
                 return filterItem === 'and';
             }
         });
-    },
+    }
 
-    _addSelectionFilter: function(isDeselect, filter, isSelectAll, skipFilter) {
+    _addSelectionFilter(isDeselect, filter, isSelectAll, skipFilter) {
         const that = this;
         const currentFilter = isDeselect ? ['!', filter] : filter;
         const currentOperation = isDeselect ? 'and' : 'or';
@@ -215,16 +214,16 @@ export default SelectionStrategy.inherit({
         selectionFilter = that._normalizeFilter(selectionFilter);
 
         that._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
-    },
+    }
 
-    _normalizeFilter: function(filter) {
+    _normalizeFilter(filter) {
         if(filter && filter.length === 1) {
             filter = filter[0];
         }
         return filter;
-    },
+    }
 
-    _removeFilterByIndex: function(filter, filterIndex, isSelectAll) {
+    _removeFilterByIndex(filter, filterIndex, isSelectAll) {
         const operation = filter[1];
 
         if(filterIndex > 0) {
@@ -236,11 +235,11 @@ export default SelectionStrategy.inherit({
         if(isSelectAll && operation === 'and') {
             filter.splice(0, filter.length);
         }
-    },
-    _isSimpleKeyFilter: function(filter, key) {
+    }
+    _isSimpleKeyFilter(filter, key) {
         return filter.length === 3 && filter[0] === key && filter[1] === '=';
-    },
-    _isKeyFilter: function(filter) {
+    }
+    _isKeyFilter(filter) {
         if(filter.length === 2 && filter[0] === '!') {
             return this._isKeyFilter(filter[1]);
         }
@@ -262,8 +261,8 @@ export default SelectionStrategy.inherit({
         }
 
         return this._isSimpleKeyFilter(filter, keyField);
-    },
-    _hasKeyFiltersOnlyStartingFromIndex: function(selectionFilter, filterIndex) {
+    }
+    _hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex) {
         if(filterIndex >= 0) {
             for(let i = filterIndex; i < selectionFilter.length; i++) {
                 if(typeof selectionFilter[i] !== 'string' && !this._isKeyFilter(selectionFilter[i])) {
@@ -275,8 +274,8 @@ export default SelectionStrategy.inherit({
         }
 
         return false;
-    },
-    _removeSameFilter: function(selectionFilter, filter, inverted, isSelectAll) {
+    }
+    _removeSameFilter(selectionFilter, filter, inverted, isSelectAll) {
         filter = inverted ? ['!', filter] : filter;
 
         if(JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
@@ -305,9 +304,9 @@ export default SelectionStrategy.inherit({
             }
             return -1;
         }
-    },
+    }
 
-    getSelectAllState: function() {
+    getSelectAllState() {
         const filter = this.options.filter();
         let selectionFilter = this.options.selectionFilter;
 
@@ -327,4 +326,4 @@ export default SelectionStrategy.inherit({
 
         return undefined;
     }
-});
+}
