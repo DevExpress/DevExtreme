@@ -111,6 +111,10 @@ const setHeight = function(elements, value) {
     setDimensionProperty(elements, 'height', value);
 };
 
+// NOTE: Setting the 'element.style' requires creating attributeNode when both of the conditions met:
+//       - a form contains an input with the name property set to "style";
+//       - a form contains a dx-validator (or other popup widget).
+//       T941581
 const setStyle = function(element, styleString, resetStyle = true) {
     if(!domAdapter.isNode(element.style)) {
         if(resetStyle) {

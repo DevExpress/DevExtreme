@@ -6,7 +6,7 @@ import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import domAdapter from '../core/dom_adapter';
-import { isWindow, isDefined } from '../core/utils/type';
+import { isWindow } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
 import browser from '../core/utils/browser';
@@ -346,17 +346,8 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
-// NOTE: Setting the 'element.style.transform.scale' requires the inline style when both of the conditions met:
-//       - a form contains an input with the name property set to "style";
-//       - a form contains a dx-validator (or other popup widget).
-//       T941581
-const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
-    const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
-    if(stylePropIsValid) {
-        element.style.transform = isEmpty ? transformProp.replace(scale, '') : transformProp;
-    } else {
-        setStyle(element, isEmpty ? styleAttr.replace(scale, '') : styleAttr);
-    }
+const setScaleProperty = function(element, scale, styleAttr, isEmpty) {
+    setStyle(element, isEmpty ? styleAttr.replace(scale, '') : styleAttr, false);
 };
 
 const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
@@ -366,14 +357,13 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
     }
 
     const style = currentElement.getAttribute?.('style') || '';
-    const transform = currentElement.style?.transform;
     const scale = style.match(scaleRe)?.[0];
     let offset;
 
     if(scale) {
-        setScaleProperty(currentElement, scale, transform, style, true);
+        setScaleProperty(currentElement, scale, style, true);
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-        setScaleProperty(currentElement, scale, transform, style, false);
+        setScaleProperty(currentElement, scale, style, false);
     } else {
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
     }
