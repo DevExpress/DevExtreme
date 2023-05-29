@@ -380,9 +380,10 @@ function drawElement(element, context, parentOptions, shared) {
     const tagName = element.tagName;
     const isText = tagName === 'text' || tagName === 'tspan' || tagName === undefined;
     const isImage = tagName === 'image';
+    const isComment = element.nodeType === 8;
     const options = extend({}, parentOptions, getElementOptions(element, shared.rootAppended));
 
-    if(options.visibility === 'hidden' || options[HIDDEN_FOR_EXPORT]) {
+    if(options.visibility === 'hidden' || options[HIDDEN_FOR_EXPORT] || isComment) {
         return;
     }
 
