@@ -25,7 +25,12 @@ export type DeepPartial<T> = T extends Scalar ? T : {
 };
 
 type ItemType<T> = T extends (infer TItem)[] ? TItem : T;
-type Property<T, TPropName extends string> = T extends Partial<Record<TPropName, infer TValue>> ? TValue : never;
+type Property<T, TPropName extends string> =
+    T extends Record<TPropName, infer TValue>
+    ? TValue :
+        T extends Partial<Record<TPropName, infer TValue>>
+        ? TValue | undefined
+        : never;
 type OwnPropertyType<T, TPropName extends string> = Property<ItemType<T>, TPropName>;
 
 export type PropertyType<T, TProp extends string> =
