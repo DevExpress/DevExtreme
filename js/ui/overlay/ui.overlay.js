@@ -3,6 +3,8 @@ import fx from '../../animation/fx';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
+import { hasVisualViewport, subscribeOnVisualViewportEvent, unSubscribeOnVisualViewportEvent, visualViewportListenerNames } from '../../core/utils/visual_viewport';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
@@ -761,6 +763,26 @@ const Overlay = Widget.inherit({
         if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
             this._toggleHideOnParentsScrollSubscription(enabled);
+            this._toggleVisualViewportCallback(enabled);
+        }
+    },
+
+    _toggleVisualViewportCallback(subscribe) {
+        const shouldUseVisualViewport = hasVisualViewport();
+
+        if(!shouldUseVisualViewport) {
+            return;
+        }
+
+        this._pendingUpdate = false;
+
+        const callback = () => this._visualViewportResizeHandler();
+        const eventNames = Object.keys(visualViewportListenerNames);
+
+        if(subscribe) {
+            eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback, { passive: true }));
+        } else {
+            eventNames.forEach(eventName => unSubscribeOnVisualViewportEvent(eventName, callback));
         }
     },
 
@@ -790,6 +812,23 @@ const Overlay = Widget.inherit({
             }
             eventsEngine.on($parents, scrollEvent, handler);
             this._parentsScrollSubscriptionInfo.prevTargets = $parents;
+        }
+    },
+
+    _visualViewportResizeHandler() {
+        if(this._pendingUpdate) {
+            cancelAnimationFrame(this._resizeAnimationFrameId);
+        }
+
+        this._pendingUpdate = true;
+
+        const { visible } = this.option();
+
+        if(visible) {
+            this._resizeAnimationFrameId = requestAnimationFrame(() => {
+                this._pendingUpdate = false;
+                this._renderWrapper();
+            });
         }
     },
 
@@ -1034,13 +1073,17 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _renderWrapper: function() {
+    // I want not to render popup.
+    // I want to subscribe on resize/scroll,
+    // and then render popup, when Virtual Keyboard will be closed.
+    // I have to remove dependencies on window resize (this._dimensionChanged).
+    _renderWrapper() {
         this._positionController.styleWrapperPosition();
         this._renderWrapperDimensions();
         this._positionController.positionWrapper();
     },
 
-    _renderWrapperDimensions: function() {
+    _renderWrapperDimensions() {
         const $visualContainer = this._positionController.$visualContainer;
         const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
@@ -1107,6 +1150,7 @@ const Overlay = Widget.inherit({
 
     _clean: function() {
         const options = this.option();
+
         if(!this._contentAlreadyRendered && !options.isRenovated) {
             this.$content().empty();
         }
@@ -1114,6 +1158,8 @@ const Overlay = Widget.inherit({
         this._renderVisibility(false);
         this._stopShowTimer();
         this._cleanFocusState();
+        this._pendingUpdate = null;
+        this._resizeAnimationFrameId = null;
     },
 
     _stopShowTimer() {
