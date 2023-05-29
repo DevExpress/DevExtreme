@@ -153,6 +153,22 @@ export default {
         this.callBase();
     },
 
+    _cleanAria: function() {
+        const $element = this.$element();
+
+        this.setAria({
+            'role': null,
+            'activedescendant': null
+        }, $element);
+
+        $element.attr('tabIndex', null);
+    },
+
+    _clean() {
+        this.callBase();
+        this._cleanAria();
+    },
+
     _refresh: function() {
         if(this._valueChangeDeferred) {
             this._valueChangeDeferred.resolve();

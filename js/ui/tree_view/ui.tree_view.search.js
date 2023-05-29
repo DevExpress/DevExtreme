@@ -106,17 +106,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         this.$element().addClass(this._widgetClass());
     },
 
-    _cleanAria: function() {
-        const $element = this.$element();
-        this.setAria({
-            'role': null,
-            'activedescendant': null
-        }, $element);
-        $element.attr('tabIndex', null);
-    },
-
     _clean: function() {
-        this._cleanAria();
         this.callBase();
         this._removeSearchBox();
     }
