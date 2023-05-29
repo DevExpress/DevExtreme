@@ -17,7 +17,7 @@ test('DateRangeBox calendar appearance after change rtl mode in runtime', async 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
-  await dateRangeBox.getCalendar().option('rtlEnabled', true);
+  await dateRangeBox.option('rtlEnabled', true);
 
   await testScreenshot(t, takeScreenshot, 'DRB appearance after change rtl mode in runtime.png', { element: '#container' });
 
