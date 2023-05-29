@@ -1,6 +1,6 @@
 @echo off
 netsh interface portproxy delete v4tov4 listenport=9223 listenaddress=0.0.0.0
-start /b cmd /c call "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9223 --user-data-dir=c:\my\data --disk-cache-dir=null --overscroll-history-navigation=0 --disable-web-security -–allow-file-access-from-files "http://localhost:20090/run/DevExpress.performance/dataGridRecaclulations.tests.js?notimers=true&nocsp=true"
+start /b cmd /c call "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9223 --user-data-dir=c:\my\data --disk-cache-dir=null --overscroll-history-navigation=0 --disable-web-security --remote-allow-origins=* -–allow-file-access-from-files "http://localhost:20090/run/DevExpress.performance/dataGridRecaclulations.tests.js?notimers=true&nocsp=true"
 timeout 5
 netsh interface portproxy add v4tov4 listenport=9223 connectaddress=127.0.0.1 connectport=9223 listenaddress=0.0.0.0
 cls
