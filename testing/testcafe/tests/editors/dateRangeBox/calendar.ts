@@ -381,7 +381,6 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 
     await testScreenshot(t, takeScreenshot, `DRB range, startDate is start view & row, hover is end view & row${screenshotPostfix}.png`, { element: '#container' });
 
-    await t.debug();
     await t
       .click(calendar.getCellByDate('2021/07/31'))
       .click(dateRangeBox.getStartDateBox().input)
@@ -494,9 +493,8 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 
     await testScreenshot(t, takeScreenshot, `DRB range, endDate is start view & end cell row, hover inside row${screenshotPostfix}.png`, { element: '#container' });
 
-    await dateRangeBox.getCalendar().option('currentDate', new Date(2022, 2, 15));
+    await dateRangeBox.getCalendar().option('currentDate', new Date(2022, 3, 15));
 
-    await t.debug();
     await t
       .hover(calendar.getCellByDate('2022/04/30'));
 

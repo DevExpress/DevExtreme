@@ -361,13 +361,8 @@ const BaseView = Widget.inherit({
         this._$hoveredRangeCells = hoveredRange
             .map((value) => this._getCellByDate(value));
 
-        // if(this.option('rtlEnabled')) {
-        //     this._$rangeStartHoverCell = this._getCellByDate(hoveredRange[hoveredRange.length - 1]);
-        //     this._$rangeEndHoverCell = this._getCellByDate(hoveredRange[0]);
-        // } else {
         this._$rangeStartHoverCell = this._getCellByDate(hoveredRange[0]);
         this._$rangeEndHoverCell = this._getCellByDate(hoveredRange[hoveredRange.length - 1]);
-        // }
 
         this._$hoveredRangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_RANGE_HOVER_CLASS); });
 
