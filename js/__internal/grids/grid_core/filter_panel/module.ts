@@ -8,6 +8,7 @@ import {
   getCurrentLookupValueText, getCustomOperation, getCurrentValueText,
   getField, getCaptionByOperation, getGroupValue, isCondition, isGroup,
 } from '@js/ui/filter_builder/utils';
+// @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { registerKeyboardAction } from '@js/ui/grid_core/ui.grid_core.accessibility';
