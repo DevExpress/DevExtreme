@@ -404,8 +404,38 @@ const Overlay = Widget.inherit({
         this._customWrapperClass = classNames;
     },
 
-    _renderVisibilityAnimate: function(visible) {
+    _isVisualContainerWindow() {
+        const $visualContainer = this._positionController.$visualContainer;
+        const isVisualContainerWindow = isWindow($visualContainer.get(0));
+
+        return isVisualContainerWindow;
+    },
+
+    _isVirtualKeyboardOpen() {
+        const isVisualContainerWindow = this._isVisualContainerWindow();
+
+        if(!isVisualContainerWindow) {
+            return false;
+        }
+
+        const $visualContainer = this._positionController.$visualContainer;
+        const windowInnerHeight = window.innerHeight;
+        const visualViewportHeight = getHeight($visualContainer);
+
+        const isOpen = windowInnerHeight > visualViewportHeight;
+
+        return isOpen;
+    },
+
+    _renderVisibilityAnimate(visible) {
         this._stopAnimation();
+        this._toggleVisualViewportCallback(visible);
+
+        const isVirtualKeyboardOpen = this._isVirtualKeyboardOpen();
+
+        if(isVirtualKeyboardOpen) {
+            return new Deferred().resolve().promise();
+        }
 
         return visible ? this._show() : this._hide();
     },
@@ -637,7 +667,7 @@ const Overlay = Widget.inherit({
         fx.stop(this._$content, true);
     },
 
-    _renderVisibility: function(visible) {
+    _renderVisibility(visible) {
         if(visible && this._isParentHidden()) {
             return;
         }
@@ -663,8 +693,8 @@ const Overlay = Widget.inherit({
             this._updateZIndexStackPosition(visible);
             this._moveFromContainer();
         }
-        this._toggleShading(visible);
 
+        this._toggleShading(visible);
         this._toggleSubscriptions(visible);
     },
 
@@ -763,14 +793,14 @@ const Overlay = Widget.inherit({
         if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
             this._toggleHideOnParentsScrollSubscription(enabled);
-            this._toggleVisualViewportCallback(enabled);
         }
     },
 
     _toggleVisualViewportCallback(subscribe) {
         const shouldUseVisualViewport = hasVisualViewport();
+        const isVisualContainerWindow = this._isVisualContainerWindow();
 
-        if(!shouldUseVisualViewport) {
+        if(!shouldUseVisualViewport || !isVisualContainerWindow) {
             return;
         }
 
@@ -780,9 +810,9 @@ const Overlay = Widget.inherit({
         const eventNames = Object.keys(visualViewportListenerNames);
 
         if(subscribe) {
-            eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback, { passive: true }));
+            eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback));
         } else {
-            eventNames.forEach(eventName => unSubscribeOnVisualViewportEvent(eventName, callback));
+            eventNames.forEach(eventName => unSubscribeOnVisualViewportEvent(eventName));
         }
     },
 
@@ -816,7 +846,9 @@ const Overlay = Widget.inherit({
     },
 
     _visualViewportResizeHandler() {
-        if(this._pendingUpdate) {
+        const pendingUpdate = this._pendingUpdate;
+
+        if(pendingUpdate) {
             cancelAnimationFrame(this._resizeAnimationFrameId);
         }
 
@@ -827,7 +859,14 @@ const Overlay = Widget.inherit({
         if(visible) {
             this._resizeAnimationFrameId = requestAnimationFrame(() => {
                 this._pendingUpdate = false;
-                this._renderWrapper();
+
+                const currentVisible = this._currentVisible;
+
+                if(currentVisible) {
+                    this._renderGeometry();
+                } else {
+                    this._renderVisibilityAnimate(true);
+                }
             });
         }
     },
@@ -1041,6 +1080,12 @@ const Overlay = Widget.inherit({
     },
 
     _renderPosition() {
+        const isVirtualKeyboardOpen = this._isVirtualKeyboardOpen();
+
+        if(isVirtualKeyboardOpen) {
+            return;
+        }
+
         this._positionController.positionContent();
     },
 
@@ -1073,10 +1118,7 @@ const Overlay = Widget.inherit({
         }
     },
 
-    // I want not to render popup.
-    // I want to subscribe on resize/scroll,
-    // and then render popup, when Virtual Keyboard will be closed.
-    // I have to remove dependencies on window resize (this._dimensionChanged).
+    // Needs to remove dependencies on window resize (this._dimensionChanged).
     _renderWrapper() {
         this._positionController.styleWrapperPosition();
         this._renderWrapperDimensions();
@@ -1084,8 +1126,8 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperDimensions() {
+        const isVisualContainerWindow = this._isVisualContainerWindow();
         const $visualContainer = this._positionController.$visualContainer;
-        const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
         const wrapperWidth = isVisualContainerWindow ? getWidth($visualContainer) : getOuterWidth($visualContainer);
         const wrapperHeight = isVisualContainerWindow ? getHeight($visualContainer) : getOuterHeight($visualContainer);

@@ -38,6 +38,8 @@
 
     <script>
         $(() => {
+            // DevExpress.fx.off = true;
+
             const now = new Date();
 
             $('#date-by-picker').dxDateBox({
@@ -46,6 +48,10 @@
                 value: now,
                 dropDownOptions: {
                     shadingColor: '#000000c2',
+                    // animation: {
+                    //     show: null,
+                    //     hide: null,
+                    // },
                 },
             });
 

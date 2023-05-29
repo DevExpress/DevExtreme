@@ -1,4 +1,5 @@
 import { getWindow } from '../../core/utils/window';
+import { visualViewportCallback } from './visual_viewport_callbacks';
 
 const visualViewportListenerNames = {
     resize: 'resize',
@@ -41,18 +42,24 @@ const getVisualViewportSizes = () => {
     };
 };
 
-const subscribeOnVisualViewportEvent = (eventName, callback, options = {}) => {
+const subscribeOnVisualViewportEvent = (eventName, callback) => {
     const visualViewport = getVisualViewport();
     const event = visualViewportListenerNames[eventName];
 
-    visualViewport.addEventListener(event, callback, options);
+    visualViewportCallback.add(event, callback);
+    // Add eventEngine
+    visualViewport.addEventListener(event, callback);
 };
 
-const unSubscribeOnVisualViewportEvent = (eventName, callback) => {
+const unSubscribeOnVisualViewportEvent = (eventName) => {
     const visualViewport = getVisualViewport();
     const event = visualViewportListenerNames[eventName];
 
+    const callback = visualViewportCallback.get(event);
+
+    // Add eventEngine
     visualViewport.removeEventListener(event, callback);
+    visualViewportCallback.remove(event);
 };
 
 export {
