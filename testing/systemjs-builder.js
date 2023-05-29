@@ -156,13 +156,13 @@ const getFileList = (dirName) => {
 const transpileModules = async(Builder) => {
     const builder = new Builder(root, config);
 
-    const listFiles = getFileList(path.join(root, 'artifacts/transpiled'));
+    const listFiles = getFileList(path.join(root, 'js'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
         await builder.buildStatic(
             `[${filePath}]`,
-            filePath.replace('transpiled', 'transpiled-systemjs'),
+            filePath.replace('js', 'artifacts/transpiled-systemjs'),
             {
                 minify: false,
                 sourceMaps: true,
@@ -318,8 +318,31 @@ const transpileJsVendors = async(Builder) => {
     }
 };
 
-const transpileTesting = async(Builder) => {
+const transpileFile = async(Builder, filePath, sourceFolder, destFolder) => {
     const builder = new Builder(root, config);
+    const destPath = filePath.replace(sourceFolder, destFolder);
+    const sourceCode = fs.readFileSync(filePath).toString();
+
+    if(/System(JS)?\./.test(sourceCode) && (
+        filePath.includes('DevExpress.ui.widgets/') ||
+        filePath.includes('htmlEditorParts/')
+    )) {
+        fs.writeFileSync(destPath, sourceCode.replace(new RegExp(`(['"])\\/${sourceFolder}`, 'g'), `$1/${destFolder}`));
+        return;
+    }
+
+    if(filePath.includes('ui.widgets/fileManagerParts')) {
+        await transpileWithBabel(sourceCode, destPath);
+    } else {
+        try {
+            await transpileWithBuilder(builder, filePath, destPath);
+        } catch(error) {
+            await transpileWithBabel(sourceCode, destPath);
+        }
+    }
+};
+
+const transpileTesting = async(Builder) => {
     const contentList = getFileList(path.join(root, 'testing/content'));
     const helpersList = getFileList(path.join(root, 'testing/helpers'));
     const testsList = getFileList(path.join(root, 'testing/tests'));
@@ -327,26 +350,7 @@ const transpileTesting = async(Builder) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        const destPath = filePath.replace('testing/', 'artifacts/transpiled-testing/');
-        const sourceCode = fs.readFileSync(filePath).toString();
-
-        if(/System(JS)?\./.test(sourceCode) && (
-            filePath.includes('DevExpress.ui.widgets/') ||
-            filePath.includes('htmlEditorParts/')
-        )) {
-            fs.writeFileSync(destPath, sourceCode.replace(/(['"])\/testing/g, '$1/artifacts/transpiled-testing'));
-            continue;
-        }
-
-        if(filePath.includes('ui.widgets/fileManagerParts')) {
-            await transpileWithBabel(sourceCode, destPath);
-        } else {
-            try {
-                await transpileWithBuilder(builder, filePath, destPath);
-            } catch(error) {
-                await transpileWithBabel(sourceCode, destPath);
-            }
-        }
+        await transpileFile(Builder, filePath, 'testing/', 'artifacts/transpiled-testing/');
     }
 };
 
