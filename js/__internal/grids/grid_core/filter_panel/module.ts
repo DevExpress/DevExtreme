@@ -1,6 +1,5 @@
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import gridUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
 import CheckBox from '@js/ui/check_box';
@@ -11,7 +10,8 @@ import {
 // @ts-expect-error
 import { when, Deferred } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
-import { registerKeyboardAction } from '@js/ui/grid_core/ui.grid_core.accessibility';
+import { registerKeyboardAction } from '../module_accessibility';
+import gridUtils from '../module_utils';
 import modules from '../modules';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
