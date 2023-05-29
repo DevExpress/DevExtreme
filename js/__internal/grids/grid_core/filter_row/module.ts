@@ -81,6 +81,7 @@ const getEditorInstance = function ($editorContainer) {
   if (editor instanceof Editor) {
     return editor;
   }
+  return null;
 };
 
 const ColumnHeadersViewFilterRowExtender = (function () {
