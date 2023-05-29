@@ -11,20 +11,16 @@
 ) {
   .dx-calendar {
     width: $calendar-width;
-    min-width: $calendar-width;
     height: $calendar-height;
-    min-height: $calendar-height;
     background-color: $calendar-bg;
     gap: $calendar-element-padding;
 
     &.dx-calendar-with-footer {
       height: $calendar-height + $calendar-element-padding + $footer-button-height;
-      min-height: $calendar-height + $calendar-element-padding + $footer-button-height;
     }
 
     &.dx-calendar-multiview {
       width: $calendar-width * 2;
-      min-width: $calendar-width * 2;
     }
 
     &.dx-invalid {
