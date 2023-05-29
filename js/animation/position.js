@@ -347,7 +347,8 @@ const calculatePosition = function(what, options) {
 };
 
 const setScaleProperty = function(element, scale, styleAttr, isEmpty) {
-    setStyle(element, isEmpty ? styleAttr.replace(scale, '') : styleAttr, false);
+    const newStyleValue = isEmpty ? styleAttr.replace(scale, '') : styleAttr;
+    setStyle(element, newStyleValue, false);
 };
 
 const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
