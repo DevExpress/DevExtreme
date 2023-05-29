@@ -953,8 +953,8 @@ const Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton('next', !isDefined(this._getRequiredView('next')));
-        this._navigator.toggleButton('prev', !isDefined(this._getRequiredView('prev')));
+        this._navigator.toggleButton('next', !isDefined(this._afterView));
+        this._navigator.toggleButton('prev', !isDefined(this._beforeView));
     },
 
     _renderSwipeable: function() {
@@ -1061,13 +1061,11 @@ const Calendar = Editor.inherit({
 
     _getViewsCaption: function(view, additionalView) {
         let caption = view.getNavigatorCaption();
-        const { viewsCount, rtlEnabled } = this.option();
+        const { viewsCount } = this.option();
 
         if(viewsCount > 1 && additionalView) {
             const additionalViewCaption = additionalView.getNavigatorCaption();
-            caption = rtlEnabled
-                ? `${additionalViewCaption} - ${caption}`
-                : `${caption} - ${additionalViewCaption}`;
+            caption = `${caption} - ${additionalViewCaption}`;
         }
 
         return caption;

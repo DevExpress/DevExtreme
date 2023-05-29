@@ -61,12 +61,13 @@ class Navigator extends Widget {
 
     _renderButtons() {
         const { rtlEnabled, type, stylingMode } = this.option();
-        const direction = rtlEnabled ? -1 : 1;
+
+        const direction = 1;
 
         this._prevButton = this._createComponent($('<div>'),
             Button, {
                 focusStateEnabled: false,
-                icon: 'chevronleft',
+                icon: rtlEnabled ? 'chevronright' : 'chevronleft',
                 onClick: (e) => { this._clickAction({ direction: -direction, event: e }); },
                 type,
                 stylingMode,
@@ -80,7 +81,7 @@ class Navigator extends Widget {
         this._nextButton = this._createComponent($('<div>'),
             Button, {
                 focusStateEnabled: false,
-                icon: 'chevronright',
+                icon: rtlEnabled ? 'chevronleft' : 'chevronright',
                 onClick: (e) => { this._clickAction({ direction: direction, event: e }); },
                 type,
                 stylingMode,
