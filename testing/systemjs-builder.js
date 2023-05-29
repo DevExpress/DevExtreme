@@ -156,13 +156,13 @@ const getFileList = (dirName) => {
 const transpileModules = async(Builder) => {
     const builder = new Builder(root, config);
 
-    const listFiles = getFileList(path.join(root, 'js'));
+    const listFiles = getFileList(path.join(root, 'artifacts/transpiled'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
         await builder.buildStatic(
             `[${filePath}]`,
-            filePath.replace('js', 'artifacts/transpiled-systemjs'),
+            filePath.replace('transpiled', 'transpiled-systemjs'),
             {
                 minify: false,
                 sourceMaps: true,
@@ -327,7 +327,7 @@ const transpileFile = async(Builder, filePath, sourceFolder, destFolder) => {
         filePath.includes('DevExpress.ui.widgets/') ||
         filePath.includes('htmlEditorParts/')
     )) {
-        fs.writeFileSync(destPath, sourceCode.replace(new RegExp(`(['"])\\/${sourceFolder}`, 'g'), `$1/${destFolder}`));
+        fs.writeFileSync(destPath, sourceCode.replace(new RegExp(`(['"])\\${sourceFolder}`, 'g'), `$1${destFolder}`));
         return;
     }
 
@@ -350,7 +350,7 @@ const transpileTesting = async(Builder) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        await transpileFile(Builder, filePath, 'testing/', 'artifacts/transpiled-testing/');
+        await transpileFile(Builder, filePath, '/testing/', '/artifacts/transpiled-testing/');
     }
 };
 
