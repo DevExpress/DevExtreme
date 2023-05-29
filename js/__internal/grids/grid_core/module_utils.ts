@@ -357,7 +357,7 @@ export default {
     }
   },
 
-  getHeaderFilterGroupParameters(column, remoteGrouping) {
+  getHeaderFilterGroupParameters(column, remoteGrouping?) {
     let result: any = [];
     const dataField = column.dataField || column.name;
     const groupInterval = sharedFiltering.getGroupInterval(column);
