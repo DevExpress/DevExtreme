@@ -41,7 +41,7 @@ QUnit.test('Invalid message localization, formatted', function(assert) {
         type: 'numeric'
     }], 'Salaire');
 
-    assert.equal(result.brokenRule.message, 'La valeur du champ Salaire doit être un nombre', 'France localization should be used');
+    assert.equal(result.brokenRule.message, 'Salaire doit être un nombre', 'France localization should be used');
 });
 
 QUnit.test('T212840: Numeric - invalid, with default culture-agnostic behaviour', function(assert) {
