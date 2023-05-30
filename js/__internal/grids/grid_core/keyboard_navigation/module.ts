@@ -10,7 +10,7 @@ import {
   getWidth,
   getOuterWidth,
 } from '@js/core/utils/size';
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import domAdapter from '@js/core/dom_adapter';
 import eventsEngine from '@js/events/core/events_engine';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
@@ -33,6 +33,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_FORM_CLASS,
 } from '@js/ui/grid_core/ui.grid_core.editing_constants';
+import { memoize } from '../../../utils/memoize';
 import gridCoreUtils from '../module_utils';
 import { GridCoreKeyboardNavigationDom } from './dom';
 import {
@@ -73,7 +74,7 @@ import {
   shouldPreventScroll,
 } from './module_utils';
 import {
-  Controllers, OptionChanged, Views,
+  Controllers, OptionChanged, RowKey, Views,
 } from '../module_types';
 import modules from '../modules';
 
@@ -120,6 +121,8 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _adaptiveController!: Controllers['adaptiveColumns'];
 
+  _focusController!: Controllers['focus'];
+
   // #region Initialization
   init() {
     this._dataController = this.getController('data');
@@ -129,6 +132,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
     this._columnsController = this.getController('columns');
     this._editorFactory = this.getController('editorFactory');
+    this._focusController = this.getController('focus');
+
+    this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
+    this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
 
     if (this.isKeyboardEnabled()) {
       accessibility.subscribeVisibilityChange();
@@ -1223,7 +1230,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       args = this._fireFocusChangingEvents(
         null,
         $element,
-        false,
+        true,
         isHighlighted,
       );
       $element = args.$newCellElement;
@@ -1606,19 +1613,17 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   getVisibleRowIndex() {
-    const rowIndex = this._focusedCellPosition && this._focusedCellPosition.rowIndex;
-    if (!isDefined(rowIndex) || rowIndex < 0) {
-      return -1;
-    }
-    return rowIndex - this._dataController.getRowIndexOffset();
+    const rowIndex = this._focusedCellPosition?.rowIndex;
+    return !isDefined(rowIndex) || rowIndex < 0
+      ? -1
+      : rowIndex - this._dataController.getRowIndexOffset();
   }
 
   getVisibleColumnIndex() {
-    const columnIndex = this._focusedCellPosition && this._focusedCellPosition.columnIndex;
-    if (!isDefined(columnIndex)) {
-      return -1;
-    }
-    return columnIndex - this._columnsController.getColumnIndexOffset();
+    const columnIndex = this._focusedCellPosition?.columnIndex;
+    return !isDefined(columnIndex)
+      ? -1
+      : columnIndex - this._columnsController.getColumnIndexOffset();
   }
 
   _applyColumnIndexBoundaries(columnIndex) {
@@ -2000,21 +2005,27 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedCellChanging($event, $cellElement, isHighlighted) {
-    const that = this;
-    const prevCellIndex = that.option('focusedColumnIndex');
-    const prevRowIndex = that.option('focusedRowIndex');
-    const cellPosition = that._getCellPosition($cellElement);
+  _fireFocusedCellChanging(
+    $event: Event,
+    $cellElement: dxElementWrapper,
+    isHighlighted: boolean,
+  ) {
+    const prevColumnIndex = this.option('focusedColumnIndex');
+    const prevRowIndex = this.option('focusedRowIndex');
+    const cellPosition = this._getCellPosition($cellElement);
     const columnIndex = cellPosition ? cellPosition.columnIndex : -1;
     const rowIndex = cellPosition ? cellPosition.rowIndex : -1;
+    const visibleRows = this._dataController.getVisibleRows();
+    const visibleColumns = this._columnsController.getVisibleColumns();
+
     const args: any = {
       cellElement: $cellElement,
-      prevColumnIndex: prevCellIndex,
+      prevColumnIndex,
       prevRowIndex,
       newColumnIndex: columnIndex,
       newRowIndex: rowIndex,
-      rows: that._dataController.getVisibleRows(),
-      columns: that._columnsController.getVisibleColumns(),
+      rows: visibleRows,
+      columns: visibleColumns,
       event: $event,
       isHighlighted: isHighlighted || false,
       cancel: false,
@@ -2022,7 +2033,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this._canceledCellPosition = null;
 
-    that.executeAction('onFocusedCellChanging', args);
+    this.executeAction('onFocusedCellChanging', args);
     if (args.newColumnIndex !== columnIndex || args.newRowIndex !== rowIndex) {
       args.$newCellElement = $(
         this._getCell({
@@ -2039,52 +2050,59 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedCellChanged($cellElement, prevCellIndex, prevRowIndex) {
-    const that = this;
-    const dataController = that._dataController;
-    const columnIndex = that._rowsView.getCellIndex($cellElement);
-    const rowIndex = this._getRowIndex($cellElement && $cellElement.parent());
+  _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
+    const columnIndex = this._rowsView.getCellIndex($cell);
+    const rowIndex = this._getRowIndex($cell?.parent());
+
+    this._memoFireFocusedCellChanged($cell, rowIndex, columnIndex);
+  }
+
+  _memoFireFocusedCellChanged(
+    $cell: dxElementWrapper | undefined,
+    rowIndex: number,
+    columnIndex: number,
+  ): void {
     const localRowIndex = Math.min(
-      rowIndex - dataController.getRowIndexOffset(),
-      dataController.items().length - 1,
+      rowIndex - this._dataController.getRowIndexOffset(),
+      this._dataController.items().length - 1,
     );
-    const isEditingCell = that._editingController.isEditCell(
+    const isEditingCell = this._editingController.isEditCell(
       localRowIndex,
       columnIndex,
     );
-    const row = dataController.items()[localRowIndex];
 
-    if (
-      !isEditingCell
-      && (prevCellIndex !== columnIndex || prevRowIndex !== rowIndex)
-    ) {
-      that.executeAction('onFocusedCellChanged', {
-        cellElement: $cellElement,
-        columnIndex,
-        rowIndex,
-        row,
-        column: that._columnsController.getVisibleColumns()[columnIndex],
-      });
+    if (isEditingCell) {
+      return;
     }
+
+    const row = this._dataController.items()[localRowIndex];
+    const column = this._columnsController.getVisibleColumns()[columnIndex];
+    this.executeAction('onFocusedCellChanged', {
+      cellElement: $cell,
+      columnIndex,
+      rowIndex,
+      row,
+      column,
+    });
   }
 
-  _fireFocusedRowChanging(eventArgs, $newFocusedRow) {
+  _fireFocusedRowChanging(eventArgs: any, $newFocusedRow: dxElementWrapper) {
     const newRowIndex = this._getRowIndex($newFocusedRow);
-    const dataController = this._dataController;
     const prevFocusedRowIndex = this.option('focusedRowIndex');
-    const loadingOperationTypes = dataController.loadingOperationTypes();
+    const loadingOperationTypes = this._dataController.loadingOperationTypes();
+
     const args: any = {
       rowElement: $newFocusedRow,
       prevRowIndex: prevFocusedRowIndex,
       newRowIndex,
       event: eventArgs,
-      rows: dataController.getVisibleRows(),
+      rows: this._dataController.getVisibleRows(),
       cancel: false,
     };
 
     if (
-      !dataController
-      || (dataController.isLoading()
+      !this._dataController
+      || (this._dataController.isLoading()
         && (loadingOperationTypes.reload || loadingOperationTypes.paging))
     ) {
       args.cancel = true;
@@ -2105,28 +2123,30 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedRowChanged($rowElement) {
-    let row;
-
+  _fireFocusedRowChanged(): void {
+    const focusedRowEnabled = this.option('focusedRowEnabled');
     const focusedRowKey = this.option('focusedRowKey');
+    const focusedRowIndex = this._focusController?.getFocusedRowIndexByKey(focusedRowKey);
 
-    const focusController = this.getController('focus');
-    const focusedRowIndex = focusController?.getFocusedRowIndexByKey(focusedRowKey);
-
-    if (this.option('focusedRowEnabled')) {
-      if (focusedRowIndex >= 0) {
-        const dataController = this._dataController;
-        row = focusedRowIndex >= 0
-          && dataController.getVisibleRows()[
-            focusedRowIndex - dataController.getRowIndexOffset()
-          ];
-      }
-      this.executeAction('onFocusedRowChanged', {
-        rowElement: $rowElement,
-        rowIndex: focusedRowIndex,
-        row,
-      });
+    if (!focusedRowEnabled || (isDefined(focusedRowKey) && focusedRowIndex < 0)) {
+      return;
     }
+
+    this._memoFireFocusedRowChanged(focusedRowKey, focusedRowIndex);
+  }
+
+  _memoFireFocusedRowChanged(focusedRowKey: RowKey, focusedRowIndex: number): void {
+    const localRowIndex = focusedRowIndex - this._dataController.getRowIndexOffset();
+
+    this.executeAction('onFocusedRowChanged', {
+      rowElement: focusedRowIndex < 0
+        ? undefined
+        : this._rowsView.getRowElement(localRowIndex),
+      rowIndex: focusedRowIndex,
+      row: focusedRowIndex < 0
+        ? undefined
+        : this._dataController.getVisibleRows()[localRowIndex],
+    });
   }
 
   // #endregion Events

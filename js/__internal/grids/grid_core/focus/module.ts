@@ -23,39 +23,33 @@ const FocusController = core.ViewController.inherit((function () {
     },
 
     optionChanged(args) {
-      if (args.name === 'focusedRowIndex') {
-        const focusedRowKey = this.option('focusedRowKey');
-        this._focusRowByIndex(args.value);
-        this._triggerFocusedRowChangedIfNeed(focusedRowKey, args.value);
-        args.handled = true;
-      } else if (args.name === 'focusedRowKey') {
-        args.handled = true;
-        if (Array.isArray(args.value) && JSON.stringify(args.value) === JSON.stringify(args.previousValue)) {
-          return;
-        }
-        const focusedRowIndex = this.option('focusedRowIndex');
-        this._focusRowByKey(args.value);
-        this._triggerFocusedRowChangedIfNeed(args.value, focusedRowIndex);
-      } else if (args.name === 'focusedColumnIndex') {
-        args.handled = true;
-      } else if (args.name === 'focusedRowEnabled') {
-        args.handled = true;
-      } else if (args.name === 'autoNavigateToFocusedRow') {
-        args.handled = true;
-      } else {
-        this.callBase(args);
-      }
-    },
+      const { name, value, previousValue } = args;
 
-    _triggerFocusedRowChangedIfNeed(focusedRowKey, focusedRowIndex) {
-      const focusedRowIndexByKey = this.getFocusedRowIndexByKey(focusedRowKey);
+      switch (name) {
+        case 'focusedRowIndex':
+          this._focusRowByIndex(value);
+          this._keyboardController._fireFocusedRowChanged();
+          args.handled = true;
+          break;
+        case 'focusedRowKey':
+          if (Array.isArray(value) && JSON.stringify(value) === JSON.stringify(previousValue)) {
+            return;
+          }
 
-      if (focusedRowIndex === focusedRowIndexByKey) {
-        const rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
-        if (rowIndex >= 0) {
-          const $rowElement = $(this.getView('rowsView').getRowElement(rowIndex));
-          this.getController('keyboardNavigation')._fireFocusedRowChanged($rowElement, focusedRowIndex);
-        }
+          this._focusRowByKey(value);
+          this._keyboardController._fireFocusedRowChanged();
+          args.handled = true;
+          break;
+
+        case 'focusedColumnIndex':
+        case 'focusedRowEnabled':
+        case 'autoNavigateToFocusedRow':
+          args.handled = true;
+          break;
+
+        default:
+          this.callBase(args);
+          break;
       }
     },
 
@@ -343,9 +337,9 @@ const FocusController = core.ViewController.inherit((function () {
       }
     },
 
-    updateFocusedRow(change) {
+    updateFocusedRow({ focusedRowKey }) {
       const that = this;
-      const focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey);
+      const focusedRowIndex = that._dataController.getRowIndexByKey(focusedRowKey);
       const rowsView = that.getView('rowsView');
       let $tableElement;
 
@@ -456,16 +450,8 @@ export const focusModule = {
         },
 
         setFocusedRowIndex(rowIndex) {
-          const dataController = this.getController('data');
-
           this.callBase(rowIndex);
-
-          const visibleRowIndex = rowIndex - dataController.getRowIndexOffset();
-          const visibleRow = dataController.getVisibleRows()[visibleRowIndex];
-
-          if (!visibleRow || !visibleRow.isNewRow) {
-            this.option('focusedRowIndex', rowIndex);
-          }
+          this.option('focusedRowIndex', rowIndex);
         },
 
         setFocusedColumnIndex(columnIndex) {
@@ -485,12 +471,10 @@ export const focusModule = {
         },
 
         _updateFocusedCellPosition($cell, direction) {
-          const prevRowIndex = this.option('focusedRowIndex');
-          const prevColumnIndex = this.option('focusedColumnIndex');
           const position = this.callBase($cell, direction);
 
           if (position && position.columnIndex >= 0) {
-            this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+            this._fireFocusedCellChanged($cell);
           }
         },
       },
@@ -830,10 +814,7 @@ export const focusModule = {
         },
 
         updateFocusElementTabIndex($cellElements, preventScroll) {
-          const rowIndex = this.getController('keyboardNavigation').getVisibleRowIndex();
-          const row = this._dataController.getVisibleRows()[rowIndex];
-
-          if (this.option('focusedRowEnabled') && !row?.isNewRow) {
+          if (this.option('focusedRowEnabled')) {
             this._setFocusedRowElementTabIndex(preventScroll);
           } else {
             this.callBase($cellElements);
