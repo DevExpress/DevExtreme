@@ -55,18 +55,6 @@ const FocusController = core.ViewController.inherit((function () {
       }
     },
 
-    _triggerFocusedRowChangedIfNeed(focusedRowKey, focusedRowIndex) {
-      const focusedRowIndexByKey = this.getFocusedRowIndexByKey(focusedRowKey);
-
-      if (focusedRowIndex === focusedRowIndexByKey) {
-        const rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
-        if (rowIndex >= 0) {
-          const $rowElement = $(this.getView('rowsView').getRowElement(rowIndex));
-          this.getController('keyboardNavigation')._fireFocusedRowChanged($rowElement, focusedRowIndex);
-        }
-      }
-    },
-
     isAutoNavigateToFocusedRow() {
       return this.option('scrolling.mode') !== 'infinite' && this.option('autoNavigateToFocusedRow');
     },
@@ -471,6 +459,7 @@ export const focusModule = {
         },
 
         setFocusedRowIndex(rowIndex) {
+          this.callBase(rowIndex);
           this.option('focusedRowIndex', rowIndex);
         },
 
