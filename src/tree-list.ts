@@ -1761,7 +1761,7 @@ const DxLookup = createConfigurationComponent({
     calculateCellValue: Function,
     dataSource: {},
     displayExpr: [Function, String],
-    valueExpr: String
+    valueExpr: [String, Function]
   }
 });
 (DxLookup as any).$_optionName = "lookup";

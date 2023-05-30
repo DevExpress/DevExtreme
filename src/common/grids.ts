@@ -28,6 +28,7 @@ export {
     FilterRowOperationDescriptions,
     FilterType,
     GridBase,
+    GridBaseOptions,
     GridsEditMode,
     GridsEditRefreshMode,
     GroupExpandMode,
