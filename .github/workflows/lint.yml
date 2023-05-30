@@ -18,9 +18,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '15'
+        node-version: '18'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -30,11 +30,11 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund 
+      run: npm install --no-audit --no-fund
 
     - name: Compile renovation
-      run: | 
-        npm i cheerio@1.0.0-rc.10 
+      run: |
+        npm i cheerio@1.0.0-rc.10
         npm run compile:r
 # Remove package install after upgrade to TypeScript >= 4.6
 
@@ -49,9 +49,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '15'
+        node-version: '18'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -73,12 +73,12 @@ jobs:
       run: npm run build
 
     - name: Lint TS
-      env: 
+      env:
         DEBUG: eslint:cli-engine
       run: npm run lint-ts
 
     - name: Lint .d.ts
-      env: 
+      env:
         DEBUG: eslint:cli-engine
       run: npm run lint-dts
 
@@ -90,9 +90,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '15'
+        node-version: '18'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -108,7 +108,7 @@ jobs:
       run: npm run build
 
     - name: Lint JS
-      env: 
+      env:
         DEBUG: eslint:cli-engine
       run: npm run lint-js
 
@@ -120,10 +120,10 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '15'
-    
+        node-version: '18'
+
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
@@ -145,7 +145,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
 
@@ -166,9 +166,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Check package-lock
       run: |
