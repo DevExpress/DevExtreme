@@ -26,6 +26,10 @@ export default class TreeView extends Widget {
     return new TreeViewNode(this.getNodes().nth(index));
   }
 
+  getNodeItem(index = 0): Selector {
+    return this.getNodes().nth(index);
+  }
+
   getSelectAllCheckBox(): CheckBox {
     return new CheckBox(this.element.find(`.${CLASS.selectAllItem}`));
   }
