@@ -56,10 +56,11 @@
         "dxDateBox-simulatedDataPickerTitleDate": "Selecionar data",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Selecionar data e hora",
         "dxDateBox-validation-datetime": "Valor deve ser uma data ou hora",
-        "dxDateBox-invalidStartDateMessage": "O valor inicial deve ser um data",
-        "dxDateBox-invalidEndDateMessage": "O valor final deve ser uma data",
-        "dxDateBox-startDateOutOfRangeMessage": "A data de início está fora do intervalo",
-        "dxDateBox-endDateOutOfRangeMessage": "A data final está fora do intervalo",
+
+        "dxDateRangeBox-invalidStartDateMessage": "Start value must be a date",
+        "dxDateRangeBox-invalidEndDateMessage": "End value must be a date",
+        "dxDateRangeBox-startDateOutOfRangeMessage": "Start date is out of range",
+        "dxDateRangeBox-endDateOutOfRangeMessage": "End date is out of range",
         "dxDateRangeBox-startDateLabel": "Data de Início",
         "dxDateRangeBox-endDateLabel": "Data Final",
 
