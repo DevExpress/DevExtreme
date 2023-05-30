@@ -19,7 +19,9 @@ const compareByReference = <TArgs extends FuncArgs>(
 const compareByValue = <TArgs extends FuncArgs>(
   args: TArgs,
   lastArgs: TArgs,
-): boolean => equalByValue(args, lastArgs, { maxDepth: 4 });
+  // TODO: Check why there is a ESLint error.
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+): boolean => equalByValue(args, lastArgs, { maxDepth: 4, strict: true });
 
 const createCacheFunc = <TArgs extends FuncArgs, TReturn>(
   firstArgs: TArgs,
