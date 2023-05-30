@@ -1015,8 +1015,12 @@ const EditingController = modules.ViewController.inherit((function () {
 
     _focusFirstEditableCellInRow(rowIndex) {
       const dataController = this._dataController;
+      const keyboardController = this.getController('keyboardNavigation');
       const key = dataController.getKeyByRowIndex(rowIndex);
       const $firstCell = this.getFirstEditableCellInRow(rowIndex);
+
+      keyboardController?.focus($firstCell);
+      this.option('focusedRowKey', key);
 
       this._editCellInProgress = true;
       this._delayedInputFocus($firstCell, () => {

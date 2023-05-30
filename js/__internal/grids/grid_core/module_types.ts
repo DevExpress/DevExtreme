@@ -6,6 +6,9 @@ import { dxElementWrapper } from '@js/core/renderer';
 import { GridBase, GridBaseOptions } from '@js/ui/data_grid';
 import Widget from '@js/ui/widget/ui.widget';
 
+// Data types
+export type RowKey = unknown;
+
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
   (() => TOptions) &
