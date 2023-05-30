@@ -1,7 +1,9 @@
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 import CheckBox from '../checkBox';
+import TextBox from '../textBox';
 import Scrollable from '../scrollView/scrollable';
+import TreeViewNode from './treeViewNode';
 
 const CLASS = {
   treeview: 'dx-treeview',
@@ -20,20 +22,20 @@ export default class TreeView extends Widget {
     return this.element.find(`.${CLASS.node}`);
   }
 
-  getNode(index = 0): Selector {
-    return this.getNodes().nth(index);
+  getNode(index = 0): TreeViewNode {
+    return new TreeViewNode(this.getNodes().nth(index));
   }
 
-  getSelectAllItem(): Selector {
-    return this.element.find(`.${CLASS.selectAllItem}`);
+  getSelectAllCheckBox(): CheckBox {
+    return new CheckBox(this.element.find(`.${CLASS.selectAllItem}`));
   }
 
-  getSearchBar(): Selector {
-    return this.element.find(`.${CLASS.searchBar}`);
+  getSearchTextBox(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.searchBar}`));
   }
 
   getCheckBoxByNodeIndex(index = 0): CheckBox {
-    return new CheckBox(this.getNode(index).find(`.${CLASS.checkbox}`));
+    return this.getNode(index).getCheckBox();
   }
 
   getScrollable(): Scrollable {

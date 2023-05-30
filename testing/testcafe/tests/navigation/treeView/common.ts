@@ -13,24 +13,24 @@ fixture.disablePageReloads`TreeView`
 
 test('Treeview search, selectAll item and nodes should be focused in DOM elements order when navigating with tab and shift+tab', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItem = treeView.getSelectAllItem();
-  const searchBar = treeView.getSearchBar();
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+  const searchTextBox = treeView.getSearchTextBox();
   const node = treeView.getNode(0);
 
   await t.pressKey('tab')
-    .expect(searchBar.hasClass('dx-state-focused'))
+    .expect(searchTextBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(node.hasClass('dx-state-focused'))
+    .expect(node.isFocused)
     .ok()
     .pressKey('shift+tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('shift+tab')
-    .expect(searchBar.hasClass('dx-state-focused'))
+    .expect(searchTextBox.isFocused)
     .ok();
 }).before(async () => createWidget('dxTreeView', {
   searchEnabled: true,
@@ -40,16 +40,18 @@ test('Treeview search, selectAll item and nodes should be focused in DOM element
 
 test('Treeview items focus order should be correct when changing showCheckBoxesMode from normal to selectAll at runtime', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItem = treeView.getSelectAllItem();
   const node = treeView.getNode(0);
 
   await treeView.option('showCheckBoxesMode', 'selectAll');
 
-  await t.pressKey('tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+
+  await t
+    .pressKey('tab')
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(node.hasClass('dx-state-focused'))
+    .expect(node.isFocused)
     .ok();
 }).before(async () => createWidget('dxTreeView', {
   showCheckBoxesMode: 'normal',
@@ -58,16 +60,16 @@ test('Treeview items focus order should be correct when changing showCheckBoxesM
 
 test('Treeview items focus order should be correct when changing showCheckBoxesMode from none to selectAll at runtime', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItem = treeView.getSelectAllItem();
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
   const node = treeView.getNode(0);
 
   await treeView.option('showCheckBoxesMode', 'selectAll');
 
   await t.pressKey('tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(node.hasClass('dx-state-focused'))
+    .expect(node.isFocused)
     .ok();
 }).before(async () => createWidget('dxTreeView', {
   showCheckBoxesMode: 'none',
@@ -76,20 +78,20 @@ test('Treeview items focus order should be correct when changing showCheckBoxesM
 
 test('Treeview items focus order should be correct when changing showCheckBoxesMode at runtime with search enabled', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItem = treeView.getSelectAllItem();
-  const searchBar = treeView.getSearchBar();
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+  const searchBar = treeView.getSearchTextBox();
   const node = treeView.getNode(0);
 
   await treeView.option('showCheckBoxesMode', 'selectAll');
 
   await t.pressKey('tab')
-    .expect(searchBar.hasClass('dx-state-focused'))
+    .expect(searchBar.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(node.hasClass('dx-state-focused'))
+    .expect(node.isFocused)
     .ok();
 }).before(async () => createWidget('dxTreeView', {
   searchEnabled: true,
@@ -99,20 +101,20 @@ test('Treeview items focus order should be correct when changing showCheckBoxesM
 
 test('Treeview items focus order should be correct when changing search panel mode at runtime', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItem = treeView.getSelectAllItem();
-  const searchBar = treeView.getSearchBar();
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+  const searchBar = treeView.getSearchTextBox();
   const node = treeView.getNode(0);
 
   await treeView.option('searchEnabled', 'true');
 
   await t.pressKey('tab')
-    .expect(searchBar.hasClass('dx-state-focused'))
+    .expect(searchBar.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(node.hasClass('dx-state-focused'))
+    .expect(node.isFocused)
     .ok();
 }).before(async () => createWidget('dxTreeView', {
   searchEnabled: false,
@@ -122,14 +124,14 @@ test('Treeview items focus order should be correct when changing search panel mo
 
 test('Treeview node container should be focused after selectAll item when navigating with tab when no search bar is present', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItem = treeView.getSelectAllItem();
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
   const node = treeView.getNode(0);
 
   await t.pressKey('tab')
-    .expect(selectAllItem.hasClass('dx-state-focused'))
+    .expect(selectAllItemCheckBox.isFocused)
     .ok()
     .pressKey('tab')
-    .expect(node.hasClass('dx-state-focused'))
+    .expect(node.isFocused)
     .ok();
 }).before(async () => createWidget('dxTreeView', {
   showCheckBoxesMode: 'selectAll',
