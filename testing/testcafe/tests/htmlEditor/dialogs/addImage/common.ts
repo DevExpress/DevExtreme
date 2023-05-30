@@ -12,7 +12,7 @@ test('Add button should be enabled after switch to url form', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'))
+    .click(htmlEditor.toolbar.getItemByName('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .eql(true);
@@ -42,7 +42,7 @@ test('Add button should be disable after switch to image upload form', async (t)
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'))
+    .click(htmlEditor.toolbar.getItemByName('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .notOk()
@@ -81,7 +81,7 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'))
+    .click(htmlEditor.toolbar.getItemByName('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .ok()
@@ -92,7 +92,7 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
     .click(htmlEditor.dialog.footerToolbar.cancelButton.element);
 
   await t
-    .click(htmlEditor.toolbar.getItem('link'))
+    .click(htmlEditor.toolbar.getItemByName('link'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .notOk()
@@ -103,7 +103,7 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t
-    .click(htmlEditor.toolbar.getItem('color'))
+    .click(htmlEditor.toolbar.getItemByName('color'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .notOk()

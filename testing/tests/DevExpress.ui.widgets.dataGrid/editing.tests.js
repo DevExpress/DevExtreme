@@ -20794,7 +20794,14 @@ QUnit.module('Editing - new row position', {
 
         this.setupModules = () => {
             setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'virtualScrolling', 'focus'], {
-                initViews: true
+                initViews: true,
+                controllers: {
+                    keyboardNavigation: {
+                        setFocusedRowIndex: () => {},
+                        focus: () => {},
+                        _fireFocusedRowChanged: () => {},
+                    },
+                },
             });
 
             this.on = (name, callBack) => {
