@@ -3340,7 +3340,7 @@ QUnit.module('Page margins', moduleConfig, () => {
             'text,f1,15,30.75,{baseline:middle}',
             'setLineWidth,0.5',
             'setDrawColor,#979797',
-            'rect,10,20,575.28,21.5',
+            'rect,10,20,821.89,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000',
