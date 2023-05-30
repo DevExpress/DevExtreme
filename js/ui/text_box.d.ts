@@ -106,6 +106,7 @@ export type Properties = dxTextBoxOptions<TextBoxInstance>;
 /** @deprecated use Properties instead */
 export type Options = Properties;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -206,3 +207,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

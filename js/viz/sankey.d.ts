@@ -707,6 +707,7 @@ export type Properties = dxSankeyOptions;
 /** @deprecated use Properties instead */
 export type Options = dxSankeyOptions;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -789,3 +790,4 @@ onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
+///#ENDDEBUG

@@ -621,7 +621,7 @@ QUnit.module('interaction via swipe', {
         assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not moved');
     });
 
-    QUnit.test('item container left animation should  be completed correctly if selected index is last', function(assert) {
+    QUnit.test('item container left animation should be completed correctly if selected index is last', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
             selectedIndex: 2

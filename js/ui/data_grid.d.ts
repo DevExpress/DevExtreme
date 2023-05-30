@@ -2083,6 +2083,7 @@ export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData,
 /** @deprecated use Properties instead */
 export type Options<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -2341,3 +2342,4 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
 };
+///#ENDDEBUG

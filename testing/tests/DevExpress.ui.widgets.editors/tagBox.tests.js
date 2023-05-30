@@ -61,6 +61,7 @@ const KEY_DOWN = 'ArrowDown';
 const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const TIME_TO_WAIT = 500;
 
@@ -7647,12 +7648,15 @@ QUnit.module('accessibility', () => {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const $label = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`);
+        const labelId = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`).attr('id');
+        const placeholderId = $tagBox.find(`.${PLACEHOLDER_CLASS}`).attr('id');
 
-        assert.strictEqual($input.attr('aria-labelledby'), $label.attr('id'), 'aria-labelledby was set correctly');
+        const expectedAria = `${labelId} ${placeholderId}`;
+
+        assert.strictEqual($input.attr('aria-labelledby'), expectedAria, 'aria-labelledby was set correctly');
 
         tagBox.option('label', null);
-        assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby was not set');
+        assert.strictEqual($input.attr('aria-labelledby'), placeholderId, 'aria-labelledby is equal placeholder id');
     });
 
     QUnit.test('select should have a correct aria-label', function(assert) {

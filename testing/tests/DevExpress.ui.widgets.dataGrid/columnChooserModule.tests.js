@@ -874,7 +874,7 @@ QUnit.module('Column chooser', {
         const columnChooserView = this.columnChooserView;
 
         this.options.columnChooser.mode = 'select';
-        $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
+        $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: false }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
         this.setTestElement($testElement);
 
         this.renderColumnChooser();
@@ -884,7 +884,7 @@ QUnit.module('Column chooser', {
         };
 
         // act
-        columnChooserView._columnsController.columnsChanged.fire({ optionNames: { showInColumnChooser: true } });
+        columnChooserView._columnsController.columnsChanged.fire({ columnIndices: [0], optionNames: { showInColumnChooser: true } });
 
         // assert
         assert.ok(callRenderColumnChooser, 'update treeview items');
@@ -1083,7 +1083,7 @@ QUnit.module('Column chooser', {
         sinon.spy(this.columnChooserView, '_updateItems');
 
         // act
-        this.columnsController.columnsChanged.fire({ optionNames: { all: true }, changeTypes: { columns: true } });
+        this.columnsController.columnsChanged.fire({ optionNames: { all: true }, columnIndices: [0, 1], changeTypes: { columns: true } });
 
         // assert
         assert.strictEqual(this.columnChooserView._updateItems.callCount, 1, 'update treeview item');
@@ -1184,7 +1184,8 @@ QUnit.module('Column chooser', {
                 }
                 this.endUpdate();
                 this.columnsController.columnsChanged.fire({
-                    optionNames
+                    optionNames,
+                    columnIndices: [0, 1]
                 });
             } else {
                 for(let i = 0; i < 2; i++) {
@@ -1214,6 +1215,7 @@ QUnit.module('Column chooser', {
             const $testElement = $('#container');
 
             this.options.columnChooser.mode = 'select';
+            $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }]);
 
             this.setTestElement($testElement);
 
@@ -1221,14 +1223,17 @@ QUnit.module('Column chooser', {
             this.columnChooserView.showColumnChooser();
 
             // arrange
+            sinon.spy(this.columnChooserView, '_updateItemsSelection');
             sinon.spy(this.columnChooserView, '_updateItems');
 
             // act
             this.columnsController.columnsChanged.fire({
-                optionNames: { [optionName]: true },
+                columnIndex: 0,
+                optionNames: { [optionName]: true, length: 1 },
             });
 
-            assert.strictEqual(this.columnChooserView._updateItems.callCount, 1, 'treeview items update count');
+            assert.strictEqual(this.columnChooserView._updateItemsSelection.callCount, 1, 'update selection state');
+            assert.strictEqual(this.columnChooserView._updateItems.callCount, optionName === 'visible' ? 0 : 1, 'treeview items update count');
 
             this.columnChooserView.hideColumnChooser();
         });

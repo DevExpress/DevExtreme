@@ -1487,7 +1487,7 @@ QUnit.module('State of validated rules', () => {
         assert.ok(handler.calledOnce, 'Handler should be called only once as value did not change');
     });
 
-    QUnit.test('Rule should  be revalidated after value change - valid value', function(assert) {
+    QUnit.test('Rule should be revalidated after value change - valid value', function(assert) {
         const handler = sinon.spy(function() { return true; });
         const value = '25';
         const rule = {
@@ -1610,7 +1610,7 @@ QUnit.module('State of validated rules', () => {
         });
     });
 
-    QUnit.test('Async rule should  be revalidated after value change - valid value', function(assert) {
+    QUnit.test('Async rule should be revalidated after value change - valid value', function(assert) {
         const handler = sinon.spy(function() {
             const d = new Deferred();
             d.resolve(true);

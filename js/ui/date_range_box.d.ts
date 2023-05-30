@@ -82,7 +82,13 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @public
  */
-export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | label | maxLength | name | placeholder | text'> & {
+export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'> & {
+    /**
+     * @docid dxDateRangeBoxOptions.disableOutOfRangeSelection
+     * @default true
+     * @public
+     */
+    disableOutOfRangeSelection?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
@@ -229,6 +235,7 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
   startDateField(): DxElement;
 }
 
+///#DEBUG
 type EventProps<T> = Extract<keyof T, `on${any}`>;
 type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
 
@@ -341,3 +348,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
+///#ENDDEBUG

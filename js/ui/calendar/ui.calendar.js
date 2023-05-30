@@ -20,10 +20,12 @@ import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import dateLocalization from '../../localization/date';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import { isCommandKeyPressed } from '../../events/utils/index';
+import { isCommandKeyPressed, addNamespace } from '../../events/utils/index';
 import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
 import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
+import { end as hoverEndEventName } from '../../events/hover';
+import eventsEngine from '../../events/core/events_engine';
 
 // STYLE calendar
 
@@ -46,6 +48,8 @@ const POP_ANIMATION_TO = 1;
 
 const CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd';
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
+
+const CALENDAR_DXHOVEREND_EVENT_NAME = addNamespace(hoverEndEventName, 'dxCalendar');
 
 const LEVEL_COMPARE_MAP = {
     'month': 3,
@@ -677,6 +681,7 @@ const Calendar = Editor.inherit({
         $element.append(this.$body);
 
         this._renderViews();
+        this._renderEvents();
 
         this._renderNavigator();
         $element.prepend(this._navigator.$element());
@@ -737,13 +742,12 @@ const Calendar = Editor.inherit({
     },
 
     _renderSpecificView: function(date) {
-        const { viewsCount, zoomLevel } = this.option();
+        const { zoomLevel } = this.option();
         const specificView = Views[zoomLevel];
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
         const view = this._createComponent($view, specificView, config);
-        $view.toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
 
         return view;
     },
@@ -771,6 +775,16 @@ const Calendar = Editor.inherit({
             allowValueSelection: this._isMaxZoomLevel(),
             _todayDate: this.option('_todayDate')
         };
+    },
+
+    _renderEvents() {
+        eventsEngine.off(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME);
+
+        if(this.option('selectionMode') === 'range') {
+            eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
+                this._updateViewsOption('hoveredRange', []);
+            }));
+        }
     },
 
     _injectComponent: function(func) {
@@ -939,8 +953,8 @@ const Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton('next', !isDefined(this._getRequiredView('next')));
-        this._navigator.toggleButton('prev', !isDefined(this._getRequiredView('prev')));
+        this._navigator.toggleButton('next', !isDefined(this._afterView));
+        this._navigator.toggleButton('prev', !isDefined(this._beforeView));
     },
 
     _renderSwipeable: function() {
@@ -1047,13 +1061,11 @@ const Calendar = Editor.inherit({
 
     _getViewsCaption: function(view, additionalView) {
         let caption = view.getNavigatorCaption();
-        const { viewsCount, rtlEnabled } = this.option();
+        const { viewsCount } = this.option();
 
         if(viewsCount > 1 && additionalView) {
             const additionalViewCaption = additionalView.getNavigatorCaption();
-            caption = rtlEnabled
-                ? `${additionalViewCaption} - ${caption}`
-                : `${caption} - ${additionalViewCaption}`;
+            caption = `${caption} - ${additionalViewCaption}`;
         }
 
         return caption;

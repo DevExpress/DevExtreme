@@ -360,7 +360,7 @@ export default {
     }
   },
 
-  getHeaderFilterGroupParameters(column, remoteGrouping) {
+  getHeaderFilterGroupParameters(column, remoteGrouping?) {
     let result: any = [];
     const dataField = column.dataField || column.name;
     const groupInterval = sharedFiltering.getGroupInterval(column);
@@ -411,7 +411,7 @@ export default {
     return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
   },
 
-  getPointsByColumns(items, pointCreated, isVertical, startColumnIndex) {
+  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex?) {
     const cellsLength = items.length;
     let notCreatePoint = false;
     let item;
@@ -523,7 +523,7 @@ export default {
 
   getWidgetInstance,
 
-  getLastResizableColumnIndex(columns, resultWidths) {
+  getLastResizableColumnIndex(columns, resultWidths?) {
     const hasResizableColumns = columns.some((column) => column && !column.command && !column.fixed && column.allowResizing !== false);
     let lastColumnIndex;
 

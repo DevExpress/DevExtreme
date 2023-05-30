@@ -37,6 +37,8 @@ function getSelector(className) {
 
 const { test, module: testModule } = QUnit;
 
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -83,7 +85,7 @@ export default function() {
             assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
         });
 
-        test('render table with header without paragraph', function(assert) {
+        testWithoutCsp('render table with header without paragraph', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: TABLE_WITH_HEADER_MARKUP
             }).dxHtmlEditor('instance');
@@ -108,7 +110,7 @@ export default function() {
             assert.strictEqual(markup, expectedValue);
         });
 
-        test('render table with header and multiple paragraphs', function(assert) {
+        testWithoutCsp('render table with header and multiple paragraphs', function(assert) {
             const value = `
             <table>
                 <thead>
@@ -239,7 +241,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        test('value with table after change valueType', function(assert) {
+        testWithoutCsp('value with table after change valueType', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -257,7 +259,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        test('render markup with a font-size style', function(assert) {
+        testWithoutCsp('render markup with a font-size style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-size: 20px">Test</span>'
             }).dxHtmlEditor('instance');
@@ -267,7 +269,7 @@ export default function() {
             assert.equal(markup, '<p><span style="font-size: 20px;">Test</span></p>');
         });
 
-        test('render markup with a font-family style', function(assert) {
+        testWithoutCsp('render markup with a font-family style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-family: Terminal;">Test</span>'
             }).dxHtmlEditor('instance');
@@ -693,8 +695,7 @@ export default function() {
         });
     });
 
-    testModule('Table without paragraph support', {
-        ...moduleConfig,
+    testModule('Table without paragraph support', Object.assign({
         before: function() {
             this.originalTableModule = Quill.import('modules/table');
             const TableModule = Quill.import('tableModules/lite');
@@ -703,7 +704,7 @@ export default function() {
         after: function() {
             Quill.register('modules/table', this.originalTableModule, true);
         }
-    }, () => {
+    }, moduleConfig), () => {
         test('render table with header', function(assert) {
             const expectedMarkup = '<table><thead><tr><th>Header1</th><th>Header2</th></tr></thead><tbody><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
             const instance = $('#htmlEditor').dxHtmlEditor({
