@@ -136,6 +136,7 @@ QUnit.module('General', () => {
 
         try {
             $secondTab.trigger('dxpointerdown');
+            clock.tick(10);
             assert.strictEqual($secondTab.hasClass(TAB_SELECTED_CLASS), false);
 
             $secondTab.trigger('dxpointerup');
