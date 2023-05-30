@@ -1988,12 +1988,10 @@ testModule('tables', simpleModuleConfig, function() {
 testModule('Toolbar localization', simpleModuleConfig, function() {
     const messages = {
         'ru': {
-            /* eslint-disable i18n/no-russian-character */
-            'dxHtmlEditor-italic': 'Курсив',
-            'dxHtmlEditor-list': 'Список',
-            'dxHtmlEditor-ordered': 'Нумерованный',
-            'dxHtmlEditor-bullet': 'Маркированный'
-            /* eslint-enable */
+            'dxHtmlEditor-italic': 'Italique',
+            'dxHtmlEditor-list': 'Liste',
+            'dxHtmlEditor-ordered': 'Numéroté',
+            'dxHtmlEditor-bullet': 'Marqué'
         }
     };
 
@@ -2034,13 +2032,11 @@ testModule('Toolbar localization', simpleModuleConfig, function() {
 
     function getExpectedData(locatedInMenu) {
         return {
-            /* eslint-disable i18n/no-russian-character */
-            buttonText: 'Курсив',
-            buttonTitle: 'Курсив',
+            buttonText: 'Italique',
+            buttonTitle: 'Italique',
             isButtonTextVisible: locatedInMenu,
-            selectBoxItemsText: 'НумерованныйМаркированный',
-            selectBoxPlaceholder: 'Список'
-            /* eslint-enable */
+            selectBoxItemsText: 'NumérotéMarqué',
+            selectBoxPlaceholder: 'Liste'
         };
     }
 

@@ -4,7 +4,7 @@ require('localization/globalize/currency');
 require('localization/globalize/date');
 require('localization/globalize/message');
 const cldrData = [
-    require('devextreme-cldr-data/ru.json!json')
+    require('devextreme-cldr-data/fr.json!json')
 ];
 
 const ValidationEngine = require('ui/validation_engine');
@@ -20,7 +20,7 @@ localization.loadMessages(ru);
 
 QUnit.module('culture-specific validation', {
     beforeEach: function() {
-        Globalize.locale('ru');
+        Globalize.locale('fr');
     },
 
     afterEach: function() {
@@ -29,19 +29,19 @@ QUnit.module('culture-specific validation', {
 });
 
 QUnit.test('Invalid message localization', function(assert) {
-    const result = ValidationEngine.validate('не число', [{
+    const result = ValidationEngine.validate('NaN', [{
         type: 'numeric'
     }]);
 
-    assert.equal(result.brokenRule.message, 'Значение должно быть числом', 'Russian localization should be used');
+    assert.equal(result.brokenRule.message, 'La valeur doit être un nombre', 'France localization should be used');
 });
 
 QUnit.test('Invalid message localization, formatted', function(assert) {
-    const result = ValidationEngine.validate('не число', [{
+    const result = ValidationEngine.validate('NaN', [{
         type: 'numeric'
-    }], 'Зарплата');
+    }], 'Salaire');
 
-    assert.equal(result.brokenRule.message, 'Значение поля Зарплата должно быть числом', 'Russian localization should be used');
+    assert.equal(result.brokenRule.message, 'La valeur du champ Salaire doit être un nombre', 'France localization should be used');
 });
 
 QUnit.test('T212840: Numeric - invalid, with default culture-agnostic behaviour', function(assert) {

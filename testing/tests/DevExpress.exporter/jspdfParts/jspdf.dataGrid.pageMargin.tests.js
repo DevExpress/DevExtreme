@@ -3327,8 +3327,7 @@ QUnit.module('Page margins', moduleConfig, () => {
 
     QUnit.test('1 col - 1 row. grid.Width=100, Margin={top:10,right:10,bottom:10,left:10}, topLeft={x=0,y=10}, pageOrientation=landscape', function(assert) {
         const done = assert.async();
-        // eslint-disable-next-line i18n/no-russian-character
-        const doc = createMockPdfDoc({ orientation: 'д' });
+        const doc = createMockPdfDoc({ orientation: 'l' });
 
         const dataGrid = createDataGrid({
             width: 100,
