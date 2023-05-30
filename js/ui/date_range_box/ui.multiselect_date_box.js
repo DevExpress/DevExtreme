@@ -42,11 +42,36 @@ class MultiselectDateBox extends DateBox {
     }
 
     _renderOpenedState() {
-        this._strategy.dateRangeBox.option('opened', this.option('opened'));
+        const { opened } = this.option();
 
-        if(this._isStartDateBox()) {
-            super._renderOpenedState();
+        this._strategy.dateRangeBox.option('opened', opened);
+
+        let context = this;
+
+        if(!this._isStartDateBox()) {
+            context = this._strategy.dateRangeBox.getStartDateBox();
         }
+
+        if(opened) {
+            context._createPopup();
+        }
+
+        context._setPopupOption('visible', opened);
+        this._setAriaAttributes(context);
+    }
+
+    _setAriaAttributes(startDateBox) {
+        const { opened } = this.option();
+
+        const arias = {
+            'expanded': opened,
+            'controls': startDateBox._getControlsAria(),
+        };
+
+        const ariaOwns = (opened || undefined) && startDateBox._popupContentId;
+
+        this.setAria(arias);
+        this.setAria('owns', ariaOwns, this.$element());
     }
 
     _isStartDateBox() {

@@ -729,7 +729,7 @@ class DateRangeBox extends Editor {
             case 'opened':
                 this._toggleDropDownEditorActiveClass();
                 this.getStartDateBox().option(name, value);
-                this.getEndDateBox()._setOptionWithoutOptionChange(name, value);
+                this.getEndDateBox().option(name, value);
                 break;
             case 'buttons':
                 this._cleanButtonContainers();
