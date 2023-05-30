@@ -67,6 +67,7 @@ const optionTestValues = {
     width: 500,
     wrapperAttr: { 'custom-attr': 'value' },
     _wrapperClassExternal: 'dx-dropdowneditor-overlay',
+    _ignoreElementAttrDeprecation: true,
 };
 
 const getPopupInstance = (editor) => {
@@ -154,7 +155,7 @@ dropDownEditorsNames.forEach(widgetName => {
             dropDownOptionsKeys.forEach(option => {
                 // TODO: fix this cases
                 if(widgetName === 'dxDropDownBox' && (option === 'focusStateEnabled' || option === 'tabIndex')
-                    || widgetName === 'dxDropDownButton' && option === 'showCloseButton') {
+                    || widgetName === 'dxDropDownButton' && (option === 'showCloseButton' || option === '_ignoreElementAttrDeprecation')) {
                     return;
                 }
                 QUnit.test(`${option} is correct`, function(assert) {
@@ -212,6 +213,10 @@ dropDownEditorsNames.forEach(widgetName => {
 
         QUnit.module('dropDownOptions 2-way binding', () => {
             dropDownOptionsKeys.forEach(option => {
+                if(widgetName === 'dxDropDownButton' && option === '_ignoreElementAttrDeprecation') {
+                    return;
+                }
+
                 QUnit.test(`dropDownOptions.${option} was updated correctly`, function(assert) {
                     const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false, applyValueMode: 'instantly' });
                     const popup = getPopupInstance(editor);
