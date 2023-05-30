@@ -60,10 +60,11 @@ test('Treeview items focus order should be correct when changing showCheckBoxesM
 
 test('Treeview items focus order should be correct when changing showCheckBoxesMode from none to selectAll at runtime', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
   const node = treeView.getNode(0);
 
   await treeView.option('showCheckBoxesMode', 'selectAll');
+
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
 
   await t.pressKey('tab')
     .expect(selectAllItemCheckBox.isFocused)
@@ -78,11 +79,12 @@ test('Treeview items focus order should be correct when changing showCheckBoxesM
 
 test('Treeview items focus order should be correct when changing showCheckBoxesMode at runtime with search enabled', async (t) => {
   const treeView = new TreeView('#container');
-  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
   const searchBar = treeView.getSearchTextBox();
   const node = treeView.getNode(0);
 
   await treeView.option('showCheckBoxesMode', 'selectAll');
+
+  const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
 
   await t.pressKey('tab')
     .expect(searchBar.isFocused)
@@ -102,10 +104,11 @@ test('Treeview items focus order should be correct when changing showCheckBoxesM
 test('Treeview items focus order should be correct when changing search panel mode at runtime', async (t) => {
   const treeView = new TreeView('#container');
   const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
-  const searchBar = treeView.getSearchTextBox();
   const node = treeView.getNode(0);
 
   await treeView.option('searchEnabled', 'true');
+
+  const searchBar = treeView.getSearchTextBox();
 
   await t.pressKey('tab')
     .expect(searchBar.isFocused)
