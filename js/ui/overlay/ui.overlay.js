@@ -806,13 +806,13 @@ const Overlay = Widget.inherit({
 
         this._pendingUpdate = false;
 
-        const callback = () => this._visualViewportResizeHandler();
+        const callback = this._visualViewportResizeHandler;
         const eventNames = Object.keys(visualViewportListenerNames);
 
         if(subscribe) {
             eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback));
         } else {
-            eventNames.forEach(eventName => unSubscribeOnVisualViewportEvent(eventName));
+            eventNames.forEach(eventName => unSubscribeOnVisualViewportEvent(eventName, callback));
         }
     },
 
@@ -1080,12 +1080,6 @@ const Overlay = Widget.inherit({
     },
 
     _renderPosition() {
-        const isVirtualKeyboardOpen = this._isVirtualKeyboardOpen();
-
-        if(isVirtualKeyboardOpen) {
-            return;
-        }
-
         this._positionController.positionContent();
     },
 
