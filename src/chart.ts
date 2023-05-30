@@ -1671,9 +1671,9 @@ const DxImage = createConfigurationComponent({
     "update:width": null,
   },
   props: {
-    height: Number,
-    url: String,
-    width: Number
+    height: [Number, Object],
+    url: [String, Object],
+    width: [Number, Object]
   }
 });
 (DxImage as any).$_optionName = "image";
@@ -2536,7 +2536,7 @@ const DxTitle = createConfigurationComponent({
     alignment: String,
     font: Object,
     horizontalAlignment: String,
-    margin: Number,
+    margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,

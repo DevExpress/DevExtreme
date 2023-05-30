@@ -770,7 +770,7 @@ const DxImage = createConfigurationComponent({
   props: {
     height: [Number, Object],
     location: String,
-    url: String,
+    url: [String, Object],
     width: [Number, Object]
   }
 });

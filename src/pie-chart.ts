@@ -1060,7 +1060,7 @@ const DxTitle = createConfigurationComponent({
   props: {
     font: Object,
     horizontalAlignment: String,
-    margin: Object,
+    margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
