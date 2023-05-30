@@ -162,6 +162,27 @@ jobs:
     - name: Lint CSS
       run: npm run lint-css
 
+  package_lock_npm_6:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Check package-lock
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund
+
+    - name: Check build
+      run: npm run build:dev
+
   package_lock:
     runs-on: devextreme-shr2
     timeout-minutes: 10
@@ -213,7 +234,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [Renovation, TS, JS, CSS, texts, package_lock, component_exports]
+    needs: [Renovation, TS, JS, CSS, texts, package_lock, package_lock_npm_6, component_exports]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
