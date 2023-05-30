@@ -4419,6 +4419,16 @@
             "DemoType": "Web"
           }
         ]
+      },
+      {
+        "Name": "Date Range Box",
+        "Equivalents": "",
+        "Demos": [{
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "DateRangeBox",
+            "Badge": "New"
+        }]
       }
     ]
   },

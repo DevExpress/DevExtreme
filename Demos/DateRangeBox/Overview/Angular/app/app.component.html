@@ -1,0 +1,56 @@
+<div class="dx-fieldset">
+  <div class="dx-field">
+    <div class="dx-field-label multiline-label">
+      <span>Default functionality</span>
+      <div class="selected-days-wrapper">
+        <span>Days selected: </span>
+        <span>{{ selectedDays }}</span>
+      </div>
+    </div>
+    <div class="dx-field-value">
+      <dx-date-range-box
+        [(value)]="currentValue"
+        (onValueChanged)="currentValueChanged($event)"
+      >
+      </dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Custom format</div>
+    <div class="dx-field-value">
+      <dx-date-range-box [value]="initialValue" displayFormat="EEEE, MMM dd">
+      </dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Use buttons to apply selection</div>
+    <div class="dx-field-value">
+      <dx-date-range-box applyValueMode="useButtons"></dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Single-calendar View</div>
+    <div class="dx-field-value">
+      <dx-date-range-box [multiView]="false"></dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Calendar only appears on icon click</div>
+    <div class="dx-field-value">
+      <dx-date-range-box [openOnFieldClick]="false"></dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Limit available dates (this month)</div>
+    <div class="dx-field-value">
+      <dx-date-range-box [min]="min" [max]="max"></dx-date-range-box>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">Clear button</div>
+    <div class="dx-field-value">
+      <dx-date-range-box [showClearButton]="true" [value]="initialValue">
+      </dx-date-range-box>
+    </div>
+  </div>
+</div>
