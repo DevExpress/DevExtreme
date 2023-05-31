@@ -28,7 +28,7 @@ export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
 /**
- * @docid
+ * @docid _ui_range_slider_ValueChangedEvent
  * @public
  * @type object
  * @inherits NativeEventInfo, ValueChangedInfo
@@ -59,10 +59,9 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     endName?: string;
     /**
      * @docid
-     * @type_function_param1_field component:dxRangeSlider
+     * @type_function_param1 e:_ui_range_slider_ValueChangedEvent
      * @action
      * @default null
-     * @type_function_param1_field value:array<number>
      * @public
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
@@ -106,7 +105,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onValueChanged'>;
 
 /**
 * @hidden
@@ -136,11 +135,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/range_slider:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxRangeSliderOptions.onValueChanged
- * @type_function_param1 e:{ui/range_slider:ValueChangedEvent}
- */
-onValueChanged?: ((e: ValueChangedEvent) => void);
 };
 ///#ENDDEBUG
