@@ -458,8 +458,7 @@ QUnit.test('toDataURL ImageQuality', function(assert) {
 QUnit.test('Special symbols drown on canvas correct', function(assert) {
     const that = this;
     const done = assert.async();
-    // eslint-disable-next-line i18n/no-russian-character
-    const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Специальные символы</text></g>' + testingMarkupEnd,
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Symboles spéciaux</text></g>' + testingMarkupEnd,
         {
             width: 500,
             height: 250,
@@ -470,8 +469,7 @@ QUnit.test('Special symbols drown on canvas correct', function(assert) {
     $.when(imageBlob).done(function() {
         try {
             assert.equal(that.drawnElements[1].type, 'text', 'Text element was drawned correct');
-            // eslint-disable-next-line i18n/no-russian-character
-            assert.equal(that.drawnElements[1].args[0], 'Специальные символы', 'The text symbols is correct');
+            assert.equal(that.drawnElements[1].args[0], 'Symboles spéciaux', 'The text symbols is correct');
         } finally {
             done();
         }
