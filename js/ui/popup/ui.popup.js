@@ -22,6 +22,7 @@ import { isDefined, isObject } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
+import { hasVisualViewport } from '../../core/utils/visual_viewport';
 import messageLocalization from '../../localization/message';
 import PopupDrag from './popup_drag';
 import Resizable from '../resizable';
@@ -351,8 +352,10 @@ const Popup = Overlay.inherit({
     },
 
     _renderContentImpl: function() {
+        const isDimensionChange = true;
+
         this._renderTitle();
-        this.callBase();
+        this.callBase(isDimensionChange);
         this._renderResize();
         this._renderBottom();
     },
@@ -639,7 +642,7 @@ const Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometry: function(options) {
+    _renderGeometry(options) {
         const { visible, useResizeObserver } = this.option();
 
         if(visible && hasWindow()) {
@@ -648,6 +651,7 @@ const Popup = Overlay.inherit({
             this._isAnimationPaused = shouldRepeatAnimation || undefined;
 
             this._stopAnimation();
+
             if(options?.shouldOnlyReposition) {
                 this._renderPosition(false);
             } else {
@@ -871,7 +875,13 @@ const Popup = Overlay.inherit({
         }
     },
 
-    _dimensionChanged: function() {
+    _dimensionChanged() {
+        const shouldUseVisualViewport = hasVisualViewport();
+
+        if(shouldUseVisualViewport) {
+            return;
+        }
+
         this._renderGeometry({ isDimensionChange: true });
     },
 

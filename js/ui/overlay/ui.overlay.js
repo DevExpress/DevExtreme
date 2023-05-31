@@ -3,7 +3,12 @@ import fx from '../../animation/fx';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
-import { hasVisualViewport, subscribeOnVisualViewportEvent, unSubscribeOnVisualViewportEvent, visualViewportListenerNames } from '../../core/utils/visual_viewport';
+import {
+    hasVisualViewport,
+    subscribeOnVisualViewportEvent,
+    unSubscribeOnVisualViewportEvent,
+    visualViewportListenerNames,
+} from '../../core/utils/visual_viewport';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
@@ -806,7 +811,7 @@ const Overlay = Widget.inherit({
 
         this._pendingUpdate = false;
 
-        const callback = this._visualViewportResizeHandler;
+        const callback = this._visualViewportResizeHandler.bind(this);
         const eventNames = Object.keys(visualViewportListenerNames);
 
         if(subscribe) {
@@ -946,13 +951,14 @@ const Overlay = Widget.inherit({
         return isHidden || !domAdapter.getBody().contains($parent.get(0));
     },
 
-    _renderContentImpl: function() {
+    _renderContentImpl(isDimensionChange = false) {
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option('contentTemplate');
         const contentTemplate = this._getTemplate(contentTemplateOption);
         const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
-        contentTemplate && contentTemplate.render({
+
+        contentTemplate?.render({
             container: getPublicElement(this.$content()),
             noModel: true,
             transclude,
@@ -961,7 +967,7 @@ const Overlay = Widget.inherit({
 
                 // NOTE: T1114344
                 if(this.option('templatesRenderAsynchronously')) {
-                    this._dimensionChanged();
+                    this._renderGeometry({ isDimensionChange });
                 }
             }
         });
@@ -1180,7 +1186,13 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _dimensionChanged: function() {
+    _dimensionChanged() {
+        const shouldUseVisualViewport = hasVisualViewport();
+
+        if(shouldUseVisualViewport) {
+            return;
+        }
+
         this._renderGeometry();
     },
 

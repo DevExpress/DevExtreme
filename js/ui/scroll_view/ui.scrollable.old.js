@@ -368,7 +368,7 @@ const Scrollable = DOMComponent.inherit({
         return getPublicElement(this._$container);
     },
 
-    scrollOffset: function() {
+    scrollOffset() {
         const scrollOffset = this._strategy._getScrollOffset();
 
         return scrollOffset;
