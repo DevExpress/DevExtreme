@@ -205,11 +205,15 @@ const transpileRenovationModules = async() => {
             fs.mkdirSync(dirPath, { recursive: true });
         }
 
+        const targetCode = code.replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
+
+        const [pre, post] = path.extname(targetPath) === '.json'
+            ? ['module.exports = ', ';']
+            : ['', ''];
+
         fs.writeFileSync(targetPath, [
             'define(function(require, exports, module) {',
-            code
-                .replace(/(\n|\r)/g, '$1    ')
-                .replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/'),
+            `${pre}${targetCode}${post}`.replace(/(\n|\r)/g, '$1    '),
             '});'
         ].join('\n'));
     }
