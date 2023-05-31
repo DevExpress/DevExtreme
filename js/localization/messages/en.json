@@ -156,7 +156,7 @@
         "dxDataGrid-ariaFilterCell": "Filter cell",
         "dxDataGrid-ariaCollapse": "Collapse",
         "dxDataGrid-ariaExpand": "Expand",
-        "dxDataGrid-ariaDataGrid": "Data grid",
+        "dxDataGrid-ariaDataGrid": "Data grid with {0} rows and {1} columns",
         "dxDataGrid-ariaSearchInGrid": "Search in the data grid",
         "dxDataGrid-ariaSelectAll": "Select all",
         "dxDataGrid-ariaSelectRow": "Select row",
