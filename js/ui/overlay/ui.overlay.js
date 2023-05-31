@@ -135,7 +135,7 @@ const Overlay = Widget.inherit({
 
             _ignoreElementAttrDeprecation: false,
 
-            _ignorePreventScrollEvents: false,
+            _ignorePreventScrollEventsDeprecation: false,
 
             onShowing: null,
 
@@ -223,7 +223,7 @@ const Overlay = Widget.inherit({
             if(options.elementAttr && !options._ignoreElementAttrDeprecation) {
                 this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
             }
-            if('preventScrollEvents' in options && !options._ignorePreventScrollEvents) {
+            if('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
                 this._logDeprecatedPreventScrollEventsInfo();
             }
         }

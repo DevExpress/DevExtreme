@@ -46,7 +46,7 @@ define(function(require) {
                     name === '_ignoreCopyRootClassesToWrapperDeprecation' ||
                     name === '_dataController' ||
                     name === '_ignoreElementAttrDeprecation' ||
-                    name === '_ignorePreventScrollEvents' ||
+                    name === '_ignorePreventScrollEventsDeprecation' ||
                     name === '_checkParentVisibility') {
                     return;
                 }

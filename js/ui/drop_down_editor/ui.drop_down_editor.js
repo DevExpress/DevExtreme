@@ -617,7 +617,7 @@ const DropDownEditor = TextBox.inherit({
             fullScreen: false,
             contentTemplate: null,
             _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
-            _ignoreElementAttrDeprecation: true,
+            _ignorePreventScrollEventsDeprecation: true,
         };
     },
 

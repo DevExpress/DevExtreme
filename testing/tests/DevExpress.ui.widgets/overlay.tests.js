@@ -3571,9 +3571,9 @@ testModule('preventScrollEvents', () => {
             stub.restore();
         });
 
-        [true, false].forEach(function(_ignorePreventScrollEvents) {
-            test(`"preventScrollEvents" deprecation warning should not be logged if "_ignorePreventScrollEvents" option value is ${_ignorePreventScrollEvents}`, function(assert) {
-                assert.expect(_ignorePreventScrollEvents ? 0 : 1);
+        [true, false].forEach(function(_ignorePreventScrollEventsDeprecation) {
+            test(`"preventScrollEvents" deprecation warning should not be logged if "_ignorePreventScrollEventsDeprecation" option value is ${_ignorePreventScrollEventsDeprecation}`, function(assert) {
+                assert.expect(_ignorePreventScrollEventsDeprecation ? 0 : 1);
 
                 const stub = sinon.stub(errors, 'log', () => {
                     assert.deepEqual(errors.log.lastCall.args, [
@@ -3587,7 +3587,7 @@ testModule('preventScrollEvents', () => {
 
                 $('#overlay').dxOverlay({
                     preventScrollEvents,
-                    _ignorePreventScrollEvents,
+                    _ignorePreventScrollEventsDeprecation,
                 });
                 stub.restore();
             });
