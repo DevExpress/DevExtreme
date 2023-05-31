@@ -198,17 +198,20 @@ const transpileRenovationModules = async() => {
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listRenovationFiles) {
         const code = fs.readFileSync(filePath).toString();
+        const targetPath = filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs');
+        const dirPath = path.dirname(targetPath);
 
-        fs.writeFileSync(
-            filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs'),
-            [
-                'define(function(require, exports, module) {',
-                code
-                    .replace(/(\n|\r)/g, '$1    ')
-                    .replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/'),
-                '});'
-            ].join('\n')
-        );
+        if(!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+        }
+
+        fs.writeFileSync(targetPath, [
+            'define(function(require, exports, module) {',
+            code
+                .replace(/(\n|\r)/g, '$1    ')
+                .replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/'),
+            '});'
+        ].join('\n'));
     }
 };
 
