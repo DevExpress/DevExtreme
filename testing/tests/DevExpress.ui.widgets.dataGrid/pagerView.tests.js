@@ -643,11 +643,11 @@ QUnit.module('Pager', {
         const pagerView = this.pagerView;
 
         this.options.pager.showInfo = true;
-        this.options.pager.infoText = '{0} Page de {1}';
+        this.options.pager.infoText = 'Page {0} sur {1}';
 
         // act
         pagerView.render(testElement);
-        assert.equal($('.dx-info').text(), '2 Page de 20');
+        assert.equal($('.dx-info').text(), 'Page 2 sur 20');
     });
 
     QUnit.test('Invalidate instead of render for options', function(assert) {

@@ -1987,7 +1987,7 @@ testModule('tables', simpleModuleConfig, function() {
 
 testModule('Toolbar localization', simpleModuleConfig, function() {
     const messages = {
-        'ru': {
+        'fr': {
             'dxHtmlEditor-italic': 'Italique',
             'dxHtmlEditor-list': 'Liste',
             'dxHtmlEditor-ordered': 'Numéroté',
@@ -2048,7 +2048,7 @@ testModule('Toolbar localization', simpleModuleConfig, function() {
             init(this, locateInMenu);
 
             try {
-                localization.locale('ru');
+                localization.locale('fr');
                 new Toolbar(this.quillMock, this.options);
 
                 if(locateInMenu) {
