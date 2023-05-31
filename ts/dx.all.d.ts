@@ -19892,7 +19892,7 @@ declare module DevExpress.ui {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSliderOptions;
     /**
-     * [descr:ValueChangedEvent]
+     * [descr:_ui_range_slider_ValueChangedEvent]
      */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRangeSlider,
