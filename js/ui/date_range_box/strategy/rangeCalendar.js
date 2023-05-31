@@ -135,6 +135,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
         });
     }
 
+    _refreshActiveDescendant(e) {
+        this.dateRangeBox.setAria('activedescendant', e.actionValue);
+    }
+
     _injectComponent(func) {
         return (params) => func(extend(params, { component: this.dateRangeBox }));
     }

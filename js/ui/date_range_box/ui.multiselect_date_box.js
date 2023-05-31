@@ -44,34 +44,23 @@ class MultiselectDateBox extends DateBox {
     _renderOpenedState() {
         const { opened } = this.option();
 
-        this._strategy.dateRangeBox.option('opened', opened);
+        this._getDateRangeBox().option('opened', opened);
 
-        let context = this;
+        if(this._isStartDateBox()) {
+            if(opened) {
+                this._createPopup();
+            }
 
-        if(!this._isStartDateBox()) {
-            context = this._strategy.dateRangeBox.getStartDateBox();
+            this._getDateRangeBox()._popupContentIdentifier(this._getControlsAria());
+
+            this._setPopupOption('visible', opened);
         }
 
-        if(opened) {
-            context._createPopup();
-        }
-
-        context._setPopupOption('visible', opened);
-        this._setAriaAttributes(context);
+        this._getDateRangeBox()._setAriaAttributes();
     }
 
-    _setAriaAttributes(startDateBox) {
-        const { opened } = this.option();
-
-        const arias = {
-            'expanded': opened,
-            'controls': startDateBox._getControlsAria(),
-        };
-
-        const ariaOwns = (opened || undefined) && startDateBox._popupContentId;
-
-        this.setAria(arias);
-        this.setAria('owns', ariaOwns, this.$element());
+    _getDateRangeBox() {
+        return this._strategy.dateRangeBox;
     }
 
     _isStartDateBox() {

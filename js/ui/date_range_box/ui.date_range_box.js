@@ -669,6 +669,28 @@ class DateRangeBox extends Editor {
         return $(input).is(domAdapter.getActiveElement(input));
     }
 
+    _popupContentIdentifier(identifier) {
+        if(identifier) {
+            this._popupContentId = identifier;
+        }
+
+        return this._popupContentId;
+    }
+
+    _setAriaAttributes() {
+        const { opened } = this.option();
+
+        const arias = {
+            'expanded': opened,
+            'controls': this._popupContentIdentifier(),
+        };
+
+        const ariaOwns = (opened || undefined) && this._popupContentIdentifier();
+
+        this.setAria(arias);
+        this.setAria('owns', ariaOwns, this.$element());
+    }
+
     _cleanButtonContainers() {
         this._$beforeButtonsContainer?.remove();
         this._$afterButtonsContainer?.remove();
@@ -729,7 +751,7 @@ class DateRangeBox extends Editor {
             case 'opened':
                 this._toggleDropDownEditorActiveClass();
                 this.getStartDateBox().option(name, value);
-                this.getEndDateBox().option(name, value);
+                this.getEndDateBox()._setOptionWithoutOptionChange(name, value);
                 break;
             case 'buttons':
                 this._cleanButtonContainers();

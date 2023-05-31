@@ -37,6 +37,7 @@ const INVALID_CLASS = 'dx-invalid';
 const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
@@ -790,12 +791,12 @@ QUnit.module('DropDownButton', moduleConfig, () => {
             readOnly: true,
         });
 
-        assert.equal(this.instance.getButton('dropDown'), undefined, 'drop down button is not rendered');
+        assert.strictEqual(this.instance.getButton('dropDown'), undefined, 'drop down button is not rendered');
 
         this.instance.option('readOnly', false);
 
-        assert.equal(this.instance.getButton('dropDown'), getButtons(this.$element).dxButton('instance'), 'drop down button is rendered');
-        assert.equal(this.instance.getButton('dropDown').option('disabled'), false, 'drop down button is not disabled');
+        assert.strictEqual(this.instance.getButton('dropDown'), getButtons(this.$element).dxButton('instance'), 'drop down button is rendered');
+        assert.strictEqual(this.instance.getButton('dropDown').option('disabled'), false, 'drop down button is not disabled');
     });
 
     QUnit.testInActiveWindow('DateRangeBox should be focused after opening by click on drop down button if disabled is false', function(assert) {
@@ -1512,7 +1513,7 @@ QUnit.module('Events', moduleConfig, () => {
                 QUnit.assert.strictEqual(args.component, this.instance, `${event} component`);
                 QUnit.assert.strictEqual($(args.element).get(0), this.$element.get(0), `${event} element`);
                 QUnit.assert.strictEqual(args.event.type, eventName.toLowerCase(), `${event} event`);
-                QUnit.assert.equal($(args.event.target).get(0), $(targetInput).get(0), `${event} target`);
+                QUnit.assert.strictEqual($(args.event.target).get(0), $(targetInput).get(0), `${event} target`);
             };
         }
     }, () => {
@@ -2452,7 +2453,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         });
 
         const componentField = disabledDates.lastCall.args[0].component;
-        assert.equal(componentField.NAME, 'dxDateRangeBox', 'Correct component');
+        assert.strictEqual(componentField.NAME, 'dxDateRangeBox', 'Correct component');
     });
 });
 
@@ -3891,5 +3892,161 @@ QUnit.module('calendarOptions', moduleConfig, () => {
 
             assert.deepEqual(calendar.option(name), value);
         });
+    });
+});
+
+QUnit.module('Aria accessibility', moduleConfig, () => {
+    QUnit.test('aria-owns attribute on root element', function(assert) {
+        assert.strictEqual(this.$element.attr('aria-owns'), undefined, 'aria-owns');
+        assert.strictEqual($(this.instance.startDateField()).attr('aria-owns'), undefined, 'aria-owns on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-owns'), undefined, 'aria-owns on endDateInput');
+
+        this.instance.open();
+
+        assert.strictEqual(this.$element.attr('aria-owns'), $(this.instance.content()).attr('id'), 'aria-owns');
+        assert.strictEqual($(this.instance.startDateField()).attr('aria-owns'), undefined, 'aria-owns on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-owns'), undefined, 'aria-owns on endDateInput');
+
+        this.instance.close();
+
+        assert.strictEqual(this.$element.attr('aria-owns'), undefined, 'aria-owns');
+        assert.strictEqual($(this.instance.startDateField()).attr('aria-owns'), undefined, 'aria-owns on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-owns'), undefined, 'aria-owns on endDateInput');
+    });
+
+    QUnit.test('aria-expanded attributes on inputs', function(assert) {
+        assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded on endDateInput');
+
+        this.instance.open();
+
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded on endDateInput');
+
+        this.instance.close();
+
+        assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded on endDateInput');
+    });
+
+    QUnit.test('aria-expanded attributes on inputs if opened is true on initialization', function(assert) {
+        this.reinit({
+            opened: true
+        });
+
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded on endDateInput');
+
+        this.instance.close();
+
+        assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded on startDateInput');
+        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded on endDateInput');
+    });
+
+    ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+        QUnit.test(`aria-expanded attributes on inputs if ${dateBoxName} opened option is changed`, function(assert) {
+            const dateBox = dateBoxName === 'startDateBox'
+                ? this.instance.getStartDateBox()
+                : this.instance.getEndDateBox();
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded on endDateInput');
+
+            dateBox.option('opened', true);
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'true', 'aria-expanded on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded on endDateInput');
+
+            dateBox.option('opened', false);
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded on endDateInput');
+        });
+    });
+
+    [true, false].forEach(deferRendering => {
+        QUnit.test(`'aria-controls' should be set if deferRendering="${deferRendering}"`, function(assert) {
+            this.reinit({
+                deferRendering,
+            });
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), deferRendering ? undefined : $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), deferRendering ? undefined : $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+
+            this.instance.open();
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+
+            this.instance.close();
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+        });
+
+        ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
+            QUnit.test(`aria-controls attributes on inputs if ${dateBoxName} opened option is changed`, function(assert) {
+                const dateBox = dateBoxName === 'startDateBox'
+                    ? this.instance.getStartDateBox()
+                    : this.instance.getEndDateBox();
+
+                assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), deferRendering ? undefined : $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
+                assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), deferRendering ? undefined : $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+
+                dateBox.option('opened', true);
+
+                assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
+                assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+
+                dateBox.option('opened', false);
+
+                assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
+                assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+            });
+        });
+
+        QUnit.test('aria-activedescendant on input should point to the contoured cell\'s id in calendar', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            this.reinit({
+                calendarOptions: {
+                    currentDate: new Date(2021, 9, 17),
+                },
+                deferRendering,
+            });
+
+            const getContouredCell = () => {
+                return $(this.instance.content()).find(`.${CALENDAR_CONTOURED_CELL_CLASS}`);
+            };
+
+            const contouredCellID = getContouredCell().attr('id');
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), deferRendering ? undefined : contouredCellID, 'aria-activedescendant on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), deferRendering ? undefined : contouredCellID, 'aria-activedescendant on endDateInput');
+
+            this.instance.option('opened', true);
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), contouredCellID, 'aria-activedescendant on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), contouredCellID, 'aria-activedescendant on endDateInput');
+
+            const keyboard = keyboardMock($(this.instance.startDateField()));
+
+            keyboard.keyDown('right');
+
+            const newContouredCellID = getContouredCell().attr('id');
+
+            assert.strictEqual(newContouredCellID === contouredCellID, false, 'countoured cell is changed');
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on endDateInput');
+
+            this.instance.option('opened', false);
+
+            assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on startDateInput');
+            assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on endDateInput');
+        });
+
     });
 });
