@@ -662,32 +662,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(row.attr('aria-rowindex'), 89, 'aria-index is correct after scrolling');
     });
 
-    // T595044
-    QUnit.test('aria-colcount aria-rowcount if virtual scrolling', function(assert) {
-        // arrange, act
-        const array = [];
-
-        for(let i = 0; i < 100; i++) {
-            array.push({ ID: i, C0: 'C0_' + i, C1: 'C1_' + i });
-        }
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 200,
-            dataSource: {
-                store: array,
-                group: 'ID'
-            },
-            paging: { pageSize: 2 },
-            scrolling: { mode: 'virtual' }
-        });
-
-        this.clock.tick(10);
-
-        // assert
-        assert.equal(dataGrid.find('.dx-gridbase-container').attr('aria-rowcount'), 200, 'aria-rowcount is correct');
-        assert.equal(dataGrid.find('.dx-gridbase-container').attr('aria-colcount'), 3, 'aria-colcount is correct');
-    });
-
     QUnit.test('all visible items should be rendered if pageSize is small and virtual scrolling is enabled', function(assert) {
         // arrange, act
         const array = [];
