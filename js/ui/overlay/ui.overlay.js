@@ -512,10 +512,10 @@ const Overlay = Widget.inherit({
             return this._showingDeferred.resolve();
         }
 
-        if(this._currentVisible) {
+        if(this._isCurrentVisible) {
             return new Deferred().resolve().promise();
         }
-        this._currentVisible = true;
+        this._isCurrentVisible = true;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
@@ -610,10 +610,10 @@ const Overlay = Widget.inherit({
     },
 
     _hide: function() {
-        if(!this._currentVisible) {
+        if(!this._isCurrentVisible) {
             return new Deferred().resolve().promise();
         }
-        this._currentVisible = false;
+        this._isCurrentVisible = false;
 
         this._hidingDeferred = new Deferred();
         const hidingArgs = { cancel: false };
@@ -677,7 +677,7 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        this._currentVisible = visible;
+        this._isCurrentVisible = visible;
 
         this._stopAnimation();
 
@@ -865,9 +865,9 @@ const Overlay = Widget.inherit({
             this._resizeAnimationFrameId = requestAnimationFrame(() => {
                 this._pendingUpdate = false;
 
-                const currentVisible = this._currentVisible;
+                const isCurrentVisible = this._isCurrentVisible;
 
-                if(currentVisible) {
+                if(isCurrentVisible) {
                     this._renderGeometry();
                 } else {
                     this._renderVisibilityAnimate(true);
@@ -906,7 +906,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderContent: function() {
-        const shouldDeferRendering = !this._currentVisible && this.option('deferRendering');
+        const shouldDeferRendering = !this._isCurrentVisible && this.option('deferRendering');
         const isParentHidden = this.option('visible') && this._isParentHidden();
 
         if(isParentHidden) {

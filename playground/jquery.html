@@ -32,35 +32,13 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="textbox" style="margin-bottom: 20px;"></div>
-    <div id="tagbox" style="margin-bottom: 20px;"></div>
-    <div id="date-by-picker"></div>
-
+    <div id="button"></div>
     <script>
-        $(() => {
-            // DevExpress.fx.off = true;
-
-            const now = new Date();
-
-            $('#date-by-picker').dxDateBox({
-                pickerType: 'rollers',
-                type: 'datetime',
-                value: now,
-                dropDownOptions: {
-                    shadingColor: '#000000c2',
-                    templatesRenderAsynchronously: true,
-                    // animation: {
-                    //     show: null,
-                    //     hide: null,
-                    // },
-                },
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
-
-            $('#textbox').dxTextBox({
-                value: 'John Smith',
-            });
-
-            $('#tagbox').dxTagBox();
         });
     </script>
 </body>

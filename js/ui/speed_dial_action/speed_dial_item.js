@@ -217,7 +217,7 @@ class SpeedDialItem extends Overlay {
                 this._renderLabel();
                 break;
             case 'visible':
-                this._currentVisible = args.previousValue;
+                this._isCurrentVisible = args.previousValue;
                 args.value ?
                     this._show() :
                     this._hide();
