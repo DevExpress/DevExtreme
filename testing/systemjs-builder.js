@@ -192,22 +192,22 @@ const transpileModules = async(Builder) => {
     }
 };
 
-const transpileRenovationModules = async(Builder) => {
-    const builder = new Builder(root, config);
-
+const transpileRenovationModules = async() => {
     const listRenovationFiles = getFileList(path.join(root, 'artifacts/transpiled-renovation'));
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listRenovationFiles) {
-        await builder.buildStatic(
-            `[${filePath}]`,
+        const code = fs.readFileSync(filePath).toString();
+
+        fs.writeFileSync(
             filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs'),
-            {
-                minify: false,
-                sourceMaps: true,
-                encodeNames: false,
-                namedExports: filePath.includes('__internal')
-            }
+            [
+                'define(function(require, exports, module) {',
+                code
+                    .replace(/(\n|\r)/g, '$1    ')
+                    .replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/'),
+                '});'
+            ].join('\n')
         );
     }
 };
@@ -399,7 +399,7 @@ const updateBuilder = () => {
     switch(transpile) {
         case 'builder': return updateBuilder();
         case 'modules': return await transpileModules(Builder);
-        case 'modules-renovation': return await transpileRenovationModules(Builder);
+        case 'modules-renovation': return await transpileRenovationModules();
         case 'testing': return await transpileTesting(Builder);
         case 'css': return await transpileCss(Builder);
         case 'js-vendors': return await transpileJsVendors(Builder);
