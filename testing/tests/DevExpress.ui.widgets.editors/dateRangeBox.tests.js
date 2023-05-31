@@ -3921,18 +3921,18 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
     });
 
     QUnit.test('aria-owns attribute should not be added to root element of nested dateboxes', function(assert) {
-        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start input');
-        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end input');
+        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start datebox');
+        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end datebox');
 
         this.instance.open();
 
-        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start input');
-        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end input');
+        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start datebox');
+        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end datebox');
 
         this.instance.close();
 
-        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start input');
-        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end input');
+        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start datebox');
+        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end datebox');
     });
 
     QUnit.test('aria-expanded attribute with false value should be added to each input on initialization if opened is false', function(assert) {
