@@ -54,9 +54,9 @@ class MultiselectDateBox extends DateBox {
             this._getDateRangeBox()._popupContentIdentifier(this._getControlsAria());
 
             this._setPopupOption('visible', opened);
-        }
 
-        this._getDateRangeBox()._setAriaAttributes();
+            this._getDateRangeBox()._setAriaAttributes();
+        }
     }
 
     _getDateRangeBox() {

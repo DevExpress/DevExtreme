@@ -686,7 +686,7 @@ class DateRangeBox extends Editor {
             'controls': this._popupContentIdentifier(),
         };
 
-        const ariaOwns = (opened || undefined) && this._popupContentIdentifier();
+        const ariaOwns = opened ? this._popupContentIdentifier() : undefined;
 
         this.setAria(arias);
         this.setAria('owns', ariaOwns, this.$element());

@@ -791,7 +791,7 @@ QUnit.module('DropDownButton', moduleConfig, () => {
             readOnly: true,
         });
 
-        assert.strictEqual(this.instance.getButton('dropDown'), undefined, 'drop down button is not rendered');
+        assert.strictEqual(this.instance.getButton('dropDown'), null, 'drop down button is not rendered');
 
         this.instance.option('readOnly', false);
 
@@ -3986,6 +3986,10 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
             QUnit.test(`aria-controls attributes on inputs if ${dateBoxName} opened option is changed`, function(assert) {
+                this.reinit({
+                    deferRendering,
+                });
+
                 const dateBox = dateBoxName === 'startDateBox'
                     ? this.instance.getStartDateBox()
                     : this.instance.getEndDateBox();
@@ -4022,12 +4026,14 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
                 return $(this.instance.content()).find(`.${CALENDAR_CONTOURED_CELL_CLASS}`);
             };
 
-            const contouredCellID = getContouredCell().attr('id');
+            let contouredCellID = getContouredCell().attr('id');
 
             assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), deferRendering ? undefined : contouredCellID, 'aria-activedescendant on startDateInput');
             assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), deferRendering ? undefined : contouredCellID, 'aria-activedescendant on endDateInput');
 
             this.instance.option('opened', true);
+
+            contouredCellID = getContouredCell().attr('id');
 
             assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), contouredCellID, 'aria-activedescendant on startDateInput');
             assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), contouredCellID, 'aria-activedescendant on endDateInput');
@@ -4047,6 +4053,5 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on startDateInput');
             assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on endDateInput');
         });
-
     });
 });
