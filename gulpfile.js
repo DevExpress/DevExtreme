@@ -18,6 +18,7 @@ const
   OUTPUTDIR_CLEAN = 'output-dir.clean',
   GEN_RUN = 'generator.run',
 
+  BUILD_STRATEGY = 'build.strategy',
   COPY_STRATEGY = 'copy.strategy',
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
@@ -48,7 +49,7 @@ gulp.task(GEN_RUN, (done) => {
       indexFileName: config.indexFileName
     },
     config.widgetsPackage,
-    VUE_VERSION, 
+    VUE_VERSION,
     true
   );
 
@@ -114,6 +115,8 @@ gulp.task(ADD_HEADERS, function() {
       .pipe(gulp.dest(config.npm.dist));
 });
 
+gulp.task(BUILD_STRATEGY, shell.task(['npm run pack -w devextreme-vue2-strategy']))
+
 gulp.task(COPY_STRATEGY, function() {
   return gulp.src(`${config.npm.strategySrc}`)
         .pipe(gulp.dest(config.npm.strategyDist));
@@ -122,6 +125,7 @@ gulp.task(COPY_STRATEGY, function() {
 gulp.task(NPM_PACK, gulp.series(
   CLEAN,
   NPM_BUILD,
+  BUILD_STRATEGY,
   COPY_STRATEGY,
   ADD_HEADERS,
   shell.task(['npm pack'], { cwd: config.npm.dist })
