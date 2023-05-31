@@ -20,10 +20,6 @@ runs:
       run: |
         echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
-    - shell: bash
-      run: |
-        echo Installed chromium version: ${{ inputs.chrome-version }}
-        google-chrome-stable --version
     - name: "Setup Firefox"
       id: setup-firefox
       uses: browser-actions/setup-firefox@v1
