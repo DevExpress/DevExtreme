@@ -242,9 +242,10 @@ class DateRangeBox extends Editor {
         this._renderStylingMode();
         // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
-        this._renderStartDateBox();
-        this._renderSeparator();
         this._renderEndDateBox();
+        this._renderSeparator();
+        this._renderStartDateBox();
+
 
         this._toggleEmptinessState();
         this._renderEmptinessEvent();
@@ -308,7 +309,7 @@ class DateRangeBox extends Editor {
     _renderStartDateBox() {
         this._$startDateBox = $('<div>')
             .addClass(START_DATEBOX_CLASS)
-            .appendTo(this.$element());
+            .prependTo(this.$element());
 
         this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
         this._startDateBox.NAME = '_StartDateBox';
@@ -327,7 +328,7 @@ class DateRangeBox extends Editor {
         const $icon = getImageContainer(SEPARATOR_ICON_NAME);
         this._$separator = $('<div>')
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
-            .appendTo(this.$element());
+            .prependTo(this.$element());
 
         this._renderPreventBlurOnSeparatorClick();
 
