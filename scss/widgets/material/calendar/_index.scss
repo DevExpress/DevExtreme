@@ -51,4 +51,22 @@
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
   $calendar-cell-hover-border-color,
+  999em,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::before",
+  $calendar-hover-bg,
+  $calendar-cell-hover-border-color,
+  999em,
+  0,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::after",
+  inherit,
+  $calendar-cell-hover-border-color,
+  999em,
+  1px,
+  '.dx-calendar-cell-range-hover',
+  '.dx-calendar-cell-range-hover-start',
+  '.dx-calendar-cell-range-hover-end',
 );
