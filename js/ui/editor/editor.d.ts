@@ -15,7 +15,7 @@ import {
 
 /**
  * @docid
- * @public
+ * @hidden
  */
 export interface ValueChangedInfo {
     /** @docid */
