@@ -207,15 +207,19 @@ const transpileRenovationModules = async() => {
 
         const targetCode = code.replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
 
-        const [pre, post] = path.extname(targetPath) === '.json'
-            ? ['module.exports = ', ';']
-            : ['', ''];
+        if(targetCode.includes('define(')) {
+            fs.writeFileSync(targetPath, targetCode);
+        } else {
+            const [pre, post] = path.extname(targetPath) === '.json'
+                ? ['module.exports = ', ';']
+                : ['', ''];
 
-        fs.writeFileSync(targetPath, [
-            'define(function(require, exports, module) {',
-            `${pre}${targetCode}${post}`.replace(/(\n|\r)/g, '$1    '),
-            '});'
-        ].join('\n'));
+            fs.writeFileSync(targetPath, [
+                'define(function(require, exports, module) {',
+                `${pre}${targetCode}${post}`.replace(/(\n|\r)/g, '$1    '),
+                '});'
+            ].join('\n'));
+        }
     }
 };
 
