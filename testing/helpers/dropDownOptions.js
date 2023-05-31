@@ -56,6 +56,7 @@ const defaultDropDownOptions = {
     visible: false,
     width: null,
     _wrapperClassExternal: 'dx-dropdowneditor-overlay',
+    _ignoreElementAttrDeprecation: true,
 };
 
 export {
