@@ -4031,6 +4031,11 @@ QUnit.module('Aria accessibility', {
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should equal contoured calendar cell\'s identifier, deferRendering="${deferRendering}', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
             this.reinit({
                 calendarOptions: {
                     currentDate: new Date(2021, 9, 17),
@@ -4044,6 +4049,11 @@ QUnit.module('Aria accessibility', {
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should be saved after change opened option value to false in runtime', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
             this.reinit({
                 calendarOptions: {
                     currentDate: new Date(2021, 9, 17),
