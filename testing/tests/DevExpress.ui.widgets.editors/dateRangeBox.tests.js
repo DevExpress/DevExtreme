@@ -77,11 +77,6 @@ const moduleConfig = {
             value: ['2023/01/05', '2023/02/14'],
             multiView: true,
         });
-
-        this.checkInputAttributes = (attrName, expectedValue) => {
-            QUnit.assert.strictEqual(this.$startDateInput.attr(attrName), expectedValue, `${attrName} attr value of start input`);
-            QUnit.assert.strictEqual(this.$endDateInput.attr(attrName), expectedValue, `${attrName} attr value of end input`);
-        };
     },
     afterEach: function() {
         fx.off = false;
@@ -3907,7 +3902,20 @@ QUnit.module('calendarOptions', moduleConfig, () => {
     });
 });
 
-QUnit.module('Aria accessibility', moduleConfig, () => {
+QUnit.module('Aria accessibility', {
+    beforeEach: function() {
+        moduleConfig.beforeEach.apply(this);
+
+        this.checkInputAttributes = (attrName, expectedValue) => {
+            QUnit.assert.strictEqual(this.$startDateInput.attr(attrName), expectedValue, `${attrName} attr value of start input`);
+            QUnit.assert.strictEqual(this.$endDateInput.attr(attrName), expectedValue, `${attrName} attr value of end input`);
+        };
+    },
+
+    afterEach: function() {
+        moduleConfig.afterEach.apply(this);
+    }
+}, () => {
     QUnit.test('aria-owns attribute should be added to root element when popup is open and removed when popup is closed', function(assert) {
         assert.strictEqual(this.$element.attr('aria-owns'), undefined, 'aria-owns');
 
