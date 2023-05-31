@@ -153,9 +153,7 @@ export default {
         this.callBase();
     },
 
-    _cleanAria: function() {
-        const $ariaTarget = this.option('searchEnabled') ? this.$element() : this._itemContainer();
-
+    _cleanAria: function($ariaTarget) {
         this.setAria({
             'role': null,
             'activedescendant': null
@@ -166,7 +164,8 @@ export default {
 
     _clean() {
         this.callBase();
-        this._cleanAria();
+        this._cleanAria(this._itemContainer());
+        this._cleanAria(this.$element());
     },
 
     _refresh: function() {
