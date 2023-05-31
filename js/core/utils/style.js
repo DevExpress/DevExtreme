@@ -111,30 +111,20 @@ const setHeight = function(elements, value) {
     setDimensionProperty(elements, 'height', value);
 };
 
-// NOTE: Setting the 'element.style' requires creating attributeNode when both of the conditions met:
-//       - a form contains an input with the name property set to "style";
-//       - a form contains a dx-validator (or other popup widget).
-//       T941581
 const setStyle = function(element, styleString, resetStyle = true) {
-    if(!domAdapter.isNode(element.style)) {
-        if(resetStyle) {
-            const styleList = [].slice.call(element.style);
-            styleList.forEach((propertyName) => {
-                element.style.removeProperty(propertyName);
-            });
-        }
-        styleString.split(';').forEach((style) => {
-            const parts = style.split(':').map(stylePart => stylePart.trim());
-            if(parts.length === 2) {
-                const [property, value] = parts;
-                element.style[property] = value;
-            }
+    if(resetStyle) {
+        const styleList = [].slice.call(element.style);
+        styleList.forEach((propertyName) => {
+            element.style.removeProperty(propertyName);
         });
-    } else {
-        const styleAttributeNode = domAdapter.createAttribute('style');
-        styleAttributeNode.value = styleString;
-        element.setAttributeNode(styleAttributeNode);
     }
+    styleString.split(';').forEach((style) => {
+        const parts = style.split(':').map(stylePart => stylePart.trim());
+        if(parts.length === 2) {
+            const [property, value] = parts;
+            element.style[property] = value;
+        }
+    });
 };
 
 export {

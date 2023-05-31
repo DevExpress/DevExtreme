@@ -6,7 +6,7 @@ import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import domAdapter from '../core/dom_adapter';
-import { isWindow } from '../core/utils/type';
+import { isWindow, isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
 import browser from '../core/utils/browser';
@@ -345,10 +345,21 @@ const calculatePosition = function(what, options) {
 
     return result;
 };
-
+// NOTE: Setting the 'element.style' requires creating attributeNode when both of the conditions met:
+//       - a form contains an input with the name property set to "style";
+//       - a form contains a dx-validator (or other popup widget).
+//       T941581
 const setScaleProperty = function(element, scale, styleAttr, isEmpty) {
+    const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
     const newStyleValue = isEmpty ? styleAttr.replace(scale, '') : styleAttr;
-    setStyle(element, newStyleValue, false);
+
+    if(stylePropIsValid) {
+        setStyle(element, newStyleValue, false);
+    } else {
+        const styleAttributeNode = domAdapter.createAttribute('style');
+        styleAttributeNode.value = newStyleValue;
+        element.setAttributeNode(styleAttributeNode);
+    }
 };
 
 const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
