@@ -93,6 +93,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
+     * @fires BaseWidgetOptions.onValueChanged
      */
     endDate?: Date | number | string;
     /**
@@ -161,6 +162,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
+     * @fires BaseWidgetOptions.onValueChanged
      */
     startDate?: Date | number | string;
     /**
