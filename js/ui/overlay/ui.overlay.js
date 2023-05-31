@@ -410,6 +410,10 @@ const Overlay = Widget.inherit({
     },
 
     _isVisualContainerWindow() {
+        if(!hasWindow()) {
+            return false;
+        }
+
         const $visualContainer = this._positionController.$visualContainer;
         const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
