@@ -57,6 +57,13 @@ const moduleConfig = {
         const init = (options) => {
             this.$element = $('#dateRangeBox').dxDateRangeBox(options);
             this.instance = this.$element.dxDateRangeBox('instance');
+
+            this.$startDateBox = $(this.instance.getStartDateBox().element());
+            this.$endDateBox = $(this.instance.getEndDateBox().element());
+            this.$startDateInput = $(this.instance.startDateField());
+            this.$endDateInput = $(this.instance.endDateField());
+
+            this.getPopupContent = () => $(this.instance.content());
             this.getCalendar = () => this.instance.getStartDateBox()._strategy._widget;
         };
 
@@ -400,14 +407,15 @@ QUnit.module('Classes', moduleConfig, () => {
             value: [null, null],
         });
 
-        const $startDateInput = $(this.instance.startDateField());
-        const keyboard = keyboardMock($startDateInput);
+        const keyboard = keyboardMock(this.$startDateInput);
 
         keyboard.type('2021/14/15');
-        $startDateInput.trigger('input');
+        this.$startDateInput.trigger('input');
+
         assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'has not class');
 
-        $startDateInput.val('').trigger('input');
+        this.$startDateInput.val('').trigger('input');
+
         assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'has class');
     });
 
@@ -416,14 +424,15 @@ QUnit.module('Classes', moduleConfig, () => {
             value: [null, null],
         });
 
-        const $endDateInput = $(this.instance.endDateField());
-        const keyboard = keyboardMock($endDateInput);
+        const keyboard = keyboardMock(this.$endDateInput);
 
         keyboard.type('2021/14/15');
-        $endDateInput.trigger('input');
+        this.$endDateInput.trigger('input');
+
         assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'has not class');
 
-        $endDateInput.val('').trigger('input');
+        this.$endDateInput.val('').trigger('input');
+
         assert.strictEqual(this.instance.$element().hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'has class');
     });
 
@@ -448,7 +457,7 @@ QUnit.module('Classes', moduleConfig, () => {
             value: [null, null],
         });
 
-        const $endDateInput = $(this.instance.endDateField());
+        const $endDateInput = this.$endDateInput;
         const keyboard = keyboardMock($endDateInput);
 
         keyboard.type('2021/14/15');
@@ -1764,10 +1773,8 @@ QUnit.module('Public methods', moduleConfig, () => {
 
         const startDateBox = this.instance.getStartDateBox();
 
-        const $popupContent = $(this.instance.content());
-
-        assert.strictEqual($popupContent.is($(startDateBox.content())), true, 'content returns right element');
-        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
+        assert.strictEqual(this.getPopupContent().is($(startDateBox.content())), true, 'content returns right element');
+        assert.strictEqual(this.getPopupContent().hasClass(POPUP_CONTENT_CLASS), true, 'content returns popup content element');
     });
 
     QUnit.testInActiveWindow('Focus() method should focus startDate input', function(assert) {
@@ -3896,12 +3903,17 @@ QUnit.module('calendarOptions', moduleConfig, () => {
 });
 
 QUnit.module('Aria accessibility', moduleConfig, () => {
+    const checkInputAttributes = (instance, attrName, expectedValue) => {
+        QUnit.assert.strictEqual($(instance.startDateField()).attr(attrName), expectedValue, `${attrName} attr value of start input`);
+        QUnit.assert.strictEqual($(instance.endDateField()).attr(attrName), expectedValue, `${attrName} attr value of end input`);
+    };
+
     QUnit.test('aria-owns attribute should be added to root element when popup is open and removed when popup is closed', function(assert) {
         assert.strictEqual(this.$element.attr('aria-owns'), undefined, 'aria-owns');
 
         this.instance.open();
 
-        assert.strictEqual(this.$element.attr('aria-owns'), $(this.instance.content()).attr('id'), 'aria-owns');
+        assert.strictEqual(this.$element.attr('aria-owns'), this.getPopupContent().attr('id'), 'aria-owns');
 
         this.instance.close();
 
@@ -3909,21 +3921,18 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
     });
 
     QUnit.test('aria-owns attribute should not be added to root element of nested dateboxes', function(assert) {
-        const startDateBoxElement = this.instance.getStartDateBox().element();
-        const endDateBoxElement = this.instance.getStartDateBox().element();
-
-        assert.strictEqual($(startDateBoxElement).attr('aria-owns'), undefined, 'aria-owns attr value of start input');
-        assert.strictEqual($(endDateBoxElement).attr('aria-owns'), undefined, 'aria-owns attr value of end input');
+        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start input');
+        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end input');
 
         this.instance.open();
 
-        assert.strictEqual($(startDateBoxElement).attr('aria-owns'), undefined, 'aria-owns attr value of start input');
-        assert.strictEqual($(endDateBoxElement).attr('aria-owns'), undefined, 'aria-owns attr value of end input');
+        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start input');
+        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end input');
 
         this.instance.close();
 
-        assert.strictEqual($(startDateBoxElement).attr('aria-owns'), undefined, 'aria-owns attr value of start input');
-        assert.strictEqual($(endDateBoxElement).attr('aria-owns'), undefined, 'aria-owns attr value of end input');
+        assert.strictEqual(this.$startDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of start input');
+        assert.strictEqual(this.$endDateBox.attr('aria-owns'), undefined, 'aria-owns attr value of end input');
     });
 
     QUnit.test('aria-expanded attribute with false value should be added to each input on initialization if opened is false', function(assert) {
@@ -3931,8 +3940,7 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             opened: false
         });
 
-        assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded attr value of start input');
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded attr value of end input');
+        checkInputAttributes(this.instance, 'aria-expanded', 'false');
     });
 
     QUnit.test('aria-expanded attribute with true value should be added to each input on initialization if opened is true', function(assert) {
@@ -3940,20 +3948,17 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             opened: true
         });
 
-        assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'true', 'aria-expanded attr value of start input');
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded attr value of end input');
+        checkInputAttributes(this.instance, 'aria-expanded', 'true');
     });
 
     QUnit.test('aria-expanded attribute value should be toggled for each input after change opened option value in runtime', function(assert) {
         this.instance.open();
 
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded attr value of start input');
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded attr value of end input');
+        checkInputAttributes(this.instance, 'aria-expanded', 'true');
 
         this.instance.close();
 
-        assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded attr value of start input');
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded attr value of end input');
+        checkInputAttributes(this.instance, 'aria-expanded', 'false');
     });
 
     ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
@@ -3964,13 +3969,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
             dateBox.option('opened', true);
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'true', 'aria-expanded on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'true', 'aria-expanded on endDateInput');
+            checkInputAttributes(this.instance, 'aria-expanded', 'true');
 
             dateBox.option('opened', false);
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-expanded'), 'false', 'aria-expanded on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-expanded'), 'false', 'aria-expanded on endDateInput');
+            checkInputAttributes(this.instance, 'aria-expanded', 'false');
         });
     });
 
@@ -3980,10 +3983,7 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
                 deferRendering,
             });
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), deferRendering ? undefined : $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), deferRendering ? undefined : $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
-
-            this.instance.open();
+            checkInputAttributes(this.instance, 'aria-controls', deferRendering ? undefined : this.getPopupContent().attr('id'));
         });
 
         QUnit.test(`aria-controls attribute value of each input should equal popup content identifier if popup is rendered, deferRendering="${deferRendering}"`, function(assert) {
@@ -3993,13 +3993,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
             this.instance.open();
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+            checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
 
             this.instance.close();
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+            checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
         });
 
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
@@ -4014,13 +4012,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
                 dateBox.option('opened', true);
 
-                assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
-                assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+                checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
 
                 dateBox.option('opened', false);
 
-                assert.strictEqual($(this.instance.startDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on startDateInput');
-                assert.strictEqual($(this.instance.endDateField()).attr('aria-controls'), $(this.instance.content()).attr('id'), 'aria-controls on endDateInput');
+                checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
             });
         });
 
@@ -4032,10 +4028,9 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
                 deferRendering,
             });
 
-            const contouredCellID = $(this.instance.content()).find(`.${CALENDAR_CONTOURED_CELL_CLASS}`).attr('id');
+            const contouredCellID = this.getPopupContent().find(`.${CALENDAR_CONTOURED_CELL_CLASS}`).attr('id');
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), deferRendering ? undefined : contouredCellID, 'aria-activedescendant on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), deferRendering ? undefined : contouredCellID, 'aria-activedescendant on endDateInput');
+            checkInputAttributes(this.instance, 'aria-activedescendant', deferRendering ? undefined : contouredCellID);
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should be saved after change opened option value to false in runtime', function(assert) {
@@ -4046,12 +4041,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
                 opened: true,
             });
 
-            const contouredCellID = $(this.instance.content()).find(`.${CALENDAR_CONTOURED_CELL_CLASS}`).attr('id');
+            const contouredCellID = this.getPopupContent().find(`.${CALENDAR_CONTOURED_CELL_CLASS}`).attr('id');
 
             this.instance.option('opened', false);
 
-            assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), contouredCellID, 'aria-activedescendant on startDateInput');
-            assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), contouredCellID, 'aria-activedescendant on endDateInput');
+            checkInputAttributes(this.instance, 'aria-activedescendant', contouredCellID);
         });
     });
 
@@ -4069,22 +4063,16 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
         });
 
         const getContouredCell = () => {
-            return $(this.instance.content()).find(`.${CALENDAR_CONTOURED_CELL_CLASS}`);
+            return this.getPopupContent().find(`.${CALENDAR_CONTOURED_CELL_CLASS}`);
         };
 
         const contouredCellID = getContouredCell().attr('id');
 
-        keyboardMock($(this.instance.startDateField())).keyDown('right');
+        keyboardMock(this.$startDateInput).keyDown('right');
 
         const newContouredCellID = getContouredCell().attr('id');
 
         assert.strictEqual(newContouredCellID === contouredCellID, false, 'countoured cell is changed');
-        assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on startDateInput');
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on endDateInput');
-
-        this.instance.option('opened', false);
-
-        assert.strictEqual($(this.instance.startDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on startDateInput');
-        assert.strictEqual($(this.instance.endDateField()).attr('aria-activedescendant'), newContouredCellID, 'aria-activedescendant on endDateInput');
+        checkInputAttributes(this.instance, 'aria-activedescendant', newContouredCellID);
     });
 });
