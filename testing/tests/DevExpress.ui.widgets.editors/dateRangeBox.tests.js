@@ -77,6 +77,11 @@ const moduleConfig = {
             value: ['2023/01/05', '2023/02/14'],
             multiView: true,
         });
+
+        this.checkInputAttributes = (attrName, expectedValue) => {
+            QUnit.assert.strictEqual(this.$startDateInput.attr(attrName), expectedValue, `${attrName} attr value of start input`);
+            QUnit.assert.strictEqual(this.$endDateInput.attr(attrName), expectedValue, `${attrName} attr value of end input`);
+        };
     },
     afterEach: function() {
         fx.off = false;
@@ -3903,11 +3908,6 @@ QUnit.module('calendarOptions', moduleConfig, () => {
 });
 
 QUnit.module('Aria accessibility', moduleConfig, () => {
-    const checkInputAttributes = (instance, attrName, expectedValue) => {
-        QUnit.assert.strictEqual($(instance.startDateField()).attr(attrName), expectedValue, `${attrName} attr value of start input`);
-        QUnit.assert.strictEqual($(instance.endDateField()).attr(attrName), expectedValue, `${attrName} attr value of end input`);
-    };
-
     QUnit.test('aria-owns attribute should be added to root element when popup is open and removed when popup is closed', function(assert) {
         assert.strictEqual(this.$element.attr('aria-owns'), undefined, 'aria-owns');
 
@@ -3940,7 +3940,7 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             opened: false
         });
 
-        checkInputAttributes(this.instance, 'aria-expanded', 'false');
+        this.checkInputAttributes('aria-expanded', 'false');
     });
 
     QUnit.test('aria-expanded attribute with true value should be added to each input on initialization if opened is true', function(assert) {
@@ -3948,17 +3948,17 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             opened: true
         });
 
-        checkInputAttributes(this.instance, 'aria-expanded', 'true');
+        this.checkInputAttributes('aria-expanded', 'true');
     });
 
     QUnit.test('aria-expanded attribute value should be toggled for each input after change opened option value in runtime', function(assert) {
         this.instance.open();
 
-        checkInputAttributes(this.instance, 'aria-expanded', 'true');
+        this.checkInputAttributes('aria-expanded', 'true');
 
         this.instance.close();
 
-        checkInputAttributes(this.instance, 'aria-expanded', 'false');
+        this.checkInputAttributes('aria-expanded', 'false');
     });
 
     ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
@@ -3969,11 +3969,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
             dateBox.option('opened', true);
 
-            checkInputAttributes(this.instance, 'aria-expanded', 'true');
+            this.checkInputAttributes('aria-expanded', 'true');
 
             dateBox.option('opened', false);
 
-            checkInputAttributes(this.instance, 'aria-expanded', 'false');
+            this.checkInputAttributes('aria-expanded', 'false');
         });
     });
 
@@ -3983,7 +3983,9 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
                 deferRendering,
             });
 
-            checkInputAttributes(this.instance, 'aria-controls', deferRendering ? undefined : this.getPopupContent().attr('id'));
+            const expectedAriaControlsValue = deferRendering ? undefined : this.getPopupContent().attr('id');
+
+            this.checkInputAttributes('aria-controls', expectedAriaControlsValue);
         });
 
         QUnit.test(`aria-controls attribute value of each input should equal popup content identifier if popup is rendered, deferRendering="${deferRendering}"`, function(assert) {
@@ -3993,11 +3995,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
             this.instance.open();
 
-            checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
+            this.checkInputAttributes('aria-controls', this.getPopupContent().attr('id'));
 
             this.instance.close();
 
-            checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
+            this.checkInputAttributes('aria-controls', this.getPopupContent().attr('id'));
         });
 
         ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
@@ -4012,11 +4014,11 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
                 dateBox.option('opened', true);
 
-                checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
+                this.checkInputAttributes('aria-controls', this.getPopupContent().attr('id'));
 
                 dateBox.option('opened', false);
 
-                checkInputAttributes(this.instance, 'aria-controls', this.getPopupContent().attr('id'));
+                this.checkInputAttributes('aria-controls', this.getPopupContent().attr('id'));
             });
         });
 
@@ -4030,7 +4032,7 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
             const contouredCellID = this.getPopupContent().find(`.${CALENDAR_CONTOURED_CELL_CLASS}`).attr('id');
 
-            checkInputAttributes(this.instance, 'aria-activedescendant', deferRendering ? undefined : contouredCellID);
+            this.checkInputAttributes('aria-activedescendant', deferRendering ? undefined : contouredCellID);
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should be saved after change opened option value to false in runtime', function(assert) {
@@ -4045,7 +4047,7 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
             this.instance.option('opened', false);
 
-            checkInputAttributes(this.instance, 'aria-activedescendant', contouredCellID);
+            this.checkInputAttributes('aria-activedescendant', contouredCellID);
         });
     });
 
@@ -4073,6 +4075,6 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
         const newContouredCellID = getContouredCell().attr('id');
 
         assert.strictEqual(newContouredCellID === contouredCellID, false, 'countoured cell is changed');
-        checkInputAttributes(this.instance, 'aria-activedescendant', newContouredCellID);
+        this.checkInputAttributes('aria-activedescendant', newContouredCellID);
     });
 });
