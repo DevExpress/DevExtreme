@@ -51,10 +51,13 @@ const apiRequestMock = RequestMock()
 test('Should sort without DataSource reload if scrolling mode isn\'t virtual', async (t) => {
   const pivotGrid = new PivotGrid('#container');
   await t.addRequestHooks(requestLogger);
+  const initialRequestCount = await requestLogger.count(() => true);
 
   await t.click(pivotGrid.getColumnHeaderArea().getAction());
 
-  const requestCount = await requestLogger.count(() => true);
+  const afterSortRequestCount = await requestLogger.count(() => true);
+  const requestCount = afterSortRequestCount - initialRequestCount;
+
   await t.expect(requestCount).eql(0);
 
   await t.removeRequestHooks(requestLogger);
@@ -89,10 +92,13 @@ test('Should sort without DataSource reload if scrolling mode isn\'t virtual', a
 test('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
   const pivotGrid = new PivotGrid('#container');
   await t.addRequestHooks(requestLogger);
+  const initialRequestCount = await requestLogger.count(() => true);
 
   await t.click(pivotGrid.getColumnHeaderArea().getAction());
 
-  const requestCount = await requestLogger.count(() => true);
+  const afterSortRequestCount = await requestLogger.count(() => true);
+  const requestCount = afterSortRequestCount - initialRequestCount;
+
   await t.expect(requestCount).eql(1);
 
   await t.removeRequestHooks(requestLogger);

@@ -1,5 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
+import DataGridInstance from '../../../../js/ui/data_grid';
 import Widget from '../internal/widget';
+import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
 import FilterPanel from './filter/panel';
@@ -292,8 +294,8 @@ export default class DataGrid extends Widget {
     return new EditForm(element, buttons);
   }
 
-  getToolbar(): Selector {
-    return this.element.find(`.${CLASS.toolbar}`);
+  getToolbar(): Toolbar {
+    return new Toolbar(this.element.find(`.${CLASS.toolbar}`));
   }
 
   getHeaderPanel(): HeaderPanel {
@@ -450,6 +452,19 @@ export default class DataGrid extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).option('grouping.autoExpandAll', true),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
+  apiCollapseAllGroups(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).option('grouping.autoExpandAll', false),
       {
         dependencies: {
           getInstance,

@@ -8,6 +8,30 @@ module.exports = {
     overrides: [
         {
             files: [
+                '**/*.ts'
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                'no-restricted-globals': [
+                    'warn',
+                    {
+                        'name': 'setTimeout',
+                        'message': 'Use setTimeout only if there is absolutely no another way. If it is, ignore this rule and leave a comment why setTimeout is used here.'
+                    },
+                    {
+                        'name': 'setInterval',
+                        'message': 'Use setInterval only if there is absolutely no another way. If it is, ignore this rule and leave a comment why setInterval is used here.'
+                    }
+                ],
+            }
+        },
+        {
+            files: [
                 '**/*.ts',
             ],
             excludedFiles: '**/module*.ts',
@@ -58,6 +82,7 @@ module.exports = {
                 'prefer-rest-params': 'warn',
                 'max-len': 'warn',
                 'consistent-return': 'warn',
+                'array-callback-return': 'warn',
                 '@typescript-eslint/explicit-function-return-type': 'warn',
                 '@typescript-eslint/init-declarations': 'warn',
                 '@typescript-eslint/no-unsafe-return': 'warn',

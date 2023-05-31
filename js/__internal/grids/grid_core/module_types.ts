@@ -1,31 +1,33 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import {
-  PropertyType as _PropertyType,
-} from '@js/core/index';
+import { PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
-import DataGrid, { Properties } from '@js/ui/data_grid';
+import { GridBase, GridBaseOptions } from '@js/common/grids';
+import Widget from '@js/ui/widget/ui.widget';
 
-type PropertyType<O, K extends string> = _PropertyType<O, K> extends never
-  ? any
-  : _PropertyType<O, K>;
+// Data types
+export type RowKey = unknown;
 
-type GetOptionValueType = (<TPropertyName extends string>(
-  optionName: TPropertyName) =>
-  PropertyType<InternalGridOptions, TPropertyName>);
+// todo: move to upper .d.ts
+type OptionsMethod<TOptions> =
+  (() => TOptions) &
+  ((options: TOptions) => void) &
+  (
+    <TPropertyName extends string>(
+      optionName: TPropertyName
+    ) => PropertyType<TOptions, TPropertyName>
+  ) & (
+    <TPropertyName extends string>(
+      optionName: TPropertyName,
+      optionValue: PropertyType<TOptions, TPropertyName>
+    ) => void
+  );
 
-type SetOptionValueType = (<TPropertyName extends string>(
-  optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>) => void);
+type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
-type SetOptionsType = ((options: InternalGridOptions) => void);
-
-export interface InternalGrid
-  extends Omit<DataGrid<unknown, unknown>, 'option'> {
-  option: GetOptionValueType &
-  SetOptionValueType &
-  (() => InternalGridOptions) &
-  SetOptionsType;
+export interface InternalGrid extends GridBaseType {
+  option: OptionsMethod<InternalGridOptions>;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
@@ -56,11 +58,45 @@ export interface InternalGrid
   ) => TComponent;
 }
 
-export type InternalGridOptions = Properties & {
+export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown> {
   loadingTimeout?: number;
-};
 
-export interface OptionChangedArgs<T extends string = string> {
+  useLegacyKeyboardNavigation?: boolean;
+}
+
+// todo: move to upper .d.ts files
+type DotPrefix<T extends string> = T extends '' ? '' : `.${T}`;
+
+// todo: move to upper .d.ts files
+type DecrementalCounter = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+// todo: move to upper .d.ts files
+type IsObject<T> =
+  0 extends (1 & T)
+    ? false
+    : T extends any[]
+      ? false
+      : string extends keyof T
+        ? false
+        : T extends object
+          ? true
+          : false;
+
+// todo: move to upper .d.ts files
+type DotNestedKeys<T, RLIMIT extends number = 10> =
+(
+  IsObject<T> extends true ?
+    (
+      RLIMIT extends 1 ? keyof T :
+        {
+          [K in Exclude<keyof T, symbol>]: `${K}${DotPrefix<DotNestedKeys<T[K], DecrementalCounter[RLIMIT]>>}` | K
+        }[Exclude<keyof T, symbol>]
+    ) :
+    ''
+) extends infer D ? Extract<D, string> : never;
+
+// todo: move to upper .d.ts files
+interface OptionChangedArgs<T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
   previousValue: PropertyType<InternalGridOptions, T>;
@@ -68,13 +104,21 @@ export interface OptionChangedArgs<T extends string = string> {
   handled: boolean;
 }
 
+// todo: move to upper .d.ts files
+type OptionNames = DotNestedKeys<Required<InternalGridOptions>>;
+
+// todo: move to upper .d.ts files
+export type OptionChanged = {
+  [P in OptionNames]: OptionChangedArgs<P>;
+}[OptionNames];
+
 export interface Controllers {
   data: import('./data_controller/module').DataController;
-  columns: any;
+  columns: import('./columns_controller/module').ColumnsController;
   resizing: any;
   adaptiveColumns: any;
   columnChooser: any;
-  editorFactory: import('./editor_factory/module_types').EditorFactory;
+  editorFactory: any; // import('./editor_factory/module').EditorFactory;
   editing: any;
   keyboardNavigation: import('./keyboard_navigation/module').KeyboardNavigationController;
   focus: any;
@@ -147,7 +191,7 @@ declare class ModuleItem {
 
   off(...args: any[]): void;
 
-  optionChanged(e: OptionChangedArgs): void;
+  optionChanged(e: OptionChanged): void;
 
   getAction(name: string): any;
 
