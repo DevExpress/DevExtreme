@@ -6,7 +6,7 @@ import Class from '@js/core/class';
 import { format } from '@js/core/utils/string';
 import { deferUpdate } from '@js/core/utils/common';
 import { isDefined, isString } from '@js/core/utils/type';
-import { VirtualScrollController } from '@js/ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import VirtualScrollControllerModule from '@js/__internal/grids/grid_core/virtual_scrolling/module_core';
 import { foreachColumnInfo, createColumnsInfo } from '@js/ui/grid_core/ui.grid_core.virtual_columns_core';
 import stateStoring from '@js/ui/grid_core/ui.grid_core.state_storing_core';
 
@@ -575,7 +575,7 @@ const DataController = Class.inherit((function () {
   }
 
   function createScrollController(dataController, component, dataAdapter) {
-    return new VirtualScrollController(component, extend({
+    return new VirtualScrollControllerModule.VirtualScrollController(component, extend({
       hasKnownLastPage() {
         return true;
       },

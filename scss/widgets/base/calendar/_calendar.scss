@@ -8,9 +8,14 @@
 
   position: relative;
   display: flex;
+  direction: ltr;
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid transparent;
+
+  &.dx-rtl {
+    direction: rtl;
+  }
 }
 
 .dx-calendar-views-wrapper {
@@ -22,7 +27,6 @@
 .dx-calendar-navigator {
   display: flex;
   justify-content: space-between;
-  direction: ltr;
 
   .dx-calendar-caption-button {
     flex-grow: 1;
@@ -63,7 +67,6 @@
   table {
     width: 100%;
     height: 100%;
-    direction: ltr;
     table-layout: fixed;
     border-spacing: 0;
     line-height: normal;
@@ -80,12 +83,19 @@
 
     @include dx-overflow();
   }
+}
 
-  .dx-calendar-week-number-cell {
+.dx-calendar-week-number-cell {
+  position: relative;
+
+  span {
+    position: absolute;
     display: flex;
-    height: 100%;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    width: 2em;
+    inset: 0;
   }
 }
 
@@ -128,32 +138,6 @@
 
     table {
       padding: 0 10px;
-    }
-  }
-}
-
-.dx-calendar-range {
-  .dx-calendar-cell {
-    &::before {
-      content: "";
-      position: absolute;
-      z-index: 1;
-      inset-inline-start: 50%;
-      inset-inline-end: 0;
-    }
-  }
-}
-
-.dx-rtl {
-  &.dx-calendar {
-    .dx-calendar-body {
-      table {
-        left: 0;
-      }
-
-      .dx-widget {
-        direction: ltr;
-      }
     }
   }
 }

@@ -108,8 +108,8 @@ export type Properties = dxTextAreaOptions;
 export type Options = dxTextAreaOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 

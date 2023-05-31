@@ -82,7 +82,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 /**
  * @public
  */
-export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | label | maxLength | name | placeholder | text'> & {
+export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'> & {
     /**
      * @docid dxDateRangeBoxOptions.disableOutOfRangeSelection
      * @default true
@@ -236,8 +236,8 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
 }
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 

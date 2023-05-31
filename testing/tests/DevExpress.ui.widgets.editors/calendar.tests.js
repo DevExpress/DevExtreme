@@ -36,6 +36,8 @@ const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
 const CALENDAR_CELL_RANGE_HOVER_CLASS = 'dx-calendar-cell-range-hover';
+const CALENDAR_CELL_RANGE_HOVER_START_CLASS = 'dx-calendar-cell-range-hover-start';
+const CALENDAR_CELL_RANGE_HOVER_END_CLASS = 'dx-calendar-cell-range-hover-end';
 const CALENDAR_RANGE_START_DATE_CLASS = 'dx-calendar-range-start-date';
 const CALENDAR_RANGE_END_DATE_CLASS = 'dx-calendar-range-end-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
@@ -216,41 +218,27 @@ QUnit.module('Navigator integration', {
         };
         const zoomLevels = ['month', 'year', 'decade', 'century'];
 
-        QUnit.test('after navigate to next', function(assert) {
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
+        [true, false].forEach(rtlEnabled => {
+            QUnit.test(`after navigate to next, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                this.reinit({ rtlEnabled, value: new Date(2015, 5, 13) });
 
-                this.$navigatorNext.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+                $.each(zoomLevels, (_, zoomLevel) => {
+                    this.calendar.option({ zoomLevel });
+
+                    this.$navigatorNext.trigger('dxclick');
+                    assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+                });
             });
-        });
 
-        QUnit.test('after navigate to next in RTL', function(assert) {
-            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
+            QUnit.test(`after navigate to prev, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                this.reinit({ rtlEnabled, value: new Date(2015, 5, 13) });
 
-                this.$navigatorNext.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
-            });
-        });
+                $.each(zoomLevels, (_, zoomLevel) => {
+                    this.calendar.option({ zoomLevel });
 
-        QUnit.test('after navigate to prev', function(assert) {
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
-
-                this.$navigatorPrev.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
-            });
-        });
-
-        QUnit.test('after navigate to prev in RTL', function(assert) {
-            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
-            $.each(zoomLevels, (_, zoomLevel) => {
-                this.calendar.option({ zoomLevel });
-
-                this.$navigatorPrev.trigger('dxclick');
-                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+                    this.$navigatorPrev.trigger('dxclick');
+                    assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
+                });
             });
         });
     });
@@ -271,41 +259,26 @@ QUnit.module('Navigator integration', {
         assert.strictEqual(this.$element.css('width'), initialWidthValue, 'width is correct');
     });
 
-    QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
-        const calendar = this.calendar;
-        const $navigatorPrev = this.$navigatorPrev;
-        const $navigatorNext = this.$navigatorNext;
+    [true, false].forEach((rtlEnabled) => {
+        QUnit.test(`calendar must change the current date when navigating to previous and next view, rtlEnabled=${rtlEnabled}`, function(assert) {
+            this.reinit({
+                rtlEnabled,
+            });
 
-        $.each(['month', 'year', 'decade', 'century'], (_, type) => {
-            calendar.option('zoomLevel', type);
+            const calendar = this.calendar;
+            const $navigatorPrev = this.$navigatorPrev;
+            const $navigatorNext = this.$navigatorNext;
 
-            const startDate = calendar.option('currentDate');
-            $($navigatorPrev).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') < startDate, 'current date more then start date');
+            $.each(['month', 'year', 'decade', 'century'], (_, type) => {
+                calendar.option('zoomLevel', type);
 
-            $($navigatorNext.trigger('dxclick')).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') > startDate, 'current date less then start date');
-        });
-    });
+                const startDate = calendar.option('currentDate');
+                $($navigatorPrev).trigger('dxclick');
+                assert.ok(calendar.option('currentDate') < startDate, 'current date more then start date');
 
-    QUnit.test('calendar must change the current date when navigating to previous and next view in RTL mode', function(assert) {
-        this.reinit({
-            rtlEnabled: true
-        });
-
-        const calendar = this.calendar;
-        const $navigatorPrev = this.$navigatorPrev;
-        const $navigatorNext = this.$navigatorNext;
-
-        $.each(['month', 'year', 'decade', 'century'], (_, type) => {
-            calendar.option('zoomLevel', type);
-
-            const startDate = calendar.option('currentDate');
-            $($navigatorPrev).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') > startDate, 'current date more then start date');
-
-            $($navigatorNext.trigger('dxclick')).trigger('dxclick');
-            assert.ok(calendar.option('currentDate') < startDate, 'current date less then start date');
+                $($navigatorNext.trigger('dxclick')).trigger('dxclick');
+                assert.ok(calendar.option('currentDate') > startDate, 'current date less then start date');
+            });
         });
     });
 
@@ -441,41 +414,25 @@ QUnit.module('Navigator integration', {
         assert.ok(!$(nextChangeMonthButton).hasClass(ACTIVE_STATE_CLASS));
     });
 
-    QUnit.test('view change buttons should be disabled if min/max has been reached', function(assert) {
-        this.reinit({
-            value: new Date(2015, 8, 6),
-            min: new Date(2015, 7, 1),
-            max: new Date(2015, 9, 28)
+    [true, false].forEach((rtlEnabled) =>{
+        QUnit.test(`view change buttons should be disabled if min/max has been reached, rtlEnabled=${rtlEnabled}`, function(assert) {
+            this.reinit({
+                rtlEnabled,
+                value: new Date(2015, 8, 6),
+                min: new Date(2015, 7, 1),
+                max: new Date(2015, 9, 28)
+            });
+
+            assert.ok(!this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
+            assert.ok(!this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
+
+            $(this.$navigatorPrev).trigger('dxclick');
+            assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
+
+            $(this.$navigatorNext).trigger('dxclick');
+            $(this.$navigatorNext).trigger('dxclick');
+            assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
         });
-
-        assert.ok(!this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-        assert.ok(!this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorPrev).trigger('dxclick');
-        assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorNext).trigger('dxclick');
-        $(this.$navigatorNext).trigger('dxclick');
-        assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-    });
-
-    QUnit.test('view change buttons should be disabled if min/max has been reached in RTL mode', function(assert) {
-        this.reinit({
-            rtlEnabled: true,
-            value: new Date(2015, 8, 6),
-            min: new Date(2015, 7, 1),
-            max: new Date(2015, 9, 28)
-        });
-
-        assert.ok(!this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-        assert.ok(!this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorPrev).trigger('dxclick');
-        assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
-
-        $(this.$navigatorNext).trigger('dxclick');
-        $(this.$navigatorNext).trigger('dxclick');
-        assert.ok(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS));
     });
 
     [
@@ -2216,11 +2173,51 @@ QUnit.module('Options', {
                     values: ['2023/01/13', null],
                     selectionMode: 'range'
                 });
+
+                const getCell = (date) => {
+                    return $(getCurrentViewInstance(this.calendar).$element().find(`*[data-value="${date}"]`));
+                };
+
+                getCell('2023/01/15').trigger('mouseenter');
+
+                const hoveredRange = getCurrentViewInstance(this.calendar).option('hoveredRange');
+
+                assert.strictEqual(hoveredRange.length, 3, 'hovered range is correct');
+
+                assert.strictEqual(getCell('2023/01/15').hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/15').hasClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_END_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/15').hasClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_START_CLASS} class`);
+
+                assert.strictEqual(getCell('2023/01/14').hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/14').hasClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_END_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/14').hasClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_START_CLASS} class`);
+
+                assert.strictEqual(getCell('2023/01/13').hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/13').hasClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS), false, `${CALENDAR_CELL_RANGE_HOVER_END_CLASS} class`);
+                assert.strictEqual(getCell('2023/01/13').hasClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS), true, `${CALENDAR_CELL_RANGE_HOVER_START_CLASS} class`);
+            });
+
+            QUnit.test('Hovered range should be cleared after mouseleave on viewsWrapper element', function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'test does not actual for mobile devices');
+                    return;
+                }
+
+                this.reinit({
+                    values: ['2023/01/13', null],
+                    selectionMode: 'range'
+                });
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/15"]'));
 
                 $cell.trigger('mouseenter');
 
-                assert.ok($cell.hasClass(CALENDAR_CELL_RANGE_HOVER_CLASS));
+                assert.strictEqual(getCurrentViewInstance(this.calendar).option('hoveredRange').length, 3, 'hovered range is correct');
+
+                const $viewsWrapper = $(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)));
+
+                $viewsWrapper.trigger('mouseleave');
+
+                assert.strictEqual(getCurrentViewInstance(this.calendar).option('hoveredRange').length, 0, 'hovered range is cleared');
             });
 
             QUnit.test('Selected range should be reduced when difference between startDate and endDate is bigger than four mounths', function(assert) {

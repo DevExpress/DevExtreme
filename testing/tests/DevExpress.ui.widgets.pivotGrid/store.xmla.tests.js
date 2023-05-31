@@ -3913,11 +3913,9 @@ define(function(require) {
 
             store.load({
                 columns: [
-                    // eslint-disable-next-line i18n/no-russian-character
-                    { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column' }
+                    { dataField: '[Agrégation par date].[Agrégation par date]', area: 'column' }
                 ],
-                // eslint-disable-next-line i18n/no-russian-character
-                values: [{ dataField: '[Measures].[Опер_Колво]' }]
+                values: [{ dataField: '[Measures].[Fon_nombre]' }]
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);
@@ -3942,13 +3940,11 @@ define(function(require) {
                 cube: 'CubeMobile'
             });
             store.load({
-                /* eslint-disable i18n/no-russian-character */
                 columns: [
-                    { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column', expanded: true },
-                    { dataField: '[Дата].[Год]' }
+                    { dataField: '[Agrégation par date].[Agrégation par date]', area: 'column', expanded: true },
+                    { dataField: '[Date].[L\'année]' }
                 ],
-                values: [{ dataField: '[Measures].[Опер_Колво]' }]
-                /* eslint-enable */
+                values: [{ dataField: '[Measures].[Fon_nombre]' }]
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);

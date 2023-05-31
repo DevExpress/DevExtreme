@@ -360,7 +360,7 @@ export default {
     }
   },
 
-  getHeaderFilterGroupParameters(column, remoteGrouping) {
+  getHeaderFilterGroupParameters(column, remoteGrouping?) {
     let result: any = [];
     const dataField = column.dataField || column.name;
     const groupInterval = sharedFiltering.getGroupInterval(column);
@@ -523,7 +523,7 @@ export default {
 
   getWidgetInstance,
 
-  getLastResizableColumnIndex(columns, resultWidths) {
+  getLastResizableColumnIndex(columns, resultWidths?) {
     const hasResizableColumns = columns.some((column) => column && !column.command && !column.fixed && column.allowResizing !== false);
     let lastColumnIndex;
 

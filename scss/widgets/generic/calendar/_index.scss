@@ -20,24 +20,21 @@
 );
 
 .dx-calendar-navigator {
-  .dx-button {
+  .dx-calendar-caption-button {
+    font-weight: 600;
     border-radius: 0;
   }
 
-  .dx-calendar-caption-button {
-    font-weight: 600;
-  }
-
   .dx-calendar-navigator-previous-view {
-    margin-right: -1px;
-    border-top-left-radius: $calendar-navigator-border-radius;
-    border-bottom-left-radius: $calendar-navigator-border-radius;
+    margin-inline-end: -1px;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
   }
 
   .dx-calendar-navigator-next-view {
-    margin-left: -1px;
-    border-top-right-radius: $calendar-navigator-border-radius;
-    border-bottom-right-radius: $calendar-navigator-border-radius;
+    margin-inline-start: -1px;
+    border-end-start-radius: 0;
+    border-start-start-radius: 0;
   }
 }
 
@@ -62,5 +59,23 @@
   $calendar-cell-contoured-border-color,
   $calendar-cell-other-color,
   $calendar-cell-other-hover-color,
-  $calendar-cell-hover-border-color
+  $calendar-cell-hover-border-color,
+  $base-border-radius,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::before",
+  $calendar-hover-bg,
+  $calendar-cell-hover-border-color,
+  $base-border-radius,
+  0,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::after",
+  inherit,
+  $calendar-cell-hover-border-color,
+  $base-border-radius,
+  1px,
+  '.dx-calendar-cell-range-hover',
+  '.dx-calendar-cell-range-hover-start',
+  '.dx-calendar-cell-range-hover-end',
 );

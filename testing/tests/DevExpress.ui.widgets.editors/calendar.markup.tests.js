@@ -171,16 +171,6 @@ QUnit.module('Navigator', {
         const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
         assert.equal(navigatorCaption.text(), 'June 2015July 2015');
     });
-
-    QUnit.test('Calendar with two views and rtlEnabled should display 2 months in reverse order', function(assert) {
-        this.calendar.option({
-            viewsCount: 2,
-            rtlEnabled: true
-        });
-
-        const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
-        assert.equal(navigatorCaption.text(), 'July 2015June 2015');
-    });
 });
 
 QUnit.module('Calendar footer', {
@@ -274,22 +264,6 @@ QUnit.module('showWeekNumbers', {
         const $firstBodyCell = this.$firstBodyRow.children().eq(0);
 
         assert.ok($firstBodyCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
-    });
-
-    QUnit.test('last header cell should have "dx-week-number-header" class when showWeekNumbers=true and rtlEnabled=true', function(assert) {
-        this.reinit({ showWeekNumbers: true, rtlEnabled: true });
-        this.cacheTableElements();
-        const $lastHeaderCell = this.$headerRow.children().eq(7);
-
-        assert.ok($lastHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
-    });
-
-    QUnit.test('last cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true and rtlEnabled=true', function(assert) {
-        this.reinit({ showWeekNumbers: true, rtlEnabled: true });
-        this.cacheTableElements();
-        const $lastBodyRowCell = this.$firstBodyRow.children().eq(7);
-
-        assert.ok($lastBodyRowCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
     });
 
     QUnit.test('calendar with zoomLevel!=="month" and showWeekNumbers=true should not have additional column', function(assert) {

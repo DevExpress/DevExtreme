@@ -691,3 +691,124 @@ test('Value in calendar should be updated by click on clear button if popup is o
     },
   });
 });
+
+test('Value in calendar should be updated after change start date value by keyboard and click on endDate input if popup is open', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('backspace')
+    .typeText(dateRangeBox.getStartDateBox().input, '0');
+
+  await t
+    .expect(dateRangeBox.option('value'))
+    .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
+    .expect(dateRangeBox.getCalendar().option('values'))
+    .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
+    .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
+    .eql(0);
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.option('value'))
+    .eql([new Date(2020, 9, 17), new Date(2021, 9, 24)])
+    .expect(dateRangeBox.getCalendar().option('values'))
+    .eql([new Date(2020, 9, 17), new Date(2021, 9, 24)])
+    .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
+    .eql(1);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onValueChangedCounter = 0;
+  })();
+
+  return createWidget('dxDateRangeBox', {
+    value: [new Date(2021, 9, 17), new Date(2021, 9, 24)],
+    opened: false,
+    width: 500,
+    calendarOptions: {
+      currentDate: new Date(2021, 9, 19),
+    },
+    showClearButton: true,
+    onValueChanged() {
+      ((window as any).onValueChangedCounter as number) += 1;
+    },
+  });
+});
+
+test('Value in calendar should be updated after change start date value by keyboard and press `tab` if popup is open', async (t) => {
+  const dateRangeBox = new DateRangeBox('#container');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true);
+
+  await t
+    .pressKey('backspace')
+    .pressKey('backspace')
+    .typeText(dateRangeBox.getStartDateBox().input, '19');
+
+  await t
+    .expect(dateRangeBox.option('value'))
+    .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
+    .expect(dateRangeBox.getCalendar().option('values'))
+    .eql([new Date(2021, 9, 17), new Date(2021, 9, 24)])
+    .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
+    .eql(0);
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.option('value'))
+    .eql([new Date(2019, 9, 17), new Date(2021, 9, 24)])
+    .expect(dateRangeBox.getCalendar().option('values'))
+    .eql([new Date(2019, 9, 17), new Date(2021, 9, 24)])
+    .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
+    .eql(1);
+
+  await t
+    .typeText(dateRangeBox.getEndDateBox().input, '10/24/2023')
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.option('value'))
+    .eql([new Date(2019, 9, 17), new Date(2023, 9, 24)])
+    .expect(dateRangeBox.getCalendar().option('values'))
+    .eql([new Date(2019, 9, 17), new Date(2023, 9, 24)])
+    .expect(ClientFunction(() => (window as any).onValueChangedCounter)())
+    .eql(2);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onValueChangedCounter = 0;
+  })();
+
+  return createWidget('dxDateRangeBox', {
+    value: [new Date(2021, 9, 17), new Date(2021, 9, 24)],
+    opened: false,
+    width: 500,
+    calendarOptions: {
+      currentDate: new Date(2021, 9, 19),
+    },
+    showClearButton: true,
+    onValueChanged() {
+      ((window as any).onValueChangedCounter as number) += 1;
+    },
+  });
+});

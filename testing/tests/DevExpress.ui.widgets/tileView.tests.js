@@ -521,7 +521,7 @@ QUnit.module('keyboard navigation', {
         const $element = this.$element;
         const keyboard = this.keyboard;
 
-        $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerup');
+        $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerdown');
         this.clock.tick(10);
         keyboard.keyDown('home');
 
@@ -532,7 +532,7 @@ QUnit.module('keyboard navigation', {
         const $element = this.$element;
         const keyboard = this.keyboard;
 
-        $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerup');
+        $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerdown');
         this.clock.tick(10);
         keyboard.keyDown('end');
 
@@ -567,7 +567,7 @@ $.each(configs, function(direction, config) {
             const keyboard = this.keyboard;
             const instance = $('#widget').dxTileView('instance');
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown('right');
 
@@ -584,7 +584,7 @@ $.each(configs, function(direction, config) {
             const $element = this.$element;
             const keyboard = this.keyboard;
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown('left');
 
@@ -600,7 +600,7 @@ $.each(configs, function(direction, config) {
             const $element = this.$element;
             const keyboard = this.keyboard;
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown('down');
 
@@ -616,7 +616,7 @@ $.each(configs, function(direction, config) {
             const $element = this.$element;
             const keyboard = this.keyboard;
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown('pageDown');
 
@@ -632,7 +632,7 @@ $.each(configs, function(direction, config) {
             const $element = this.$element;
             const keyboard = this.keyboard;
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown('up');
 
@@ -648,7 +648,7 @@ $.each(configs, function(direction, config) {
             const $element = this.$element;
             const keyboard = this.keyboard;
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown('pageUp');
 
@@ -672,7 +672,7 @@ $.each(configs, function(direction, config) {
 
             assert.equal(instance.scrollPosition(), 0, 'scrollPosition equal zero on init');
 
-            $element.find(TILEVIEW_ITEM_SELECTOR).first().trigger('dxpointerup');
+            $element.find(TILEVIEW_ITEM_SELECTOR).first().trigger('dxpointerdown');
             this.clock.tick(10);
             keyboard.keyDown(testConfig.forward);
             assert.equal(instance.scrollPosition(), 80, 'scrollPosition equal 80 after press forward arrow (item num 7)');

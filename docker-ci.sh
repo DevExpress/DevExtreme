@@ -123,6 +123,7 @@ function run_test_impl {
                     --enable-impl-side-painting
                     --enable-skia-benchmarking
                     --disable-web-security
+                    --remote-allow-origins=*
                 )
             fi
 

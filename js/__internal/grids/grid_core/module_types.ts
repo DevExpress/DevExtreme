@@ -6,6 +6,9 @@ import { dxElementWrapper } from '@js/core/renderer';
 import { GridBase, GridBaseOptions } from '@js/common/grids';
 import Widget from '@js/ui/widget/ui.widget';
 
+// Data types
+export type RowKey = unknown;
+
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
   (() => TOptions) &
@@ -115,7 +118,7 @@ export interface Controllers {
   resizing: any;
   adaptiveColumns: any;
   columnChooser: any;
-  editorFactory: import('./editor_factory/module_types').EditorFactory;
+  editorFactory: any; // import('./editor_factory/module').EditorFactory;
   editing: any;
   keyboardNavigation: import('./keyboard_navigation/module').KeyboardNavigationController;
   focus: any;
