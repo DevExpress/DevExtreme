@@ -154,14 +154,14 @@ export default {
     },
 
     _cleanAria: function() {
-        const $element = this.$element();
+        const $ariaTarget = this.option('searchEnabled') ? this.$element() : this._itemContainer();
 
         this.setAria({
             'role': null,
             'activedescendant': null
-        }, $element);
+        }, $ariaTarget);
 
-        $element.attr('tabIndex', null);
+        $ariaTarget.attr('tabIndex', null);
     },
 
     _clean() {
