@@ -951,7 +951,7 @@ const Overlay = Widget.inherit({
         return isHidden || !domAdapter.getBody().contains($parent.get(0));
     },
 
-    _renderContentImpl(isDimensionChange = false) {
+    _renderContentImpl() {
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option('contentTemplate');
@@ -967,7 +967,7 @@ const Overlay = Widget.inherit({
 
                 // NOTE: T1114344
                 if(this.option('templatesRenderAsynchronously')) {
-                    this._renderGeometry({ isDimensionChange });
+                    this._renderGeometryAsynchronously();
                 }
             }
         });
@@ -1184,6 +1184,10 @@ const Overlay = Widget.inherit({
         } else {
             this._renderVisibilityAnimate(visible);
         }
+    },
+
+    _renderGeometryAsynchronously() {
+        this._renderGeometry();
     },
 
     _dimensionChanged() {

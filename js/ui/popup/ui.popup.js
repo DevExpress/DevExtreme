@@ -351,11 +351,9 @@ const Popup = Overlay.inherit({
         this._observeContentResize(true);
     },
 
-    _renderContentImpl: function() {
-        const isDimensionChange = true;
-
+    _renderContentImpl() {
         this._renderTitle();
-        this.callBase(isDimensionChange);
+        this.callBase();
         this._renderResize();
         this._renderBottom();
     },
@@ -873,6 +871,10 @@ const Popup = Overlay.inherit({
         if(hasWindow()) {
             this._renderFullscreenWidthClass();
         }
+    },
+
+    _renderGeometryAsynchronously() {
+        this._renderGeometry({ isDimensionChange: true });
     },
 
     _dimensionChanged() {

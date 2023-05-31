@@ -1,4 +1,4 @@
-import { getWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 
 const visualViewportListenerNames = {
     resize: 'resize',
@@ -6,9 +6,15 @@ const visualViewportListenerNames = {
 };
 
 const getVisualViewport = () => {
-    const { visualViewport } = getWindow();
+    const isWindowAvailable = hasWindow();
 
-    return visualViewport;
+    if(isWindowAvailable) {
+        const { visualViewport } = getWindow();
+
+        return visualViewport;
+    }
+
+    return null;
 };
 
 const hasVisualViewport = () => {

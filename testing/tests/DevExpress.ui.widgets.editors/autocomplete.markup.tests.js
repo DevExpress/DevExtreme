@@ -21,6 +21,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 QUnit.module('dxAutocomplete', {
     beforeEach: function() {
+        // debugger;
         this.element = $('#widget').dxAutocomplete({
             value: 'text',
             dataSource: ['item 1', 'item 2', 'item 3']
