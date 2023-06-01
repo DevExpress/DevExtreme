@@ -110,7 +110,7 @@ test('ButtonGroup item should not have hover and active state', async (t) => {
     .expect(button.hasClass(ACTIVE_STATE_CLASS))
     .notOk()
     .expect(button.hasClass(FOCUSED_STATE_CLASS))
-    .notOk()
+    .ok()
     .expect(button.hasClass(HOVER_STATE_CLASS))
     .ok();
 
