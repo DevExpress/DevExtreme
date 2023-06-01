@@ -8,6 +8,7 @@ import SelectBox from 'ui/select_box';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { hasVisualViewport } from 'core/utils/visual_viewport';
 import messageLocalization from 'localization/message';
 import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointmentPopup/form';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
@@ -18,6 +19,7 @@ const { module, test } = QUnit;
 
 const APPOINTMENT_POPUP_WIDTH = 485;
 const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
+
 const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const width = visibility === true ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
     const colSpan = visibility === true ? 1 : 2;
@@ -90,14 +92,34 @@ const createScheduler = (options = {}) => {
     return createWrapper($.extend(defaultOption, options));
 };
 
-const setWindowWidth = width => {
-    Object.defineProperty(document.documentElement, 'clientWidth', {
-        get: () => width,
-        configurable: true
+const setConfigurableProperty = (object, propertyName, value) => {
+    Object.defineProperty(object, propertyName, {
+        get: () => value,
+        configurable: true,
     });
 };
 
-const resetWindowWidth = () => delete document.documentElement.clientWidth;
+const setWindowWidth = width => {
+    setConfigurableProperty(document.documentElement, 'clientWidth', width);
+
+    const shouldUseVisualViewport = hasVisualViewport();
+
+    if(shouldUseVisualViewport) {
+        setConfigurableProperty(window, 'innerWidth', width);
+        setConfigurableProperty(window.visualViewport, 'width', width);
+    }
+};
+
+const resetWindowWidth = () => {
+    document.documentElement.clientWidth = null;
+
+    const wasVisualViewportUsed = hasVisualViewport();
+
+    if(wasVisualViewportUsed) {
+        window.innerWidth = null;
+        window.visualViewport.width = null;
+    }
+};
 
 QUnit.testStart(() => initTestMarkup());
 
