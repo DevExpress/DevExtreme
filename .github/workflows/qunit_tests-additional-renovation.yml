@@ -40,7 +40,8 @@ jobs:
           DOTNET_CLI_TELEMETRY_OPTOUT: "true"
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
         run: |
-          npm run build:dev:cps
+          npm run build:dev
+          npm run build:systemjs
 
       - name: Zip artifacts
         run: |

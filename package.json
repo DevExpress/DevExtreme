@@ -213,7 +213,6 @@
     "pre-commit": "node build/pre-commit/index.js",
     "build": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build:dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",
-    "build:dev:csp": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true BUILD_SYSTEMJS=true gulp default",
     "build:testcafe": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true BUILD_TESTCAFE=TRUE gulp default",
     "build-npm-devextreme": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true SKIP_THEMEBUILDER=true gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default --uglify",

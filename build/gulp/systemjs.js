@@ -47,6 +47,7 @@ gulp.task('transpile-systemjs', gulp.series(
     gulp.parallel(
         'transpile-systemjs-modules',
         'transpile-systemjs-modules-renovation',
+        'transpile-systemjs-testing',
         'transpile-systemjs-css',
         'transpile-systemjs-js-vendors'
     )
