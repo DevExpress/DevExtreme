@@ -59,57 +59,57 @@ const config = {
         'text': path.join(root, '/node_modules/systemjs-plugin-text/text.js'),
         'json': path.join(root, '/node_modules/systemjs-plugin-json/json.js'),
         'plugin-babel': path.join(root, '/node_modules/systemjs-plugin-babel/plugin-babel.js'),
-        'systemjs-babel-build': path.join(root, '/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js')
+        'systemjs-babel-build': path.join(root, '/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js'),
     },
     packages: {
         '@devextreme/runtime/common': {
             main: '../cjs/common/index.js',
             defaultExtension: 'js',
-            format: 'cjs'
+            format: 'cjs',
         },
         '@devextreme/runtime/inferno': {
             main: '../cjs/inferno/index.js',
             defaultExtension: 'js',
-            format: 'cjs'
+            format: 'cjs',
         },
         '@devextreme/runtime/angular': {
             main: '../cjs/angular/index.js',
             defaultExtension: 'js',
-            format: 'cjs'
+            format: 'cjs',
         },
         '@devextreme/runtime/react': {
             main: '../cjs/react/index.js',
             defaultExtension: 'js',
-            format: 'cjs'
+            format: 'cjs',
         },
         '@devextreme/runtime/vue': {
             main: '../cjs/vue/index.js',
             defaultExtension: 'js',
-            format: 'cjs'
+            format: 'cjs',
         },
         '@devextreme/runtime/declarations': {
             main: '../cjs/declarations/index.js',
             defaultExtension: 'js',
-            format: 'cjs'
+            format: 'cjs',
         },
         '': {
-            defaultExtension: 'js'
+            defaultExtension: 'js',
         },
 
         // Deps
         'globalize': {
             main: '../globalize.js',
-            defaultExtension: 'js'
+            defaultExtension: 'js',
         },
         'cldr': {
             main: '../cldr.js',
-            defaultExtension: 'js'
+            defaultExtension: 'js',
         },
         'events/utils': {
-            main: 'index'
+            main: 'index',
         },
         'events': {
-            main: 'index'
+            main: 'index',
         },
     },
     packageConfigPaths: [
@@ -119,19 +119,19 @@ const config = {
         '/node_modules/knockout/build/output/knockout-latest.debug.js': {
             format: 'global',
             deps: ['jquery'],
-            exports: 'ko'
+            exports: 'ko',
         },
 
         '/artifacts/js/angular.js': {
             deps: ['jquery'],
             format: 'global',
-            exports: 'angular'
+            exports: 'angular',
         },
 
         '*.json': {
-            'loader': 'json'
-        }
-    }
+            'loader': 'json',
+        },
+    },
 };
 
 const getFileList = (dirName) => {
@@ -153,23 +153,10 @@ const getFileList = (dirName) => {
     return files;
 };
 
-const transpileModules = async(Builder) => {
-    const builder = new Builder(root, config);
-
-    const listFiles = getFileList(path.join(root, 'artifacts/transpiled'));
-
-    // eslint-disable-next-line no-restricted-syntax
-    for(const filePath of listFiles) {
-        await builder.buildStatic(
-            `[${filePath}]`,
-            filePath.replace('transpiled', 'transpiled-systemjs'),
-            {
-                minify: false,
-                sourceMaps: true,
-                encodeNames: false
-            }
-        );
-    }
+const transpileModules = async() => {
+    getFileList(path.join(root, 'artifacts/transpiled')).forEach((filePath) => {
+        transpileFile(filePath, filePath.replace('/transpiled', '/transpiled-systemjs'));
+    });
 
     const infernoPath = path.join(root, 'node_modules/@devextreme/runtime/esm/inferno');
     const listRuntimeFiles = getFileList(infernoPath);
@@ -179,7 +166,7 @@ const transpileModules = async(Builder) => {
         const file = fs.readFileSync(filePath);
         const { code } = await babel.transform(file.toString(), {
             presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-transform-modules-systemjs']
+            plugins: ['@babel/plugin-transform-modules-systemjs'],
         });
 
         const destPath = filePath.replace(infernoPath, path.join(root, 'artifacts/transpiled-systemjs/runtime/inferno'));
@@ -192,47 +179,59 @@ const transpileModules = async(Builder) => {
     }
 };
 
-const transpileRenovationModules = async() => {
-    const listRenovationFiles = getFileList(path.join(root, 'artifacts/transpiled-renovation'));
+const buildAmdModule = (body) => `
+define(function(require, exports, module) {
+${body}
+});
+`;
 
-    // eslint-disable-next-line no-restricted-syntax
-    for(const filePath of listRenovationFiles) {
-        const code = fs.readFileSync(filePath).toString();
-        const targetPath = filePath.replace('transpiled-renovation', 'transpiled-renovation-systemjs');
-        const dirPath = path.dirname(targetPath);
+const transpileCommonJSFile = (source, pathToFile) => {
+    const [pre, post] = path.extname(pathToFile) === '.json'
+        ? ['module.exports = ', ';']
+        : ['', ''];
 
-        if(!fs.existsSync(dirPath)) {
-            fs.mkdirSync(dirPath, { recursive: true });
-        }
+    fs.writeFileSync(
+        pathToFile,
+        buildAmdModule(
+            `${pre}${source}${post}`.replace(/(\n|\r)/g, '$1    ')
+        )
+    );
+};
 
-        const targetCode = code.replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
+const transpileFile = (sourcePath, targetPath) => {
+    const code = fs.readFileSync(sourcePath).toString().replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
+    const dirPath = path.dirname(targetPath);
 
-        if(/^define\(/.test(targetCode)) {
-            fs.writeFileSync(targetPath, targetCode);
-        } else {
-            const [pre, post] = path.extname(targetPath) === '.json'
-                ? ['module.exports = ', ';']
-                : ['', ''];
+    if(!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+    }
 
-            fs.writeFileSync(targetPath, [
-                'define(function(require, exports, module) {',
-                `${pre}${targetCode}${post}`.replace(/(\n|\r)/g, '$1    '),
-                '});'
-            ].join('\n'));
-        }
+    if(/(^|\s)define\(/gm.test(code)) {
+        fs.writeFileSync(targetPath, code);
+    } else {
+        transpileCommonJSFile(code, targetPath);
     }
 };
 
+const transpileRenovationModules = () => {
+    getFileList(path.join(root, 'artifacts/transpiled-renovation')).forEach((filePath) => {
+        transpileFile(
+            filePath,
+            filePath.replace('/transpiled-renovation', '/transpiled-renovation-systemjs'),
+        );
+    });
+};
+
 const buildCssAsSystemModule = (name, filePath) => `
-    System.register('${filePath}', [], false, function() {});
-    (function() {
-        if (typeof document == 'undefined') return;
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/${filePath}';
-        link.setAttribute('data-theme', '${name}');
-        document.getElementsByTagName('head')[0].appendChild(link);
-    })();
+System.register('${filePath}', [], false, function() {});
+(function() {
+    if (typeof document == 'undefined') return;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/${filePath}';
+    link.setAttribute('data-theme', '${name}');
+    document.getElementsByTagName('head')[0].appendChild(link);
+})();
 `;
 
 const transpileCss = async(Builder) => {
@@ -244,14 +243,14 @@ const transpileCss = async(Builder) => {
 
             return builder.bundle(
                 path.join(root, `node_modules/systemjs-plugin-${pluginName}/${pluginName}.js`),
-                path.join(root, `artifacts/css-systemjs/${pluginName}.js`)
+                path.join(root, `artifacts/css-systemjs/${pluginName}.js`),
             );
-        })
+        }),
     );
 
     const cssList = [
         ['artifacts/css/dx.light.css', 'generic.light'],
-        ['artifacts/css/dx.material.blue.light.css', 'material.blue.light']
+        ['artifacts/css/dx.material.blue.light.css', 'material.blue.light'],
     ];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -273,8 +272,8 @@ const transpileWithBuilder = async(builder, sourcePath, destPath, buildTree) => 
         {
             minify: false,
             sourceMaps: true,
-            encodeNames: false
-        }
+            encodeNames: false,
+        },
     );
 };
 
@@ -300,16 +299,16 @@ const transpileJsVendors = async(Builder) => {
     const vendorsList = [
         {
             filePath: path.join(root, 'node_modules/angular/index.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/angular.js')
+            destPath: path.join(root, 'artifacts/js-systemjs/angular.js'),
         },
         {
             filePath: path.join(root, 'node_modules/intl/index.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/intl.js')
+            destPath: path.join(root, 'artifacts/js-systemjs/intl.js'),
         },
         {
             filePath: path.join(root, 'node_modules/knockout/build/output/knockout-latest.debug.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/knockout.js')
-        }
+            destPath: path.join(root, 'artifacts/js-systemjs/knockout.js'),
+        },
     ];
     const cldrDataList = getFileList(path.join(root, 'node_modules/devextreme-cldr-data'));
     const cldrCoreList = getFileList(path.join(root, 'node_modules/cldr-core/supplemental'));
@@ -318,7 +317,7 @@ const transpileJsVendors = async(Builder) => {
         .filter(filePath => filePath.endsWith('.json'))
         .map(jsonPath => ({
             filePath: jsonPath,
-            destPath: jsonPath.replace('node_modules', 'artifacts/js-systemjs')
+            destPath: jsonPath.replace('node_modules', 'artifacts/js-systemjs'),
         }));
 
     const modulesList = [].concat(vendorsList, formatList);
@@ -329,7 +328,7 @@ const transpileJsVendors = async(Builder) => {
     }
 };
 
-const transpileFile = async(Builder, filePath, sourceFolder, destFolder) => {
+const transpileFileWithBuilder = async(Builder, filePath, sourceFolder, destFolder) => {
     const builder = new Builder(root, config);
     const destPath = filePath.replace(sourceFolder, destFolder);
     const sourceCode = fs.readFileSync(filePath).toString();
@@ -361,7 +360,7 @@ const transpileTesting = async(Builder) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        await transpileFile(Builder, filePath, '/testing/', '/artifacts/transpiled-testing/');
+        await transpileFileWithBuilder(Builder, filePath, '/testing/', '/artifacts/transpiled-testing/');
     }
 };
 
@@ -372,7 +371,7 @@ const patchBuilder = (fileName, searchValue, replaceValue) => {
     if(!file.includes(replaceValue)) {
         fs.writeFileSync(filePath, file.replaceAll(
             searchValue,
-            replaceValue
+            replaceValue,
         ));
     }
 };
@@ -385,19 +384,19 @@ const updateBuilder = () => {
             getCanonicalName(loader, normalized) :
             dep.replace("/testing/helpers/", "/artifacts/transpiled-testing/helpers/")
                 .replace("../../../../artifacts/js/", "../../../../../artifacts/js")
-                .replace("/node_modules/", "/../node_modules/");`
+                .replace("/node_modules/", "/../node_modules/");`,
     );
 
     patchBuilder(
         'compile.js',
         'exportDefault ? "true" : "false"',
-        'exportDefault && !compileOpts.namedExports ? "true" : "false"'
+        'exportDefault && !compileOpts.namedExports ? "true" : "false"',
     );
 
     patchBuilder(
         'builder.js',
         'return normalized;',
-        'return normalized.replace("%20", " ");'
+        'return normalized.replace("%20", " ");',
     );
 };
 
@@ -408,11 +407,17 @@ const updateBuilder = () => {
     const Builder = require('systemjs-builder');
 
     switch(transpile) {
-        case 'builder': return updateBuilder();
-        case 'modules': return await transpileModules(Builder);
-        case 'modules-renovation': return await transpileRenovationModules();
-        case 'testing': return await transpileTesting(Builder);
-        case 'css': return await transpileCss(Builder);
-        case 'js-vendors': return await transpileJsVendors(Builder);
+        case 'builder':
+            return updateBuilder();
+        case 'modules':
+            return await transpileModules(Builder);
+        case 'modules-renovation':
+            return transpileRenovationModules();
+        case 'testing':
+            return await transpileTesting(Builder);
+        case 'css':
+            return await transpileCss(Builder);
+        case 'js-vendors':
+            return await transpileJsVendors(Builder);
     }
 })();
