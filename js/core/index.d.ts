@@ -25,18 +25,13 @@ export type DeepPartial<T> = T extends Scalar ? T : {
 };
 
 type ItemType<T> = T extends (infer TItem)[] ? TItem : T;
-type Property<T, TPropName extends string> =
-    T extends Record<TPropName, infer TValue>
-    ? TValue :
-        T extends Partial<Record<TPropName, infer TValue>>
-        ? TValue | undefined
-        : never;
+type Property<T, TPropName extends string> = T extends Partial<Record<TPropName, infer TValue>> ? TValue : never;
 type OwnPropertyType<T, TPropName extends string> = Property<ItemType<T>, TPropName>;
 
 export type PropertyType<T, TProp extends string> =
   TProp extends `${infer TOwnProp}.${infer TNestedProps}`
     ? PropertyType<OwnPropertyType<T, TOwnProp>, TNestedProps>
-    : OwnPropertyType<T, TProp> | undefined;
+    : OwnPropertyType<T, TProp>;
 
 export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
 

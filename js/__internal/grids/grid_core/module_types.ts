@@ -1,10 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { PropertyType } from '@js/core/index';
+import { PropertyType as _PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
 import { GridBase, GridBaseOptions } from '@js/common/grids';
 import Widget from '@js/ui/widget/ui.widget';
+
+type PropertyType<T, TProp extends string> = _PropertyType<T, TProp> | undefined;
 
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
