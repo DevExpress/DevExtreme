@@ -207,7 +207,7 @@ const transpileRenovationModules = async() => {
 
         const targetCode = code.replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
 
-        if(targetCode.includes('define(')) {
+        if(/^define\(/.test(targetCode)) {
             fs.writeFileSync(targetPath, targetCode);
         } else {
             const [pre, post] = path.extname(targetPath) === '.json'
