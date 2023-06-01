@@ -143,6 +143,7 @@ class MultiselectDateBox extends DateBox {
         if($(target).is(endDateInput)) {
             if(endDate) {
                 if(startDate && monthDifference(startDate, endDate) > 1) {
+                    calendar.option('currentDate', calendar._getDateByOffset(null, endDate));
                     calendar.option('currentDate', calendar._getDateByOffset(-1, endDate));
                 }
 

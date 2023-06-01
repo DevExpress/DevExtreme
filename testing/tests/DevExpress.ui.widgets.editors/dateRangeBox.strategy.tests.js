@@ -19,6 +19,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const POPUP_APPLY_BUTTON_CLASS = 'dx-popup-done';
 const POPUP_DONE_BUTTON = `${POPUP_APPLY_BUTTON_CLASS}.dx-button`;
 const POPUP_CANCEL_BUTTON = 'dx-popup-cancel.dx-button';
+const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
@@ -507,6 +508,36 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             assert.ok($startDateCell.length, 'startDate is on main view');
             assert.ok($endDateCell.length, 'endDate is on additional view');
+        });
+
+        QUnit.test('startDate should be contoured after moving focus from endDate to startDate', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/12'), new Date('2023/11/13')],
+            });
+
+            $(this.instance.endDateField()).trigger('dxclick');
+            $(this.instance.startDateField()).trigger('dxclick');
+
+            const $calendar = this.getCalendar().$element();
+            const $startDateCell = $($calendar.find('td[data-value=\'2023/06/12\']'));
+
+            assert.ok($startDateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
+        });
+
+        QUnit.test('Calendar should not swipe views on focus endDate when startDate is on main view and endDate is on additional view', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/12'), new Date('2023/11/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const $calendar = this.getCalendar().$element();
+            const $endDateCell = $($calendar.find('td[data-value=\'2023/11/13\']'));
+
+            assert.ok($endDateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
         });
     });
 });

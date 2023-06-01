@@ -532,6 +532,8 @@ const Calendar = Editor.inherit({
             if(this._additionalView) {
                 if(offset > 2 || offset < -1) {
                     this._refreshViews();
+                    this._setViewContoured(normalizedDate);
+                    this._updateAriaId(normalizedDate);
                     this._renderNavigator();
                 } else if(offset === 1 && this._skipNavigate) {
                     this._setViewContoured(normalizedDate);
