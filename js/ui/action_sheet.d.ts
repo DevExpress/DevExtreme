@@ -94,8 +94,7 @@ export interface dxActionSheetOptions<
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxActionSheet
+     * @type_function_param1 e:{ui/action_sheet:CancelClickEvent}
      * @action
      * @public
      */
@@ -244,18 +243,12 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onSelectionChanged'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCancelClick'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxActionSheetOptions.onCancelClick
- * @type_function_param1 e:{ui/action_sheet:CancelClickEvent}
- */
-onCancelClick?: ((e: CancelClickEvent) => void);
 /**
  * @skip
  * @docid dxActionSheetOptions.onContentReady

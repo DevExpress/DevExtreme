@@ -418,38 +418,23 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     };
     /**
      * @docid
-     * @type_function_param1 e:Object
+     * @type_function_param1 e:{ui/pivot_grid:CellClickEvent}
      * @default null
-     * @type_function_param1_field component:dxPivotGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field columnFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field rowFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field dataFields:Array<PivotGridDataSourceOptions.fields>
      * @action
      * @public
      */
     onCellClick?: ((e: CellClickEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field cell:dxPivotGridPivotGridCell
+     * @type_function_param1 e:{ui/pivot_grid:CellPreparedEvent}
      * @default null
-     * @type_function_param1_field component:dxPivotGrid
      * @action
      * @public
      */
     onCellPrepared?: ((e: CellPreparedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:Object
-     * @type_function_param1_field component:dxPivotGrid
-     * @type_function_param1_field cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field dataFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field rowFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field columnFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field field:PivotGridDataSourceOptions.fields
-     * @type_function_param1_field items:Array<Object>
+     * @type_function_param1 e:{ui/pivot_grid:ContextMenuPreparingEvent}
      * @default null
      * @action
      * @public
@@ -457,9 +442,8 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
+     * @type_function_param1 e:{ui/pivot_grid:ExportingEvent}
      * @default null
-     * @type_function_param1_field component:dxPivotGrid
      * @action
      * @public
      */
@@ -741,24 +725,12 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick', 'onCellPrepared', 'onContextMenuPreparing', 'onExporting'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxPivotGridOptions.onCellClick
- * @type_function_param1 e:{ui/pivot_grid:CellClickEvent}
- */
-onCellClick?: ((e: CellClickEvent) => void);
-/**
- * @skip
- * @docid dxPivotGridOptions.onCellPrepared
- * @type_function_param1 e:{ui/pivot_grid:CellPreparedEvent}
- */
-onCellPrepared?: ((e: CellPreparedEvent) => void);
 /**
  * @skip
  * @docid dxPivotGridOptions.onContentReady
@@ -767,22 +739,10 @@ onCellPrepared?: ((e: CellPreparedEvent) => void);
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
  * @skip
- * @docid dxPivotGridOptions.onContextMenuPreparing
- * @type_function_param1 e:{ui/pivot_grid:ContextMenuPreparingEvent}
- */
-onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
-/**
- * @skip
  * @docid dxPivotGridOptions.onDisposing
  * @type_function_param1 e:{ui/pivot_grid:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxPivotGridOptions.onExporting
- * @type_function_param1 e:{ui/pivot_grid:ExportingEvent}
- */
-onExporting?: ((e: ExportingEvent) => void);
 /**
  * @skip
  * @docid dxPivotGridOptions.onInitialized

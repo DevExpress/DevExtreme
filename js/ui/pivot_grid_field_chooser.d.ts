@@ -154,11 +154,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     layout?: FieldChooserLayout;
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPivotGridFieldChooser
-     * @type_function_param1_field field:PivotGridDataSourceOptions.fields
-     * @type_function_param1_field event:event
-     * @type_function_param1_field items:Array<Object>
+     * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContextMenuPreparingEvent}
      * @default null
 
      * @action
@@ -254,7 +250,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuPreparing'>;
 
 /**
 * @hidden
@@ -266,12 +262,6 @@ type Events = {
  * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
- * @docid dxPivotGridFieldChooserOptions.onContextMenuPreparing
- * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContextMenuPreparingEvent}
- */
-onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
 /**
  * @skip
  * @docid dxPivotGridFieldChooserOptions.onDisposing

@@ -95,10 +95,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxButtonGroup
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/button_group:ItemClickEvent}
      * @action
      * @public
      */
@@ -106,10 +103,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxButtonGroup
-     * @type_function_param1_field addedItems:array<any>
-     * @type_function_param1_field removedItems:array<any>
+     * @type_function_param1 e:{ui/button_group:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -194,7 +188,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onItemClick', 'onSelectionChanged'>;
 
 /**
 * @hidden
@@ -220,21 +214,9 @@ onDisposing?: ((e: DisposingEvent) => void);
 onInitialized?: ((e: InitializedEvent) => void);
 /**
  * @skip
- * @docid dxButtonGroupOptions.onItemClick
- * @type_function_param1 e:{ui/button_group:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
  * @docid dxButtonGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/button_group:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxButtonGroupOptions.onSelectionChanged
- * @type_function_param1 e:{ui/button_group:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

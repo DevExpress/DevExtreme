@@ -332,9 +332,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeMap
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/tree_map:ClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -343,8 +341,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1 e:{viz/tree_map:DrillEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -353,8 +350,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1 e:{viz/tree_map:HoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -363,8 +359,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1 e:{viz/tree_map:NodesInitializedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -373,8 +368,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1 e:{viz/tree_map:NodesRenderingEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -383,8 +377,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1 e:{viz/tree_map:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -719,18 +712,12 @@ export type Options = dxTreeMapOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onClick', 'onDrill', 'onHoverChanged', 'onNodesInitialized', 'onNodesRendering', 'onSelectionChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxTreeMapOptions.onClick
- * @type_function_param1 e:{viz/tree_map:ClickEvent}
- */
-onClick?: ((e: ClickEvent) => void);
 /**
  * @skip
  * @docid dxTreeMapOptions.onDisposing
@@ -743,12 +730,6 @@ onDisposing?: ((e: DisposingEvent) => void);
  * @type_function_param1 e:{viz/tree_map:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
-/**
- * @skip
- * @docid dxTreeMapOptions.onDrill
- * @type_function_param1 e:{viz/tree_map:DrillEvent}
- */
-onDrill?: ((e: DrillEvent) => void);
 /**
  * @skip
  * @docid dxTreeMapOptions.onExported
@@ -769,12 +750,6 @@ onExporting?: ((e: ExportingEvent) => void);
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
  * @skip
- * @docid dxTreeMapOptions.onHoverChanged
- * @type_function_param1 e:{viz/tree_map:HoverChangedEvent}
- */
-onHoverChanged?: ((e: HoverChangedEvent) => void);
-/**
- * @skip
  * @docid dxTreeMapOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/tree_map:IncidentOccurredEvent}
  */
@@ -787,27 +762,9 @@ onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 onInitialized?: ((e: InitializedEvent) => void);
 /**
  * @skip
- * @docid dxTreeMapOptions.onNodesInitialized
- * @type_function_param1 e:{viz/tree_map:NodesInitializedEvent}
- */
-onNodesInitialized?: ((e: NodesInitializedEvent) => void);
-/**
- * @skip
- * @docid dxTreeMapOptions.onNodesRendering
- * @type_function_param1 e:{viz/tree_map:NodesRenderingEvent}
- */
-onNodesRendering?: ((e: NodesRenderingEvent) => void);
-/**
- * @skip
  * @docid dxTreeMapOptions.onOptionChanged
  * @type_function_param1 e:{viz/tree_map:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeMapOptions.onSelectionChanged
- * @type_function_param1 e:{viz/tree_map:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

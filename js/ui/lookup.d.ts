@@ -167,8 +167,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxLookup
+     * @type_function_param1 e:{ui/lookup:PageLoadingEvent}
      * @action
      * @public
      */
@@ -176,8 +175,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxLookup
+     * @type_function_param1 e:{ui/lookup:PullRefreshEvent}
      * @action
      * @public
      */
@@ -185,10 +183,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:dxLookup
+     * @type_function_param1 e:{ui/lookup:ScrollEvent}
      * @action
      * @public
      */
@@ -196,11 +191,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field value:object
-     * @type_function_param1_field previousValue:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxLookup
+     * @type_function_param1 e:{ui/lookup:ValueChangedEvent}
      * @action
      * @public
      */
@@ -339,7 +330,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onPageLoading', 'onPullRefresh', 'onScroll', 'onValueChanged'>;
 
 /**
 * @hidden
@@ -389,33 +380,9 @@ onOpened?: ((e: OpenedEvent) => void);
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
  * @skip
- * @docid dxLookupOptions.onPageLoading
- * @type_function_param1 e:{ui/lookup:PageLoadingEvent}
- */
-onPageLoading?: ((e: PageLoadingEvent) => void);
-/**
- * @skip
- * @docid dxLookupOptions.onPullRefresh
- * @type_function_param1 e:{ui/lookup:PullRefreshEvent}
- */
-onPullRefresh?: ((e: PullRefreshEvent) => void);
-/**
- * @skip
- * @docid dxLookupOptions.onScroll
- * @type_function_param1 e:{ui/lookup:ScrollEvent}
- */
-onScroll?: ((e: ScrollEvent) => void);
-/**
- * @skip
  * @docid dxLookupOptions.onSelectionChanged
  * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
- * @skip
- * @docid dxLookupOptions.onValueChanged
- * @type_function_param1 e:{ui/lookup:ValueChangedEvent}
- */
-onValueChanged?: ((e: ValueChangedEvent) => void);
 };
 ///#ENDDEBUG

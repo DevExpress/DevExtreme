@@ -118,8 +118,7 @@ export interface dxContextMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxContextMenu
+     * @type_function_param1 e:{ui/context_menu:HiddenEvent}
      * @action
      * @public
      */
@@ -127,8 +126,7 @@ export interface dxContextMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxContextMenu
+     * @type_function_param1 e:{ui/context_menu:HidingEvent}
      * @action
      * @public
      */
@@ -136,9 +134,7 @@ export interface dxContextMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxContextMenu
+     * @type_function_param1 e:{ui/context_menu:PositioningEvent}
      * @action
      * @public
      */
@@ -146,8 +142,7 @@ export interface dxContextMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxContextMenu
+     * @type_function_param1 e:{ui/context_menu:ShowingEvent}
      * @action
      * @public
      */
@@ -155,8 +150,7 @@ export interface dxContextMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxContextMenu
+     * @type_function_param1 e:{ui/context_menu:ShownEvent}
      * @action
      * @public
      */
@@ -287,7 +281,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemHold' | 'onItemReordered'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onHidden', 'onHiding', 'onPositioning', 'onShowing', 'onShown'>;
 
 /**
 * @hidden
@@ -305,18 +299,6 @@ onContentReady?: ((e: ContentReadyEvent) => void);
  * @type_function_param1 e:{ui/context_menu:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxContextMenuOptions.onHidden
- * @type_function_param1 e:{ui/context_menu:HiddenEvent}
- */
-onHidden?: ((e: HiddenEvent) => void);
-/**
- * @skip
- * @docid dxContextMenuOptions.onHiding
- * @type_function_param1 e:{ui/context_menu:HidingEvent}
- */
-onHiding?: ((e: HidingEvent) => void);
 /**
  * @skip
  * @docid dxContextMenuOptions.onInitialized
@@ -349,27 +331,9 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
  * @skip
- * @docid dxContextMenuOptions.onPositioning
- * @type_function_param1 e:{ui/context_menu:PositioningEvent}
- */
-onPositioning?: ((e: PositioningEvent) => void);
-/**
- * @skip
  * @docid dxContextMenuOptions.onSelectionChanged
  * @type_function_param1 e:{ui/context_menu:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
- * @skip
- * @docid dxContextMenuOptions.onShowing
- * @type_function_param1 e:{ui/context_menu:ShowingEvent}
- */
-onShowing?: ((e: ShowingEvent) => void);
-/**
- * @skip
- * @docid dxContextMenuOptions.onShown
- * @type_function_param1 e:{ui/context_menu:ShownEvent}
- */
-onShown?: ((e: ShownEvent) => void);
 };
 ///#ENDDEBUG

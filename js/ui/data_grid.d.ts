@@ -728,13 +728,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     masterDetail?: MasterDetail<TRowData, TKey>;
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:object
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:CellClickEvent}
      * @default null
      * @action
      * @public
@@ -742,13 +736,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:dxDataGridColumn
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:CellDblClickEvent}
      * @default null
      * @action
      * @public
@@ -756,12 +744,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:dxDataGridColumn
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:CellHoverChangedEvent}
      * @default null
      * @action
      * @public
@@ -769,12 +752,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:dxDataGridColumn
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:CellPreparedEvent}
      * @default null
      * @action
      * @public
@@ -782,11 +760,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:Object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field items:Array<Object>
-     * @type_function_param1_field column:dxDataGridColumn
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:ContextMenuPreparingEvent}
      * @default null
      * @action
      * @public
@@ -794,11 +768,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:object
+     * @type_function_param1 e:{ui/data_grid:EditingStartEvent}
      * @default null
      * @action
      * @public
@@ -806,10 +776,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 options:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field setValue(newValue, newText):any
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:EditorPreparedEvent}
      * @default null
      * @action
      * @public
@@ -817,11 +784,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field setValue(newValue, newText):any
-     * @type_function_param1_field editorOptions:object
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:EditorPreparingEvent}
      * @default null
      * @action
      * @public
@@ -829,9 +792,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field format:Enums.DataGridExportFormat|string
+     * @type_function_param1 e:{ui/data_grid:ExportingEvent}
      * @default null
      * @action
      * @public
@@ -839,10 +800,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onExporting?: ((e: ExportingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field row:dxDataGridRowObject
-     * @type_function_param1_field column:dxDataGridColumn
+     * @type_function_param1 e:{ui/data_grid:FocusedCellChangedEvent}
      * @default null
      * @action
      * @public
@@ -850,11 +808,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field rows:Array<dxDataGridRowObject>
-     * @type_function_param1_field columns:Array<dxDataGridColumn>
+     * @type_function_param1 e:{ui/data_grid:FocusedCellChangingEvent}
      * @default null
      * @action
      * @public
@@ -862,9 +816,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field row:dxDataGridRowObject
+     * @type_function_param1 e:{ui/data_grid:FocusedRowChangedEvent}
      * @default null
      * @action
      * @public
@@ -872,10 +824,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field rows:Array<dxDataGridRowObject>
+     * @type_function_param1 e:{ui/data_grid:FocusedRowChangingEvent}
      * @default null
      * @action
      * @public
@@ -883,13 +832,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field values:Array<any>
-     * @type_function_param1_field columns:Array<Object>
+     * @type_function_param1 e:{ui/data_grid:RowClickEvent}
      * @default null
      * @action
      * @public
@@ -897,13 +840,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field values:Array<any>
-     * @type_function_param1_field columns:Array<dxDataGridColumn>
+     * @type_function_param1 e:{ui/data_grid:RowDblClickEvent}
      * @default null
      * @action
      * @public
@@ -911,12 +848,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field values:Array<any>
-     * @type_function_param1_field columns:Array<dxDataGridColumn>
+     * @type_function_param1 e:{ui/data_grid:RowPreparedEvent}
      * @default null
      * @action
      * @public
@@ -2089,7 +2021,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick', 'onCellDblClick', 'onCellHoverChanged', 'onCellPrepared', 'onContextMenuPreparing', 'onEditingStart', 'onEditorPrepared', 'onEditorPreparing', 'onExporting', 'onFocusedCellChanged', 'onFocusedCellChanging', 'onFocusedRowChanged', 'onFocusedRowChanging', 'onRowClick', 'onRowDblClick', 'onRowPrepared'>;
 
 /**
 * @hidden
@@ -2103,40 +2035,10 @@ type Events = {
 onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent) => void);
 /**
  * @skip
- * @docid dxDataGridOptions.onCellClick
- * @type_function_param1 e:{ui/data_grid:CellClickEvent}
- */
-onCellClick?: ((e: CellClickEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onCellDblClick
- * @type_function_param1 e:{ui/data_grid:CellDblClickEvent}
- */
-onCellDblClick?: ((e: CellDblClickEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onCellHoverChanged
- * @type_function_param1 e:{ui/data_grid:CellHoverChangedEvent}
- */
-onCellHoverChanged?: ((e: CellHoverChangedEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onCellPrepared
- * @type_function_param1 e:{ui/data_grid:CellPreparedEvent}
- */
-onCellPrepared?: ((e: CellPreparedEvent) => void);
-/**
- * @skip
  * @docid dxDataGridOptions.onContentReady
  * @type_function_param1 e:{ui/data_grid:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onContextMenuPreparing
- * @type_function_param1 e:{ui/data_grid:ContextMenuPreparingEvent}
- */
-onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
 /**
  * @skip
  * @docid dxDataGridOptions.onDataErrorOccurred
@@ -2163,54 +2065,6 @@ onEditCanceled?: ((e: EditCanceledEvent) => void);
 onEditCanceling?: ((e: EditCancelingEvent) => void);
 /**
  * @skip
- * @docid dxDataGridOptions.onEditingStart
- * @type_function_param1 e:{ui/data_grid:EditingStartEvent}
- */
-onEditingStart?: ((e: EditingStartEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onEditorPrepared
- * @type_function_param1 e:{ui/data_grid:EditorPreparedEvent}
- */
-onEditorPrepared?: ((e: EditorPreparedEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onEditorPreparing
- * @type_function_param1 e:{ui/data_grid:EditorPreparingEvent}
- */
-onEditorPreparing?: ((e: EditorPreparingEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onExporting
- * @type_function_param1 e:{ui/data_grid:ExportingEvent}
- */
-onExporting?: ((e: ExportingEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onFocusedCellChanged
- * @type_function_param1 e:{ui/data_grid:FocusedCellChangedEvent}
- */
-onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onFocusedCellChanging
- * @type_function_param1 e:{ui/data_grid:FocusedCellChangingEvent}
- */
-onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onFocusedRowChanged
- * @type_function_param1 e:{ui/data_grid:FocusedRowChangedEvent}
- */
-onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onFocusedRowChanging
- * @type_function_param1 e:{ui/data_grid:FocusedRowChangingEvent}
- */
-onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => void);
-/**
- * @skip
  * @docid dxDataGridOptions.onInitialized
  * @type_function_param1 e:{ui/data_grid:InitializedEvent}
  */
@@ -2235,12 +2089,6 @@ onKeyDown?: ((e: KeyDownEvent) => void);
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
  * @skip
- * @docid dxDataGridOptions.onRowClick
- * @type_function_param1 e:{ui/data_grid:RowClickEvent}
- */
-onRowClick?: ((e: RowClickEvent) => void);
-/**
- * @skip
  * @docid dxDataGridOptions.onRowCollapsed
  * @type_function_param1 e:{ui/data_grid:RowCollapsedEvent}
  */
@@ -2251,12 +2099,6 @@ onRowCollapsed?: ((e: RowCollapsedEvent) => void);
  * @type_function_param1 e:{ui/data_grid:RowCollapsingEvent}
  */
 onRowCollapsing?: ((e: RowCollapsingEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onRowDblClick
- * @type_function_param1 e:{ui/data_grid:RowDblClickEvent}
- */
-onRowDblClick?: ((e: RowDblClickEvent) => void);
 /**
  * @skip
  * @docid dxDataGridOptions.onRowExpanded
@@ -2281,12 +2123,6 @@ onRowInserted?: ((e: RowInsertedEvent) => void);
  * @type_function_param1 e:{ui/data_grid:RowInsertingEvent}
  */
 onRowInserting?: ((e: RowInsertingEvent) => void);
-/**
- * @skip
- * @docid dxDataGridOptions.onRowPrepared
- * @type_function_param1 e:{ui/data_grid:RowPreparedEvent}
- */
-onRowPrepared?: ((e: RowPreparedEvent) => void);
 /**
  * @skip
  * @docid dxDataGridOptions.onRowRemoved

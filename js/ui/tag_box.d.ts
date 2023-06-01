@@ -140,9 +140,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTagBox
-     * @type_function_param1_field selectedItems:Array<string,number,Object>
+     * @type_function_param1 e:{ui/tag_box:MultiTagPreparingEvent}
      * @action
      * @public
      */
@@ -150,8 +148,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTagBox
+     * @type_function_param1 e:{ui/tag_box:SelectAllValueChangedEvent}
      * @action
      * @public
      */
@@ -159,10 +156,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field addedItems:Array<string,number,Object>
-     * @type_function_param1_field removedItems:Array<string,number,Object>
-     * @type_function_param1_field component:dxTagBox
+     * @type_function_param1 e:{ui/tag_box:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -239,7 +233,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing', 'onSelectAllValueChanged', 'onSelectionChanged'>;
 
 /**
 * @hidden
@@ -325,12 +319,6 @@ onKeyDown?: ((e: KeyDownEvent) => void);
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
  * @skip
- * @docid dxTagBoxOptions.onMultiTagPreparing
- * @type_function_param1 e:{ui/tag_box:MultiTagPreparingEvent}
- */
-onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
-/**
- * @skip
  * @docid dxTagBoxOptions.onOpened
  * @type_function_param1 e:{ui/tag_box:OpenedEvent}
  */
@@ -341,18 +329,6 @@ onOpened?: ((e: OpenedEvent) => void);
  * @type_function_param1 e:{ui/tag_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxTagBoxOptions.onSelectAllValueChanged
- * @type_function_param1 e:{ui/tag_box:SelectAllValueChangedEvent}
- */
-onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
-/**
- * @skip
- * @docid dxTagBoxOptions.onSelectionChanged
- * @type_function_param1 e:{ui/tag_box:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 /**
  * @skip
  * @docid dxTagBoxOptions.onValueChanged

@@ -530,9 +530,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxVectorMap
-     * @type_function_param1_field center:Array<number>
+     * @type_function_param1 e:{viz/vector_map:CenterChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -542,9 +540,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxVectorMap
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/vector_map:ClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -553,8 +549,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1 e:{viz/vector_map:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -563,8 +558,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1 e:{viz/vector_map:TooltipHiddenEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -573,8 +567,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1 e:{viz/vector_map:TooltipShownEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -583,8 +576,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1 e:{viz/vector_map:ZoomFactorChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -905,24 +897,12 @@ export type Options = dxVectorMapOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onCenterChanged', 'onClick', 'onSelectionChanged', 'onTooltipHidden', 'onTooltipShown', 'onZoomFactorChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxVectorMapOptions.onCenterChanged
- * @type_function_param1 e:{viz/vector_map:CenterChangedEvent}
- */
-onCenterChanged?: ((e: CenterChangedEvent) => void);
-/**
- * @skip
- * @docid dxVectorMapOptions.onClick
- * @type_function_param1 e:{viz/vector_map:ClickEvent}
- */
-onClick?: ((e: ClickEvent) => void);
 /**
  * @skip
  * @docid dxVectorMapOptions.onDisposing
@@ -971,29 +951,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{viz/vector_map:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxVectorMapOptions.onSelectionChanged
- * @type_function_param1 e:{viz/vector_map:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
- * @skip
- * @docid dxVectorMapOptions.onTooltipHidden
- * @type_function_param1 e:{viz/vector_map:TooltipHiddenEvent}
- */
-onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
-/**
- * @skip
- * @docid dxVectorMapOptions.onTooltipShown
- * @type_function_param1 e:{viz/vector_map:TooltipShownEvent}
- */
-onTooltipShown?: ((e: TooltipShownEvent) => void);
-/**
- * @skip
- * @docid dxVectorMapOptions.onZoomFactorChanged
- * @type_function_param1 e:{viz/vector_map:ZoomFactorChangedEvent}
- */
-onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
 };
 ///#ENDDEBUG

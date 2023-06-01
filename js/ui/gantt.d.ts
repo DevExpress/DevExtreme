@@ -407,8 +407,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -416,7 +415,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
+     * @type_function_param1 e:{ui/gantt:CustomCommandEvent}
      * @action
      * @public
      */
@@ -424,9 +423,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field items:Array<object>
+     * @type_function_param1 e:{ui/gantt:ContextMenuPreparingEvent}
      * @action
      * @public
      */
@@ -434,8 +431,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskInsertingEvent}
      * @action
      * @public
      */
@@ -443,8 +439,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskInsertedEvent}
      * @action
      * @public
      */
@@ -452,8 +447,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskDeletingEvent}
      * @action
      * @public
      */
@@ -461,8 +455,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskDeletedEvent}
      * @action
      * @public
      */
@@ -470,8 +463,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskUpdatingEvent}
      * @action
      * @public
      */
@@ -479,8 +471,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskUpdatedEvent}
      * @action
      * @public
      */
@@ -488,8 +479,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:TaskMovingEvent}
      * @action
      * @public
      */
@@ -497,10 +487,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
-     * @type_function_param1_field readOnlyFields:Array<string>
-     * @type_function_param1_field hiddenFields:Array<string>
+     * @type_function_param1 e:{ui/gantt:TaskEditDialogShowingEvent}
      * @action
      * @public
      */
@@ -508,9 +495,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
-     * @type_function_param1_field values:Array<any>
+     * @type_function_param1 e:{ui/gantt:ResourceManagerDialogShowingEvent}
      * @action
      * @public
      */
@@ -518,8 +503,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:DependencyInsertingEvent}
      * @action
      * @public
      */
@@ -527,8 +511,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:DependencyInsertedEvent}
      * @action
      * @public
      */
@@ -536,8 +519,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:DependencyDeletingEvent}
      * @action
      * @public
      */
@@ -545,8 +527,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:DependencyDeletedEvent}
      * @action
      * @public
      */
@@ -554,8 +535,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceInsertingEvent}
      * @action
      * @public
      */
@@ -563,8 +543,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceInsertedEvent}
      * @action
      * @public
      */
@@ -572,8 +551,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceDeletingEvent}
      * @action
      * @public
      */
@@ -581,8 +559,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceDeletedEvent}
      * @action
      * @public
      */
@@ -590,8 +567,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceAssigningEvent}
      * @action
      * @public
      */
@@ -599,8 +575,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceAssignedEvent}
      * @action
      * @public
      */
@@ -608,8 +583,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceUnassigningEvent}
      * @action
      * @public
      */
@@ -617,8 +591,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
+     * @type_function_param1 e:{ui/gantt:ResourceUnassignedEvent}
      * @action
      * @public
      */
@@ -626,9 +599,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/gantt:TaskClickEvent}
      * @action
      * @public
      */
@@ -636,9 +607,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/gantt:TaskDblClickEvent}
      * @action
      * @public
      */
@@ -646,9 +615,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxGantt
-     * @type_function_param1_field scaleType:Enums.GanttRenderScaleType
+     * @type_function_param1 e:{ui/gantt:ScaleCellPreparedEvent}
      * @action
      * @public
      */
@@ -1607,7 +1574,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuPreparing', 'onCustomCommand', 'onDependencyDeleted', 'onDependencyDeleting', 'onDependencyInserted', 'onDependencyInserting', 'onResourceAssigned', 'onResourceAssigning', 'onResourceDeleted', 'onResourceDeleting', 'onResourceInserted', 'onResourceInserting', 'onResourceManagerDialogShowing', 'onResourceUnassigned', 'onResourceUnassigning', 'onScaleCellPrepared', 'onSelectionChanged', 'onTaskClick', 'onTaskDblClick', 'onTaskDeleted', 'onTaskDeleting', 'onTaskEditDialogShowing', 'onTaskInserted', 'onTaskInserting', 'onTaskMoving', 'onTaskUpdated', 'onTaskUpdating'>;
 
 /**
 * @hidden
@@ -1619,42 +1586,6 @@ type Events = {
  * @type_function_param1 e:{ui/gantt:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onContextMenuPreparing
- * @type_function_param1 e:{ui/gantt:ContextMenuPreparingEvent}
- */
-onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onCustomCommand
- * @type_function_param1 e:{ui/gantt:CustomCommandEvent}
- */
-onCustomCommand?: ((e: CustomCommandEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onDependencyDeleted
- * @type_function_param1 e:{ui/gantt:DependencyDeletedEvent}
- */
-onDependencyDeleted?: ((e: DependencyDeletedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onDependencyDeleting
- * @type_function_param1 e:{ui/gantt:DependencyDeletingEvent}
- */
-onDependencyDeleting?: ((e: DependencyDeletingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onDependencyInserted
- * @type_function_param1 e:{ui/gantt:DependencyInsertedEvent}
- */
-onDependencyInserted?: ((e: DependencyInsertedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onDependencyInserting
- * @type_function_param1 e:{ui/gantt:DependencyInsertingEvent}
- */
-onDependencyInserting?: ((e: DependencyInsertingEvent) => void);
 /**
  * @skip
  * @docid dxGanttOptions.onDisposing
@@ -1673,131 +1604,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/gantt:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceAssigned
- * @type_function_param1 e:{ui/gantt:ResourceAssignedEvent}
- */
-onResourceAssigned?: ((e: ResourceAssignedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceAssigning
- * @type_function_param1 e:{ui/gantt:ResourceAssigningEvent}
- */
-onResourceAssigning?: ((e: ResourceAssigningEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceDeleted
- * @type_function_param1 e:{ui/gantt:ResourceDeletedEvent}
- */
-onResourceDeleted?: ((e: ResourceDeletedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceDeleting
- * @type_function_param1 e:{ui/gantt:ResourceDeletingEvent}
- */
-onResourceDeleting?: ((e: ResourceDeletingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceInserted
- * @type_function_param1 e:{ui/gantt:ResourceInsertedEvent}
- */
-onResourceInserted?: ((e: ResourceInsertedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceInserting
- * @type_function_param1 e:{ui/gantt:ResourceInsertingEvent}
- */
-onResourceInserting?: ((e: ResourceInsertingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceManagerDialogShowing
- * @type_function_param1 e:{ui/gantt:ResourceManagerDialogShowingEvent}
- */
-onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceUnassigned
- * @type_function_param1 e:{ui/gantt:ResourceUnassignedEvent}
- */
-onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onResourceUnassigning
- * @type_function_param1 e:{ui/gantt:ResourceUnassigningEvent}
- */
-onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onScaleCellPrepared
- * @type_function_param1 e:{ui/gantt:ScaleCellPreparedEvent}
- */
-onScaleCellPrepared?: ((e: ScaleCellPreparedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onSelectionChanged
- * @type_function_param1 e:{ui/gantt:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskClick
- * @type_function_param1 e:{ui/gantt:TaskClickEvent}
- */
-onTaskClick?: ((e: TaskClickEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskDblClick
- * @type_function_param1 e:{ui/gantt:TaskDblClickEvent}
- */
-onTaskDblClick?: ((e: TaskDblClickEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskDeleted
- * @type_function_param1 e:{ui/gantt:TaskDeletedEvent}
- */
-onTaskDeleted?: ((e: TaskDeletedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskDeleting
- * @type_function_param1 e:{ui/gantt:TaskDeletingEvent}
- */
-onTaskDeleting?: ((e: TaskDeletingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskEditDialogShowing
- * @type_function_param1 e:{ui/gantt:TaskEditDialogShowingEvent}
- */
-onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskInserted
- * @type_function_param1 e:{ui/gantt:TaskInsertedEvent}
- */
-onTaskInserted?: ((e: TaskInsertedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskInserting
- * @type_function_param1 e:{ui/gantt:TaskInsertingEvent}
- */
-onTaskInserting?: ((e: TaskInsertingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskMoving
- * @type_function_param1 e:{ui/gantt:TaskMovingEvent}
- */
-onTaskMoving?: ((e: TaskMovingEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskUpdated
- * @type_function_param1 e:{ui/gantt:TaskUpdatedEvent}
- */
-onTaskUpdated?: ((e: TaskUpdatedEvent) => void);
-/**
- * @skip
- * @docid dxGanttOptions.onTaskUpdating
- * @type_function_param1 e:{ui/gantt:TaskUpdatingEvent}
- */
-onTaskUpdating?: ((e: TaskUpdatingEvent) => void);
 };
 ///#ENDDEBUG

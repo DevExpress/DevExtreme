@@ -242,9 +242,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxBarGauge
-     * @type_function_param1_field target:object
+     * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -253,9 +251,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxBarGauge
-     * @type_function_param1_field target:object
+     * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -419,7 +415,7 @@ export type Options = dxBarGaugeOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onTooltipHidden', 'onTooltipShown'>;
 
 /**
 * @hidden
@@ -473,17 +469,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{viz/bar_gauge:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxBarGaugeOptions.onTooltipHidden
- * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
- */
-onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
-/**
- * @skip
- * @docid dxBarGaugeOptions.onTooltipShown
- * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
- */
-onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
 ///#ENDDEBUG

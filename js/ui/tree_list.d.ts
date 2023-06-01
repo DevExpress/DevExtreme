@@ -544,13 +544,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     keyExpr?: string | Function;
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:object
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:CellClickEvent}
      * @default null
      * @action
      * @public
@@ -558,13 +552,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:dxTreeListColumn
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:CellDblClickEvent}
      * @default null
      * @action
      * @public
@@ -572,12 +560,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:dxTreeListColumn
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:CellHoverChangedEvent}
      * @default null
      * @action
      * @public
@@ -585,12 +568,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:dxTreeListColumn
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:CellPreparedEvent}
      * @default null
      * @action
      * @public
@@ -598,11 +576,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:Object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field items:Array<Object>
-     * @type_function_param1_field column:dxTreeListColumn
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
      * @default null
      * @action
      * @public
@@ -610,11 +584,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field column:object
+     * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
      * @default null
      * @action
      * @public
@@ -622,10 +592,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 options:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field setValue(newValue, newText):any
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:EditorPreparedEvent}
      * @default null
      * @action
      * @public
@@ -633,11 +600,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field setValue(newValue, newText):any
-     * @type_function_param1_field editorOptions:object
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:EditorPreparingEvent}
      * @default null
      * @action
      * @public
@@ -645,10 +608,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1 e:{ui/tree_list:FocusedCellChangedEvent}
      * @default null
      * @action
      * @public
@@ -656,11 +616,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field rows:Array<dxTreeListRowObject>
-     * @type_function_param1_field columns:Array<dxTreeListColumn>
+     * @type_function_param1 e:{ui/tree_list:FocusedCellChangingEvent}
      * @default null
      * @action
      * @public
@@ -668,9 +624,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1 e:{ui/tree_list:FocusedRowChangedEvent}
      * @default null
      * @action
      * @public
@@ -678,16 +632,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field element:DxElement
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
-     * @type_function_param1_field rowElement:DxElement
-     * @type_function_param1_field prevRowIndex:number
-     * @type_function_param1_field newRowIndex:number
-     * @type_function_param1_field rows:Array<dxTreeListRowObject>
-     * @type_function_param1_field cancel:boolean
+     * @type_function_param1 e:{ui/tree_list:FocusedRowChangingEvent}
      * @default null
      * @action
      * @public
@@ -695,9 +640,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field root:dxTreeListNode
+     * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
      * @default null
      * @action
      * @public
@@ -705,14 +648,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field values:Array<any>
-     * @type_function_param1_field columns:Array<Object>
-     * @type_function_param1_field node:dxTreeListNode
+     * @type_function_param1 e:{ui/tree_list:RowClickEvent}
      * @default null
      * @action
      * @public
@@ -720,13 +656,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field values:Array<any>
-     * @type_function_param1_field columns:Array<dxTreeListColumn>
+     * @type_function_param1 e:{ui/tree_list:RowDblClickEvent}
      * @default null
      * @action
      * @public
@@ -734,13 +664,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field data:object
-     * @type_function_param1_field key:any
-     * @type_function_param1_field values:Array<any>
-     * @type_function_param1_field columns:Array<dxTreeListColumn>
-     * @type_function_param1_field node:dxTreeListNode
+     * @type_function_param1 e:{ui/tree_list:RowPreparedEvent}
      * @default null
      * @action
      * @public
@@ -1499,7 +1423,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick', 'onCellDblClick', 'onCellHoverChanged', 'onCellPrepared', 'onContextMenuPreparing', 'onEditingStart', 'onEditorPrepared', 'onEditorPreparing', 'onFocusedCellChanged', 'onFocusedCellChanging', 'onFocusedRowChanged', 'onFocusedRowChanging', 'onNodesInitialized', 'onRowClick', 'onRowDblClick', 'onRowPrepared'>;
 
 /**
 * @hidden
@@ -1513,40 +1437,10 @@ type Events = {
 onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent) => void);
 /**
  * @skip
- * @docid dxTreeListOptions.onCellClick
- * @type_function_param1 e:{ui/tree_list:CellClickEvent}
- */
-onCellClick?: ((e: CellClickEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onCellDblClick
- * @type_function_param1 e:{ui/tree_list:CellDblClickEvent}
- */
-onCellDblClick?: ((e: CellDblClickEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onCellHoverChanged
- * @type_function_param1 e:{ui/tree_list:CellHoverChangedEvent}
- */
-onCellHoverChanged?: ((e: CellHoverChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onCellPrepared
- * @type_function_param1 e:{ui/tree_list:CellPreparedEvent}
- */
-onCellPrepared?: ((e: CellPreparedEvent) => void);
-/**
- * @skip
  * @docid dxTreeListOptions.onContentReady
  * @type_function_param1 e:{ui/tree_list:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onContextMenuPreparing
- * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
- */
-onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
 /**
  * @skip
  * @docid dxTreeListOptions.onDataErrorOccurred
@@ -1573,48 +1467,6 @@ onEditCanceled?: ((e: EditCanceledEvent) => void);
 onEditCanceling?: ((e: EditCancelingEvent) => void);
 /**
  * @skip
- * @docid dxTreeListOptions.onEditingStart
- * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
- */
-onEditingStart?: ((e: EditingStartEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onEditorPrepared
- * @type_function_param1 e:{ui/tree_list:EditorPreparedEvent}
- */
-onEditorPrepared?: ((e: EditorPreparedEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onEditorPreparing
- * @type_function_param1 e:{ui/tree_list:EditorPreparingEvent}
- */
-onEditorPreparing?: ((e: EditorPreparingEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onFocusedCellChanged
- * @type_function_param1 e:{ui/tree_list:FocusedCellChangedEvent}
- */
-onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onFocusedCellChanging
- * @type_function_param1 e:{ui/tree_list:FocusedCellChangingEvent}
- */
-onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onFocusedRowChanged
- * @type_function_param1 e:{ui/tree_list:FocusedRowChangedEvent}
- */
-onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onFocusedRowChanging
- * @type_function_param1 e:{ui/tree_list:FocusedRowChangingEvent}
- */
-onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => void);
-/**
- * @skip
  * @docid dxTreeListOptions.onInitialized
  * @type_function_param1 e:{ui/tree_list:InitializedEvent}
  */
@@ -1633,22 +1485,10 @@ onInitNewRow?: ((e: InitNewRowEvent) => void);
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
  * @skip
- * @docid dxTreeListOptions.onNodesInitialized
- * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
- */
-onNodesInitialized?: ((e: NodesInitializedEvent) => void);
-/**
- * @skip
  * @docid dxTreeListOptions.onOptionChanged
  * @type_function_param1 e:{ui/tree_list:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onRowClick
- * @type_function_param1 e:{ui/tree_list:RowClickEvent}
- */
-onRowClick?: ((e: RowClickEvent) => void);
 /**
  * @skip
  * @docid dxTreeListOptions.onRowCollapsed
@@ -1661,12 +1501,6 @@ onRowCollapsed?: ((e: RowCollapsedEvent) => void);
  * @type_function_param1 e:{ui/tree_list:RowCollapsingEvent}
  */
 onRowCollapsing?: ((e: RowCollapsingEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onRowDblClick
- * @type_function_param1 e:{ui/tree_list:RowDblClickEvent}
- */
-onRowDblClick?: ((e: RowDblClickEvent) => void);
 /**
  * @skip
  * @docid dxTreeListOptions.onRowExpanded
@@ -1691,12 +1525,6 @@ onRowInserted?: ((e: RowInsertedEvent) => void);
  * @type_function_param1 e:{ui/tree_list:RowInsertingEvent}
  */
 onRowInserting?: ((e: RowInsertingEvent) => void);
-/**
- * @skip
- * @docid dxTreeListOptions.onRowPrepared
- * @type_function_param1 e:{ui/tree_list:RowPreparedEvent}
- */
-onRowPrepared?: ((e: RowPreparedEvent) => void);
 /**
  * @skip
  * @docid dxTreeListOptions.onRowRemoved

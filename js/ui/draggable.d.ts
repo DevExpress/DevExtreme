@@ -177,9 +177,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDraggable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/draggable:DragEndEvent}
      * @action
      * @public
      */
@@ -187,9 +185,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDraggable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/draggable:DragMoveEvent}
      * @action
      * @public
      */
@@ -197,9 +193,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDraggable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/draggable:DragStartEvent}
      * @action
      * @public
      */
@@ -226,7 +220,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onDrop'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onDragEnd', 'onDragMove', 'onDragStart'>;
 
 /**
 * @hidden
@@ -238,24 +232,6 @@ type Events = {
  * @type_function_param1 e:{ui/draggable:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxDraggableOptions.onDragEnd
- * @type_function_param1 e:{ui/draggable:DragEndEvent}
- */
-onDragEnd?: ((e: DragEndEvent) => void);
-/**
- * @skip
- * @docid dxDraggableOptions.onDragMove
- * @type_function_param1 e:{ui/draggable:DragMoveEvent}
- */
-onDragMove?: ((e: DragMoveEvent) => void);
-/**
- * @skip
- * @docid dxDraggableOptions.onDragStart
- * @type_function_param1 e:{ui/draggable:DragStartEvent}
- */
-onDragStart?: ((e: DragStartEvent) => void);
 /**
  * @skip
  * @docid dxDraggableOptions.onInitialized
