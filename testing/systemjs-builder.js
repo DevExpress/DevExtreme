@@ -310,20 +310,18 @@ const transpileJsVendors = async(Builder) => {
             destPath: path.join(root, 'artifacts/js-systemjs/knockout.js'),
         },
     ];
-    const cldrDataList = getFileList(path.join(root, 'node_modules/devextreme-cldr-data'));
-    const cldrCoreList = getFileList(path.join(root, 'node_modules/cldr-core/supplemental'));
 
-    const formatList = [].concat(cldrDataList, cldrCoreList)
+    [].concat(
+        getFileList(path.join(root, 'node_modules/devextreme-cldr-data')),
+        getFileList(path.join(root, 'node_modules/cldr-core/supplemental'))
+    )
         .filter(filePath => filePath.endsWith('.json'))
-        .map(jsonPath => ({
-            filePath: jsonPath,
-            destPath: jsonPath.replace('node_modules', 'artifacts/js-systemjs'),
-        }));
-
-    const modulesList = [].concat(vendorsList, formatList);
+        .forEach((filePath) => {
+            transpileFile(filePath, filePath.replace('node_modules', 'artifacts/js-systemjs'));
+        });
 
     // eslint-disable-next-line no-restricted-syntax
-    for(const { filePath, destPath } of modulesList) {
+    for(const { filePath, destPath } of vendorsList) {
         await transpileWithBuilder(builder, filePath, destPath, true);
     }
 };
