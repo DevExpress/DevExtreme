@@ -1801,4 +1801,49 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(actualFilterValues[0], expectedFilterValues[0]);
         assert.deepEqual(actualFilterValues[1], expectedFilterValues[1]);
     });
+
+    // T1147719
+    QUnit.test('When columns are auto-generated and filterValue is set, error should not be thrown', function(assert) {
+        try {
+            const grid = createDataGrid({
+                dataSource: [{ id: 0 }, { id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                filterValue: ['id', '=', '1'],
+                filterPanel: { visible: true },
+            });
+            this.clock.tick(10);
+
+            const rows = grid.getVisibleRows();
+
+            assert.strictEqual(rows.length, 1, 'Rows filtered');
+            assert.strictEqual(rows[0].data.id, 1);
+        } catch(err) {
+            assert.ok(false, 'error is thrown');
+        }
+    });
+
+    // T1147719
+    QUnit.test('When columns are auto-generated, filterValue is set and dataSource was set later, error should not be thrown', function(assert) {
+        try {
+            const grid = createDataGrid({
+                dataSource: undefined,
+                keyExpr: 'id',
+                filterValue: ['id', '=', '1'],
+                filterPanel: { visible: true },
+            });
+
+            this.clock.tick(10);
+
+            grid.option('dataSource', [{ id: 0 }, { id: 1 }, { id: 2 }]);
+
+            this.clock.tick(10);
+
+            const rows = grid.getVisibleRows();
+
+            assert.strictEqual(rows.length, 1, 'Rows filtered');
+            assert.strictEqual(rows[0].data.id, 1);
+        } catch(err) {
+            assert.ok(false, 'error is thrown');
+        }
+    });
 });
