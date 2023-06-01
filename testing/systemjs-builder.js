@@ -198,7 +198,18 @@ const transpileCommonJSFile = (source, pathToFile) => {
     );
 };
 
-const transpileFile = (sourcePath, targetPath) => {
+const buildJsonModule = (body) => `
+SystemJS.register([], function(_exports) {
+    return {
+        setters: [],
+        execute: function() {
+            _exports("default", ${body});
+        }
+    };
+});
+`;
+
+const transpileFile = async(sourcePath, targetPath) => {
     const code = fs.readFileSync(sourcePath).toString().replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
     const dirPath = path.dirname(targetPath);
 
@@ -206,20 +217,26 @@ const transpileFile = (sourcePath, targetPath) => {
         fs.mkdirSync(dirPath, { recursive: true });
     }
 
-    if(/(^|\s)define\(/gm.test(code)) {
+    if(/(^|\s)System(JS)?\./gm.test(code) || /(^|\s)define\(/gm.test(code)) {
         fs.writeFileSync(targetPath, code);
-    } else {
+    } else if(/(\(|\s|^)require\(/.test(code) || /(module\.)?exports(\.\w+)?\s?=/.test(code)) {
         transpileCommonJSFile(code, targetPath);
+    } else if(sourcePath.endsWith('.json')) {
+        fs.writeFileSync(targetPath, buildJsonModule(code));
+    } else {
+        await transpileWithBabel(code, targetPath);
     }
 };
 
-const transpileRenovationModules = () => {
-    getFileList(path.join(root, 'artifacts/transpiled-renovation')).forEach((filePath) => {
-        transpileFile(
-            filePath,
-            filePath.replace('/transpiled-renovation', '/transpiled-renovation-systemjs'),
-        );
-    });
+const transpileRenovationModules = async() => {
+    await Promise.all(
+        getFileList(path.join(root, 'artifacts/transpiled-renovation')).map((filePath) => {
+            return transpileFile(
+                filePath,
+                filePath.replace('/transpiled-renovation', '/transpiled-renovation-systemjs'),
+            );
+        })
+    );
 };
 
 const buildCssAsSystemModule = (name, filePath) => `
@@ -414,7 +431,7 @@ const updateBuilder = () => {
         case 'modules':
             return await transpileModules();
         case 'modules-renovation':
-            return transpileRenovationModules();
+            return await transpileRenovationModules();
         case 'testing':
             return await transpileTesting(Builder);
         case 'css':
